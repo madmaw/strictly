@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "moduleResolution": "Node",
+    "noEmit": true
+  },
+  "extends": "./tsconfig.json",
+  "include": [
+    ".eslintrc.cjs",
+    ".vscode"
+  ],
+  "references": []
+}
