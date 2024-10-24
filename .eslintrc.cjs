@@ -92,15 +92,6 @@ module.exports = {
       rules: {
         '@eslint-community/eslint-comments/no-unused-disable': 'warn',
         '@typescript-eslint/await-thenable': 'warn',
-        '@typescript-eslint/ban-types': [
-          'warn',
-          {
-            types: {
-              '{}': false,
-            },
-            extendDefaults: true,
-          },
-        ],
         '@typescript-eslint/consistent-type-assertions': [
           'warn',
           {
@@ -160,6 +151,12 @@ module.exports = {
             ],
             format: null,
             modifiers: ['requiresQuotes'],
+          },
+        ],
+        '@typescript-eslint/no-empty-object-type': [
+          'warn',
+          {
+            allowObjectTypes: 'always',
           },
         ],
         '@typescript-eslint/no-floating-promises': [
@@ -336,15 +333,8 @@ module.exports = {
         ],
         // annoying to have unused imports deleted prematurely
         'unused-imports/no-unused-imports': 'off',
-        'unused-imports/no-unused-vars': [
-          'warn',
-          {
-            vars: 'all',
-            varsIgnorePattern: '^_',
-            args: 'after-used',
-            argsIgnorePattern: '^_',
-          },
-        ],
+        // typescript does this more correctly anyway
+        'unused-imports/no-unused-vars': 'off',
       },
     },
     // TSX

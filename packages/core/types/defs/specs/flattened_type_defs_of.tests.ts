@@ -8,12 +8,12 @@ import {
   struct,
   union,
 } from 'types/defs/builders'
-import { type FlattenedTypesOf } from 'types/defs/flattened_types_of'
+import { type FlattenedTypeDefsOf } from 'types/defs/flattened_type_defs_of'
 
-describe('FlattenedTypesOf', function () {
+describe('FlattenedTypeDefsOf', function () {
   describe('literal', function () {
     const { typeDef } = number
-    type T = FlattenedTypesOf<typeof typeDef>
+    type T = FlattenedTypeDefsOf<typeof typeDef, 's'>
 
     let t: {
       readonly $: {
@@ -27,7 +27,7 @@ describe('FlattenedTypesOf', function () {
 
   describe('list', function () {
     const { typeDef } = list(number)
-    type T = SimplifyDeep<FlattenedTypesOf<typeof typeDef>>
+    type T = SimplifyDeep<FlattenedTypeDefsOf<typeof typeDef, 's'>>
 
     let t: {
       readonly $: {
@@ -35,7 +35,7 @@ describe('FlattenedTypesOf', function () {
           readonly valuePrototype: number,
         },
       },
-      readonly [_: `$[${number}]`]: {
+      readonly ['$.s']: {
         readonly valuePrototype: number,
       },
     }
@@ -46,7 +46,7 @@ describe('FlattenedTypesOf', function () {
 
   describe('map', function () {
     const { typeDef } = map<'a' | 'b', typeof number.typeDef>(number)
-    type T = SimplifyDeep<FlattenedTypesOf<typeof typeDef>>
+    type T = SimplifyDeep<FlattenedTypeDefsOf<typeof typeDef, 's'>>
 
     let t: {
       readonly $: {
@@ -55,10 +55,7 @@ describe('FlattenedTypesOf', function () {
           readonly valuePrototype: number,
         },
       },
-      readonly ['$.a']: {
-        readonly valuePrototype: number,
-      },
-      readonly ['$.b']: {
+      readonly ['$.s']: {
         readonly valuePrototype: number,
       },
     }
@@ -71,7 +68,7 @@ describe('FlattenedTypesOf', function () {
     const { typeDef } = struct()
       .set('a', number)
       .set('b', string)
-    type T = SimplifyDeep<FlattenedTypesOf<typeof typeDef>>
+    type T = SimplifyDeep<FlattenedTypeDefsOf<typeof typeDef, 's'>>
 
     let t: {
       readonly $: {
@@ -102,7 +99,7 @@ describe('union', function () {
     const { typeDef } = union()
       .add(1, struct().set('a', boolean))
       .add(2, struct().set('a', number))
-    type T = SimplifyDeep<FlattenedTypesOf<typeof typeDef>>
+    type T = SimplifyDeep<FlattenedTypeDefsOf<typeof typeDef, 's'>>
 
     let t:
       | {
