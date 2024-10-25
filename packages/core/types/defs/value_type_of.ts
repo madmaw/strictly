@@ -7,17 +7,18 @@ import {
   type ReadonlyTypeDef,
   type StructuredTypeDef,
   type TypeDef,
+  type TypeDefHolder,
   type UnionTypeDef,
 } from '.'
 
 export type ValueTypeOf<
-  F extends TypeDef,
-> = InternalValueTypeOf<F>
+  T extends TypeDefHolder,
+> = InternalValueTypeOf<T['typeDef']>
 
-type InternalValueTypeOf<
+export type InternalValueTypeOf<
   F extends TypeDef,
-> = F extends LiteralTypeDef ? ValueTypeOfLiteral<F>
-  : F extends NullableTypeDef ? ValueTypeOfNullable<F>
+> = F extends LiteralTypeDef ? InternalValueTypeOfLiteral<F>
+  : F extends NullableTypeDef ? InternalValueTypeOfNullable<F>
   : F extends ListTypeDef ? InternalValueTypeOfList<F>
   : F extends MapTypeDef ? InternalValueTypeOfMap<F>
   : F extends ReadonlyTypeDef ? InternalValueTypeOfReadonly<F>
@@ -26,15 +27,11 @@ type InternalValueTypeOf<
   : F extends UnionTypeDef ? InternalValueTypeOfUnion<F>
   : never
 
-type ValueTypeOfLiteral<F extends LiteralTypeDef> = F['valuePrototype']
+type InternalValueTypeOfLiteral<F extends LiteralTypeDef> = F['valuePrototype']
 
-type ValueTypeOfNullable<
+type InternalValueTypeOfNullable<
   F extends NullableTypeDef,
 > = InternalValueTypeOf<F['toNullableTypeDef']> | null
-
-export type ValueTypeOfList<
-  F extends ListTypeDef,
-> = InternalValueTypeOfList<F>
 
 type InternalValueTypeOfList<F extends ListTypeDef> = InternalValueTypeOf<F['elements']>[]
 

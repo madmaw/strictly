@@ -14,22 +14,19 @@ import {
   type StructuredFieldKey,
   type StructuredTypeDef,
   type TypeDef,
+  type TypeDefHolder,
   type UnionTypeDef,
-} from '.'
-import { type ValueTypeOf } from './value_type_of'
-
-type TypeDefHolder<T extends TypeDef> = {
-  readonly typeDef: T,
-}
+} from './index'
 
 class TypeDefBuilder<T extends TypeDef> implements TypeDefHolder<T> {
-  /**
-   * Instance of the type of the built typedef. This value is never populated
-   * and should only be used as `typeof x.aInstance`
-   */
-  readonly aValue!: ValueTypeOf<T>
-
   constructor(readonly typeDef: T) {
+  }
+
+  // gets around some classes of ts error
+  get holder(): TypeDefHolder<T> {
+    return {
+      typeDef: this.typeDef,
+    }
   }
 }
 
@@ -211,8 +208,8 @@ export function list<T extends TypeDef>(elements: TypeDefHolder<T>): ListTypeDef
   })
 }
 
-export function map<K extends MapKeyType, V extends TypeDef>({ typeDef }: TypeDefHolder<V>) {
-  return new MapTypeDefBuilder<K, V>({
+export function map<K extends MapKeyType, V extends TypeDefHolder>({ typeDef }: V) {
+  return new MapTypeDefBuilder<K, V['typeDef']>({
     // eslint-disable-next-line no-undefined
     keyPrototype: undefined!,
     valueTypeDef: typeDef,
@@ -220,18 +217,18 @@ export function map<K extends MapKeyType, V extends TypeDef>({ typeDef }: TypeDe
 }
 
 export function readonly<T extends MapTypeDef | ListTypeDef>({ typeDef }: TypeDefHolder<T>) {
-  return new ReadonlyTypeDefBuilder({
+  return new ReadonlyTypeDefBuilder<T>({
     toReadonlyTypeDef: typeDef,
   })
 }
 
 export function partial<T extends MapTypeDef>({ typeDef }: TypeDefHolder<T>) {
-  return new PartialTypeDefBuilder({
+  return new PartialTypeDefBuilder<T>({
     toPartialTypeDef: typeDef,
   })
 }
 
-export function struct() {
+export function struct(): StructuredTypeDefBuilder<{}> {
   // have to explicitly supply types as TS will infinitely recurse trying to infer them!
   return new StructuredTypeDefBuilder<{}>({
     fields: {},

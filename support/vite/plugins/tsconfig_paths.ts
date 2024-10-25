@@ -1,4 +1,4 @@
-import { type TsconfigJson } from 'types'
+import { type TsconfigJson } from '@tscriptors/support-vite/types'
 import tsconfigPaths from 'vite-tsconfig-paths'
 
 export function createTsconfigPathsPlugin({

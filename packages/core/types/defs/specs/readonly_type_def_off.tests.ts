@@ -13,8 +13,7 @@ import { type ReadonlyTypeDefOf } from 'types/defs/readonly_type_def_of'
 
 describe('ReadonlyTypeDefOf', function () {
   describe('literal', function () {
-    const { typeDef } = number
-    type T = ReadonlyTypeDefOf<typeof typeDef>
+    type T = ReadonlyTypeDefOf<typeof number>
 
     let t: {
       readonly valuePrototype: number,
@@ -25,8 +24,8 @@ describe('ReadonlyTypeDefOf', function () {
   })
 
   describe('list', function () {
-    const { typeDef } = list(number)
-    type T = ReadonlyTypeDefOf<typeof typeDef>
+    const builder = list(number)
+    type T = ReadonlyTypeDefOf<typeof builder>
 
     let t: {
       readonly toReadonlyTypeDef: {
@@ -41,8 +40,8 @@ describe('ReadonlyTypeDefOf', function () {
   })
 
   describe('map', function () {
-    const { typeDef } = map<'a' | 'b', typeof number.typeDef>(number)
-    type T = ReadonlyTypeDefOf<typeof typeDef>
+    const builder = map<'a' | 'b', typeof number>(number)
+    type T = ReadonlyTypeDefOf<typeof builder>
 
     let t: {
       readonly toReadonlyTypeDef: {
@@ -58,10 +57,10 @@ describe('ReadonlyTypeDefOf', function () {
   })
 
   describe('struct', function () {
-    const { typeDef } = struct()
+    const builder = struct()
       .set('a', number)
       .setOptional('b', string)
-    type T = ReadonlyTypeDefOf<typeof typeDef>
+    type T = ReadonlyTypeDefOf<typeof builder>
 
     let t: {
       readonly fields: {
@@ -79,10 +78,10 @@ describe('ReadonlyTypeDefOf', function () {
   })
 
   describe('union', function () {
-    const { typeDef } = union()
-      .add(1, map<'a', typeof number.typeDef>(number))
+    const builder = union()
+      .add(1, map<'a', typeof number>(number))
       .add(2, string)
-    type T = ReadonlyTypeDefOf<typeof typeDef>
+    type T = ReadonlyTypeDefOf<typeof builder>
 
     let t: {
       readonly unions: {
@@ -105,8 +104,8 @@ describe('ReadonlyTypeDefOf', function () {
   })
 
   describe('nullable', function () {
-    const { typeDef } = nullable(map<'a', typeof number.typeDef>(number))
-    type T = ReadonlyTypeDefOf<typeof typeDef>
+    const builder = nullable(map<'a', typeof number>(number))
+    type T = ReadonlyTypeDefOf<typeof builder>
 
     let t: {
       readonly toNullableTypeDef: {
@@ -124,8 +123,8 @@ describe('ReadonlyTypeDefOf', function () {
   })
 
   describe('partial', function () {
-    const { typeDef } = partial(map<'a', typeof number.typeDef>(number))
-    type T = ReadonlyTypeDefOf<typeof typeDef>
+    const builder = partial(map<'a', typeof number>(number))
+    type T = ReadonlyTypeDefOf<typeof builder>
 
     let t: {
       readonly toPartialTypeDef: {
@@ -143,8 +142,8 @@ describe('ReadonlyTypeDefOf', function () {
   })
 
   describe('readonly', function () {
-    const { typeDef } = readonly(map<'a', typeof number.typeDef>(number))
-    type T = ReadonlyTypeDefOf<typeof typeDef>
+    const builder = readonly(map<'a', typeof number>(number))
+    type T = ReadonlyTypeDefOf<typeof builder>
 
     let t: {
       readonly toReadonlyTypeDef: {

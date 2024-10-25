@@ -104,3 +104,7 @@ export type UnionTypeDef<
 > = {
   readonly unions: U,
 }
+
+export type TypeDefHolder<T extends TypeDef = TypeDef> = {
+  readonly typeDef: T,
+}

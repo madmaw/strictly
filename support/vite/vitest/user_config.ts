@@ -1,5 +1,5 @@
-import { createTsconfigPathsPlugin } from 'plugins/tsconfig_paths'
-import { type TsconfigJson } from 'types'
+import { createTsconfigPathsPlugin } from '@tscriptors/support-vite/plugins/tsconfig_paths'
+import { type TsconfigJson } from '@tscriptors/support-vite/types'
 import { type ViteUserConfig } from 'vitest/config'
 
 export function createVitestUserConfig(tsconfigJson: TsconfigJson): ViteUserConfig {

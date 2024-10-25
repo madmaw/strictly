@@ -7,8 +7,8 @@ import { type FlattenedValueTypesOf } from 'types/defs/flattened_value_types_of'
 
 describe('FlattenedValueTypesOf', function () {
   describe('map', function () {
-    const { typeDef } = map<string, typeof number.typeDef>(number)
-    type T = FlattenedTypeDefsOf<typeof typeDef, null>
+    const builder = map<string, typeof number>(number)
+    type T = FlattenedTypeDefsOf<typeof builder, null>
     type V = FlattenedValueTypesOf<T>
 
     let v: {

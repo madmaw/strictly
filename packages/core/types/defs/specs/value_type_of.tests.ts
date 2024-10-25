@@ -6,7 +6,7 @@ describe('ValueTypeOf', function () {
     type TypeD = {
       valuePrototype: 'a' | 'b' | 'c',
     }
-    type T = ValueTypeOf<TypeD>
+    type T = ValueTypeOf<{ typeDef: TypeD }>
 
     let t: 'a' | 'b' | 'c'
     it('equals expected type', function () {
@@ -15,7 +15,9 @@ describe('ValueTypeOf', function () {
 
     describe('nullable', function () {
       type N = ValueTypeOf<{
-        toNullableTypeDef: TypeD,
+        typeDef: {
+          toNullableTypeDef: TypeD,
+        },
       }>
       let n: 'a' | 'b' | 'c' | null
 
@@ -32,7 +34,7 @@ describe('ValueTypeOf', function () {
           valuePrototype: 'a' | 'b' | 'c',
         },
       }
-      type T = ValueTypeOf<TypeD>
+      type T = ValueTypeOf<{ typeDef: TypeD }>
       describe('mutable', function () {
         let a: ('a' | 'b' | 'c')[]
         it('equals expected type', function () {
@@ -42,7 +44,9 @@ describe('ValueTypeOf', function () {
 
       describe('readonly', function () {
         type R = ValueTypeOf<{
-          toReadonlyTypeDef: TypeD,
+          typeDef: {
+            toReadonlyTypeDef: TypeD,
+          },
         }>
 
         let a: readonly ('a' | 'b' | 'c')[]
@@ -53,7 +57,9 @@ describe('ValueTypeOf', function () {
 
       describe('nullable', function () {
         type N = ValueTypeOf<{
-          toNullableTypeDef: TypeD,
+          typeDef: {
+            toNullableTypeDef: TypeD,
+          },
         }>
         let a: ('a' | 'b' | 'c')[] | null
 
@@ -71,7 +77,7 @@ describe('ValueTypeOf', function () {
         valuePrototype: 'a' | 'b' | 'c',
       },
     }
-    type T = ValueTypeOf<TypeD>
+    type T = ValueTypeOf<{ typeDef: TypeD }>
 
     describe('mutable', function () {
       let t: Record<'x' | 'y' | 'z', 'a' | 'b' | 'c'>
@@ -82,7 +88,9 @@ describe('ValueTypeOf', function () {
 
     describe('readonly', function () {
       type R = ValueTypeOf<{
-        toReadonlyTypeDef: TypeD,
+        typeDef: {
+          toReadonlyTypeDef: TypeD,
+        },
       }>
       let r: ReadonlyRecord<'x' | 'y' | 'z', 'a' | 'b' | 'c'>
 
@@ -103,7 +111,7 @@ describe('ValueTypeOf', function () {
         },
       },
     }
-    type T = ValueTypeOf<TypeD>
+    type T = ValueTypeOf<{ typeDef: TypeD }>
 
     describe('mutable', function () {
       let value: {
@@ -127,7 +135,7 @@ describe('ValueTypeOf', function () {
           },
         },
       }
-      type T = ValueTypeOf<TypeD>
+      type T = ValueTypeOf<{ typeDef: TypeD }>
 
       let value: {
         readonly a: 'a' | 'b',
@@ -149,7 +157,7 @@ describe('ValueTypeOf', function () {
           },
         },
       }
-      type T = ValueTypeOf<TypeD>
+      type T = ValueTypeOf<{ typeDef: TypeD }>
 
       let v: {
         a?: 'a' | 'b',
@@ -164,24 +172,26 @@ describe('ValueTypeOf', function () {
 
   describe('union', function () {
     type T = ValueTypeOf<{
-      unions: {
-        [0]: {
-          fields: {
-            b: {
-              valuePrototype: string,
-            },
-            readonly d: {
-              valuePrototype: 1,
+      typeDef: {
+        unions: {
+          [0]: {
+            fields: {
+              b: {
+                valuePrototype: string,
+              },
+              readonly d: {
+                valuePrototype: 1,
+              },
             },
           },
-        },
-        [1]: {
-          fields: {
-            e: {
-              valuePrototype: number,
-            },
-            readonly d: {
-              valuePrototype: 2,
+          [1]: {
+            fields: {
+              e: {
+                valuePrototype: number,
+              },
+              readonly d: {
+                valuePrototype: 2,
+              },
             },
           },
         },

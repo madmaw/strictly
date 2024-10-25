@@ -15,8 +15,7 @@ import { type FlattenedJsonPathsOf } from 'types/defs/flattened_json_paths_of'
 
 describe('FlattenedJsonPathsOf', function () {
   describe('literal', function () {
-    const { typeDef } = number
-    type T = FlattenedJsonPathsOf<typeof typeDef>
+    type T = FlattenedJsonPathsOf<typeof number>
 
     let t: {
       readonly $: '$',
@@ -27,8 +26,8 @@ describe('FlattenedJsonPathsOf', function () {
   })
 
   describe('list', function () {
-    const { typeDef } = list(list(number))
-    type T = SimplifyDeep<FlattenedJsonPathsOf<typeof typeDef>>
+    const builder = list(list(number))
+    type T = SimplifyDeep<FlattenedJsonPathsOf<typeof builder>>
 
     let t: {
       readonly $: '$',
@@ -42,8 +41,8 @@ describe('FlattenedJsonPathsOf', function () {
 
   describe('map', function () {
     const l = list(number)
-    const { typeDef } = map<'a' | 'b', typeof l.typeDef>(l)
-    type T = SimplifyDeep<FlattenedJsonPathsOf<typeof typeDef>>
+    const builder = map<'a' | 'b', typeof l>(l)
+    type T = SimplifyDeep<FlattenedJsonPathsOf<typeof builder>>
 
     let t: {
       readonly $: '$',
@@ -58,15 +57,19 @@ describe('FlattenedJsonPathsOf', function () {
   })
 
   describe('struct', function () {
-    const { typeDef } = struct()
+    const builder = struct()
       .set('a', list(number))
-      .set('b', boolean)
-    type T = SimplifyDeep<FlattenedJsonPathsOf<typeof typeDef>>
+      .setOptional('b', boolean)
+      .setReadonly('c', string)
+      .setReadonlyOptional('d', string)
+    type T = SimplifyDeep<FlattenedJsonPathsOf<typeof builder>>
 
     let t: {
       readonly $: '$',
       readonly [`$.a`]: '$.a',
       readonly [`$.b`]: '$.b',
+      readonly [`$.c`]: '$.c',
+      readonly [`$.d`]: '$.d',
       readonly [_: `$.a[${number}]`]: '$.a.@',
     }
     it('equals expected type', function () {
@@ -75,10 +78,10 @@ describe('FlattenedJsonPathsOf', function () {
   })
 
   describe('union', function () {
-    const { typeDef } = union()
+    const builder = union()
       .add(1, list(number))
       .add(2, string)
-    type T = SimplifyDeep<FlattenedJsonPathsOf<typeof typeDef>>
+    type T = SimplifyDeep<FlattenedJsonPathsOf<typeof builder>>
 
     let t: {
       readonly $: '$',
@@ -92,9 +95,9 @@ describe('FlattenedJsonPathsOf', function () {
   })
 
   describe('readonly', function () {
-    const { typeDef } = readonly(list(list(number)))
+    const builder = readonly(list(list(number)))
 
-    type T = SimplifyDeep<FlattenedJsonPathsOf<typeof typeDef>>
+    type T = SimplifyDeep<FlattenedJsonPathsOf<typeof builder>>
 
     let t: {
       readonly $: '$',
@@ -108,8 +111,8 @@ describe('FlattenedJsonPathsOf', function () {
 
   describe('partial', function () {
     const l = list(number)
-    const { typeDef } = partial(map<'a' | 'b', typeof l.typeDef>(l))
-    type T = SimplifyDeep<FlattenedJsonPathsOf<typeof typeDef>>
+    const builder = partial(map<'a' | 'b', typeof l>(l))
+    type T = SimplifyDeep<FlattenedJsonPathsOf<typeof builder>>
 
     let t: {
       readonly $: '$',
@@ -124,9 +127,9 @@ describe('FlattenedJsonPathsOf', function () {
   })
 
   describe('nullable', function () {
-    const { typeDef } = nullable(list(nullable(list(number))))
+    const builder = nullable(list(nullable(list(number))))
 
-    type T = SimplifyDeep<FlattenedJsonPathsOf<typeof typeDef>>
+    type T = SimplifyDeep<FlattenedJsonPathsOf<typeof builder>>
 
     let t: {
       readonly $: '$',

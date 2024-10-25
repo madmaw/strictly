@@ -59,7 +59,7 @@ describe('builder', function () {
   describe('map', function () {
     describe('numeric map', function () {
       describe('mutable', function () {
-        const { typeDef } = map<'a' | 'b' | 'c', typeof number.typeDef>(number)
+        const { typeDef } = map<'a' | 'b' | 'c', typeof number>(number)
 
         it('equals expected type', function () {
           type C = {
@@ -74,7 +74,7 @@ describe('builder', function () {
       })
 
       describe('readonly', function () {
-        const { typeDef } = readonly(map<'a' | 'b' | 'c', typeof number.typeDef>(number))
+        const { typeDef } = readonly(map<'a' | 'b' | 'c', typeof number>(number))
 
         it('equals expected type', function () {
           type C = {
@@ -90,7 +90,7 @@ describe('builder', function () {
       })
 
       describe('partial', function () {
-        const { typeDef } = partial(map<'a' | 'b' | 'c', typeof number.typeDef>(number))
+        const { typeDef } = partial(map<'a' | 'b' | 'c', typeof number>(number))
 
         it('equals expected type', function () {
           type C = {

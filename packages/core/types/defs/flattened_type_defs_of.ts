@@ -11,15 +11,16 @@ import {
   type ReadonlyTypeDef,
   type StructuredTypeDef,
   type TypeDef,
+  type TypeDefHolder,
   type UnionTypeDef,
 } from '.'
 import { type JsonPathOf } from './json_path_of'
 
 export type FlattenedTypeDefsOf<
-  T extends TypeDef,
+  T extends TypeDefHolder,
   SegmentOverride extends string | null,
   Path extends string = '$',
-> = InternalFlattenedTypeDefsOf<T, SegmentOverride, Path>
+> = InternalFlattenedTypeDefsOf<T['typeDef'], SegmentOverride, Path>
 
 type InternalFlattenedTypeDefsOf<
   T extends TypeDef,
@@ -83,8 +84,8 @@ type InternalFlattenedTypesOfStructChildrenUnion<
   Path extends string,
 > = T extends StructuredTypeDef<infer Fields> ? {} extends Fields ? {}
   : {
-    readonly [K in keyof Fields]: InternalFlattenedTypeDefsOf<
-      Fields[K],
+    readonly [K in keyof Fields]-?: InternalFlattenedTypeDefsOf<
+      Exclude<Fields[K], undefined>,
       SegmentOverride,
       JsonPathOf<Path, K>
     >

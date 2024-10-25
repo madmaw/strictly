@@ -7,15 +7,16 @@ import {
   type ReadonlyTypeDef,
   type StructuredTypeDef,
   type TypeDef,
+  type TypeDefHolder,
   type UnionTypeDef,
 } from '.'
 import { type JsonPathOf } from './json_path_of'
 
 export type JsonPathsOf<
-  T extends TypeDef,
+  T extends TypeDefHolder,
   SegmentOverride extends string | null = null,
   Prefix extends string = '$',
-> = InternalJsonPathsOf<T, Prefix, SegmentOverride>
+> = InternalJsonPathsOf<T['typeDef'], Prefix, SegmentOverride>
 
 type InternalJsonPathsOf<
   F extends TypeDef,

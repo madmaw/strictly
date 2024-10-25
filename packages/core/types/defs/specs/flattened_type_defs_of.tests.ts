@@ -12,8 +12,7 @@ import { type FlattenedTypeDefsOf } from 'types/defs/flattened_type_defs_of'
 
 describe('FlattenedTypeDefsOf', function () {
   describe('literal', function () {
-    const { typeDef } = number
-    type T = FlattenedTypeDefsOf<typeof typeDef, 's'>
+    type T = FlattenedTypeDefsOf<typeof number, 's'>
 
     let t: {
       readonly $: {
@@ -26,8 +25,8 @@ describe('FlattenedTypeDefsOf', function () {
   })
 
   describe('list', function () {
-    const { typeDef } = list(number)
-    type T = SimplifyDeep<FlattenedTypeDefsOf<typeof typeDef, 's'>>
+    const builder = list(number)
+    type T = SimplifyDeep<FlattenedTypeDefsOf<typeof builder, 's'>>
 
     let t: {
       readonly $: {
@@ -45,8 +44,8 @@ describe('FlattenedTypeDefsOf', function () {
   })
 
   describe('map', function () {
-    const { typeDef } = map<'a' | 'b', typeof number.typeDef>(number)
-    type T = SimplifyDeep<FlattenedTypeDefsOf<typeof typeDef, 's'>>
+    const builder = map<'a' | 'b', typeof number>(number)
+    type T = SimplifyDeep<FlattenedTypeDefsOf<typeof builder, 's'>>
 
     let t: {
       readonly $: {
@@ -65,41 +64,57 @@ describe('FlattenedTypeDefsOf', function () {
   })
 
   describe('struct', function () {
-    const { typeDef } = struct()
-      .set('a', number)
-      .set('b', string)
-    type T = SimplifyDeep<FlattenedTypeDefsOf<typeof typeDef, 's'>>
+    describe('simple', function () {
+      const builder = struct()
+        .set('a', number)
+        .setOptional('b', string)
+        .setReadonly('c', boolean)
+        .setReadonlyOptional('d', string)
+      type T = SimplifyDeep<FlattenedTypeDefsOf<typeof builder, '@'>>
 
-    let t: {
-      readonly $: {
-        readonly fields: {
-          a: {
-            readonly valuePrototype: number,
-          },
-          b: {
-            readonly valuePrototype: string,
+      let t: {
+        readonly $: {
+          readonly fields: {
+            a: {
+              readonly valuePrototype: number,
+            },
+            b?: {
+              readonly valuePrototype: string,
+            },
+            readonly c: {
+              readonly valuePrototype: boolean,
+            },
+            readonly d?: {
+              readonly valuePrototype: string,
+            },
           },
         },
-      },
-      readonly ['$.a']: {
-        readonly valuePrototype: number,
-      },
-      readonly ['$.b']: {
-        readonly valuePrototype: string,
-      },
-    }
-    it('equals expected type', function () {
-      expectTypeOf(t).toEqualTypeOf<T>()
+        readonly ['$.a']: {
+          readonly valuePrototype: number,
+        },
+        readonly ['$.b']: {
+          readonly valuePrototype: string,
+        },
+        readonly ['$.c']: {
+          readonly valuePrototype: boolean,
+        },
+        readonly ['$.d']: {
+          readonly valuePrototype: string,
+        },
+      }
+      it('equals expected type', function () {
+        expectTypeOf(t).toEqualTypeOf<T>()
+      })
     })
   })
 })
 
 describe('union', function () {
   describe('overlapping', function () {
-    const { typeDef } = union()
+    const builder = union()
       .add(1, struct().set('a', boolean))
       .add(2, struct().set('a', number))
-    type T = SimplifyDeep<FlattenedTypeDefsOf<typeof typeDef, 's'>>
+    type T = SimplifyDeep<FlattenedTypeDefsOf<typeof builder, 's'>>
 
     let t:
       | {

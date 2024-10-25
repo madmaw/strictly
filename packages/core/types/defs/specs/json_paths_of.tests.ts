@@ -17,8 +17,7 @@ describe('JsonPathsOf', function () {
     let path: '$'
 
     describe('regular', function () {
-      const { typeDef } = string
-      type T = JsonPathsOf<typeof typeDef>
+      type T = JsonPathsOf<typeof string>
 
       it('equals expected type', function () {
         expectTypeOf(path).toEqualTypeOf<T>()
@@ -26,8 +25,8 @@ describe('JsonPathsOf', function () {
     })
 
     describe('nullable', function () {
-      const { typeDef } = nullable(string)
-      type T = JsonPathsOf<typeof typeDef>
+      const builder = nullable(string)
+      type T = JsonPathsOf<typeof builder>
 
       it('equals expected type', function () {
         expectTypeOf(path).toEqualTypeOf<T>()
@@ -39,8 +38,8 @@ describe('JsonPathsOf', function () {
     let path: '$' | `$[${number}]`
 
     describe('mutable', function () {
-      const { typeDef } = list(string)
-      type T = JsonPathsOf<typeof typeDef>
+      const builder = list(string)
+      type T = JsonPathsOf<typeof builder>
 
       it('equals expected type', function () {
         expectTypeOf(path).toEqualTypeOf<T>()
@@ -48,8 +47,8 @@ describe('JsonPathsOf', function () {
     })
 
     describe('readonly', function () {
-      const { typeDef } = readonly(list(string))
-      type T = JsonPathsOf<typeof typeDef>
+      const builder = readonly(list(string))
+      type T = JsonPathsOf<typeof builder>
 
       it('equals expected type', function () {
         expectTypeOf(path).toEqualTypeOf<T>()
@@ -57,8 +56,8 @@ describe('JsonPathsOf', function () {
     })
 
     describe('nullable', function () {
-      const { typeDef } = nullable(list(string))
-      type T = JsonPathsOf<typeof typeDef>
+      const builder = nullable(list(string))
+      type T = JsonPathsOf<typeof builder>
 
       it('equals expected type', function () {
         expectTypeOf(path).toEqualTypeOf<T>()
@@ -66,8 +65,8 @@ describe('JsonPathsOf', function () {
     })
 
     describe('override', function () {
-      const { typeDef } = list(string)
-      type T = JsonPathsOf<typeof typeDef, 'o'>
+      const builder = list(string)
+      type T = JsonPathsOf<typeof builder, 'o'>
 
       let path: '$' | `$.o`
       it('equals expected type', function () {
@@ -80,8 +79,8 @@ describe('JsonPathsOf', function () {
     let path: '$' | `$.${string}` | `$[${number}]`
 
     describe('mutable', function () {
-      const { typeDef } = map(string)
-      type T = JsonPathsOf<typeof typeDef>
+      const builder = map(string)
+      type T = JsonPathsOf<typeof builder>
 
       it('equals expected type', function () {
         expectTypeOf(path).toEqualTypeOf<T>()
@@ -89,8 +88,8 @@ describe('JsonPathsOf', function () {
     })
 
     describe('mutable with exact keys', function () {
-      const { typeDef } = map<'a' | 'b', typeof string.typeDef>(string)
-      type T = JsonPathsOf<typeof typeDef>
+      const builder = map<'a' | 'b', typeof string>(string)
+      type T = JsonPathsOf<typeof builder>
 
       let path: '$' | '$.a' | '$.b'
       it('equals expected type', function () {
@@ -99,8 +98,8 @@ describe('JsonPathsOf', function () {
     })
 
     describe('mutable with numeric keys', function () {
-      const { typeDef } = map<1 | 2 | 3, typeof string.typeDef>(string)
-      type T = JsonPathsOf<typeof typeDef>
+      const builder = map<1 | 2 | 3, typeof string>(string)
+      type T = JsonPathsOf<typeof builder>
 
       let path: '$' | '$[1]' | '$[2]' | '$[3]'
       it('equals expected type', function () {
@@ -109,8 +108,8 @@ describe('JsonPathsOf', function () {
     })
 
     describe('readonly', function () {
-      const { typeDef } = readonly(map(string))
-      type T = JsonPathsOf<typeof typeDef>
+      const builder = readonly(map(string))
+      type T = JsonPathsOf<typeof builder>
 
       it('equals expected type', function () {
         expectTypeOf(path).toEqualTypeOf<T>()
@@ -118,8 +117,8 @@ describe('JsonPathsOf', function () {
     })
 
     describe('partial', function () {
-      const { typeDef } = partial(map(string))
-      type T = JsonPathsOf<typeof typeDef>
+      const builder = partial(map(string))
+      type T = JsonPathsOf<typeof builder>
 
       it('equals expected type', function () {
         expectTypeOf(path).toEqualTypeOf<T>()
@@ -127,8 +126,8 @@ describe('JsonPathsOf', function () {
     })
 
     describe('nullable', function () {
-      const { typeDef } = nullable(map(string))
-      type T = JsonPathsOf<typeof typeDef>
+      const builder = nullable(map(string))
+      type T = JsonPathsOf<typeof builder>
 
       it('equals expected type', function () {
         expectTypeOf(path).toEqualTypeOf<T>()
@@ -136,8 +135,8 @@ describe('JsonPathsOf', function () {
     })
 
     describe('override', function () {
-      const { typeDef } = map(string)
-      type T = JsonPathsOf<typeof typeDef, 'x'>
+      const builder = map(string)
+      type T = JsonPathsOf<typeof builder, 'x'>
 
       let path: '$' | '$.x'
       it('equals expected type', function () {
@@ -148,11 +147,11 @@ describe('JsonPathsOf', function () {
 
   describe('struct', function () {
     describe('simple', function () {
-      const { typeDef } = struct()
+      const builder = struct()
         .set('n', number)
         .set('b', boolean)
         .set('s', string)
-      type T = JsonPathsOf<typeof typeDef>
+      type T = JsonPathsOf<typeof builder>
 
       let path: '$' | '$.n' | '$.b' | '$.s'
       it('equals expected type', function () {
@@ -173,16 +172,16 @@ describe('JsonPathsOf', function () {
       })
 
       it('ignores override', function () {
-        type T = JsonPathsOf<typeof typeDef, 'y'>
+        type T = JsonPathsOf<typeof builder, 'y'>
         expectTypeOf(path).toEqualTypeOf<T>()
       })
     })
 
     describe('nested', function () {
-      const { typeDef } = struct()
+      const builder = struct()
         .set('s1', struct().set('a1', boolean))
         .set('s2', struct().set('a2', string))
-      type T = JsonPathsOf<typeof typeDef>
+      type T = JsonPathsOf<typeof builder>
 
       let path: '$' | '$.s1' | '$.s1.a1' | '$.s2' | '$.s2.a2'
       it('equals expected type', function () {
@@ -191,11 +190,11 @@ describe('JsonPathsOf', function () {
     })
 
     describe('struct of list', function () {
-      const { typeDef } = struct()
+      const builder = struct()
         .set('l', list(number))
 
       describe('no override', function () {
-        type T = JsonPathsOf<typeof typeDef>
+        type T = JsonPathsOf<typeof builder>
 
         let path: '$' | '$.l' | `$.l[${number}]`
         it('equals expected type', function () {
@@ -204,7 +203,7 @@ describe('JsonPathsOf', function () {
       })
 
       describe('passes override', function () {
-        type T = JsonPathsOf<typeof typeDef, 'o'>
+        type T = JsonPathsOf<typeof builder, 'o'>
 
         let path: '$' | '$.l' | '$.l.o'
         it('equals expected type', function () {
@@ -216,10 +215,10 @@ describe('JsonPathsOf', function () {
 
   describe('union', function () {
     describe('with primitives', function () {
-      const { typeDef } = union()
+      const builder = union()
         .add(1, number)
         .add(2, string)
-      type T = JsonPathsOf<typeof typeDef>
+      type T = JsonPathsOf<typeof builder>
 
       let path: '$'
       it('equals expected type', function () {
@@ -228,11 +227,11 @@ describe('JsonPathsOf', function () {
     })
 
     describe('with overlapping map', function () {
-      const { typeDef } = union()
+      const builder = union()
         .add(1, struct().set('a', number).set('b', string))
         .add(2, struct().set('b', string).set('c', string))
         .add(3, struct().set('c', string).set('a', string))
-      type T = JsonPathsOf<typeof typeDef>
+      type T = JsonPathsOf<typeof builder>
 
       let path: '$' | '$.a' | '$.b' | '$.c'
       it('equals expected type', function () {
@@ -241,7 +240,7 @@ describe('JsonPathsOf', function () {
     })
 
     describe('nested', function () {
-      const { typeDef } = union()
+      const builder = union()
         .add(1, struct().set(
           'a',
           union().add('x', struct().set('aa', string)),
@@ -250,7 +249,7 @@ describe('JsonPathsOf', function () {
           'b',
           union().add('y', struct().set('bb', string)),
         ))
-      type T = JsonPathsOf<typeof typeDef>
+      type T = JsonPathsOf<typeof builder>
 
       let path: '$' | '$.a' | '$.a.aa' | '$.b' | '$.b.bb'
       it('equals expected type', function () {

@@ -7,10 +7,11 @@ import {
   type ReadonlyTypeDef,
   type StructuredTypeDef,
   type TypeDef,
+  type TypeDefHolder,
   type UnionTypeDef,
 } from '.'
 
-export type ReadonlyTypeDefOf<T extends TypeDef> = InternalReadonlyTypeDefOf<T>
+export type ReadonlyTypeDefOf<T extends TypeDefHolder> = InternalReadonlyTypeDefOf<T['typeDef']>
 
 type InternalReadonlyTypeDefOf<T extends TypeDef> = T extends LiteralTypeDef ? InternalReadonlyTypeDefOfLiteral<T>
   : T extends ListTypeDef ? InternalReadonlyTypeDefOfList<T>
@@ -26,7 +27,7 @@ type InternalReadonlyTypeDefOfLiteral<T extends LiteralTypeDef> = T
 
 type InternalReadonlyTypeDefOfList<T extends ListTypeDef> = {
   readonly toReadonlyTypeDef: {
-    readonly elements: ReadonlyTypeDefOf<T['elements']>,
+    readonly elements: InternalReadonlyTypeDefOf<T['elements']>,
   },
 }
 

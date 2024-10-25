@@ -12,8 +12,7 @@ import { type PartialTypeDefOf } from 'types/defs/partial_type_def_of'
 
 describe('PartialTypeDefOf', function () {
   describe('literal', function () {
-    const { typeDef } = number
-    type T = PartialTypeDefOf<typeof typeDef>
+    type T = PartialTypeDefOf<typeof number>
 
     let t: {
       readonly toNullableTypeDef: {
@@ -27,8 +26,8 @@ describe('PartialTypeDefOf', function () {
   })
 
   describe('list', function () {
-    const { typeDef } = list(number)
-    type T = PartialTypeDefOf<typeof typeDef>
+    const builder = list(number)
+    type T = PartialTypeDefOf<typeof builder>
 
     let t: {
       readonly toNullableTypeDef: {
@@ -45,8 +44,8 @@ describe('PartialTypeDefOf', function () {
   })
 
   describe('map', function () {
-    const { typeDef } = map<'a' | 'b', typeof number.typeDef>(number)
-    type T = PartialTypeDefOf<typeof typeDef>
+    const builder = map<'a' | 'b', typeof number>(number)
+    type T = PartialTypeDefOf<typeof builder>
 
     let t: {
       readonly toNullableTypeDef: {
@@ -67,10 +66,10 @@ describe('PartialTypeDefOf', function () {
   })
 
   describe('struct', function () {
-    const { typeDef } = struct()
+    const builder = struct()
       .set('a', number)
       .setReadonly('b', string)
-    type T = PartialTypeDefOf<typeof typeDef>
+    type T = PartialTypeDefOf<typeof builder>
 
     let t: {
       readonly toNullableTypeDef: {
@@ -96,10 +95,10 @@ describe('PartialTypeDefOf', function () {
 
   describe('union', function () {
     describe('simple', function () {
-      const { typeDef } = union()
+      const builder = union()
         .add(1, number)
         .add(2, string)
-      type T = PartialTypeDefOf<typeof typeDef>
+      type T = PartialTypeDefOf<typeof builder>
 
       let t: {
         readonly toNullableTypeDef: {
@@ -121,8 +120,8 @@ describe('PartialTypeDefOf', function () {
   })
 
   describe('nullable', function () {
-    const { typeDef } = nullable(number)
-    type T = PartialTypeDefOf<typeof typeDef>
+    const builder = nullable(number)
+    type T = PartialTypeDefOf<typeof builder>
 
     let t: {
       readonly toNullableTypeDef: {
@@ -135,8 +134,8 @@ describe('PartialTypeDefOf', function () {
   })
 
   describe('readonly', function () {
-    const { typeDef } = readonly(list(number))
-    type T = PartialTypeDefOf<typeof typeDef>
+    const builder = readonly(list(number))
+    type T = PartialTypeDefOf<typeof builder>
 
     let t: {
       readonly toNullableTypeDef: {
