@@ -30,7 +30,7 @@
   "private": true,
   "resolutions": {
     "**/**/@dprint/dockerfile": "=0.3.0",
-    "//": "vitest.workspace.ts gets incompatible plugin types without forcing vite version to be the same everywhere. eslint/dprint needs the dockerfile set to this version or you get a runtime error"
+    "**/**/vite": "=5.4.10"
   },
   "scripts": {
     "check-types": "turbo run check-types",
@@ -43,6 +43,7 @@
   "version": "0.0.1",
   "workspaces": {
     "packages": [
+      "apps/*",
       "packages/*",
       "support/*"
     ]

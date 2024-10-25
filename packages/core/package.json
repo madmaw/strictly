@@ -1,6 +1,6 @@
 {
   "devDependencies": {
-    "@tscriptors/support-vitest": "*"
+    "@tscriptors/support-vite": "*"
   },
   "license": "MIT",
   "main": "index.js",

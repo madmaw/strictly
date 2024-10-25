@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
+    "baseUrl": "./src",
     "outDir": "./.out"
   },
   "extends": "../../tsconfig.json",
@@ -14,7 +14,10 @@
       "path": "../../support/vite"
     },
     {
-      "path": "../core"
+      "path": "../../packages/core"
+    },
+    {
+      "path": "../../packages/form"
     }
   ]
 }

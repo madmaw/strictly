@@ -46,8 +46,9 @@
   ],
   "include": ["tsconfig.json"],
   "references": [
-    {"path": "packages/core/"},
+    {"path": "apps/example"},
+    {"path": "packages/core"},
     {"path": "packages/form"},
-    {"path": "support/vitest/"}
+    {"path": "support/vite"}
   ]
 }

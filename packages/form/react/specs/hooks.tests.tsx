@@ -8,7 +8,7 @@ import { useFormInput } from 'react/hooks'
 import {
   type Field,
   type FormProps,
-} from 'types'
+} from 'react/props'
 import {
   type Mock,
   vitest,

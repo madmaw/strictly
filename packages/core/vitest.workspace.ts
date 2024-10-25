@@ -1,4 +1,4 @@
-import { createViteUserConfig } from '@tscriptors/support-vitest/vitest.workspace'
+import { createVitestUserConfig } from '@tscriptors/support-vite'
 import {
   defineWorkspace,
 } from 'vitest/config'
@@ -7,5 +7,5 @@ import tsconfig from './tsconfig.json'
 
 export default defineWorkspace([
   '.',
-  createViteUserConfig(tsconfig),
+  createVitestUserConfig(tsconfig),
 ] as const)

@@ -1,8 +1,7 @@
 {
-  "devDependencies": {},
   "license": "MIT",
-  "main": "index.js",
-  "name": "@tscriptors/support-vitest",
+  "main": "index.ts",
+  "name": "@tscriptors/support-vite",
   "scripts": {
     "check-types": "tsc",
     "lint": "cross-env ESLINT_USE_FLAT_CONFIG=false eslint . --max-warnings=0",

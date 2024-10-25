@@ -6,9 +6,9 @@ import {
 import {
   type Field,
   type FormProps,
-} from 'types'
+} from './props'
 
-export function useFormInput<K extends string, Fields extends ReadonlyRecord<K, Field<string>>>(
+export function useFormInput<K extends string, Fields extends ReadonlyRecord<K, Field<string, string>>>(
   k: K,
   {
     onFieldValueChange,
@@ -35,12 +35,16 @@ export function useFormInput<K extends string, Fields extends ReadonlyRecord<K, 
     k,
     onFieldBlur,
   ])
-  const { value } = fields[k]
+  const {
+    value,
+    error,
+  } = fields[k]
 
   return {
     onChange,
     onFocus,
     onBlur,
     value,
+    error,
   }
 }
