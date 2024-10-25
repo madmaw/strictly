@@ -62,6 +62,9 @@ module.exports = {
             project: 'tsconfig.json',
           },
         },
+        react: {
+          version: 'detect',
+        },
       },
       plugins: [
         '@typescript-eslint',
@@ -77,6 +80,8 @@ module.exports = {
         'plugin:@eslint-community/eslint-comments/recommended',
         'plugin:@typescript-eslint/recommended-type-checked',
         'plugin:dprint-integration/recommended',
+        'plugin:react/recommended',
+        'plugin:react-hooks/recommended',
         'plugin:import/errors',
         'plugin:import/warnings',
       ],
@@ -318,6 +323,45 @@ module.exports = {
           {
             array: true,
             object: true,
+          },
+        ],
+        'react/display-name': ['off'],
+        'react/jsx-boolean-value': [
+          'warn',
+          'always',
+        ],
+        'react/jsx-closing-bracket-location': ['off'],
+        'react/jsx-first-prop-new-line': [
+          'warn',
+          'multiline-multiprop',
+        ],
+        'react/jsx-indent-props': [
+          'warn',
+          2,
+        ],
+        'react/jsx-max-props-per-line': [
+          'warn',
+          {
+            maximum: 1,
+          },
+        ],
+        'react/jsx-one-expression-per-line': [
+          'warn',
+          { allow: 'non-jsx' },
+        ],
+        'react/jsx-sort-props': [
+          'warn',
+          {},
+        ],
+        'react/no-unknown-property': ['warn'],
+        // handled by dprint
+        'react/prop-types': ['off'],
+        'react/react-in-jsx-scope': ['off'],
+        'react-hooks/exhaustive-deps': [
+          'warn',
+          {
+            additionalHooks:
+              '(usePartialComponent|usePartialObserverComponent|useWhen|useReaction|useAutorun|useObserverComponent|useConstant|useDeferredConstant)',
           },
         ],
         // handled by dprint
