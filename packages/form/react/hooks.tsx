@@ -4,11 +4,11 @@ import {
   useCallback,
 } from 'react'
 import {
-  type Field,
+  type FormField,
   type FormProps,
 } from './props'
 
-export function useFormInput<K extends string, Fields extends ReadonlyRecord<K, Field<string, string>>>(
+export function useFormInput<K extends string, Fields extends ReadonlyRecord<K, FormField<string, string>>>(
   k: K,
   {
     onFieldValueChange,

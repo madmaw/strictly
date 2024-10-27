@@ -22,5 +22,5 @@ const { holder } = struct()
   .set('noMiddleName', boolean)
 
 export type PersonDetails = ValueTypeOf<typeof holder>
-type FlattenedPersonDetailsTypeDefs = FlattenedTypeDefsOf<typeof holder, '@'>
+type FlattenedPersonDetailsTypeDefs = FlattenedTypeDefsOf<typeof holder, '*'>
 export type PersonDetailsFields = FlattenedFormFieldsOf<FlattenedPersonDetailsTypeDefs, string>

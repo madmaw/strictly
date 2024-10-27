@@ -16,6 +16,8 @@ import {
 } from '.'
 import { type JsonPathOf } from './json_path_of'
 
+export type FlattenedTypeDefs = ReadonlyRecord<string, TypeDef>
+
 export type FlattenedTypeDefsOf<
   T extends TypeDefHolder,
   SegmentOverride extends string | null,

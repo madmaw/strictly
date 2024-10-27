@@ -1,14 +1,14 @@
 import { type ReadonlyRecord } from '@tscriptors/core/util/record'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type Field<V = any, E = any> = {
+export type FormField<V = any, E = any> = {
   readonly value: V,
   readonly error?: E,
 }
 
-export type Fields = ReadonlyRecord<string, Field>
+export type FormFields = ReadonlyRecord<string, FormField>
 
-export type FormProps<F extends Fields> = {
+export type FormProps<F extends FormFields> = {
   fields: F,
 
   onFieldValueChange<K extends keyof F>(this: void, key: K, value: F[K]['value']): void,
