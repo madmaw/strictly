@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./src",
+    "outDir": "./.out"
+  },
+  "extends": "../../tsconfig.json",
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    "tsconfig.json"
+  ],
+  "references": [
+    {
+      "path": "../../support/vite"
+    },
+    {
+      "path": "../../packages/define"
+    },
+    {
+      "path": "../../packages/form"
+    }
+  ]
+}

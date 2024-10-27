@@ -1,14 +1,16 @@
 {
   "devDependencies": {
-    "vite": "^5.4.10"
+    "@de/support-vite": "*"
   },
   "license": "MIT",
-  "main": "index.ts",
-  "name": "@de/support-vite",
+  "main": "index.js",
+  "name": "@de/fine",
   "scripts": {
     "check-types": "tsc",
     "lint": "cross-env ESLINT_USE_FLAT_CONFIG=false eslint . --max-warnings=0",
-    "lint:fix": "cross-env ESLINT_USE_FLAT_CONFIG=false eslint . --fix"
+    "lint:fix": "cross-env ESLINT_USE_FLAT_CONFIG=false eslint . --fix",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "version": "0.0.1"
 }

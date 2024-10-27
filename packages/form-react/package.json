@@ -1,0 +1,28 @@
+{
+  "dependencies": {
+    "@de/fine": "*",
+    "react": "^18.3.1"
+  },
+  "devDependencies": {
+    "@de/support-vite": "*",
+    "@testing-library/dom": "^10.4.0",
+    "@testing-library/react": "^16.0.1",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "jsdom": "^25.0.1",
+    "react-dom": "^18.3.1",
+    "react-testing-library": "^8.0.1",
+    "type-fest": "^4.26.1"
+  },
+  "license": "MIT",
+  "main": "index.js",
+  "name": "@de/form-react",
+  "scripts": {
+    "check-types": "tsc",
+    "lint": "cross-env ESLINT_USE_FLAT_CONFIG=false eslint . --max-warnings=0",
+    "lint:fix": "cross-env ESLINT_USE_FLAT_CONFIG=false eslint . --fix",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "version": "0.0.1"
+}

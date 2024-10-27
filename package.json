@@ -25,7 +25,7 @@
   },
   "license": "MIT",
   "main": "index.js",
-  "name": "tscriptors",
+  "name": "@de/de",
   "packageManager": "yarn@1.22.22",
   "private": true,
   "resolutions": {

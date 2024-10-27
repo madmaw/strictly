@@ -1,0 +1,36 @@
+{
+  "dependencies": {
+    "@de/fine": "*",
+    "@de/form-react": "*",
+    "@mantine/core": "^7.13.4",
+    "@mantine/hooks": "^7.13.4",
+    "react": "^18.3.1"
+  },
+  "devDependencies": {
+    "@de/support-vite": "*",
+    "@testing-library/dom": "^10.4.0",
+    "@testing-library/react": "^16.0.1",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "jsdom": "^25.0.1",
+    "react-dom": "^18.3.1",
+    "react-testing-library": "^8.0.1",
+    "type-fest": "^4.26.1",
+    "vite": "^5.4.10"
+  },
+  "license": "MIT",
+  "main": "index.js",
+  "name": "@de/mo",
+  "scripts": {
+    "build": "vite build",
+    "check-types": "tsc",
+    "dev": "vite",
+    "lint": "cross-env ESLINT_USE_FLAT_CONFIG=false eslint . --max-warnings=0",
+    "lint:fix": "cross-env ESLINT_USE_FLAT_CONFIG=false eslint . --fix",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "type": "module",
+  "version": "0.0.1"
+}
