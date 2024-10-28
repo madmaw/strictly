@@ -1,5 +1,11 @@
+import '@mantine/core/styles.css'
+
 import { checkExists } from '@de/fine/util/preconditions'
-import { install } from 'features/form/install'
+import {
+  createTheme,
+  MantineProvider,
+} from '@mantine/core'
+import { install } from 'features/form/pet/install'
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 
@@ -10,11 +16,17 @@ window.onload = function () {
     'unable to find element id {}',
     elementId,
   )
+  const theme = createTheme({
+    /** Put your mantine theme override here */
+  })
+
   const App = install()
   createRoot(e).render(
     (
       <StrictMode>
-        <App />
+        <MantineProvider theme={theme}>
+          <App />
+        </MantineProvider>
       </StrictMode>
     ),
   )

@@ -14,9 +14,9 @@ import {
 } from '.'
 import { type JsonPathOf } from './json_path_of'
 
-export type FlattenedJsonPathsOf<
+export type FlattenedJsonValueToTypePathsOf<
   T extends TypeDefHolder,
-  SegmentOverride extends string = '@',
+  SegmentOverride extends string = '*',
   Path extends string = '$',
 > = InternalFlattenedJsonPathsOf<
   T['typeDef'],

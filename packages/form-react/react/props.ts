@@ -4,6 +4,7 @@ import { type ReadonlyRecord } from '@de/fine/util/record'
 export type FormField<V = any, E = any> = {
   readonly value: V,
   readonly error?: E,
+  readonly disabled: boolean,
 }
 
 export type FormFields = ReadonlyRecord<string, FormField>

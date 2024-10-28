@@ -10,6 +10,7 @@ module.exports = {
     ],
     tsconfigRootDir: __dirname,
     sourceType: 'module',
+    ecmaVersion: '2015',
   },
   rules: {
     'import/no-extraneous-dependencies': [

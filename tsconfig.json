@@ -48,7 +48,7 @@
   "references": [
     {"path": "apps/demo"},
     {"path": "packages/define"},
-    {"path": "packages/form"},
+    {"path": "packages/form-react"},
     {"path": "support/vite"}
   ]
 }

@@ -7,7 +7,8 @@ import { type ReadonlyRecord } from '@de/fine/util/record'
 export type FlattenedFormFieldsOf<R extends ReadonlyRecord<string, TypeDef>, E> = {
   [K in keyof R]: {
     value: InternalValueTypeOf<R[K]>,
-    error: E,
+    error?: E,
+    disabled: boolean,
   }
 }
 

@@ -93,6 +93,7 @@ module.exports = {
         ],
         tsconfigRootDir: __dirname,
         sourceType: 'module',
+        ecmaVersion: '2015',
       },
       rules: {
         '@eslint-community/eslint-comments/no-unused-disable': 'warn',
@@ -175,6 +176,8 @@ module.exports = {
         '@typescript-eslint/no-unsafe-assignment': 'off',
         // seems to generate a lot of false positives and be redundant with TS settings
         '@typescript-eslint/no-unsafe-call': 'off',
+        // seems to generate a lot of false positives and be redundant with TS settings
+        '@typescript-eslint/no-unsafe-member-access': 'off',
         // disable in favour of unused-imports/no-unused-vars as it gives more control
         '@typescript-eslint/no-unused-vars': 'off',
         '@typescript-eslint/prefer-readonly': 'warn',
