@@ -9,7 +9,6 @@ import {
   type MapKeyType,
   type MapTypeDef,
   type NullableTypeDef,
-  type PartialTypeDef,
   type ReadonlyTypeDef,
   type StructuredFieldKey,
   type StructuredTypeDef,
@@ -46,17 +45,19 @@ class ListTypeDefBuilder<
 class MapTypeDefBuilder<
   K extends MapKeyType,
   V extends TypeDef,
-> extends TypeDefBuilder<MapTypeDef<K, V>> {
+  Partial extends boolean,
+> extends TypeDefBuilder<MapTypeDef<K, V, Partial>> {
+  partial() {
+    return new MapTypeDefBuilder<K, V, true>({
+      ...this.typeDef,
+      partial: true,
+    })
+  }
 }
 
 class ReadonlyTypeDefBuilder<
   T extends ListTypeDef | MapTypeDef,
 > extends TypeDefBuilder<ReadonlyTypeDef<T>> {
-}
-
-class PartialTypeDefBuilder<
-  T extends MapTypeDef,
-> extends TypeDefBuilder<PartialTypeDef<T>> {
 }
 
 class StructuredTypeDefBuilder<
@@ -219,11 +220,12 @@ export function list<T extends TypeDef>(elements: TypeDefHolder<T>): ListTypeDef
 }
 
 export function map<K extends MapKeyType, V extends TypeDefHolder>({ typeDef }: V) {
-  return new MapTypeDefBuilder<K, V['typeDef']>({
+  return new MapTypeDefBuilder<K, V['typeDef'], false>({
     type: TypeDefType.Map,
     // eslint-disable-next-line no-undefined
     keyPrototype: undefined!,
     valueTypeDef: typeDef,
+    partial: false,
   })
 }
 
@@ -231,13 +233,6 @@ export function readonly<T extends MapTypeDef | ListTypeDef>({ typeDef }: TypeDe
   return new ReadonlyTypeDefBuilder<T>({
     type: TypeDefType.Readonly,
     toReadonlyTypeDef: typeDef,
-  })
-}
-
-export function partial<T extends MapTypeDef>({ typeDef }: TypeDefHolder<T>) {
-  return new PartialTypeDefBuilder<T>({
-    type: TypeDefType.Partial,
-    toPartialTypeDef: typeDef,
   })
 }
 

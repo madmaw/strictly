@@ -5,7 +5,6 @@ import {
   type LiteralTypeDef,
   type MapTypeDef,
   type NullableTypeDef,
-  type PartialTypeDef,
   type ReadonlyTypeDef,
   type StructuredTypeDef,
   type TypeDef,
@@ -44,7 +43,6 @@ type InternalFlattenedJsonPathsOfChildren<
   : T extends StructuredTypeDef ? InternalFlattenedJsonPathsOfStructChildren<T, SegmentOverride, ValuePath, TypePath>
   : T extends UnionTypeDef ? InternalFlattenedJsonPathsOfUnionChildren<T, SegmentOverride, ValuePath, TypePath>
   : T extends ReadonlyTypeDef ? InternalFlattenedJsonPathsOfReadonlyChildren<T, SegmentOverride, ValuePath, TypePath>
-  : T extends PartialTypeDef ? InternalFlattenedJsonPathsOfPartialChildren<T, SegmentOverride, ValuePath, TypePath>
   : T extends NullableTypeDef ? InternalFlattenedJsonPathsOfNullableChildren<T, SegmentOverride, ValuePath, TypePath>
   : never
 
@@ -113,18 +111,6 @@ type InternalFlattenedJsonPathsOfReadonlyChildren<
   TypePath extends string,
 > = InternalFlattenedJsonPathsOfChildren<
   T['toReadonlyTypeDef'],
-  SegmentOverride,
-  ValuePath,
-  TypePath
->
-
-type InternalFlattenedJsonPathsOfPartialChildren<
-  T extends PartialTypeDef,
-  SegmentOverride extends string,
-  ValuePath extends string,
-  TypePath extends string,
-> = InternalFlattenedJsonPathsOfChildren<
-  T['toPartialTypeDef'],
   SegmentOverride,
   ValuePath,
   TypePath

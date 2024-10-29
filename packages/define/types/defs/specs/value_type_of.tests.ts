@@ -87,6 +87,7 @@ describe('ValueTypeOf', function () {
         readonly type: TypeDefType.Literal,
         readonly valuePrototype: 'a' | 'b' | 'c',
       },
+      readonly partial: false,
     }
     type T = ValueTypeOf<{ typeDef: TypeD }>
 
@@ -108,6 +109,24 @@ describe('ValueTypeOf', function () {
 
       it('equals expected type', function () {
         expectTypeOf(r).toEqualTypeOf<R>()
+      })
+    })
+
+    describe('partial', function () {
+      type TypeD = {
+        readonly type: TypeDefType.Map,
+        readonly keyPrototype: 'x' | 'y' | 'z',
+        readonly valueTypeDef: {
+          readonly type: TypeDefType.Literal,
+          readonly valuePrototype: 'a' | 'b' | 'c',
+        },
+        readonly partial: true,
+      }
+      type T = ValueTypeOf<{ typeDef: TypeD }>
+
+      let t: Partial<Record<'x' | 'y' | 'z', 'a' | 'b' | 'c'>>
+      it('equals expected type', function () {
+        expectTypeOf(t).toEqualTypeOf<T>()
       })
     })
   })

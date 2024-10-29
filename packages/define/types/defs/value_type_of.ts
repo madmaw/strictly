@@ -1,9 +1,9 @@
+import { type MaybePartial } from 'types/lang'
 import {
   type ListTypeDef,
   type LiteralTypeDef,
   type MapTypeDef,
   type NullableTypeDef,
-  type PartialTypeDef,
   type ReadonlyTypeDef,
   type StructuredTypeDef,
   type TypeDef,
@@ -24,7 +24,6 @@ export type InternalValueTypeOf<
   : F extends ListTypeDef ? InternalValueTypeOfList<F, Extra>
   : F extends MapTypeDef ? InternalValueTypeOfMap<F, Extra>
   : F extends ReadonlyTypeDef ? InternalValueTypeOfReadonly<F, Extra>
-  : F extends PartialTypeDef ? InternalValueTypeOfPartial<F, Extra>
   : F extends StructuredTypeDef ? InternalValueTypeOfStruct<F, Extra>
   : F extends UnionTypeDef ? InternalValueTypeOfUnion<F, Extra>
   : never
@@ -41,20 +40,19 @@ type InternalValueTypeOfList<F extends ListTypeDef, Extra> = InternalValueTypeOf
 type InternalValueTypeOfMap<
   F extends MapTypeDef,
   Extra,
-> = Record<
-  F['keyPrototype'],
-  InternalValueTypeOf<
-    F['valueTypeDef'],
-    Extra
-  >
+> = MaybePartial<
+  Record<
+    F['keyPrototype'],
+    InternalValueTypeOf<
+      F['valueTypeDef'],
+      Extra
+    >
+  >,
+  F['partial']
 > & Extra
 
 type InternalValueTypeOfReadonly<F extends ReadonlyTypeDef, Extra> = Readonly<
   InternalValueTypeOf<F['toReadonlyTypeDef'], Extra>
->
-
-type InternalValueTypeOfPartial<F extends PartialTypeDef, Extra> = Partial<
-  InternalValueTypeOf<F['toPartialTypeDef'], Extra>
 >
 
 type InternalValueTypeOfStruct<

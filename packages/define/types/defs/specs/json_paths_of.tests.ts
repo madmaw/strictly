@@ -4,7 +4,6 @@ import {
   map,
   nullable,
   number,
-  partial,
   readonly,
   string,
   struct,
@@ -117,7 +116,7 @@ describe('JsonPathsOf', function () {
     })
 
     describe('partial', function () {
-      const builder = partial(map(string))
+      const builder = map(string).partial()
       type T = JsonPathsOf<typeof builder>
 
       it('equals expected type', function () {

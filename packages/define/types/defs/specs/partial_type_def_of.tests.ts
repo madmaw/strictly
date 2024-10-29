@@ -62,18 +62,16 @@ describe('PartialTypeDefOf', function () {
       readonly typeDef: {
         readonly type: TypeDefType.Nullable,
         readonly toNullableTypeDef: {
-          readonly type: TypeDefType.Partial,
-          readonly toPartialTypeDef: {
-            readonly type: TypeDefType.Map,
-            readonly keyPrototype: 'a' | 'b',
-            readonly valueTypeDef: {
-              readonly type: TypeDefType.Nullable,
-              readonly toNullableTypeDef: {
-                readonly type: TypeDefType.Literal,
-                readonly valuePrototype: number,
-              },
+          readonly type: TypeDefType.Map,
+          readonly keyPrototype: 'a' | 'b',
+          readonly valueTypeDef: {
+            readonly type: TypeDefType.Nullable,
+            readonly toNullableTypeDef: {
+              readonly type: TypeDefType.Literal,
+              readonly valuePrototype: number,
             },
           },
+          readonly partial: true,
         },
       },
     }

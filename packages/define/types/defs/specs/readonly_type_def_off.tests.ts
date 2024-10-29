@@ -4,7 +4,6 @@ import {
   map,
   nullable,
   number,
-  partial,
   readonly,
   string,
   struct,
@@ -62,6 +61,7 @@ describe('ReadonlyTypeDefOf', function () {
             readonly type: TypeDefType.Literal,
             readonly valuePrototype: number,
           },
+          readonly partial: false,
         },
       },
     }
@@ -115,6 +115,7 @@ describe('ReadonlyTypeDefOf', function () {
                 readonly type: TypeDefType.Literal,
                 readonly valuePrototype: number,
               },
+              readonly partial: false,
             },
           },
           readonly [2]: {
@@ -145,6 +146,7 @@ describe('ReadonlyTypeDefOf', function () {
               readonly type: TypeDefType.Literal,
               readonly valuePrototype: number,
             },
+            readonly partial: false,
           },
         },
       },
@@ -155,22 +157,20 @@ describe('ReadonlyTypeDefOf', function () {
   })
 
   describe('partial', function () {
-    const builder = partial(map<'a', typeof number>(number))
+    const builder = map<'a', typeof number>(number).partial()
     type T = ReadonlyTypeDefOf<typeof builder>
 
     let t: {
       readonly typeDef: {
-        readonly type: TypeDefType.Partial,
-        readonly toPartialTypeDef: {
-          readonly type: TypeDefType.Readonly,
-          readonly toReadonlyTypeDef: {
-            readonly type: TypeDefType.Map,
-            readonly keyPrototype: 'a',
-            readonly valueTypeDef: {
-              readonly type: TypeDefType.Literal,
-              readonly valuePrototype: number,
-            },
+        readonly type: TypeDefType.Readonly,
+        readonly toReadonlyTypeDef: {
+          readonly type: TypeDefType.Map,
+          readonly keyPrototype: 'a',
+          readonly valueTypeDef: {
+            readonly type: TypeDefType.Literal,
+            readonly valuePrototype: number,
           },
+          readonly partial: true,
         },
       },
     }
@@ -193,6 +193,7 @@ describe('ReadonlyTypeDefOf', function () {
             readonly type: TypeDefType.Literal,
             readonly valuePrototype: number,
           },
+          readonly partial: false,
         },
       },
     }

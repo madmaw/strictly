@@ -27,7 +27,6 @@ export type TypeDef =
   | ListTypeDef
   | MapTypeDef
   | ReadonlyTypeDef
-  | PartialTypeDef
   | StructuredTypeDef
   | UnionTypeDef
 
@@ -37,7 +36,6 @@ export enum TypeDefType {
   List,
   Map,
   Readonly,
-  Partial,
   Structured,
   Union,
 }
@@ -76,19 +74,13 @@ export type MapKeyType = string | number
 export type MapTypeDef<
   K extends MapKeyType = MapKeyType,
   V extends TypeDef = AnyTypeDef,
+  Partial extends boolean = boolean,
 > = {
   readonly type: TypeDefType.Map,
   // never actually populate
   readonly keyPrototype: K,
   readonly valueTypeDef: V,
-}
-
-// map with partial fields
-export type PartialTypeDef<
-  T extends MapTypeDef = AnyTypeDef,
-> = {
-  readonly type: TypeDefType.Partial,
-  readonly toPartialTypeDef: T,
+  readonly partial: Partial,
 }
 
 // readonly list or map

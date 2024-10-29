@@ -3,7 +3,6 @@ import {
   type LiteralTypeDef,
   type MapTypeDef,
   type NullableTypeDef,
-  type PartialTypeDef,
   type ReadonlyTypeDef,
   type StructuredTypeDef,
   type TypeDef,
@@ -33,7 +32,6 @@ type InternalJsonPathsOfChildren<
   : F extends ListTypeDef ? InternalJsonPathsOfListChildren<F, Prefix, SegmentOverride>
   : F extends MapTypeDef ? InternalJsonPathsOfMapChildren<F, Prefix, SegmentOverride>
   : F extends ReadonlyTypeDef ? InternalJsonPathsOfReadonlyChildren<F, Prefix, SegmentOverride>
-  : F extends PartialTypeDef ? InternalJsonPathsOfPartialChildren<F, Prefix, SegmentOverride>
   : F extends StructuredTypeDef ? InternalJsonPathsOfStructChildren<F, Prefix, SegmentOverride>
   : F extends UnionTypeDef ? InternalJsonPathsOfUnionChildren<
       F,
@@ -84,16 +82,6 @@ type InternalJsonPathsOfReadonlyChildren<
   SegmentOverride extends string | null,
 > = InternalJsonPathsOfChildren<
   F['toReadonlyTypeDef'],
-  Prefix,
-  SegmentOverride
->
-
-type InternalJsonPathsOfPartialChildren<
-  F extends PartialTypeDef,
-  Prefix extends string,
-  SegmentOverride extends string | null,
-> = InternalJsonPathsOfChildren<
-  F['toPartialTypeDef'],
   Prefix,
   SegmentOverride
 >

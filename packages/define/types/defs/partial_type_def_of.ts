@@ -3,7 +3,6 @@ import {
   type LiteralTypeDef,
   type MapTypeDef,
   type NullableTypeDef,
-  type PartialTypeDef,
   type ReadonlyTypeDef,
   type StructuredTypeDef,
   type TypeDef,
@@ -26,7 +25,6 @@ type InternalPartialOf<T extends TypeDef> = T extends LiteralTypeDef ? InternalP
   : T extends MapTypeDef ? InternalPartialOfMap<T>
   : T extends StructuredTypeDef ? InternalPartialOfStructured<T>
   : T extends UnionTypeDef ? InternalPartialOfUnion<T>
-  : T extends PartialTypeDef ? InternalPartialOfPartial<T>
   : T extends ReadonlyTypeDef ? InternalPartialOfReadonly<T>
   : T extends NullableTypeDef ? InternalPartialOfNullable<T>
   : never
@@ -39,12 +37,10 @@ type InternalPartialOfList<T extends ListTypeDef> = {
 }
 
 type InternalPartialOfMap<T extends MapTypeDef> = {
-  readonly type: TypeDefType.Partial,
-  readonly toPartialTypeDef: {
-    readonly type: T['type'],
-    readonly keyPrototype: T['keyPrototype'],
-    readonly valueTypeDef: InternalPartialAndNullableOf<T['valueTypeDef']>,
-  },
+  readonly type: T['type'],
+  readonly keyPrototype: T['keyPrototype'],
+  readonly valueTypeDef: InternalPartialAndNullableOf<T['valueTypeDef']>,
+  readonly partial: true,
 }
 
 type InternalPartialOfStructured<T extends StructuredTypeDef> = T extends StructuredTypeDef<infer Fields> ? {
@@ -62,8 +58,6 @@ type InternalPartialOfUnion<T extends UnionTypeDef> = T extends UnionTypeDef<inf
     },
   }
   : never
-
-type InternalPartialOfPartial<T extends PartialTypeDef> = InternalPartialOf<T['toPartialTypeDef']>
 
 type InternalPartialOfReadonly<T extends ReadonlyTypeDef> = {
   readonly type: T['type'],

@@ -5,7 +5,6 @@ import {
   map,
   nullable,
   number,
-  partial,
   readonly,
   string,
   struct,
@@ -103,23 +102,6 @@ describe('FlattenedJsonPathsOf', function () {
       readonly $: '$',
       readonly [_: `$[${number}]`]: '$.*',
       readonly [_: `$[${number}][${number}]`]: '$.*.*',
-    }
-    it('equals expected type', function () {
-      expectTypeOf(t).toEqualTypeOf<T>()
-    })
-  })
-
-  describe('partial', function () {
-    const l = list(number)
-    const builder = partial(map<'a' | 'b', typeof l>(l))
-    type T = SimplifyDeep<FlattenedJsonValueToTypePathsOf<typeof builder>>
-
-    let t: {
-      readonly $: '$',
-      readonly [`$.a`]: '$.*',
-      readonly [`$.b`]: '$.*',
-      readonly [_: `$.a[${number}]`]: '$.*.*',
-      readonly [_: `$.b[${number}]`]: '$.*.*',
     }
     it('equals expected type', function () {
       expectTypeOf(t).toEqualTypeOf<T>()

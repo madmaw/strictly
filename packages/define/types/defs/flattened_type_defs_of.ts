@@ -7,7 +7,6 @@ import {
   type LiteralTypeDef,
   type MapTypeDef,
   type NullableTypeDef,
-  type PartialTypeDef,
   type ReadonlyTypeDef,
   type StructuredTypeDef,
   type TypeDef,
@@ -45,7 +44,6 @@ type InternalFlattenedTypeDefsOfChildren<
   : T extends StructuredTypeDef ? InternalFlattenedTypeDefsOfStructChildren<T, SegmentOverride, Path>
   : T extends UnionTypeDef ? InternalFlattenedTypeDefsOfUnionChildren<T, SegmentOverride, Path>
   : T extends ReadonlyTypeDef ? InternalFlattenedTypeDefsOfReadonlyChildren<T, SegmentOverride, Path>
-  : T extends PartialTypeDef ? InternalFlattenedTypeDefsOfPartialChildren<T, SegmentOverride, Path>
   : T extends NullableTypeDef ? InternalFlattenedTypeDefsOfNullableChildren<T, SegmentOverride, Path>
   : never
 
@@ -112,12 +110,6 @@ type InternalFlattenedTypeDefsOfReadonlyChildren<
   SegmentOverride extends string | null,
   Path extends string,
 > = InternalFlattenedTypeDefsOfChildren<T['toReadonlyTypeDef'], SegmentOverride, Path>
-
-type InternalFlattenedTypeDefsOfPartialChildren<
-  T extends PartialTypeDef,
-  SegmentOverride extends string | null,
-  Path extends string,
-> = InternalFlattenedTypeDefsOfChildren<T['toPartialTypeDef'], SegmentOverride, Path>
 
 type InternalFlattenedTypeDefsOfNullableChildren<
   T extends NullableTypeDef,

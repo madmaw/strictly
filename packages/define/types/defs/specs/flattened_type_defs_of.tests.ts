@@ -60,6 +60,7 @@ describe('FlattenedTypeDefsOf', function () {
           readonly type: TypeDefType.Literal,
           readonly valuePrototype: number,
         },
+        readonly partial: false,
       },
       readonly ['$.s']: {
         readonly type: TypeDefType.Literal,
