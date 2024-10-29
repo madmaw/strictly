@@ -42,16 +42,14 @@ class ListTypeDefBuilder<
 > extends TypeDefBuilder<ListTypeDef<T>> {
 }
 
-class MapTypeDefBuilder<
-  K extends MapKeyType,
-  V extends TypeDef,
-  Partial extends boolean,
-> extends TypeDefBuilder<MapTypeDef<K, V, Partial>> {
+class MapTypeDefBuilder<T extends MapTypeDef> extends TypeDefBuilder<T> {
   partial() {
-    return new MapTypeDefBuilder<K, V, true>({
-      ...this.typeDef,
-      partial: true,
-    })
+    return new MapTypeDefBuilder<
+      MapTypeDef<
+        T['keyPrototype'],
+        T['valueTypeDef'] | undefined
+      >
+    >(this.typeDef)
   }
 }
 
@@ -220,12 +218,11 @@ export function list<T extends TypeDef>(elements: TypeDefHolder<T>): ListTypeDef
 }
 
 export function map<K extends MapKeyType, V extends TypeDefHolder>({ typeDef }: V) {
-  return new MapTypeDefBuilder<K, V['typeDef'], false>({
+  return new MapTypeDefBuilder<MapTypeDef<K, V['typeDef']>>({
     type: TypeDefType.Map,
     // eslint-disable-next-line no-undefined
     keyPrototype: undefined!,
     valueTypeDef: typeDef,
-    partial: false,
   })
 }
 

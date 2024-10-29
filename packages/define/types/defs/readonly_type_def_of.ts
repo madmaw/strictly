@@ -39,8 +39,10 @@ type InternalReadonlyTypeDefOfMap<T extends MapTypeDef> = {
   readonly toReadonlyTypeDef: {
     readonly type: T['type'],
     readonly keyPrototype: T['keyPrototype'],
-    readonly valueTypeDef: InternalReadonlyTypeDefOf<T['valueTypeDef']>,
-    readonly partial: T['partial'],
+    readonly valueTypeDef: undefined extends T['valueTypeDef'] ? InternalReadonlyTypeDefOf<
+        Exclude<T['valueTypeDef'], undefined>
+      > | undefined
+      : InternalReadonlyTypeDefOf<T['valueTypeDef']>,
   },
 }
 

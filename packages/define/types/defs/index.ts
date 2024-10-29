@@ -73,14 +73,12 @@ export type MapKeyType = string | number
 
 export type MapTypeDef<
   K extends MapKeyType = MapKeyType,
-  V extends TypeDef = AnyTypeDef,
-  Partial extends boolean = boolean,
+  V extends TypeDef | undefined = AnyTypeDef,
 > = {
   readonly type: TypeDefType.Map,
   // never actually populate
   readonly keyPrototype: K,
   readonly valueTypeDef: V,
-  readonly partial: Partial,
 }
 
 // readonly list or map

@@ -70,8 +70,7 @@ describe('PartialTypeDefOf', function () {
               readonly type: TypeDefType.Literal,
               readonly valuePrototype: number,
             },
-          },
-          readonly partial: true,
+          } | undefined,
         },
       },
     }

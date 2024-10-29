@@ -71,7 +71,6 @@ describe('builder', function () {
           type C = {
             readonly type: TypeDefType.Map,
             readonly keyPrototype: 'a' | 'b' | 'c',
-            readonly partial: false,
             readonly valueTypeDef: {
               readonly type: TypeDefType.Literal,
               readonly valuePrototype: number,
@@ -91,7 +90,6 @@ describe('builder', function () {
             readonly toReadonlyTypeDef: {
               readonly type: TypeDefType.Map,
               readonly keyPrototype: 'a' | 'b' | 'c',
-              readonly partial: false,
               readonly valueTypeDef: {
                 readonly type: TypeDefType.Literal,
                 readonly valuePrototype: number,
@@ -112,8 +110,7 @@ describe('builder', function () {
             readonly valueTypeDef: {
               readonly type: TypeDefType.Literal,
               readonly valuePrototype: number,
-            },
-            readonly partial: true,
+            } | undefined,
           }
 
           expectTypeOf(typeDef).toEqualTypeOf<C>()

@@ -61,7 +61,6 @@ describe('ReadonlyTypeDefOf', function () {
             readonly type: TypeDefType.Literal,
             readonly valuePrototype: number,
           },
-          readonly partial: false,
         },
       },
     }
@@ -115,7 +114,6 @@ describe('ReadonlyTypeDefOf', function () {
                 readonly type: TypeDefType.Literal,
                 readonly valuePrototype: number,
               },
-              readonly partial: false,
             },
           },
           readonly [2]: {
@@ -146,7 +144,6 @@ describe('ReadonlyTypeDefOf', function () {
               readonly type: TypeDefType.Literal,
               readonly valuePrototype: number,
             },
-            readonly partial: false,
           },
         },
       },
@@ -169,8 +166,7 @@ describe('ReadonlyTypeDefOf', function () {
           readonly valueTypeDef: {
             readonly type: TypeDefType.Literal,
             readonly valuePrototype: number,
-          },
-          readonly partial: true,
+          } | undefined,
         },
       },
     }
@@ -193,7 +189,6 @@ describe('ReadonlyTypeDefOf', function () {
             readonly type: TypeDefType.Literal,
             readonly valuePrototype: number,
           },
-          readonly partial: false,
         },
       },
     }

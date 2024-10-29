@@ -44,11 +44,12 @@ type InternalValueTypeOfMap<
   Record<
     F['keyPrototype'],
     InternalValueTypeOf<
-      F['valueTypeDef'],
+      Exclude<F['valueTypeDef'], undefined>,
       Extra
     >
   >,
-  F['partial']
+  // yes, this is necessary
+  undefined extends F['valueTypeDef'] ? true : false
 > & Extra
 
 type InternalValueTypeOfReadonly<F extends ReadonlyTypeDef, Extra> = Readonly<

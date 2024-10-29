@@ -119,8 +119,7 @@ describe('ValueTypeOf', function () {
         readonly valueTypeDef: {
           readonly type: TypeDefType.Literal,
           readonly valuePrototype: 'a' | 'b' | 'c',
-        },
-        readonly partial: true,
+        } | undefined,
       }
       type T = ValueTypeOf<{ typeDef: TypeD }>
 
