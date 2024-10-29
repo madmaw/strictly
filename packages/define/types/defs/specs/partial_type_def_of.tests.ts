@@ -1,3 +1,4 @@
+import { type TypeDefType } from 'types/defs'
 import {
   list,
   map,
@@ -15,8 +16,12 @@ describe('PartialTypeDefOf', function () {
     type T = PartialTypeDefOf<typeof number>
 
     let t: {
-      readonly toNullableTypeDef: {
-        readonly valuePrototype: number,
+      readonly typeDef: {
+        readonly type: TypeDefType.Nullable,
+        readonly toNullableTypeDef: {
+          readonly type: TypeDefType.Literal,
+          readonly valuePrototype: number,
+        },
       },
     }
 
@@ -30,10 +35,16 @@ describe('PartialTypeDefOf', function () {
     type T = PartialTypeDefOf<typeof builder>
 
     let t: {
-      readonly toNullableTypeDef: {
-        readonly elements: {
-          readonly toNullableTypeDef: {
-            readonly valuePrototype: number,
+      readonly typeDef: {
+        readonly type: TypeDefType.Nullable,
+        readonly toNullableTypeDef: {
+          readonly type: TypeDefType.List,
+          readonly elements: {
+            readonly type: TypeDefType.Nullable,
+            readonly toNullableTypeDef: {
+              readonly type: TypeDefType.Literal,
+              readonly valuePrototype: number,
+            },
           },
         },
       },
@@ -48,12 +59,19 @@ describe('PartialTypeDefOf', function () {
     type T = PartialTypeDefOf<typeof builder>
 
     let t: {
-      readonly toNullableTypeDef: {
-        readonly toPartialTypeDef: {
-          readonly keyPrototype: 'a' | 'b',
-          readonly valueTypeDef: {
-            readonly toNullableTypeDef: {
-              readonly valuePrototype: number,
+      readonly typeDef: {
+        readonly type: TypeDefType.Nullable,
+        readonly toNullableTypeDef: {
+          readonly type: TypeDefType.Partial,
+          readonly toPartialTypeDef: {
+            readonly type: TypeDefType.Map,
+            readonly keyPrototype: 'a' | 'b',
+            readonly valueTypeDef: {
+              readonly type: TypeDefType.Nullable,
+              readonly toNullableTypeDef: {
+                readonly type: TypeDefType.Literal,
+                readonly valuePrototype: number,
+              },
             },
           },
         },
@@ -72,16 +90,24 @@ describe('PartialTypeDefOf', function () {
     type T = PartialTypeDefOf<typeof builder>
 
     let t: {
-      readonly toNullableTypeDef: {
-        readonly fields: {
-          a?: {
-            readonly toNullableTypeDef: {
-              readonly valuePrototype: number,
+      readonly typeDef: {
+        readonly type: TypeDefType.Nullable,
+        readonly toNullableTypeDef: {
+          readonly type: TypeDefType.Structured,
+          readonly fields: {
+            a?: {
+              readonly type: TypeDefType.Nullable,
+              readonly toNullableTypeDef: {
+                readonly type: TypeDefType.Literal,
+                readonly valuePrototype: number,
+              },
             },
-          },
-          readonly b?: {
-            readonly toNullableTypeDef: {
-              readonly valuePrototype: string,
+            readonly b?: {
+              readonly type: TypeDefType.Nullable,
+              readonly toNullableTypeDef: {
+                readonly type: TypeDefType.Literal,
+                readonly valuePrototype: string,
+              },
             },
           },
         },
@@ -101,13 +127,19 @@ describe('PartialTypeDefOf', function () {
       type T = PartialTypeDefOf<typeof builder>
 
       let t: {
-        readonly toNullableTypeDef: {
-          readonly unions: {
-            readonly 1: {
-              readonly valuePrototype: number,
-            },
-            readonly 2: {
-              readonly valuePrototype: string,
+        readonly typeDef: {
+          readonly type: TypeDefType.Nullable,
+          readonly toNullableTypeDef: {
+            readonly type: TypeDefType.Union,
+            readonly unions: {
+              readonly 1: {
+                readonly type: TypeDefType.Literal,
+                readonly valuePrototype: number,
+              },
+              readonly 2: {
+                readonly type: TypeDefType.Literal,
+                readonly valuePrototype: string,
+              },
             },
           },
         },
@@ -124,8 +156,12 @@ describe('PartialTypeDefOf', function () {
     type T = PartialTypeDefOf<typeof builder>
 
     let t: {
-      readonly toNullableTypeDef: {
-        readonly valuePrototype: number,
+      readonly typeDef: {
+        readonly type: TypeDefType.Nullable,
+        readonly toNullableTypeDef: {
+          readonly type: TypeDefType.Literal,
+          readonly valuePrototype: number,
+        },
       },
     }
     it('equals expected type', function () {
@@ -138,11 +174,18 @@ describe('PartialTypeDefOf', function () {
     type T = PartialTypeDefOf<typeof builder>
 
     let t: {
-      readonly toNullableTypeDef: {
-        readonly toReadonlyTypeDef: {
-          readonly elements: {
-            readonly toNullableTypeDef: {
-              readonly valuePrototype: number,
+      readonly typeDef: {
+        readonly type: TypeDefType.Nullable,
+        readonly toNullableTypeDef: {
+          readonly type: TypeDefType.Readonly,
+          readonly toReadonlyTypeDef: {
+            readonly type: TypeDefType.List,
+            readonly elements: {
+              readonly type: TypeDefType.Nullable,
+              readonly toNullableTypeDef: {
+                readonly type: TypeDefType.Literal,
+                readonly valuePrototype: number,
+              },
             },
           },
         },

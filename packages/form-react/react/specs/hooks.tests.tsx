@@ -40,6 +40,7 @@ describe('hooks', function () {
       fields: {
         $: {
           value: 'zzz',
+          disabled: false,
         },
       },
       onFieldBlur,
@@ -64,6 +65,7 @@ describe('hooks', function () {
             fields={{
               $: {
                 value,
+                disabled: false,
               },
             }}
           />

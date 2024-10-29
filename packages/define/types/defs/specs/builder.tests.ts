@@ -1,3 +1,4 @@
+import { type TypeDefType } from 'types/defs'
 import {
   boolean,
   list,
@@ -16,6 +17,7 @@ describe('builder', function () {
 
     it('equals expected type', function () {
       type C = {
+        readonly type: TypeDefType.Literal,
         readonly valuePrototype: number,
       }
 
@@ -30,7 +32,9 @@ describe('builder', function () {
 
         it('equals expected type', function () {
           type C = {
+            readonly type: TypeDefType.List,
             readonly elements: {
+              readonly type: TypeDefType.Literal,
               readonly valuePrototype: number,
             },
           }
@@ -44,8 +48,11 @@ describe('builder', function () {
 
       it('equals expected type', function () {
         type C = {
+          readonly type: TypeDefType.Readonly,
           readonly toReadonlyTypeDef: {
+            readonly type: TypeDefType.List,
             readonly elements: {
+              readonly type: TypeDefType.Literal,
               readonly valuePrototype: number,
             },
           },
@@ -63,8 +70,10 @@ describe('builder', function () {
 
         it('equals expected type', function () {
           type C = {
+            readonly type: TypeDefType.Map,
             readonly keyPrototype: 'a' | 'b' | 'c',
             readonly valueTypeDef: {
+              readonly type: TypeDefType.Literal,
               readonly valuePrototype: number,
             },
           }
@@ -78,9 +87,12 @@ describe('builder', function () {
 
         it('equals expected type', function () {
           type C = {
+            readonly type: TypeDefType.Readonly,
             readonly toReadonlyTypeDef: {
+              readonly type: TypeDefType.Map,
               readonly keyPrototype: 'a' | 'b' | 'c',
               readonly valueTypeDef: {
+                readonly type: TypeDefType.Literal,
                 readonly valuePrototype: number,
               },
             },
@@ -94,9 +106,12 @@ describe('builder', function () {
 
         it('equals expected type', function () {
           type C = {
+            readonly type: TypeDefType.Partial,
             readonly toPartialTypeDef: {
+              readonly type: TypeDefType.Map,
               readonly keyPrototype: 'a' | 'b' | 'c',
               readonly valueTypeDef: {
+                readonly type: TypeDefType.Literal,
                 readonly valuePrototype: number,
               },
             },
@@ -117,24 +132,29 @@ describe('builder', function () {
 
     it('equals expected type', function () {
       type C = {
+        readonly type: TypeDefType.Structured,
         readonly fields:
           & {
             a: {
+              readonly type: TypeDefType.Literal,
               readonly valuePrototype: number,
             },
           }
           & {
             readonly b: {
+              readonly type: TypeDefType.Literal,
               readonly valuePrototype: boolean,
             },
           }
           & {
             c?: {
+              readonly type: TypeDefType.Literal,
               readonly valuePrototype: string,
             },
           }
           & {
             readonly d?: {
+              readonly type: TypeDefType.Literal,
               readonly valuePrototype: number,
             },
           },
@@ -160,14 +180,17 @@ describe('builder', function () {
 
       it('equals expected type', function () {
         type C = {
+          readonly type: TypeDefType.Union,
           readonly unions:
             & {
               readonly [1]: {
+                readonly type: TypeDefType.Literal,
                 readonly valuePrototype: number,
               },
             }
             & {
               readonly [2]: {
+                readonly type: TypeDefType.Literal,
                 readonly valuePrototype: string,
               },
             },
@@ -191,11 +214,14 @@ describe('builder', function () {
 
       it('equals expected type', function () {
         type C = {
+          readonly type: TypeDefType.Union,
           readonly unions:
             & {
               readonly [1]: {
+                readonly type: TypeDefType.Structured,
                 readonly fields: {
                   a: {
+                    readonly type: TypeDefType.Literal,
                     readonly valuePrototype: boolean,
                   },
                 },
@@ -203,8 +229,10 @@ describe('builder', function () {
             }
             & {
               readonly [2]: {
+                readonly type: TypeDefType.Structured,
                 readonly fields: {
                   b: {
+                    readonly type: TypeDefType.Literal,
                     readonly valuePrototype: number,
                   },
                 },

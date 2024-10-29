@@ -1,4 +1,5 @@
 import { type SimplifyDeep } from 'type-fest'
+import { type TypeDefType } from 'types/defs'
 import {
   boolean,
   list,
@@ -16,6 +17,7 @@ describe('FlattenedTypeDefsOf', function () {
 
     let t: {
       readonly $: {
+        readonly type: TypeDefType.Literal,
         readonly valuePrototype: number,
       },
     }
@@ -30,11 +32,14 @@ describe('FlattenedTypeDefsOf', function () {
 
     let t: {
       readonly $: {
+        readonly type: TypeDefType.List,
         readonly elements: {
+          readonly type: TypeDefType.Literal,
           readonly valuePrototype: number,
         },
       },
       readonly ['$.s']: {
+        readonly type: TypeDefType.Literal,
         readonly valuePrototype: number,
       },
     }
@@ -49,12 +54,15 @@ describe('FlattenedTypeDefsOf', function () {
 
     let t: {
       readonly $: {
+        readonly type: TypeDefType.Map,
         readonly keyPrototype: 'a' | 'b',
         readonly valueTypeDef: {
+          readonly type: TypeDefType.Literal,
           readonly valuePrototype: number,
         },
       },
       readonly ['$.s']: {
+        readonly type: TypeDefType.Literal,
         readonly valuePrototype: number,
       },
     }
@@ -74,31 +82,40 @@ describe('FlattenedTypeDefsOf', function () {
 
       let t: {
         readonly $: {
+          readonly type: TypeDefType.Structured,
           readonly fields: {
             a: {
+              readonly type: TypeDefType.Literal,
               readonly valuePrototype: number,
             },
             b?: {
+              readonly type: TypeDefType.Literal,
               readonly valuePrototype: string,
             },
             readonly c: {
+              readonly type: TypeDefType.Literal,
               readonly valuePrototype: boolean,
             },
             readonly d?: {
+              readonly type: TypeDefType.Literal,
               readonly valuePrototype: string,
             },
           },
         },
         readonly ['$.a']: {
+          readonly type: TypeDefType.Literal,
           readonly valuePrototype: number,
         },
         readonly ['$.b']: {
+          readonly type: TypeDefType.Literal,
           readonly valuePrototype: string,
         },
         readonly ['$.c']: {
+          readonly type: TypeDefType.Literal,
           readonly valuePrototype: boolean,
         },
         readonly ['$.d']: {
+          readonly type: TypeDefType.Literal,
           readonly valuePrototype: string,
         },
       }
@@ -119,17 +136,22 @@ describe('union', function () {
     let t:
       | {
         readonly $: {
+          readonly type: TypeDefType.Union,
           readonly unions: {
             readonly [1]: {
+              readonly type: TypeDefType.Structured,
               readonly fields: {
                 a: {
+                  readonly type: TypeDefType.Literal,
                   readonly valuePrototype: boolean,
                 },
               },
             },
             readonly [2]: {
+              readonly type: TypeDefType.Structured,
               readonly fields: {
                 a: {
+                  readonly type: TypeDefType.Literal,
                   readonly valuePrototype: number,
                 },
               },
@@ -137,22 +159,28 @@ describe('union', function () {
           },
         },
         readonly ['$.a']: {
+          readonly type: TypeDefType.Literal,
           readonly valuePrototype: boolean,
         },
       }
       | {
         readonly $: {
+          readonly type: TypeDefType.Union,
           readonly unions: {
             readonly [1]: {
+              readonly type: TypeDefType.Structured,
               readonly fields: {
                 a: {
+                  readonly type: TypeDefType.Literal,
                   readonly valuePrototype: boolean,
                 },
               },
             },
             readonly [2]: {
+              readonly type: TypeDefType.Structured,
               readonly fields: {
                 a: {
+                  readonly type: TypeDefType.Literal,
                   readonly valuePrototype: number,
                 },
               },
@@ -160,6 +188,7 @@ describe('union', function () {
           },
         },
         readonly ['$.a']: {
+          readonly type: TypeDefType.Literal,
           readonly valuePrototype: number,
         },
       }

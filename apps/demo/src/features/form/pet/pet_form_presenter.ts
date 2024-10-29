@@ -7,6 +7,7 @@ import {
   type FlattenedPetAccessors,
   type FlattenedPetJsonValueToTypePaths,
   type FlattenedPetValueTypes,
+  type MutablePet,
   type Pet,
   type PetFields,
   type PetValuePaths,
@@ -99,7 +100,7 @@ export class PetFormModel {
   }
 
   // TODO observable
-  value: Pet
+  value: MutablePet
 
   constructor(value: Pet) {
     this.value = value

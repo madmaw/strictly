@@ -3,6 +3,7 @@ import {
   type FlattenedJsonValueToTypePathsOf,
   type FlattenedTypeDefsOf,
   type FlattenedValueTypesOf,
+  type ReadonlyTypeDefOf,
   type ValueTypeOf,
 } from '@de/fine'
 import {
@@ -18,7 +19,8 @@ export const petTypeDef = struct()
   .set('alive', boolean)
   .narrow
 
-export type Pet = ValueTypeOf<typeof petTypeDef>
+export type MutablePet = ValueTypeOf<typeof petTypeDef>
+export type Pet = ValueTypeOf<ReadonlyTypeDefOf<typeof petTypeDef>>
 export type PetValuePaths = JsonPathsOf<typeof petTypeDef>
 export type PetTypePaths = JsonPathsOf<typeof petTypeDef, '*'>
 export type FlattenedPetJsonValueToTypePaths = FlattenedJsonValueToTypePathsOf<typeof petTypeDef>

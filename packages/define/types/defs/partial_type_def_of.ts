@@ -8,12 +8,16 @@ import {
   type StructuredTypeDef,
   type TypeDef,
   type TypeDefHolder,
+  type TypeDefType,
   type UnionTypeDef,
 } from '.'
 
-export type PartialTypeDefOf<T extends TypeDefHolder> = InternalPartialAndNullableOf<T['typeDef']>
+export type PartialTypeDefOf<T extends TypeDefHolder> = {
+  readonly typeDef: InternalPartialAndNullableOf<T['typeDef']>,
+}
 
 type InternalPartialAndNullableOf<T extends TypeDef> = {
+  readonly type: TypeDefType.Nullable,
   readonly toNullableTypeDef: InternalPartialOf<T>,
 }
 
@@ -30,17 +34,21 @@ type InternalPartialOf<T extends TypeDef> = T extends LiteralTypeDef ? InternalP
 type InternalPartialOfLiteral<T extends LiteralTypeDef> = T
 
 type InternalPartialOfList<T extends ListTypeDef> = {
+  readonly type: T['type'],
   readonly elements: InternalPartialAndNullableOf<T['elements']>,
 }
 
 type InternalPartialOfMap<T extends MapTypeDef> = {
+  readonly type: TypeDefType.Partial,
   readonly toPartialTypeDef: {
+    readonly type: T['type'],
     readonly keyPrototype: T['keyPrototype'],
     readonly valueTypeDef: InternalPartialAndNullableOf<T['valueTypeDef']>,
   },
 }
 
 type InternalPartialOfStructured<T extends StructuredTypeDef> = T extends StructuredTypeDef<infer Fields> ? {
+    readonly type: T['type'],
     readonly fields: {
       [K in keyof Fields]+?: InternalPartialAndNullableOf<Fields[K]>
     },
@@ -48,6 +56,7 @@ type InternalPartialOfStructured<T extends StructuredTypeDef> = T extends Struct
   : never
 
 type InternalPartialOfUnion<T extends UnionTypeDef> = T extends UnionTypeDef<infer Unions> ? {
+    readonly type: T['type'],
     readonly unions: {
       [K in keyof Unions]: InternalPartialOf<Unions[K]>
     },
@@ -57,6 +66,7 @@ type InternalPartialOfUnion<T extends UnionTypeDef> = T extends UnionTypeDef<inf
 type InternalPartialOfPartial<T extends PartialTypeDef> = InternalPartialOf<T['toPartialTypeDef']>
 
 type InternalPartialOfReadonly<T extends ReadonlyTypeDef> = {
+  readonly type: T['type'],
   readonly toReadonlyTypeDef: InternalPartialOf<T['toReadonlyTypeDef']>,
 }
 

@@ -10,7 +10,7 @@ type Validator<
   K extends keyof R,
   E,
 > = (
-  value: InternalValueTypeOf<R[K]>,
+  value: InternalValueTypeOf<R[K], {}>,
   key: K,
   values: FlattenedFormValuesOf<R>,
 ) => E | null

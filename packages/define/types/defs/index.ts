@@ -17,8 +17,10 @@ import { type ReadonlyRecord } from 'util/record'
 // type HomogeneousFattenedValue<T extends TypeDef, V> = { [K in keyof FlattenedOf<T>]?: V }
 // ```
 
-// NOTE: that there is no explicit discriminator for these types, so they need to be distinct enough that
-// no one type's fields are a complete subset of another's
+export type TypeDefHolder<T extends TypeDef = TypeDef> = {
+  readonly typeDef: T,
+}
+
 export type TypeDef =
   | LiteralTypeDef
   | NullableTypeDef
@@ -29,6 +31,17 @@ export type TypeDef =
   | StructuredTypeDef
   | UnionTypeDef
 
+export enum TypeDefType {
+  Literal = 1,
+  Nullable,
+  List,
+  Map,
+  Readonly,
+  Partial,
+  Structured,
+  Union,
+}
+
 // used to avoid TS complaining about circular references
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type AnyTypeDef = any
@@ -36,6 +49,7 @@ type AnyTypeDef = any
 // literal
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type LiteralTypeDef<V = any> = {
+  readonly type: TypeDefType.Literal,
   // never actually populate
   readonly valuePrototype: V,
 }
@@ -44,6 +58,7 @@ export type LiteralTypeDef<V = any> = {
 export type NullableTypeDef<
   T extends TypeDef = AnyTypeDef,
 > = {
+  readonly type: TypeDefType.Nullable,
   readonly toNullableTypeDef: T,
 }
 
@@ -51,6 +66,7 @@ export type NullableTypeDef<
 export type ListTypeDef<
   E extends TypeDef = AnyTypeDef,
 > = {
+  readonly type: TypeDefType.List,
   readonly elements: E,
 }
 
@@ -61,6 +77,7 @@ export type MapTypeDef<
   K extends MapKeyType = MapKeyType,
   V extends TypeDef = AnyTypeDef,
 > = {
+  readonly type: TypeDefType.Map,
   // never actually populate
   readonly keyPrototype: K,
   readonly valueTypeDef: V,
@@ -70,6 +87,7 @@ export type MapTypeDef<
 export type PartialTypeDef<
   T extends MapTypeDef = AnyTypeDef,
 > = {
+  readonly type: TypeDefType.Partial,
   readonly toPartialTypeDef: T,
 }
 
@@ -77,6 +95,7 @@ export type PartialTypeDef<
 export type ReadonlyTypeDef<
   T extends ListTypeDef | MapTypeDef = AnyTypeDef,
 > = {
+  readonly type: TypeDefType.Readonly,
   readonly toReadonlyTypeDef: T,
 }
 
@@ -96,15 +115,13 @@ export type StructuredTypeDefFields = {
 export type StructuredTypeDef<
   Fields extends StructuredTypeDefFields = StructuredTypeDefFields,
 > = {
+  readonly type: TypeDefType.Structured,
   readonly fields: Fields,
 }
 
 export type UnionTypeDef<
   U extends ReadonlyRecord<string, AnyTypeDef> = {},
 > = {
+  readonly type: TypeDefType.Union,
   readonly unions: U,
-}
-
-export type TypeDefHolder<T extends TypeDef = TypeDef> = {
-  readonly typeDef: T,
 }

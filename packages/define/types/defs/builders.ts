@@ -15,6 +15,7 @@ import {
   type StructuredTypeDef,
   type TypeDef,
   type TypeDefHolder,
+  TypeDefType,
   type UnionTypeDef,
 } from './index'
 
@@ -79,6 +80,7 @@ class StructuredTypeDefBuilder<
     return new StructuredTypeDefBuilder<
       Fields & Record<Name, T>
     >({
+      type: TypeDefType.Structured,
       fields: {
         ...this.typeDef.fields,
         ...newFields,
@@ -102,6 +104,7 @@ class StructuredTypeDefBuilder<
     return new StructuredTypeDefBuilder<
       Fields & ReadonlyRecord<Name, T>
     >({
+      type: TypeDefType.Structured,
       fields: {
         ...this.typeDef.fields,
         ...newFields,
@@ -125,6 +128,7 @@ class StructuredTypeDefBuilder<
     return new StructuredTypeDefBuilder<
       Fields & PartialRecord<Name, T>
     >({
+      type: TypeDefType.Structured,
       fields: {
         ...this.typeDef.fields,
         ...newFields,
@@ -148,6 +152,7 @@ class StructuredTypeDefBuilder<
     return new StructuredTypeDefBuilder<
       Fields & PartialReadonlyRecord<Name, T>
     >({
+      type: TypeDefType.Structured,
       fields: {
         ...this.typeDef.fields,
         ...newFields,
@@ -174,6 +179,7 @@ class UnionTypeDefBuilder<
   ): UnionTypeDefBuilder<ReadonlyRecord<K, T> & U> {
     return new UnionTypeDefBuilder<ReadonlyRecord<K, T> & U>(
       {
+        type: TypeDefType.Union,
         // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
         unions: {
           ...this.typeDef.unions,
@@ -186,6 +192,7 @@ class UnionTypeDefBuilder<
 
 export function literal<T>(): LiteralTypeDefBuilder<T> {
   return new LiteralTypeDefBuilder({
+    type: TypeDefType.Literal,
     // eslint-disable-next-line no-undefined
     valuePrototype: undefined!,
   })
@@ -198,6 +205,7 @@ export const boolean = literal<boolean>()
 export function nullable<T extends TypeDef>(nonNullable: TypeDefHolder<T>): NullableTypeDefBuilder<T> {
   // have to explicitly supply types as TS will infinitely recurse trying to infer them!
   return new NullableTypeDefBuilder<T>({
+    type: TypeDefType.Nullable,
     toNullableTypeDef: nonNullable.typeDef,
   })
 }
@@ -205,12 +213,14 @@ export function nullable<T extends TypeDef>(nonNullable: TypeDefHolder<T>): Null
 export function list<T extends TypeDef>(elements: TypeDefHolder<T>): ListTypeDefBuilder<T> {
   // have to explicitly supply types as TS will infinitely recurse trying to infer them!
   return new ListTypeDefBuilder<T>({
+    type: TypeDefType.List,
     elements: elements.typeDef,
   })
 }
 
 export function map<K extends MapKeyType, V extends TypeDefHolder>({ typeDef }: V) {
   return new MapTypeDefBuilder<K, V['typeDef']>({
+    type: TypeDefType.Map,
     // eslint-disable-next-line no-undefined
     keyPrototype: undefined!,
     valueTypeDef: typeDef,
@@ -219,12 +229,14 @@ export function map<K extends MapKeyType, V extends TypeDefHolder>({ typeDef }: 
 
 export function readonly<T extends MapTypeDef | ListTypeDef>({ typeDef }: TypeDefHolder<T>) {
   return new ReadonlyTypeDefBuilder<T>({
+    type: TypeDefType.Readonly,
     toReadonlyTypeDef: typeDef,
   })
 }
 
 export function partial<T extends MapTypeDef>({ typeDef }: TypeDefHolder<T>) {
   return new PartialTypeDefBuilder<T>({
+    type: TypeDefType.Partial,
     toPartialTypeDef: typeDef,
   })
 }
@@ -232,6 +244,7 @@ export function partial<T extends MapTypeDef>({ typeDef }: TypeDefHolder<T>) {
 export function struct(): StructuredTypeDefBuilder<{}> {
   // have to explicitly supply types as TS will infinitely recurse trying to infer them!
   return new StructuredTypeDefBuilder<{}>({
+    type: TypeDefType.Structured,
     fields: {},
   })
 }
@@ -240,6 +253,7 @@ export function union(): UnionTypeDefBuilder<{}> {
   // have to explicitly supply types as TS will infinitely recurse trying to infer them!
   return new UnionTypeDefBuilder<{}>(
     {
+      type: TypeDefType.Union,
       unions: {},
     },
   )
