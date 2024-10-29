@@ -37,6 +37,7 @@ describe('FlattenedTypeDefsOf', function () {
           readonly type: TypeDefType.Literal,
           readonly valuePrototype: number,
         },
+        readonly readonly: false,
       },
       readonly ['$.s']: {
         readonly type: TypeDefType.Literal,
@@ -60,6 +61,7 @@ describe('FlattenedTypeDefsOf', function () {
           readonly type: TypeDefType.Literal,
           readonly valuePrototype: number,
         },
+        readonly readonly: false,
       },
       readonly ['$.s']: {
         readonly type: TypeDefType.Literal,

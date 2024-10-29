@@ -4,7 +4,6 @@ import {
   list,
   map,
   number,
-  readonly,
   string,
   struct,
   union,
@@ -36,6 +35,7 @@ describe('builder', function () {
               readonly type: TypeDefType.Literal,
               readonly valuePrototype: number,
             },
+            readonly readonly: false,
           }
           expectTypeOf(typeDef).toEqualTypeOf<C>()
         })
@@ -43,18 +43,16 @@ describe('builder', function () {
     })
 
     describe('readonly', function () {
-      const { typeDef } = readonly(list(number))
+      const { typeDef } = list(number).readonly()
 
       it('equals expected type', function () {
         type C = {
-          readonly type: TypeDefType.Readonly,
-          readonly toReadonlyTypeDef: {
-            readonly type: TypeDefType.List,
-            readonly elements: {
-              readonly type: TypeDefType.Literal,
-              readonly valuePrototype: number,
-            },
+          readonly type: TypeDefType.List,
+          readonly elements: {
+            readonly type: TypeDefType.Literal,
+            readonly valuePrototype: number,
           },
+          readonly readonly: true,
         }
 
         expectTypeOf(typeDef).toEqualTypeOf<C>()
@@ -75,6 +73,7 @@ describe('builder', function () {
               readonly type: TypeDefType.Literal,
               readonly valuePrototype: number,
             },
+            readonly readonly: false,
           }
 
           expectTypeOf(typeDef).toEqualTypeOf<C>()
@@ -82,26 +81,24 @@ describe('builder', function () {
       })
 
       describe('readonly', function () {
-        const { typeDef } = readonly(map<'a' | 'b' | 'c', typeof number>(number))
+        const { typeDef } = map<'a' | 'b' | 'c', typeof number>(number).readonly()
 
         it('equals expected type', function () {
           type C = {
-            readonly type: TypeDefType.Readonly,
-            readonly toReadonlyTypeDef: {
-              readonly type: TypeDefType.Map,
-              readonly keyPrototype: 'a' | 'b' | 'c',
-              readonly valueTypeDef: {
-                readonly type: TypeDefType.Literal,
-                readonly valuePrototype: number,
-              },
+            readonly type: TypeDefType.Map,
+            readonly keyPrototype: 'a' | 'b' | 'c',
+            readonly valueTypeDef: {
+              readonly type: TypeDefType.Literal,
+              readonly valuePrototype: number,
             },
+            readonly readonly: true,
           }
           expectTypeOf(typeDef).toEqualTypeOf<C>()
         })
       })
 
       describe('partial', function () {
-        const { typeDef } = map<'a' | 'b' | 'c', typeof number>(number).partial()
+        const { typeDef } = map<'a' | 'b' | 'c', typeof number>(number).partial().readonly()
 
         it('equals expected type', function () {
           type C = {
@@ -111,6 +108,7 @@ describe('builder', function () {
               readonly type: TypeDefType.Literal,
               readonly valuePrototype: number,
             } | undefined,
+            readonly readonly: true,
           }
 
           expectTypeOf(typeDef).toEqualTypeOf<C>()

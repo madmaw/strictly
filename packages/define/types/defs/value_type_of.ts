@@ -1,10 +1,13 @@
-import { type MaybePartial } from 'types/lang'
+import {
+  type MaybePartial,
+  type MaybeReadonly,
+  type MaybeReadonlyArray,
+} from 'types/lang'
 import {
   type ListTypeDef,
   type LiteralTypeDef,
   type MapTypeDef,
   type NullableTypeDef,
-  type ReadonlyTypeDef,
   type StructuredTypeDef,
   type TypeDef,
   type TypeDefHolder,
@@ -23,7 +26,6 @@ export type InternalValueTypeOf<
   : F extends NullableTypeDef ? InternalValueTypeOfNullable<F, Extra>
   : F extends ListTypeDef ? InternalValueTypeOfList<F, Extra>
   : F extends MapTypeDef ? InternalValueTypeOfMap<F, Extra>
-  : F extends ReadonlyTypeDef ? InternalValueTypeOfReadonly<F, Extra>
   : F extends StructuredTypeDef ? InternalValueTypeOfStruct<F, Extra>
   : F extends UnionTypeDef ? InternalValueTypeOfUnion<F, Extra>
   : never
@@ -35,26 +37,28 @@ type InternalValueTypeOfNullable<
   Extra,
 > = InternalValueTypeOf<F['toNullableTypeDef'], Extra> | null
 
-type InternalValueTypeOfList<F extends ListTypeDef, Extra> = InternalValueTypeOf<F['elements'], Extra>[] & Extra
+type InternalValueTypeOfList<F extends ListTypeDef, Extra> = MaybeReadonlyArray<
+  InternalValueTypeOf<F['elements'], Extra>,
+  F['readonly']
+> & Extra
 
 type InternalValueTypeOfMap<
   F extends MapTypeDef,
   Extra,
-> = MaybePartial<
-  Record<
-    F['keyPrototype'],
-    InternalValueTypeOf<
-      Exclude<F['valueTypeDef'], undefined>,
-      Extra
-    >
+> = MaybeReadonly<
+  MaybePartial<
+    Record<
+      F['keyPrototype'],
+      InternalValueTypeOf<
+        Exclude<F['valueTypeDef'], undefined>,
+        Extra
+      >
+    >,
+    // yes, this is necessary
+    undefined extends F['valueTypeDef'] ? true : false
   >,
-  // yes, this is necessary
-  undefined extends F['valueTypeDef'] ? true : false
+  F['readonly']
 > & Extra
-
-type InternalValueTypeOfReadonly<F extends ReadonlyTypeDef, Extra> = Readonly<
-  InternalValueTypeOf<F['toReadonlyTypeDef'], Extra>
->
 
 type InternalValueTypeOfStruct<
   F extends StructuredTypeDef,

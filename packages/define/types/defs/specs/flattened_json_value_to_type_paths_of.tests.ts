@@ -5,7 +5,6 @@ import {
   map,
   nullable,
   number,
-  readonly,
   string,
   struct,
   union,
@@ -94,7 +93,7 @@ describe('FlattenedJsonPathsOf', function () {
   })
 
   describe('readonly', function () {
-    const builder = readonly(list(list(number)))
+    const builder = list(list(number)).readonly()
 
     type T = SimplifyDeep<FlattenedJsonValueToTypePathsOf<typeof builder>>
 

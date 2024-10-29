@@ -3,7 +3,6 @@ import {
   type LiteralTypeDef,
   type MapTypeDef,
   type NullableTypeDef,
-  type ReadonlyTypeDef,
   type StructuredTypeDef,
   type TypeDef,
   type TypeDefHolder,
@@ -25,7 +24,6 @@ type InternalPartialOf<T extends TypeDef> = T extends LiteralTypeDef ? InternalP
   : T extends MapTypeDef ? InternalPartialOfMap<T>
   : T extends StructuredTypeDef ? InternalPartialOfStructured<T>
   : T extends UnionTypeDef ? InternalPartialOfUnion<T>
-  : T extends ReadonlyTypeDef ? InternalPartialOfReadonly<T>
   : T extends NullableTypeDef ? InternalPartialOfNullable<T>
   : never
 
@@ -34,12 +32,14 @@ type InternalPartialOfLiteral<T extends LiteralTypeDef> = T
 type InternalPartialOfList<T extends ListTypeDef> = {
   readonly type: T['type'],
   readonly elements: InternalPartialAndNullableOf<T['elements']>,
+  readonly readonly: T['readonly'],
 }
 
 type InternalPartialOfMap<T extends MapTypeDef> = {
   readonly type: T['type'],
   readonly keyPrototype: T['keyPrototype'],
   readonly valueTypeDef: InternalPartialAndNullableOf<T['valueTypeDef']> | undefined,
+  readonly readonly: T['readonly'],
 }
 
 type InternalPartialOfStructured<T extends StructuredTypeDef> = T extends StructuredTypeDef<infer Fields> ? {
@@ -57,10 +57,5 @@ type InternalPartialOfUnion<T extends UnionTypeDef> = T extends UnionTypeDef<inf
     },
   }
   : never
-
-type InternalPartialOfReadonly<T extends ReadonlyTypeDef> = {
-  readonly type: T['type'],
-  readonly toReadonlyTypeDef: InternalPartialOf<T['toReadonlyTypeDef']>,
-}
 
 type InternalPartialOfNullable<T extends NullableTypeDef> = InternalPartialOf<T['toNullableTypeDef']>

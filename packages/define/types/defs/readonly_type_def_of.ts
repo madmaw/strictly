@@ -3,11 +3,9 @@ import {
   type LiteralTypeDef,
   type MapTypeDef,
   type NullableTypeDef,
-  type ReadonlyTypeDef,
   type StructuredTypeDef,
   type TypeDef,
   type TypeDefHolder,
-  type TypeDefType,
   type UnionTypeDef,
 } from '.'
 
@@ -20,30 +18,25 @@ type InternalReadonlyTypeDefOf<T extends TypeDef> = T extends LiteralTypeDef ? I
   : T extends MapTypeDef ? InternalReadonlyTypeDefOfMap<T>
   : T extends StructuredTypeDef ? InternalReadonlyTypeDefOfStruct<T>
   : T extends UnionTypeDef ? InternalReadonlyTypeDefOfUnion<T>
-  : T extends ReadonlyTypeDef ? InternalReadonlyTypeDefOfReadonly<T>
   : T extends NullableTypeDef ? InternalReadonlyTypeDefOfNullable<T>
   : never
 
 type InternalReadonlyTypeDefOfLiteral<T extends LiteralTypeDef> = T
 
 type InternalReadonlyTypeDefOfList<T extends ListTypeDef> = {
-  readonly type: TypeDefType.Readonly,
-  readonly toReadonlyTypeDef: {
-    readonly type: T['type'],
-    readonly elements: InternalReadonlyTypeDefOf<T['elements']>,
-  },
+  readonly type: T['type'],
+  readonly elements: InternalReadonlyTypeDefOf<T['elements']>,
+  readonly readonly: true,
 }
 
 type InternalReadonlyTypeDefOfMap<T extends MapTypeDef> = {
-  readonly type: TypeDefType.Readonly,
-  readonly toReadonlyTypeDef: {
-    readonly type: T['type'],
-    readonly keyPrototype: T['keyPrototype'],
-    readonly valueTypeDef: undefined extends T['valueTypeDef'] ? InternalReadonlyTypeDefOf<
-        Exclude<T['valueTypeDef'], undefined>
-      > | undefined
-      : InternalReadonlyTypeDefOf<T['valueTypeDef']>,
-  },
+  readonly type: T['type'],
+  readonly keyPrototype: T['keyPrototype'],
+  readonly valueTypeDef: undefined extends T['valueTypeDef'] ? InternalReadonlyTypeDefOf<
+      Exclude<T['valueTypeDef'], undefined>
+    > | undefined
+    : InternalReadonlyTypeDefOf<T['valueTypeDef']>,
+  readonly readonly: true,
 }
 
 type InternalReadonlyTypeDefOfStruct<T extends StructuredTypeDef> = T extends StructuredTypeDef<infer Fields> ? {
@@ -66,5 +59,3 @@ type InternalReadonlyTypeDefOfNullable<T extends NullableTypeDef> = {
   readonly type: T['type'],
   readonly toNullableTypeDef: InternalReadonlyTypeDefOf<T['toNullableTypeDef']>,
 }
-
-type InternalReadonlyTypeDefOfReadonly<T extends ReadonlyTypeDef> = InternalReadonlyTypeDefOf<T['toReadonlyTypeDef']>

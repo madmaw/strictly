@@ -4,7 +4,6 @@ import {
   map,
   nullable,
   number,
-  readonly,
   string,
   struct,
   union,
@@ -46,6 +45,7 @@ describe('PartialTypeDefOf', function () {
               readonly valuePrototype: number,
             },
           },
+          readonly readonly: false,
         },
       },
     }
@@ -71,6 +71,7 @@ describe('PartialTypeDefOf', function () {
               readonly valuePrototype: number,
             },
           } | undefined,
+          readonly readonly: false,
         },
       },
     }
@@ -167,24 +168,22 @@ describe('PartialTypeDefOf', function () {
   })
 
   describe('readonly', function () {
-    const builder = readonly(list(number))
+    const builder = list(number).readonly()
     type T = PartialTypeDefOf<typeof builder>
 
     let t: {
       readonly typeDef: {
         readonly type: TypeDefType.Nullable,
         readonly toNullableTypeDef: {
-          readonly type: TypeDefType.Readonly,
-          readonly toReadonlyTypeDef: {
-            readonly type: TypeDefType.List,
-            readonly elements: {
-              readonly type: TypeDefType.Nullable,
-              readonly toNullableTypeDef: {
-                readonly type: TypeDefType.Literal,
-                readonly valuePrototype: number,
-              },
+          readonly type: TypeDefType.List,
+          readonly elements: {
+            readonly type: TypeDefType.Nullable,
+            readonly toNullableTypeDef: {
+              readonly type: TypeDefType.Literal,
+              readonly valuePrototype: number,
             },
           },
+          readonly readonly: true,
         },
       },
     }

@@ -4,7 +4,6 @@ import {
   map,
   nullable,
   number,
-  readonly,
   string,
   struct,
   union,
@@ -46,7 +45,7 @@ describe('JsonPathsOf', function () {
     })
 
     describe('readonly', function () {
-      const builder = readonly(list(string))
+      const builder = list(string).readonly()
       type T = JsonPathsOf<typeof builder>
 
       it('equals expected type', function () {
@@ -107,7 +106,7 @@ describe('JsonPathsOf', function () {
     })
 
     describe('readonly', function () {
-      const builder = readonly(map(string))
+      const builder = map(string).readonly()
       type T = JsonPathsOf<typeof builder>
 
       it('equals expected type', function () {

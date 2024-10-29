@@ -26,7 +26,6 @@ export type TypeDef =
   | NullableTypeDef
   | ListTypeDef
   | MapTypeDef
-  | ReadonlyTypeDef
   | StructuredTypeDef
   | UnionTypeDef
 
@@ -35,7 +34,6 @@ export enum TypeDefType {
   Nullable,
   List,
   Map,
-  Readonly,
   Structured,
   Union,
 }
@@ -63,9 +61,11 @@ export type NullableTypeDef<
 // list
 export type ListTypeDef<
   E extends TypeDef = AnyTypeDef,
+  Readonly extends boolean = boolean,
 > = {
   readonly type: TypeDefType.List,
   readonly elements: E,
+  readonly readonly: Readonly,
 }
 
 // map
@@ -74,19 +74,13 @@ export type MapKeyType = string | number
 export type MapTypeDef<
   K extends MapKeyType = MapKeyType,
   V extends TypeDef | undefined = AnyTypeDef,
+  Readonly extends boolean = boolean,
 > = {
   readonly type: TypeDefType.Map,
   // never actually populate
   readonly keyPrototype: K,
   readonly valueTypeDef: V,
-}
-
-// readonly list or map
-export type ReadonlyTypeDef<
-  T extends ListTypeDef | MapTypeDef = AnyTypeDef,
-> = {
-  readonly type: TypeDefType.Readonly,
-  readonly toReadonlyTypeDef: T,
+  readonly readonly: Readonly,
 }
 
 // structured type

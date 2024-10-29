@@ -40,6 +40,7 @@ describe('ValueTypeOf', function () {
           readonly type: TypeDefType.Literal,
           readonly valuePrototype: 'a' | 'b' | 'c',
         },
+        readonly readonly: false,
       }
       type T = ValueTypeOf<{ typeDef: TypeD }>
       describe('mutable', function () {
@@ -51,9 +52,13 @@ describe('ValueTypeOf', function () {
 
       describe('readonly', function () {
         type R = ValueTypeOf<{
-          readonly typeDef: {
-            readonly type: TypeDefType.Readonly,
-            readonly toReadonlyTypeDef: TypeD,
+          typeDef: {
+            readonly type: TypeDefType.List,
+            readonly elements: {
+              readonly type: TypeDefType.Literal,
+              readonly valuePrototype: 'a' | 'b' | 'c',
+            },
+            readonly readonly: true,
           },
         }>
 
@@ -87,7 +92,7 @@ describe('ValueTypeOf', function () {
         readonly type: TypeDefType.Literal,
         readonly valuePrototype: 'a' | 'b' | 'c',
       },
-      readonly partial: false,
+      readonly: false,
     }
     type T = ValueTypeOf<{ typeDef: TypeD }>
 
@@ -101,8 +106,13 @@ describe('ValueTypeOf', function () {
     describe('readonly', function () {
       type R = ValueTypeOf<{
         readonly typeDef: {
-          readonly type: TypeDefType.Readonly,
-          readonly toReadonlyTypeDef: TypeD,
+          readonly type: TypeDefType.Map,
+          readonly keyPrototype: 'x' | 'y' | 'z',
+          readonly valueTypeDef: {
+            readonly type: TypeDefType.Literal,
+            readonly valuePrototype: 'a' | 'b' | 'c',
+          },
+          readonly: true,
         },
       }>
       let r: ReadonlyRecord<'x' | 'y' | 'z', 'a' | 'b' | 'c'>
@@ -120,6 +130,7 @@ describe('ValueTypeOf', function () {
           readonly type: TypeDefType.Literal,
           readonly valuePrototype: 'a' | 'b' | 'c',
         } | undefined,
+        readonly: false,
       }
       type T = ValueTypeOf<{ typeDef: TypeD }>
 
