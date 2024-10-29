@@ -2,7 +2,6 @@ import {
   type ListTypeDef,
   type LiteralTypeDef,
   type MapTypeDef,
-  type NullableTypeDef,
   type StructuredTypeDef,
   type TypeDef,
   type TypeDefHolder,
@@ -15,8 +14,14 @@ export type PartialTypeDefOf<T extends TypeDefHolder> = {
 }
 
 type InternalPartialAndNullableOf<T extends TypeDef> = {
-  readonly type: TypeDefType.Nullable,
-  readonly toNullableTypeDef: InternalPartialOf<T>,
+  readonly type: TypeDefType.Union,
+  readonly unions: {
+    readonly [0]: {
+      readonly type: TypeDefType.Literal,
+      readonly valuePrototype: null,
+    },
+    readonly [1]: InternalPartialOf<T>,
+  },
 }
 
 type InternalPartialOf<T extends TypeDef> = T extends LiteralTypeDef ? InternalPartialOfLiteral<T>
@@ -24,7 +29,6 @@ type InternalPartialOf<T extends TypeDef> = T extends LiteralTypeDef ? InternalP
   : T extends MapTypeDef ? InternalPartialOfMap<T>
   : T extends StructuredTypeDef ? InternalPartialOfStructured<T>
   : T extends UnionTypeDef ? InternalPartialOfUnion<T>
-  : T extends NullableTypeDef ? InternalPartialOfNullable<T>
   : never
 
 type InternalPartialOfLiteral<T extends LiteralTypeDef> = T
@@ -57,5 +61,3 @@ type InternalPartialOfUnion<T extends UnionTypeDef> = T extends UnionTypeDef<inf
     },
   }
   : never
-
-type InternalPartialOfNullable<T extends NullableTypeDef> = InternalPartialOf<T['toNullableTypeDef']>

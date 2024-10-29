@@ -4,7 +4,6 @@ import {
   type ListTypeDef,
   type LiteralTypeDef,
   type MapTypeDef,
-  type NullableTypeDef,
   type StructuredTypeDef,
   type TypeDef,
   type TypeDefHolder,
@@ -41,7 +40,6 @@ type InternalFlattenedJsonPathsOfChildren<
   : T extends MapTypeDef ? InternalFlattenedJsonPathsOfMapChildren<T, SegmentOverride, ValuePath, TypePath>
   : T extends StructuredTypeDef ? InternalFlattenedJsonPathsOfStructChildren<T, SegmentOverride, ValuePath, TypePath>
   : T extends UnionTypeDef ? InternalFlattenedJsonPathsOfUnionChildren<T, SegmentOverride, ValuePath, TypePath>
-  : T extends NullableTypeDef ? InternalFlattenedJsonPathsOfNullableChildren<T, SegmentOverride, ValuePath, TypePath>
   : never
 
 type InternalFlattenedJsonPathsOfLiteralChildren = {}
@@ -101,15 +99,3 @@ type InternalFlattenedJsonPathsOfUnionChildren<
     >
   }[keyof Unions]
   : never
-
-type InternalFlattenedJsonPathsOfNullableChildren<
-  T extends NullableTypeDef,
-  SegmentOverride extends string,
-  ValuePath extends string,
-  TypePath extends string,
-> = InternalFlattenedJsonPathsOfChildren<
-  T['toNullableTypeDef'],
-  SegmentOverride,
-  ValuePath,
-  TypePath
->

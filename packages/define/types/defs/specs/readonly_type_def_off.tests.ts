@@ -2,7 +2,6 @@ import { type TypeDefType } from 'types/defs'
 import {
   list,
   map,
-  nullable,
   number,
   string,
   struct,
@@ -113,29 +112,6 @@ describe('ReadonlyTypeDefOf', function () {
             readonly type: TypeDefType.Literal,
             readonly valuePrototype: string,
           },
-        },
-      },
-    }
-    it('equals expected type', function () {
-      expectTypeOf(t).toEqualTypeOf<T>()
-    })
-  })
-
-  describe('nullable', function () {
-    const builder = nullable(map<'a', typeof number>(number))
-    type T = ReadonlyTypeDefOf<typeof builder>
-
-    let t: {
-      readonly typeDef: {
-        readonly type: TypeDefType.Nullable,
-        readonly toNullableTypeDef: {
-          readonly type: TypeDefType.Map,
-          readonly keyPrototype: 'a',
-          readonly valueTypeDef: {
-            readonly type: TypeDefType.Literal,
-            readonly valuePrototype: number,
-          },
-          readonly readonly: true,
         },
       },
     }

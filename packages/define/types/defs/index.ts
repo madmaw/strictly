@@ -23,7 +23,6 @@ export type TypeDefHolder<T extends TypeDef = TypeDef> = {
 
 export type TypeDef =
   | LiteralTypeDef
-  | NullableTypeDef
   | ListTypeDef
   | MapTypeDef
   | StructuredTypeDef
@@ -31,7 +30,6 @@ export type TypeDef =
 
 export enum TypeDefType {
   Literal = 1,
-  Nullable,
   List,
   Map,
   Structured,
@@ -48,14 +46,6 @@ export type LiteralTypeDef<V = any> = {
   readonly type: TypeDefType.Literal,
   // never actually populate
   readonly valuePrototype: V,
-}
-
-// nullable
-export type NullableTypeDef<
-  T extends TypeDef = AnyTypeDef,
-> = {
-  readonly type: TypeDefType.Nullable,
-  readonly toNullableTypeDef: T,
 }
 
 // list

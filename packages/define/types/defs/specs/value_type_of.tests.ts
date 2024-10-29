@@ -16,20 +16,6 @@ describe('ValueTypeOf', function () {
     it('equals expected type', function () {
       expectTypeOf(t).toEqualTypeOf<T>()
     })
-
-    describe('nullable', function () {
-      type N = ValueTypeOf<{
-        readonly typeDef: {
-          readonly type: TypeDefType.Nullable,
-          readonly toNullableTypeDef: TypeD,
-        },
-      }>
-      let n: 'a' | 'b' | 'c' | null
-
-      it('equals expected type', function () {
-        expectTypeOf(n).toEqualTypeOf<N>()
-      })
-    })
   })
 
   describe('list', function () {
@@ -65,20 +51,6 @@ describe('ValueTypeOf', function () {
         let a: readonly ('a' | 'b' | 'c')[]
         it('equals expected type', function () {
           expectTypeOf(a).toEqualTypeOf<R>()
-        })
-      })
-
-      describe('nullable', function () {
-        type N = ValueTypeOf<{
-          readonly typeDef: {
-            readonly type: TypeDefType.Nullable,
-            readonly toNullableTypeDef: TypeD,
-          },
-        }>
-        let a: ('a' | 'b' | 'c')[] | null
-
-        it('equals expected type', function () {
-          expectTypeOf(a).toEqualTypeOf<N>()
         })
       })
     })

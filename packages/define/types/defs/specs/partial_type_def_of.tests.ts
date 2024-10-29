@@ -1,8 +1,8 @@
+import { type SimplifyDeep } from 'type-fest'
 import { type TypeDefType } from 'types/defs'
 import {
   list,
   map,
-  nullable,
   number,
   string,
   struct,
@@ -16,10 +16,16 @@ describe('PartialTypeDefOf', function () {
 
     let t: {
       readonly typeDef: {
-        readonly type: TypeDefType.Nullable,
-        readonly toNullableTypeDef: {
-          readonly type: TypeDefType.Literal,
-          readonly valuePrototype: number,
+        readonly type: TypeDefType.Union,
+        readonly unions: {
+          readonly [0]: {
+            readonly type: TypeDefType.Literal,
+            readonly valuePrototype: null,
+          },
+          readonly [1]: {
+            readonly type: TypeDefType.Literal,
+            readonly valuePrototype: number,
+          },
         },
       },
     }
@@ -35,17 +41,29 @@ describe('PartialTypeDefOf', function () {
 
     let t: {
       readonly typeDef: {
-        readonly type: TypeDefType.Nullable,
-        readonly toNullableTypeDef: {
-          readonly type: TypeDefType.List,
-          readonly elements: {
-            readonly type: TypeDefType.Nullable,
-            readonly toNullableTypeDef: {
-              readonly type: TypeDefType.Literal,
-              readonly valuePrototype: number,
-            },
+        readonly type: TypeDefType.Union,
+        readonly unions: {
+          readonly [0]: {
+            readonly type: TypeDefType.Literal,
+            readonly valuePrototype: null,
           },
-          readonly readonly: false,
+          readonly [1]: {
+            readonly type: TypeDefType.List,
+            readonly elements: {
+              readonly type: TypeDefType.Union,
+              readonly unions: {
+                readonly [0]: {
+                  readonly type: TypeDefType.Literal,
+                  readonly valuePrototype: null,
+                },
+                readonly [1]: {
+                  readonly type: TypeDefType.Literal,
+                  readonly valuePrototype: number,
+                },
+              },
+            },
+            readonly readonly: false,
+          },
         },
       },
     }
@@ -56,22 +74,34 @@ describe('PartialTypeDefOf', function () {
 
   describe('map', function () {
     const builder = map<'a' | 'b', typeof number>(number)
-    type T = PartialTypeDefOf<typeof builder>
+    type T = SimplifyDeep<PartialTypeDefOf<typeof builder>>
 
     let t: {
       readonly typeDef: {
-        readonly type: TypeDefType.Nullable,
-        readonly toNullableTypeDef: {
-          readonly type: TypeDefType.Map,
-          readonly keyPrototype: 'a' | 'b',
-          readonly valueTypeDef: {
-            readonly type: TypeDefType.Nullable,
-            readonly toNullableTypeDef: {
-              readonly type: TypeDefType.Literal,
-              readonly valuePrototype: number,
-            },
-          } | undefined,
-          readonly readonly: false,
+        readonly type: TypeDefType.Union,
+        readonly unions: {
+          readonly [0]: {
+            readonly type: TypeDefType.Literal,
+            readonly valuePrototype: null,
+          },
+          readonly [1]: {
+            readonly type: TypeDefType.Map,
+            readonly keyPrototype: 'a' | 'b',
+            readonly valueTypeDef: {
+              readonly type: TypeDefType.Union,
+              readonly unions: {
+                readonly [0]: {
+                  readonly type: TypeDefType.Literal,
+                  readonly valuePrototype: null,
+                },
+                readonly [1]: {
+                  readonly type: TypeDefType.Literal,
+                  readonly valuePrototype: number,
+                },
+              },
+            } | undefined,
+            readonly readonly: false,
+          },
         },
       },
     }
@@ -89,22 +119,40 @@ describe('PartialTypeDefOf', function () {
 
     let t: {
       readonly typeDef: {
-        readonly type: TypeDefType.Nullable,
-        readonly toNullableTypeDef: {
-          readonly type: TypeDefType.Structured,
-          readonly fields: {
-            a?: {
-              readonly type: TypeDefType.Nullable,
-              readonly toNullableTypeDef: {
-                readonly type: TypeDefType.Literal,
-                readonly valuePrototype: number,
+        readonly type: TypeDefType.Union,
+        readonly unions: {
+          readonly [0]: {
+            readonly type: TypeDefType.Literal,
+            readonly valuePrototype: null,
+          },
+          readonly [1]: {
+            readonly type: TypeDefType.Structured,
+            readonly fields: {
+              a?: {
+                readonly type: TypeDefType.Union,
+                readonly unions: {
+                  readonly [0]: {
+                    readonly type: TypeDefType.Literal,
+                    readonly valuePrototype: null,
+                  },
+                  readonly [1]: {
+                    readonly type: TypeDefType.Literal,
+                    readonly valuePrototype: number,
+                  },
+                },
               },
-            },
-            readonly b?: {
-              readonly type: TypeDefType.Nullable,
-              readonly toNullableTypeDef: {
-                readonly type: TypeDefType.Literal,
-                readonly valuePrototype: string,
+              readonly b?: {
+                readonly type: TypeDefType.Union,
+                readonly unions: {
+                  readonly [0]: {
+                    readonly type: TypeDefType.Literal,
+                    readonly valuePrototype: null,
+                  },
+                  readonly [1]: {
+                    readonly type: TypeDefType.Literal,
+                    readonly valuePrototype: string,
+                  },
+                },
               },
             },
           },
@@ -126,17 +174,23 @@ describe('PartialTypeDefOf', function () {
 
       let t: {
         readonly typeDef: {
-          readonly type: TypeDefType.Nullable,
-          readonly toNullableTypeDef: {
-            readonly type: TypeDefType.Union,
-            readonly unions: {
-              readonly 1: {
-                readonly type: TypeDefType.Literal,
-                readonly valuePrototype: number,
-              },
-              readonly 2: {
-                readonly type: TypeDefType.Literal,
-                readonly valuePrototype: string,
+          readonly type: TypeDefType.Union,
+          readonly unions: {
+            readonly [0]: {
+              readonly type: TypeDefType.Literal,
+              readonly valuePrototype: null,
+            },
+            readonly [1]: {
+              readonly type: TypeDefType.Union,
+              readonly unions: {
+                readonly 1: {
+                  readonly type: TypeDefType.Literal,
+                  readonly valuePrototype: number,
+                },
+                readonly 2: {
+                  readonly type: TypeDefType.Literal,
+                  readonly valuePrototype: string,
+                },
               },
             },
           },
@@ -149,41 +203,35 @@ describe('PartialTypeDefOf', function () {
     })
   })
 
-  describe('nullable', function () {
-    const builder = nullable(number)
-    type T = PartialTypeDefOf<typeof builder>
-
-    let t: {
-      readonly typeDef: {
-        readonly type: TypeDefType.Nullable,
-        readonly toNullableTypeDef: {
-          readonly type: TypeDefType.Literal,
-          readonly valuePrototype: number,
-        },
-      },
-    }
-    it('equals expected type', function () {
-      expectTypeOf(t).toEqualTypeOf<T>()
-    })
-  })
-
   describe('readonly', function () {
     const builder = list(number).readonly()
     type T = PartialTypeDefOf<typeof builder>
 
     let t: {
       readonly typeDef: {
-        readonly type: TypeDefType.Nullable,
-        readonly toNullableTypeDef: {
-          readonly type: TypeDefType.List,
-          readonly elements: {
-            readonly type: TypeDefType.Nullable,
-            readonly toNullableTypeDef: {
-              readonly type: TypeDefType.Literal,
-              readonly valuePrototype: number,
-            },
+        readonly type: TypeDefType.Union,
+        readonly unions: {
+          readonly [0]: {
+            readonly type: TypeDefType.Literal,
+            readonly valuePrototype: null,
           },
-          readonly readonly: true,
+          readonly [1]: {
+            readonly type: TypeDefType.List,
+            readonly elements: {
+              readonly type: TypeDefType.Union,
+              readonly unions: {
+                readonly [0]: {
+                  readonly type: TypeDefType.Literal,
+                  readonly valuePrototype: null,
+                },
+                readonly [1]: {
+                  readonly type: TypeDefType.Literal,
+                  readonly valuePrototype: number,
+                },
+              },
+            },
+            readonly readonly: true,
+          },
         },
       },
     }

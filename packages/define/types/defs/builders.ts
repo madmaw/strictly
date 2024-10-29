@@ -8,7 +8,6 @@ import {
   type LiteralTypeDef,
   type MapKeyType,
   type MapTypeDef,
-  type NullableTypeDef,
   type StructuredFieldKey,
   type StructuredTypeDef,
   type TypeDef,
@@ -31,9 +30,6 @@ class TypeDefBuilder<T extends TypeDef> implements TypeDefHolder<T> {
 }
 
 class LiteralTypeDefBuilder<T> extends TypeDefBuilder<LiteralTypeDef<T>> {
-}
-
-class NullableTypeDefBuilder<T extends TypeDef> extends TypeDefBuilder<NullableTypeDef<T>> {
 }
 
 class ListTypeDefBuilder<
@@ -214,12 +210,18 @@ export function literal<T>(): LiteralTypeDefBuilder<T> {
 export const string = literal<string>()
 export const number = literal<number>()
 export const boolean = literal<boolean>()
+export const nullTypeDefHolder = literal<null>()
 
-export function nullable<T extends TypeDef>(nonNullable: TypeDefHolder<T>): NullableTypeDefBuilder<T> {
-  // have to explicitly supply types as TS will infinitely recurse trying to infer them!
-  return new NullableTypeDefBuilder<T>({
-    type: TypeDefType.Nullable,
-    toNullableTypeDef: nonNullable.typeDef,
+export function nullable<T extends TypeDef>(nonNullable: TypeDefHolder<T>): UnionTypeDefBuilder<{
+  [0]: LiteralTypeDef<null>,
+  [1]: T,
+}> {
+  return new UnionTypeDefBuilder({
+    type: TypeDefType.Union,
+    unions: {
+      [0]: nullTypeDefHolder.typeDef,
+      [1]: nonNullable.typeDef,
+    },
   })
 }
 

@@ -2,7 +2,6 @@ import {
   type ListTypeDef,
   type LiteralTypeDef,
   type MapTypeDef,
-  type NullableTypeDef,
   type StructuredTypeDef,
   type TypeDef,
   type TypeDefHolder,
@@ -18,7 +17,6 @@ type InternalReadonlyTypeDefOf<T extends TypeDef> = T extends LiteralTypeDef ? I
   : T extends MapTypeDef ? InternalReadonlyTypeDefOfMap<T>
   : T extends StructuredTypeDef ? InternalReadonlyTypeDefOfStruct<T>
   : T extends UnionTypeDef ? InternalReadonlyTypeDefOfUnion<T>
-  : T extends NullableTypeDef ? InternalReadonlyTypeDefOfNullable<T>
   : never
 
 type InternalReadonlyTypeDefOfLiteral<T extends LiteralTypeDef> = T
@@ -54,8 +52,3 @@ type InternalReadonlyTypeDefOfUnion<T extends UnionTypeDef> = T extends UnionTyp
     },
   }
   : never
-
-type InternalReadonlyTypeDefOfNullable<T extends NullableTypeDef> = {
-  readonly type: T['type'],
-  readonly toNullableTypeDef: InternalReadonlyTypeDefOf<T['toNullableTypeDef']>,
-}
