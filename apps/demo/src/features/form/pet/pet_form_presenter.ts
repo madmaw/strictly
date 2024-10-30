@@ -1,3 +1,5 @@
+import { mobxCopy } from '@de/fine/transformers/copies/mobx_copy'
+import { type MobxObservable } from '@de/fine/types/defs/mobx_value_type_of'
 import {
   computed,
   observable,
@@ -10,6 +12,7 @@ import {
   type MutablePet,
   type Pet,
   type PetFields,
+  petTypeDef,
   type PetValuePaths,
 } from './types'
 
@@ -25,7 +28,7 @@ export class PetFormPresenter {
     runInAction(function () {
       delete model.errors[path]
       // types should match but a cast is necessary here
-      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-explicit-any
+      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-argument
       model.accessors[path].set(value as any)
     })
   }
@@ -56,7 +59,7 @@ export class PetFormModel {
           return this.value
         },
         set: (value: Pet) => {
-          this.value = value
+          this.value = mobxCopy<typeof petTypeDef>(petTypeDef, value)
         },
       },
       '$.alive': {
@@ -99,10 +102,9 @@ export class PetFormModel {
     }
   }
 
-  // TODO observable
-  value: MutablePet
+  value: MobxObservable<MutablePet>
 
   constructor(value: Pet) {
-    this.value = value
+    this.value = mobxCopy<typeof petTypeDef>(petTypeDef, value)
   }
 }

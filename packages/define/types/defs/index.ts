@@ -63,6 +63,7 @@ export type MapKeyType = string | number
 
 export type MapTypeDef<
   K extends MapKeyType = MapKeyType,
+  // if `V` includes `undefined` the map is partial
   V extends TypeDef | undefined = AnyTypeDef,
   Readonly extends boolean = boolean,
 > = {

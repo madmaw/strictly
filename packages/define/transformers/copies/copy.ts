@@ -13,30 +13,29 @@ import {
   type UnionKey,
   type UnionTypeDef,
 } from 'types/defs'
+import { type ReadonlyTypeDefOf } from 'types/defs/readonly_type_def_of'
 import { type ValueTypeOf } from 'types/defs/value_type_of'
 import {
   map,
   reduce,
 } from 'util/record'
 
-type AnyValueType = any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type AnyValueType = any
 
 export type Copier<R> = (v: AnyValueType, t: TypeDef) => R
-
-function passThroughCopier(v: AnyValueType): AnyValueType {
-  return v
-}
 
 export function copy<
   T extends TypeDefHolder,
   R,
 >(
   { typeDef }: T,
-  value: ValueTypeOf<T>,
-  copier: Copier<R> = passThroughCopier,
+  value: ValueTypeOf<ReadonlyTypeDefOf<T>>,
+  copier: Copier<R>,
 ): R {
   return internalCopy(
     typeDef,
+    // @ts-expect-error ignore the complaint about the infinitely deep type
     value,
     copier,
   )
