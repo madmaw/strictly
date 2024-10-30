@@ -15,6 +15,7 @@ export type PartialTypeDefOf<T extends TypeDefHolder> = {
 
 type InternalPartialAndNullableOf<T extends TypeDef> = {
   readonly type: TypeDefType.Union,
+  readonly discriminator: null,
   readonly unions: {
     readonly [0]: {
       readonly type: TypeDefType.Literal,
@@ -54,8 +55,9 @@ type InternalPartialOfStructured<T extends StructuredTypeDef> = T extends Struct
   }
   : never
 
-type InternalPartialOfUnion<T extends UnionTypeDef> = T extends UnionTypeDef<infer Unions> ? {
+type InternalPartialOfUnion<T extends UnionTypeDef> = T extends UnionTypeDef<infer D, infer Unions> ? {
     readonly type: T['type'],
+    readonly discriminator: D,
     readonly unions: {
       [K in keyof Unions]: InternalPartialOf<Unions[K]>
     },

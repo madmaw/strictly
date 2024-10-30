@@ -74,6 +74,7 @@ export type MapTypeDef<
 }
 
 // structured type
+// could be replaced with a map and an intersection
 export type StructuredFieldKey = string | number
 
 // NOTE we use the `readonly` and `?` (partial) status of these field definitions
@@ -93,9 +94,13 @@ export type StructuredTypeDef<
   readonly fields: Fields,
 }
 
+export type UnionKey = string | number
+
 export type UnionTypeDef<
-  U extends ReadonlyRecord<string, AnyTypeDef> = {},
+  D extends string | null = string | null,
+  U extends ReadonlyRecord<UnionKey, AnyTypeDef> = ReadonlyRecord<UnionKey, AnyTypeDef>,
 > = {
+  readonly discriminator: D,
   readonly type: TypeDefType.Union,
   readonly unions: U,
 }

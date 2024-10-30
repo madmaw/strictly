@@ -98,6 +98,7 @@ describe('ReadonlyTypeDefOf', function () {
     let t: {
       readonly typeDef: {
         readonly type: TypeDefType.Union,
+        readonly discriminator: null,
         readonly unions: {
           readonly [1]: {
             readonly type: TypeDefType.Map,

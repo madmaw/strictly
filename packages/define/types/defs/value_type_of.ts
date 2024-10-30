@@ -3,6 +3,7 @@ import {
   type MaybeReadonly,
   type MaybeReadonlyArray,
 } from 'types/lang'
+import { type ReadonlyRecord } from 'util/record'
 import {
   type ListTypeDef,
   type LiteralTypeDef,
@@ -67,7 +68,10 @@ type InternalValueTypeOfStruct<
 type InternalValueTypeOfUnion<
   F extends UnionTypeDef,
   Extra,
-> = F extends UnionTypeDef<infer U> ? {
+> = F extends UnionTypeDef<infer D, infer U> ? D extends string ? {
+      [K in keyof U]: InternalValueTypeOf<U[K], Extra> & ReadonlyRecord<D, K>
+    }[keyof U]
+  : {
     [K in keyof U]: InternalValueTypeOf<U[K], Extra>
   }[keyof U]
   : never

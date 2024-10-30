@@ -17,6 +17,7 @@ describe('PartialTypeDefOf', function () {
     let t: {
       readonly typeDef: {
         readonly type: TypeDefType.Union,
+        readonly discriminator: null,
         readonly unions: {
           readonly [0]: {
             readonly type: TypeDefType.Literal,
@@ -42,6 +43,7 @@ describe('PartialTypeDefOf', function () {
     let t: {
       readonly typeDef: {
         readonly type: TypeDefType.Union,
+        readonly discriminator: null,
         readonly unions: {
           readonly [0]: {
             readonly type: TypeDefType.Literal,
@@ -51,6 +53,7 @@ describe('PartialTypeDefOf', function () {
             readonly type: TypeDefType.List,
             readonly elements: {
               readonly type: TypeDefType.Union,
+              readonly discriminator: null,
               readonly unions: {
                 readonly [0]: {
                   readonly type: TypeDefType.Literal,
@@ -79,6 +82,7 @@ describe('PartialTypeDefOf', function () {
     let t: {
       readonly typeDef: {
         readonly type: TypeDefType.Union,
+        readonly discriminator: null,
         readonly unions: {
           readonly [0]: {
             readonly type: TypeDefType.Literal,
@@ -89,6 +93,7 @@ describe('PartialTypeDefOf', function () {
             readonly keyPrototype: 'a' | 'b',
             readonly valueTypeDef: {
               readonly type: TypeDefType.Union,
+              readonly discriminator: null,
               readonly unions: {
                 readonly [0]: {
                   readonly type: TypeDefType.Literal,
@@ -120,6 +125,7 @@ describe('PartialTypeDefOf', function () {
     let t: {
       readonly typeDef: {
         readonly type: TypeDefType.Union,
+        readonly discriminator: null,
         readonly unions: {
           readonly [0]: {
             readonly type: TypeDefType.Literal,
@@ -130,6 +136,7 @@ describe('PartialTypeDefOf', function () {
             readonly fields: {
               a?: {
                 readonly type: TypeDefType.Union,
+                readonly discriminator: null,
                 readonly unions: {
                   readonly [0]: {
                     readonly type: TypeDefType.Literal,
@@ -143,6 +150,7 @@ describe('PartialTypeDefOf', function () {
               },
               readonly b?: {
                 readonly type: TypeDefType.Union,
+                readonly discriminator: null,
                 readonly unions: {
                   readonly [0]: {
                     readonly type: TypeDefType.Literal,
@@ -175,6 +183,7 @@ describe('PartialTypeDefOf', function () {
       let t: {
         readonly typeDef: {
           readonly type: TypeDefType.Union,
+          readonly discriminator: null,
           readonly unions: {
             readonly [0]: {
               readonly type: TypeDefType.Literal,
@@ -182,12 +191,13 @@ describe('PartialTypeDefOf', function () {
             },
             readonly [1]: {
               readonly type: TypeDefType.Union,
+              readonly discriminator: null,
               readonly unions: {
-                readonly 1: {
+                readonly [1]: {
                   readonly type: TypeDefType.Literal,
                   readonly valuePrototype: number,
                 },
-                readonly 2: {
+                readonly [2]: {
                   readonly type: TypeDefType.Literal,
                   readonly valuePrototype: string,
                 },
@@ -210,6 +220,7 @@ describe('PartialTypeDefOf', function () {
     let t: {
       readonly typeDef: {
         readonly type: TypeDefType.Union,
+        readonly discriminator: null,
         readonly unions: {
           readonly [0]: {
             readonly type: TypeDefType.Literal,
@@ -219,6 +230,7 @@ describe('PartialTypeDefOf', function () {
             readonly type: TypeDefType.List,
             readonly elements: {
               readonly type: TypeDefType.Union,
+              readonly discriminator: null,
               readonly unions: {
                 readonly [0]: {
                   readonly type: TypeDefType.Literal,

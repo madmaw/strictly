@@ -13,6 +13,7 @@ import {
   type TypeDef,
   type TypeDefHolder,
   TypeDefType,
+  type UnionKey,
   type UnionTypeDef,
 } from './index'
 
@@ -171,27 +172,34 @@ class StructuredTypeDefBuilder<
 }
 
 class UnionTypeDefBuilder<
+  D extends string | null,
   U extends Record<string | number, TypeDef>,
 > extends TypeDefBuilder<
   UnionTypeDef<
+    D,
     U
   >
 > {
   add<
-    K extends Exclude<string | number, keyof U>,
+    K extends Exclude<UnionKey, keyof U>,
     T extends TypeDef,
   >(
     k: K,
     {
       typeDef,
     }: TypeDefHolder<T>,
-  ): UnionTypeDefBuilder<ReadonlyRecord<K, T> & U> {
-    return new UnionTypeDefBuilder<ReadonlyRecord<K, T> & U>(
+  ): UnionTypeDefBuilder<D, ReadonlyRecord<K, T> & U> {
+    const {
+      discriminator,
+      unions,
+    } = this.typeDef
+    return new UnionTypeDefBuilder<D, ReadonlyRecord<K, T> & U>(
       {
         type: TypeDefType.Union,
+        discriminator: discriminator,
         // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
         unions: {
-          ...this.typeDef.unions,
+          ...unions,
           [k]: typeDef,
         } as ReadonlyRecord<K, T> & U,
       },
@@ -212,17 +220,20 @@ export const number = literal<number>()
 export const boolean = literal<boolean>()
 export const nullTypeDefHolder = literal<null>()
 
-export function nullable<T extends TypeDef>(nonNullable: TypeDefHolder<T>): UnionTypeDefBuilder<{
-  [0]: LiteralTypeDef<null>,
-  [1]: T,
+export function nullable<T extends TypeDef>(nonNullable: TypeDefHolder<T>): UnionTypeDefBuilder<null, {
+  readonly [0]: LiteralTypeDef<null>,
+  readonly [1]: T,
 }> {
-  return new UnionTypeDefBuilder({
-    type: TypeDefType.Union,
-    unions: {
-      [0]: nullTypeDefHolder.typeDef,
-      [1]: nonNullable.typeDef,
+  return new UnionTypeDefBuilder(
+    {
+      discriminator: null,
+      type: TypeDefType.Union,
+      unions: {
+        [0]: nullTypeDefHolder.typeDef,
+        [1]: nonNullable.typeDef,
+      },
     },
-  })
+  )
 }
 
 export function list<T extends TypeDef>(elements: TypeDefHolder<T>): ListTypeDefBuilder<T, false> {
@@ -252,10 +263,14 @@ export function struct(): StructuredTypeDefBuilder<{}> {
   })
 }
 
-export function union(): UnionTypeDefBuilder<{}> {
+export function union<D extends null>(): UnionTypeDefBuilder<D, {}>
+export function union<D extends string>(discriminator: D): UnionTypeDefBuilder<D, {}>
+export function union<D extends string | null>(discriminator?: D): UnionTypeDefBuilder<D, {}> {
   // have to explicitly supply types as TS will infinitely recurse trying to infer them!
-  return new UnionTypeDefBuilder<{}>(
+  return new UnionTypeDefBuilder<D, {}>(
     {
+      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+      discriminator: (discriminator ?? null) as D,
       type: TypeDefType.Union,
       unions: {},
     },

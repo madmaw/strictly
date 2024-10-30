@@ -90,12 +90,14 @@ type InternalFlattenedJsonPathsOfUnionChildren<
   SegmentOverride extends string,
   ValuePath extends string,
   TypePath extends string,
-> = T extends UnionTypeDef<infer Unions> ? {
-    [K in keyof Unions]: InternalFlattenedJsonPathsOfChildren<
-      Unions[K],
-      SegmentOverride,
-      ValuePath,
-      TypePath
-    >
-  }[keyof Unions]
+> = T extends UnionTypeDef<infer D, infer Unions> ?
+    & ({
+      [K in keyof Unions]: InternalFlattenedJsonPathsOfChildren<
+        Unions[K],
+        SegmentOverride,
+        ValuePath,
+        TypePath
+      >
+    }[keyof Unions])
+    & (D extends string ? ReadonlyRecord<JsonPathOf<ValuePath, D>, JsonPathOf<TypePath, D>> : {})
   : never

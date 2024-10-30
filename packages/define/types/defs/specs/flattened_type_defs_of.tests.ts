@@ -139,6 +139,7 @@ describe('union', function () {
       | {
         readonly $: {
           readonly type: TypeDefType.Union,
+          readonly discriminator: null,
           readonly unions: {
             readonly [1]: {
               readonly type: TypeDefType.Structured,
@@ -168,6 +169,7 @@ describe('union', function () {
       | {
         readonly $: {
           readonly type: TypeDefType.Union,
+          readonly discriminator: null,
           readonly unions: {
             readonly [1]: {
               readonly type: TypeDefType.Structured,

@@ -196,6 +196,7 @@ describe('ValueTypeOf', function () {
     type T = ValueTypeOf<{
       typeDef: {
         readonly type: TypeDefType.Union,
+        readonly discriminator: null,
         readonly unions: {
           readonly [0]: {
             readonly type: TypeDefType.Structured,

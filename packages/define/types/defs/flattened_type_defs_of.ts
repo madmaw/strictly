@@ -69,30 +69,21 @@ type InternalFlattenedTypeDefsOfStructChildren<
   T extends StructuredTypeDef,
   SegmentOverride extends string | null,
   Path extends string,
-> =
-  // Breaking this up seems to help the TS language service cache the results
-  // and not grind to a halt
-  UnionToIntersection<InternalFlattenedTypesOfStructChildrenUnion<T, SegmentOverride, Path>>
-
-type InternalFlattenedTypesOfStructChildrenUnion<
-  T extends StructuredTypeDef,
-  SegmentOverride extends string | null,
-  Path extends string,
 > = T extends StructuredTypeDef<infer Fields> ? {} extends Fields ? {}
-  : {
+  : UnionToIntersection<{
     readonly [K in keyof Fields]-?: InternalFlattenedTypeDefsOf<
       Exclude<Fields[K], undefined>,
       SegmentOverride,
       JsonPathOf<Path, K>
     >
-  }[keyof Fields]
+  }[keyof Fields]>
   : never
 
 type InternalFlattenedTypeDefsOfUnionChildren<
   T extends UnionTypeDef,
   SegmentOverride extends string | null,
   Path extends string,
-> = T extends UnionTypeDef<infer Unions> ? {
+> = T extends UnionTypeDef<infer _D, infer Unions> ? {
     [K in keyof Unions]: InternalFlattenedTypeDefsOfChildren<
       Unions[K],
       SegmentOverride,

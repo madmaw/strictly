@@ -1,8 +1,11 @@
-import { type TypeDefType } from 'types/defs'
+import {
+  type TypeDefType,
+} from 'types/defs'
 import {
   boolean,
   list,
   map,
+  nullable,
   number,
   string,
   struct,
@@ -20,6 +23,28 @@ describe('builder', function () {
       }
 
       expectTypeOf(typeDef).toEqualTypeOf<C>()
+    })
+
+    describe('nullable', function () {
+      const { typeDef } = nullable(number)
+
+      type C = {
+        readonly type: TypeDefType.Union,
+        readonly discriminator: null,
+        readonly unions: {
+          readonly [0]: {
+            readonly type: TypeDefType.Literal,
+            readonly valuePrototype: null,
+          },
+          readonly [1]: {
+            readonly type: TypeDefType.Literal,
+            readonly valuePrototype: number,
+          },
+        },
+      }
+      it('equals expected type', function () {
+        expectTypeOf(typeDef).toEqualTypeOf<C>()
+      })
     })
   })
 
@@ -175,6 +200,7 @@ describe('builder', function () {
       it('equals expected type', function () {
         type C = {
           readonly type: TypeDefType.Union,
+          readonly discriminator: null,
           readonly unions:
             & {
               readonly [1]: {
@@ -209,6 +235,7 @@ describe('builder', function () {
       it('equals expected type', function () {
         type C = {
           readonly type: TypeDefType.Union,
+          readonly discriminator: null,
           readonly unions:
             & {
               readonly [1]: {

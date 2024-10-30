@@ -45,8 +45,9 @@ type InternalReadonlyTypeDefOfStruct<T extends StructuredTypeDef> = T extends St
   }
   : never
 
-type InternalReadonlyTypeDefOfUnion<T extends UnionTypeDef> = T extends UnionTypeDef<infer Unions> ? {
+type InternalReadonlyTypeDefOfUnion<T extends UnionTypeDef> = T extends UnionTypeDef<infer D, infer Unions> ? {
     readonly type: T['type'],
+    readonly discriminator: D,
     readonly unions: {
       readonly [K in keyof Unions]: InternalReadonlyTypeDefOf<Unions[K]>
     },

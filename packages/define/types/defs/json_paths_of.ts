@@ -87,7 +87,7 @@ type InternalJsonPathsOfUnionChildren<
   Prefix extends string,
   SegmentOverride extends string | null,
 > // typescript cannot infer the key in unions unless we get the value directly
- = F extends UnionTypeDef<infer Unions> ? {
+ = F extends UnionTypeDef<infer D, infer Unions> ? {
     readonly [K in keyof Unions]: InternalJsonPathsOf<
       Unions[K],
       // This will overload paths, but we don't actually care about that here
@@ -97,5 +97,5 @@ type InternalJsonPathsOfUnionChildren<
       Prefix,
       SegmentOverride
     >
-  }[keyof Unions]
+  }[keyof Unions] | (D extends string ? JsonPathOf<Prefix, D> : never)
   : never
