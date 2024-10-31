@@ -1,8 +1,8 @@
+import { type ReadonlyRecord } from '@de/base'
 import {
   type TypeDefType,
-} from 'types/defs'
-import { type ValueTypeOf } from 'types/defs/value_type_of'
-import { type ReadonlyRecord } from 'util/record'
+} from 'types/definitions'
+import { type ValueTypeOf } from 'types/value_type_of'
 
 describe('ValueTypeOf', function () {
   describe('literal', function () {

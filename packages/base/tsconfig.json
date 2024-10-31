@@ -9,7 +9,8 @@
     "tsconfig.json"
   ],
   "references": [
-    {"path": "../base"},
-    {"path": "../../support/vite"}
+    {
+      "path": "../../support/vite"
+    }
   ]
 }

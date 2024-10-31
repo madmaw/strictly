@@ -1,5 +1,4 @@
 import { type SimplifyDeep } from 'type-fest'
-import { type TypeDefType } from 'types/defs'
 import {
   list,
   map,
@@ -7,8 +6,9 @@ import {
   string,
   struct,
   union,
-} from 'types/defs/builders'
-import { type PartialTypeDefOf } from 'types/defs/partial_type_def_of'
+} from 'types/builders'
+import { type TypeDefType } from 'types/definitions'
+import { type PartialTypeDefOf } from 'types/partial_type_def_of'
 
 describe('PartialTypeDefOf', function () {
   describe('literal', function () {

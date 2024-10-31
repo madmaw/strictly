@@ -47,6 +47,7 @@
   "include": ["tsconfig.json"],
   "references": [
     {"path": "apps/demo"},
+    {"path": "packages/base"},
     {"path": "packages/define"},
     {"path": "packages/form-react"},
     {"path": "support/vite"}

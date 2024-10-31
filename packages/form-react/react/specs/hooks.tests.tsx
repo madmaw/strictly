@@ -1,4 +1,4 @@
-import { type ReadonlyRecord } from '@de/fine/util/record'
+import { type ReadonlyRecord } from '@de/base'
 import {
   fireEvent,
   render,

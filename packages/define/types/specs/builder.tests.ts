@@ -1,7 +1,4 @@
 import {
-  type TypeDefType,
-} from 'types/defs'
-import {
   boolean,
   list,
   map,
@@ -10,7 +7,10 @@ import {
   string,
   struct,
   union,
-} from 'types/defs/builders'
+} from 'types/builders'
+import {
+  type TypeDefType,
+} from 'types/definitions'
 
 describe('builder', function () {
   describe('literal', function () {

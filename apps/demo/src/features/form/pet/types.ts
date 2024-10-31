@@ -1,17 +1,15 @@
 import {
+  boolean,
   type FlattenedAccessorsOf,
   type FlattenedJsonValueToTypePathsOf,
   type FlattenedTypeDefsOf,
   type FlattenedValueTypesOf,
   type ReadonlyTypeDefOf,
-  type ValueTypeOf,
-} from '@de/fine'
-import {
-  boolean,
   string,
   struct,
-} from '@de/fine/types/defs/builders'
-import { type JsonPathsOf } from '@de/fine/types/defs/json_paths_of'
+  type ValueTypeOf,
+} from '@de/fine'
+import { type JsonPathsOf } from '@de/fine/types/json_paths_of'
 import { type FlattenedFormFieldsOf } from '@de/form-react'
 
 export const petTypeDef = struct()

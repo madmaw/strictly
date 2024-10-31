@@ -1,5 +1,5 @@
 import { mobxCopy } from '@de/fine/transformers/copies/mobx_copy'
-import { type MobxObservable } from '@de/fine/types/defs/mobx_value_type_of'
+import { type MobxObservable } from '@de/fine/types/mobx_value_type_of'
 import {
   computed,
   observable,

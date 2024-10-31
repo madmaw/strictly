@@ -7,7 +7,7 @@ import {
   type TypeDefHolder,
   type TypeDefType,
   type UnionTypeDef,
-} from '.'
+} from './definitions'
 
 export type PartialTypeDefOf<T extends TypeDefHolder> = {
   readonly typeDef: InternalPartialAndNullableOf<T['typeDef']>,

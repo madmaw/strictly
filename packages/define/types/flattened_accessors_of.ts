@@ -1,4 +1,4 @@
-import { type ReadonlyRecord } from 'util/record'
+import { type ReadonlyRecord } from '@de/base'
 
 export type Accessor<T> = {
   get(): T,

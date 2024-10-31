@@ -1,5 +1,9 @@
-import { UnexpectedImplementationError } from 'errors/unexpected_implementation'
-import { UnreachableError } from 'errors/unreachable'
+import {
+  map,
+  reduce,
+  UnexpectedImplementationError,
+  UnreachableError,
+} from '@de/base'
 import {
   type ListTypeDef,
   type LiteralTypeDef,
@@ -12,13 +16,9 @@ import {
   TypeDefType,
   type UnionKey,
   type UnionTypeDef,
-} from 'types/defs'
-import { type ReadonlyTypeDefOf } from 'types/defs/readonly_type_def_of'
-import { type ValueTypeOf } from 'types/defs/value_type_of'
-import {
-  map,
-  reduce,
-} from 'util/record'
+} from 'types/definitions'
+import { type ReadonlyTypeDefOf } from 'types/readonly_type_def_of'
+import { type ValueTypeOf } from 'types/value_type_of'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type AnyValueType = any

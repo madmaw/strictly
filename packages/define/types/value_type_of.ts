@@ -2,8 +2,8 @@ import {
   type MaybePartial,
   type MaybeReadonly,
   type MaybeReadonlyArray,
-} from 'types/lang'
-import { type ReadonlyRecord } from 'util/record'
+  type ReadonlyRecord,
+} from '@de/base'
 import {
   type ListTypeDef,
   type LiteralTypeDef,
@@ -12,7 +12,7 @@ import {
   type TypeDef,
   type TypeDefHolder,
   type UnionTypeDef,
-} from '.'
+} from './definitions'
 
 export type ValueTypeOf<
   T,

@@ -1,8 +1,8 @@
+import { type ReadonlyRecord } from '@de/base'
 import {
   type InternalValueTypeOf,
   type TypeDef,
 } from '@de/fine'
-import { type ReadonlyRecord } from '@de/fine/util/record'
 import { type FormField } from 'react/props'
 
 // sets and sets the value into the original object
@@ -15,7 +15,7 @@ type FlattenedAccessorsOf<
   JsonPaths extends ReadonlyRecord<string, keyof Fields>,
   Fields extends ReadonlyRecord<string, TypeDef>,
 > = {
-  [K in keyof JsonPaths]: Accessor<InternalValueTypeOf<Fields[JsonPaths[K]]>>
+  [K in keyof JsonPaths]: Accessor<InternalValueTypeOf<Fields[JsonPaths[K]], {}>>
 }
 
 type Conversion<V, E> = {
@@ -35,7 +35,7 @@ type Converter<E, From = any, To = any> = {
 type FlattenedConvertersOf<Fields extends ReadonlyRecord<string, TypeDef>, E> = {
   [K in keyof Fields]: Converter<
     E,
-    InternalValueTypeOf<Fields[K]>
+    InternalValueTypeOf<Fields[K], {}>
   >
 }
 
@@ -101,12 +101,12 @@ export class FormModel<
   JsonPaths extends ReadonlyRecord<string, keyof FieldTypeDefs>,
   Converters extends FlattenedConvertersOf<FieldTypeDefs, E>,
 > {
-  value: InternalValueTypeOf<T>
+  value: InternalValueTypeOf<T, {}>
   fieldOverrides: FlattenedFieldOverrides<E, JsonPaths, Converters> = {}
 
   constructor(
     private readonly typeDef: T,
-    value: InternalValueTypeOf<T>,
+    value: InternalValueTypeOf<T, {}>,
     private readonly converters: Converters,
   ) {
     this.value = value

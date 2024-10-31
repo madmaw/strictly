@@ -8,8 +8,8 @@ import {
   string,
   struct,
   union,
-} from 'types/defs/builders'
-import { type FlattenedJsonValueToTypePathsOf } from 'types/defs/flattened_json_value_to_type_paths_of'
+} from 'types/builders'
+import { type FlattenedJsonValueToTypePathsOf } from 'types/flattened_json_value_to_type_paths_of'
 
 describe('FlattenedJsonPathsOf', function () {
   describe('literal', function () {

@@ -1,4 +1,4 @@
-import { type ReadonlyRecord } from 'util/record'
+import { type ReadonlyRecord } from '@de/base'
 
 // NOTE: this file, in conjunction with the types that derive information from these types, pushes the
 // Typescript compiler to its absolute limit. It tends to be a death of 1000 cuts so no individual feature

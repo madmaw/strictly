@@ -2,7 +2,7 @@ import {
   type PartialReadonlyRecord,
   type PartialRecord,
   type ReadonlyRecord,
-} from 'util/record'
+} from '@de/base'
 import {
   type ListTypeDef,
   type LiteralTypeDef,
@@ -15,7 +15,7 @@ import {
   TypeDefType,
   type UnionKey,
   type UnionTypeDef,
-} from './index'
+} from './definitions'
 
 class TypeDefBuilder<T extends TypeDef> implements TypeDefHolder<T> {
   constructor(readonly typeDef: T) {

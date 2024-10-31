@@ -6,7 +6,7 @@ import {
   type TypeDef,
   type TypeDefHolder,
   type UnionTypeDef,
-} from '.'
+} from './definitions'
 import { type JsonPathOf } from './json_path_of'
 
 export type JsonPathsOf<

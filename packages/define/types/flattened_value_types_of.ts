@@ -1,5 +1,5 @@
-import { type ReadonlyRecord } from 'util/record'
-import { type TypeDef } from '.'
+import { type ReadonlyRecord } from '@de/base'
+import { type TypeDef } from './definitions'
 import { type InternalValueTypeOf } from './value_type_of'
 
 // TS doesn't like this

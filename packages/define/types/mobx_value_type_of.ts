@@ -1,6 +1,6 @@
 import {
   type TypeDefHolder,
-} from '.'
+} from './definitions'
 import { type ValueTypeOf } from './value_type_of'
 
 const MOBX_OBSERVABLE_KEY = '___mobx_observable'

@@ -1,4 +1,7 @@
-import { UnreachableError } from 'errors/unreachable'
+import {
+  reduce,
+  UnreachableError,
+} from '@de/base'
 import {
   type IObservableFactory,
   makeObservable,
@@ -9,11 +12,10 @@ import {
   type TypeDef,
   type TypeDefHolder,
   TypeDefType,
-} from 'types/defs'
-import { type MobxValueTypeOf } from 'types/defs/mobx_value_type_of'
-import { type ReadonlyTypeDefOf } from 'types/defs/readonly_type_def_of'
-import { type ValueTypeOf } from 'types/defs/value_type_of'
-import { reduce } from 'util/record'
+} from 'types/definitions'
+import { type MobxValueTypeOf } from 'types/mobx_value_type_of'
+import { type ReadonlyTypeDefOf } from 'types/readonly_type_def_of'
+import { type ValueTypeOf } from 'types/value_type_of'
 import {
   type AnyValueType,
   copy,

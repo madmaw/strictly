@@ -1,5 +1,4 @@
 import { type SimplifyDeep } from 'type-fest'
-import { type TypeDefType } from 'types/defs'
 import {
   boolean,
   list,
@@ -8,8 +7,9 @@ import {
   string,
   struct,
   union,
-} from 'types/defs/builders'
-import { type FlattenedTypeDefsOf } from 'types/defs/flattened_type_defs_of'
+} from 'types/builders'
+import { type TypeDefType } from 'types/definitions'
+import { type FlattenedTypeDefsOf } from 'types/flattened_type_defs_of'
 
 describe('FlattenedTypeDefsOf', function () {
   describe('literal', function () {

@@ -1,4 +1,4 @@
-import { type ReadonlyRecord } from '@de/fine/util/record'
+import { type ReadonlyRecord } from '@de/base'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type FormField<V = any, E = any> = {

@@ -1,5 +1,5 @@
+import { type ReadonlyRecord } from '@de/base'
 import { type UnionToIntersection } from 'type-fest'
-import { type ReadonlyRecord } from 'util/record'
 import {
   type ListTypeDef,
   type LiteralTypeDef,
@@ -8,7 +8,7 @@ import {
   type TypeDef,
   type TypeDefHolder,
   type UnionTypeDef,
-} from '.'
+} from './definitions'
 import { type JsonPathOf } from './json_path_of'
 
 export type FlattenedJsonValueToTypePathsOf<

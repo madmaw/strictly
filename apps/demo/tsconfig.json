@@ -11,14 +11,9 @@
     "tsconfig.json"
   ],
   "references": [
-    {
-      "path": "../../support/vite"
-    },
-    {
-      "path": "../../packages/define"
-    },
-    {
-      "path": "../../packages/form-react"
-    }
+    {"path": "../../support/vite"},
+    {"path": "../../packages/base"},
+    {"path": "../../packages/define"},
+    {"path": "../../packages/form-react"}
   ]
 }

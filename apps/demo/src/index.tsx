@@ -1,6 +1,6 @@
 import '@mantine/core/styles.css'
 
-import { checkExists } from '@de/fine/util/preconditions'
+import { checkExists } from '@de/base'
 import {
   createTheme,
   MantineProvider,

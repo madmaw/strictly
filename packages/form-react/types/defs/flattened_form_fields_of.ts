@@ -1,8 +1,8 @@
+import { type ReadonlyRecord } from '@de/base'
 import {
   type InternalValueTypeOf,
   type TypeDef,
 } from '@de/fine'
-import { type ReadonlyRecord } from '@de/fine/util/record'
 
 export type FlattenedFormFieldsOf<R extends ReadonlyRecord<string, TypeDef>, E> = {
   [K in keyof R]: {

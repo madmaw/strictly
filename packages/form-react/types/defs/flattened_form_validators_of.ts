@@ -1,8 +1,8 @@
+import { type ReadonlyRecord } from '@de/base'
 import {
   type InternalValueTypeOf,
   type TypeDef,
 } from '@de/fine'
-import { type ReadonlyRecord } from '@de/fine/util/record'
 import { type FlattenedFormValuesOf } from './flattened_form_fields_of'
 
 type Validator<

@@ -6,7 +6,7 @@ import {
   type TypeDef,
   type TypeDefHolder,
   type UnionTypeDef,
-} from '.'
+} from './definitions'
 
 export type ReadonlyTypeDefOf<T extends TypeDefHolder> = {
   readonly typeDef: InternalReadonlyTypeDefOf<T['typeDef']>,

@@ -1,4 +1,3 @@
-import { type TypeDefType } from 'types/defs'
 import {
   list,
   map,
@@ -6,8 +5,9 @@ import {
   string,
   struct,
   union,
-} from 'types/defs/builders'
-import { type ReadonlyTypeDefOf } from 'types/defs/readonly_type_def_of'
+} from 'types/builders'
+import { type TypeDefType } from 'types/definitions'
+import { type ReadonlyTypeDefOf } from 'types/readonly_type_def_of'
 
 describe('ReadonlyTypeDefOf', function () {
   describe('literal', function () {

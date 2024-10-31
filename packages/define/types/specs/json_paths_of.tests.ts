@@ -7,8 +7,8 @@ import {
   string,
   struct,
   union,
-} from 'types/defs/builders'
-import { type JsonPathsOf } from 'types/defs/json_paths_of'
+} from 'types/builders'
+import { type JsonPathsOf } from 'types/json_paths_of'
 
 describe('JsonPathsOf', function () {
   describe('literal', function () {
