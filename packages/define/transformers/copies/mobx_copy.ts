@@ -1,6 +1,6 @@
 import { UnreachableError } from 'errors/unreachable'
 import {
-  IObservableFactory,
+  type IObservableFactory,
   makeObservable,
   observable,
 } from 'mobx'
