@@ -97,6 +97,7 @@ export function mobxCopy<T extends TypeDefHolder>(
   t: T,
   proto: ValueTypeOf<ReadonlyTypeDefOf<T>>,
 ): MobxValueTypeOf<T> {
+  // TODO simplify types in a way where this doesn't happen
   // @ts-expect-error ignore the complaint about the infinitely deep type
   return copy(t, proto, observeValue)
 }

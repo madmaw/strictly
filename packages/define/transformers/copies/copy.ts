@@ -35,6 +35,7 @@ export function copy<
 ): R {
   return internalCopy(
     typeDef,
+    // TODO simplify types in a way where this doesn't happen
     // @ts-expect-error ignore the complaint about the infinitely deep type
     value,
     copier,
