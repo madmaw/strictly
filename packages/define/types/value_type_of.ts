@@ -1,7 +1,5 @@
 import {
-  type MaybePartial,
-  type MaybeReadonly,
-  type MaybeReadonlyArray,
+  type IsFieldReadonly,
   type ReadonlyRecord,
 } from '@de/base'
 import {
@@ -31,28 +29,38 @@ export type InternalValueTypeOf<
 
 type InternalValueTypeOfLiteral<F extends LiteralTypeDef> = F['valuePrototype']
 
-type InternalValueTypeOfList<F extends ListTypeDef, Extra> = MaybeReadonlyArray<
-  InternalValueTypeOf<F['elements'], Extra>,
-  F['readonly']
-> & Extra
+type InternalValueTypeOfList<F extends ListTypeDef, Extra> = IsFieldReadonly<F, 'elements'> extends true
+  ? readonly InternalValueTypeOf<
+    F['elements'],
+    Extra
+  >[] & Extra
+  : InternalValueTypeOf<
+    F['elements'],
+    Extra
+  >[] & Extra
 
 type InternalValueTypeOfMap<
   F extends MapTypeDef,
   Extra,
-> = MaybeReadonly<
-  MaybePartial<
-    Record<
-      F['keyPrototype'],
-      InternalValueTypeOf<
-        Exclude<F['valueTypeDef'], undefined>,
-        Extra
-      >
-    >,
-    // yes, this is necessary
-    undefined extends F['valueTypeDef'] ? true : false
-  >,
-  F['readonly']
-> & Extra
+> = undefined extends F['valueTypeDef']
+  // partial
+  ? IsFieldReadonly<F, 'valueTypeDef'> extends true
+    // readonly
+    ? {
+      readonly [k in F['keyPrototype']]?: InternalValueTypeOf<F['valueTypeDef'], Extra>
+    }
+  : {
+    [k in F['keyPrototype']]?: InternalValueTypeOf<F['valueTypeDef'], Extra>
+  }
+  // complete
+  : IsFieldReadonly<F, 'valueTypeDef'> extends true
+  // readonly
+    ? {
+      readonly [k in F['keyPrototype']]: InternalValueTypeOf<F['valueTypeDef'], Extra>
+    }
+  : {
+    [k in F['keyPrototype']]: InternalValueTypeOf<F['valueTypeDef'], Extra>
+  }
 
 type InternalValueTypeOfStruct<
   F extends StructuredTypeDef,

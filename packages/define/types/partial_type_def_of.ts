@@ -37,14 +37,12 @@ type InternalPartialOfLiteral<T extends LiteralTypeDef> = T
 type InternalPartialOfList<T extends ListTypeDef> = {
   readonly type: T['type'],
   readonly elements: InternalPartialAndNullableOf<T['elements']>,
-  readonly readonly: T['readonly'],
 }
 
 type InternalPartialOfMap<T extends MapTypeDef> = {
   readonly type: T['type'],
   readonly keyPrototype: T['keyPrototype'],
   readonly valueTypeDef: InternalPartialAndNullableOf<T['valueTypeDef']> | undefined,
-  readonly readonly: T['readonly'],
 }
 
 type InternalPartialOfStructured<T extends StructuredTypeDef> = T extends StructuredTypeDef<infer Fields> ? {

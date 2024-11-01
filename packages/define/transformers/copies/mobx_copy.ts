@@ -32,26 +32,18 @@ function observeValue(
     case TypeDefType.Literal:
       return v
     case TypeDefType.List:
-      if (!def.readonly) {
-        // can't work out that an observable array is an array
-        // eslint-disable-next-line @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-explicit-any
-        return observable.array(v as any[], { deep: false }) as any
-      } else {
-        return v
-      }
+      // can't work out that an observable array is an array
+      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-explicit-any
+      return observable.array(v as any[], { deep: false }) as any
     case TypeDefType.Map:
-      if (!def.readonly) {
-        // make observable observes all fields
-        return observable(
-          v,
-          {},
-          {
-            deep: false,
-          },
-        )
-      } else {
-        return v
-      }
+      // make observable observes all fields
+      return observable(
+        v,
+        {},
+        {
+          deep: false,
+        },
+      )
     case TypeDefType.Structured:
       // `makeObservable` only observes the specified props
       return makeObservable(
@@ -99,7 +91,5 @@ export function mobxCopy<T extends TypeDefHolder>(
   t: T,
   proto: ValueTypeOf<ReadonlyTypeDefOf<T>>,
 ): MobxValueTypeOf<T> {
-  // TODO simplify types in a way where this doesn't happen
-  // @ts-expect-error ignore the complaint about the infinitely deep type
   return copy(t, proto, observeValue)
 }

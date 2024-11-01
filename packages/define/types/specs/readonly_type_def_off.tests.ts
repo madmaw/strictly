@@ -35,7 +35,6 @@ describe('ReadonlyTypeDefOf', function () {
           readonly type: TypeDefType.Literal,
           readonly valuePrototype: number,
         },
-        readonly readonly: true,
       },
     }
     it('equals expected type', function () {
@@ -55,7 +54,6 @@ describe('ReadonlyTypeDefOf', function () {
           readonly type: TypeDefType.Literal,
           readonly valuePrototype: number,
         },
-        readonly readonly: true,
       },
     }
     it('equals expected type', function () {
@@ -107,7 +105,6 @@ describe('ReadonlyTypeDefOf', function () {
               readonly type: TypeDefType.Literal,
               readonly valuePrototype: number,
             },
-            readonly readonly: true,
           },
           readonly [2]: {
             readonly type: TypeDefType.Literal,
@@ -133,7 +130,6 @@ describe('ReadonlyTypeDefOf', function () {
           readonly type: TypeDefType.Literal,
           readonly valuePrototype: number,
         } | undefined,
-        readonly readonly: true,
       },
     }
     it('equals expected type', function () {
@@ -153,7 +149,6 @@ describe('ReadonlyTypeDefOf', function () {
           readonly type: TypeDefType.Literal,
           readonly valuePrototype: number,
         },
-        readonly readonly: true,
       },
     }
     it('equals expected type', function () {

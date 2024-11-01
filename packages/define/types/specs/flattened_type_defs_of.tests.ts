@@ -33,11 +33,10 @@ describe('FlattenedTypeDefsOf', function () {
     let t: {
       readonly $: {
         readonly type: TypeDefType.List,
-        readonly elements: {
+        elements: {
           readonly type: TypeDefType.Literal,
           readonly valuePrototype: number,
         },
-        readonly readonly: false,
       },
       readonly ['$.s']: {
         readonly type: TypeDefType.Literal,
@@ -57,11 +56,10 @@ describe('FlattenedTypeDefsOf', function () {
       readonly $: {
         readonly type: TypeDefType.Map,
         readonly keyPrototype: 'a' | 'b',
-        readonly valueTypeDef: {
+        valueTypeDef: {
           readonly type: TypeDefType.Literal,
           readonly valuePrototype: number,
         },
-        readonly readonly: false,
       },
       readonly ['$.s']: {
         readonly type: TypeDefType.Literal,

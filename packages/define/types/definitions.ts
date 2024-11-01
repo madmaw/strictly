@@ -51,11 +51,10 @@ export type LiteralTypeDef<V = any> = {
 // list
 export type ListTypeDef<
   E extends TypeDef = AnyTypeDef,
-  Readonly extends boolean = boolean,
 > = {
   readonly type: TypeDefType.List,
+  // readonly is inherited by the output
   readonly elements: E,
-  readonly readonly: Readonly,
 }
 
 // map
@@ -65,13 +64,12 @@ export type MapTypeDef<
   K extends MapKeyType = MapKeyType,
   // if `V` includes `undefined` the map is partial
   V extends TypeDef | undefined = AnyTypeDef,
-  Readonly extends boolean = boolean,
 > = {
   readonly type: TypeDefType.Map,
   // never actually populate
   readonly keyPrototype: K,
+  // readonly is inherited by the output
   readonly valueTypeDef: V,
-  readonly readonly: Readonly,
 }
 
 // structured type

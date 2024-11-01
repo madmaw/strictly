@@ -24,7 +24,6 @@ type InternalReadonlyTypeDefOfLiteral<T extends LiteralTypeDef> = T
 type InternalReadonlyTypeDefOfList<T extends ListTypeDef> = {
   readonly type: T['type'],
   readonly elements: InternalReadonlyTypeDefOf<T['elements']>,
-  readonly readonly: true,
 }
 
 type InternalReadonlyTypeDefOfMap<T extends MapTypeDef> = {
@@ -34,7 +33,6 @@ type InternalReadonlyTypeDefOfMap<T extends MapTypeDef> = {
       Exclude<T['valueTypeDef'], undefined>
     > | undefined
     : InternalReadonlyTypeDefOf<T['valueTypeDef']>,
-  readonly readonly: true,
 }
 
 type InternalReadonlyTypeDefOfStruct<T extends StructuredTypeDef> = T extends StructuredTypeDef<infer Fields> ? {

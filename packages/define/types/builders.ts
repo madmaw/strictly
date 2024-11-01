@@ -1,4 +1,5 @@
 import {
+  type IsFieldReadonly,
   type PartialReadonlyRecord,
   type PartialRecord,
   type ReadonlyRecord,
@@ -34,38 +35,37 @@ class LiteralTypeDefBuilder<T> extends TypeDefBuilder<LiteralTypeDef<T>> {
 }
 
 class ListTypeDefBuilder<
-  T extends TypeDef,
-  Readonly extends boolean,
-> extends TypeDefBuilder<ListTypeDef<T, Readonly>> {
-  readonly() {
-    return new ListTypeDefBuilder<T, true>({
-      ...this.typeDef,
-      readonly: true,
-    })
+  T extends ListTypeDef,
+> extends TypeDefBuilder<T> {
+  readonly(): ListTypeDefBuilder<{
+    readonly type: TypeDefType.List,
+    readonly elements: T['elements'],
+  }> {
+    return this
   }
 }
 
 class MapTypeDefBuilder<T extends MapTypeDef> extends TypeDefBuilder<T> {
-  partial() {
-    return new MapTypeDefBuilder<
-      MapTypeDef<
-        T['keyPrototype'],
-        T['valueTypeDef'] | undefined
-      >
-    >(this.typeDef)
+  partial(): IsFieldReadonly<T, 'valueTypeDef'> extends true ? MapTypeDefBuilder<{
+      readonly type: TypeDefType.Map,
+      readonly keyPrototype: T['keyPrototype'],
+      readonly valueTypeDef: T['valueTypeDef'] | undefined,
+    }>
+    : MapTypeDefBuilder<{
+      readonly type: TypeDefType.Map,
+      readonly keyPrototype: T['keyPrototype'],
+      valueTypeDef: T['valueTypeDef'] | undefined,
+    }>
+  {
+    return this
   }
 
-  readonly() {
-    return new MapTypeDefBuilder<
-      MapTypeDef<
-        T['keyPrototype'],
-        T['valueTypeDef'],
-        true
-      >
-    >({
-      ...this.typeDef,
-      readonly: true,
-    })
+  readonly(): MapTypeDefBuilder<{
+    readonly type: TypeDefType.Map,
+    readonly keyPrototype: T['keyPrototype'],
+    readonly valueTypeDef: T['valueTypeDef'],
+  }> {
+    return this
   }
 }
 
@@ -236,22 +236,27 @@ export function nullable<T extends TypeDef>(nonNullable: TypeDefHolder<T>): Unio
   )
 }
 
-export function list<T extends TypeDef>(elements: TypeDefHolder<T>): ListTypeDefBuilder<T, false> {
+export function list<T extends TypeDef>(elements: TypeDefHolder<T>): ListTypeDefBuilder<{
+  readonly type: TypeDefType.List,
+  elements: T,
+}> {
   // have to explicitly supply types as TS will infinitely recurse trying to infer them!
-  return new ListTypeDefBuilder<T, false>({
+  return new ListTypeDefBuilder<ListTypeDef<T>>({
     type: TypeDefType.List,
     elements: elements.typeDef,
-    readonly: false,
   })
 }
 
 export function map<K extends MapKeyType, V extends TypeDefHolder>({ typeDef }: V) {
-  return new MapTypeDefBuilder<MapTypeDef<K, V['typeDef'], false>>({
+  return new MapTypeDefBuilder<{
+    readonly type: TypeDefType.Map,
+    readonly keyPrototype: K,
+    valueTypeDef: V['typeDef'],
+  }>({
     type: TypeDefType.Map,
     // eslint-disable-next-line no-undefined
     keyPrototype: undefined!,
     valueTypeDef: typeDef,
-    readonly: false,
   })
 }
 
