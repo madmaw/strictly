@@ -16,6 +16,8 @@ import { type ReadonlyRecord } from '@de/base'
 // ```
 // type HomogeneousFattenedValue<T extends TypeDef, V> = { [K in keyof FlattenedOf<T>]?: V }
 // ```
+// 5. Use longhand { [s: string]: number } instead of Record<string, number> when doing transformations and
+// defining types
 
 export type TypeDefHolder<T extends TypeDef = TypeDef> = {
   readonly typeDef: T,

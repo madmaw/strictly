@@ -5,29 +5,32 @@ import {
   UnreachableError,
 } from '@de/base'
 import {
-  type ListTypeDef,
-  type LiteralTypeDef,
-  type MapTypeDef,
   type StructuredFieldKey,
-  type StructuredTypeDef,
-  type StructuredTypeDefFields,
   type TypeDef,
-  type TypeDefHolder,
   TypeDefType,
   type UnionKey,
-  type UnionTypeDef,
 } from 'types/definitions'
 import { type ReadonlyTypeDefOf } from 'types/readonly_type_def_of'
+import {
+  type StrictListTypeDef,
+  type StrictLiteralTypeDef,
+  type StrictMapTypeDef,
+  type StrictStructuredTypeDef,
+  type StrictStructuredTypeDefFields,
+  type StrictTypeDef,
+  type StrictTypeDefHolder,
+  type StrictUnionTypeDef,
+} from 'types/strict_definitions'
 import { type ValueTypeOf } from 'types/value_type_of'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type AnyValueType = any
 
-export type Copier<R> = (v: AnyValueType, t: TypeDef) => R
+export type Copier<R> = (v: AnyValueType, t: StrictTypeDef) => R
 
 export function copy<
-  T extends TypeDefHolder,
-  R,
+  T extends StrictTypeDefHolder,
+  R extends ValueTypeOf<ReadonlyTypeDefOf<T>>,
 >(
   { typeDef }: T,
   value: ValueTypeOf<ReadonlyTypeDefOf<T>>,
@@ -90,8 +93,8 @@ function internalCopy<R>(
 function copyLiteral<
   R,
 >(
-  typeDef: LiteralTypeDef,
-  value: ValueTypeOf<{ typeDef: LiteralTypeDef }>,
+  typeDef: StrictLiteralTypeDef,
+  value: ValueTypeOf<{ typeDef: StrictLiteralTypeDef }>,
   copier: Copier<R>,
 ): R {
   // mutable and immutable literals should be the same type
@@ -101,7 +104,7 @@ function copyLiteral<
 function copyList<
   R,
 >(
-  typeDef: ListTypeDef,
+  typeDef: StrictListTypeDef,
   arr: AnyValueType[],
   copier: Copier<R>,
 ): R {
@@ -120,7 +123,7 @@ function copyList<
 function copyMap<
   R,
 >(
-  typeDef: MapTypeDef,
+  typeDef: StrictMapTypeDef,
   value: AnyValueType,
   copier: Copier<R>,
 ): R {
@@ -143,7 +146,7 @@ function copyStructFields<
   R,
   Extra extends Record<string, UnionKey>,
 >(
-  fields: StructuredTypeDefFields,
+  fields: StrictStructuredTypeDefFields,
   value: Record<StructuredFieldKey, AnyValueType>,
   copier: Copier<R>,
   extra: Extra,
@@ -162,7 +165,7 @@ function copyStructFields<
 function copyStruct<
   R,
 >(
-  typeDef: StructuredTypeDef,
+  typeDef: StrictStructuredTypeDef,
   value: AnyValueType,
   copier: Copier<R>,
 ): R {
@@ -176,7 +179,7 @@ function copyStruct<
 function copyUnion<
   R,
 >(
-  typeDef: UnionTypeDef,
+  typeDef: StrictUnionTypeDef,
   value: AnyValueType,
   copier: Copier<R>,
 ): R {
@@ -211,7 +214,8 @@ function copyUnion<
     return copier(discriminatingUnion, typeDef)
   }
   // oh dear!
+  // this should have caused a type error already
   throw new UnexpectedImplementationError(
-    'unions must specify a discriminator or be unions with literal constants to be copied',
+    'unions must be strict in order to be copied',
   )
 }

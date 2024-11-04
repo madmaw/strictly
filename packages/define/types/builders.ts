@@ -221,16 +221,16 @@ export const boolean = literal<boolean>()
 export const nullTypeDefHolder = literal<null>()
 
 export function nullable<T extends TypeDef>(nonNullable: TypeDefHolder<T>): UnionTypeDefBuilder<null, {
-  readonly [0]: LiteralTypeDef<null>,
-  readonly [1]: T,
+  readonly [0]: T,
+  readonly [1]: LiteralTypeDef<null>,
 }> {
   return new UnionTypeDefBuilder(
     {
       discriminator: null,
       type: TypeDefType.Union,
       unions: {
-        [0]: nullTypeDefHolder.typeDef,
-        [1]: nonNullable.typeDef,
+        [0]: nonNullable.typeDef,
+        [1]: nullTypeDefHolder.typeDef,
       },
     },
   )

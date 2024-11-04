@@ -34,11 +34,11 @@ describe('builder', function () {
         readonly unions: {
           readonly [0]: {
             readonly type: TypeDefType.Literal,
-            readonly valuePrototype: null,
+            readonly valuePrototype: number,
           },
           readonly [1]: {
             readonly type: TypeDefType.Literal,
-            readonly valuePrototype: number,
+            readonly valuePrototype: null,
           },
         },
       }
