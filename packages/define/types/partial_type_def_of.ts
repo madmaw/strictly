@@ -18,11 +18,11 @@ type InternalPartialAndNullableOf<T extends TypeDef> = {
   readonly type: TypeDefType.Union,
   readonly discriminator: null,
   readonly unions: {
-    readonly [0]: {
+    readonly [0]: InternalPartialOf<T>,
+    readonly [1]: {
       readonly type: TypeDefType.Literal,
-      readonly valuePrototype: null,
+      readonly valuePrototype: [null],
     },
-    readonly [1]: InternalPartialOf<T>,
   },
 }
 

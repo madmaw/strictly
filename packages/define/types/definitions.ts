@@ -46,7 +46,7 @@ type AnyTypeDef = any
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type LiteralTypeDef<V = any> = {
   readonly type: TypeDefType.Literal,
-  readonly valuePrototype: V,
+  readonly valuePrototype: [V],
 }
 
 // list
@@ -94,7 +94,7 @@ export type StructuredTypeDef<
   readonly fields: Fields,
 }
 
-export type UnionKey = string | number
+export type UnionKey = string
 
 export type UnionTypeDef<
   D extends string | null = string | null,

@@ -27,7 +27,7 @@ export type InternalValueTypeOf<
   : F extends UnionTypeDef ? InternalValueTypeOfUnion<F, Extra>
   : never
 
-type InternalValueTypeOfLiteral<F extends LiteralTypeDef> = F['valuePrototype']
+type InternalValueTypeOfLiteral<F extends LiteralTypeDef> = F['valuePrototype'][number]
 
 type InternalValueTypeOfList<F extends ListTypeDef, Extra> = IsFieldReadonly<F, 'elements'> extends true
   ? readonly InternalValueTypeOf<

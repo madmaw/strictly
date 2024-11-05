@@ -173,7 +173,7 @@ class StructuredTypeDefBuilder<
 
 class UnionTypeDefBuilder<
   D extends string | null,
-  U extends Record<string | number, TypeDef>,
+  U extends Record<UnionKey, TypeDef>,
 > extends TypeDefBuilder<
   UnionTypeDef<
     D,
@@ -207,7 +207,7 @@ class UnionTypeDefBuilder<
   }
 }
 
-export function literal<T>(value?: T): LiteralTypeDefBuilder<T> {
+export function literal<T>(value?: [T]): LiteralTypeDefBuilder<T> {
   return new LiteralTypeDefBuilder({
     type: TypeDefType.Literal,
     valuePrototype: value!,
@@ -217,19 +217,19 @@ export function literal<T>(value?: T): LiteralTypeDefBuilder<T> {
 export const string = literal<string>()
 export const number = literal<number>()
 export const boolean = literal<boolean>()
-export const nullTypeDefHolder = literal(null)
+export const nullTypeDefHolder = literal([null])
 
 export function nullable<T extends TypeDef>(nonNullable: TypeDefHolder<T>): UnionTypeDefBuilder<null, {
-  readonly [0]: T,
-  readonly [1]: LiteralTypeDef<null>,
+  readonly ['0']: T,
+  readonly ['1']: LiteralTypeDef<null>,
 }> {
   return new UnionTypeDefBuilder(
     {
-      discriminator: null,
       type: TypeDefType.Union,
+      discriminator: null,
       unions: {
-        [0]: nonNullable.typeDef,
-        [1]: nullTypeDefHolder.typeDef,
+        ['0']: nonNullable.typeDef,
+        ['1']: nullTypeDefHolder.typeDef,
       },
     },
   )
@@ -273,9 +273,9 @@ export function union<D extends string | null>(discriminator?: D): UnionTypeDefB
   // have to explicitly supply types as TS will infinitely recurse trying to infer them!
   return new UnionTypeDefBuilder<D, {}>(
     {
+      type: TypeDefType.Union,
       // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
       discriminator: (discriminator ?? null) as D,
-      type: TypeDefType.Union,
       unions: {},
     },
   )

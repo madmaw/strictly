@@ -188,21 +188,6 @@ function copyUnion<
     unions,
   } = typeDef
 
-  // is it a `<constant1> | <constant2> | X`? We can handle that
-  // a good example is when we `| null` something
-  const allTypeDefs = Object.values<TypeDef>(unions)
-  const variableTypeDefs = allTypeDefs.filter(function (typeDef: TypeDef) {
-    // eslint-disable-next-line no-undefined
-    return typeDef.type !== TypeDefType.Literal || typeDef.valuePrototype !== undefined
-  })
-  if (variableTypeDefs.length > 1) {
-    // can handle up to one non-constant value
-    const targetTypeDef = allTypeDefs.find(function (typeDef) {
-      return typeDef.type === TypeDefType.Literal && typeDef.valuePrototype === value
-    }) || variableTypeDefs[0]
-    return internalCopy(targetTypeDef, value, copier)
-  }
-
   // is it a discriminated union with a struct?
   if (discriminator != null) {
     const discriminatorValue = value[discriminator]
@@ -213,6 +198,23 @@ function copyUnion<
     )
     return copier(discriminatingUnion, typeDef)
   }
+
+  // is it a `<constant1> | <constant2> | X`? We can handle that
+  // a good example is when we `| null` something
+  const allTypeDefs = Object.values<TypeDef>(unions)
+  const variableTypeDefs = allTypeDefs.filter(function (typeDef: TypeDef) {
+    return typeDef.type !== TypeDefType.Literal || typeDef.valuePrototype == null
+  })
+  if (variableTypeDefs.length <= 1) {
+    // can handle up to one non-constant value
+    const targetTypeDef = allTypeDefs.find(function (typeDef) {
+      return typeDef.type === TypeDefType.Literal
+        && typeDef.valuePrototype != null
+        && typeDef.valuePrototype.indexOf(value) >= 0
+    }) || variableTypeDefs[0]
+    return internalCopy(targetTypeDef, value, copier)
+  }
+
   // oh dear!
   // this should have caused a type error already
   throw new UnexpectedImplementationError(

@@ -16,7 +16,7 @@ describe('ReadonlyTypeDefOf', function () {
     let t: {
       readonly typeDef: {
         readonly type: TypeDefType.Literal,
-        readonly valuePrototype: number,
+        readonly valuePrototype: [number],
       },
     }
     it('equals expected type', function () {
@@ -33,7 +33,7 @@ describe('ReadonlyTypeDefOf', function () {
         readonly type: TypeDefType.List,
         readonly elements: {
           readonly type: TypeDefType.Literal,
-          readonly valuePrototype: number,
+          readonly valuePrototype: [number],
         },
       },
     }
@@ -52,7 +52,7 @@ describe('ReadonlyTypeDefOf', function () {
         readonly keyPrototype: 'a' | 'b',
         readonly valueTypeDef: {
           readonly type: TypeDefType.Literal,
-          readonly valuePrototype: number,
+          readonly valuePrototype: [number],
         },
       },
     }
@@ -73,11 +73,11 @@ describe('ReadonlyTypeDefOf', function () {
         readonly fields: {
           readonly a: {
             readonly type: TypeDefType.Literal,
-            readonly valuePrototype: number,
+            readonly valuePrototype: [number],
           },
           readonly b?: {
             readonly type: TypeDefType.Literal,
-            readonly valuePrototype: string,
+            readonly valuePrototype: [string],
           },
         },
       },
@@ -89,8 +89,8 @@ describe('ReadonlyTypeDefOf', function () {
 
   describe('union', function () {
     const builder = union()
-      .add(1, map<'a', typeof number>(number))
-      .add(2, string)
+      .add('1', map<'a', typeof number>(number))
+      .add('2', string)
     type T = ReadonlyTypeDefOf<typeof builder>
 
     let t: {
@@ -103,12 +103,12 @@ describe('ReadonlyTypeDefOf', function () {
             readonly keyPrototype: 'a',
             readonly valueTypeDef: {
               readonly type: TypeDefType.Literal,
-              readonly valuePrototype: number,
+              readonly valuePrototype: [number],
             },
           },
           readonly [2]: {
             readonly type: TypeDefType.Literal,
-            readonly valuePrototype: string,
+            readonly valuePrototype: [string],
           },
         },
       },
@@ -128,7 +128,7 @@ describe('ReadonlyTypeDefOf', function () {
         readonly keyPrototype: 'a',
         readonly valueTypeDef: {
           readonly type: TypeDefType.Literal,
-          readonly valuePrototype: number,
+          readonly valuePrototype: [number],
         } | undefined,
       },
     }
@@ -147,7 +147,7 @@ describe('ReadonlyTypeDefOf', function () {
         readonly keyPrototype: 'a',
         readonly valueTypeDef: {
           readonly type: TypeDefType.Literal,
-          readonly valuePrototype: number,
+          readonly valuePrototype: [number],
         },
       },
     }

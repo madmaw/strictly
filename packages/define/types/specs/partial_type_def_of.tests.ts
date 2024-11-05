@@ -21,11 +21,11 @@ describe('PartialTypeDefOf', function () {
         readonly unions: {
           readonly [0]: {
             readonly type: TypeDefType.Literal,
-            readonly valuePrototype: null,
+            readonly valuePrototype: [number],
           },
           readonly [1]: {
             readonly type: TypeDefType.Literal,
-            readonly valuePrototype: number,
+            readonly valuePrototype: [null],
           },
         },
       },
@@ -46,10 +46,6 @@ describe('PartialTypeDefOf', function () {
         readonly discriminator: null,
         readonly unions: {
           readonly [0]: {
-            readonly type: TypeDefType.Literal,
-            readonly valuePrototype: null,
-          },
-          readonly [1]: {
             readonly type: TypeDefType.List,
             readonly elements: {
               readonly type: TypeDefType.Union,
@@ -57,14 +53,18 @@ describe('PartialTypeDefOf', function () {
               readonly unions: {
                 readonly [0]: {
                   readonly type: TypeDefType.Literal,
-                  readonly valuePrototype: null,
+                  readonly valuePrototype: [number],
                 },
                 readonly [1]: {
                   readonly type: TypeDefType.Literal,
-                  readonly valuePrototype: number,
+                  readonly valuePrototype: [null],
                 },
               },
             },
+          },
+          readonly [1]: {
+            readonly type: TypeDefType.Literal,
+            readonly valuePrototype: [null],
           },
         },
       },
@@ -84,10 +84,6 @@ describe('PartialTypeDefOf', function () {
         readonly discriminator: null,
         readonly unions: {
           readonly [0]: {
-            readonly type: TypeDefType.Literal,
-            readonly valuePrototype: null,
-          },
-          readonly [1]: {
             readonly type: TypeDefType.Map,
             readonly keyPrototype: 'a' | 'b',
             readonly valueTypeDef: {
@@ -96,14 +92,18 @@ describe('PartialTypeDefOf', function () {
               readonly unions: {
                 readonly [0]: {
                   readonly type: TypeDefType.Literal,
-                  readonly valuePrototype: null,
+                  readonly valuePrototype: [number],
                 },
                 readonly [1]: {
                   readonly type: TypeDefType.Literal,
-                  readonly valuePrototype: number,
+                  readonly valuePrototype: [null],
                 },
               },
             } | undefined,
+          },
+          readonly [1]: {
+            readonly type: TypeDefType.Literal,
+            readonly valuePrototype: [null],
           },
         },
       },
@@ -126,10 +126,6 @@ describe('PartialTypeDefOf', function () {
         readonly discriminator: null,
         readonly unions: {
           readonly [0]: {
-            readonly type: TypeDefType.Literal,
-            readonly valuePrototype: null,
-          },
-          readonly [1]: {
             readonly type: TypeDefType.Structured,
             readonly fields: {
               a?: {
@@ -138,11 +134,11 @@ describe('PartialTypeDefOf', function () {
                 readonly unions: {
                   readonly [0]: {
                     readonly type: TypeDefType.Literal,
-                    readonly valuePrototype: null,
+                    readonly valuePrototype: [number],
                   },
                   readonly [1]: {
                     readonly type: TypeDefType.Literal,
-                    readonly valuePrototype: number,
+                    readonly valuePrototype: [null],
                   },
                 },
               },
@@ -152,15 +148,19 @@ describe('PartialTypeDefOf', function () {
                 readonly unions: {
                   readonly [0]: {
                     readonly type: TypeDefType.Literal,
-                    readonly valuePrototype: null,
+                    readonly valuePrototype: [string],
                   },
                   readonly [1]: {
                     readonly type: TypeDefType.Literal,
-                    readonly valuePrototype: string,
+                    readonly valuePrototype: [null],
                   },
                 },
               },
             },
+          },
+          readonly [1]: {
+            readonly type: TypeDefType.Literal,
+            readonly valuePrototype: [null],
           },
         },
       },
@@ -174,8 +174,8 @@ describe('PartialTypeDefOf', function () {
   describe('union', function () {
     describe('simple', function () {
       const builder = union()
-        .add(1, number)
-        .add(2, string)
+        .add('1', number)
+        .add('2', string)
       type T = PartialTypeDefOf<typeof builder>
 
       let t: {
@@ -184,22 +184,22 @@ describe('PartialTypeDefOf', function () {
           readonly discriminator: null,
           readonly unions: {
             readonly [0]: {
-              readonly type: TypeDefType.Literal,
-              readonly valuePrototype: null,
-            },
-            readonly [1]: {
               readonly type: TypeDefType.Union,
               readonly discriminator: null,
               readonly unions: {
                 readonly [1]: {
                   readonly type: TypeDefType.Literal,
-                  readonly valuePrototype: number,
+                  readonly valuePrototype: [number],
                 },
                 readonly [2]: {
                   readonly type: TypeDefType.Literal,
-                  readonly valuePrototype: string,
+                  readonly valuePrototype: [string],
                 },
               },
+            },
+            readonly [1]: {
+              readonly type: TypeDefType.Literal,
+              readonly valuePrototype: [null],
             },
           },
         },
@@ -221,10 +221,6 @@ describe('PartialTypeDefOf', function () {
         readonly discriminator: null,
         readonly unions: {
           readonly [0]: {
-            readonly type: TypeDefType.Literal,
-            readonly valuePrototype: null,
-          },
-          readonly [1]: {
             readonly type: TypeDefType.List,
             readonly elements: {
               readonly type: TypeDefType.Union,
@@ -232,14 +228,18 @@ describe('PartialTypeDefOf', function () {
               readonly unions: {
                 readonly [0]: {
                   readonly type: TypeDefType.Literal,
-                  readonly valuePrototype: null,
+                  readonly valuePrototype: [number],
                 },
                 readonly [1]: {
                   readonly type: TypeDefType.Literal,
-                  readonly valuePrototype: number,
+                  readonly valuePrototype: [null],
                 },
               },
             },
+          },
+          readonly [1]: {
+            readonly type: TypeDefType.Literal,
+            readonly valuePrototype: [null],
           },
         },
       },

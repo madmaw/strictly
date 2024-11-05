@@ -31,7 +31,7 @@ type AnyTypeDef = any
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type StrictLiteralTypeDef<V = any> = {
   readonly type: TypeDefType.Literal,
-  readonly valuePrototype: V,
+  readonly valuePrototype: [V],
 }
 
 // list
@@ -84,6 +84,7 @@ export type StrictUnionTypeDef<
       readonly unions: U,
     }
   : never
+  // TODO enforce the unions are all structs
   : {
     readonly discriminator: D,
     readonly type: TypeDefType.Union,

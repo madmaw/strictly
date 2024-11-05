@@ -8,7 +8,7 @@ describe('ValueTypeOf', function () {
   describe('literal', function () {
     type TypeD = {
       readonly type: TypeDefType.Literal,
-      readonly valuePrototype: 'a' | 'b' | 'c',
+      readonly valuePrototype: ['a' | 'b' | 'c'],
     }
     type T = ValueTypeOf<{ typeDef: TypeD }>
 
@@ -24,7 +24,7 @@ describe('ValueTypeOf', function () {
         readonly type: TypeDefType.List,
         elements: {
           readonly type: TypeDefType.Literal,
-          readonly valuePrototype: 'a' | 'b' | 'c',
+          readonly valuePrototype: ['a' | 'b' | 'c'],
         },
       }
       type T = ValueTypeOf<{ typeDef: TypeD }>
@@ -41,7 +41,7 @@ describe('ValueTypeOf', function () {
             readonly type: TypeDefType.List,
             readonly elements: {
               readonly type: TypeDefType.Literal,
-              readonly valuePrototype: 'a' | 'b' | 'c',
+              readonly valuePrototype: ['a' | 'b' | 'c'],
             },
           },
         }>
@@ -60,7 +60,7 @@ describe('ValueTypeOf', function () {
       readonly keyPrototype: 'x' | 'y' | 'z',
       valueTypeDef: {
         readonly type: TypeDefType.Literal,
-        readonly valuePrototype: 'a' | 'b' | 'c',
+        readonly valuePrototype: ['a' | 'b' | 'c'],
       },
     }
     type T = ValueTypeOf<{ typeDef: TypeD }>
@@ -79,7 +79,7 @@ describe('ValueTypeOf', function () {
           readonly keyPrototype: 'x' | 'y' | 'z',
           readonly valueTypeDef: {
             readonly type: TypeDefType.Literal,
-            readonly valuePrototype: 'a' | 'b' | 'c',
+            readonly valuePrototype: ['a' | 'b' | 'c'],
           },
         },
       }>
@@ -96,7 +96,7 @@ describe('ValueTypeOf', function () {
         readonly keyPrototype: 'x' | 'y' | 'z',
         valueTypeDef: {
           readonly type: TypeDefType.Literal,
-          readonly valuePrototype: 'a' | 'b' | 'c',
+          readonly valuePrototype: ['a' | 'b' | 'c'],
         } | undefined,
       }
       type T = ValueTypeOf<{ typeDef: TypeD }>
@@ -113,7 +113,7 @@ describe('ValueTypeOf', function () {
         readonly keyPrototype: 'x' | 'y' | 'z',
         readonly valueTypeDef: {
           readonly type: TypeDefType.Literal,
-          readonly valuePrototype: 'a' | 'b' | 'c',
+          readonly valuePrototype: ['a' | 'b' | 'c'],
         } | undefined,
       }
       type T = ValueTypeOf<{ typeDef: TypeD }>
@@ -131,11 +131,11 @@ describe('ValueTypeOf', function () {
       fields: {
         a: {
           readonly type: TypeDefType.Literal,
-          readonly valuePrototype: 'a' | 'b',
+          readonly valuePrototype: ['a' | 'b'],
         },
         b: {
           readonly type: TypeDefType.Literal,
-          readonly valuePrototype: number,
+          readonly valuePrototype: [number],
         },
       },
     }
@@ -158,11 +158,11 @@ describe('ValueTypeOf', function () {
         fields: {
           readonly a: {
             readonly type: TypeDefType.Literal,
-            readonly valuePrototype: 'a' | 'b',
+            readonly valuePrototype: ['a' | 'b'],
           },
           readonly b: {
             readonly type: TypeDefType.Literal,
-            readonly valuePrototype: number,
+            readonly valuePrototype: [number],
           },
         },
       }
@@ -183,11 +183,11 @@ describe('ValueTypeOf', function () {
         readonly fields: {
           a?: {
             readonly type: TypeDefType.Literal,
-            readonly valuePrototype: 'a' | 'b',
+            readonly valuePrototype: ['a' | 'b'],
           },
           b?: {
             readonly type: TypeDefType.Literal,
-            readonly valuePrototype: number,
+            readonly valuePrototype: [number],
           },
         },
       }
@@ -215,11 +215,11 @@ describe('ValueTypeOf', function () {
             readonly fields: {
               b: {
                 readonly type: TypeDefType.Literal,
-                readonly valuePrototype: string,
+                readonly valuePrototype: [string],
               },
               readonly d: {
                 readonly type: TypeDefType.Literal,
-                readonly valuePrototype: 1,
+                readonly valuePrototype: [1],
               },
             },
           },
@@ -228,11 +228,11 @@ describe('ValueTypeOf', function () {
             readonly fields: {
               e: {
                 readonly type: TypeDefType.Literal,
-                readonly valuePrototype: number,
+                readonly valuePrototype: [number],
               },
               readonly d: {
                 readonly type: TypeDefType.Literal,
-                readonly valuePrototype: 2,
+                readonly valuePrototype: [2],
               },
             },
           },

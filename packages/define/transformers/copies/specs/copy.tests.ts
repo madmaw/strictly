@@ -96,9 +96,9 @@ describe('copy', function () {
   describe('union', function () {
     describe('non-discriminated', function () {
       const typeDef = union()
-        .add(0, list(number))
-        .add(1, literal('b'))
-        .add(2, literal(false))
+        .add('0', list(number))
+        .add('1', literal(['b']))
+        .add('2', literal([false]))
       it('copies string literal', function () {
         const c = copy(
           typeDef,

@@ -13,7 +13,7 @@ describe('Strict Definitions', function () {
       type U = {
         readonly [1]: {
           type: TypeDefType.Literal,
-          valuePrototype: 'a',
+          valuePrototype: ['a'],
         },
       }
       type C = IsStrictUnion<U>
@@ -26,7 +26,7 @@ describe('Strict Definitions', function () {
           type: TypeDefType.List,
           elements: {
             type: TypeDefType.Literal,
-            valuePrototype: 'a',
+            valuePrototype: ['a'],
           },
         },
       }
@@ -40,7 +40,7 @@ describe('Strict Definitions', function () {
           type: TypeDefType.List,
           elements: {
             type: TypeDefType.Literal,
-            valuePrototype: 'a',
+            valuePrototype: ['a'],
           },
         },
       }
@@ -52,17 +52,17 @@ describe('Strict Definitions', function () {
       type U = {
         readonly [1]: {
           type: TypeDefType.Literal,
-          valuePrototype: 'a',
+          valuePrototype: ['a'],
         },
         readonly [2]: {
           type: TypeDefType.Literal,
-          valuePrototype: 'c',
+          valuePrototype: ['c'],
         },
         readonly [0]: {
           type: TypeDefType.List,
           elements: {
             type: TypeDefType.Literal,
-            valuePrototype: 'a',
+            valuePrototype: ['a'],
           },
         },
       }
@@ -78,7 +78,7 @@ describe('Strict Definitions', function () {
           type: TypeDefType.List,
           elements: {
             type: TypeDefType.Literal,
-            valuePrototype: 'a',
+            valuePrototype: ['a'],
           },
         },
       }
@@ -90,11 +90,11 @@ describe('Strict Definitions', function () {
       type U = {
         readonly [1]: {
           readonly type: TypeDefType.Literal,
-          readonly valuePrototype: 'a',
+          readonly valuePrototype: ['a'],
         },
         readonly [2]: {
           readonly type: TypeDefType.Literal,
-          readonly valuePrototype: 'c',
+          readonly valuePrototype: ['c'],
         },
       }
       type C = StrictUnionTypeDef<null, U>
@@ -109,17 +109,17 @@ describe('Strict Definitions', function () {
       type U = {
         readonly [1]: {
           readonly type: TypeDefType.Literal,
-          readonly valuePrototype: 'a',
+          readonly valuePrototype: ['a'],
         },
         readonly [2]: {
           readonly type: TypeDefType.Literal,
-          readonly valuePrototype: 'c',
+          readonly valuePrototype: ['c'],
         },
         readonly [0]: {
           type: TypeDefType.List,
           elements: {
             type: TypeDefType.Literal,
-            valuePrototype: 'a',
+            valuePrototype: ['a'],
           },
         },
       }
@@ -137,17 +137,17 @@ describe('Strict Definitions', function () {
       type U = {
         readonly [1]: {
           readonly type: TypeDefType.Literal,
-          readonly valuePrototype: 'a',
+          readonly valuePrototype: ['a'],
         },
         readonly [2]: {
           readonly type: TypeDefType.Literal,
-          readonly valuePrototype: 'c',
+          readonly valuePrototype: ['c'],
         },
         readonly [0]: {
           type: TypeDefType.List,
           elements: {
             type: TypeDefType.Literal,
-            valuePrototype: 'a',
+            valuePrototype: ['a'],
           },
         },
       }
@@ -164,13 +164,13 @@ describe('Strict Definitions', function () {
     type U = {
       readonly [2]: {
         readonly type: TypeDefType.Literal,
-        readonly valuePrototype: 'a',
+        readonly valuePrototype: ['a'],
       },
       readonly [1]: {
         type: TypeDefType.List,
         elements: {
           type: TypeDefType.Literal,
-          valuePrototype: 'a',
+          valuePrototype: ['a'],
         },
       },
     }

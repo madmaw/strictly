@@ -1,10 +1,14 @@
 import {
-  checkExists,
+  checkUnary,
   type ReadonlyRecord,
   reduce,
   UnreachableError,
 } from '@de/base'
-import { TypeDefType } from 'types/definitions'
+import { string } from 'types/builders'
+import {
+  type TypeDef,
+  TypeDefType,
+} from 'types/definitions'
 import { type ReadonlyTypeDefOf } from 'types/readonly_type_def_of'
 import {
   type StrictListTypeDef,
@@ -20,7 +24,7 @@ import { jsonPath } from './json_path'
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type AnyValueType = any
 
-export type Mapper<R> = (t: StrictTypeDef) => R
+export type Mapper<R> = (v: AnyValueType, t: StrictTypeDef) => R
 
 export function flattenValue<
   T extends StrictTypeDefHolder,
@@ -44,7 +48,7 @@ function internalFlattenValue<M>(
   mapper: Mapper<M>,
   r: Record<string, M>,
 ) {
-  r[path] = mapper(v)
+  r[path] = mapper(v, typeDef)
   switch (typeDef.type) {
     case TypeDefType.Literal:
       // no children
@@ -98,10 +102,10 @@ function internalFlattenStructChildren<M>(
   r: Record<string, M>,
 ): Record<string, M> {
   return reduce(
-    v,
-    function (r, k, v) {
-      const fieldTypeDef = fields[k]
-      return internalFlattenValue(jsonPath(path, k), fieldTypeDef, v, mapper, r)
+    fields,
+    function (r, k, fieldTypeDef) {
+      const fieldValue = v[k]
+      return internalFlattenValue(jsonPath(path, k), fieldTypeDef, fieldValue, mapper, r)
     },
     r,
   )
@@ -121,7 +125,12 @@ function internalFlattenUnionChildren<M>(
     const found = reduce(
       unions,
       function (found, _k, typeDef: StrictTypeDef) {
-        if (!found && typeDef.type === TypeDefType.Literal && typeDef.valuePrototype === v) {
+        if (
+          !found
+          && typeDef.type === TypeDefType.Literal
+          && typeDef.valuePrototype != null
+          && typeDef.valuePrototype.indexOf(v) >= 0
+        ) {
           internalFlattenValue(path, typeDef, v, mapper, r)
           return true
         }
@@ -130,9 +139,17 @@ function internalFlattenUnionChildren<M>(
       false,
     )
     if (!found) {
+      const complexUnions = Object.values(unions).filter(function (u: TypeDef) {
+        return u.type !== TypeDefType.Literal
+      })
+      const complexUnion = checkUnary(
+        complexUnions,
+        'expected 1 complex union type, received {}',
+        complexUnions.length,
+      )
       internalFlattenValue(
         path,
-        checkExists(unions[0], 'expected fallback union at index 0'),
+        complexUnion,
         v,
         mapper,
         r,
@@ -140,6 +157,15 @@ function internalFlattenUnionChildren<M>(
     }
     return r
   } else {
-    return internalFlattenValue(path, unions[discriminator], v, mapper, r)
+    const discriminatorValue = v[discriminator]
+    // manufacture a typedef for discriminator
+    r[jsonPath(path, discriminator)] = mapper(discriminatorValue, string.typeDef)
+    return internalFlattenValue(
+      path,
+      unions[discriminatorValue],
+      v,
+      mapper,
+      r,
+    )
   }
 }

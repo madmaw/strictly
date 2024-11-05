@@ -77,8 +77,8 @@ describe('FlattenedJsonPathsOf', function () {
 
   describe('union', function () {
     const builder = union()
-      .add(1, list(number))
-      .add(2, string)
+      .add('1', list(number))
+      .add('2', string)
     type T = SimplifyDeep<FlattenedJsonValueToTypePathsOf<typeof builder>>
 
     let t: {

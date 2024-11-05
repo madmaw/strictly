@@ -19,7 +19,7 @@ describe('builder', function () {
     it('equals expected type', function () {
       type C = {
         readonly type: TypeDefType.Literal,
-        readonly valuePrototype: number,
+        readonly valuePrototype: [number],
       }
 
       expectTypeOf(typeDef).toEqualTypeOf<C>()
@@ -34,11 +34,11 @@ describe('builder', function () {
         readonly unions: {
           readonly [0]: {
             readonly type: TypeDefType.Literal,
-            readonly valuePrototype: number,
+            readonly valuePrototype: [number],
           },
           readonly [1]: {
             readonly type: TypeDefType.Literal,
-            readonly valuePrototype: null,
+            readonly valuePrototype: [null],
           },
         },
       }
@@ -58,7 +58,7 @@ describe('builder', function () {
             readonly type: TypeDefType.List,
             elements: {
               readonly type: TypeDefType.Literal,
-              readonly valuePrototype: number,
+              readonly valuePrototype: [number],
             },
           }
           expectTypeOf(typeDef).toEqualTypeOf<C>()
@@ -74,7 +74,7 @@ describe('builder', function () {
           readonly type: TypeDefType.List,
           readonly elements: {
             readonly type: TypeDefType.Literal,
-            readonly valuePrototype: number,
+            readonly valuePrototype: [number],
           },
         }
 
@@ -94,7 +94,7 @@ describe('builder', function () {
             readonly keyPrototype: 'a' | 'b' | 'c',
             valueTypeDef: {
               readonly type: TypeDefType.Literal,
-              readonly valuePrototype: number,
+              readonly valuePrototype: [number],
             },
           }
 
@@ -111,7 +111,7 @@ describe('builder', function () {
             readonly keyPrototype: 'a' | 'b' | 'c',
             readonly valueTypeDef: {
               readonly type: TypeDefType.Literal,
-              readonly valuePrototype: number,
+              readonly valuePrototype: [number],
             },
           }
           expectTypeOf(typeDef).toEqualTypeOf<C>()
@@ -127,7 +127,7 @@ describe('builder', function () {
             readonly keyPrototype: 'a' | 'b' | 'c',
             valueTypeDef: {
               readonly type: TypeDefType.Literal,
-              readonly valuePrototype: number,
+              readonly valuePrototype: [number],
             } | undefined,
           }
           expectTypeOf(typeDef).toEqualTypeOf<C>()
@@ -143,7 +143,7 @@ describe('builder', function () {
             readonly keyPrototype: 'a' | 'b' | 'c',
             readonly valueTypeDef: {
               readonly type: TypeDefType.Literal,
-              readonly valuePrototype: number,
+              readonly valuePrototype: [number],
             } | undefined,
           }
 
@@ -160,7 +160,7 @@ describe('builder', function () {
             readonly keyPrototype: 'a' | 'b' | 'c',
             readonly valueTypeDef: {
               readonly type: TypeDefType.Literal,
-              readonly valuePrototype: number,
+              readonly valuePrototype: [number],
             } | undefined,
           }
 
@@ -184,25 +184,25 @@ describe('builder', function () {
           & {
             a: {
               readonly type: TypeDefType.Literal,
-              readonly valuePrototype: number,
+              readonly valuePrototype: [number],
             },
           }
           & {
             readonly b: {
               readonly type: TypeDefType.Literal,
-              readonly valuePrototype: boolean,
+              readonly valuePrototype: [boolean],
             },
           }
           & {
             c?: {
               readonly type: TypeDefType.Literal,
-              readonly valuePrototype: string,
+              readonly valuePrototype: [string],
             },
           }
           & {
             readonly d?: {
               readonly type: TypeDefType.Literal,
-              readonly valuePrototype: number,
+              readonly valuePrototype: [number],
             },
           },
       }
@@ -217,11 +217,11 @@ describe('builder', function () {
         typeDef,
       } = union()
         .add(
-          1,
+          '1',
           number,
         )
         .add(
-          2,
+          '2',
           string,
         )
 
@@ -233,13 +233,13 @@ describe('builder', function () {
             & {
               readonly [1]: {
                 readonly type: TypeDefType.Literal,
-                readonly valuePrototype: number,
+                readonly valuePrototype: [number],
               },
             }
             & {
               readonly [2]: {
                 readonly type: TypeDefType.Literal,
-                readonly valuePrototype: string,
+                readonly valuePrototype: [string],
               },
             },
         }
@@ -252,11 +252,11 @@ describe('builder', function () {
         typeDef,
       } = union()
         .add(
-          1,
+          '1',
           struct().set('a', boolean),
         )
         .add(
-          2,
+          '2',
           struct().set('b', number),
         )
 
@@ -271,7 +271,7 @@ describe('builder', function () {
                 readonly fields: {
                   a: {
                     readonly type: TypeDefType.Literal,
-                    readonly valuePrototype: boolean,
+                    readonly valuePrototype: [boolean],
                   },
                 },
               },
@@ -282,7 +282,7 @@ describe('builder', function () {
                 readonly fields: {
                   b: {
                     readonly type: TypeDefType.Literal,
-                    readonly valuePrototype: number,
+                    readonly valuePrototype: [number],
                   },
                 },
               },
