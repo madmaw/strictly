@@ -13,7 +13,7 @@ function mapper(v: AnyValueType) {
 
 export function flattenValueOf<T extends TypeDefHolder>(
   typeDef: TypeDefHolder,
-  value: ValueTypeOf<ReadonlyTypeDefOf<T>>,
+  value: ValueTypeOf<T>,
 ): FlattenedValueTypesOf<T> {
   return flattenValue(typeDef, value, mapper)
 }

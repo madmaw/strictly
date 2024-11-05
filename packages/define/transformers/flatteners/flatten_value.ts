@@ -32,7 +32,7 @@ export function flattenValue<
   R extends ReadonlyRecord<string, M>,
 >(
   { typeDef }: T,
-  v: ValueTypeOf<ReadonlyTypeDefOf<T>>,
+  v: ValueTypeOf<T>,
   mapper: Mapper<M>,
 ): R {
   const r: Record<string, AnyValueType> = {}
