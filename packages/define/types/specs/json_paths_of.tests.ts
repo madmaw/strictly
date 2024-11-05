@@ -8,6 +8,7 @@ import {
   struct,
   union,
 } from 'types/builders'
+import { TypeDefHolder } from 'types/definitions'
 import { type JsonPathsOf } from 'types/json_paths_of'
 
 describe('JsonPathsOf', function () {
@@ -255,4 +256,16 @@ describe('JsonPathsOf', function () {
       })
     })
   })
+  
+  describe('infinite recursion', function () {
+    function f<T extends TypeDefHolder>(t: T): JsonPathsOf<T> {
+      return JSON.stringify(t) as JsonPathsOf<T>
+    }
+    it('compiles', function () {
+      const builder = list(string)
+
+      expect(f(builder)).toBeDefined();
+    })
+  })
 })
+

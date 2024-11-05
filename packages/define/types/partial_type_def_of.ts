@@ -9,6 +9,7 @@ import {
   type UnionTypeDef,
 } from './definitions'
 
+// converts a type def to have nullable values and partial record fields
 export type PartialTypeDefOf<T extends TypeDefHolder> = {
   readonly typeDef: InternalPartialAndNullableOf<T['typeDef']>,
 }

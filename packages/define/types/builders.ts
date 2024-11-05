@@ -207,18 +207,17 @@ class UnionTypeDefBuilder<
   }
 }
 
-export function literal<T>(): LiteralTypeDefBuilder<T> {
+export function literal<T>(value?: T): LiteralTypeDefBuilder<T> {
   return new LiteralTypeDefBuilder({
     type: TypeDefType.Literal,
-    // eslint-disable-next-line no-undefined
-    valuePrototype: undefined!,
+    valuePrototype: value!,
   })
 }
 
 export const string = literal<string>()
 export const number = literal<number>()
 export const boolean = literal<boolean>()
-export const nullTypeDefHolder = literal<null>()
+export const nullTypeDefHolder = literal(null)
 
 export function nullable<T extends TypeDef>(nonNullable: TypeDefHolder<T>): UnionTypeDefBuilder<null, {
   readonly [0]: T,

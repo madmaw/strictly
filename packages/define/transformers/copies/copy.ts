@@ -193,7 +193,7 @@ function copyUnion<
   const allTypeDefs = Object.values<TypeDef>(unions)
   const variableTypeDefs = allTypeDefs.filter(function (typeDef: TypeDef) {
     // eslint-disable-next-line no-undefined
-    return typeDef.type !== TypeDefType.Literal || typeDef.valuePrototype === undefined
+    return typeDef.type !== TypeDefType.Literal || typeDef.valuePrototype !== undefined
   })
   if (variableTypeDefs.length > 1) {
     // can handle up to one non-constant value

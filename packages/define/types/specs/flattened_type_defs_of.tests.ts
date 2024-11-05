@@ -198,4 +198,19 @@ describe('union', function () {
       expectTypeOf(t).toEqualTypeOf<T>()
     })
   })
+
+  // describe('infinite recursion', function () {
+  //   function f<T extends TypeDefHolder>({ typeDef }: T): FlattenedTypeDefsOf<T, null> {
+  //     return {
+  //       $: typeDef
+  //     }
+  //   }
+  //   it('compiles', function () {
+  //     const builder = list(string)
+
+  //     expect(f(builder)).toBeDefined();
+  //   })    
+  // })
+
 })
+

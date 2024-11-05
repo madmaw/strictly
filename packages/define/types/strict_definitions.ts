@@ -31,7 +31,6 @@ type AnyTypeDef = any
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type StrictLiteralTypeDef<V = any> = {
   readonly type: TypeDefType.Literal,
-  // never actually populate
   readonly valuePrototype: V,
 }
 
