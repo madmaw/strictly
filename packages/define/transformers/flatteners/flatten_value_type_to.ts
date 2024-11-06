@@ -4,7 +4,6 @@ import {
   reduce,
   UnreachableError,
 } from '@de/base'
-import { string } from 'types/builders'
 import {
   type TypeDef,
   TypeDefType,
@@ -22,8 +21,13 @@ import { jsonPath } from './json_path'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type AnyValueType = any
+export type Setter<V> = (v: V) => void
 
-export type Mapper<R> = (v: AnyValueType, t: StrictTypeDef) => R
+export type Mapper<R> = (
+  t: StrictTypeDef,
+  v: AnyValueType,
+  setter: Setter<AnyValueType>,
+) => R
 
 export function flattenValueTypeTo<
   T extends StrictTypeDefHolder,
@@ -32,10 +36,18 @@ export function flattenValueTypeTo<
 >(
   { typeDef }: T,
   v: ValueTypeOf<T>,
+  setter: Setter<ValueTypeOf<T>>,
   mapper: Mapper<M>,
 ): R {
   const r: Record<string, AnyValueType> = {}
-  internalFlattenValue('$', typeDef, v, mapper, r)
+  internalFlattenValue(
+    '$',
+    typeDef,
+    v,
+    setter,
+    mapper,
+    r,
+  )
   // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
   return r as R
 }
@@ -44,10 +56,21 @@ function internalFlattenValue<M>(
   path: string,
   typeDef: StrictTypeDef,
   v: AnyValueType,
+  setter: Setter<AnyValueType>,
   mapper: Mapper<M>,
   r: Record<string, M>,
 ) {
-  r[path] = mapper(v, typeDef)
+  r[path] = mapper(typeDef, v, setter)
+  return internalFlattenValueChildren(path, typeDef, v, mapper, r)
+}
+
+function internalFlattenValueChildren<M>(
+  path: string,
+  typeDef: StrictTypeDef,
+  v: AnyValueType,
+  mapper: Mapper<M>,
+  r: Record<string, M>,
+) {
   switch (typeDef.type) {
     case TypeDefType.Literal:
       // no children
@@ -73,7 +96,16 @@ function internalFlattenListChildren<M>(
   r: Record<string, M>,
 ) {
   return v.reduce(function (r, e, i) {
-    return internalFlattenValue(jsonPath(path, i), elements, e, mapper, r)
+    return internalFlattenValue(
+      jsonPath(path, i),
+      elements,
+      e,
+      (e: AnyValueType) => {
+        v[i] = e
+      },
+      mapper,
+      r,
+    )
   }, r)
 }
 
@@ -86,8 +118,17 @@ function internalFlattenMapChildren<M>(
 ): Record<string, M> {
   return reduce(
     v,
-    function (r, k, v) {
-      return internalFlattenValue(jsonPath(path, k), valueTypeDef, v, mapper, r)
+    function (r, k, value) {
+      return internalFlattenValue(
+        jsonPath(path, k),
+        valueTypeDef,
+        value,
+        (value: AnyValueType) => {
+          v[k] = value
+        },
+        mapper,
+        r,
+      )
     },
     r,
   )
@@ -104,7 +145,16 @@ function internalFlattenStructChildren<M>(
     fields,
     function (r, k, fieldTypeDef) {
       const fieldValue = v[k]
-      return internalFlattenValue(jsonPath(path, k), fieldTypeDef, fieldValue, mapper, r)
+      return internalFlattenValue(
+        jsonPath(path, k),
+        fieldTypeDef,
+        fieldValue,
+        (value: AnyValueType) => {
+          v[k] = value
+        },
+        mapper,
+        r,
+      )
     },
     r,
   )
@@ -130,7 +180,7 @@ function internalFlattenUnionChildren<M>(
           && typeDef.valuePrototype != null
           && typeDef.valuePrototype.indexOf(v) >= 0
         ) {
-          internalFlattenValue(path, typeDef, v, mapper, r)
+          internalFlattenValueChildren(path, typeDef, v, mapper, r)
           return true
         }
         return false
@@ -146,7 +196,7 @@ function internalFlattenUnionChildren<M>(
         'expected 1 complex union type, received {}',
         complexUnions.length,
       )
-      internalFlattenValue(
+      internalFlattenValueChildren(
         path,
         complexUnion,
         v,
@@ -157,9 +207,7 @@ function internalFlattenUnionChildren<M>(
     return r
   } else {
     const discriminatorValue = v[discriminator]
-    // manufacture a typedef for discriminator
-    r[jsonPath(path, discriminator)] = mapper(discriminatorValue, string.typeDef)
-    return internalFlattenValue(
+    return internalFlattenValueChildren(
       path,
       unions[discriminatorValue],
       v,
