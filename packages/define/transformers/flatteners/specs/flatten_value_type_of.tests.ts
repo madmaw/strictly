@@ -1,4 +1,4 @@
-import { flattenValueOf } from 'transformers/flatteners/flatten_value_of'
+import { flattenValueTypeOf } from 'transformers/flatteners/flatten_value_type_of'
 import {
   boolean,
   list,
@@ -10,7 +10,7 @@ describe('flattenValueOf', function () {
   // note that we already have tests for the type and the function that this calls, so
   // this is only a sanity check
   it('flattens', function () {
-    const flattened = flattenValueOf(
+    const flattened = flattenValueTypeOf(
       struct()
         .set('a', list(number))
         .set('b', boolean),

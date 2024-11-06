@@ -25,7 +25,7 @@ export type AnyValueType = any
 
 export type Mapper<R> = (v: AnyValueType, t: StrictTypeDef) => R
 
-export function flattenValue<
+export function flattenValueTypeTo<
   T extends StrictTypeDefHolder,
   M,
   R extends ReadonlyRecord<string, M>,

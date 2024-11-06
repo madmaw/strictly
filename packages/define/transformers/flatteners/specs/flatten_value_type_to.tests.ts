@@ -1,7 +1,7 @@
 import {
   type AnyValueType,
-  flattenValue,
-} from 'transformers/flatteners/flatten_value_to'
+  flattenValueTypeTo,
+} from 'transformers/flatteners/flatten_value_type_to'
 import {
   boolean,
   list,
@@ -20,7 +20,7 @@ describe('FlattenValue', function () {
 
   describe('literal', function () {
     it('equals expected type', function () {
-      const flattened = flattenValue(number, 1, toString)
+      const flattened = flattenValueTypeTo(number, 1, toString)
       expect(flattened).toEqual({
         $: '1',
       })
@@ -29,7 +29,7 @@ describe('FlattenValue', function () {
 
   describe('list', function () {
     it('equals expected type', function () {
-      const flattened = flattenValue(
+      const flattened = flattenValueTypeTo(
         list(number),
         [
           1,
@@ -49,7 +49,7 @@ describe('FlattenValue', function () {
 
   describe('map', function () {
     it('equals expected type', function () {
-      const flattened = flattenValue(
+      const flattened = flattenValueTypeTo(
         map<'a' | 'b', typeof number>(number),
         {
           a: 1,
@@ -67,7 +67,7 @@ describe('FlattenValue', function () {
 
   describe('struct', function () {
     it('equals expected type', function () {
-      const flattened = flattenValue(
+      const flattened = flattenValueTypeTo(
         struct().set('a', number).set('b', boolean),
         {
           a: 1,
@@ -89,7 +89,7 @@ describe('FlattenValue', function () {
         const typeDefHolder = union('d')
           .add('1', struct().set('a', number))
           .add('2', struct().set('b', boolean))
-        const flattened = flattenValue(
+        const flattened = flattenValueTypeTo(
           typeDefHolder,
           {
             d: '1',
@@ -106,7 +106,7 @@ describe('FlattenValue', function () {
     })
     describe('non-discriminated', function () {
       it('equals expected type', function () {
-        const flattened = flattenValue(
+        const flattened = flattenValueTypeTo(
           union()
             .add('0', number)
             .add('1', nullTypeDefHolder),
@@ -121,7 +121,7 @@ describe('FlattenValue', function () {
 
     describe('complex non-discriminated', function () {
       it('equals expected type', function () {
-        const flattened = flattenValue(
+        const flattened = flattenValueTypeTo(
           union()
             .add('z', list(number))
             .add('x', nullTypeDefHolder)
