@@ -6,7 +6,7 @@ export type Accessor<T> = {
 }
 
 // TS doesn't like this
-// export type FlattenedAccessorsOf<T extends TypeDef> = Accessor<InternalFlattenValueTypesOf<FlattenedTypeDefsOf<T, null>>>
+// export type FlattenedAccessorsOf<T extends TypeDef> = InternalFlattenValueTypesOf<FlattenedTypeDefsOf<T, null>>
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type FlattenedAccessorsOf<R extends ReadonlyRecord<string, any>> = {

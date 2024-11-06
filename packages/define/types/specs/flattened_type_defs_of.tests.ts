@@ -17,8 +17,10 @@ describe('FlattenedTypeDefsOf', function () {
 
     let t: {
       readonly $: {
-        readonly type: TypeDefType.Literal,
-        readonly valuePrototype: [number],
+        readonly typeDef: {
+          readonly type: TypeDefType.Literal,
+          readonly valuePrototype: [number],
+        },
       },
     }
     it('equals expected type', function () {
@@ -32,15 +34,19 @@ describe('FlattenedTypeDefsOf', function () {
 
     let t: {
       readonly $: {
-        readonly type: TypeDefType.List,
-        elements: {
-          readonly type: TypeDefType.Literal,
-          readonly valuePrototype: [number],
+        readonly typeDef: {
+          readonly type: TypeDefType.List,
+          elements: {
+            readonly type: TypeDefType.Literal,
+            readonly valuePrototype: [number],
+          },
         },
       },
       readonly ['$.s']: {
-        readonly type: TypeDefType.Literal,
-        readonly valuePrototype: [number],
+        readonly typeDef: {
+          readonly type: TypeDefType.Literal,
+          readonly valuePrototype: [number],
+        },
       },
     }
     it('equals expected type', function () {
@@ -54,20 +60,24 @@ describe('FlattenedTypeDefsOf', function () {
 
     let t: {
       readonly $: {
-        readonly type: TypeDefType.Map,
-        readonly keyPrototype: 'a' | 'b',
-        valueTypeDef: {
+        readonly typeDef: {
+          readonly type: TypeDefType.Map,
+          readonly keyPrototype: 'a' | 'b',
+          valueTypeDef: {
+            readonly type: TypeDefType.Literal,
+            readonly valuePrototype: [number],
+          },
+        },
+      },
+      readonly ['$.s']: {
+        readonly typeDef: {
           readonly type: TypeDefType.Literal,
           readonly valuePrototype: [number],
         },
       },
-      readonly ['$.s']: {
-        readonly type: TypeDefType.Literal,
-        readonly valuePrototype: [number],
-      },
     }
     it('equals expected type', function () {
-      expectTypeOf(t).toEqualTypeOf<T>()
+      expectTypeOf<typeof t>(t).toEqualTypeOf<T>()
     })
   })
 
@@ -82,41 +92,51 @@ describe('FlattenedTypeDefsOf', function () {
 
       let t: {
         readonly $: {
-          readonly type: TypeDefType.Structured,
-          readonly fields: {
-            a: {
-              readonly type: TypeDefType.Literal,
-              readonly valuePrototype: [number],
-            },
-            b?: {
-              readonly type: TypeDefType.Literal,
-              readonly valuePrototype: [string],
-            },
-            readonly c: {
-              readonly type: TypeDefType.Literal,
-              readonly valuePrototype: [boolean],
-            },
-            readonly d?: {
-              readonly type: TypeDefType.Literal,
-              readonly valuePrototype: [string],
+          readonly typeDef: {
+            readonly type: TypeDefType.Structured,
+            readonly fields: {
+              a: {
+                readonly type: TypeDefType.Literal,
+                readonly valuePrototype: [number],
+              },
+              b?: {
+                readonly type: TypeDefType.Literal,
+                readonly valuePrototype: [string],
+              },
+              readonly c: {
+                readonly type: TypeDefType.Literal,
+                readonly valuePrototype: [boolean],
+              },
+              readonly d?: {
+                readonly type: TypeDefType.Literal,
+                readonly valuePrototype: [string],
+              },
             },
           },
         },
         readonly ['$.a']: {
-          readonly type: TypeDefType.Literal,
-          readonly valuePrototype: [number],
+          readonly typeDef: {
+            readonly type: TypeDefType.Literal,
+            readonly valuePrototype: [number],
+          },
         },
         readonly ['$.b']: {
-          readonly type: TypeDefType.Literal,
-          readonly valuePrototype: [string],
+          readonly typeDef: {
+            readonly type: TypeDefType.Literal,
+            readonly valuePrototype: [string],
+          },
         },
         readonly ['$.c']: {
-          readonly type: TypeDefType.Literal,
-          readonly valuePrototype: [boolean],
+          readonly typeDef: {
+            readonly type: TypeDefType.Literal,
+            readonly valuePrototype: [boolean],
+          },
         },
         readonly ['$.d']: {
-          readonly type: TypeDefType.Literal,
-          readonly valuePrototype: [string],
+          readonly typeDef: {
+            readonly type: TypeDefType.Literal,
+            readonly valuePrototype: [string],
+          },
         },
       }
       it('equals expected type', function () {
@@ -136,62 +156,70 @@ describe('union', function () {
     let t:
       | {
         readonly $: {
-          readonly type: TypeDefType.Union,
-          readonly discriminator: null,
-          readonly unions: {
-            readonly ['1']: {
-              readonly type: TypeDefType.Structured,
-              readonly fields: {
-                a: {
-                  readonly type: TypeDefType.Literal,
-                  readonly valuePrototype: [boolean],
+          readonly typeDef: {
+            readonly type: TypeDefType.Union,
+            readonly discriminator: null,
+            readonly unions: {
+              readonly ['1']: {
+                readonly type: TypeDefType.Structured,
+                readonly fields: {
+                  a: {
+                    readonly type: TypeDefType.Literal,
+                    readonly valuePrototype: [boolean],
+                  },
                 },
               },
-            },
-            readonly ['2']: {
-              readonly type: TypeDefType.Structured,
-              readonly fields: {
-                a: {
-                  readonly type: TypeDefType.Literal,
-                  readonly valuePrototype: [number],
+              readonly ['2']: {
+                readonly type: TypeDefType.Structured,
+                readonly fields: {
+                  a: {
+                    readonly type: TypeDefType.Literal,
+                    readonly valuePrototype: [number],
+                  },
                 },
               },
             },
           },
         },
         readonly ['$.a']: {
-          readonly type: TypeDefType.Literal,
-          readonly valuePrototype: [boolean],
+          readonly typeDef: {
+            readonly type: TypeDefType.Literal,
+            readonly valuePrototype: [boolean],
+          },
         },
       }
       | {
         readonly $: {
-          readonly type: TypeDefType.Union,
-          readonly discriminator: null,
-          readonly unions: {
-            readonly ['1']: {
-              readonly type: TypeDefType.Structured,
-              readonly fields: {
-                a: {
-                  readonly type: TypeDefType.Literal,
-                  readonly valuePrototype: [boolean],
+          readonly typeDef: {
+            readonly type: TypeDefType.Union,
+            readonly discriminator: null,
+            readonly unions: {
+              readonly ['1']: {
+                readonly type: TypeDefType.Structured,
+                readonly fields: {
+                  a: {
+                    readonly type: TypeDefType.Literal,
+                    readonly valuePrototype: [boolean],
+                  },
                 },
               },
-            },
-            readonly ['2']: {
-              readonly type: TypeDefType.Structured,
-              readonly fields: {
-                a: {
-                  readonly type: TypeDefType.Literal,
-                  readonly valuePrototype: [number],
+              readonly ['2']: {
+                readonly type: TypeDefType.Structured,
+                readonly fields: {
+                  a: {
+                    readonly type: TypeDefType.Literal,
+                    readonly valuePrototype: [number],
+                  },
                 },
               },
             },
           },
         },
         readonly ['$.a']: {
-          readonly type: TypeDefType.Literal,
-          readonly valuePrototype: [number],
+          readonly typeDef: {
+            readonly type: TypeDefType.Literal,
+            readonly valuePrototype: [number],
+          },
         },
       }
     it('equals expected type', function () {

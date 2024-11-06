@@ -26,7 +26,7 @@ type InternalFlattenedTypeDefsOf<
 > =
   & ReadonlyRecord<
     Path,
-    T
+    TypeDefHolder<T>
   >
   & InternalFlattenedTypeDefsOfChildren<T, SegmentOverride, Path>
 

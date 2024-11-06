@@ -96,9 +96,9 @@ export type StrictUnionTypeDef<
 export type IsStrictUnion<U extends ReadonlyRecord<UnionKey, AnyTypeDef>> = IsEqual<
   U,
   Simplify<{
-    readonly [K in keyof Omit<U, 0> as U[K] extends StrictLiteralTypeDef ? K : never]: U[K]
-  } & (U extends { readonly [0]: AnyTypeDef } ? {
-      readonly [0]: U[0],
+    readonly [K in keyof Omit<U, '0'> as U[K] extends StrictLiteralTypeDef ? K : never]: U[K]
+  } & (U extends { readonly ['0']: AnyTypeDef } ? {
+      readonly ['0']: U['0'],
     }
     : {})>
 >

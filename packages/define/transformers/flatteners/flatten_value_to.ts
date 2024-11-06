@@ -9,7 +9,6 @@ import {
   type TypeDef,
   TypeDefType,
 } from 'types/definitions'
-import { type ReadonlyTypeDefOf } from 'types/readonly_type_def_of'
 import {
   type StrictListTypeDef,
   type StrictMapTypeDef,

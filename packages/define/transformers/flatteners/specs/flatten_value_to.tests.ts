@@ -1,7 +1,7 @@
 import {
   type AnyValueType,
   flattenValue,
-} from 'transformers/flatteners/flatten_value'
+} from 'transformers/flatteners/flatten_value_to'
 import {
   boolean,
   list,
