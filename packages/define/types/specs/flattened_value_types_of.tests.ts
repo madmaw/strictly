@@ -2,14 +2,13 @@ import {
   map,
   number,
 } from 'types/builders'
-import { type FlattenedTypeDefsOf } from 'types/flattened_type_defs_of'
 import { type FlattenedValueTypesOf } from 'types/flattened_value_types_of'
 
 describe('FlattenedValueTypesOf', function () {
+  // note we only test a small example since most of the work is done in flatten
   describe('map', function () {
     const builder = map<string, typeof number>(number)
-    type T = FlattenedTypeDefsOf<typeof builder, null>
-    type V = FlattenedValueTypesOf<T>
+    type V = FlattenedValueTypesOf<typeof builder>
 
     let v: {
       readonly $: Record<string, number>,

@@ -1,9 +1,13 @@
 import { type ReadonlyRecord } from '@de/base'
 import { type TypeDefHolder } from './definitions'
+import { type FlattenedTypeDefsOf } from './flattened_type_defs_of'
 import { type ValueTypeOf } from './value_type_of'
 
-export type FlattenedValueTypesOf<R extends ReadonlyRecord<string, TypeDefHolder>> = {
-  [K in keyof R]: ValueTypeOf<R[K], {}>
+export type FlattenedValueTypesOf<
+  T extends TypeDefHolder,
+  Flattened extends ReadonlyRecord<string, TypeDefHolder> = FlattenedTypeDefsOf<T, null>,
+> = {
+  [K in keyof Flattened]: ValueTypeOf<Flattened[K], {}>
 }
 
 // TS doesn't like this
