@@ -3,7 +3,7 @@ import { type TypeDefHolder } from './definitions'
 import { type FlattenedValueTypesOf } from './flattened_value_types_of'
 
 export type Accessor<T> = {
-  get(): T,
+  value: T,
   set(v: T): void,
 }
 

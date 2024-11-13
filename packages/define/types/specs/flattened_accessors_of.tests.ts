@@ -12,11 +12,11 @@ describe('FlattenedAccessorsOf', function () {
 
     let v: {
       readonly $: {
-        get: () => Record<string, number>,
+        value: Record<string, number>,
         set: (v: Record<string, number>) => void,
       },
       readonly [_: `$.${string}`]: {
-        get: () => number,
+        value: number,
         set: (v: number) => void,
       },
     }

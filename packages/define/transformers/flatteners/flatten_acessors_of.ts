@@ -12,13 +12,11 @@ import {
 
 function mapAccessor(
   _t: TypeDef,
-  v: AnyValueType,
+  value: AnyValueType,
   set: Setter<AnyValueType>,
 ): Accessor<AnyValueType> {
   return {
-    get() {
-      return v
-    },
+    value,
     set,
   }
 }
