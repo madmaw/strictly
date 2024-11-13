@@ -1,4 +1,4 @@
-import { flattenTypeDefsTo } from 'transformers/flatteners/flatten_type_defs_to'
+import { flattenTypeDefTo } from 'transformers/flatteners/flatten_type_def_to'
 import {
   boolean,
   list,
@@ -17,7 +17,7 @@ import {
   vi,
 } from 'vitest'
 
-describe('flattenTypeDefsTo', function () {
+describe('flattenTypeDefTo', function () {
   let toTypeDefType: Mock<(typeDef: TypeDef) => number>
   let flattened: Record<string, TypeDefType>
 
@@ -29,7 +29,7 @@ describe('flattenTypeDefsTo', function () {
 
   describe('literal', function () {
     beforeEach(function () {
-      flattened = flattenTypeDefsTo(number, toTypeDefType)
+      flattened = flattenTypeDefTo(number, toTypeDefType)
     })
 
     it('equals expected type', function () {
@@ -46,7 +46,7 @@ describe('flattenTypeDefsTo', function () {
   describe('list', function () {
     const typeDefHolder = list(number)
     beforeEach(function () {
-      flattened = flattenTypeDefsTo(typeDefHolder, toTypeDefType)
+      flattened = flattenTypeDefTo(typeDefHolder, toTypeDefType)
     })
 
     it('equals expected type', function () {
@@ -64,7 +64,7 @@ describe('flattenTypeDefsTo', function () {
   describe('map', function () {
     const typeDefHolder = map<'a' | 'b', typeof number>(number)
     beforeEach(function () {
-      flattened = flattenTypeDefsTo(typeDefHolder, toTypeDefType)
+      flattened = flattenTypeDefTo(typeDefHolder, toTypeDefType)
     })
 
     it('equals expected type', function () {
@@ -84,7 +84,7 @@ describe('flattenTypeDefsTo', function () {
   describe('struct', function () {
     const typeDefHolder = struct().set('a', number).set('b', list(boolean))
     beforeEach(function () {
-      flattened = flattenTypeDefsTo(typeDefHolder, toTypeDefType)
+      flattened = flattenTypeDefTo(typeDefHolder, toTypeDefType)
     })
 
     it('equals expected type', function () {
@@ -108,7 +108,7 @@ describe('flattenTypeDefsTo', function () {
         .add('b', boolean)
         .add('c', number)
       beforeEach(function () {
-        flattened = flattenTypeDefsTo(typeDefHolder, toTypeDefType)
+        flattened = flattenTypeDefTo(typeDefHolder, toTypeDefType)
       })
 
       it('equals expected type', function () {
@@ -127,7 +127,7 @@ describe('flattenTypeDefsTo', function () {
         .add('a', struct().set('a', boolean))
         .add('b', struct().set('b', number))
       beforeEach(function () {
-        flattened = flattenTypeDefsTo(typeDefHolder, toTypeDefType)
+        flattened = flattenTypeDefTo(typeDefHolder, toTypeDefType)
       })
 
       it('equals expected type', function () {

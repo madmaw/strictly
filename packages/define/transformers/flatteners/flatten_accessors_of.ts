@@ -2,7 +2,10 @@ import {
   type TypeDef,
   type TypeDefHolder,
 } from 'types/definitions'
-import { type Accessor } from 'types/flattened_accessors_of'
+import {
+  type Accessor,
+  type FlattenedAccessorsOf,
+} from 'types/flattened_accessors_of'
 import { type ValueTypeOf } from 'types/value_type_of'
 import {
   type AnyValueType,
@@ -25,8 +28,8 @@ export function flattenAccessorsOf<T extends TypeDefHolder>(
   t: T,
   value: ValueTypeOf<T>,
   setValue: Setter<ValueTypeOf<T>>,
-) {
-  flattenValueTypeTo(
+): FlattenedAccessorsOf<T> {
+  return flattenValueTypeTo(
     t,
     value,
     setValue,

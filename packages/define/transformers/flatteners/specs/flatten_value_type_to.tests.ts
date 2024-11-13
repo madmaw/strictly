@@ -34,7 +34,7 @@ type FlattenedToStrings<R extends Record<string, TypeDefHolder>> = {
   [K in keyof R]: string
 }
 
-describe('FlattenValue', function () {
+describe('flattenValueTypeTo', function () {
   let toStringMapper: Mock<Mapper<string>>
   let setMapper: Mock<Mapper<(v: AnyValueType) => void>>
   let setter: Mock<(v: AnyValueType) => void>

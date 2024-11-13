@@ -10,7 +10,7 @@ function mapper(_t: StrictTypeDef, v: AnyValueType) {
   return v
 }
 
-export function flattenValueTypeOf<T extends TypeDefHolder>(
+export function flattenValueTypesOf<T extends TypeDefHolder>(
   typeDef: TypeDefHolder,
   value: ValueTypeOf<T>,
 ) {
