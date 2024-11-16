@@ -51,7 +51,7 @@ export function union<
 export function map<
   K extends string | number | symbol,
   V,
-  R,
+  R = V,
 >(
   r: ReadonlyRecord<K, V>,
   f: (k: K, v: V) => R,

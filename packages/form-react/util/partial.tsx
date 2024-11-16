@@ -10,7 +10,7 @@ import {
 
 export function createSimplePartialComponent<
   ComponentProps,
-  // TODO force curried props to be a struct subset of the component props
+  // TODO force curried props to be a strict subset of the component props
   CurriedProps extends Partial<ComponentProps> = Partial<ComponentProps>,
 >(
   Component: ComponentType<ComponentProps>,
@@ -38,7 +38,7 @@ export function createSimplePartialComponent<
 
 export function createPartialComponent<
   ComponentProps,
-  // TODO force curried props to be a struct subset of the component props
+  // TODO force curried props to be a strict subset of the component props
   CurriedProps extends Partial<ComponentProps> = Partial<ComponentProps>,
   AdditionalProps = {},
 >(
@@ -70,7 +70,7 @@ export function createPartialComponent<
 
 export function usePartialComponent<
   ComponentProps,
-  // TODO force curried props to be a struct subset of the component props
+  // TODO force curried props to be a strict subset of the component props
   CurriedProps extends Partial<ComponentProps>,
   AdditionalProps = {},
 >(
@@ -96,7 +96,7 @@ export function usePartialComponent<
 
 export function createPartialObserverComponent<
   ComponentProps,
-  // TODO force curried props to be a struct subset of the component props
+  // TODO force curried props to be a strict subset of the component props
   CurriedProps extends Partial<ComponentProps>,
   AdditionalProps = {},
 >(

@@ -9,10 +9,9 @@ import {
 } from './props'
 
 export function useFormInput<
-  K extends string,
-  Fields extends ReadonlyRecord<K, FormField<string, string>>,
+  Fields extends ReadonlyRecord<string, FormField<string, string>>,
 >(
-  k: K,
+  k: keyof Fields,
   {
     onFieldValueChange,
     onFieldBlur,
@@ -55,10 +54,9 @@ export function useFormInput<
 }
 
 export function useFormCheckBox<
-  K extends string,
-  Fields extends ReadonlyRecord<K, FormField<boolean, string>>,
+  Fields extends ReadonlyRecord<string, FormField<boolean, string>>,
 >(
-  k: K,
+  k: keyof Fields,
   {
     onFieldValueChange,
     onFieldBlur,

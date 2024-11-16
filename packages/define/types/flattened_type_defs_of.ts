@@ -10,13 +10,11 @@ import {
   type TypeDefHolder,
   type UnionTypeDef,
 } from './definitions'
+import {
+  type Depths,
+  type StartingDepth,
+} from './flattened'
 import { type JsonPathOf } from './json_path_of'
-
-// Unfortunately the TS compiler will infinitely loop if we don't give it a way of breaking out.
-// A starting depth of 12 (the maximum) will cause performance issues while developing
-type StartingDepth = 10
-// Going much above a depth of 10 will also blow up
-type Depths = [-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
 
 export type FlattenedTypeDefsOf<
   T extends TypeDefHolder,

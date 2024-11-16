@@ -9,6 +9,10 @@ import {
   type TypeDefHolder,
   type UnionTypeDef,
 } from './definitions'
+import {
+  type Depths,
+  type StartingDepth,
+} from './flattened'
 import { type JsonPathOf } from './json_path_of'
 
 export type FlattenedJsonValueToTypePathsOf<
@@ -19,27 +23,58 @@ export type FlattenedJsonValueToTypePathsOf<
   T['typeDef'],
   SegmentOverride,
   Path,
-  Path
+  Path,
+  StartingDepth
 >
 type InternalFlattenedJsonPathsOf<
   T extends TypeDef,
   SegmentOverride extends string,
   ValuePath extends string,
   TypePath extends string,
+  Depth extends number,
+  NextDepth extends number = Depths[Depth],
 > =
-  & ReadonlyRecord<ValuePath, TypePath>
-  & InternalFlattenedJsonPathsOfChildren<T, SegmentOverride, ValuePath, TypePath>
+  & {
+    readonly [K in ValuePath]: TypePath
+  }
+  & InternalFlattenedJsonPathsOfChildren<T, SegmentOverride, ValuePath, TypePath, NextDepth>
 
 type InternalFlattenedJsonPathsOfChildren<
   T extends TypeDef,
   SegmentOverride extends string,
   ValuePath extends string,
   TypePath extends string,
-> = T extends LiteralTypeDef ? InternalFlattenedJsonPathsOfLiteralChildren
-  : T extends ListTypeDef ? InternalFlattenedJsonPathsOfListChildren<T, SegmentOverride, ValuePath, TypePath>
-  : T extends MapTypeDef ? InternalFlattenedJsonPathsOfMapChildren<T, SegmentOverride, ValuePath, TypePath>
-  : T extends StructuredTypeDef ? InternalFlattenedJsonPathsOfStructChildren<T, SegmentOverride, ValuePath, TypePath>
-  : T extends UnionTypeDef ? InternalFlattenedJsonPathsOfUnionChildren<T, SegmentOverride, ValuePath, TypePath>
+  Depth extends number,
+> = Depth extends -1 ? never
+  : T extends LiteralTypeDef ? InternalFlattenedJsonPathsOfLiteralChildren
+  : T extends ListTypeDef ? InternalFlattenedJsonPathsOfListChildren<
+      T,
+      SegmentOverride,
+      ValuePath,
+      TypePath,
+      Depth
+    >
+  : T extends MapTypeDef ? InternalFlattenedJsonPathsOfMapChildren<
+      T,
+      SegmentOverride,
+      ValuePath,
+      TypePath,
+      Depth
+    >
+  : T extends StructuredTypeDef ? InternalFlattenedJsonPathsOfStructChildren<
+      T,
+      SegmentOverride,
+      ValuePath,
+      TypePath,
+      Depth
+    >
+  : T extends UnionTypeDef ? InternalFlattenedJsonPathsOfUnionChildren<
+      T,
+      SegmentOverride,
+      ValuePath,
+      TypePath,
+      Depth
+    >
   : never
 
 type InternalFlattenedJsonPathsOfLiteralChildren = {}
@@ -49,11 +84,13 @@ type InternalFlattenedJsonPathsOfListChildren<
   SegmentOverride extends string,
   ValuePath extends string,
   TypePath extends string,
+  Depth extends number,
 > = InternalFlattenedJsonPathsOf<
   T['elements'],
   SegmentOverride,
   JsonPathOf<ValuePath, number>,
-  JsonPathOf<TypePath, number, SegmentOverride>
+  JsonPathOf<TypePath, number, SegmentOverride>,
+  Depth
 >
 
 type InternalFlattenedJsonPathsOfMapChildren<
@@ -61,11 +98,13 @@ type InternalFlattenedJsonPathsOfMapChildren<
   SegmentOverride extends string,
   ValuePath extends string,
   TypePath extends string,
+  Depth extends number,
 > = InternalFlattenedJsonPathsOf<
   T['valueTypeDef'],
   SegmentOverride,
   JsonPathOf<ValuePath, T['keyPrototype']>,
-  JsonPathOf<TypePath, T['keyPrototype'], SegmentOverride>
+  JsonPathOf<TypePath, T['keyPrototype'], SegmentOverride>,
+  Depth
 >
 
 type InternalFlattenedJsonPathsOfStructChildren<
@@ -73,13 +112,15 @@ type InternalFlattenedJsonPathsOfStructChildren<
   SegmentOverride extends string,
   ValuePath extends string,
   TypePath extends string,
+  Depth extends number,
 > = T extends StructuredTypeDef<infer Fields> ? UnionToIntersection<
     {
       [K in keyof Fields]-?: InternalFlattenedJsonPathsOf<
         Exclude<Fields[K], undefined>,
         SegmentOverride,
         JsonPathOf<ValuePath, K>,
-        JsonPathOf<TypePath, K>
+        JsonPathOf<TypePath, K>,
+        Depth
       >
     }[keyof Fields]
   >
@@ -90,13 +131,15 @@ type InternalFlattenedJsonPathsOfUnionChildren<
   SegmentOverride extends string,
   ValuePath extends string,
   TypePath extends string,
+  Depth extends number,
 > = T extends UnionTypeDef<infer D, infer Unions> ?
     & ({
       [K in keyof Unions]: InternalFlattenedJsonPathsOfChildren<
         Unions[K],
         SegmentOverride,
         ValuePath,
-        TypePath
+        TypePath,
+        Depth
       >
     }[keyof Unions])
     & (D extends string ? ReadonlyRecord<JsonPathOf<ValuePath, D>, JsonPathOf<TypePath, D>> : {})

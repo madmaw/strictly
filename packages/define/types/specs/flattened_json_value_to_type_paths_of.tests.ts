@@ -52,6 +52,10 @@ describe('FlattenedJsonPathsOf', function () {
     it('equals expected type', function () {
       expectTypeOf(t).toEqualTypeOf<T>()
     })
+
+    it('allows lookup of type path', function () {
+      expectTypeOf<T['$.a[1]']>().toEqualTypeOf<'$.*.*'>()
+    })
   })
 
   describe('struct', function () {

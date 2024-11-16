@@ -5,6 +5,7 @@ export type FormatArg =
   | object
   | null
   | undefined
+  | symbol
 
 export function format(
   message: string,

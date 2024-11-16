@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@de/base": "*",
     "@de/fine": "*",
     "mobx": "^6.13.5",
     "mobx-react": "^9.1.1",

@@ -27,6 +27,8 @@ export type Mapper<R> = (
   t: StrictTypeDef,
   v: AnyValueType,
   setter: Setter<AnyValueType>,
+  typePath: string,
+  valuePath: string,
 ) => R
 
 export function flattenValueTypeTo<
@@ -42,6 +44,7 @@ export function flattenValueTypeTo<
   const r: Record<string, AnyValueType> = {}
   internalFlattenValue(
     '$',
+    '$',
     typeDef,
     v,
     setter,
@@ -53,19 +56,21 @@ export function flattenValueTypeTo<
 }
 
 function internalFlattenValue<M>(
-  path: string,
+  valuePath: string,
+  typePath: string,
   typeDef: StrictTypeDef,
   v: AnyValueType,
   setter: Setter<AnyValueType>,
   mapper: Mapper<M>,
   r: Record<string, M>,
 ) {
-  r[path] = mapper(typeDef, v, setter)
-  return internalFlattenValueChildren(path, typeDef, v, mapper, r)
+  r[valuePath] = mapper(typeDef, v, setter, typePath, valuePath)
+  return internalFlattenValueChildren(valuePath, typePath, typeDef, v, mapper, r)
 }
 
 function internalFlattenValueChildren<M>(
-  path: string,
+  valuePath: string,
+  typePath: string,
   typeDef: StrictTypeDef,
   v: AnyValueType,
   mapper: Mapper<M>,
@@ -76,28 +81,31 @@ function internalFlattenValueChildren<M>(
       // no children
       return r
     case TypeDefType.List:
-      return internalFlattenListChildren(path, typeDef, v, mapper, r)
+      return internalFlattenListChildren(valuePath, typePath, typeDef, v, mapper, r)
     case TypeDefType.Map:
-      return internalFlattenMapChildren(path, typeDef, v, mapper, r)
+      return internalFlattenMapChildren(valuePath, typePath, typeDef, v, mapper, r)
     case TypeDefType.Structured:
-      return internalFlattenStructChildren(path, typeDef, v, mapper, r)
+      return internalFlattenStructChildren(valuePath, typePath, typeDef, v, mapper, r)
     case TypeDefType.Union:
-      return internalFlattenUnionChildren(path, typeDef, v, mapper, r)
+      return internalFlattenUnionChildren(valuePath, typePath, typeDef, v, mapper, r)
     default:
       throw new UnreachableError(typeDef)
   }
 }
 
 function internalFlattenListChildren<M>(
-  path: string,
+  valuePath: string,
+  typePath: string,
   { elements }: StrictListTypeDef,
   v: AnyValueType[],
   mapper: Mapper<M>,
   r: Record<string, M>,
 ) {
+  const newTypePath = jsonPath(typePath, '*')
   return v.reduce(function (r, e, i) {
     return internalFlattenValue(
-      jsonPath(path, i),
+      jsonPath(valuePath, i),
+      newTypePath,
       elements,
       e,
       (e: AnyValueType) => {
@@ -110,17 +118,20 @@ function internalFlattenListChildren<M>(
 }
 
 function internalFlattenMapChildren<M>(
-  path: string,
+  valuePath: string,
+  typePath: string,
   { valueTypeDef }: StrictMapTypeDef,
   v: Record<string, AnyValueType>,
   mapper: Mapper<M>,
   r: Record<string, M>,
 ): Record<string, M> {
+  const newTypePath = jsonPath(typePath, '*')
   return reduce(
     v,
     function (r, k, value) {
       return internalFlattenValue(
-        jsonPath(path, k),
+        jsonPath(valuePath, k),
+        newTypePath,
         valueTypeDef,
         value,
         (value: AnyValueType) => {
@@ -135,7 +146,8 @@ function internalFlattenMapChildren<M>(
 }
 
 function internalFlattenStructChildren<M>(
-  path: string,
+  valuePath: string,
+  typePath: string,
   { fields }: StrictStructuredTypeDef,
   v: Record<string, AnyValueType>,
   mapper: Mapper<M>,
@@ -146,7 +158,8 @@ function internalFlattenStructChildren<M>(
     function (r, k, fieldTypeDef) {
       const fieldValue = v[k]
       return internalFlattenValue(
-        jsonPath(path, k),
+        jsonPath(valuePath, k),
+        jsonPath(typePath, k),
         fieldTypeDef,
         fieldValue,
         (value: AnyValueType) => {
@@ -161,7 +174,8 @@ function internalFlattenStructChildren<M>(
 }
 
 function internalFlattenUnionChildren<M>(
-  path: string,
+  valuePath: string,
+  typePath: string,
   {
     unions,
     discriminator,
@@ -180,7 +194,7 @@ function internalFlattenUnionChildren<M>(
           && typeDef.valuePrototype != null
           && typeDef.valuePrototype.indexOf(v) >= 0
         ) {
-          internalFlattenValueChildren(path, typeDef, v, mapper, r)
+          internalFlattenValueChildren(valuePath, typePath, typeDef, v, mapper, r)
           return true
         }
         return false
@@ -197,7 +211,8 @@ function internalFlattenUnionChildren<M>(
         complexUnions.length,
       )
       internalFlattenValueChildren(
-        path,
+        valuePath,
+        typePath,
         complexUnion,
         v,
         mapper,
@@ -208,7 +223,8 @@ function internalFlattenUnionChildren<M>(
   } else {
     const discriminatorValue = v[discriminator]
     return internalFlattenValueChildren(
-      path,
+      valuePath,
+      typePath,
       unions[discriminatorValue],
       v,
       mapper,
