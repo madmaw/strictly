@@ -515,5 +515,40 @@ describe('FormPresenter', function () {
         }))
       })
     })
+
+    describe('validate', function () {
+      beforeEach(function () {
+        presenter.setFieldValue<'$[0]'>(model, '$[0]', 'x')
+        presenter.setFieldValue<'$[1]'>(model, '$[1]', '2')
+        presenter.setFieldValue<'$[2]'>(model, '$[2]', 'z')
+        presenter.validate(model)
+      })
+
+      it('contains errors for all invalid fields', function () {
+        expect(model.fields).toEqual(expect.objectContaining({
+          '$[0]': expect.objectContaining({
+            value: 'x',
+            error: IS_NAN_ERROR,
+          }),
+          '$[1]': expect.objectContaining({
+            value: '2',
+            // eslint-disable-next-line no-undefined
+            error: undefined,
+          }),
+          '$[2]': expect.objectContaining({
+            value: 'z',
+            error: IS_NAN_ERROR,
+          }),
+        }))
+      })
+
+      it('sets the value only for valid fields', function () {
+        expect(model.value).toEqual([
+          1,
+          2,
+          7,
+        ])
+      })
+    })
   })
 })
