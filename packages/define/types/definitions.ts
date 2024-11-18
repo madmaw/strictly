@@ -61,6 +61,8 @@ export type ListTypeDef<
 // map
 export type MapKeyType = string | number
 
+// might be able to combine map and list into a single "homogeneous" type def with an implementation
+// hint, which might help with performance
 export type MapTypeDef<
   K extends MapKeyType = MapKeyType,
   // if `V` includes `undefined` the map is partial

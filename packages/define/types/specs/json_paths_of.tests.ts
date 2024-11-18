@@ -270,7 +270,7 @@ describe('JsonPathsOf', function () {
     })
   })
 
-  describe('with nested unions', function () {
+  describe('with nested discriminator', function () {
     const builder = union('x')
       .add(
         '1',

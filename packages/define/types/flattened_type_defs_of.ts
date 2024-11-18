@@ -16,11 +16,14 @@ import {
 } from './flattened'
 import { type JsonPathOf } from './json_path_of'
 
+// NOTE removing any ternary from this file improves the performance and the depth of data structure we can go to
+
 export type FlattenedTypeDefsOf<
   T extends TypeDefHolder,
   SegmentOverride extends string | null,
   Path extends string = '$',
-> = InternalFlattenedTypeDefsOf<T['typeDef'], SegmentOverride, Path, '', StartingDepth>
+  Depth extends number = StartingDepth,
+> = InternalFlattenedTypeDefsOf<T['typeDef'], SegmentOverride, Path, '', Depth>
 
 type InternalFlattenedTypeDefsOf<
   T extends TypeDef,
@@ -87,8 +90,7 @@ type InternalFlattenedTypeDefsOfStructChildren<
   Path extends string,
   Qualifier extends string,
   Depth extends number,
-> // TODO suspect these `extends` checks are counting toward the limit of 50 operations, remove
- = T extends StructuredTypeDef<infer Fields>
+> = T extends StructuredTypeDef<infer Fields>
   ? {} extends Fields ? {} : keyof Fields extends string ? UnionToIntersection<{
       readonly [K in keyof Fields]-?: InternalFlattenedTypeDefsOf<
         Exclude<Fields[K], undefined>,
