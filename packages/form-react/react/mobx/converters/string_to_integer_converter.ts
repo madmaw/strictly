@@ -3,8 +3,9 @@ import {
   ConversionResult,
   type Converter,
 } from 'react/mobx/form_presenter'
+import { type FormField } from 'react/props'
 
-export class StringToIntegerConverter<E> implements Converter<E, number, string> {
+export class StringToIntegerConverter<E> implements Converter<E, Record<string, FormField>, number, string> {
   constructor(private readonly isNanError: E) {
   }
 

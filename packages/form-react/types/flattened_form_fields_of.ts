@@ -1,17 +1,13 @@
-import { type ReadonlyRecord } from '@de/base'
-import {
-  type FlattenedTypeDefsOf,
-  type TypeDefHolder,
-  type ValueTypeOf,
-} from '@de/fine'
+import { type ValueOf } from 'type-fest'
 
 export type FlattenedFormFieldsOf<
-  T extends TypeDefHolder,
   E,
-  R extends ReadonlyRecord<string, TypeDefHolder> = FlattenedTypeDefsOf<T, null>,
+  JsonPaths extends Record<string, string>,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  TypePathsToFieldTypes extends Partial<Readonly<Record<ValueOf<JsonPaths>, any>>>,
 > = {
-  [K in keyof R]: {
-    value: ValueTypeOf<R[K]>,
+  readonly [K in keyof JsonPaths as unknown extends TypePathsToFieldTypes[JsonPaths[K]] ? never : K]: {
+    value: TypePathsToFieldTypes[JsonPaths[K]],
     error?: E,
     disabled: boolean,
   }

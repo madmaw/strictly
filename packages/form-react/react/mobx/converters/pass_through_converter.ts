@@ -3,8 +3,9 @@ import {
   ConversionResult,
   type Converter,
 } from 'react/mobx/form_presenter'
+import { type FormField } from 'react/props'
 
-export class PassThroughConverter<E, V> implements Converter<E, V, V> {
+export class PassThroughConverter<E, V> implements Converter<E, Record<string, FormField>, V, V> {
   convert(from: V): Conversion<E, V> {
     return {
       type: ConversionResult.Success,

@@ -35,14 +35,20 @@ export type Conversion<E, V> = {
 // convert to the model type from the display type
 // for example a text field that renders an integer would have
 // a `from` type of `string`, and a `to` type of `number`
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type Converter<E, To = any, From = any> = {
-  // TODO probably need to supply more context (form state and path for example)
-  convert(from: From): Conversion<E, To>,
+
+export type Converter<
+  E,
+  Fields extends Record<string, FormField> = Record<string, FormField>,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  To = any,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  From = any,
+> = {
+  convert(from: From, valuePath: keyof Fields, fields: Fields): Conversion<E, To>,
   revert(to: To): From,
 }
 
-type FlattenedFieldsOf<
+type FlattenedConvertedFieldsOf<
   E,
   ValuePathsToConverters extends ReadonlyRecord<string, Converter<E>>,
 > = {
@@ -65,11 +71,11 @@ type FlattenedFieldOverrides<
 export type ValuePathsToConvertersOf<
   E,
   JsonPaths extends ReadonlyRecord<string, string>,
-  Converters extends Partial<Record<ValueOf<JsonPaths>, Converter<E>>>,
+  TypePathsToConverters extends Partial<Readonly<Record<ValueOf<JsonPaths>, Converter<E>>>>,
 > = {
   readonly [
-    K in keyof JsonPaths as unknown extends Converters[JsonPaths[K]] ? never : K
-  ]: NonNullable<Converters[JsonPaths[K]]>
+    K in keyof JsonPaths as unknown extends TypePathsToConverters[JsonPaths[K]] ? never : K
+  ]: NonNullable<TypePathsToConverters[JsonPaths[K]]>
 }
 
 export class FormPresenter<
@@ -77,7 +83,9 @@ export class FormPresenter<
   E,
   JsonPaths extends ReadonlyRecord<string, string>,
   // TODO JsonPaths extends FlattenedJsonValueToTypePathsOf<T> = FlattenedJsonValueToTypePathsOf<T>
-  TypePathsToConverters extends Partial<Readonly<Record<ValueOf<JsonPaths>, Converter<E>>>>,
+  TypePathsToConverters extends Partial<
+    Readonly<Record<ValueOf<JsonPaths>, Converter<E, FlattenedConvertedFieldsOf<E, ValuePathsToConverters>>>>
+  >,
   ValuePathsToConverters extends Readonly<Record<string, Converter<E>>> = ValuePathsToConvertersOf<
     E,
     JsonPaths,
@@ -105,7 +113,7 @@ export class FormPresenter<
       valuePath,
     )
 
-    const conversion = converter.convert(value)
+    const conversion = converter.convert(value, valuePath, model.fields)
     runInAction(function () {
       switch (conversion.type) {
         case ConversionResult.Failure:
@@ -172,7 +180,7 @@ export class FormPresenter<
             typePath,
             valuePath,
           )
-          const conversion = converter.convert(fieldOverride.value)
+          const conversion = converter.convert(fieldOverride.value, valuePath, model.fields)
           switch (conversion.type) {
             case ConversionResult.Failure:
               return {
@@ -208,7 +216,9 @@ export class FormModel<
   E,
   JsonPaths extends ReadonlyRecord<string, string>,
   TypePathsToConverters extends Partial<Record<ValueOf<JsonPaths>, Converter<E>>>,
-  ValuePathsToConverters extends Readonly<Record<string, Converter<E>>> = ValuePathsToConvertersOf<
+  ValuePathsToConverters extends Readonly<
+    Record<string, Converter<E, FlattenedConvertedFieldsOf<E, ValuePathsToConverters>>>
+  > = ValuePathsToConvertersOf<
     E,
     JsonPaths,
     TypePathsToConverters
@@ -235,7 +245,7 @@ export class FormModel<
     )
   }
 
-  get fields(): FlattenedFieldsOf<E, ValuePathsToConverters> {
+  get fields(): FlattenedConvertedFieldsOf<E, ValuePathsToConverters> {
     return flattenValueTypeTo(
       this.typeDef,
       this.value,

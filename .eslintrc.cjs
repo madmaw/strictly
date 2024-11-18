@@ -147,6 +147,7 @@ module.exports = {
               'StrictPascalCase',
               'UPPER_CASE',
             ],
+            leadingUnderscore: 'allow',
           },
           {
             selector: [
