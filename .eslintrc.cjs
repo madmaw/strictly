@@ -389,7 +389,17 @@ module.exports = {
         'unused-imports/no-unused-vars': 'off',
       },
     },
-    // TSX
+    // test files
+    {
+      files: ['*.tests.*'],
+      rules: {
+        // interferes with expect(my.method).toHaveBeenCalledOnce() etc...
+        '@typescript-eslint/unbound-method': 'off',
+        // TODO is there a vitest equivalent?
+        // 'jest/unbound-method': 'error',
+      },
+    },
+    // TSX only
     {
       files: ['*.tsx'],
       rules: {

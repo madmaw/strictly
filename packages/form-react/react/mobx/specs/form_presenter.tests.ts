@@ -586,12 +586,7 @@ describe('all', function () {
         it('supplies the full, previous context when converting', function () {
           presenter.setFieldValueAndValidate<'$[2]'>(model, '$[2]', '4')
 
-          // eslint-disable-next-line @typescript-eslint/unbound-method
           expect(stringToIntegerConverter.convert).toHaveBeenCalledOnce()
-
-          // TODO allow unbound methods in test files
-          // https://github.com/jest-community/eslint-plugin-jest/blob/main/docs/rules/unbound-method.md
-          // eslint-disable-next-line @typescript-eslint/unbound-method
           expect(stringToIntegerConverter.convert).toHaveBeenCalledWith(
             '4',
             '$[2]',
