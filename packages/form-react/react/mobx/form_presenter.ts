@@ -164,41 +164,42 @@ export class FormPresenter<
   }
 
   validate(model: FormModel<T, E, JsonPaths, TypePathsToConverters, ValuePathsToConverters>) {
-    runInAction(() => {
-      model.fieldOverrides = map(
+    const fieldOverrides = map(
+      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+      model.fieldOverrides as Record<keyof ValuePathsToConverters, FieldOverride<E, AnyValueType>>,
+      (
+        valuePath: keyof ValuePathsToConverters,
+        fieldOverride: FieldOverride<E, AnyValueType>,
+      ): FieldOverride<E, AnyValueType> => {
         // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-        model.fieldOverrides as Record<keyof ValuePathsToConverters, FieldOverride<E, AnyValueType>>,
-        (
-          valuePath: keyof ValuePathsToConverters,
-          fieldOverride: FieldOverride<E, AnyValueType>,
-        ): FieldOverride<E, AnyValueType> => {
-          // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-          const typePath = model.jsonPaths[valuePath as keyof JsonPaths]
-          const converter = checkExists(
-            this.converters[typePath],
-            'expected converter to be defined {} ({})',
-            typePath,
-            valuePath,
-          )
-          const conversion = converter.convert(fieldOverride.value, valuePath, model.fields)
-          switch (conversion.type) {
-            case ConversionResult.Failure:
-              return {
-                ...fieldOverride,
-                dirty: true,
-                error: conversion.error,
-              }
-            case ConversionResult.Success:
-              // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-              model.accessors[valuePath as keyof FlattenedAccessorsOf<T>].set(conversion.value)
-              return {
-                dirty: false,
-              }
-            default:
-              throw new UnreachableError(conversion)
-          }
-        },
-      )
+        const typePath = model.jsonPaths[valuePath as keyof JsonPaths]
+        const converter = checkExists(
+          this.converters[typePath],
+          'expected converter to be defined {} ({})',
+          typePath,
+          valuePath,
+        )
+        const conversion = converter.convert(fieldOverride.value, valuePath, model.fields)
+        switch (conversion.type) {
+          case ConversionResult.Failure:
+            return {
+              ...fieldOverride,
+              dirty: true,
+              error: conversion.error,
+            }
+          case ConversionResult.Success:
+            // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+            model.accessors[valuePath as keyof FlattenedAccessorsOf<T>].set(conversion.value)
+            return {
+              dirty: false,
+            }
+          default:
+            throw new UnreachableError(conversion)
+        }
+      },
+    )
+    runInAction(function () {
+      model.fieldOverrides = fieldOverrides
     })
   }
 
