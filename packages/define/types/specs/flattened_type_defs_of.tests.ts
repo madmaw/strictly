@@ -13,7 +13,7 @@ import { type FlattenedTypeDefsOf } from 'types/flattened_type_defs_of'
 
 describe('FlattenedTypeDefsOf', function () {
   describe('literal', function () {
-    type T = FlattenedTypeDefsOf<typeof number, 's'>
+    type T = FlattenedTypeDefsOf<typeof number, null>
 
     let t: {
       readonly $: {
@@ -30,19 +30,11 @@ describe('FlattenedTypeDefsOf', function () {
 
   describe('list', function () {
     const builder = list(number)
-    type T = SimplifyDeep<FlattenedTypeDefsOf<typeof builder, 's'>>
+    type T = SimplifyDeep<FlattenedTypeDefsOf<typeof builder, '*'>>
 
     let t: {
-      readonly $: {
-        readonly typeDef: {
-          readonly type: TypeDefType.List,
-          elements: {
-            readonly type: TypeDefType.Literal,
-            readonly valuePrototype: [number],
-          },
-        },
-      },
-      readonly ['$.s']: {
+      readonly $: SimplifyDeep<typeof builder.narrow>,
+      readonly ['$.*']: {
         readonly typeDef: {
           readonly type: TypeDefType.Literal,
           readonly valuePrototype: [number],
@@ -56,20 +48,11 @@ describe('FlattenedTypeDefsOf', function () {
 
   describe('map', function () {
     const builder = map<'a' | 'b', typeof number>(number)
-    type T = SimplifyDeep<FlattenedTypeDefsOf<typeof builder, 's'>>
+    type T = SimplifyDeep<FlattenedTypeDefsOf<typeof builder, '*'>>
 
     let t: {
-      readonly $: {
-        readonly typeDef: {
-          readonly type: TypeDefType.Map,
-          readonly keyPrototype: 'a' | 'b',
-          valueTypeDef: {
-            readonly type: TypeDefType.Literal,
-            readonly valuePrototype: [number],
-          },
-        },
-      },
-      readonly ['$.s']: {
+      readonly $: SimplifyDeep<typeof builder.narrow>,
+      readonly ['$.*']: {
         readonly typeDef: {
           readonly type: TypeDefType.Literal,
           readonly valuePrototype: [number],
@@ -88,32 +71,10 @@ describe('FlattenedTypeDefsOf', function () {
         .setOptional('b', string)
         .setReadonly('c', boolean)
         .setReadonlyOptional('d', string)
-      type T = SimplifyDeep<FlattenedTypeDefsOf<typeof builder, '@'>>
+      type T = SimplifyDeep<FlattenedTypeDefsOf<typeof builder, null>>
 
       let t: {
-        readonly $: {
-          readonly typeDef: {
-            readonly type: TypeDefType.Structured,
-            readonly fields: {
-              a: {
-                readonly type: TypeDefType.Literal,
-                readonly valuePrototype: [number],
-              },
-              b?: {
-                readonly type: TypeDefType.Literal,
-                readonly valuePrototype: [string],
-              },
-              readonly c: {
-                readonly type: TypeDefType.Literal,
-                readonly valuePrototype: [boolean],
-              },
-              readonly d?: {
-                readonly type: TypeDefType.Literal,
-                readonly valuePrototype: [string],
-              },
-            },
-          },
-        },
+        readonly $: SimplifyDeep<typeof builder.narrow>,
         readonly ['$.a']: {
           readonly typeDef: {
             readonly type: TypeDefType.Literal,
@@ -148,95 +109,107 @@ describe('FlattenedTypeDefsOf', function () {
 
 describe('union', function () {
   describe('overlapping', function () {
-    const builder = union()
-      .add('1', struct().set('a', boolean))
-      .add('2', struct().set('a', number))
-    type T = SimplifyDeep<FlattenedTypeDefsOf<typeof builder, 's'>>
+    describe('non-discriminated', function () {
+      const builder = union()
+        .add('x', struct().set('a', boolean))
+        .add('y', struct().set('a', number))
+      type T = SimplifyDeep<FlattenedTypeDefsOf<typeof builder, null>>
 
-    let t:
-      | {
-        readonly $: {
-          readonly typeDef: {
-            readonly type: TypeDefType.Union,
-            readonly discriminator: null,
-            readonly unions: {
-              readonly ['1']: {
-                readonly type: TypeDefType.Structured,
-                readonly fields: {
-                  a: {
-                    readonly type: TypeDefType.Literal,
-                    readonly valuePrototype: [boolean],
-                  },
-                },
-              },
-              readonly ['2']: {
-                readonly type: TypeDefType.Structured,
-                readonly fields: {
-                  a: {
-                    readonly type: TypeDefType.Literal,
-                    readonly valuePrototype: [number],
-                  },
-                },
-              },
+      let t:
+        | {
+          readonly $: SimplifyDeep<typeof builder.narrow>,
+          readonly ['$.a']: {
+            readonly typeDef: {
+              readonly type: TypeDefType.Literal,
+              readonly valuePrototype: [boolean],
             },
           },
-        },
-        readonly ['$.a']: {
+        }
+        | {
+          readonly $: SimplifyDeep<typeof builder.narrow>,
+          readonly ['$.a']: {
+            readonly typeDef: {
+              readonly type: TypeDefType.Literal,
+              readonly valuePrototype: [number],
+            },
+          },
+        }
+      it('equals expected type', function () {
+        expectTypeOf(t).toEqualTypeOf<T>()
+      })
+    })
+
+    describe('discriminator', function () {
+      const builder = union('x')
+        .add('1', struct().set('a', boolean))
+        .add('2', struct().set('a', number))
+      type T = SimplifyDeep<FlattenedTypeDefsOf<typeof builder, null>>
+
+      let t: {
+        readonly $: SimplifyDeep<typeof builder.narrow>,
+        readonly ['$.1:a']: {
           readonly typeDef: {
             readonly type: TypeDefType.Literal,
             readonly valuePrototype: [boolean],
           },
         },
-      }
-      | {
-        readonly $: {
-          readonly typeDef: {
-            readonly type: TypeDefType.Union,
-            readonly discriminator: null,
-            readonly unions: {
-              readonly ['1']: {
-                readonly type: TypeDefType.Structured,
-                readonly fields: {
-                  a: {
-                    readonly type: TypeDefType.Literal,
-                    readonly valuePrototype: [boolean],
-                  },
-                },
-              },
-              readonly ['2']: {
-                readonly type: TypeDefType.Structured,
-                readonly fields: {
-                  a: {
-                    readonly type: TypeDefType.Literal,
-                    readonly valuePrototype: [number],
-                  },
-                },
-              },
-            },
-          },
-        },
-        readonly ['$.a']: {
+        readonly ['$.2:a']: {
           readonly typeDef: {
             readonly type: TypeDefType.Literal,
             readonly valuePrototype: [number],
           },
         },
       }
-    it('equals expected type', function () {
-      expectTypeOf(t).toEqualTypeOf<T>()
+      it('equals expected type', function () {
+        expectTypeOf(t).toEqualTypeOf<T>()
+      })
+    })
+
+    describe('nested discriminator', function () {
+      const builder = union('x')
+        .add(
+          '1',
+          union('y')
+            .add('p', struct().set('a', boolean))
+            .add('q', struct().set('a', string)),
+        )
+        .add(
+          '2',
+          union('z')
+            .add('r', struct().set('b', number))
+            .add('s', struct().set('c', string)),
+        )
+      type T = SimplifyDeep<FlattenedTypeDefsOf<typeof builder, null>>
+      let t: {
+        readonly $: SimplifyDeep<typeof builder.narrow>,
+        readonly ['$.1:p:a']: {
+          readonly typeDef: {
+            readonly type: TypeDefType.Literal,
+            readonly valuePrototype: [boolean],
+          },
+        },
+        readonly ['$.1:q:a']: {
+          readonly typeDef: {
+            readonly type: TypeDefType.Literal,
+            readonly valuePrototype: [string],
+          },
+        },
+        readonly ['$.2:r:b']: {
+          readonly typeDef: {
+            readonly type: TypeDefType.Literal,
+            readonly valuePrototype: [number],
+          },
+        },
+        readonly ['$.2:s:c']: {
+          readonly typeDef: {
+            readonly type: TypeDefType.Literal,
+            readonly valuePrototype: [string],
+          },
+        },
+      }
+      it('equals expected type', function () {
+        expectTypeOf(t).toEqualTypeOf<T>()
+      })
     })
   })
-
-  // describe('infinite recursion', function () {
-  //   function f<T extends TypeDefHolder>({ typeDef }: T): FlattenedTypeDefsOf<T, null> {
-  //     return {
-  //       $: typeDef
-  //     }
-  //   }
-  //   it('compiles', function () {
-  //     const builder = list(string)
-
-  //     expect(f(builder)).toBeDefined();
-  //   })
-  // })
 })

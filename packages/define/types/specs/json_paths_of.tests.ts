@@ -256,6 +256,40 @@ describe('JsonPathsOf', function () {
     })
   })
 
+  describe('with discriminator', function () {
+    const builder = union('x')
+      .add('1', struct().set('a', boolean))
+      .add('2', struct().set('b', number))
+
+    type T = JsonPathsOf<typeof builder>
+
+    let path: '$' | '$.1:a' | '$.2:b'
+
+    it('equals expected type', function () {
+      expectTypeOf(path).toEqualTypeOf<T>()
+    })
+  })
+
+  describe('with nested unions', function () {
+    const builder = union('x')
+      .add(
+        '1',
+        union('y').add('p', struct().set('a', boolean)),
+      )
+      .add(
+        '2',
+        union('z').add('q', struct().set('b', number)),
+      )
+
+    type T = JsonPathsOf<typeof builder>
+
+    let path: '$' | '$.1:p:a' | '$.2:q:b'
+
+    it('equals expected type', function () {
+      expectTypeOf(path).toEqualTypeOf<T>()
+    })
+  })
+
   // breaks linting
   // describe('infinite recursion', function () {
   //   function f<T extends TypeDefHolder>(t: T): JsonPathsOf<T> {

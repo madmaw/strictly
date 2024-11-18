@@ -10,6 +10,9 @@ import {
   type UnionKey,
 } from './definitions'
 
+// TODO rename to something more descriptive (e.g. introspectable definitions, deterministic
+// definitions, discriminated definitions)
+
 // strict equivalent of type defs, basically just makes it so Union is introspectable
 
 export type StrictTypeDefHolder<T extends StrictTypeDef = StrictTypeDef> = {
@@ -91,7 +94,7 @@ export type StrictUnionTypeDef<
     readonly unions: U,
   }
 
-// tests whether the union is composed of one non-constant value (at [0]) and the rest
+// tests whether the union is composed of one non-constant value (at ['0']) and the rest
 // constants
 export type IsStrictUnion<U extends ReadonlyRecord<UnionKey, AnyTypeDef>> = IsEqual<
   U,

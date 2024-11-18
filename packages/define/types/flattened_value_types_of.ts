@@ -9,10 +9,3 @@ export type FlattenedValueTypesOf<
 > = {
   [K in keyof Flattened]: ValueTypeOf<Flattened[K], {}>
 }
-
-// TS doesn't like this
-// export type FlattenedValueTypesOf2<T extends TypeDef> = InternalFlattenedValueTypesOf<FlattenedTypeDefsOf<T, null>>
-
-// export type InternalFlattenedValueTypesOf<R extends ReadonlyRecord<string, TypeDef>> = {
-//   [K in keyof R]: InternalValueTypeOf<R[K], {}>
-// }

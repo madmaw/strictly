@@ -1,4 +1,5 @@
 import { type ReadonlyRecord } from '@de/base'
+import { type SimplifyDeep } from 'type-fest'
 import {
   type TypeDefType,
 } from 'types/definitions'
@@ -205,51 +206,125 @@ describe('ValueTypeOf', function () {
   })
 
   describe('union', function () {
-    type T = ValueTypeOf<{
-      typeDef: {
-        readonly type: TypeDefType.Union,
-        readonly discriminator: null,
-        readonly unions: {
-          readonly [0]: {
-            readonly type: TypeDefType.Structured,
-            readonly fields: {
-              b: {
-                readonly type: TypeDefType.Literal,
-                readonly valuePrototype: [string],
-              },
-              readonly d: {
-                readonly type: TypeDefType.Literal,
-                readonly valuePrototype: [1],
-              },
+    describe('non-discriminated', function () {
+      type T = ValueTypeOf<{
+        typeDef: {
+          readonly type: TypeDefType.Union,
+          readonly discriminator: null,
+          readonly unions: {
+            readonly [0]: {
+              readonly type: TypeDefType.Literal,
+              readonly valuePrototype: [null],
+            },
+            readonly [1]: {
+              readonly type: TypeDefType.Literal,
+              readonly valuePrototype: [number],
+            },
+            readonly [2]: {
+              readonly type: TypeDefType.Literal,
+              readonly valuePrototype: [string],
             },
           },
-          readonly [1]: {
-            readonly type: TypeDefType.Structured,
-            readonly fields: {
-              e: {
-                readonly type: TypeDefType.Literal,
-                readonly valuePrototype: [number],
+        },
+      }>
+
+      let t: null | number | string
+
+      it('equals expected type', function () {
+        expectTypeOf(t).toEqualTypeOf<T>()
+      })
+    })
+
+    describe('implicitly discriminated', function () {
+      type T = ValueTypeOf<{
+        typeDef: {
+          readonly type: TypeDefType.Union,
+          readonly discriminator: null,
+          readonly unions: {
+            readonly [0]: {
+              readonly type: TypeDefType.Structured,
+              readonly fields: {
+                b: {
+                  readonly type: TypeDefType.Literal,
+                  readonly valuePrototype: [string],
+                },
+                readonly d: {
+                  readonly type: TypeDefType.Literal,
+                  readonly valuePrototype: [1],
+                },
               },
-              readonly d: {
-                readonly type: TypeDefType.Literal,
-                readonly valuePrototype: [2],
+            },
+            readonly [1]: {
+              readonly type: TypeDefType.Structured,
+              readonly fields: {
+                b: {
+                  readonly type: TypeDefType.Literal,
+                  readonly valuePrototype: [number],
+                },
+                readonly d: {
+                  readonly type: TypeDefType.Literal,
+                  readonly valuePrototype: [2],
+                },
               },
             },
           },
         },
-      },
-    }>
+      }>
 
-    let t: {
-      readonly d: 1,
-      b: string,
-    } | {
-      readonly d: 2,
-      e: number,
-    }
+      let t: {
+        readonly d: 1,
+        b: string,
+      } | {
+        readonly d: 2,
+        b: number,
+      }
 
-    it('equals expected type', function () {
-      expectTypeOf(t).toEqualTypeOf<T>()
+      it('equals expected type', function () {
+        expectTypeOf(t).toEqualTypeOf<T>()
+      })
+    })
+
+    describe('explicitly discriminated', function () {
+      type T = SimplifyDeep<
+        ValueTypeOf<{
+          typeDef: {
+            readonly type: TypeDefType.Union,
+            readonly discriminator: 'd',
+            readonly unions: {
+              readonly [1]: {
+                readonly type: TypeDefType.Structured,
+                readonly fields: {
+                  b: {
+                    readonly type: TypeDefType.Literal,
+                    readonly valuePrototype: [string],
+                  },
+                },
+              },
+              readonly [2]: {
+                readonly type: TypeDefType.Structured,
+                readonly fields: {
+                  b: {
+                    readonly type: TypeDefType.Literal,
+                    readonly valuePrototype: [number],
+                  },
+                },
+              },
+            },
+          },
+        }>
+      >
+
+      let t: {
+        readonly d: 1,
+        b: string,
+      } | {
+        readonly d: 2,
+        b: number,
+      }
+
+      it('equals expected type', function () {
+        expectTypeOf(t).toEqualTypeOf<T>()
+      })
     })
   })
 })
