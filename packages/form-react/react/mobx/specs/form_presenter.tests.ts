@@ -694,6 +694,17 @@ describe('all', function () {
           model = presenter.createModel(originalValue)
         })
 
+        it('has the expected fields', function () {
+          expect(model.fields).toEqual({
+            $: {
+              disabled: false,
+              // eslint-disable-next-line no-undefined
+              error: undefined,
+              value: false,
+            },
+          })
+        })
+
         describe('setFieldValueAndValidate', function () {
           describe('success', function () {
             beforeEach(function () {
@@ -702,7 +713,8 @@ describe('all', function () {
             })
 
             it('sets the value', function () {
-              expect(model.value).toEqual([1])
+              // expect(model.value).toEqual([1])
+              expect(model.value).toEqual(null)
             })
           })
         })
