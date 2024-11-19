@@ -5,6 +5,7 @@ import {
   map,
   nullTypeDefHolder,
   number,
+  string,
   struct,
   union,
 } from 'types/builders'
@@ -72,21 +73,42 @@ describe('flattenJsonValueToTypePathsOf', function () {
   })
 
   describe('union', function () {
-    const typeDef = union()
-      .add('a', list(number))
-      .add('b', nullTypeDefHolder)
-    const flattened = flattenJsonValueToTypePathsOf(typeDef, [
-      1,
-      2,
-      3,
-    ])
+    describe('non-discriminated', function () {
+      const typeDef = union()
+        .add('a', list(number))
+        .add('b', nullTypeDefHolder)
+      const flattened = flattenJsonValueToTypePathsOf(typeDef, [
+        1,
+        2,
+        3,
+      ])
 
-    it('equals expected value', function () {
-      expect(flattened).toEqual({
-        $: '$',
-        '$[0]': '$.*',
-        '$[1]': '$.*',
-        '$[2]': '$.*',
+      it('equals expected value', function () {
+        expect(flattened).toEqual({
+          $: '$',
+          '$[0]': '$.*',
+          '$[1]': '$.*',
+          '$[2]': '$.*',
+        })
+      })
+    })
+
+    describe('discriminated', function () {
+      const typeDef = union('d')
+        .add('x', struct().set('a', number).set('b', boolean))
+        .add('y', struct().set('c', string).set('d', boolean))
+      const flattened = flattenJsonValueToTypePathsOf(typeDef, {
+        d: 'x',
+        a: 1,
+        b: true,
+      })
+
+      it('equals expected value', function () {
+        expect(flattened).toEqual({
+          $: '$',
+          '$.x:a': '$.x:a',
+          '$.x:b': '$.x:b',
+        })
       })
     })
   })

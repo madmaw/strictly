@@ -12,5 +12,5 @@ export type FlattenedAccessorsOf<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   Flattened extends ReadonlyRecord<string, any> = FlattenedValueTypesOf<T>,
 > = {
-  [K in keyof Flattened]: Accessor<Flattened[K]>
+  readonly [K in keyof Flattened]?: Accessor<Flattened[K]>
 }

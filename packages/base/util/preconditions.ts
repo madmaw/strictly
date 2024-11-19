@@ -11,7 +11,7 @@ class PreconditionFailedError extends Error {
 }
 
 export function checkExists<T>(
-  t: T | null | undefined,
+  t: T,
   message: string,
   ...args: readonly FormatArg[]
 ): NonNullable<T> {

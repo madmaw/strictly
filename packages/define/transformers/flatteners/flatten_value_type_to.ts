@@ -65,12 +65,13 @@ function internalFlattenValue<M>(
   r: Record<string, M>,
 ) {
   r[valuePath] = mapper(typeDef, v, setter, typePath, valuePath)
-  return internalFlattenValueChildren(valuePath, typePath, typeDef, v, mapper, r)
+  return internalFlattenValueChildren(valuePath, typePath, '', typeDef, v, mapper, r)
 }
 
 function internalFlattenValueChildren<M>(
   valuePath: string,
   typePath: string,
+  qualifier: string,
   typeDef: StrictTypeDef,
   v: AnyValueType,
   mapper: Mapper<M>,
@@ -85,9 +86,9 @@ function internalFlattenValueChildren<M>(
     case TypeDefType.Map:
       return internalFlattenMapChildren(valuePath, typePath, typeDef, v, mapper, r)
     case TypeDefType.Structured:
-      return internalFlattenStructChildren(valuePath, typePath, typeDef, v, mapper, r)
+      return internalFlattenStructChildren(valuePath, typePath, qualifier, typeDef, v, mapper, r)
     case TypeDefType.Union:
-      return internalFlattenUnionChildren(valuePath, typePath, typeDef, v, mapper, r)
+      return internalFlattenUnionChildren(valuePath, typePath, qualifier, typeDef, v, mapper, r)
     default:
       throw new UnreachableError(typeDef)
   }
@@ -148,6 +149,7 @@ function internalFlattenMapChildren<M>(
 function internalFlattenStructChildren<M>(
   valuePath: string,
   typePath: string,
+  qualifier: string,
   { fields }: StrictStructuredTypeDef,
   v: Record<string, AnyValueType>,
   mapper: Mapper<M>,
@@ -158,8 +160,8 @@ function internalFlattenStructChildren<M>(
     function (r, k, fieldTypeDef) {
       const fieldValue = v[k]
       return internalFlattenValue(
-        jsonPath(valuePath, k),
-        jsonPath(typePath, k),
+        jsonPath(valuePath, k, qualifier),
+        jsonPath(typePath, k, qualifier),
         fieldTypeDef,
         fieldValue,
         (value: AnyValueType) => {
@@ -176,6 +178,7 @@ function internalFlattenStructChildren<M>(
 function internalFlattenUnionChildren<M>(
   valuePath: string,
   typePath: string,
+  qualifier: string,
   {
     unions,
     discriminator,
@@ -194,7 +197,7 @@ function internalFlattenUnionChildren<M>(
           && typeDef.valuePrototype != null
           && typeDef.valuePrototype.indexOf(v) >= 0
         ) {
-          internalFlattenValueChildren(valuePath, typePath, typeDef, v, mapper, r)
+          internalFlattenValueChildren(valuePath, typePath, qualifier, typeDef, v, mapper, r)
           return true
         }
         return false
@@ -213,6 +216,7 @@ function internalFlattenUnionChildren<M>(
       internalFlattenValueChildren(
         valuePath,
         typePath,
+        qualifier,
         complexUnion,
         v,
         mapper,
@@ -225,6 +229,7 @@ function internalFlattenUnionChildren<M>(
     return internalFlattenValueChildren(
       valuePath,
       typePath,
+      `${qualifier}${discriminatorValue}:`,
       unions[discriminatorValue],
       v,
       mapper,

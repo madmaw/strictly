@@ -296,7 +296,7 @@ describe('flattenValueTypeTo', function () {
         it('equals expected type', function () {
           expect(flattened).toEqual({
             $: '{"d":"1","a":2}',
-            ['$.a']: '2',
+            ['$.1:a']: '2',
           })
         })
       })
@@ -324,9 +324,7 @@ describe('flattenValueTypeTo', function () {
         })
 
         it('sets an internal value', function () {
-          // need to cast to any as TS cannot guarantee that '$.a' is present
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/consistent-type-assertions
-          ;(flattened as any)['$.a'](1)
+          flattened['$.1:a'](1)
 
           expect(u).toEqual({
             d: '1',

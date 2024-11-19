@@ -3,7 +3,6 @@ import {
   reduce,
   UnreachableError,
 } from '@de/base'
-import { literal } from 'types/builders'
 import {
   TypeDefType,
 } from 'types/definitions'
@@ -45,11 +44,12 @@ function internalFlattenTypeDef(
   r: Record<string, StrictTypeDef>,
 ): Record<string, StrictTypeDef> {
   r[path] = t
-  return internalFlattenTypeDefChildren(path, t, r)
+  return internalFlattenTypeDefChildren(path, '', t, r)
 }
 
 function internalFlattenTypeDefChildren(
   path: string,
+  qualifier: string,
   t: StrictTypeDef,
   r: Record<string, StrictTypeDef>,
 ): Record<string, StrictTypeDef> {
@@ -61,9 +61,9 @@ function internalFlattenTypeDefChildren(
     case TypeDefType.Map:
       return internalFlattenMapTypeDefChildren(path, t, r)
     case TypeDefType.Structured:
-      return internalFlattenStructTypeDefChildren(path, t, r)
+      return internalFlattenStructTypeDefChildren(path, qualifier, t, r)
     case TypeDefType.Union:
-      return internalFlattenUnionTypeDefChildren(path, t, r)
+      return internalFlattenUnionTypeDefChildren(path, qualifier, t, r)
     default:
       throw new UnreachableError(t)
   }
@@ -87,13 +87,18 @@ function internalFlattenMapTypeDefChildren(
 
 function internalFlattenStructTypeDefChildren(
   path: string,
+  qualifier: string,
   { fields }: StrictStructuredTypeDef,
   r: Record<string, StrictTypeDef>,
 ): Record<string, StrictTypeDef> {
   return reduce(
     fields,
     function (acc, fieldName, fieldTypeDef) {
-      return internalFlattenTypeDef(jsonPath(path, fieldName), fieldTypeDef, acc)
+      return internalFlattenTypeDef(
+        jsonPath(path, fieldName, qualifier),
+        fieldTypeDef,
+        acc,
+      )
     },
     r,
   )
@@ -101,20 +106,22 @@ function internalFlattenStructTypeDefChildren(
 
 function internalFlattenUnionTypeDefChildren(
   path: string,
+  qualifier: string,
   {
     discriminator,
     unions,
   }: StrictUnionTypeDef,
   r: Record<string, StrictTypeDef>,
 ): Record<string, StrictTypeDef> {
-  if (discriminator != null) {
-    // manufacture a typedef for discriminator
-    r[jsonPath(path, discriminator)] = literal().typeDef /*Object.keys(unions)*/
-  }
   return reduce(
     unions,
-    function (acc, _key, typeDef: StrictTypeDef) {
-      return internalFlattenTypeDefChildren(path, typeDef, acc)
+    function (acc, key, typeDef: StrictTypeDef) {
+      return internalFlattenTypeDefChildren(
+        path,
+        discriminator != null ? `${qualifier}${key}:` : qualifier,
+        typeDef,
+        acc,
+      )
     },
     r,
   )

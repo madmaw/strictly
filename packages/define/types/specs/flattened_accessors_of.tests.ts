@@ -10,7 +10,7 @@ describe('FlattenedAccessorsOf', function () {
     const builder = map<string, typeof number>(number)
     type V = FlattenedAccessorsOf<typeof builder>
 
-    let v: {
+    let v: Partial<{
       readonly $: {
         value: Record<string, number>,
         set: (v: Record<string, number>) => void,
@@ -19,7 +19,7 @@ describe('FlattenedAccessorsOf', function () {
         value: number,
         set: (v: number) => void,
       },
-    }
+    }>
     it('equals expected type', function () {
       expectTypeOf(v).toEqualTypeOf<V>()
     })

@@ -1,3 +1,4 @@
+import { expectDefinedAndReturn } from '@de/base/test'
 import { flattenAccessorsOf } from 'transformers/flatteners/flatten_accessors_of'
 import {
   boolean,
@@ -77,7 +78,7 @@ describe('flattenAccessorsOf', function () {
   })
 
   it('sets an internal value of a struct', function () {
-    flattened['$.a'].set([5])
+    expectDefinedAndReturn(flattened['$.a']).set([5])
 
     expect(value).toEqual({
       a: [5],
@@ -86,7 +87,7 @@ describe('flattenAccessorsOf', function () {
   })
 
   it('sets an internal value of an array', function () {
-    flattened['$.a[1]'].set(99)
+    expectDefinedAndReturn(flattened['$.a[1]']).set(99)
 
     expect(value).toEqual({
       a: [
@@ -106,7 +107,7 @@ describe('flattenAccessorsOf', function () {
       ],
       b: true,
     }
-    flattened.$.set(newValue)
+    expectDefinedAndReturn(flattened.$).set(newValue)
     expect(setter).toHaveBeenCalledWith(newValue)
   })
 })

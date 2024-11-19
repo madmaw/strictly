@@ -167,12 +167,15 @@ module.exports = {
           },
         ],
         '@typescript-eslint/no-floating-promises': [
-          'warn',
+          // incredibly slow rule!
+          process.env.NODE_ENV === 'production' ? 'warn' : 'off',
           {
             ignoreVoid: false,
             checkThenables: true,
           },
         ],
+        // very slow rule
+        '@typescript-eslint/no-misused-promises': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
         // seems to generate a lot of false positives and be redundant with TS settings
         '@typescript-eslint/no-unsafe-argument': 'off',
         // seems to generate a lot of false positives and be redundant with TS settings
@@ -259,7 +262,8 @@ module.exports = {
             'module.css': 'always',
           },
         ],
-        'import/no-cycle': 'warn',
+        // very slow rule
+        'import/no-cycle': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
         'import/no-extraneous-dependencies': 'warn',
         // handled better by no-relative-import-paths/no-relative-import-paths
         'import/no-relative-packages': ['off'],

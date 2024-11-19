@@ -1,16 +1,23 @@
+import { expectDefinedAndReturn } from '@de/base/test'
 import {
   boolean,
   type FlattenedJsonValueToTypePathsOf,
+  type FlattenedTypeDefsOf,
   list,
   map,
+  nullTypeDefHolder,
   number,
+  string,
   struct,
+  union,
   type ValueTypeOf,
 } from '@de/fine'
+import { NullableToBooleanConverter } from 'react/mobx/converters/nullable_to_boolean_converter'
 import { PassThroughConverter } from 'react/mobx/converters/pass_through_converter'
 import { StringToIntegerConverter } from 'react/mobx/converters/string_to_integer_converter'
 import {
   type Converter,
+  type FlattenedTypePathsToConvertersOf,
   FormModel,
   FormPresenter,
   type ValuePathsToConvertersOf,
@@ -44,6 +51,43 @@ describe('all', function () {
   beforeEach(function () {
     mockClear(stringToIntegerConverter)
     mockClear(booleanToBooleanConverter)
+  })
+
+  describe('FlattenedTypePathsToConvertersOf', function () {
+    const typeDef = struct()
+      .set('x', string)
+      .set('y', boolean)
+    type T = FlattenedTypePathsToConvertersOf<
+      string,
+      FlattenedTypeDefsOf<typeof typeDef, '*'>
+    >
+    let t: {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      readonly $?: Converter<string, Record<string, FormField>, any, { x: string, y: boolean }>,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      readonly ['$.x']?: Converter<string, Record<string, FormField>, any, string>,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      readonly ['$.y']?: Converter<string, Record<string, FormField>, any, boolean>,
+    }
+    it('equals expected type', function () {
+      expectTypeOf(t).toEqualTypeOf<T>()
+    })
+
+    it('matches representative converters', function () {
+      const converters = {
+        '$.x': stringToIntegerConverter,
+        '$.y': booleanToBooleanConverter,
+      } as const
+      expectTypeOf(converters).toMatchTypeOf<T>()
+    })
+
+    it('does not allow mismatched converters', function () {
+      const converters = {
+        '$.x': booleanToBooleanConverter,
+        '$.y': stringToIntegerConverter,
+      } as const
+      expectTypeOf(converters).not.toMatchTypeOf<T>()
+    })
   })
 
   describe('ValuePathsToConvertersOf', function () {
@@ -104,11 +148,13 @@ describe('all', function () {
 
       describe('accessors', function () {
         it('gets the expected value', function () {
-          expect(model.accessors.$.value).toEqual(value)
+          const accessor = expectDefinedAndReturn(model.accessors.$)
+          expect(accessor.value).toEqual(value)
         })
 
         it('sets a value', function () {
-          model.accessors.$.set(1)
+          const accessor = expectDefinedAndReturn(model.accessors.$)
+          accessor.set(1)
           expect(model.value).toEqual(1)
         })
       })
@@ -181,11 +227,13 @@ describe('all', function () {
             17,
           ],
         ] as const)('gets the expected values for %s', function (valuePath, value) {
-          expect(model.accessors[valuePath].value).toEqual(value)
+          const accessor = expectDefinedAndReturn(model.accessors[valuePath])
+          expect(accessor.value).toEqual(value)
         })
 
         it('sets a value', function () {
-          model.accessors['$[0]'].set(100)
+          const accessor = expectDefinedAndReturn(model.accessors['$[0]'])
+          accessor.set(100)
           expect(model.value).toEqual([
             100,
             4,
@@ -200,13 +248,17 @@ describe('all', function () {
       const converters = {
         '$.*': stringToIntegerConverter,
       } as const
+      type ValuePathsToConverters = {
+        '$.a': typeof stringToIntegerConverter,
+        '$.b': typeof stringToIntegerConverter,
+      }
       let value: ValueTypeOf<typeof typeDef>
       let model: FormModel<
         typeof typeDef,
         string,
         FlattenedJsonValueToTypePathsOf<typeof typeDef>,
         typeof converters,
-        typeof converters
+        ValuePathsToConverters
       >
       beforeEach(function () {
         value = {
@@ -218,7 +270,7 @@ describe('all', function () {
           string,
           FlattenedJsonValueToTypePathsOf<typeof typeDef>,
           typeof converters,
-          typeof converters
+          ValuePathsToConverters
         >(
           typeDef,
           value,
@@ -237,12 +289,14 @@ describe('all', function () {
             2,
           ],
         ] as const)('gets the expected value for %s', function (valuePath, value) {
-          expect(model.accessors[valuePath].value).toEqual(value)
+          const accessor = expectDefinedAndReturn(model.accessors[valuePath])
+          expect(accessor.value).toEqual(value)
         })
 
         it('sets a value', function () {
+          const accessor = expectDefinedAndReturn(model.accessors['$.b'])
           const newValue = 100
-          model.accessors['$.b'].set(newValue)
+          accessor.set(newValue)
 
           expect(value.b).toEqual(newValue)
         })
@@ -319,11 +373,13 @@ describe('all', function () {
             true,
           ],
         ] as const)('gets the expected value for %s', function (valuePath, value) {
-          expect(model.accessors[valuePath].value).toEqual(value)
+          const accessor = expectDefinedAndReturn(model.accessors[valuePath])
+          expect(accessor.value).toEqual(value)
         })
 
         it('sets a value', function () {
-          model.accessors['$.b'].set(false)
+          const accessor = expectDefinedAndReturn(model.accessors['$.b'])
+          accessor.set(false)
           expect(value.b).toEqual(false)
         })
       })
@@ -607,5 +663,50 @@ describe('all', function () {
     })
 
     // TODO map / struct/ union
+
+    describe('union', function () {
+      describe('non-discriminated', function () {
+        const typeDef = union()
+          .add('null', nullTypeDefHolder)
+          .add('0', list(number))
+        const converters = {
+          $: new NullableToBooleanConverter<string, number[]>([1]),
+          '$.*': stringToIntegerConverter,
+        } as const
+        const presenter = new FormPresenter<
+          typeof typeDef,
+          string,
+          FlattenedJsonValueToTypePathsOf<typeof typeDef>,
+          typeof converters
+        >(
+          typeDef,
+          converters,
+        )
+        let originalValue: ValueTypeOf<typeof typeDef>
+        let model: FormModel<
+          typeof typeDef,
+          string,
+          FlattenedJsonValueToTypePathsOf<typeof typeDef>,
+          typeof converters
+        >
+        beforeEach(function () {
+          originalValue = null
+          model = presenter.createModel(originalValue)
+        })
+
+        describe('setFieldValueAndValidate', function () {
+          describe('success', function () {
+            beforeEach(function () {
+              // blows up TS
+              // presenter.setFieldValueAndValidate<'$'>(model, '$', true)
+            })
+
+            it('sets the value', function () {
+              expect(model.value).toEqual([1])
+            })
+          })
+        })
+      })
+    })
   })
 })
