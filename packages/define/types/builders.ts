@@ -246,7 +246,12 @@ export function list<T extends TypeDef>(elements: TypeDefHolder<T>): ListTypeDef
   })
 }
 
-export function map<K extends MapKeyType, V extends TypeDefHolder>({ typeDef }: V) {
+export function map<
+  V extends TypeDefHolder,
+  // NOTE if we swap these generics and the caller forgets to supply the second one (so the TypeDefHolder)
+  // TSC will freeze
+  K extends MapKeyType,
+>({ typeDef }: V) {
   return new MapTypeDefBuilder<{
     readonly type: TypeDefType.Map,
     readonly keyPrototype: K,

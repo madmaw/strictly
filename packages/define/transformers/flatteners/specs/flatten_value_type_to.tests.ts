@@ -153,7 +153,7 @@ describe('flattenValueTypeTo', function () {
   })
 
   describe('map', function () {
-    const typeDef = map<'a' | 'b', typeof number>(number)
+    const typeDef = map<typeof number, 'a' | 'b'>(number)
     type F = FlattenedTypeDefsOf<typeof typeDef, null>
 
     let m: ValueTypeOf<typeof typeDef>

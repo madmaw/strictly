@@ -86,7 +86,7 @@ describe('JsonPathsOf', function () {
     })
 
     describe('mutable with exact keys', function () {
-      const builder = map<'a' | 'b', typeof string>(string)
+      const builder = map<typeof string, 'a' | 'b'>(string)
       type T = JsonPathsOf<typeof builder>
 
       let path: '$' | '$.a' | '$.b'
@@ -96,7 +96,7 @@ describe('JsonPathsOf', function () {
     })
 
     describe('mutable with numeric keys', function () {
-      const builder = map<1 | 2 | 3, typeof string>(string)
+      const builder = map<typeof string, 1 | 2 | 3>(string)
       type T = JsonPathsOf<typeof builder>
 
       let path: '$' | '$[1]' | '$[2]' | '$[3]'

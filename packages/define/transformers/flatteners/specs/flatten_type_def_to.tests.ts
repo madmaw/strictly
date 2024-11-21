@@ -62,7 +62,7 @@ describe('flattenTypeDefTo', function () {
   })
 
   describe('map', function () {
-    const typeDefHolder = map<'a' | 'b', typeof number>(number)
+    const typeDefHolder = map<typeof number, 'a' | 'b'>(number)
     beforeEach(function () {
       flattened = flattenTypeDefTo(typeDefHolder, toTypeDefType)
     })

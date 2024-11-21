@@ -75,7 +75,7 @@ describe('PartialTypeDefOf', function () {
   })
 
   describe('map', function () {
-    const builder = map<'a' | 'b', typeof number>(number)
+    const builder = map<typeof number, 'a' | 'b'>(number)
     type T = SimplifyDeep<PartialTypeDefOf<typeof builder>>
 
     let t: {

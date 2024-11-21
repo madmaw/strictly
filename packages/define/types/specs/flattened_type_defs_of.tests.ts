@@ -47,7 +47,7 @@ describe('FlattenedTypeDefsOf', function () {
   })
 
   describe('map', function () {
-    const builder = map<'a' | 'b', typeof number>(number)
+    const builder = map<typeof number, 'a' | 'b'>(number)
     type T = SimplifyDeep<FlattenedTypeDefsOf<typeof builder, '*'>>
 
     let t: {

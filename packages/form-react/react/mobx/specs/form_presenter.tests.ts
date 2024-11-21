@@ -2,7 +2,7 @@ import { expectDefinedAndReturn } from '@de/base/test'
 import {
   boolean,
   type FlattenedJsonValueToTypePathsOf,
-  type FlattenedTypeDefsOf,
+  type FlattenedValueTypesOf,
   list,
   map,
   nullTypeDefHolder,
@@ -54,39 +54,61 @@ describe('all', function () {
   })
 
   describe('FlattenedTypePathsToConvertersOf', function () {
-    const typeDef = struct()
-      .set('x', string)
-      .set('y', boolean)
-    type T = FlattenedTypePathsToConvertersOf<
-      string,
-      FlattenedTypeDefsOf<typeof typeDef, '*'>
-    >
-    let t: {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      readonly $?: Converter<string, Record<string, FormField>, any, { x: string, y: boolean }>,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      readonly ['$.x']?: Converter<string, Record<string, FormField>, any, string>,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      readonly ['$.y']?: Converter<string, Record<string, FormField>, any, boolean>,
-    }
-    it('equals expected type', function () {
-      expectTypeOf(t).toEqualTypeOf<T>()
+    describe('map', function () {
+      const typeDef = map<typeof number, 'a' | 'b'>(number)
+      type T = FlattenedTypePathsToConvertersOf<
+        string,
+        FlattenedValueTypesOf<typeof typeDef>
+      >
+      let t: {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        readonly $?: Converter<string, Record<string, FormField>, Record<'a' | 'b', number>, any>,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        readonly ['$.a']?: Converter<string, Record<string, FormField>, number, any>,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        readonly ['$.b']?: Converter<string, Record<string, FormField>, number, any>,
+      }
+
+      it('equals expected type', function () {
+        expectTypeOf(t).toEqualTypeOf<T>()
+      })
     })
 
-    it('matches representative converters', function () {
-      const converters = {
-        '$.x': stringToIntegerConverter,
-        '$.y': booleanToBooleanConverter,
-      } as const
-      expectTypeOf(converters).toMatchTypeOf<T>()
-    })
+    describe('struct', function () {
+      const typeDef = struct()
+        .set('x', string)
+        .set('y', boolean)
+      type T = FlattenedTypePathsToConvertersOf<
+        string,
+        FlattenedValueTypesOf<typeof typeDef>
+      >
+      let t: {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        readonly $?: Converter<string, Record<string, FormField>, { x: string, y: boolean }, any>,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        readonly ['$.x']?: Converter<string, Record<string, FormField>, string, any>,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        readonly ['$.y']?: Converter<string, Record<string, FormField>, boolean, any>,
+      }
+      it('equals expected type', function () {
+        expectTypeOf(t).toEqualTypeOf<T>()
+      })
 
-    it('does not allow mismatched converters', function () {
-      const converters = {
-        '$.x': booleanToBooleanConverter,
-        '$.y': stringToIntegerConverter,
-      } as const
-      expectTypeOf(converters).not.toMatchTypeOf<T>()
+      it('matches representative converters', function () {
+        const converters = {
+          '$.x': new PassThroughConverter<string, string>(),
+          '$.y': new PassThroughConverter<string, boolean>(),
+        } as const
+        expectTypeOf(converters).toMatchTypeOf<T>()
+      })
+
+      it('does not allow mismatched converters', function () {
+        const converters = {
+          '$.x': new PassThroughConverter<string, boolean>(),
+          '$.y': new PassThroughConverter<string, string>(),
+        } as const
+        expectTypeOf(converters).not.toMatchTypeOf<T>()
+      })
     })
   })
 
@@ -104,8 +126,8 @@ describe('all', function () {
       } as const
       type T = ValuePathsToConvertersOf<
         string,
-        typeof jsonPaths,
-        typeof converters
+        typeof converters,
+        typeof jsonPaths
       >
       let t: {
         readonly '$.a': typeof converters['$.x'],
@@ -128,7 +150,6 @@ describe('all', function () {
         typeof typeDef,
         string,
         FlattenedJsonValueToTypePathsOf<typeof typeDef>,
-        typeof converters,
         typeof converters
       >
       beforeEach(function () {
@@ -137,7 +158,6 @@ describe('all', function () {
           typeof typeDef,
           string,
           FlattenedJsonValueToTypePathsOf<typeof typeDef>,
-          typeof converters,
           typeof converters
         >(
           typeDef,
@@ -190,7 +210,6 @@ describe('all', function () {
         typeof typeDef,
         string,
         FlattenedJsonValueToTypePathsOf<typeof typeDef>,
-        typeof converters,
         typeof converters
       >
       beforeEach(function () {
@@ -203,7 +222,6 @@ describe('all', function () {
           typeof typeDef,
           string,
           FlattenedJsonValueToTypePathsOf<typeof typeDef>,
-          typeof converters,
           typeof converters
         >(
           typeDef,
@@ -244,21 +262,17 @@ describe('all', function () {
     })
 
     describe('map', function () {
-      const typeDef = map<'a' | 'b', typeof number>(number)
+      const typeDef = map<typeof number, 'a' | 'b'>(number)
       const converters = {
         '$.*': stringToIntegerConverter,
+        // '$.*': booleanToBooleanConverter,
       } as const
-      type ValuePathsToConverters = {
-        '$.a': typeof stringToIntegerConverter,
-        '$.b': typeof stringToIntegerConverter,
-      }
       let value: ValueTypeOf<typeof typeDef>
       let model: FormModel<
         typeof typeDef,
         string,
         FlattenedJsonValueToTypePathsOf<typeof typeDef>,
-        typeof converters,
-        ValuePathsToConverters
+        typeof converters
       >
       beforeEach(function () {
         value = {
@@ -269,8 +283,7 @@ describe('all', function () {
           typeof typeDef,
           string,
           FlattenedJsonValueToTypePathsOf<typeof typeDef>,
-          typeof converters,
-          ValuePathsToConverters
+          typeof converters
         >(
           typeDef,
           value,
@@ -341,7 +354,6 @@ describe('all', function () {
         typeof typeDef,
         string,
         FlattenedJsonValueToTypePathsOf<typeof typeDef>,
-        typeof converters,
         typeof converters
       >
       beforeEach(function () {
@@ -353,7 +365,6 @@ describe('all', function () {
           typeof typeDef,
           string,
           FlattenedJsonValueToTypePathsOf<typeof typeDef>,
-          typeof converters,
           typeof converters
         >(
           typeDef,
@@ -708,13 +719,11 @@ describe('all', function () {
         describe('setFieldValueAndValidate', function () {
           describe('success', function () {
             beforeEach(function () {
-              // blows up TS
-              // presenter.setFieldValueAndValidate<'$'>(model, '$', true)
+              presenter.setFieldValueAndValidate<'$'>(model, '$', true)
             })
 
             it('sets the value', function () {
-              // expect(model.value).toEqual([1])
-              expect(model.value).toEqual(null)
+              expect(model.value).toEqual([1])
             })
           })
         })

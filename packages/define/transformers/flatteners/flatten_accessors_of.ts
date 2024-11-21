@@ -24,12 +24,17 @@ function mapAccessor(
   }
 }
 
-export function flattenAccessorsOf<T extends TypeDefHolder>(
+export function flattenAccessorsOf<
+  T extends TypeDefHolder,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  R extends Readonly<Record<string, Accessor<any>>> = FlattenedAccessorsOf<T>,
+>(
   t: T,
   value: ValueTypeOf<T>,
   setValue: Setter<ValueTypeOf<T>>,
-): FlattenedAccessorsOf<T> {
-  return flattenValueTypeTo(
+): R {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return flattenValueTypeTo<T, Accessor<any>, R>(
     t,
     value,
     setValue,

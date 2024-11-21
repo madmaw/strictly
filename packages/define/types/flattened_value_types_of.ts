@@ -5,7 +5,8 @@ import { type ValueTypeOf } from './value_type_of'
 
 export type FlattenedValueTypesOf<
   T extends TypeDefHolder,
-  Flattened extends ReadonlyRecord<string, TypeDefHolder> = FlattenedTypeDefsOf<T, null>,
+  SegmentOverride extends string | null = null,
+  Flattened extends ReadonlyRecord<string, TypeDefHolder> = FlattenedTypeDefsOf<T, SegmentOverride>,
 > = {
   [K in keyof Flattened]: ValueTypeOf<Flattened[K], {}>
 }

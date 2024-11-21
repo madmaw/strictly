@@ -43,7 +43,7 @@ describe('ReadonlyTypeDefOf', function () {
   })
 
   describe('map', function () {
-    const builder = map<'a' | 'b', typeof number>(number)
+    const builder = map<typeof number, 'a' | 'b'>(number)
     type T = ReadonlyTypeDefOf<typeof builder>
 
     let t: {
@@ -89,7 +89,7 @@ describe('ReadonlyTypeDefOf', function () {
 
   describe('union', function () {
     const builder = union()
-      .add('1', map<'a', typeof number>(number))
+      .add('1', map<typeof number, 'a'>(number))
       .add('2', string)
     type T = ReadonlyTypeDefOf<typeof builder>
 
@@ -119,7 +119,7 @@ describe('ReadonlyTypeDefOf', function () {
   })
 
   describe('partial', function () {
-    const builder = map<'a', typeof number>(number).partial()
+    const builder = map<typeof number, 'a'>(number).partial()
     type T = ReadonlyTypeDefOf<typeof builder>
 
     let t: {
@@ -138,7 +138,7 @@ describe('ReadonlyTypeDefOf', function () {
   })
 
   describe('readonly', function () {
-    const builder = map<'a', typeof number>(number).readonly()
+    const builder = map<typeof number, 'a'>(number).readonly()
     type T = ReadonlyTypeDefOf<typeof builder>
 
     let t: {

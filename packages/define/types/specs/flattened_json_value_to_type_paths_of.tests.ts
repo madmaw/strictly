@@ -43,7 +43,7 @@ describe('FlattenedJsonPathsOf', function () {
 
   describe('map', function () {
     const l = list(number)
-    const builder = map<'a' | 'b', typeof l>(l)
+    const builder = map<typeof l, 'a' | 'b'>(l)
     type T = SimplifyDeep<FlattenedJsonValueToTypePathsOf<typeof builder>>
 
     let t: {

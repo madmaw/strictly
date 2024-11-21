@@ -39,7 +39,7 @@ describe('flattenJsonValueToTypePathsOf', function () {
   })
 
   describe('map', function () {
-    const typeDef = map<'a' | 'b', typeof number>(number)
+    const typeDef = map<typeof number, 'a' | 'b'>(number)
     const flattened = flattenJsonValueToTypePathsOf(typeDef, {
       a: 1,
       b: 3,

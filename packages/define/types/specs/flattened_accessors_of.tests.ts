@@ -7,19 +7,19 @@ import { type FlattenedAccessorsOf } from 'types/flattened_accessors_of'
 describe('FlattenedAccessorsOf', function () {
   // note we only test a small example since most of the work is done in flatten
   describe('map', function () {
-    const builder = map<string, typeof number>(number)
+    const builder = map<typeof number, string>(number)
     type V = FlattenedAccessorsOf<typeof builder>
 
-    let v: Partial<{
+    let v: {
       readonly $: {
-        value: Record<string, number>,
+        readonly value: Record<string, number>,
         set: (v: Record<string, number>) => void,
       },
       readonly [_: `$.${string}`]: {
-        value: number,
+        readonly value: number,
         set: (v: number) => void,
       },
-    }>
+    }
     it('equals expected type', function () {
       expectTypeOf(v).toEqualTypeOf<V>()
     })
