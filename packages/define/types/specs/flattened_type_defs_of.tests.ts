@@ -112,7 +112,7 @@ describe('union', function () {
     describe('non-discriminated', function () {
       const builder = union()
         .add('x', struct().set('a', boolean))
-        .add('y', struct().set('a', number))
+        .add('y', struct().set('b', number))
       type T = SimplifyDeep<FlattenedTypeDefsOf<typeof builder, null>>
 
       let t:
@@ -127,19 +127,20 @@ describe('union', function () {
         }
         | {
           readonly $: SimplifyDeep<typeof builder.narrow>,
-          readonly ['$.a']: {
+          readonly ['$.b']: {
             readonly typeDef: {
               readonly type: TypeDefType.Literal,
               readonly valuePrototype: [number],
             },
           },
         }
+
       it('equals expected type', function () {
         expectTypeOf(t).toEqualTypeOf<T>()
       })
     })
 
-    describe('discriminator', function () {
+    describe('discriminated', function () {
       const builder = union('x')
         .add('1', struct().set('a', boolean))
         .add('2', struct().set('a', number))
@@ -165,7 +166,7 @@ describe('union', function () {
       })
     })
 
-    describe('nested discriminator', function () {
+    describe('nested discriminated', function () {
       const builder = union('x')
         .add(
           '1',

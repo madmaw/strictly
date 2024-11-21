@@ -106,6 +106,7 @@ describe('FlattenedJsonPathsOf', function () {
         readonly $: '$',
         readonly [_: `$[${number}]`]: '$.*',
       }
+
       it('equals expected type', function () {
         expectTypeOf(t).toEqualTypeOf<T>()
       })
