@@ -6,9 +6,9 @@ import {
 } from '@testing-library/react'
 import { useFormInput } from 'react/hooks'
 import {
-  type FormField,
   type FormProps,
 } from 'react/props'
+import { type FormField } from 'types/form_field'
 import {
   type Mock,
   vitest,

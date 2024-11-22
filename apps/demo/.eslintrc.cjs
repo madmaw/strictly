@@ -13,6 +13,13 @@ module.exports = {
     ecmaVersion: '2015',
   },
   rules: {
+    'no-relative-import-paths/no-relative-import-paths': [
+      'warn',
+      {
+        allowSameFolder: true,
+        rootDir: './src',
+      },
+    ],
     'import/no-extraneous-dependencies': [
       'warn',
       {

@@ -9,9 +9,9 @@ import {
   Stack,
   TextInput,
 } from '@mantine/core'
-import { type PetFields } from './types'
+import { type PetFormFields } from './types'
 
-type PetFormProps = FormProps<PetFields> & {
+export type PetFormProps = FormProps<PetFormFields> & {
   onSubmit: () => void,
 }
 

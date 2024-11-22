@@ -3,15 +3,16 @@ import {
   type ChangeEvent,
   useCallback,
 } from 'react'
+import { type FormField } from 'types/form_field'
 import {
-  type FormField,
   type FormProps,
 } from './props'
 
 export function useFormInput<
-  Fields extends ReadonlyRecord<string, FormField<string, string>>,
+  K extends string,
+  Fields extends ReadonlyRecord<K, FormField<string, string>>,
 >(
-  k: keyof Fields,
+  k: K,
   {
     onFieldValueChange,
     onFieldBlur,
@@ -26,13 +27,13 @@ export function useFormInput<
     onFieldValueChange,
   ])
   const onFocus = useCallback(function () {
-    onFieldFocus(k)
+    onFieldFocus?.(k)
   }, [
     k,
     onFieldFocus,
   ])
   const onBlur = useCallback(function () {
-    onFieldBlur(k)
+    onFieldBlur?.(k)
   }, [
     k,
     onFieldBlur,
@@ -54,9 +55,10 @@ export function useFormInput<
 }
 
 export function useFormCheckBox<
-  Fields extends ReadonlyRecord<string, FormField<boolean, string>>,
+  K extends string,
+  Fields extends ReadonlyRecord<K, FormField<string, boolean>>,
 >(
-  k: keyof Fields,
+  k: K,
   {
     onFieldValueChange,
     onFieldBlur,
@@ -71,13 +73,13 @@ export function useFormCheckBox<
     onFieldValueChange,
   ])
   const onFocus = useCallback(function () {
-    onFieldFocus(k)
+    onFieldFocus?.(k)
   }, [
     k,
     onFieldFocus,
   ])
   const onBlur = useCallback(function () {
-    onFieldBlur(k)
+    onFieldBlur?.(k)
   }, [
     k,
     onFieldBlur,

@@ -22,7 +22,7 @@ import {
   FormPresenter,
   type ValuePathsToConvertersOf,
 } from 'react/mobx/form_presenter'
-import { type FormField } from 'react/props'
+import { type FormField } from 'types/form_field'
 import { type Mocked } from 'vitest'
 import {
   mock,
@@ -311,7 +311,7 @@ describe('all', function () {
           const newValue = 100
           accessor.set(newValue)
 
-          expect(value.b).toEqual(newValue)
+          expect(model.value.b).toEqual(newValue)
         })
       })
 
@@ -391,7 +391,7 @@ describe('all', function () {
         it('sets a value', function () {
           const accessor = expectDefinedAndReturn(model.accessors['$.b'])
           accessor.set(false)
-          expect(value.b).toEqual(false)
+          expect(model.value.b).toEqual(false)
         })
       })
 

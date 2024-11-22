@@ -1,25 +1,25 @@
 import { usePartialObserverComponent } from '@de/form-react/util/partial'
-import {
-  useCallback,
-  useMemo,
-} from 'react'
-import { PetForm } from './pet_form'
-import {
-  PetFormModel,
-  PetFormPresenter,
-} from './pet_form_presenter'
+import { PetForm } from 'features/form/pet/pet_form'
 import {
   type FlattenedPetValueTypes,
   type PetTypePaths,
   type PetValuePaths,
-} from './types'
+} from 'features/form/pet/types'
+import {
+  useCallback,
+  useMemo,
+} from 'react'
+import {
+  ManualPetFormModel,
+  ManualPetFormPresenter,
+} from './manual_pet_form_presenter'
 
 export function install() {
-  const presenter = new PetFormPresenter()
+  const presenter = new ManualPetFormPresenter()
 
   return function () {
     const model = useMemo(function () {
-      return new PetFormModel({
+      return new ManualPetFormModel({
         name: '',
         alive: true,
       })
@@ -42,32 +42,16 @@ export function install() {
       [model],
     )
 
-    const onFieldBlur = useCallback(
-      function () {
-      },
-      [],
-    )
-
-    const onFieldFocus = useCallback(
-      function () {
-      },
-      [],
-    )
-
     const Form = usePartialObserverComponent(
       function () {
         return {
           fields: model.fields,
-          onFieldBlur,
-          onFieldFocus,
           onFieldValueChange,
           onSubmit,
         }
       },
       [
         model,
-        onFieldBlur,
-        onFieldFocus,
         onFieldValueChange,
         onSubmit,
       ],

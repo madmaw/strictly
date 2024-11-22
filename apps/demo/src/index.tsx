@@ -5,7 +5,7 @@ import {
   createTheme,
   MantineProvider,
 } from '@mantine/core'
-import { install } from 'features/form/pet/install'
+import { install as installAssisted } from 'features/form/pet/assisted/install'
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 
@@ -20,7 +20,7 @@ window.onload = function () {
     /** Put your mantine theme override here */
   })
 
-  const App = install()
+  const App = installAssisted()
   createRoot(e).render(
     (
       <StrictMode>

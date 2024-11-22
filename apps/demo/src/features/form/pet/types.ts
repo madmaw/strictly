@@ -2,7 +2,6 @@ import {
   boolean,
   type FlattenedAccessorsOf,
   type FlattenedJsonValueToTypePathsOf,
-  type FlattenedTypeDefsOf,
   type FlattenedValueTypesOf,
   type ReadonlyTypeDefOf,
   string,
@@ -10,7 +9,7 @@ import {
   type ValueTypeOf,
 } from '@de/fine'
 import { type JsonPathsOf } from '@de/fine/types/json_paths_of'
-import { type FlattenedFormFieldsOf } from '@de/form-react'
+import { type FormField } from '@de/form-react'
 
 export const petTypeDef = struct()
   .set('name', string)
@@ -22,7 +21,10 @@ export type Pet = ValueTypeOf<ReadonlyTypeDefOf<typeof petTypeDef>>
 export type PetValuePaths = JsonPathsOf<typeof petTypeDef>
 export type PetTypePaths = JsonPathsOf<typeof petTypeDef, '*'>
 export type FlattenedPetJsonValueToTypePaths = FlattenedJsonValueToTypePathsOf<typeof petTypeDef>
-type FlattenedPetTypeDefs = FlattenedTypeDefsOf<typeof petTypeDef, '*'>
-export type FlattenedPetValueTypes = FlattenedValueTypesOf<FlattenedPetTypeDefs>
-export type FlattenedPetAccessors = FlattenedAccessorsOf<FlattenedPetValueTypes>
-export type PetFields = FlattenedFormFieldsOf<FlattenedPetTypeDefs, string>
+export type FlattenedPetValueTypes = FlattenedValueTypesOf<typeof petTypeDef>
+export type FlattenedPetAccessors = FlattenedAccessorsOf<typeof petTypeDef>
+
+export type PetFormFields = {
+  '$.name': FormField<string, string>,
+  '$.alive': FormField<string, boolean>,
+}

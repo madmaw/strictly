@@ -9,16 +9,23 @@ import {
   flattenAccessorsOf,
   type FlattenedValueTypesOf,
   flattenJsonValueToTypePathsOf,
+  type MobxValueTypeOf,
   type TypeDefHolder,
   type ValueTypeOf,
 } from '@de/fine'
+import { mobxCopy } from '@de/fine/transformers/copies/mobx_copy'
 import {
   type AnyValueType,
   flattenValueTypeTo,
 } from '@de/fine/transformers/flatteners/flatten_value_type_to'
 import { type StrictTypeDef } from '@de/fine/types/strict_definitions'
-import { runInAction } from 'mobx'
-import { type FormField } from 'react/props'
+import {
+  computed,
+  observable,
+  runInAction,
+} from 'mobx'
+import { type SimplifyDeep } from 'type-fest'
+import { type FormField } from 'types/form_field'
 
 export enum ConversionResult {
   Success = 0,
@@ -52,7 +59,7 @@ type FlattenedConvertedFieldsOf<
   E,
   ValuePathsToConverters extends ReadonlyRecord<string, Converter<E>>,
 > = {
-  [K in keyof ValuePathsToConverters]: FormField<ReturnType<ValuePathsToConverters[K]['revert']>, E>
+  [K in keyof ValuePathsToConverters]: FormField<E, ReturnType<ValuePathsToConverters[K]['revert']>>
 }
 
 export type FlattenedTypePathsToConvertersOf<
@@ -242,30 +249,35 @@ export class FormModel<
   ValuePathsToConverters extends ValuePathsToConvertersOf<E, TypePathsToConverters, JsonPaths> =
     ValuePathsToConvertersOf<E, TypePathsToConverters, JsonPaths>,
 > {
-  value: ValueTypeOf<T>
-  fieldOverrides: FlattenedFieldOverrides<E, ValuePathsToConverters> = {}
+  @observable.ref
+  accessor value: MobxValueTypeOf<T>
+  @observable.shallow
+  accessor fieldOverrides: FlattenedFieldOverrides<E, ValuePathsToConverters> = {}
 
   constructor(
     private readonly typeDef: T,
     value: ValueTypeOf<T>,
     private readonly converters: TypePathsToConverters,
   ) {
-    this.value = value
+    this.value = mobxCopy(typeDef, value)
   }
 
+  @computed
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   get accessors(): Readonly<Record<string, Accessor<any>>> {
+    // TODO flatten mobx accessors of actually!
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return flattenAccessorsOf<T, Readonly<Record<string, Accessor<any>>>>(
       this.typeDef,
       this.value,
       (value: ValueTypeOf<T>): void => {
-        this.value = value
+        this.value = mobxCopy(this.typeDef, value)
       },
     )
   }
 
-  get fields(): FlattenedConvertedFieldsOf<E, ValuePathsToConverters> {
+  @computed
+  get fields(): SimplifyDeep<FlattenedConvertedFieldsOf<E, ValuePathsToConverters>> {
     return flattenValueTypeTo(
       this.typeDef,
       this.value,
@@ -289,6 +301,7 @@ export class FormModel<
     )
   }
 
+  @computed
   get jsonPaths(): JsonPaths {
     return flattenJsonValueToTypePathsOf<T, JsonPaths>(
       this.typeDef,
