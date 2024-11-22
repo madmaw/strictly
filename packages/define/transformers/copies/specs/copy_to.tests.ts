@@ -1,7 +1,7 @@
 import {
   type AnyValueType,
-  copy,
-} from 'transformers/copies/copy'
+  copyTo,
+} from 'transformers/copies/copy_to'
 import {
   boolean,
   list,
@@ -15,7 +15,7 @@ import {
 import { TypeDefType } from 'types/definitions'
 import { type StrictTypeDef } from 'types/strict_definitions'
 
-describe('copy', function () {
+describe('copyTo', function () {
   function toString(v: AnyValueType, t: StrictTypeDef) {
     if (t.type === TypeDefType.Literal) {
       return JSON.stringify(v)
@@ -27,7 +27,7 @@ describe('copy', function () {
   describe('literal', function () {
     const typeDef = literal<1>()
     it('copies', function () {
-      const c = copy(typeDef, 1, toString)
+      const c = copyTo(typeDef, 1, toString)
       expect(c).toEqual('1')
     })
   })
@@ -35,7 +35,7 @@ describe('copy', function () {
   describe('list', function () {
     const typeDef = list(literal<number>())
     it('copies', function () {
-      const c = copy(
+      const c = copyTo(
         typeDef,
         [
           1,
@@ -55,7 +55,7 @@ describe('copy', function () {
   describe('map', function () {
     const typeDef = map<typeof number, 'a' | 'b'>(number)
     it('copies', function () {
-      const c = copy(
+      const c = copyTo(
         typeDef,
         {
           a: 1,
@@ -76,7 +76,7 @@ describe('copy', function () {
       .set('b', boolean)
       .set('c', string)
     it('copies', function () {
-      const c = copy(
+      const c = copyTo(
         typeDef,
         {
           a: 1,
@@ -100,7 +100,7 @@ describe('copy', function () {
         .add('1', literal(['b']))
         .add('2', literal([false]))
       it('copies string literal', function () {
-        const c = copy(
+        const c = copyTo(
           typeDef,
           'b',
           toString,
@@ -109,7 +109,7 @@ describe('copy', function () {
       })
 
       it('copies boolean literal', function () {
-        const c = copy(
+        const c = copyTo(
           typeDef,
           false,
           toString,

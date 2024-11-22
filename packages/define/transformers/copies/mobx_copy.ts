@@ -20,8 +20,8 @@ import {
 import { type ValueTypeOf } from 'types/value_type_of'
 import {
   type AnyValueType,
-  copy,
-} from './copy'
+  copyTo,
+} from './copy_to'
 
 function observeValue(
   v: AnyValueType,
@@ -38,7 +38,7 @@ function observeValue(
       // eslint-disable-next-line @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-explicit-any
       return observable.array(v as any[], { deep: false }) as any
     case TypeDefType.Map:
-      // make observable observes all fields
+      // observable observes all fields
       return observable(
         v,
         {},
@@ -93,5 +93,5 @@ export function mobxCopy<T extends StrictTypeDefHolder>(
   t: T,
   proto: ValueTypeOf<ReadonlyTypeDefOf<T>>,
 ): MobxValueTypeOf<T> {
-  return copy(t, proto, observeValue)
+  return copyTo(t, proto, observeValue)
 }

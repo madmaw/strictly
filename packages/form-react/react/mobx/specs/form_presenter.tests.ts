@@ -12,16 +12,16 @@ import {
   union,
   type ValueTypeOf,
 } from '@de/fine'
-import { NullableToBooleanConverter } from 'react/mobx/converters/nullable_to_boolean_converter'
-import { PassThroughConverter } from 'react/mobx/converters/pass_through_converter'
-import { StringToIntegerConverter } from 'react/mobx/converters/string_to_integer_converter'
+import { NullableToBooleanConverter } from 'converters/nullable_to_boolean_converter'
+import { PassThroughConverter } from 'converters/pass_through_converter'
+import { StringToIntegerConverter } from 'converters/string_to_integer_converter'
 import {
-  type Converter,
   type FlattenedTypePathsToConvertersOf,
   FormModel,
   FormPresenter,
   type ValuePathsToConvertersOf,
 } from 'react/mobx/form_presenter'
+import { type Converter } from 'types/converter'
 import { type FormField } from 'types/form_field'
 import { type Mocked } from 'vitest'
 import {
@@ -29,15 +29,16 @@ import {
   mockClear,
 } from 'vitest-mock-extended'
 
-const IS_NAN_ERROR = 'isNan'
+const IS_NAN_ERROR = 1
 
 function createMockedConverter<
+  E,
   To,
   From,
->(impl: Converter<string, Record<string, FormField>, To, From>): Mocked<
-  Converter<string, Record<string, FormField>, To, From>
+>(impl: Converter<E, Record<string, FormField>, To, From>): Mocked<
+  Converter<E, Record<string, FormField>, To, From>
 > {
-  const mockedConverter = mock<Converter<string, Record<string, FormField>, To, From>>()
+  const mockedConverter = mock<Converter<E, Record<string, FormField>, To, From>>()
   // TODO surely there's a better way of providing fallbacks?
   mockedConverter.convert.mockImplementation(impl.convert.bind(impl))
   mockedConverter.revert.mockImplementation(impl.revert.bind(impl))
@@ -46,7 +47,9 @@ function createMockedConverter<
 
 describe('all', function () {
   const stringToIntegerConverter = createMockedConverter(new StringToIntegerConverter(IS_NAN_ERROR))
-  const booleanToBooleanConverter = createMockedConverter(new PassThroughConverter<string, boolean>())
+  const booleanToBooleanConverter = createMockedConverter(
+    new PassThroughConverter<string, Record<string, FormField>, boolean>(),
+  )
 
   beforeEach(function () {
     mockClear(stringToIntegerConverter)
@@ -57,16 +60,15 @@ describe('all', function () {
     describe('map', function () {
       const typeDef = map<typeof number, 'a' | 'b'>(number)
       type T = FlattenedTypePathsToConvertersOf<
-        string,
         FlattenedValueTypesOf<typeof typeDef>
       >
       let t: {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        readonly $?: Converter<string, Record<string, FormField>, Record<'a' | 'b', number>, any>,
+        readonly $?: Converter<any, Record<string, FormField>, Record<'a' | 'b', number>, any>,
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        readonly ['$.a']?: Converter<string, Record<string, FormField>, number, any>,
+        readonly ['$.a']?: Converter<any, Record<string, FormField>, number, any>,
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        readonly ['$.b']?: Converter<string, Record<string, FormField>, number, any>,
+        readonly ['$.b']?: Converter<any, Record<string, FormField>, number, any>,
       }
 
       it('equals expected type', function () {
@@ -79,16 +81,15 @@ describe('all', function () {
         .set('x', string)
         .set('y', boolean)
       type T = FlattenedTypePathsToConvertersOf<
-        string,
         FlattenedValueTypesOf<typeof typeDef>
       >
       let t: {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        readonly $?: Converter<string, Record<string, FormField>, { x: string, y: boolean }, any>,
+        readonly $?: Converter<any, Record<string, FormField>, { x: string, y: boolean }, any>,
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        readonly ['$.x']?: Converter<string, Record<string, FormField>, string, any>,
+        readonly ['$.x']?: Converter<any, Record<string, FormField>, string, any>,
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        readonly ['$.y']?: Converter<string, Record<string, FormField>, boolean, any>,
+        readonly ['$.y']?: Converter<any, Record<string, FormField>, boolean, any>,
       }
       it('equals expected type', function () {
         expectTypeOf(t).toEqualTypeOf<T>()
@@ -96,16 +97,16 @@ describe('all', function () {
 
       it('matches representative converters', function () {
         const converters = {
-          '$.x': new PassThroughConverter<string, string>(),
-          '$.y': new PassThroughConverter<string, boolean>(),
+          '$.x': new PassThroughConverter<string, Record<string, FormField>, string>(),
+          '$.y': new PassThroughConverter<string, Record<string, FormField>, boolean>(),
         } as const
         expectTypeOf(converters).toMatchTypeOf<T>()
       })
 
       it('does not allow mismatched converters', function () {
         const converters = {
-          '$.x': new PassThroughConverter<string, boolean>(),
-          '$.y': new PassThroughConverter<string, string>(),
+          '$.x': new PassThroughConverter<string, Record<string, FormField>, boolean>(),
+          '$.y': new PassThroughConverter<string, Record<string, FormField>, string>(),
         } as const
         expectTypeOf(converters).not.toMatchTypeOf<T>()
       })
@@ -125,7 +126,6 @@ describe('all', function () {
         '$.c': '$.z',
       } as const
       type T = ValuePathsToConvertersOf<
-        string,
         typeof converters,
         typeof jsonPaths
       >
@@ -148,7 +148,6 @@ describe('all', function () {
       let value: ValueTypeOf<typeof typeDef>
       let model: FormModel<
         typeof typeDef,
-        string,
         FlattenedJsonValueToTypePathsOf<typeof typeDef>,
         typeof converters
       >
@@ -156,7 +155,6 @@ describe('all', function () {
         value = 5
         model = new FormModel<
           typeof typeDef,
-          string,
           FlattenedJsonValueToTypePathsOf<typeof typeDef>,
           typeof converters
         >(
@@ -203,12 +201,11 @@ describe('all', function () {
     describe('list', function () {
       const typeDef = list(number)
       const converters = {
-        '$.*': new StringToIntegerConverter<string>(IS_NAN_ERROR),
+        '$.*': new StringToIntegerConverter(IS_NAN_ERROR),
       } as const
       let value: ValueTypeOf<typeof typeDef>
       let model: FormModel<
         typeof typeDef,
-        string,
         FlattenedJsonValueToTypePathsOf<typeof typeDef>,
         typeof converters
       >
@@ -220,7 +217,6 @@ describe('all', function () {
         ]
         model = new FormModel<
           typeof typeDef,
-          string,
           FlattenedJsonValueToTypePathsOf<typeof typeDef>,
           typeof converters
         >(
@@ -270,7 +266,6 @@ describe('all', function () {
       let value: ValueTypeOf<typeof typeDef>
       let model: FormModel<
         typeof typeDef,
-        string,
         FlattenedJsonValueToTypePathsOf<typeof typeDef>,
         typeof converters
       >
@@ -281,7 +276,6 @@ describe('all', function () {
         }
         model = new FormModel<
           typeof typeDef,
-          string,
           FlattenedJsonValueToTypePathsOf<typeof typeDef>,
           typeof converters
         >(
@@ -352,7 +346,6 @@ describe('all', function () {
       let value: ValueTypeOf<typeof typeDef>
       let model: FormModel<
         typeof typeDef,
-        string,
         FlattenedJsonValueToTypePathsOf<typeof typeDef>,
         typeof converters
       >
@@ -363,7 +356,6 @@ describe('all', function () {
         }
         model = new FormModel<
           typeof typeDef,
-          string,
           FlattenedJsonValueToTypePathsOf<typeof typeDef>,
           typeof converters
         >(
@@ -432,7 +424,6 @@ describe('all', function () {
       } as const
       const presenter = new FormPresenter<
         typeof typeDef,
-        string,
         FlattenedJsonValueToTypePathsOf<typeof typeDef>,
         typeof converters
       >(
@@ -442,7 +433,6 @@ describe('all', function () {
       let originalValue: ValueTypeOf<typeof typeDef>
       let model: FormModel<
         typeof typeDef,
-        string,
         FlattenedJsonValueToTypePathsOf<typeof typeDef>,
         typeof converters
       >
@@ -523,7 +513,6 @@ describe('all', function () {
       } as const
       const presenter = new FormPresenter<
         typeof typeDef,
-        string,
         FlattenedJsonValueToTypePathsOf<typeof typeDef>,
         typeof converters
       >(
@@ -533,7 +522,6 @@ describe('all', function () {
       let originalValue: ValueTypeOf<typeof typeDef>
       let model: FormModel<
         typeof typeDef,
-        string,
         FlattenedJsonValueToTypePathsOf<typeof typeDef>,
         typeof converters
       >
@@ -677,16 +665,16 @@ describe('all', function () {
 
     describe('union', function () {
       describe('non-discriminated', function () {
+        const listOfNumbersTypeDef = list(number)
         const typeDef = union()
           .add('null', nullTypeDefHolder)
-          .add('0', list(number))
+          .add('0', listOfNumbersTypeDef)
         const converters = {
-          $: new NullableToBooleanConverter<string, number[]>([1]),
+          $: new NullableToBooleanConverter<string, typeof typeDef>(typeDef, [1]),
           '$.*': stringToIntegerConverter,
         } as const
         const presenter = new FormPresenter<
           typeof typeDef,
-          string,
           FlattenedJsonValueToTypePathsOf<typeof typeDef>,
           typeof converters
         >(
@@ -696,7 +684,6 @@ describe('all', function () {
         let originalValue: ValueTypeOf<typeof typeDef>
         let model: FormModel<
           typeof typeDef,
-          string,
           FlattenedJsonValueToTypePathsOf<typeof typeDef>,
           typeof converters
         >
