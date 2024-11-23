@@ -115,25 +115,21 @@ describe('union', function () {
         .add('y', struct().set('b', number))
       type T = SimplifyDeep<FlattenedTypeDefsOf<typeof builder, null>>
 
-      let t:
-        | {
-          readonly $: SimplifyDeep<typeof builder.narrow>,
-          readonly ['$.a']: {
-            readonly typeDef: {
-              readonly type: TypeDefType.Literal,
-              readonly valuePrototype: [boolean],
-            },
+      let t: {
+        readonly $: SimplifyDeep<typeof builder.narrow>,
+        readonly ['$.a']: {
+          readonly typeDef: {
+            readonly type: TypeDefType.Literal,
+            readonly valuePrototype: [boolean],
           },
-        }
-        | {
-          readonly $: SimplifyDeep<typeof builder.narrow>,
-          readonly ['$.b']: {
-            readonly typeDef: {
-              readonly type: TypeDefType.Literal,
-              readonly valuePrototype: [number],
-            },
+        },
+        readonly ['$.b']: {
+          readonly typeDef: {
+            readonly type: TypeDefType.Literal,
+            readonly valuePrototype: [number],
           },
-        }
+        },
+      }
 
       it('equals expected type', function () {
         expectTypeOf(t).toEqualTypeOf<T>()

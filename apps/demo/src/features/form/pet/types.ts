@@ -9,7 +9,10 @@ import {
   type ValueTypeOf,
 } from '@de/fine'
 import { type JsonPathsOf } from '@de/fine/types/json_paths_of'
-import { type FormField } from '@de/form-react'
+import {
+  type FlattenedFormFieldsOf,
+  type FormField,
+} from '@de/form-react'
 
 export const petTypeDef = struct()
   .set('name', string)
@@ -24,9 +27,12 @@ export type FlattenedPetJsonValueToTypePaths = FlattenedJsonValueToTypePathsOf<t
 export type FlattenedPetValueTypes = FlattenedValueTypesOf<typeof petTypeDef>
 export type FlattenedPetAccessors = FlattenedAccessorsOf<typeof petTypeDef>
 
-export type PetFormFields = {
-  '$.name': FormField<string, string>,
-  '$.alive': FormField<string, boolean>,
-}
+export type PetFormFields = FlattenedFormFieldsOf<
+  FlattenedJsonValueToTypePathsOf<typeof petTypeDef>,
+  {
+    '$.name': FormField<string, string>,
+    '$.alive': FormField<string, boolean>,
+  }
+>
 
 export const NAME_TOO_SHORT_ERROR = 'name too short'

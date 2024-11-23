@@ -109,7 +109,7 @@ type InternalFlattenedTypeDefsOfUnionChildren<
   Path extends string,
   Qualifier extends string,
   Depth extends number,
-> = T extends UnionTypeDef<infer D, infer Unions> ? keyof Unions extends string ? D extends null ? {
+> = T extends UnionTypeDef<infer D, infer Unions> ? keyof Unions extends string ? D extends null ? UnionToIntersection<{
         readonly [K in keyof Unions]: InternalFlattenedTypeDefsOfChildren<
           Unions[K],
           SegmentOverride,
@@ -117,7 +117,7 @@ type InternalFlattenedTypeDefsOfUnionChildren<
           '',
           Depth
         >
-      }[keyof Unions]
+      }[keyof Unions]>
     : UnionToIntersection<{
       readonly [K in keyof Unions]: InternalFlattenedTypeDefsOfChildren<
         Unions[K],

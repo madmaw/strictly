@@ -24,7 +24,10 @@ import {
   observable,
   runInAction,
 } from 'mobx'
-import { type SimplifyDeep } from 'type-fest'
+import {
+  type SimplifyDeep,
+  type ValueOf,
+} from 'type-fest'
 import {
   ConversionResult,
   type Converter,
@@ -70,11 +73,12 @@ type FlattenedFieldOverrides<
 export type ValuePathsToConvertersOf<
   TypePathsToConverters extends Partial<Readonly<Record<string, Converter>>>,
   JsonPaths extends Readonly<Record<string, string>>,
-> = {
-  readonly [
-    K in keyof JsonPaths as unknown extends TypePathsToConverters[JsonPaths[K]] ? never : K
-  ]: NonNullable<TypePathsToConverters[JsonPaths[K]]>
-}
+> = keyof TypePathsToConverters extends ValueOf<JsonPaths> ? {
+    readonly [
+      K in keyof JsonPaths as unknown extends TypePathsToConverters[JsonPaths[K]] ? never : K
+    ]: NonNullable<TypePathsToConverters[JsonPaths[K]]>
+  }
+  : never
 
 export class FormPresenter<
   T extends TypeDefHolder,

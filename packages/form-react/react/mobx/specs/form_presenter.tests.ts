@@ -661,7 +661,7 @@ describe('all', function () {
       })
     })
 
-    // TODO map / struct/ union
+    // TODO map / struct
 
     describe('union', function () {
       describe('non-discriminated', function () {
@@ -673,9 +673,10 @@ describe('all', function () {
           $: new NullableToBooleanConverter<string, typeof typeDef>(typeDef, [1]),
           '$.*': stringToIntegerConverter,
         } as const
+        type JsonPaths = FlattenedJsonValueToTypePathsOf<typeof typeDef>
         const presenter = new FormPresenter<
           typeof typeDef,
-          FlattenedJsonValueToTypePathsOf<typeof typeDef>,
+          JsonPaths,
           typeof converters
         >(
           typeDef,
@@ -684,7 +685,7 @@ describe('all', function () {
         let originalValue: ValueTypeOf<typeof typeDef>
         let model: FormModel<
           typeof typeDef,
-          FlattenedJsonValueToTypePathsOf<typeof typeDef>,
+          JsonPaths,
           typeof converters
         >
         beforeEach(function () {

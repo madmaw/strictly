@@ -1,11 +1,13 @@
-import { type UnionToIntersection } from 'type-fest'
+import {
+  type SimplifyDeep,
+  type UnionToIntersection,
+} from 'type-fest'
 import {
   type ListTypeDef,
   type LiteralTypeDef,
   type MapTypeDef,
   type StructuredTypeDef,
   type TypeDef,
-  type TypeDefHolder,
   type UnionTypeDef,
 } from './definitions'
 import {
@@ -13,18 +15,20 @@ import {
   type StartingDepth,
 } from './flattened'
 import { type JsonPathOf } from './json_path_of'
+import { type StrictTypeDefHolder } from './strict_definitions'
 
 export type FlattenedJsonValueToTypePathsOf<
-  T extends TypeDefHolder,
+  T extends StrictTypeDefHolder,
   SegmentOverride extends string = '*',
   Path extends string = '$',
-> = InternalFlattenedJsonPathsOf<
+> = SimplifyDeep<InternalFlattenedJsonPathsOf<
   T['typeDef'],
   SegmentOverride,
   Path,
   Path,
   StartingDepth
->
+>>
+
 type InternalFlattenedJsonPathsOf<
   T extends TypeDef,
   SegmentOverride extends string,
@@ -156,7 +160,7 @@ type InternalFlattenedJsonPathsOfUnionChildren<
   TypePath extends string,
   Qualifier extends string,
   Depth extends number,
-> = T extends UnionTypeDef<infer D, infer Unions> ? keyof Unions extends string ? D extends null ? {
+> = T extends UnionTypeDef<infer D, infer Unions> ? keyof Unions extends string ? D extends null ? UnionToIntersection<{
         readonly [K in keyof Unions]: InternalFlattenedJsonPathsOfChildren<
           Unions[K],
           SegmentOverride,
@@ -165,7 +169,7 @@ type InternalFlattenedJsonPathsOfUnionChildren<
           '',
           Depth
         >
-      }[keyof Unions]
+      }[keyof Unions]>
     : UnionToIntersection<{
       readonly [K in keyof Unions]: InternalFlattenedJsonPathsOfChildren<
         Unions[K],
