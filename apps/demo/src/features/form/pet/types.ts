@@ -28,3 +28,5 @@ export type PetFormFields = {
   '$.name': FormField<string, string>,
   '$.alive': FormField<string, boolean>,
 }
+
+export const NAME_TOO_SHORT_ERROR = 'name too short'

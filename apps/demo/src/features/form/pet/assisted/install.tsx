@@ -28,7 +28,7 @@ export function install() {
         path: Path,
         value: ValueTypeOfPresenterField<typeof presenter, Path>,
       ) {
-        presenter.setFieldValueAndValidate(model, path, value)
+        presenter.setFieldValue(model, path, value)
       },
       [model],
     )

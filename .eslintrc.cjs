@@ -190,6 +190,7 @@ module.exports = {
         '@typescript-eslint/no-unused-vars': 'off',
         '@typescript-eslint/prefer-readonly': 'warn',
         '@typescript-eslint/switch-exhaustiveness-check': 'warn',
+        // dprint handles this
         'array-bracket-newline': [
           'warn',
           {

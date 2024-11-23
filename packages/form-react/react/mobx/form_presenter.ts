@@ -181,36 +181,40 @@ export class FormPresenter<
   }
 
   validate(model: FormModel<T, JsonPaths, TypePathsToConverters, ValuePathsToConverters>) {
-    const fieldOverrides = map(
-      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-explicit-any
-      model.fieldOverrides as Record<keyof ValuePathsToConverters, FieldOverride<any, any>>,
-      (
-        valuePath: keyof ValuePathsToConverters,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        fieldOverride: FieldOverride<any, any>,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      ): FieldOverride<any, any> => {
-        const converter = this.getConverterForValuePath(model, valuePath)
-        // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-        const conversion = converter.convert(fieldOverride.value, valuePath as string, model.fields)
-        switch (conversion.type) {
-          case ConversionResult.Failure:
-            return {
-              ...fieldOverride,
-              dirty: true,
-              error: conversion.error,
-            }
-          case ConversionResult.Success:
-            this.getAccessorForValuePath(model, valuePath).set(conversion.value)
-            return {
-              dirty: false,
-            }
-          default:
-            throw new UnreachableError(conversion)
-        }
-      },
-    )
-    runInAction(function () {
+    runInAction(() => {
+      const fieldOverrides = map(
+        // eslint-disable-next-line @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-explicit-any
+        model.fieldOverrides as Record<keyof ValuePathsToConverters, FieldOverride<any, any>>,
+        (
+          valuePath: keyof ValuePathsToConverters,
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          fieldOverride: FieldOverride<any, any>,
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        ): FieldOverride<any, any> => {
+          const converter = this.getConverterForValuePath(model, valuePath)
+          const value = fieldOverride.dirty
+            ? fieldOverride.value
+            // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+            : converter.revert(model.accessors[valuePath as string].value)
+          // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+          const conversion = converter.convert(value, valuePath as string, model.fields)
+          switch (conversion.type) {
+            case ConversionResult.Failure:
+              return {
+                ...fieldOverride,
+                dirty: true,
+                error: conversion.error,
+              }
+            case ConversionResult.Success:
+              this.getAccessorForValuePath(model, valuePath).set(conversion.value)
+              return {
+                dirty: false,
+              }
+            default:
+              throw new UnreachableError(conversion)
+          }
+        },
+      )
       model.fieldOverrides = fieldOverrides
     })
   }
@@ -247,6 +251,7 @@ export class FormModel<
   }
 
   @computed
+  // should only be referenced internally, so loosely type
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   get accessors(): Readonly<Record<string, Accessor<any>>> {
     // TODO flatten mobx accessors of actually!

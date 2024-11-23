@@ -5,6 +5,7 @@ import {
   type FlattenedPetJsonValueToTypePaths,
   type FlattenedPetValueTypes,
   type MutablePet,
+  NAME_TOO_SHORT_ERROR,
   type Pet,
   type PetFormFields,
   petTypeDef,
@@ -41,7 +42,7 @@ export class ManualPetFormPresenter {
   }: ManualPetFormModel) {
     runInAction(function () {
       if (name == null || name.trim().length < 2) {
-        errors['$.name'] = 'name too short'
+        errors['$.name'] = NAME_TOO_SHORT_ERROR
       }
     })
   }
