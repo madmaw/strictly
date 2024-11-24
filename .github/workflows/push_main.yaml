@@ -1,0 +1,12 @@
+name: CI Workflow
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  workflow-call-ci:
+    uses: ./.github/workflows/workflow_call_ci.yaml
+    secrets: inherit
+  

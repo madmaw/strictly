@@ -11,7 +11,8 @@ import {
 } from './definitions'
 
 // TODO rename to something more descriptive (e.g. introspectable definitions, deterministic
-// definitions, discriminated definitions)
+// definitions, discriminated definitions). Maybe should just replace definitions since most
+// of the supporting types and utilities don't support non-strict definitions anyway
 
 // strict equivalent of type defs, basically just makes it so Union is introspectable
 
