@@ -18,27 +18,21 @@ describe('poll', function () {
 
   it('returns the success value', async function () {
     const value = 1
-    callee.mockResolvedValueOnce({
-      value,
-    })
+    callee.mockResolvedValueOnce([value])
     const result = await poll(
       callee,
       {
         pollInterval,
       },
     )
-    expect(result).toEqual({
-      value,
-    })
+    expect(result).toEqual([value])
     expect(callee).toHaveBeenCalledTimes(1)
   })
 
   it('returns the success value after a retry', async function () {
     const value = 1
     callee.mockResolvedValueOnce(null)
-    callee.mockResolvedValueOnce({
-      value,
-    })
+    callee.mockResolvedValueOnce([value])
     const result = await poll(
       callee,
       {
@@ -46,9 +40,7 @@ describe('poll', function () {
         retries: 2,
       },
     )
-    expect(result).toEqual({
-      value,
-    })
+    expect(result).toEqual([value])
     expect(callee).toHaveBeenCalledTimes(2)
   })
 

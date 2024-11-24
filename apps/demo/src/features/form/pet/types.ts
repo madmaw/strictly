@@ -2,6 +2,7 @@ import {
   boolean,
   type FlattenedAccessorsOf,
   type FlattenedJsonValueToTypePathsOf,
+  type FlattenedTypeDefsOf,
   type FlattenedValueTypesOf,
   type ReadonlyTypeDefOf,
   string,
@@ -23,6 +24,7 @@ export type MutablePet = ValueTypeOf<typeof petTypeDef>
 export type Pet = ValueTypeOf<ReadonlyTypeDefOf<typeof petTypeDef>>
 export type PetValuePaths = JsonPathsOf<typeof petTypeDef>
 export type PetTypePaths = JsonPathsOf<typeof petTypeDef, '*'>
+export type FlattenedPetTypeDefs = FlattenedTypeDefsOf<typeof petTypeDef, '*'>
 export type FlattenedPetJsonValueToTypePaths = FlattenedJsonValueToTypePathsOf<typeof petTypeDef>
 export type FlattenedPetValueTypes = FlattenedValueTypesOf<typeof petTypeDef>
 export type FlattenedPetAccessors = FlattenedAccessorsOf<typeof petTypeDef>

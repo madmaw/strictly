@@ -1,6 +1,6 @@
 import {
-  type PathsOfPresenterFields,
-  type ValueTypeOfPresenterField,
+  type RenderTypeOfPresenterValuePath,
+  type ValuePathsOfPresenter,
 } from '@de/form-react/react/mobx/types'
 import { usePartialObserverComponent } from '@de/form-react/util/partial'
 import { PetForm } from 'features/form/pet/pet_form'
@@ -24,9 +24,9 @@ export function install() {
     }, [])
 
     const onFieldValueChange = useCallback(
-      function<Path extends PathsOfPresenterFields<typeof presenter>> (
+      function<Path extends ValuePathsOfPresenter<typeof presenter>> (
         path: Path,
-        value: ValueTypeOfPresenterField<typeof presenter, Path>,
+        value: RenderTypeOfPresenterValuePath<typeof presenter, Path>,
       ) {
         presenter.setFieldValue(model, path, value)
       },
