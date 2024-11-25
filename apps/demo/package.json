@@ -13,9 +13,20 @@
   "devDependencies": {
     "@babel/plugin-proposal-decorators": "^7.25.9",
     "@babel/plugin-transform-class-static-block": "^7.26.0",
+    "@chromatic-com/storybook": "^3.2.2",
     "@de/support-vite": "*",
+    "@storybook/addon-actions": "^8.4.5",
+    "@storybook/addon-essentials": "^8.4.5",
+    "@storybook/addon-interactions": "^8.4.5",
+    "@storybook/addon-links": "^8.4.5",
+    "@storybook/blocks": "^8.4.5",
+    "@storybook/builder-vite": "^8.4.5",
+    "@storybook/react": "^8.4.5",
+    "@storybook/react-vite": "^8.4.5",
+    "@storybook/test-runner": "^0.19.1",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/react": "^16.0.1",
+    "@testing-library/user-event": "^14.5.2",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
     "@vitejs/plugin-react": "^4.3.3",
@@ -25,6 +36,7 @@
     "postcss-simple-vars": "^7.0.1",
     "react-dom": "^18.3.1",
     "react-testing-library": "^8.0.1",
+    "storybook": "^8.4.5",
     "type-fest": "^4.27.0",
     "vite": "^5.4.10"
   },
@@ -38,7 +50,9 @@
     "lint": "cross-env ESLINT_USE_FLAT_CONFIG=false eslint . --max-warnings=0",
     "lint:fix": "cross-env ESLINT_USE_FLAT_CONFIG=false eslint . --fix",
     "preview": "vite preview",
+    "storybook": "storybook dev",
     "test": "vitest run",
+    "test:update": "vitest run -u",
     "test:watch": "vitest"
   },
   "version": "0.0.1"

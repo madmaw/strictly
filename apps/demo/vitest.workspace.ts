@@ -13,6 +13,12 @@ export default defineWorkspace([
     test: {
       ...(config.test || {}),
       environment: 'jsdom',
+      setupFiles: [
+        './.vitest/install_deterministic_random.ts',
+        // install storybook setup for unit tests that import stories directly
+        './.vitest/install_storybook_preview.ts',
+        './.vitest/match_media.ts',
+      ],
     },
   },
 ] as const)

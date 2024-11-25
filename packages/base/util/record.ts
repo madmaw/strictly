@@ -79,7 +79,7 @@ export function reduce<
   A,
 >(
   r: ReadonlyRecord<K, V>,
-  f: (acc: A, K: K, v: V) => A,
+  f: (acc: A, k: K, v: V) => A,
   a: A,
 ): A {
   return Object.entries<V>(r).reduce(
@@ -96,9 +96,9 @@ export function reduce<
 }
 
 export function forEach<
-  R extends Record<K, V>,
-  K extends string | number | symbol,
-  V,
+  R extends Readonly<Record<K, V>>,
+  K extends string | number | symbol = R extends Readonly<Record<infer Kk, infer _Vv>> ? Kk : never,
+  V = R extends Readonly<Record<infer _Kk, infer Vv>> ? Vv : never,
 >(r: R, f: (k: K, v: R[K]) => void) {
   return Object.entries<V>(r).forEach(
     function ([
@@ -108,6 +108,23 @@ export function forEach<
       // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
       return f(k as K, v as R[K])
     },
+  )
+}
+
+export function toArray<
+  K extends string | number | symbol,
+  V,
+>(r: Readonly<Record<K, V>>): readonly (readonly [K, V])[] {
+  return reduce<K, V, [K, V][]>(
+    r,
+    function (acc, k, v) {
+      acc.push([
+        k,
+        v,
+      ])
+      return acc
+    },
+    [],
   )
 }
 

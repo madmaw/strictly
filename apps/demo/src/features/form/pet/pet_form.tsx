@@ -11,6 +11,8 @@ import {
 } from '@mantine/core'
 import { type PetFormFields } from './types'
 
+export const LABEL_SUBMIT = 'Submit'
+
 export type PetFormProps = FormProps<PetFormFields> & {
   onSubmit: () => void,
 }
@@ -30,7 +32,7 @@ export function PetForm(props: PetFormProps) {
         label='Alive'
       />
       <Button onClick={onSubmit}>
-        Submit
+        {LABEL_SUBMIT}
       </Button>
     </Stack>
   )

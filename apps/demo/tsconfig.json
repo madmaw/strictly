@@ -7,6 +7,9 @@
   "include": [
     "**/*.ts",
     "**/*.tsx",
+    ".storybook/**/*.ts",
+    ".storybook/**/*.tsx",
+    ".vitest/**/*.ts",
     "babel.config.js",
     "tsconfig.json"
   ],
