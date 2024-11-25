@@ -16,6 +16,7 @@
     "eslint-plugin-react": "^7.37.2",
     "eslint-plugin-react-hooks": "^5.0.0",
     "eslint-plugin-unused-imports": "^4.1.4",
+    "eslint-plugin-yml": "^1.15.0",
     "turbo": "^2.2.3",
     "type-fest": "^4.26.1",
     "typescript": "~5.5.3",
@@ -36,8 +37,8 @@
     "check-types": "turbo run check-types",
     "lint": "turbo run lint --continue && yarn lint:root",
     "lint:fix": "turbo run lint:fix --continue && yarn lint:root:fix",
-    "lint:root": "cross-env ESLINT_USE_FLAT_CONFIG=false eslint --max-warnings=0 *.cjs *.json",
-    "lint:root:fix": "cross-env ESLINT_USE_FLAT_CONFIG=false eslint --fix *.cjs *.json",
+    "lint:root": "cross-env ESLINT_USE_FLAT_CONFIG=false eslint --max-warnings=0 *.cjs *.json .github",
+    "lint:root:fix": "cross-env ESLINT_USE_FLAT_CONFIG=false eslint --fix *.cjs *.json .github",
     "test": "turbo run test"
   },
   "version": "0.0.1",

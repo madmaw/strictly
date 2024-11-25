@@ -44,7 +44,10 @@
     ".turbo",
     "node_modules"
   ],
-  "include": ["tsconfig.json"],
+  "include": [
+    ".github/**/*.yaml",
+    "tsconfig.json"
+  ],
   "references": [
     {"path": "apps/demo"},
     {"path": "packages/base"},

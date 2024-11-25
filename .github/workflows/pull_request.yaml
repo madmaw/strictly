@@ -1,10 +1,9 @@
 name: CI Workflow
 
 on:
-  pull_request:
+  pull_request: ~
 
 jobs:
   workflow-call-ci:
     uses: ./.github/workflows/workflow_call_ci.yaml
     secrets: inherit
-  

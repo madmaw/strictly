@@ -9,6 +9,5 @@ jobs:
   workflow-call-ci:
     uses: ./.github/workflows/workflow_call_ci.yaml
     secrets: inherit
-  
   # TODO push to "green" if this works
   # TODO deploy to NPM if version number increases

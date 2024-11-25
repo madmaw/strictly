@@ -40,7 +40,36 @@ module.exports = {
         ],
       },
     },
-    // code
+    // YAML
+    {
+      files: [
+        '*.yaml',
+        '*.yml',
+      ],
+      parser: 'yaml-eslint-parser',
+      extends: 'plugin:yml/standard',
+      rules: {
+        'no-multiple-empty-lines': [
+          'warn',
+          {
+            max: 1,
+            // eslint-disable-next-line @typescript-eslint/naming-convention
+            maxBOF: 0,
+            // eslint-disable-next-line @typescript-eslint/naming-convention
+            maxEOF: 1,
+          },
+        ],
+        'yml/quotes': [
+          'warn',
+          {
+            prefer: 'single',
+            avoidEscape: true,
+          },
+        ],
+      },
+    },
+
+    // Typescript/Javascript
     {
       files: [
         '*.ts',
@@ -491,6 +520,7 @@ module.exports = {
   ignorePatterns: [
     '!.vitest',
     '!.vscode',
+    '!.github',
     'node_modules',
     '**/dist/**',
     '**/.out/**',
