@@ -11,4 +11,8 @@ export type FormProps<F extends FormFields> = {
   onFieldFocus?(this: void, key: keyof F): void,
 
   onFieldBlur?(this: void, key: keyof F): void,
+
+  // when the user hits enter on a field, return true if
+  // the default behavior should be suppressed
+  onFieldSubmit?(this: void, key: keyof F): boolean,
 }

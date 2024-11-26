@@ -145,21 +145,21 @@ describe('all', function () {
       const converters = {
         $: stringToIntegerConverter,
       } as const
-      let value: ValueTypeOf<typeof typeDef>
+      let originalValue: ValueTypeOf<typeof typeDef>
       let model: FormModel<
         typeof typeDef,
         FlattenedJsonValueToTypePathsOf<typeof typeDef>,
         typeof converters
       >
       beforeEach(function () {
-        value = 5
+        originalValue = 5
         model = new FormModel<
           typeof typeDef,
           FlattenedJsonValueToTypePathsOf<typeof typeDef>,
           typeof converters
         >(
           typeDef,
-          value,
+          originalValue,
           converters,
         )
       })
@@ -167,13 +167,14 @@ describe('all', function () {
       describe('accessors', function () {
         it('gets the expected value', function () {
           const accessor = expectDefinedAndReturn(model.accessors.$)
-          expect(accessor.value).toEqual(value)
+          expect(accessor.value).toEqual(originalValue)
         })
 
-        it('sets a value', function () {
+        it('sets the underlying value', function () {
+          const newValue = 1
           const accessor = expectDefinedAndReturn(model.accessors.$)
-          accessor.set(1)
-          expect(model.value).toEqual(1)
+          accessor.set(newValue)
+          expect(model.value).toEqual(newValue)
         })
       })
 
@@ -447,8 +448,8 @@ describe('all', function () {
             presenter.setFieldValueAndValidate<'$'>(model, '$', '1')
           })
 
-          it('sets the value', function () {
-            expect(model.value).toEqual(1)
+          it('does not set the underlying value', function () {
+            expect(model.value).toEqual(originalValue)
           })
 
           it('sets the fields', function () {
@@ -540,12 +541,8 @@ describe('all', function () {
             presenter.setFieldValueAndValidate<'$[0]'>(model, '$[0]', '100')
           })
 
-          it('sets the value', function () {
-            expect(model.value).toEqual([
-              100,
-              3,
-              7,
-            ])
+          it('does not set the underlying value', function () {
+            expect(model.value).toEqual(originalValue)
           })
 
           it('sets the fields', function () {
@@ -607,7 +604,7 @@ describe('all', function () {
           presenter.setFieldValue<'$[0]'>(model, '$[0]', 'x')
           presenter.setFieldValue<'$[1]'>(model, '$[1]', '2')
           presenter.setFieldValue<'$[2]'>(model, '$[2]', 'z')
-          presenter.validate(model)
+          presenter.validateAndMaybeSaveAll(model)
         })
 
         it('contains errors for all invalid fields', function () {
@@ -710,8 +707,8 @@ describe('all', function () {
               presenter.setFieldValueAndValidate<'$'>(model, '$', true)
             })
 
-            it('sets the value', function () {
-              expect(model.value).toEqual([1])
+            it('does not set the underlying value', function () {
+              expect(model.value).toEqual(originalValue)
             })
           })
         })

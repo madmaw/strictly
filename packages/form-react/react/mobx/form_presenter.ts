@@ -1,7 +1,7 @@
 import {
   checkExists,
-  map,
   type ReadonlyRecord,
+  reduce,
   UnreachableError,
 } from '@de/base'
 import {
@@ -55,19 +55,24 @@ export type FlattenedTypePathsToConvertersOf<
   ]?: Converter<any, Record<string, FormField>, F[K], any>
 }
 
-type FieldOverride<E, V> = {
-  error?: E,
-  value?: V,
-  dirty: boolean,
+type FieldOverride<V> = {
+  value: V,
+  // seems like something we'll need?
+  // dirty: boolean,
 }
 
 type FlattenedFieldOverrides<
   ValuePathsToConverters extends Readonly<Record<string, Converter>>,
 > = {
   -readonly [K in keyof ValuePathsToConverters]?: FieldOverride<
-    ErrorTypeOfConverter<ValuePathsToConverters[K]>,
     FromTypeOfConverter<ValuePathsToConverters[K]>
   >
+}
+
+type FlattenedErrors<
+  ValuePathsToConverters extends Readonly<Record<string, Converter>>,
+> = {
+  -readonly [K in keyof ValuePathsToConverters]?: ErrorTypeOfConverter<ValuePathsToConverters[K]>
 }
 
 export type ValuePathsToConvertersOf<
@@ -131,24 +136,22 @@ export class FormPresenter<
     model: FormModel<T, JsonPaths, TypePathsToConverters, ValuePathsToConverters>,
     valuePath: K,
     value: FromTypeOfConverter<ValuePathsToConverters[K]>,
-  ): void {
+  ): boolean {
     const converter = this.getConverterForValuePath(model, valuePath)
 
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     const conversion = converter.convert(value, valuePath as string, model.fields)
-    runInAction(() => {
+    return runInAction(() => {
+      model.fieldOverrides[valuePath] = {
+        value,
+      }
       switch (conversion.type) {
         case ConversionResult.Failure:
-          model.fieldOverrides[valuePath] = {
-            value,
-            dirty: true,
-            error: conversion.error,
-          }
-          break
+          model.errors[valuePath] = conversion.error
+          return false
         case ConversionResult.Success:
-          delete model.fieldOverrides[valuePath]
-          this.getAccessorForValuePath(model, valuePath).set(conversion.value)
-          break
+          delete model.errors[valuePath]
+          return true
         default:
           throw new UnreachableError(conversion)
       }
@@ -163,7 +166,6 @@ export class FormPresenter<
     runInAction(function () {
       model.fieldOverrides[valuePath] = {
         value,
-        dirty: true,
       }
     })
   }
@@ -175,51 +177,74 @@ export class FormPresenter<
     const fieldOverride = model.fieldOverrides[valuePath]
     if (fieldOverride != null) {
       runInAction(function () {
-        model.fieldOverrides[valuePath] = {
-          ...fieldOverride,
-          // eslint-disable-next-line no-undefined
-          error: undefined,
-        }
+        delete model.errors[valuePath]
       })
     }
   }
 
-  validate(model: FormModel<T, JsonPaths, TypePathsToConverters, ValuePathsToConverters>) {
+  clearAll(model: FormModel<T, JsonPaths, TypePathsToConverters, ValuePathsToConverters>, value: ValueTypeOf<T>): void {
     runInAction(() => {
-      const fieldOverrides = map(
+      model.errors = {}
+      model.fieldOverrides = {}
+      model.value = mobxCopy(this.typeDef, value)
+    })
+  }
+
+  validateField<K extends keyof ValuePathsToConverters>(
+    model: FormModel<T, JsonPaths, TypePathsToConverters, ValuePathsToConverters>,
+    valuePath: K,
+  ): boolean {
+    const fieldOverride = model.fieldOverrides[valuePath]
+    if (fieldOverride != null) {
+      const converter = this.getConverterForValuePath(model, valuePath)
+      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+      const conversion = converter.convert(fieldOverride.value, valuePath as string, model.fields)
+      return runInAction(function () {
+        switch (conversion.type) {
+          case ConversionResult.Failure:
+            model.errors[valuePath] = conversion.error
+            return false
+          case ConversionResult.Success:
+            delete model.errors[valuePath]
+            return true
+          default:
+            throw new UnreachableError(conversion)
+        }
+      })
+    }
+    return true
+  }
+
+  validateAndMaybeSaveAll(model: FormModel<T, JsonPaths, TypePathsToConverters, ValuePathsToConverters>): boolean {
+    // TODO want to iteratively reduce accessors (start from shortest key to longest key and every time
+    // we successfully set the value, restart the validate and save process)
+    return runInAction(() => {
+      return reduce(
         // eslint-disable-next-line @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-explicit-any
-        model.fieldOverrides as Record<keyof ValuePathsToConverters, FieldOverride<any, any>>,
+        model.fieldOverrides as Record<keyof ValuePathsToConverters, FieldOverride<any>>,
         (
+          success: boolean,
           valuePath: keyof ValuePathsToConverters,
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          fieldOverride: FieldOverride<any, any>,
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        ): FieldOverride<any, any> => {
+          { value }: FieldOverride<any>,
+        ): boolean => {
           const converter = this.getConverterForValuePath(model, valuePath)
-          const value = fieldOverride.dirty
-            ? fieldOverride.value
-            // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-            : converter.revert(model.accessors[valuePath as string].value)
           // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
           const conversion = converter.convert(value, valuePath as string, model.fields)
           switch (conversion.type) {
             case ConversionResult.Failure:
-              return {
-                ...fieldOverride,
-                dirty: true,
-                error: conversion.error,
-              }
+              model.errors[valuePath] = conversion.error
+              return false
             case ConversionResult.Success:
               this.getAccessorForValuePath(model, valuePath).set(conversion.value)
-              return {
-                dirty: false,
-              }
+              delete model.errors[valuePath]
+              return success
             default:
               throw new UnreachableError(conversion)
           }
         },
+        true,
       )
-      model.fieldOverrides = fieldOverrides
     })
   }
 
@@ -245,6 +270,8 @@ export class FormModel<
   accessor value: MobxValueTypeOf<T>
   @observable.shallow
   accessor fieldOverrides: FlattenedFieldOverrides<ValuePathsToConverters> = {}
+  @observable.shallow
+  accessor errors: FlattenedErrors<ValuePathsToConverters> = {}
 
   constructor(
     private readonly typeDef: T,
@@ -285,9 +312,11 @@ export class FormModel<
         // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
         const fieldOverride = this.fieldOverrides[valuePath as keyof ValuePathsToConverters]
         const value = fieldOverride?.value ?? converter.revert(v)
+        // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+        const error = this.errors[valuePath as keyof ValuePathsToConverters]
         return {
           value,
-          error: fieldOverride?.error,
+          error,
           disabled: false,
         }
       },

@@ -17,6 +17,7 @@ export function useFormInput<
     onFieldValueChange,
     onFieldBlur,
     onFieldFocus,
+    onFieldSubmit,
     fields,
   }: FormProps<Fields>,
 ) {
@@ -38,6 +39,17 @@ export function useFormInput<
     k,
     onFieldBlur,
   ])
+  const onKeyUp = useCallback(function (e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.key === 'Enter') {
+      if (onFieldSubmit?.(k)) {
+        e.preventDefault()
+      }
+    }
+  }, [
+    k,
+    onFieldSubmit,
+  ])
+
   const {
     value,
     error,
@@ -48,6 +60,7 @@ export function useFormInput<
     onChange,
     onFocus,
     onBlur,
+    onKeyUp,
     value,
     error,
     disabled,

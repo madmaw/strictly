@@ -28,14 +28,37 @@ export function install() {
         path: Path,
         value: RenderTypeOfPresenterValuePath<typeof presenter, Path>,
       ) {
+        presenter.clearFieldError(model, path)
         presenter.setFieldValue(model, path, value)
+      },
+      [model],
+    )
+
+    const onFieldSubmit = useCallback(
+      function<Path extends ValuePathsOfPresenter<typeof presenter>> (path: Path) {
+        if (presenter.validateField(model, path)) {
+          // if it successfully validates
+          // TODO move to next field
+        }
+        return false
+      },
+      [model],
+    )
+
+    const onFieldBlur = useCallback(
+      function<Path extends ValuePathsOfPresenter<typeof presenter>> (path: Path) {
+        presenter.validateField(model, path)
       },
       [model],
     )
 
     const onSubmit = useCallback(
       function () {
-        presenter.validate(model)
+        if (presenter.validateAndMaybeSaveAll(model)) {
+          // TODO fire an event with the successfully created value
+          // eslint-disable-next-line no-console
+          console.log(model.value)
+        }
       },
       [model],
     )
@@ -46,12 +69,16 @@ export function install() {
           fields: model.fields,
           onFieldValueChange,
           onSubmit,
+          onFieldSubmit,
+          onFieldBlur,
         }
       },
       [
         model,
         onFieldValueChange,
         onSubmit,
+        onFieldSubmit,
+        onFieldBlur,
       ],
       PetForm,
     )
