@@ -1,5 +1,4 @@
 import {
-  type ReadonlyRecord,
   reduce,
   UnreachableError,
 } from '@de/base'
@@ -35,7 +34,7 @@ export type Mapper<R> = (
 export function flattenValueTypeTo<
   T extends StrictTypeDefHolder,
   M,
-  R extends ReadonlyRecord<string, M>,
+  R extends Readonly<Record<string, M>>,
 >(
   { typeDef }: T,
   v: ValueTypeOf<T>,

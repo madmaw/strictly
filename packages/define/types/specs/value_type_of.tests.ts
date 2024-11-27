@@ -1,4 +1,3 @@
-import { type ReadonlyRecord } from '@de/base'
 import { type SimplifyDeep } from 'type-fest'
 import {
   type TypeDefType,
@@ -84,7 +83,7 @@ describe('ValueTypeOf', function () {
           },
         },
       }>
-      let r: ReadonlyRecord<'x' | 'y' | 'z', 'a' | 'b' | 'c'>
+      let r: Readonly<Record<'x' | 'y' | 'z', 'a' | 'b' | 'c'>>
 
       it('equals expected type', function () {
         expectTypeOf(r).toEqualTypeOf<R>()
@@ -119,7 +118,7 @@ describe('ValueTypeOf', function () {
       }
       type T = ValueTypeOf<{ typeDef: TypeD }>
 
-      let t: Partial<ReadonlyRecord<'x' | 'y' | 'z', 'a' | 'b' | 'c'>>
+      let t: Partial<Readonly<Record<'x' | 'y' | 'z', 'a' | 'b' | 'c'>>>
       it('equals expected type', function () {
         expectTypeOf(t).toEqualTypeOf<T>()
       })

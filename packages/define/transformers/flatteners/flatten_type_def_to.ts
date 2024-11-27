@@ -1,5 +1,4 @@
 import {
-  type ReadonlyRecord,
   reduce,
   UnreachableError,
 } from '@de/base'
@@ -21,7 +20,7 @@ export type AnyValueType = any
 
 export type Mapper<R> = (t: StrictTypeDef) => R
 
-export function flattenTypeDefTo<M, R extends ReadonlyRecord<string, M>>(
+export function flattenTypeDefTo<M, R extends Readonly<Record<string, M>>>(
   { typeDef }: StrictTypeDefHolder,
   mapper: Mapper<M>,
 ): R {

@@ -1,4 +1,3 @@
-import { type ReadonlyRecord } from '@de/base'
 import {
   type IsEqual,
   type Simplify,
@@ -81,7 +80,7 @@ export type StrictStructuredTypeDef<
 
 export type StrictUnionTypeDef<
   D extends string | null = string | null,
-  U extends ReadonlyRecord<UnionKey, AnyTypeDef> = ReadonlyRecord<UnionKey, AnyTypeDef>,
+  U extends Readonly<Record<UnionKey, AnyTypeDef>> = Readonly<Record<UnionKey, AnyTypeDef>>,
 > = D extends null ? IsStrictUnion<U> extends true ? {
       readonly discriminator: null,
       readonly type: TypeDefType.Union,
@@ -97,7 +96,7 @@ export type StrictUnionTypeDef<
 
 // tests whether the union is composed of one non-constant value (at ['0']) and the rest
 // constants
-export type IsStrictUnion<U extends ReadonlyRecord<UnionKey, AnyTypeDef>> = IsEqual<
+export type IsStrictUnion<U extends Readonly<Record<UnionKey, AnyTypeDef>>> = IsEqual<
   U,
   Simplify<{
     readonly [K in keyof Omit<U, '0'> as U[K] extends StrictLiteralTypeDef ? K : never]: U[K]

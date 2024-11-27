@@ -1,4 +1,3 @@
-import { type ReadonlyRecord } from '@de/base'
 import {
   type ChangeEvent,
   useCallback,
@@ -28,7 +27,7 @@ function DefaultErrorRenderer({
 export function useFormInput<
   K extends string,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  Fields extends ReadonlyRecord<K, FormField<any, string>>,
+  Fields extends Readonly<Record<K, FormField<any, string>>>,
 >(
   k: K,
   {
@@ -97,7 +96,7 @@ export function useFormInput<
 export function useFormCheckBox<
   K extends string,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  Fields extends ReadonlyRecord<K, FormField<any, boolean>>,
+  Fields extends Readonly<Record<K, FormField<any, boolean>>>,
 >(
   k: K,
   {
@@ -153,7 +152,7 @@ export function useFormCheckBox<
 export function useFormRadioGroup<
   K extends string,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  Fields extends ReadonlyRecord<K, FormField<any, string>>,
+  Fields extends Readonly<Record<K, FormField<any, string>>>,
 >(
   k: K,
   {

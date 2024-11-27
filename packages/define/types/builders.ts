@@ -1,8 +1,5 @@
 import {
   type IsFieldReadonly,
-  type PartialReadonlyRecord,
-  type PartialRecord,
-  type ReadonlyRecord,
 } from '@de/base'
 import {
   type ListTypeDef,
@@ -70,7 +67,7 @@ class MapTypeDefBuilder<T extends MapTypeDef> extends TypeDefBuilder<T> {
 }
 
 class StructuredTypeDefBuilder<
-  Fields extends ReadonlyRecord<StructuredFieldKey, TypeDef> = {},
+  Fields extends Readonly<Record<StructuredFieldKey, TypeDef>> = {},
 > extends TypeDefBuilder<
   StructuredTypeDef<Fields>
 > {
@@ -105,14 +102,14 @@ class StructuredTypeDefBuilder<
     name: Name,
     { typeDef }: TypeDefHolder<T>,
   ): StructuredTypeDefBuilder<
-    Fields & ReadonlyRecord<Name, T>
+    Fields & Readonly<Record<Name, T>>
   > {
     const newFields = {
       [name]: typeDef,
     }
     // have to explicitly supply types as TS will infinitely recurse trying to infer them!
     return new StructuredTypeDefBuilder<
-      Fields & ReadonlyRecord<Name, T>
+      Fields & Readonly<Record<Name, T>>
     >({
       type: TypeDefType.Structured,
       fields: {
@@ -129,14 +126,14 @@ class StructuredTypeDefBuilder<
     name: Name,
     { typeDef }: TypeDefHolder<T>,
   ): StructuredTypeDefBuilder<
-    Fields & PartialRecord<Name, T>
+    Fields & Partial<Record<Name, T>>
   > {
     const newFields = {
       [name]: typeDef,
     }
     // have to explicitly supply types as TS will infinitely recurse trying to infer them!
     return new StructuredTypeDefBuilder<
-      Fields & PartialRecord<Name, T>
+      Fields & Partial<Record<Name, T>>
     >({
       type: TypeDefType.Structured,
       fields: {
@@ -153,14 +150,14 @@ class StructuredTypeDefBuilder<
     name: Name,
     { typeDef }: TypeDefHolder<T>,
   ): StructuredTypeDefBuilder<
-    Fields & PartialReadonlyRecord<Name, T>
+    Fields & Partial<Readonly<Record<Name, T>>>
   > {
     const newFields = {
       [name]: typeDef,
     }
     // have to explicitly supply types as TS will infinitely recurse trying to infer them!
     return new StructuredTypeDefBuilder<
-      Fields & PartialReadonlyRecord<Name, T>
+      Fields & Partial<Readonly<Record<Name, T>>>
     >({
       type: TypeDefType.Structured,
       fields: {
@@ -188,12 +185,12 @@ class UnionTypeDefBuilder<
     {
       typeDef,
     }: TypeDefHolder<T>,
-  ): UnionTypeDefBuilder<D, ReadonlyRecord<K, T> & U> {
+  ): UnionTypeDefBuilder<D, Readonly<Record<K, T>> & U> {
     const {
       discriminator,
       unions,
     } = this.typeDef
-    return new UnionTypeDefBuilder<D, ReadonlyRecord<K, T> & U>(
+    return new UnionTypeDefBuilder<D, Readonly<Record<K, T>> & U>(
       {
         type: TypeDefType.Union,
         discriminator: discriminator,
@@ -201,7 +198,7 @@ class UnionTypeDefBuilder<
         unions: {
           ...unions,
           [k]: typeDef,
-        } as ReadonlyRecord<K, T> & U,
+        } as Readonly<Record<K, T>> & U,
       },
     )
   }

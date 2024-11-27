@@ -1,5 +1,3 @@
-import { type ReadonlyRecord } from '@de/base'
-
 // NOTE: this file, in conjunction with the types that derive information from these types, pushes the
 // Typescript compiler to its absolute limit. It tends to be a death of 1000 cuts so no individual feature
 // breaks it. When combined they hit some threshold (memory? performance? time?) beyond which the compiler
@@ -100,7 +98,7 @@ export type UnionKey = string
 
 export type UnionTypeDef<
   D extends string | null = string | null,
-  U extends ReadonlyRecord<UnionKey, AnyTypeDef> = ReadonlyRecord<UnionKey, AnyTypeDef>,
+  U extends Readonly<Record<UnionKey, AnyTypeDef>> = Readonly<Record<UnionKey, AnyTypeDef>>,
 > = {
   readonly discriminator: D,
   readonly type: TypeDefType.Union,

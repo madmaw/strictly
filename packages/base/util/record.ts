@@ -31,10 +31,10 @@ export function rollup<
 
 // TODO simplify the generics
 export function union<
-  R1 extends ReadonlyRecord<K1, V1>,
+  R1 extends Readonly<Record<K1, V1>>,
   K1 extends string | number | symbol,
   V1 extends R1[K1],
-  R2 extends ReadonlyRecord<K2, V2>,
+  R2 extends Readonly<Record<K2, V2>>,
   K2 extends string | number | symbol,
   V2 extends R2[K2],
 >(
@@ -53,7 +53,7 @@ export function map<
   V,
   R = V,
 >(
-  r: ReadonlyRecord<K, V>,
+  r: Readonly<Record<K, V>>,
   f: (k: K, v: V) => R,
 ): Record<K, R> {
   // TODO can use reduce to implement map
@@ -78,7 +78,7 @@ export function reduce<
   V,
   A,
 >(
-  r: ReadonlyRecord<K, V>,
+  r: Readonly<Record<K, V>>,
   f: (acc: A, k: K, v: V) => A,
   a: A,
 ): A {
@@ -131,7 +131,3 @@ export function toArray<
 export type Mutable<T> = {
   -readonly [K in keyof T]: T[K]
 }
-
-export type ReadonlyRecord<K extends string | number | symbol, V> = Readonly<Record<K, V>>
-export type PartialRecord<K extends string | number | symbol, V> = Partial<Record<K, V>>
-export type PartialReadonlyRecord<K extends string | number | symbol, V> = Partial<Readonly<Record<K, V>>>

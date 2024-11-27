@@ -1,6 +1,5 @@
 import {
   type IsFieldReadonly,
-  type ReadonlyRecord,
 } from '@de/base'
 import {
   type ListTypeDef,
@@ -77,7 +76,7 @@ type InternalValueTypeOfUnion<
   F extends UnionTypeDef,
   Extra,
 > = F extends UnionTypeDef<infer D, infer U> ? D extends string ? {
-      [K in keyof U]: InternalValueTypeOf<U[K], Extra> & ReadonlyRecord<D, K>
+      [K in keyof U]: InternalValueTypeOf<U[K], Extra> & Readonly<Record<D, K>>
     }[keyof U]
   : {
     [K in keyof U]: InternalValueTypeOf<U[K], Extra>

@@ -1,4 +1,3 @@
-import { type ReadonlyRecord } from '@de/base'
 import {
   fireEvent,
   render,
@@ -20,7 +19,7 @@ import {
 const TEST_ID = 'x'
 
 type InputFormProps = FormProps<
-  ReadonlyRecord<'$', FormField<string, string>>
+  Readonly<Record<'$', FormField<string, string>>>
 >
 
 function InputForm(props: InputFormProps) {

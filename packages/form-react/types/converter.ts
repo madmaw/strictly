@@ -17,6 +17,7 @@ export type Conversion<E, V> = {
 // for example a text field that renders an integer would have
 // a `from` type of `string`, and a `to` type of `number`
 
+// TODO converter can also have the allowable value path as a parameter
 export type Converter<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   E = any,
@@ -28,6 +29,8 @@ export type Converter<
 > = {
   convert(from: From, valuePath: keyof Fields, fields: Fields): Conversion<E, To>,
   revert(to: To): From,
+  // TODO make this a method and pass the path and context
+  // TODO move into a separate thing
   readonly defaultValue: To,
 }
 
