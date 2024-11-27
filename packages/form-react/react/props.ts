@@ -13,5 +13,11 @@ export type FormProps<F extends FormFields> = {
 
   // when the user hits enter on a field, return true if
   // the default behavior should be suppressed
-  onFieldSubmit?(this: void, key: keyof F): boolean,
+  onFieldSubmit?(this: void, key: keyof F): boolean | void,
+}
+
+export type EditorProps<O> = {
+  value: O,
+
+  onValueChange: (value: O) => void,
 }

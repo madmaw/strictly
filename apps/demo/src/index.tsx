@@ -5,7 +5,8 @@ import {
   createTheme,
   MantineProvider,
 } from '@mantine/core'
-import { install as installAssisted } from 'features/form/pet/assisted/install'
+import { AssistedPetEditor } from 'features/form/pet/assisted/assisted_pet_editor'
+import { type Pet } from 'features/form/pet/types'
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 
@@ -20,12 +21,28 @@ window.onload = function () {
     /** Put your mantine theme override here */
   })
 
-  const App = installAssisted()
+  const value: Pet = {
+    name: 'Delta',
+    alive: true,
+    species: {
+      type: 'cat',
+      meows: 1000,
+    },
+  }
+
+  function onValueChange(value: Pet) {
+    // eslint-disable-next-line no-console
+    console.log(value)
+  }
+
   createRoot(e).render(
     (
       <StrictMode>
         <MantineProvider theme={theme}>
-          <App />
+          <AssistedPetEditor
+            onValueChange={onValueChange}
+            value={value}
+          />
         </MantineProvider>
       </StrictMode>
     ),

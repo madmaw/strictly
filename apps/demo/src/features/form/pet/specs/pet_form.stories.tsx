@@ -28,6 +28,7 @@ const meta: Meta<typeof Component> = {
     onFieldBlur: action('onFieldBlur'),
     onFieldFocus: action('onFieldFocus'),
     onFieldValueChange: action('onFieldValueChange'),
+    onFieldSubmit: action('onFieldSubmit'),
     onSubmit: action('onSubmit'),
     SpeciesComponent,
   },
