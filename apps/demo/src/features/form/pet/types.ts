@@ -12,10 +12,6 @@ import {
   type ValueTypeOf,
 } from '@de/fine'
 import { type JsonPathsOf } from '@de/fine/types/json_paths_of'
-import {
-  type FlattenedFormFieldsOf,
-  type FormField,
-} from '@de/form-react'
 
 export type DogBreeds = 'Alsatian' | 'Pug' | 'Other'
 export type CatBreeds = 'Burmese' | 'Siamese' | 'Domestic Short Hair'
@@ -23,6 +19,8 @@ export type CatBreeds = 'Burmese' | 'Siamese' | 'Domestic Short Hair'
 export const speciesTypeDef = union('type')
   .add('dog', struct().set('barks', number))
   .add('cat', struct().set('meows', number))
+
+export type Species = keyof typeof speciesTypeDef['typeDef']['unions']
 
 export const petTypeDef = struct()
   .set('name', string)
@@ -39,14 +37,5 @@ export type FlattenedPetJsonValueToTypePaths = FlattenedJsonValueToTypePathsOf<t
 export type FlattenedPetValueTypes = FlattenedValueTypesOf<typeof petTypeDef>
 export type FlattenedPetAccessors = FlattenedAccessorsOf<typeof petTypeDef>
 
-export type PetFormFields = FlattenedFormFieldsOf<
-  FlattenedPetJsonValueToTypePaths,
-  {
-    '$.name': FormField<string, string>,
-    '$.alive': FormField<string, boolean>,
-    '$.species:dog.barks': FormField<string, number>,
-    '$.species:cat.meows': FormField<string, number>,
-  }
->
-
 export const NAME_TOO_SHORT_ERROR = 'name too short'
+export const NOT_A_NUMBER_ERROR = 'not a number'

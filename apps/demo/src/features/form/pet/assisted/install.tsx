@@ -3,8 +3,11 @@ import {
   type ValuePathsOfPresenter,
 } from '@de/form-react/react/mobx/types'
 import { usePartialObserverComponent } from '@de/form-react/util/partial'
-import { PetForm } from 'features/form/pet/pet_form'
+import { PetForm as PetFormImpl } from 'features/form/pet/pet_form'
+import { SpeciesForm as SpeciesFormImpl } from 'features/form/pet/species_form'
+import { type Species } from 'features/form/pet/types'
 import {
+  type ComponentType,
   useCallback,
   useMemo,
 } from 'react'
@@ -20,6 +23,10 @@ export function install() {
       return presenter.createModel({
         alive: true,
         name: 'Delta',
+        species: {
+          type: 'cat',
+          meows: 1000,
+        },
       })
     }, [])
 
@@ -63,7 +70,20 @@ export function install() {
       [model],
     )
 
-    const Form = usePartialObserverComponent(
+    const speciesComponents = useMemo<Record<Species, ComponentType>>(function () {
+      return {
+        cat: function () {
+          // TODO
+          return null
+        },
+        dog: function () {
+          // TODO
+          return null
+        },
+      }
+    }, [])
+
+    const SpeciesComponent = usePartialObserverComponent(
       function () {
         return {
           fields: model.fields,
@@ -71,6 +91,7 @@ export function install() {
           onSubmit,
           onFieldSubmit,
           onFieldBlur,
+          speciesComponents,
         }
       },
       [
@@ -79,10 +100,33 @@ export function install() {
         onSubmit,
         onFieldSubmit,
         onFieldBlur,
+        speciesComponents,
       ],
-      PetForm,
+      SpeciesFormImpl,
     )
 
-    return <Form />
+    const PetForm = usePartialObserverComponent(
+      function () {
+        return {
+          fields: model.fields,
+          onFieldValueChange,
+          onSubmit,
+          onFieldSubmit,
+          onFieldBlur,
+          SpeciesComponent,
+        }
+      },
+      [
+        model,
+        onFieldValueChange,
+        onSubmit,
+        onFieldSubmit,
+        onFieldBlur,
+        SpeciesComponent,
+      ],
+      PetFormImpl,
+    )
+
+    return <PetForm />
   }
 }

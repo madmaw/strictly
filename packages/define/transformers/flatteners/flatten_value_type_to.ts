@@ -1,5 +1,4 @@
 import {
-  checkUnary,
   type ReadonlyRecord,
   reduce,
   UnreachableError,
@@ -7,7 +6,9 @@ import {
 import {
   type TypeDef,
   TypeDefType,
+  type UnionTypeDef,
 } from 'types/definitions'
+import { type ReadonlyTypeDefOf } from 'types/readonly_type_def_of'
 import {
   type StrictListTypeDef,
   type StrictMapTypeDef,
@@ -179,61 +180,102 @@ function internalFlattenUnionChildren<M>(
   valuePath: string,
   typePath: string,
   qualifier: string,
-  {
-    unions,
-    discriminator,
-  }: StrictUnionTypeDef,
+  typeDef: StrictUnionTypeDef,
   v: AnyValueType,
   mapper: Mapper<M>,
   r: Record<string, M>,
 ): AnyValueType {
-  if (discriminator == null) {
-    const found = reduce(
-      unions,
-      function (found, _k, typeDef: StrictTypeDef) {
-        if (
-          !found
-          && typeDef.type === TypeDefType.Literal
-          && typeDef.valuePrototype != null
-          && typeDef.valuePrototype.indexOf(v) >= 0
-        ) {
-          internalFlattenValueChildren(valuePath, typePath, qualifier, typeDef, v, mapper, r)
-          return true
+  const childTypeDef = getUnionTypeDef(typeDef, v)
+  const newQualifier = typeDef.discriminator != null ? `${qualifier}${v[typeDef.discriminator]}:` : qualifier
+  return internalFlattenValueChildren(
+    valuePath,
+    typePath,
+    newQualifier,
+    childTypeDef,
+    v,
+    mapper,
+    r,
+  )
+  // const {
+  //   unions,
+  //   discriminator,
+  // } = typeDef
+  // if (discriminator == null) {
+  //   const found = reduce(
+  //     unions,
+  //     function (found, _k, typeDef: StrictTypeDef) {
+  //       if (
+  //         !found
+  //         && typeDef.type === TypeDefType.Literal
+  //         && typeDef.valuePrototype != null
+  //         && typeDef.valuePrototype.indexOf(v) >= 0
+  //       ) {
+  //         internalFlattenValueChildren(valuePath, typePath, qualifier, typeDef, v, mapper, r)
+  //         return true
+  //       }
+  //       return false
+  //     },
+  //     false,
+  //   )
+  //   if (!found) {
+  //     const complexUnions = Object.values(unions).filter(function (u: TypeDef) {
+  //       return u.type !== TypeDefType.Literal
+  //     })
+  //     const complexUnion = checkUnary(
+  //       complexUnions,
+  //       'expected 1 complex union type, received {}',
+  //       complexUnions.length,
+  //     )
+  //     internalFlattenValueChildren(
+  //       valuePath,
+  //       typePath,
+  //       qualifier,
+  //       complexUnion,
+  //       v,
+  //       mapper,
+  //       r,
+  //     )
+  //   }
+  //   return r
+  // } else {
+  //   const discriminatorValue = v[discriminator]
+  //   return internalFlattenValueChildren(
+  //     valuePath,
+  //     typePath,
+  //     `${qualifier}${discriminatorValue}:`,
+  //     unions[discriminatorValue],
+  //     v,
+  //     mapper,
+  //     r,
+  //   )
+  // }
+}
+
+export function getUnionTypeDef<T extends UnionTypeDef>(
+  typeDef: T,
+  v: ValueTypeOf<ReadonlyTypeDefOf<{
+    typeDef: T,
+  }>>,
+) {
+  if (typeDef.discriminator == null) {
+    // find either a literal who's prototype we match, or assume that
+    // we match the non-literal, or the literal value with no prototype, value
+    return reduce<string, TypeDef, null | TypeDef>(
+      typeDef.unions,
+      function (acc, _k, t) {
+        if (t.type === TypeDefType.Literal && t.valuePrototype) {
+          if (t.valuePrototype.indexOf(v) >= 0) {
+            return t
+          }
+        } else {
+          if (acc == null) {
+            return t
+          }
         }
-        return false
+        return acc
       },
-      false,
-    )
-    if (!found) {
-      const complexUnions = Object.values(unions).filter(function (u: TypeDef) {
-        return u.type !== TypeDefType.Literal
-      })
-      const complexUnion = checkUnary(
-        complexUnions,
-        'expected 1 complex union type, received {}',
-        complexUnions.length,
-      )
-      internalFlattenValueChildren(
-        valuePath,
-        typePath,
-        qualifier,
-        complexUnion,
-        v,
-        mapper,
-        r,
-      )
-    }
-    return r
-  } else {
-    const discriminatorValue = v[discriminator]
-    return internalFlattenValueChildren(
-      valuePath,
-      typePath,
-      `${qualifier}${discriminatorValue}:`,
-      unions[discriminatorValue],
-      v,
-      mapper,
-      r,
+      null,
     )
   }
+  return typeDef.unions[v[typeDef.discriminator]]
 }

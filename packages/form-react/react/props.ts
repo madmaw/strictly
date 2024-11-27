@@ -1,7 +1,6 @@
-import { type ReadonlyRecord } from '@de/base'
 import { type FormField } from 'types/form_field'
 
-export type FormFields = ReadonlyRecord<string, FormField>
+export type FormFields = Readonly<Record<string, FormField>>
 
 export type FormProps<F extends FormFields> = {
   fields: F,

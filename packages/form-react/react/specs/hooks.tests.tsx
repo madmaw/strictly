@@ -4,7 +4,10 @@ import {
   render,
   type RenderResult,
 } from '@testing-library/react'
-import { useFormInput } from 'react/hooks'
+import {
+  useFormCheckBox,
+  useFormInput,
+} from 'react/hooks'
 import {
   type FormProps,
 } from 'react/props'
@@ -16,26 +19,50 @@ import {
 
 const TEST_ID = 'x'
 
+type InputFormProps = FormProps<
+  ReadonlyRecord<'$', FormField<string, string>>
+>
+
+function InputForm(props: InputFormProps) {
+  const attributes = useFormInput('$', props)
+  return (
+    <input
+      data-testid={TEST_ID}
+      {...attributes}
+    />
+  )
+}
+
+type CheckboxFormProps = FormProps<
+  Readonly<Record<'$', FormField<string, boolean>>>
+>
+
+function CheckBoxForm(props: CheckboxFormProps) {
+  const attributes = useFormCheckBox('$', props)
+  return (
+    <input
+      data-testid={TEST_ID}
+      type='checkbox'
+      {...attributes}
+    />
+  )
+}
+
 describe('hooks', function () {
+  const onFieldBlur: Mock<(k: '$') => void> = vitest.fn()
+  const onFieldFocus: Mock<(k: '$') => void> = vitest.fn()
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const onFieldValueChange: Mock<(k: '$', value: any) => void> = vitest.fn()
+  const onFieldSubmit: Mock<(k: '$') => boolean> = vitest.fn()
+
+  beforeEach(function () {
+    onFieldBlur.mockReset()
+    onFieldFocus.mockReset()
+    onFieldValueChange.mockReset()
+    onFieldSubmit.mockReset()
+  })
+
   describe('input', function () {
-    type InputFormProps = FormProps<
-      ReadonlyRecord<'$', FormField<string, string>>
-    >
-
-    function X(props: InputFormProps) {
-      const attributes = useFormInput('$', props)
-      return (
-        <input
-          data-testid={TEST_ID}
-          {...attributes}
-        />
-      )
-    }
-
-    const onFieldBlur: Mock<(k: '$') => void> = vitest.fn()
-    const onFieldFocus: Mock<(k: '$') => void> = vitest.fn()
-    const onFieldValueChange: Mock<(k: '$', value: string) => void> = vitest.fn()
-
     const props: InputFormProps = {
       fields: {
         $: {
@@ -46,12 +73,8 @@ describe('hooks', function () {
       onFieldBlur,
       onFieldFocus,
       onFieldValueChange,
+      onFieldSubmit,
     }
-    beforeEach(function () {
-      onFieldBlur.mockReset()
-      onFieldFocus.mockReset()
-      onFieldValueChange.mockReset()
-    })
 
     it.each([
       'a',
@@ -60,7 +83,7 @@ describe('hooks', function () {
     ])('displays the value "%s"', async function (value) {
       const wrapper = render(
         (
-          <X
+          <InputForm
             {...props}
             fields={{
               $: {
@@ -81,7 +104,7 @@ describe('hooks', function () {
       let e: HTMLElement
       beforeEach(async function () {
         wrapper = render(
-          <X {...props} />,
+          <InputForm {...props} />,
         )
         e = await wrapper.findByTestId(TEST_ID)
       })
@@ -111,6 +134,86 @@ describe('hooks', function () {
         expect(onFieldValueChange).toHaveBeenCalledOnce()
         expect(onFieldValueChange).toHaveBeenCalledWith('$', value)
       })
+
+      it('reports submit', function () {
+        expect(onFieldSubmit).not.toHaveBeenCalled()
+        fireEvent.keyUp(e, { key: 'Enter' })
+        expect(onFieldSubmit).toHaveBeenCalledOnce()
+        expect(onFieldSubmit).toHaveBeenCalledWith('$')
+      })
     })
   })
+  describe('checkbox', function () {
+    const props: CheckboxFormProps = {
+      fields: {
+        $: {
+          value: false,
+          disabled: false,
+        },
+      },
+      onFieldBlur,
+      onFieldFocus,
+      onFieldValueChange,
+      onFieldSubmit,
+    }
+
+    it.each([
+      true,
+      false,
+    ])('displays checked %s', async function (value) {
+      const wrapper = render(
+        (
+          <CheckBoxForm
+            {...props}
+            fields={{
+              $: {
+                value,
+                disabled: false,
+              },
+            }}
+          />
+        ),
+      )
+      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+      const e = (await wrapper.findByTestId(TEST_ID)) as HTMLInputElement
+      expect(e.checked).toEqual(value)
+    })
+
+    describe('events', function () {
+      let wrapper: RenderResult
+      let e: HTMLElement
+      beforeEach(async function () {
+        wrapper = render(
+          <CheckBoxForm {...props} />,
+        )
+        e = await wrapper.findByTestId(TEST_ID)
+      })
+
+      it('reports focus', function () {
+        expect(onFieldFocus).not.toHaveBeenCalled()
+        e.focus()
+        expect(onFieldFocus).toHaveBeenCalledOnce()
+        expect(onFieldFocus).toHaveBeenCalledWith('$')
+      })
+
+      it('reports blur', function () {
+        e.focus()
+        expect(onFieldBlur).not.toHaveBeenCalled()
+        e.blur()
+        expect(onFieldBlur).toHaveBeenCalledOnce()
+        expect(onFieldBlur).toHaveBeenCalledWith('$')
+      })
+
+      it('reports toggle checked', function () {
+        expect(onFieldValueChange).not.toHaveBeenCalled()
+        fireEvent.click(e)
+        expect(onFieldValueChange).toHaveBeenCalledOnce()
+        expect(onFieldValueChange).toHaveBeenCalledWith('$', true)
+      })
+    })
+  })
+
+  // radio group events are not an actual thing in HTML, only mantine
+  // describe('radio group', function () {
+  // })
 })

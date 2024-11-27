@@ -38,17 +38,23 @@ function createMockedConverter<
 >(impl: Converter<E, Record<string, FormField>, To, From>): Mocked<
   Converter<E, Record<string, FormField>, To, From>
 > {
-  const mockedConverter = mock<Converter<E, Record<string, FormField>, To, From>>()
+  const mockedConverter = mock<Converter<E, Record<string, FormField>, To, From> & {
+    defaultValue: To,
+  }>()
   // TODO surely there's a better way of providing fallbacks?
   mockedConverter.convert.mockImplementation(impl.convert.bind(impl))
   mockedConverter.revert.mockImplementation(impl.revert.bind(impl))
-  return mockedConverter
+  // mocking properties doesn't really work
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/consistent-type-assertions
+  mockedConverter.defaultValue = impl.defaultValue as any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/consistent-type-assertions
+  return mockedConverter as any
 }
 
 describe('all', function () {
   const stringToIntegerConverter = createMockedConverter(new StringToIntegerConverter(IS_NAN_ERROR))
   const booleanToBooleanConverter = createMockedConverter(
-    new PassThroughConverter<string, Record<string, FormField>, boolean>(),
+    new PassThroughConverter<string, Record<string, FormField>, boolean>(false),
   )
 
   beforeEach(function () {
@@ -64,11 +70,11 @@ describe('all', function () {
       >
       let t: {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        readonly $?: Converter<any, Record<string, FormField>, Record<'a' | 'b', number>, any>,
+        readonly $?: Converter<any, Readonly<Record<string, FormField>>, Record<'a' | 'b', number>, any>,
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        readonly ['$.a']?: Converter<any, Record<string, FormField>, number, any>,
+        readonly ['$.a']?: Converter<any, Readonly<Record<string, FormField>>, number, any>,
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        readonly ['$.b']?: Converter<any, Record<string, FormField>, number, any>,
+        readonly ['$.b']?: Converter<any, Readonly<Record<string, FormField>>, number, any>,
       }
 
       it('equals expected type', function () {
@@ -85,11 +91,11 @@ describe('all', function () {
       >
       let t: {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        readonly $?: Converter<any, Record<string, FormField>, { x: string, y: boolean }, any>,
+        readonly $?: Converter<any, Readonly<Record<string, FormField>>, { x: string, y: boolean }, any>,
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        readonly ['$.x']?: Converter<any, Record<string, FormField>, string, any>,
+        readonly ['$.x']?: Converter<any, Readonly<Record<string, FormField>>, string, any>,
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        readonly ['$.y']?: Converter<any, Record<string, FormField>, boolean, any>,
+        readonly ['$.y']?: Converter<any, Readonly<Record<string, FormField>>, boolean, any>,
       }
       it('equals expected type', function () {
         expectTypeOf(t).toEqualTypeOf<T>()
@@ -97,16 +103,16 @@ describe('all', function () {
 
       it('matches representative converters', function () {
         const converters = {
-          '$.x': new PassThroughConverter<string, Record<string, FormField>, string>(),
-          '$.y': new PassThroughConverter<string, Record<string, FormField>, boolean>(),
+          '$.x': new PassThroughConverter<string, Record<string, FormField>, string>(''),
+          '$.y': new PassThroughConverter<string, Record<string, FormField>, boolean>(false),
         } as const
         expectTypeOf(converters).toMatchTypeOf<T>()
       })
 
       it('does not allow mismatched converters', function () {
         const converters = {
-          '$.x': new PassThroughConverter<string, Record<string, FormField>, boolean>(),
-          '$.y': new PassThroughConverter<string, Record<string, FormField>, string>(),
+          '$.x': new PassThroughConverter<string, Record<string, FormField>, boolean>(false),
+          '$.y': new PassThroughConverter<string, Record<string, FormField>, string>(''),
         } as const
         expectTypeOf(converters).not.toMatchTypeOf<T>()
       })

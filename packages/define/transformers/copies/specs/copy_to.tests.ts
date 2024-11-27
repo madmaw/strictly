@@ -117,5 +117,27 @@ describe('copyTo', function () {
         expect(c).toEqual('false')
       })
     })
+
+    describe('discriminated', function () {
+      const typeDef = union('d')
+        .add('a', struct().set('x', number))
+        .add('b', struct().set('y', boolean))
+
+      it('copies', function () {
+        const c = copyTo(
+          typeDef,
+          {
+            d: 'a',
+            x: 1,
+          },
+          toString,
+        )
+
+        expect(c).toEqual({
+          d: 'a',
+          x: '1',
+        })
+      })
+    })
   })
 })

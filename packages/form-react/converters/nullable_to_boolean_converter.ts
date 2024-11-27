@@ -14,7 +14,14 @@ import { type FormField } from 'types/form_field'
 export class NullableToBooleanConverter<E, T extends TypeDefHolder>
   implements Converter<E, Record<string, FormField>, ValueTypeOf<T> | null, boolean>
 {
-  constructor(private readonly typeDef: T, private readonly prototype: ValueTypeOf<ReadonlyTypeDefOf<T>>) {
+  readonly defaultValue: ValueTypeOf<T> | null
+
+  constructor(
+    private readonly typeDef: T,
+    private readonly prototype: ValueTypeOf<ReadonlyTypeDefOf<T>>,
+    defaultToNull = true,
+  ) {
+    this.defaultValue = defaultToNull ? null : prototype
   }
 
   convert(from: boolean): Conversion<E, ValueTypeOf<T> | null> {

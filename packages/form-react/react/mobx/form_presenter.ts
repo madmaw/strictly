@@ -1,6 +1,5 @@
 import {
   checkExists,
-  type ReadonlyRecord,
   reduce,
   UnreachableError,
 } from '@de/base'
@@ -37,9 +36,9 @@ import {
 import { type FormField } from 'types/form_field'
 
 export type FlattenedConvertedFieldsOf<
-  ValuePathsToConverters extends ReadonlyRecord<string, Converter>,
+  ValuePathsToConverters extends Readonly<Record<string, Converter>>,
 > = {
-  [K in keyof ValuePathsToConverters]: FormField<
+  readonly [K in keyof ValuePathsToConverters]: FormField<
     ErrorTypeOfConverter<ValuePathsToConverters[K]>,
     FromTypeOfConverter<ValuePathsToConverters[K]>
   >
@@ -52,7 +51,7 @@ export type FlattenedTypePathsToConvertersOf<
   readonly [
     K in keyof F
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  ]?: Converter<any, Record<string, FormField>, F[K], any>
+  ]?: Converter<any, Readonly<Record<string, FormField>>, F[K], any>
 }
 
 type FieldOverride<V> = {
@@ -139,8 +138,8 @@ export class FormPresenter<
   ): boolean {
     const converter = this.getConverterForValuePath(model, valuePath)
 
-    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-    const conversion = converter.convert(value, valuePath as string, model.fields)
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-explicit-any
+    const conversion = converter.convert(value, valuePath as any, model.fields)
     return runInAction(() => {
       model.fieldOverrides[valuePath] = {
         value,
@@ -197,8 +196,8 @@ export class FormPresenter<
     const fieldOverride = model.fieldOverrides[valuePath]
     if (fieldOverride != null) {
       const converter = this.getConverterForValuePath(model, valuePath)
-      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-      const conversion = converter.convert(fieldOverride.value, valuePath as string, model.fields)
+      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-explicit-any
+      const conversion = converter.convert(fieldOverride.value, valuePath as any, model.fields)
       return runInAction(function () {
         switch (conversion.type) {
           case ConversionResult.Failure:
@@ -229,8 +228,8 @@ export class FormPresenter<
           { value }: FieldOverride<any>,
         ): boolean => {
           const converter = this.getConverterForValuePath(model, valuePath)
-          // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-          const conversion = converter.convert(value, valuePath as string, model.fields)
+          // eslint-disable-next-line @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-explicit-any
+          const conversion = converter.convert(value, valuePath as any, model.fields)
           switch (conversion.type) {
             case ConversionResult.Failure:
               model.errors[valuePath] = conversion.error
@@ -298,6 +297,8 @@ export class FormModel<
 
   @computed
   get fields(): SimplifyDeep<FlattenedConvertedFieldsOf<ValuePathsToConverters>> {
+    // TODO return a proxy object that looks up the converter for the value path on the fly
+    // always want to return something when a value is requested
     return flattenValueTypeTo(
       this.typeDef,
       this.value,

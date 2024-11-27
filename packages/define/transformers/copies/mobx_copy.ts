@@ -7,6 +7,7 @@ import {
   makeObservable,
   observable,
 } from 'mobx'
+import { getUnionTypeDef } from 'transformers/flatteners/flatten_value_type_to'
 import {
   type StructuredFieldKey,
   TypeDefType,
@@ -65,25 +66,8 @@ function observeValue(
         },
       )
     case TypeDefType.Union:
-      if (def.discriminator == null) {
-        return observable(v)
-      }
-      // `makeObservable` only observes the specified props
-      return makeObservable(
-        v,
-        reduce(
-          def.unions[v[def.discriminator]],
-          function (acc, k) {
-            acc[k] = observable
-            return acc
-          },
-          // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-          {} as Record<string | number | symbol, IObservableFactory>,
-        ),
-        {
-          deep: false,
-        },
-      )
+      // delegate to the underlying value
+      return observeValue(v, getUnionTypeDef(def, v))
     default:
       throw new UnreachableError(def)
   }

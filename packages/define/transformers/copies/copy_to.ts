@@ -191,11 +191,14 @@ function copyUnion<
   // is it a discriminated union with a struct?
   if (discriminator != null) {
     const discriminatorValue = value[discriminator]
-    const discriminatingUnion = internalCopyTo(
-      unions[discriminatorValue],
-      value,
-      copier,
-    )
+    const discriminatingUnion = {
+      ...internalCopyTo(
+        unions[discriminatorValue],
+        value,
+        copier,
+      ),
+      [discriminator]: discriminatorValue,
+    }
     return copier(discriminatingUnion, typeDef)
   }
 

@@ -1,4 +1,7 @@
-import { type Maybe } from 'types/maybe'
+import {
+  type Maybe,
+  nothing,
+} from 'types/maybe'
 import { delay } from './delay'
 
 export function constantPollInterval(delay: number) {
@@ -24,11 +27,11 @@ export async function poll<T>(
     await delay(pollInterval(retriesRemaining))
     retriesRemaining--
     const v = await f()
-    if (v != null) {
+    if (v !== nothing) {
       return v
     }
   }
-  return null
+  return nothing
 }
 
 // TODO

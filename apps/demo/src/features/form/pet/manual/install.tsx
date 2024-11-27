@@ -22,6 +22,10 @@ export function install() {
       return new ManualPetFormModel({
         name: '',
         alive: true,
+        species: {
+          type: 'cat',
+          meows: 1,
+        },
       })
     }, [])
 
@@ -42,18 +46,25 @@ export function install() {
       [model],
     )
 
+    const SpeciesComponent = useCallback(function () {
+      // TODO
+      return null
+    }, [])
+
     const Form = usePartialObserverComponent(
       function () {
         return {
           fields: model.fields,
           onFieldValueChange,
           onSubmit,
+          SpeciesComponent,
         }
       },
       [
         model,
         onFieldValueChange,
         onSubmit,
+        SpeciesComponent,
       ],
       PetForm,
     )

@@ -2,15 +2,33 @@ import { type ReadonlyRecord } from '@de/base'
 import {
   type ChangeEvent,
   useCallback,
+  useMemo,
 } from 'react'
-import { type FormField } from 'types/form_field'
+import {
+  type ErrorTypeOfFormField,
+  type FormField,
+} from 'types/form_field'
 import {
   type FormProps,
 } from './props'
 
+export type ErrorRendererProps<E> = {
+  error: E,
+}
+
+export type ErrorRenderer<E> = React.ComponentType<ErrorRendererProps<E>>
+
+function DefaultErrorRenderer({
+  error,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+}: ErrorRendererProps<any>) {
+  return error
+}
+
 export function useFormInput<
   K extends string,
-  Fields extends ReadonlyRecord<K, FormField<string, string>>,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  Fields extends ReadonlyRecord<K, FormField<any, string>>,
 >(
   k: K,
   {
@@ -20,6 +38,7 @@ export function useFormInput<
     onFieldSubmit,
     fields,
   }: FormProps<Fields>,
+  ErrorRenderer: ErrorRenderer<ErrorTypeOfFormField<Fields[K]>> = DefaultErrorRenderer,
 ) {
   const onChange = useCallback(function (e: ChangeEvent<HTMLInputElement>) {
     onFieldValueChange(k, e.target.value)
@@ -56,20 +75,29 @@ export function useFormInput<
     disabled,
   } = fields[k]
 
+  const renderedError = useMemo(function () {
+    return error && <ErrorRenderer error={error} />
+  }, [
+    ErrorRenderer,
+    error,
+  ])
+
   return {
+    name: k,
     onChange,
     onFocus,
     onBlur,
     onKeyUp,
     value,
-    error,
+    error: renderedError,
     disabled,
   }
 }
 
 export function useFormCheckBox<
   K extends string,
-  Fields extends ReadonlyRecord<K, FormField<string, boolean>>,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  Fields extends ReadonlyRecord<K, FormField<any, boolean>>,
 >(
   k: K,
   {
@@ -78,6 +106,7 @@ export function useFormCheckBox<
     onFieldFocus,
     fields,
   }: FormProps<Fields>,
+  ErrorRenderer: ErrorRenderer<ErrorTypeOfFormField<Fields[K]>> = DefaultErrorRenderer,
 ) {
   const onChange = useCallback(function (e: ChangeEvent<HTMLInputElement>) {
     onFieldValueChange(k, e.target.checked)
@@ -103,12 +132,77 @@ export function useFormCheckBox<
     disabled,
   } = fields[k]
 
+  const renderedError = useMemo(function () {
+    return error && <ErrorRenderer error={error} />
+  }, [
+    ErrorRenderer,
+    error,
+  ])
+
   return {
+    name: k,
     onChange,
     onFocus,
     onBlur,
     checked: value,
+    error: renderedError,
+    disabled,
+  }
+}
+
+export function useFormRadioGroup<
+  K extends string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  Fields extends ReadonlyRecord<K, FormField<any, string>>,
+>(
+  k: K,
+  {
+    onFieldValueChange,
+    onFieldBlur,
+    onFieldFocus,
+    fields,
+  }: FormProps<Fields>,
+  ErrorRenderer: ErrorRenderer<ErrorTypeOfFormField<Fields[K]>> = DefaultErrorRenderer,
+) {
+  const onChange = useCallback(function (value: string) {
+    onFieldValueChange(k, value)
+  }, [
+    k,
+    onFieldValueChange,
+  ])
+  const onFocus = useCallback(function () {
+    onFieldFocus?.(k)
+  }, [
+    k,
+    onFieldFocus,
+  ])
+  const onBlur = useCallback(function () {
+    onFieldBlur?.(k)
+  }, [
+    k,
+    onFieldBlur,
+  ])
+
+  const {
+    value,
     error,
+    disabled,
+  } = fields[k]
+
+  const renderedError = useMemo(function () {
+    return error && <ErrorRenderer error={error} />
+  }, [
+    ErrorRenderer,
+    error,
+  ])
+
+  return {
+    name: k,
+    onChange,
+    onFocus,
+    onBlur,
+    value,
+    error: renderedError,
     disabled,
   }
 }

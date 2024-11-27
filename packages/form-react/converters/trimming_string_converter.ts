@@ -9,8 +9,11 @@ import { type Validator } from 'types/validator'
 export class TrimmingStringConverter<E, Fields extends Record<string, FormField>>
   extends ValidatedConverter<E, Fields, string, string>
 {
-  constructor(validators: readonly Validator<E, Fields, string>[] = []) {
-    super([], validators)
+  constructor(
+    defaultValue = '',
+    validators: readonly Validator<E, Fields, string>[] = [],
+  ) {
+    super(defaultValue, [], validators)
   }
 
   doConvert(from: string): Conversion<E, string> {

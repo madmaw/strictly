@@ -30,6 +30,7 @@ exports[`PetForm > renders Empty 1`] = `
           class="m_8fb7ebe7 mantine-Input-input mantine-TextInput-input"
           data-variant="default"
           id="mantine-12voha2vo"
+          name="$.name"
           value=""
         />
       </div>
@@ -49,6 +50,7 @@ exports[`PetForm > renders Empty 1`] = `
           <input
             class="mantine-focus-auto m_26063560 mantine-Checkbox-input"
             id="mantine-1fu8n1fu8"
+            name="$.alive"
             type="checkbox"
           />
           <svg
@@ -76,6 +78,18 @@ exports[`PetForm > renders Empty 1`] = `
             Alive
           </label>
         </div>
+      </div>
+    </div>
+    <div
+      class="m_e615b15f mantine-Card-root m_1b7284a3 mantine-Paper-root"
+      data-with-border="true"
+    >
+      <div
+        class="m_e615b15f mantine-Card-root m_1b7284a3 mantine-Paper-root"
+      >
+        <h1>
+          Species
+        </h1>
       </div>
     </div>
     <button
@@ -132,6 +146,7 @@ exports[`PetForm > renders Errors 1`] = `
           data-error="true"
           data-variant="default"
           id="mantine-12voha2vo"
+          name="$.name"
           value="Bad"
         />
       </div>
@@ -139,7 +154,7 @@ exports[`PetForm > renders Errors 1`] = `
         class="m_8f816625 mantine-InputWrapper-error mantine-TextInput-error"
         id="mantine-12voha2vo-error"
       >
-        this name is bad
+        name too short
       </p>
     </div>
     <div
@@ -156,8 +171,8 @@ exports[`PetForm > renders Errors 1`] = `
         >
           <input
             class="mantine-focus-auto m_26063560 mantine-Checkbox-input"
-            data-error="true"
             id="mantine-1fu8n1fu8"
+            name="$.alive"
             type="checkbox"
           />
           <svg
@@ -184,12 +199,19 @@ exports[`PetForm > renders Errors 1`] = `
           >
             Alive
           </label>
-          <p
-            class="m_8e8a99cc mantine-Checkbox-error m_8f816625 mantine-InputWrapper-error"
-          >
-            this status is bad
-          </p>
         </div>
+      </div>
+    </div>
+    <div
+      class="m_e615b15f mantine-Card-root m_1b7284a3 mantine-Paper-root"
+      data-with-border="true"
+    >
+      <div
+        class="m_e615b15f mantine-Card-root m_1b7284a3 mantine-Paper-root"
+      >
+        <h1>
+          Species
+        </h1>
       </div>
     </div>
     <button
@@ -241,6 +263,7 @@ exports[`PetForm > renders Populated 1`] = `
           class="m_8fb7ebe7 mantine-Input-input mantine-TextInput-input"
           data-variant="default"
           id="mantine-1fu8n1fu8"
+          name="$.name"
           value="Fido"
         />
       </div>
@@ -262,6 +285,7 @@ exports[`PetForm > renders Populated 1`] = `
             checked=""
             class="mantine-focus-auto m_26063560 mantine-Checkbox-input"
             id="mantine-1ssssssss"
+            name="$.alive"
             type="checkbox"
           />
           <svg
@@ -289,6 +313,18 @@ exports[`PetForm > renders Populated 1`] = `
             Alive
           </label>
         </div>
+      </div>
+    </div>
+    <div
+      class="m_e615b15f mantine-Card-root m_1b7284a3 mantine-Paper-root"
+      data-with-border="true"
+    >
+      <div
+        class="m_e615b15f mantine-Card-root m_1b7284a3 mantine-Paper-root"
+      >
+        <h1>
+          Species
+        </h1>
       </div>
     </div>
     <button

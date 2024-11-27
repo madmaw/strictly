@@ -20,7 +20,7 @@ export type Conversion<E, V> = {
 export type Converter<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   E = any,
-  Fields extends Record<string, FormField> = Record<string, FormField>,
+  Fields extends Readonly<Record<string, FormField>> = Readonly<Record<string, FormField>>,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   To = any,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -28,16 +28,20 @@ export type Converter<
 > = {
   convert(from: From, valuePath: keyof Fields, fields: Fields): Conversion<E, To>,
   revert(to: To): From,
+  readonly defaultValue: To,
 }
 
 export type ErrorTypeOfConverter<C extends Converter> = C extends Converter<infer E> ? E : never
 
 export type FromTypeOfConverter<C extends Converter> = ReturnType<C['revert']>
 
-export abstract class ValidatedConverter<E, Fields extends Record<string, FormField>, To, From>
+export type ToTypeOfConverter<C extends Converter> = C extends Converter<infer _E, infer _F, infer To> ? To : never
+
+export abstract class ValidatedConverter<E, Fields extends Readonly<Record<string, FormField>>, To, From>
   implements Converter<E, Fields, To, From>
 {
   constructor(
+    readonly defaultValue: To,
     private readonly preValidators: readonly Validator<E, Fields, From>[],
     private readonly postValidators: readonly Validator<E, Fields, To>[],
   ) {

@@ -11,10 +11,11 @@ export class StringToIntegerConverter<E, Fields extends Record<string, FormField
 {
   constructor(
     private readonly isNanError: E,
+    defaultValue: number = 0,
     preValidators: readonly Validator<E, Fields, string>[] = [],
     postValidators: readonly Validator<E, Fields, number>[] = [],
   ) {
-    super(preValidators, postValidators)
+    super(defaultValue, preValidators, postValidators)
   }
 
   doConvert(from: string): Conversion<E, number> {
