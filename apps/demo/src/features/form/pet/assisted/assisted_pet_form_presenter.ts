@@ -2,17 +2,21 @@ import {
   FormModel,
   FormPresenter,
   PassThroughConverter,
+  StringToIntegerConverter,
 } from '@de/form-react'
 import { SelectDiscriminatedUnionConverter } from '@de/form-react/converters/select_value_type_converter'
 import { TrimmingStringConverter } from '@de/form-react/converters/trimming_string_converter'
 import { type FlattenedConvertersOfFormFields } from '@de/form-react/types/flattened_converters_of_form_fields'
 import { minimumStringLengthValidatorFactory } from '@de/form-react/validators/minimum_string_length_validator'
 import { type PetFormFields } from 'features/form/pet/pet_form'
-import { type SpeciesFormFields } from 'features/form/pet/species_form'
+import { type PetSpeciesCatFormFields } from 'features/form/pet/pet_species_cat_form'
+import { type PetSpeciesDogFormFields } from 'features/form/pet/pet_species_dog_form'
+import { type PetSpeciesFormFields } from 'features/form/pet/pet_species_form'
 import {
   type FlattenedPetJsonValueToTypePaths,
   type FlattenedPetTypeDefs,
   NAME_TOO_SHORT_ERROR,
+  NOT_A_NUMBER_ERROR,
   petTypeDef,
   speciesTypeDef,
 } from 'features/form/pet/types'
@@ -21,7 +25,7 @@ import { type SimplifyDeep } from 'type-fest'
 const converters: SimplifyDeep<FlattenedConvertersOfFormFields<
   FlattenedPetJsonValueToTypePaths,
   FlattenedPetTypeDefs,
-  PetFormFields & SpeciesFormFields
+  PetFormFields & PetSpeciesFormFields & PetSpeciesCatFormFields & PetSpeciesDogFormFields
 >> = {
   '$.name': new TrimmingStringConverter(
     '',
@@ -47,8 +51,8 @@ const converters: SimplifyDeep<FlattenedConvertersOfFormFields<
       },
     },
   ),
-  // '$.species.cat:meows': new StringToIntegerConverter(NOT_A_NUMBER_ERROR),
-  // '$.species.dog:barks': new StringToIntegerConverter(NOT_A_NUMBER_ERROR),
+  '$.species.cat:meows': new StringToIntegerConverter(NOT_A_NUMBER_ERROR),
+  '$.species.dog:barks': new StringToIntegerConverter(NOT_A_NUMBER_ERROR),
 }
 
 export class AssistedPetFormPresenter extends FormPresenter<

@@ -16,16 +16,14 @@ import {
   type Species,
 } from './types'
 
-export type SpeciesFormFields = FlattenedFormFieldsOf<
+export type PetSpeciesFormFields = FlattenedFormFieldsOf<
   FlattenedPetJsonValueToTypePaths,
   {
     '$.species': FormField<never, Species>,
-    // '$.species.dog:barks': FormField<typeof NOT_A_NUMBER_ERROR, string>,
-    // '$.species.cat:meows': FormField<typeof NOT_A_NUMBER_ERROR, string>,
   }
 >
 
-export type SpeciesFormProps = FormProps<SpeciesFormFields> & {
+export type PetSpeciesFormProps = FormProps<PetSpeciesFormFields> & {
   speciesComponents: Record<Species, ComponentType>,
 }
 
@@ -34,7 +32,7 @@ const SPECIES_NAMES: Record<Species, string> = {
   dog: 'Dog',
 }
 
-export function SpeciesForm(props: SpeciesFormProps) {
+export function PetSpeciesForm(props: PetSpeciesFormProps) {
   const {
     speciesComponents,
     fields,
@@ -66,8 +64,8 @@ export function SpeciesForm(props: SpeciesFormProps) {
             },
           )}
         </Group>
-        <SpeciesComponent />
       </Radio.Group>
+      <SpeciesComponent />
     </Stack>
   )
 }

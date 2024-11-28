@@ -1,0 +1,273 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`PetSpeciesForm > renders Cat 1`] = `
+<div>
+  <style
+    data-mantine-styles="classes"
+  >
+    @media (max-width: 35.99375em) {.mantine-visible-from-xs {display: none !important;}}@media (min-width: 36em) {.mantine-hidden-from-xs {display: none !important;}}@media (max-width: 47.99375em) {.mantine-visible-from-sm {display: none !important;}}@media (min-width: 48em) {.mantine-hidden-from-sm {display: none !important;}}@media (max-width: 61.99375em) {.mantine-visible-from-md {display: none !important;}}@media (min-width: 62em) {.mantine-hidden-from-md {display: none !important;}}@media (max-width: 74.99375em) {.mantine-visible-from-lg {display: none !important;}}@media (min-width: 75em) {.mantine-hidden-from-lg {display: none !important;}}@media (max-width: 87.99375em) {.mantine-visible-from-xl {display: none !important;}}@media (min-width: 88em) {.mantine-hidden-from-xl {display: none !important;}}
+  </style>
+  <div
+    class="m_6d731127 mantine-Stack-root"
+    style="--stack-gap: var(--mantine-spacing-md); --stack-align: stretch; --stack-justify: flex-start;"
+  >
+    <div
+      class="m_46b77525 mantine-InputWrapper-root mantine-RadioGroup-root"
+    >
+      <div
+        class="m_8fdc1311 mantine-InputWrapper-label mantine-RadioGroup-label"
+        id="mantine-2voha2voh-label"
+      >
+        Species
+      </div>
+      <div
+        aria-labelledby="mantine-2voha2voh-label"
+        role="radiogroup"
+      >
+        <div
+          class="m_4081bf90 mantine-Group-root"
+          style="--group-gap: var(--mantine-spacing-md); --group-align: center; --group-justify: flex-start; --group-wrap: wrap;"
+        >
+          <div
+            class="m_f3f1af94 mantine-Radio-root m_5f75b09e mantine-Radio-root"
+            data-checked="true"
+            data-label-position="right"
+            style="--radio-color: var(--mantine-color-blue-filled);"
+          >
+            <div
+              class="m_5f6e695e mantine-Radio-body"
+            >
+              <div
+                class="m_89c4f5e4 mantine-Radio-inner"
+                data-label-position="right"
+              >
+                <input
+                  checked=""
+                  class="mantine-focus-auto m_8a3dbb89 mantine-Radio-radio"
+                  id="mantine-25rcyk5rc"
+                  name="$.species"
+                  type="radio"
+                  value="cat"
+                />
+                <svg
+                  aria-hidden="true"
+                  class="m_f3ed6b2b mantine-Radio-icon"
+                  fill="none"
+                  viewBox="0 0 5 5"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <circle
+                    cx="2.5"
+                    cy="2.5"
+                    fill="currentColor"
+                    r="2.5"
+                  />
+                </svg>
+              </div>
+              <div
+                class="m_d3ea56bb mantine-Radio-labelWrapper"
+              >
+                <label
+                  class="m_8ee546b8 mantine-Radio-label"
+                  for="mantine-25rcyk5rc"
+                >
+                  Cat
+                </label>
+              </div>
+            </div>
+          </div>
+          <div
+            class="m_f3f1af94 mantine-Radio-root m_5f75b09e mantine-Radio-root"
+            data-label-position="right"
+            style="--radio-color: var(--mantine-color-blue-filled);"
+          >
+            <div
+              class="m_5f6e695e mantine-Radio-body"
+            >
+              <div
+                class="m_89c4f5e4 mantine-Radio-inner"
+                data-label-position="right"
+              >
+                <input
+                  class="mantine-focus-auto m_8a3dbb89 mantine-Radio-radio"
+                  id="mantine-2ipx4bipx"
+                  name="$.species"
+                  type="radio"
+                  value="dog"
+                />
+                <svg
+                  aria-hidden="true"
+                  class="m_f3ed6b2b mantine-Radio-icon"
+                  fill="none"
+                  viewBox="0 0 5 5"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <circle
+                    cx="2.5"
+                    cy="2.5"
+                    fill="currentColor"
+                    r="2.5"
+                  />
+                </svg>
+              </div>
+              <div
+                class="m_d3ea56bb mantine-Radio-labelWrapper"
+              >
+                <label
+                  class="m_8ee546b8 mantine-Radio-label"
+                  for="mantine-2ipx4bipx"
+                >
+                  Dog
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="m_e615b15f mantine-Card-root m_1b7284a3 mantine-Paper-root"
+    >
+      <h1>
+        Cat
+      </h1>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`PetSpeciesForm > renders Dog 1`] = `
+<div>
+  <style
+    data-mantine-styles="classes"
+  >
+    @media (max-width: 35.99375em) {.mantine-visible-from-xs {display: none !important;}}@media (min-width: 36em) {.mantine-hidden-from-xs {display: none !important;}}@media (max-width: 47.99375em) {.mantine-visible-from-sm {display: none !important;}}@media (min-width: 48em) {.mantine-hidden-from-sm {display: none !important;}}@media (max-width: 61.99375em) {.mantine-visible-from-md {display: none !important;}}@media (min-width: 62em) {.mantine-hidden-from-md {display: none !important;}}@media (max-width: 74.99375em) {.mantine-visible-from-lg {display: none !important;}}@media (min-width: 75em) {.mantine-hidden-from-lg {display: none !important;}}@media (max-width: 87.99375em) {.mantine-visible-from-xl {display: none !important;}}@media (min-width: 88em) {.mantine-hidden-from-xl {display: none !important;}}
+  </style>
+  <div
+    class="m_6d731127 mantine-Stack-root"
+    style="--stack-gap: var(--mantine-spacing-md); --stack-align: stretch; --stack-justify: flex-start;"
+  >
+    <div
+      class="m_46b77525 mantine-InputWrapper-root mantine-RadioGroup-root"
+    >
+      <div
+        class="m_8fdc1311 mantine-InputWrapper-label mantine-RadioGroup-label"
+        id="mantine-2ipx4bipx-label"
+      >
+        Species
+      </div>
+      <div
+        aria-labelledby="mantine-2ipx4bipx-label"
+        role="radiogroup"
+      >
+        <div
+          class="m_4081bf90 mantine-Group-root"
+          style="--group-gap: var(--mantine-spacing-md); --group-align: center; --group-justify: flex-start; --group-wrap: wrap;"
+        >
+          <div
+            class="m_f3f1af94 mantine-Radio-root m_5f75b09e mantine-Radio-root"
+            data-label-position="right"
+            style="--radio-color: var(--mantine-color-blue-filled);"
+          >
+            <div
+              class="m_5f6e695e mantine-Radio-body"
+            >
+              <div
+                class="m_89c4f5e4 mantine-Radio-inner"
+                data-label-position="right"
+              >
+                <input
+                  class="mantine-focus-auto m_8a3dbb89 mantine-Radio-radio"
+                  id="mantine-1ssssssss"
+                  name="$.species"
+                  type="radio"
+                  value="cat"
+                />
+                <svg
+                  aria-hidden="true"
+                  class="m_f3ed6b2b mantine-Radio-icon"
+                  fill="none"
+                  viewBox="0 0 5 5"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <circle
+                    cx="2.5"
+                    cy="2.5"
+                    fill="currentColor"
+                    r="2.5"
+                  />
+                </svg>
+              </div>
+              <div
+                class="m_d3ea56bb mantine-Radio-labelWrapper"
+              >
+                <label
+                  class="m_8ee546b8 mantine-Radio-label"
+                  for="mantine-1ssssssss"
+                >
+                  Cat
+                </label>
+              </div>
+            </div>
+          </div>
+          <div
+            class="m_f3f1af94 mantine-Radio-root m_5f75b09e mantine-Radio-root"
+            data-checked="true"
+            data-label-position="right"
+            style="--radio-color: var(--mantine-color-blue-filled);"
+          >
+            <div
+              class="m_5f6e695e mantine-Radio-body"
+            >
+              <div
+                class="m_89c4f5e4 mantine-Radio-inner"
+                data-label-position="right"
+              >
+                <input
+                  checked=""
+                  class="mantine-focus-auto m_8a3dbb89 mantine-Radio-radio"
+                  id="mantine-25rcyk5rc"
+                  name="$.species"
+                  type="radio"
+                  value="dog"
+                />
+                <svg
+                  aria-hidden="true"
+                  class="m_f3ed6b2b mantine-Radio-icon"
+                  fill="none"
+                  viewBox="0 0 5 5"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <circle
+                    cx="2.5"
+                    cy="2.5"
+                    fill="currentColor"
+                    r="2.5"
+                  />
+                </svg>
+              </div>
+              <div
+                class="m_d3ea56bb mantine-Radio-labelWrapper"
+              >
+                <label
+                  class="m_8ee546b8 mantine-Radio-label"
+                  for="mantine-25rcyk5rc"
+                >
+                  Dog
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="m_e615b15f mantine-Card-root m_1b7284a3 mantine-Paper-root"
+    >
+      <h1>
+        Dog
+      </h1>
+    </div>
+  </div>
+</div>
+`;

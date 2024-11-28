@@ -4,9 +4,9 @@ import {
   type Meta,
   type StoryObj,
 } from '@storybook/react'
-import { SpeciesForm } from 'features/form/pet/species_form'
+import { PetSpeciesForm } from 'features/form/pet/pet_species_form'
 
-const Component = SpeciesForm
+const Component = PetSpeciesForm
 
 // TODO placeholder component
 function CatComponent() {

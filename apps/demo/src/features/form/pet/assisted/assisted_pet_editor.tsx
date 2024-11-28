@@ -5,7 +5,9 @@ import {
 } from '@de/form-react/react/mobx/types'
 import { usePartialObserverComponent } from '@de/form-react/util/partial'
 import { PetForm as PetFormImpl } from 'features/form/pet/pet_form'
-import { SpeciesForm as SpeciesFormImpl } from 'features/form/pet/species_form'
+import { PetSpeciesCatForm } from 'features/form/pet/pet_species_cat_form'
+import { PetSpeciesDogForm } from 'features/form/pet/pet_species_dog_form'
+import { PetSpeciesForm } from 'features/form/pet/pet_species_form'
 import {
   type Pet,
   type Species,
@@ -21,6 +23,7 @@ import {
 
 const presenter = new AssistedPetFormPresenter()
 
+// TODO feels like we should be able to make much of this implementation generic
 export function AssistedPetEditor({
   value,
   onValueChange,
@@ -70,18 +73,55 @@ export function AssistedPetEditor({
     ],
   )
 
+  const SpeciesCatComponent = usePartialObserverComponent(
+    function () {
+      return {
+        fields: model.fields,
+        onFieldValueChange,
+        onSubmit,
+        onFieldSubmit,
+        onFieldBlur,
+      }
+    },
+    [
+      model,
+      onFieldValueChange,
+      onSubmit,
+      onFieldSubmit,
+      onFieldBlur,
+    ],
+    PetSpeciesCatForm,
+  )
+
+  const SpeciesDogComponent = usePartialObserverComponent(
+    function () {
+      return {
+        fields: model.fields,
+        onFieldValueChange,
+        onSubmit,
+        onFieldSubmit,
+        onFieldBlur,
+      }
+    },
+    [
+      model,
+      onFieldValueChange,
+      onSubmit,
+      onFieldSubmit,
+      onFieldBlur,
+    ],
+    PetSpeciesDogForm,
+  )
+
   const speciesComponents = useMemo<Record<Species, ComponentType>>(function () {
     return {
-      cat: function () {
-        // TODO
-        return 'cat'
-      },
-      dog: function () {
-        // TODO
-        return 'dog'
-      },
+      cat: SpeciesCatComponent,
+      dog: SpeciesDogComponent,
     }
-  }, [])
+  }, [
+    SpeciesCatComponent,
+    SpeciesDogComponent,
+  ])
 
   const SpeciesComponent = usePartialObserverComponent(
     function () {
@@ -102,7 +142,7 @@ export function AssistedPetEditor({
       onFieldBlur,
       speciesComponents,
     ],
-    SpeciesFormImpl,
+    PetSpeciesForm,
   )
 
   const PetForm = usePartialObserverComponent(

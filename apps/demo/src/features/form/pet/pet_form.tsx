@@ -25,9 +25,6 @@ export type PetFormFields = FlattenedFormFieldsOf<
   {
     '$.name': FormField<typeof NAME_TOO_SHORT_ERROR, string>,
     '$.alive': FormField<never, boolean>,
-    // '$.species': FormField<never, Species>,
-    // '$.species.dog:barks': FormField<typeof NOT_A_NUMBER_ERROR, string>,
-    // '$.species.cat:meows': FormField<typeof NOT_A_NUMBER_ERROR, string>,
   }
 >
 
