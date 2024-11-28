@@ -194,6 +194,10 @@ describe('all', function () {
             }),
           )
         })
+
+        it('has the expected keys', function () {
+          expect(Object.keys(model.fields)).toEqual(['$'])
+        })
       })
 
       describe('jsonPaths', function () {
@@ -648,17 +652,7 @@ describe('all', function () {
           expect(stringToIntegerConverter.convert).toHaveBeenCalledWith(
             '4',
             '$[2]',
-            {
-              '$[0]': expect.objectContaining({
-                value: '1',
-              }),
-              '$[1]': expect.objectContaining({
-                value: '3',
-              }),
-              '$[2]': expect.objectContaining({
-                value: '7',
-              }),
-            },
+            model.fields,
           )
         })
       })

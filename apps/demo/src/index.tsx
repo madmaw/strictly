@@ -1,6 +1,6 @@
 import '@mantine/core/styles.css'
 
-import { checkExists } from '@de/base'
+import { assertExistsAndReturn } from '@de/base'
 import {
   createTheme,
   MantineProvider,
@@ -12,7 +12,7 @@ import { createRoot } from 'react-dom/client'
 
 window.onload = function () {
   const elementId = 'root'
-  const e = checkExists(
+  const e = assertExistsAndReturn(
     document.getElementById(elementId),
     'unable to find element id {}',
     elementId,

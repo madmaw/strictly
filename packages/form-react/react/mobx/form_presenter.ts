@@ -1,5 +1,5 @@
 import {
-  checkExists,
+  assertExistsAndReturn,
   reduce,
   UnreachableError,
 } from '@de/base'
@@ -12,6 +12,7 @@ import {
   type TypeDefHolder,
   type ValueTypeOf,
 } from '@de/fine'
+import { jsonValuePathToTypePath } from '@de/fine'
 import { mobxCopy } from '@de/fine/transformers/copies/mobx_copy'
 import {
   type AnyValueType,
@@ -103,14 +104,14 @@ export class FormPresenter<
     model: FormModel<T, JsonPaths, TypePathsToConverters, ValuePathsToConverters>,
     valuePath: keyof ValuePathsToConverters,
   ) {
-    const typePath = checkExists(
+    const typePath = assertExistsAndReturn(
       // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
       model.jsonPaths[valuePath as keyof JsonPaths],
       '{} is not a valid value path for the current value ({})',
       valuePath,
       Object.keys(model.jsonPaths),
     )
-    return checkExists(
+    return assertExistsAndReturn(
       // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
       this.converters[typePath as keyof TypePathsToConverters],
       'expected converter to be defined {} ({})',
@@ -123,7 +124,7 @@ export class FormPresenter<
     model: FormModel<T, JsonPaths, TypePathsToConverters, ValuePathsToConverters>,
     valuePath: keyof ValuePathsToConverters,
   ) {
-    return checkExists(
+    return assertExistsAndReturn(
       // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
       model.accessors[valuePath as string],
       'no accessor found for value path {}',
@@ -281,7 +282,85 @@ export class FormModel<
   }
 
   @computed
-  // should only be referenced internally, so loosely type
+  get fields(): SimplifyDeep<FlattenedConvertedFieldsOf<ValuePathsToConverters>> {
+    return new Proxy<SimplifyDeep<FlattenedConvertedFieldsOf<ValuePathsToConverters>>>(
+      this.knownFields,
+      {
+        get: (target, prop) => {
+          // eslint-disable-next-line @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-explicit-any
+          const field = (target as any)[prop]
+          if (field != null) {
+            return field
+          }
+          if (typeof prop === 'string') {
+            // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+            return this.maybeSynthesizeFieldByValuePath(prop as keyof ValuePathsToConverters)
+          }
+        },
+      },
+    )
+  }
+
+  @computed
+  private get knownFields(): SimplifyDeep<FlattenedConvertedFieldsOf<ValuePathsToConverters>> {
+    return flattenValueTypeTo(
+      this.typeDef,
+      this.value,
+      () => {},
+      // TODO swap these to valuePath, typePath in flatten
+      (_t: StrictTypeDef, _v: AnyValueType, _setter, typePath, valuePath): FormField | undefined => {
+        return this.synthesizeFieldByPaths(
+          // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+          valuePath as keyof ValuePathsToConverters,
+          // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+          typePath as keyof TypePathsToConverters,
+        )
+      },
+    )
+  }
+
+  private maybeSynthesizeFieldByValuePath(valuePath: keyof ValuePathsToConverters): FormField | undefined {
+    let typePath: keyof TypePathsToConverters
+    try {
+      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+      typePath = jsonValuePathToTypePath<JsonPaths, keyof JsonPaths>(
+        this.typeDef,
+        // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+        valuePath as keyof JsonPaths,
+      ) as keyof TypePathsToConverters
+    } catch (e) {
+      // TODO make jsonValuePathToTypePath return null in the event of an invalid
+      // value path instead of throwing an exception
+      // assume that the path was invalid
+      return
+    }
+    return this.synthesizeFieldByPaths(valuePath, typePath)
+  }
+
+  private synthesizeFieldByPaths(valuePath: keyof ValuePathsToConverters, typePath: keyof TypePathsToConverters) {
+    const converter = this.converters[typePath]
+    if (converter == null) {
+      // invalid path, which can happen
+      return
+    }
+
+    const fieldOverride = this.fieldOverrides[valuePath]
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+    const accessor = this.accessors[valuePath as string]
+    const value = fieldOverride
+      ? fieldOverride.value
+      : converter.revert(accessor != null ? accessor.value : converter.defaultValue)
+    const error = this.errors[valuePath]
+    return {
+      value,
+      error,
+      // if we can't write it back, then we have to disable it
+      disabled: accessor == null,
+    }
+  }
+
+  @computed
+  // should only be referenced internally, so loosely typed
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   get accessors(): Readonly<Record<string, Accessor<any>>> {
     // TODO flatten mobx accessors of actually!
@@ -291,35 +370,6 @@ export class FormModel<
       this.value,
       (value: ValueTypeOf<T>): void => {
         this.value = mobxCopy(this.typeDef, value)
-      },
-    )
-  }
-
-  @computed
-  get fields(): SimplifyDeep<FlattenedConvertedFieldsOf<ValuePathsToConverters>> {
-    // TODO return a proxy object that looks up the converter for the value path on the fly
-    // always want to return something when a value is requested
-    return flattenValueTypeTo(
-      this.typeDef,
-      this.value,
-      () => {},
-      (_t: StrictTypeDef, v: AnyValueType, _setter, typePath, valuePath): FormField | undefined => {
-        // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-        const converter = this.converters[typePath as keyof TypePathsToConverters]
-        if (converter == null) {
-          // no converter means we don't render the value
-          return
-        }
-        // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-        const fieldOverride = this.fieldOverrides[valuePath as keyof ValuePathsToConverters]
-        const value = fieldOverride?.value ?? converter.revert(v)
-        // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-        const error = this.errors[valuePath as keyof ValuePathsToConverters]
-        return {
-          value,
-          error,
-          disabled: false,
-        }
       },
     )
   }

@@ -1,5 +1,6 @@
 export * from './transformers/flatteners/flatten_accessors_of'
 export * from './transformers/flatteners/flatten_json_value_to_type_paths_of'
+export * from './transformers/flatteners/json_value_path_to_type_path'
 export * from './types/builders'
 export * from './types/definitions'
 export * from './types/flattened_accessors_of'

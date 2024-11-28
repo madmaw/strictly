@@ -38,7 +38,7 @@ export const Error: Story = {
     fields: {
       '$.species.cat:meows': {
         disabled: false,
-        value: 'a',
+        value: '',
         error: NOT_A_NUMBER_ERROR,
       },
     },

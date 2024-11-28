@@ -12,6 +12,7 @@
     "eslint-plugin-import-newlines": "^1.4.0",
     "eslint-plugin-jsonc": "^2.16.0",
     "eslint-plugin-no-autofix": "^2.0.0",
+    "eslint-plugin-no-only-tests": "^3.3.0",
     "eslint-plugin-no-relative-import-paths": "^1.5.3",
     "eslint-plugin-react": "^7.37.2",
     "eslint-plugin-react-hooks": "^5.0.0",

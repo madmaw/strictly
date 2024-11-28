@@ -101,6 +101,7 @@ module.exports = {
         'import-newlines',
         'import',
         'no-autofix',
+        'no-only-tests',
         'no-relative-import-paths',
         'unused-imports',
       ],
@@ -327,6 +328,7 @@ module.exports = {
             maxEOF: 1,
           },
         ],
+        'no-only-tests/no-only-tests': 'warn',
         'no-relative-import-paths/no-relative-import-paths': [
           'warn',
           {

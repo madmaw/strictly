@@ -10,7 +10,7 @@ class PreconditionFailedError extends Error {
   }
 }
 
-export function checkExists<T>(
+export function assertExistsAndReturn<T>(
   t: T,
   message: string,
   ...args: readonly FormatArg[]
@@ -25,12 +25,43 @@ export function assertExists<V>(v: V, message: string, ...args: readonly FormatA
   }
 }
 
+export function assertEqual<T extends FormatArg>(
+  a: T,
+  b: T,
+  message: string = '{} != {}',
+  arg1: FormatArg = a,
+  arg2: FormatArg = b,
+  ...args: readonly FormatArg[]
+) {
+  if (a !== b) {
+    throw new PreconditionFailedError(
+      message,
+      [
+        arg1,
+        arg2,
+        ...args,
+      ],
+    )
+  }
+}
+
 export function assertState(
   condition: boolean,
   message: string,
   ...args: readonly FormatArg[]
 ): asserts condition is true {
   if (!condition) {
+    throw new PreconditionFailedError(message, args)
+  }
+}
+
+export function assertIs<V, T extends V>(
+  v: V,
+  condition: (v: V) => v is T,
+  message: string,
+  ...args: readonly FormatArg[]
+): asserts v is T {
+  if (!condition(v)) {
     throw new PreconditionFailedError(message, args)
   }
 }

@@ -37,7 +37,7 @@ exports[`PetSpeciesCatForm > renders Error 1`] = `
           id="mantine-0px4bipx4"
           name="$.species.cat:meows"
           type="number"
-          value="a"
+          value=""
         />
       </div>
       <p
