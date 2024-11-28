@@ -93,7 +93,7 @@ exports[`PetForm > renders Empty 1`] = `
       </div>
     </div>
     <button
-      class="mantine-focus-auto mantine-active m_77c9d27d mantine-Button-root m_87cf2631 mantine-UnstyledButton-root"
+      class="mantine-focus-auto mantine-active _hot_c4b7be m_77c9d27d mantine-Button-root m_87cf2631 mantine-UnstyledButton-root"
       style="--button-color: var(--mantine-color-white);"
       type="button"
     >
@@ -215,7 +215,7 @@ exports[`PetForm > renders Errors 1`] = `
       </div>
     </div>
     <button
-      class="mantine-focus-auto mantine-active m_77c9d27d mantine-Button-root m_87cf2631 mantine-UnstyledButton-root"
+      class="mantine-focus-auto mantine-active _hot_c4b7be m_77c9d27d mantine-Button-root m_87cf2631 mantine-UnstyledButton-root"
       style="--button-color: var(--mantine-color-white);"
       type="button"
     >
@@ -328,7 +328,7 @@ exports[`PetForm > renders Populated 1`] = `
       </div>
     </div>
     <button
-      class="mantine-focus-auto mantine-active m_77c9d27d mantine-Button-root m_87cf2631 mantine-UnstyledButton-root"
+      class="mantine-focus-auto mantine-active _hot_c4b7be m_77c9d27d mantine-Button-root m_87cf2631 mantine-UnstyledButton-root"
       style="--button-color: var(--mantine-color-white);"
       type="button"
     >

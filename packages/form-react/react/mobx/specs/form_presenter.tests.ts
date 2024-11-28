@@ -652,7 +652,11 @@ describe('all', function () {
           expect(stringToIntegerConverter.convert).toHaveBeenCalledWith(
             '4',
             '$[2]',
-            model.fields,
+            expect.objectContaining({
+              '$[2]': expect.objectContaining({
+                value: '7',
+              }),
+            }),
           )
         })
       })

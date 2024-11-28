@@ -13,6 +13,9 @@ import {
   TextInput,
 } from '@mantine/core'
 import { type ComponentType } from 'react'
+// TODO typescript plugin https://www.npmjs.com/package/typescript-plugin-css-modules#visual-studio-code
+// TODO remove project references
+import styles from './pet_form.module.css'
 import {
   type FlattenedPetJsonValueToTypePaths,
   type NAME_TOO_SHORT_ERROR,
@@ -53,7 +56,10 @@ export function PetForm(props: PetFormProps) {
       <Card withBorder={true}>
         <SpeciesComponent />
       </Card>
-      <Button onClick={onSubmit}>
+      <Button
+        className={styles.hot}
+        onClick={onSubmit}
+      >
         {LABEL_SUBMIT}
       </Button>
     </Stack>

@@ -5,6 +5,7 @@
   },
   "extends": "../../tsconfig.json",
   "include": [
+    "**/*.module.css",
     "**/*.ts",
     "**/*.tsx",
     ".storybook/**/*.ts",
