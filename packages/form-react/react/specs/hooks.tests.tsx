@@ -10,7 +10,7 @@ import {
 import {
   type FormProps,
 } from 'react/props'
-import { type FormField } from 'types/form_field'
+import { type Field } from 'types/field'
 import {
   type Mock,
   vitest,
@@ -19,7 +19,7 @@ import {
 const TEST_ID = 'x'
 
 type InputFormProps = FormProps<
-  Readonly<Record<'$', FormField<string, string>>>
+  Readonly<Record<'$', Field<string, string>>>
 >
 
 function InputForm(props: InputFormProps) {
@@ -33,7 +33,7 @@ function InputForm(props: InputFormProps) {
 }
 
 type CheckboxFormProps = FormProps<
-  Readonly<Record<'$', FormField<string, boolean>>>
+  Readonly<Record<'$', Field<string, boolean>>>
 >
 
 function CheckBoxForm(props: CheckboxFormProps) {

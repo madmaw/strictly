@@ -5,57 +5,55 @@ import {
 } from '@de/fine'
 import { copy } from '@de/fine/transformers/copies/copy'
 import { type ValueTypesOfDiscriminatedUnion } from '@de/fine/types/value_types_of_discriminated_union'
+import { type Field } from 'types/field'
 import {
-  type Conversion,
-  ConversionResult,
-  ValidatedConverter,
-} from 'types/converter'
-import { type FormField } from 'types/form_field'
-import { type Validator } from 'types/validator'
+  type FieldConversion,
+  FieldConversionResult,
+  type FieldConverter,
+} from 'types/field_converter'
+import { type FieldValueFactory } from 'types/field_value_factory'
 
 export abstract class AbstractSelectValueTypeConverter<
-  E,
-  Fields extends Record<string, FormField>,
+  Fields extends Record<string, Field>,
   T extends TypeDefHolder,
   Values extends Readonly<Record<string, ValueTypeOf<T>>>,
-> extends ValidatedConverter<E, Fields, ValueTypeOf<T>, keyof Values> {
+> implements FieldConverter<never, Fields, ValueTypeOf<T>, keyof Values>, FieldValueFactory<Fields, ValueTypeOf<T>> {
   constructor(
-    defaultValue: ValueTypeOf<T>,
     protected readonly typeDef: T,
     protected readonly values: Values,
-    validators: readonly Validator<E, Fields, keyof Values>[],
+    private readonly defaultValueKey: keyof Values,
   ) {
-    super(defaultValue, validators, [])
   }
 
-  doConvert(from: keyof Values): Conversion<E, ValueTypeOf<T>> {
+  convert(from: keyof Values): FieldConversion<never, ValueTypeOf<T>> {
     const prototype = this.values[from]
     const value = copy(this.typeDef, prototype)
     return {
-      type: ConversionResult.Success,
+      type: FieldConversionResult.Success,
       value,
     }
   }
 
-  abstract override revert(to: ValueTypeOf<T>): keyof Values
+  abstract revert(to: ValueTypeOf<T>): keyof Values
+
+  create(): ValueTypeOf<T> {
+    return this.values[this.defaultValueKey]
+  }
 }
 
 export class SelectDiscriminatedUnionConverter<
-  E,
-  Fields extends Record<string, FormField>,
+  Fields extends Record<string, Field>,
   U extends UnionTypeDef,
-> extends AbstractSelectValueTypeConverter<E, Fields, TypeDefHolder<U>, ValueTypesOfDiscriminatedUnion<U>> {
+> extends AbstractSelectValueTypeConverter<Fields, TypeDefHolder<U>, ValueTypesOfDiscriminatedUnion<U>> {
   constructor(
-    defaultValueKey: keyof U['unions'],
     typeDef: TypeDefHolder<U>,
     values: ValueTypesOfDiscriminatedUnion<U>,
-    validators: Validator<E, Fields, keyof ValueTypesOfDiscriminatedUnion<U>>[] = [],
+    defaultValueKey: keyof U['unions'],
   ) {
     super(
-      values[defaultValueKey],
       typeDef,
       values,
-      validators,
+      defaultValueKey,
     )
   }
 

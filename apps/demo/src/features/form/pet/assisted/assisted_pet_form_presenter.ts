@@ -1,13 +1,17 @@
 import {
   FormModel,
   FormPresenter,
-  PassThroughConverter,
   StringToIntegerConverter,
 } from '@de/form-react'
-import { SelectDiscriminatedUnionConverter } from '@de/form-react/converters/select_value_type_converter'
-import { TrimmingStringConverter } from '@de/form-react/converters/trimming_string_converter'
-import { type FlattenedConvertersOfFormFields } from '@de/form-react/types/flattened_converters_of_form_fields'
-import { minimumStringLengthValidatorFactory } from '@de/form-react/validators/minimum_string_length_validator'
+import { SelectDiscriminatedUnionConverter } from '@de/form-react/field_converters/select_value_type_converter'
+import { TrimmingStringConverter } from '@de/form-react/field_converters/trimming_string_converter'
+import { minimumStringLengthFieldValidatorFactory } from '@de/form-react/field_validators/minimum_string_length_field_validator'
+import {
+  adapterFromConverter,
+  adapterFromPrototype,
+  identityAdapter,
+} from '@de/form-react/react/mobx/field_adapter_builder'
+import { type FlattenedAdaptersOfFields } from '@de/form-react/types/flattened_adapters_of_fields'
 import { type PetFormFields } from 'features/form/pet/pet_form'
 import { type PetSpeciesCatFormFields } from 'features/form/pet/pet_species_cat_form'
 import { type PetSpeciesDogFormFields } from 'features/form/pet/pet_species_dog_form'
@@ -22,37 +26,39 @@ import {
 } from 'features/form/pet/types'
 import { type SimplifyDeep } from 'type-fest'
 
-const converters: SimplifyDeep<FlattenedConvertersOfFormFields<
+const converters: SimplifyDeep<FlattenedAdaptersOfFields<
   FlattenedPetJsonValueToTypePaths,
   FlattenedPetTypeDefs,
   PetFormFields & PetSpeciesFormFields & PetSpeciesCatFormFields & PetSpeciesDogFormFields
 >> = {
-  '$.name': new TrimmingStringConverter(
+  '$.name': adapterFromPrototype(
+    new TrimmingStringConverter(),
     '',
-    [
-      minimumStringLengthValidatorFactory(
-        2,
-        NAME_TOO_SHORT_ERROR,
-      ),
-    ],
+  ).validateTo(
+    minimumStringLengthFieldValidatorFactory(
+      2,
+      NAME_TOO_SHORT_ERROR,
+    ),
   ),
-  '$.alive': new PassThroughConverter(false),
-  '$.species': new SelectDiscriminatedUnionConverter(
-    'cat',
-    speciesTypeDef,
-    {
-      cat: {
-        type: 'cat',
-        meows: 0,
+  '$.alive': identityAdapter(false),
+  '$.species': adapterFromConverter(
+    new SelectDiscriminatedUnionConverter(
+      speciesTypeDef,
+      {
+        cat: {
+          type: 'cat',
+          meows: 0,
+        },
+        dog: {
+          type: 'dog',
+          barks: 0,
+        },
       },
-      dog: {
-        type: 'dog',
-        barks: 0,
-      },
-    },
+      'cat',
+    ),
   ),
-  '$.species.cat:meows': new StringToIntegerConverter(NOT_A_NUMBER_ERROR),
-  '$.species.dog:barks': new StringToIntegerConverter(NOT_A_NUMBER_ERROR),
+  '$.species.cat:meows': adapterFromPrototype(new StringToIntegerConverter(NOT_A_NUMBER_ERROR), 0),
+  '$.species.dog:barks': adapterFromPrototype(new StringToIntegerConverter(NOT_A_NUMBER_ERROR), 0),
 }
 
 export class AssistedPetFormPresenter extends FormPresenter<

@@ -1,4 +1,5 @@
 import { type SimplifyDeep } from 'type-fest'
+import { type FromTypeOfFieldAdapter } from './field_adapter'
 import {
   type FlattenedConvertedFieldsOf,
   type FormPresenter,
@@ -30,8 +31,8 @@ export type RenderTypeOfPresenterValuePath<
   infer _1,
   infer _2,
   infer _3,
-  infer ValuePathsToConverters
-> ? ReturnType<ValuePathsToConverters[K]['revert']>
+  infer ValuePathsToAdapters
+> ? FromTypeOfFieldAdapter<ValuePathsToAdapters[K]>
   : never
 
 /**
@@ -48,6 +49,6 @@ export type FormFieldsOfPresenter<
   infer _1,
   infer _2,
   infer _3,
-  infer ValuePathsToConverters
-> ? SimplifyDeep<FlattenedConvertedFieldsOf<ValuePathsToConverters>>
+  infer ValuePathsToAdapters
+> ? SimplifyDeep<FlattenedConvertedFieldsOf<ValuePathsToAdapters>>
   : never

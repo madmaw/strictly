@@ -12,17 +12,23 @@ import {
   union,
   type ValueTypeOf,
 } from '@de/fine'
-import { NullableToBooleanConverter } from 'converters/nullable_to_boolean_converter'
-import { PassThroughConverter } from 'converters/pass_through_converter'
-import { StringToIntegerConverter } from 'converters/string_to_integer_converter'
+import { NullableToBooleanConverter } from 'field_converters/nullable_to_boolean_converter'
+import { StringToIntegerConverter } from 'field_converters/string_to_integer_converter'
+import { type FieldAdapter } from 'react/mobx/field_adapter'
 import {
-  type FlattenedTypePathsToConvertersOf,
+  adapterFromConverter,
+  adapterFromPrototype,
+  identityAdapter,
+} from 'react/mobx/field_adapter_builder'
+import {
+  type FlattenedTypePathsToAdaptersOf,
   FormModel,
   FormPresenter,
-  type ValuePathsToConvertersOf,
+  type ValuePathsToAdaptersOf,
 } from 'react/mobx/form_presenter'
-import { type Converter } from 'types/converter'
-import { type FormField } from 'types/form_field'
+import { type Field } from 'types/field'
+import { type FieldConverter } from 'types/field_converter'
+import { type FieldValueFactory } from 'types/field_value_factory'
 import { type Mocked } from 'vitest'
 import {
   mock,
@@ -31,50 +37,57 @@ import {
 
 const IS_NAN_ERROR = 1
 
-function createMockedConverter<
+function createMockedAdapter<
   E,
   To,
   From,
->(impl: Converter<E, Record<string, FormField>, To, From>): Mocked<
-  Converter<E, Record<string, FormField>, To, From>
+>({
+  converter,
+  valueFactory,
+}: FieldAdapter<E, Record<string, Field>, To, From>): Mocked<
+  FieldAdapter<E, Record<string, Field>, To, From>
 > {
-  const mockedConverter = mock<Converter<E, Record<string, FormField>, To, From> & {
-    defaultValue: To,
-  }>()
-  // TODO surely there's a better way of providing fallbacks?
-  mockedConverter.convert.mockImplementation(impl.convert.bind(impl))
-  mockedConverter.revert.mockImplementation(impl.revert.bind(impl))
-  // mocking properties doesn't really work
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/consistent-type-assertions
-  mockedConverter.defaultValue = impl.defaultValue as any
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/consistent-type-assertions
-  return mockedConverter as any
+  const mockedConverter = mock<FieldConverter<E, Record<string, Field>, To, From>>()
+  mockedConverter.convert.mockImplementation(converter.convert.bind(converter))
+  mockedConverter.revert.mockImplementation(converter.revert.bind(converter))
+
+  const mockedValueFactory = mock<FieldValueFactory<Record<string, Field>, To>>()
+  mockedValueFactory.create.mockImplementation(valueFactory.create.bind(valueFactory))
+
+  return {
+    converter: mockedConverter,
+    valueFactory: mockedValueFactory,
+  }
 }
 
 describe('all', function () {
-  const stringToIntegerConverter = createMockedConverter(new StringToIntegerConverter(IS_NAN_ERROR))
-  const booleanToBooleanConverter = createMockedConverter(
-    new PassThroughConverter<string, Record<string, FormField>, boolean>(false),
+  const stringToIntegerAdapter = createMockedAdapter(
+    adapterFromPrototype(new StringToIntegerConverter(IS_NAN_ERROR), 0),
+  )
+  const booleanToBooleanAdapter = createMockedAdapter(
+    identityAdapter(false),
   )
 
   beforeEach(function () {
-    mockClear(stringToIntegerConverter)
-    mockClear(booleanToBooleanConverter)
+    mockClear(stringToIntegerAdapter.converter)
+    mockClear(stringToIntegerAdapter.valueFactory)
+    mockClear(booleanToBooleanAdapter.converter)
+    mockClear(booleanToBooleanAdapter.valueFactory)
   })
 
   describe('FlattenedTypePathsToConvertersOf', function () {
     describe('map', function () {
       const typeDef = map<typeof number, 'a' | 'b'>(number)
-      type T = FlattenedTypePathsToConvertersOf<
+      type T = FlattenedTypePathsToAdaptersOf<
         FlattenedValueTypesOf<typeof typeDef>
       >
       let t: {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        readonly $?: Converter<any, Readonly<Record<string, FormField>>, Record<'a' | 'b', number>, any>,
+        readonly $?: FieldAdapter<any, Readonly<Record<string, Field>>, Record<'a' | 'b', number>, any>,
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        readonly ['$.a']?: Converter<any, Readonly<Record<string, FormField>>, number, any>,
+        readonly ['$.a']?: FieldAdapter<any, Readonly<Record<string, Field>>, number, any>,
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        readonly ['$.b']?: Converter<any, Readonly<Record<string, FormField>>, number, any>,
+        readonly ['$.b']?: FieldAdapter<any, Readonly<Record<string, Field>>, number, any>,
       }
 
       it('equals expected type', function () {
@@ -86,58 +99,58 @@ describe('all', function () {
       const typeDef = struct()
         .set('x', string)
         .set('y', boolean)
-      type T = FlattenedTypePathsToConvertersOf<
+      type T = FlattenedTypePathsToAdaptersOf<
         FlattenedValueTypesOf<typeof typeDef>
       >
       let t: {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        readonly $?: Converter<any, Readonly<Record<string, FormField>>, { x: string, y: boolean }, any>,
+        readonly $?: FieldAdapter<any, Readonly<Record<string, Field>>, { x: string, y: boolean }, any>,
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        readonly ['$.x']?: Converter<any, Readonly<Record<string, FormField>>, string, any>,
+        readonly ['$.x']?: FieldAdapter<any, Readonly<Record<string, Field>>, string, any>,
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        readonly ['$.y']?: Converter<any, Readonly<Record<string, FormField>>, boolean, any>,
+        readonly ['$.y']?: FieldAdapter<any, Readonly<Record<string, Field>>, boolean, any>,
       }
       it('equals expected type', function () {
         expectTypeOf(t).toEqualTypeOf<T>()
       })
 
-      it('matches representative converters', function () {
-        const converters = {
-          '$.x': new PassThroughConverter<string, Record<string, FormField>, string>(''),
-          '$.y': new PassThroughConverter<string, Record<string, FormField>, boolean>(false),
-        } as const
-        expectTypeOf(converters).toMatchTypeOf<T>()
+      it('matches representative adapters', function () {
+        type A = {
+          '$.x': FieldAdapter<string, Record<string, Field>, string>,
+          '$.y': FieldAdapter<string, Record<string, Field>, boolean>,
+        }
+        expectTypeOf<A>().toMatchTypeOf<T>()
       })
 
-      it('does not allow mismatched converters', function () {
-        const converters = {
-          '$.x': new PassThroughConverter<string, Record<string, FormField>, boolean>(false),
-          '$.y': new PassThroughConverter<string, Record<string, FormField>, string>(''),
-        } as const
-        expectTypeOf(converters).not.toMatchTypeOf<T>()
+      it('does not allow mismatched adapters', function () {
+        type A = {
+          '$.x': FieldAdapter<string, Record<string, Field>, boolean>,
+          '$.y': FieldAdapter<string, Record<string, Field>, string>,
+        }
+        expectTypeOf<A>().not.toMatchTypeOf<T>()
       })
     })
   })
 
-  describe('ValuePathsToConvertersOf', function () {
+  describe('ValuePathsToAdaptersOf', function () {
     describe('superset', function () {
-      const converters = {
-        '$.x': stringToIntegerConverter,
-        '$.y': booleanToBooleanConverter,
-      } as const
+      type A = {
+        '$.x': FieldAdapter<string, Record<string, Field>, number, string>,
+        '$.y': FieldAdapter<string, Record<string, Field>, boolean, boolean>,
+      }
       const jsonPaths = {
         $: '$',
         '$.a': '$.x',
         '$.b': '$.y',
         '$.c': '$.z',
       } as const
-      type T = ValuePathsToConvertersOf<
-        typeof converters,
+      type T = ValuePathsToAdaptersOf<
+        A,
         typeof jsonPaths
       >
       let t: {
-        readonly '$.a': typeof converters['$.x'],
-        readonly '$.b': typeof converters['$.y'],
+        readonly '$.a': A['$.x'],
+        readonly '$.b': A['$.y'],
       }
       it('equals expected type', function () {
         expectTypeOf(t).toEqualTypeOf<T>()
@@ -148,25 +161,25 @@ describe('all', function () {
   describe('FormModel', function () {
     describe('literal', function () {
       const typeDef = number
-      const converters = {
-        $: stringToIntegerConverter,
+      const adapters = {
+        $: stringToIntegerAdapter,
       } as const
       let originalValue: ValueTypeOf<typeof typeDef>
       let model: FormModel<
         typeof typeDef,
         FlattenedJsonValueToTypePathsOf<typeof typeDef>,
-        typeof converters
+        typeof adapters
       >
       beforeEach(function () {
         originalValue = 5
         model = new FormModel<
           typeof typeDef,
           FlattenedJsonValueToTypePathsOf<typeof typeDef>,
-          typeof converters
+          typeof adapters
         >(
           typeDef,
           originalValue,
-          converters,
+          adapters,
         )
       })
 
@@ -211,14 +224,14 @@ describe('all', function () {
 
     describe('list', function () {
       const typeDef = list(number)
-      const converters = {
-        '$.*': new StringToIntegerConverter(IS_NAN_ERROR),
+      const adapters = {
+        '$.*': stringToIntegerAdapter,
       } as const
       let value: ValueTypeOf<typeof typeDef>
       let model: FormModel<
         typeof typeDef,
         FlattenedJsonValueToTypePathsOf<typeof typeDef>,
-        typeof converters
+        typeof adapters
       >
       beforeEach(function () {
         value = [
@@ -229,11 +242,11 @@ describe('all', function () {
         model = new FormModel<
           typeof typeDef,
           FlattenedJsonValueToTypePathsOf<typeof typeDef>,
-          typeof converters
+          typeof adapters
         >(
           typeDef,
           value,
-          converters,
+          adapters,
         )
       })
 
@@ -271,7 +284,7 @@ describe('all', function () {
     describe('map', function () {
       const typeDef = map<typeof number, 'a' | 'b'>(number)
       const converters = {
-        '$.*': stringToIntegerConverter,
+        '$.*': stringToIntegerAdapter,
         // '$.*': booleanToBooleanConverter,
       } as const
       let value: ValueTypeOf<typeof typeDef>
@@ -351,8 +364,8 @@ describe('all', function () {
         .set('a', number)
         .set('b', boolean)
       const converters = {
-        '$.a': stringToIntegerConverter,
-        '$.b': booleanToBooleanConverter,
+        '$.a': stringToIntegerAdapter,
+        '$.b': booleanToBooleanAdapter,
       } as const
       let value: ValueTypeOf<typeof typeDef>
       let model: FormModel<
@@ -431,7 +444,7 @@ describe('all', function () {
     describe('literal', function () {
       const typeDef = number
       const converters = {
-        $: stringToIntegerConverter,
+        $: stringToIntegerAdapter,
       } as const
       const presenter = new FormPresenter<
         typeof typeDef,
@@ -520,7 +533,7 @@ describe('all', function () {
     describe('list', function () {
       const typeDef = list(number)
       const converters = {
-        '$.*': stringToIntegerConverter,
+        '$.*': stringToIntegerAdapter,
       } as const
       const presenter = new FormPresenter<
         typeof typeDef,
@@ -648,8 +661,8 @@ describe('all', function () {
         it('supplies the full, previous context when converting', function () {
           presenter.setFieldValueAndValidate<'$[2]'>(model, '$[2]', '4')
 
-          expect(stringToIntegerConverter.convert).toHaveBeenCalledOnce()
-          expect(stringToIntegerConverter.convert).toHaveBeenCalledWith(
+          expect(stringToIntegerAdapter.converter.convert).toHaveBeenCalledOnce()
+          expect(stringToIntegerAdapter.converter.convert).toHaveBeenCalledWith(
             '4',
             '$[2]',
             expect.objectContaining({
@@ -670,24 +683,24 @@ describe('all', function () {
         const typeDef = union()
           .add('null', nullTypeDefHolder)
           .add('0', listOfNumbersTypeDef)
-        const converters = {
-          $: new NullableToBooleanConverter<string, typeof typeDef>(typeDef, [1]),
-          '$.*': stringToIntegerConverter,
+        const adapters = {
+          $: adapterFromConverter(new NullableToBooleanConverter<string, typeof typeDef>(typeDef, [1])),
+          '$.*': stringToIntegerAdapter,
         } as const
         type JsonPaths = FlattenedJsonValueToTypePathsOf<typeof typeDef>
         const presenter = new FormPresenter<
           typeof typeDef,
           JsonPaths,
-          typeof converters
+          typeof adapters
         >(
           typeDef,
-          converters,
+          adapters,
         )
         let originalValue: ValueTypeOf<typeof typeDef>
         let model: FormModel<
           typeof typeDef,
           JsonPaths,
-          typeof converters
+          typeof adapters
         >
         beforeEach(function () {
           originalValue = null

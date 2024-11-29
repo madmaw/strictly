@@ -1,6 +1,6 @@
 import {
+  type Field,
   type FlattenedFormFieldsOf,
-  type FormField,
   type FormProps,
   useFormInput,
 } from '@de/form-react'
@@ -16,7 +16,7 @@ import {
 export type PetSpeciesCatFormFields = FlattenedFormFieldsOf<
   FlattenedPetJsonValueToTypePaths,
   {
-    '$.species.cat:meows': FormField<typeof NOT_A_NUMBER_ERROR, string>,
+    '$.species.cat:meows': Field<typeof NOT_A_NUMBER_ERROR, string>,
   }
 >
 

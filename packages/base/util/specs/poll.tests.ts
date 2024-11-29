@@ -1,6 +1,5 @@
 import {
   type Maybe,
-  nothing,
 } from 'types/maybe'
 import {
   constantPollInterval,
@@ -21,21 +20,21 @@ describe('poll', function () {
 
   it('returns the success value', async function () {
     const value = 1
-    callee.mockResolvedValueOnce(value)
+    callee.mockResolvedValueOnce([value])
     const result = await poll(
       callee,
       {
         pollInterval,
       },
     )
-    expect(result).toEqual(value)
+    expect(result).toEqual([value])
     expect(callee).toHaveBeenCalledTimes(1)
   })
 
   it('returns the success value after a retry', async function () {
     const value = 1
-    callee.mockResolvedValueOnce(nothing)
-    callee.mockResolvedValueOnce(value)
+    callee.mockResolvedValueOnce(null)
+    callee.mockResolvedValueOnce([value])
     const result = await poll(
       callee,
       {
@@ -43,12 +42,12 @@ describe('poll', function () {
         retries: 2,
       },
     )
-    expect(result).toEqual(value)
+    expect(result).toEqual([value])
     expect(callee).toHaveBeenCalledTimes(2)
   })
 
   it('returns null when polling result not available after retries', async function () {
-    callee.mockResolvedValue(nothing)
+    callee.mockResolvedValue(null)
     const retries = 4
     const result = await poll(
       callee,
@@ -57,7 +56,7 @@ describe('poll', function () {
         retries,
       },
     )
-    expect(result).toBe(nothing)
+    expect(result).toBe(null)
     expect(callee).toHaveBeenCalledTimes(retries)
   })
 

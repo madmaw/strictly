@@ -1,6 +1,6 @@
 import {
+  type Field,
   type FlattenedFormFieldsOf,
-  type FormField,
   type FormProps,
   useFormCheckBox,
   useFormInput,
@@ -26,8 +26,8 @@ export const LABEL_SUBMIT = 'Submit'
 export type PetFormFields = FlattenedFormFieldsOf<
   FlattenedPetJsonValueToTypePaths,
   {
-    '$.name': FormField<typeof NAME_TOO_SHORT_ERROR, string>,
-    '$.alive': FormField<never, boolean>,
+    '$.name': Field<typeof NAME_TOO_SHORT_ERROR, string>,
+    '$.alive': Field<never, boolean>,
   }
 >
 

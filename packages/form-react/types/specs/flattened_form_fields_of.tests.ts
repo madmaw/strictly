@@ -1,5 +1,5 @@
+import { type Field } from 'types/field'
 import { type FlattenedFormFieldsOf } from 'types/flattened_form_fields_of'
-import { type FormField } from 'types/form_field'
 
 describe('FlattenedFormFieldsOf', function () {
   describe('subset', function () {
@@ -11,14 +11,14 @@ describe('FlattenedFormFieldsOf', function () {
           readonly c: 'z',
         },
         {
-          readonly x: FormField<string, 1>,
-          readonly z: FormField<string, 3>,
+          readonly x: Field<string, 1>,
+          readonly z: Field<string, 3>,
         }
       >
 
       expectTypeOf<T>().toEqualTypeOf<{
-        readonly a: FormField<string, 1>,
-        readonly c: FormField<string, 3>,
+        readonly a: Field<string, 1>,
+        readonly c: Field<string, 3>,
       }>()
     })
   })
@@ -32,8 +32,8 @@ describe('FlattenedFormFieldsOf', function () {
           readonly c: 'z',
         },
         {
-          readonly w: FormField<string, 0>,
-          readonly x: FormField<string, 1>,
+          readonly w: Field<string, 0>,
+          readonly x: Field<string, 1>,
         }
       >
 

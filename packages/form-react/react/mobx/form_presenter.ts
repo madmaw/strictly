@@ -14,6 +14,7 @@ import {
 } from '@de/fine'
 import { jsonValuePathToTypePath } from '@de/fine'
 import { mobxCopy } from '@de/fine/transformers/copies/mobx_copy'
+import { flattenTypeDefsOf } from '@de/fine/transformers/flatteners/flatten_type_defs_of'
 import {
   type AnyValueType,
   flattenValueTypeTo,
@@ -28,31 +29,33 @@ import {
   type SimplifyDeep,
   type ValueOf,
 } from 'type-fest'
+import { type Field } from 'types/field'
 import {
-  ConversionResult,
-  type Converter,
-  type ErrorTypeOfConverter,
-  type FromTypeOfConverter,
-} from 'types/converter'
-import { type FormField } from 'types/form_field'
+  FieldConversionResult,
+} from 'types/field_converter'
+import {
+  type ErrorTypeOfFieldAdapter,
+  type FieldAdapter,
+  type FromTypeOfFieldAdapter,
+} from './field_adapter'
 
 export type FlattenedConvertedFieldsOf<
-  ValuePathsToConverters extends Readonly<Record<string, Converter>>,
+  ValuePathsToAdapters extends Readonly<Record<string, FieldAdapter>>,
 > = {
-  readonly [K in keyof ValuePathsToConverters]: FormField<
-    ErrorTypeOfConverter<ValuePathsToConverters[K]>,
-    FromTypeOfConverter<ValuePathsToConverters[K]>
+  readonly [K in keyof ValuePathsToAdapters]: Field<
+    ErrorTypeOfFieldAdapter<ValuePathsToAdapters[K]>,
+    FromTypeOfFieldAdapter<ValuePathsToAdapters[K]>
   >
 }
 
-export type FlattenedTypePathsToConvertersOf<
+export type FlattenedTypePathsToAdaptersOf<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   F extends Readonly<Record<string, any>>,
 > = {
   readonly [
     K in keyof F
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  ]?: Converter<any, Readonly<Record<string, FormField>>, F[K], any>
+  ]?: FieldAdapter<any, Readonly<Record<string, Field>>, F[K], any>
 }
 
 type FieldOverride<V> = {
@@ -62,47 +65,47 @@ type FieldOverride<V> = {
 }
 
 type FlattenedFieldOverrides<
-  ValuePathsToConverters extends Readonly<Record<string, Converter>>,
+  ValuePathsToAdapters extends Readonly<Record<string, FieldAdapter>>,
 > = {
-  -readonly [K in keyof ValuePathsToConverters]?: FieldOverride<
-    FromTypeOfConverter<ValuePathsToConverters[K]>
+  -readonly [K in keyof ValuePathsToAdapters]?: FieldOverride<
+    FromTypeOfFieldAdapter<ValuePathsToAdapters[K]>
   >
 }
 
 type FlattenedErrors<
-  ValuePathsToConverters extends Readonly<Record<string, Converter>>,
+  ValuePathsToAdapters extends Readonly<Record<string, FieldAdapter>>,
 > = {
-  -readonly [K in keyof ValuePathsToConverters]?: ErrorTypeOfConverter<ValuePathsToConverters[K]>
+  -readonly [K in keyof ValuePathsToAdapters]?: ErrorTypeOfFieldAdapter<ValuePathsToAdapters[K]>
 }
 
-export type ValuePathsToConvertersOf<
-  TypePathsToConverters extends Partial<Readonly<Record<string, Converter>>>,
+export type ValuePathsToAdaptersOf<
+  TypePathsToAdapters extends Partial<Readonly<Record<string, FieldAdapter>>>,
   JsonPaths extends Readonly<Record<string, string>>,
-> = keyof TypePathsToConverters extends ValueOf<JsonPaths> ? {
+> = keyof TypePathsToAdapters extends ValueOf<JsonPaths> ? {
     readonly [
-      K in keyof JsonPaths as unknown extends TypePathsToConverters[JsonPaths[K]] ? never : K
-    ]: NonNullable<TypePathsToConverters[JsonPaths[K]]>
+      K in keyof JsonPaths as unknown extends TypePathsToAdapters[JsonPaths[K]] ? never : K
+    ]: NonNullable<TypePathsToAdapters[JsonPaths[K]]>
   }
   : never
 
 export class FormPresenter<
   T extends TypeDefHolder,
   JsonPaths extends Readonly<Record<string, string>>,
-  TypePathsToConverters extends FlattenedTypePathsToConvertersOf<FlattenedValueTypesOf<T, '*'>>,
-  ValuePathsToConverters extends ValuePathsToConvertersOf<TypePathsToConverters, JsonPaths> = ValuePathsToConvertersOf<
-    TypePathsToConverters,
+  TypePathsToAdapters extends FlattenedTypePathsToAdaptersOf<FlattenedValueTypesOf<T, '*'>>,
+  ValuePathsToAdapters extends ValuePathsToAdaptersOf<TypePathsToAdapters, JsonPaths> = ValuePathsToAdaptersOf<
+    TypePathsToAdapters,
     JsonPaths
   >,
 > {
   constructor(
     private readonly typeDef: T,
-    private readonly converters: TypePathsToConverters,
+    private readonly adapters: TypePathsToAdapters,
   ) {
   }
 
-  private getConverterForValuePath(
-    model: FormModel<T, JsonPaths, TypePathsToConverters, ValuePathsToConverters>,
-    valuePath: keyof ValuePathsToConverters,
+  private getAdapterForValuePath(
+    model: FormModel<T, JsonPaths, TypePathsToAdapters, ValuePathsToAdapters>,
+    valuePath: keyof ValuePathsToAdapters,
   ) {
     const typePath = assertExistsAndReturn(
       // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
@@ -113,7 +116,7 @@ export class FormPresenter<
     )
     return assertExistsAndReturn(
       // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-      this.converters[typePath as keyof TypePathsToConverters],
+      this.adapters[typePath as keyof TypePathsToAdapters],
       'expected converter to be defined {} ({})',
       typePath,
       valuePath,
@@ -121,8 +124,8 @@ export class FormPresenter<
   }
 
   private getAccessorForValuePath(
-    model: FormModel<T, JsonPaths, TypePathsToConverters, ValuePathsToConverters>,
-    valuePath: keyof ValuePathsToConverters,
+    model: FormModel<T, JsonPaths, TypePathsToAdapters, ValuePathsToAdapters>,
+    valuePath: keyof ValuePathsToAdapters,
   ) {
     return assertExistsAndReturn(
       // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
@@ -132,12 +135,12 @@ export class FormPresenter<
     )
   }
 
-  setFieldValueAndValidate<K extends keyof ValuePathsToConverters>(
-    model: FormModel<T, JsonPaths, TypePathsToConverters, ValuePathsToConverters>,
+  setFieldValueAndValidate<K extends keyof ValuePathsToAdapters>(
+    model: FormModel<T, JsonPaths, TypePathsToAdapters, ValuePathsToAdapters>,
     valuePath: K,
-    value: FromTypeOfConverter<ValuePathsToConverters[K]>,
+    value: FromTypeOfFieldAdapter<ValuePathsToAdapters[K]>,
   ): boolean {
-    const converter = this.getConverterForValuePath(model, valuePath)
+    const { converter } = this.getAdapterForValuePath(model, valuePath)
 
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-explicit-any
     const conversion = converter.convert(value, valuePath as any, model.fields)
@@ -146,10 +149,10 @@ export class FormPresenter<
         value,
       }
       switch (conversion.type) {
-        case ConversionResult.Failure:
+        case FieldConversionResult.Failure:
           model.errors[valuePath] = conversion.error
           return false
-        case ConversionResult.Success:
+        case FieldConversionResult.Success:
           delete model.errors[valuePath]
           return true
         default:
@@ -158,10 +161,10 @@ export class FormPresenter<
     })
   }
 
-  setFieldValue<K extends keyof ValuePathsToConverters>(
-    model: FormModel<T, JsonPaths, TypePathsToConverters, ValuePathsToConverters>,
+  setFieldValue<K extends keyof ValuePathsToAdapters>(
+    model: FormModel<T, JsonPaths, TypePathsToAdapters, ValuePathsToAdapters>,
     valuePath: K,
-    value: FromTypeOfConverter<ValuePathsToConverters[K]>,
+    value: FromTypeOfFieldAdapter<ValuePathsToAdapters[K]>,
   ): void {
     runInAction(function () {
       model.fieldOverrides[valuePath] = {
@@ -170,8 +173,8 @@ export class FormPresenter<
     })
   }
 
-  clearFieldError<K extends keyof ValuePathsToConverters>(
-    model: FormModel<T, JsonPaths, TypePathsToConverters, ValuePathsToConverters>,
+  clearFieldError<K extends keyof ValuePathsToAdapters>(
+    model: FormModel<T, JsonPaths, TypePathsToAdapters, ValuePathsToAdapters>,
     valuePath: K,
   ) {
     const fieldOverride = model.fieldOverrides[valuePath]
@@ -182,7 +185,7 @@ export class FormPresenter<
     }
   }
 
-  clearAll(model: FormModel<T, JsonPaths, TypePathsToConverters, ValuePathsToConverters>, value: ValueTypeOf<T>): void {
+  clearAll(model: FormModel<T, JsonPaths, TypePathsToAdapters, ValuePathsToAdapters>, value: ValueTypeOf<T>): void {
     runInAction(() => {
       model.errors = {}
       model.fieldOverrides = {}
@@ -190,21 +193,21 @@ export class FormPresenter<
     })
   }
 
-  validateField<K extends keyof ValuePathsToConverters>(
-    model: FormModel<T, JsonPaths, TypePathsToConverters, ValuePathsToConverters>,
+  validateField<K extends keyof ValuePathsToAdapters>(
+    model: FormModel<T, JsonPaths, TypePathsToAdapters, ValuePathsToAdapters>,
     valuePath: K,
   ): boolean {
     const fieldOverride = model.fieldOverrides[valuePath]
     if (fieldOverride != null) {
-      const converter = this.getConverterForValuePath(model, valuePath)
+      const { converter } = this.getAdapterForValuePath(model, valuePath)
       // eslint-disable-next-line @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-explicit-any
       const conversion = converter.convert(fieldOverride.value, valuePath as any, model.fields)
       return runInAction(function () {
         switch (conversion.type) {
-          case ConversionResult.Failure:
+          case FieldConversionResult.Failure:
             model.errors[valuePath] = conversion.error
             return false
-          case ConversionResult.Success:
+          case FieldConversionResult.Success:
             delete model.errors[valuePath]
             return true
           default:
@@ -215,27 +218,27 @@ export class FormPresenter<
     return true
   }
 
-  validateAndMaybeSaveAll(model: FormModel<T, JsonPaths, TypePathsToConverters, ValuePathsToConverters>): boolean {
+  validateAndMaybeSaveAll(model: FormModel<T, JsonPaths, TypePathsToAdapters, ValuePathsToAdapters>): boolean {
     // TODO want to iteratively reduce accessors (start from shortest key to longest key and every time
     // we successfully set the value, restart the validate and save process)
     return runInAction(() => {
       return reduce(
         // eslint-disable-next-line @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-explicit-any
-        model.fieldOverrides as Record<keyof ValuePathsToConverters, FieldOverride<any>>,
+        model.fieldOverrides as Record<keyof ValuePathsToAdapters, FieldOverride<any>>,
         (
           success: boolean,
-          valuePath: keyof ValuePathsToConverters,
+          valuePath: keyof ValuePathsToAdapters,
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           { value }: FieldOverride<any>,
         ): boolean => {
-          const converter = this.getConverterForValuePath(model, valuePath)
+          const { converter } = this.getAdapterForValuePath(model, valuePath)
           // eslint-disable-next-line @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-explicit-any
           const conversion = converter.convert(value, valuePath as any, model.fields)
           switch (conversion.type) {
-            case ConversionResult.Failure:
+            case FieldConversionResult.Failure:
               model.errors[valuePath] = conversion.error
               return false
-            case ConversionResult.Success:
+            case FieldConversionResult.Success:
               this.getAccessorForValuePath(model, valuePath).set(conversion.value)
               delete model.errors[valuePath]
               return success
@@ -248,11 +251,11 @@ export class FormPresenter<
     })
   }
 
-  createModel(value: ValueTypeOf<T>): FormModel<T, JsonPaths, TypePathsToConverters, ValuePathsToConverters> {
-    return new FormModel<T, JsonPaths, TypePathsToConverters, ValuePathsToConverters>(
+  createModel(value: ValueTypeOf<T>): FormModel<T, JsonPaths, TypePathsToAdapters, ValuePathsToAdapters> {
+    return new FormModel<T, JsonPaths, TypePathsToAdapters, ValuePathsToAdapters>(
       this.typeDef,
       value,
-      this.converters,
+      this.adapters,
     )
   }
 }
@@ -260,30 +263,33 @@ export class FormPresenter<
 export class FormModel<
   T extends TypeDefHolder,
   JsonPaths extends Readonly<Record<string, string>>,
-  TypePathsToConverters extends FlattenedTypePathsToConvertersOf<FlattenedValueTypesOf<T, '*'>>,
-  ValuePathsToConverters extends ValuePathsToConvertersOf<TypePathsToConverters, JsonPaths> = ValuePathsToConvertersOf<
-    TypePathsToConverters,
+  TypePathsToAdapters extends FlattenedTypePathsToAdaptersOf<FlattenedValueTypesOf<T, '*'>>,
+  ValuePathsToAdapters extends ValuePathsToAdaptersOf<TypePathsToAdapters, JsonPaths> = ValuePathsToAdaptersOf<
+    TypePathsToAdapters,
     JsonPaths
   >,
 > {
   @observable.ref
   accessor value: MobxValueTypeOf<T>
   @observable.shallow
-  accessor fieldOverrides: FlattenedFieldOverrides<ValuePathsToConverters> = {}
+  accessor fieldOverrides: FlattenedFieldOverrides<ValuePathsToAdapters> = {}
   @observable.shallow
-  accessor errors: FlattenedErrors<ValuePathsToConverters> = {}
+  accessor errors: FlattenedErrors<ValuePathsToAdapters> = {}
+
+  private readonly flattenedTypeDefs: Readonly<Record<string, TypeDefHolder>>
 
   constructor(
     private readonly typeDef: T,
     value: ValueTypeOf<T>,
-    private readonly converters: TypePathsToConverters,
+    private readonly converters: TypePathsToAdapters,
   ) {
     this.value = mobxCopy(typeDef, value)
+    this.flattenedTypeDefs = flattenTypeDefsOf(typeDef)
   }
 
   @computed
-  get fields(): SimplifyDeep<FlattenedConvertedFieldsOf<ValuePathsToConverters>> {
-    return new Proxy<SimplifyDeep<FlattenedConvertedFieldsOf<ValuePathsToConverters>>>(
+  get fields(): SimplifyDeep<FlattenedConvertedFieldsOf<ValuePathsToAdapters>> {
+    return new Proxy<SimplifyDeep<FlattenedConvertedFieldsOf<ValuePathsToAdapters>>>(
       this.knownFields,
       {
         get: (target, prop) => {
@@ -294,7 +300,7 @@ export class FormModel<
           }
           if (typeof prop === 'string') {
             // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-            return this.maybeSynthesizeFieldByValuePath(prop as keyof ValuePathsToConverters)
+            return this.maybeSynthesizeFieldByValuePath(prop as keyof ValuePathsToAdapters)
           }
         },
       },
@@ -302,32 +308,32 @@ export class FormModel<
   }
 
   @computed
-  private get knownFields(): SimplifyDeep<FlattenedConvertedFieldsOf<ValuePathsToConverters>> {
+  private get knownFields(): SimplifyDeep<FlattenedConvertedFieldsOf<ValuePathsToAdapters>> {
     return flattenValueTypeTo(
       this.typeDef,
       this.value,
       () => {},
       // TODO swap these to valuePath, typePath in flatten
-      (_t: StrictTypeDef, _v: AnyValueType, _setter, typePath, valuePath): FormField | undefined => {
+      (_t: StrictTypeDef, _v: AnyValueType, _setter, typePath, valuePath): Field | undefined => {
         return this.synthesizeFieldByPaths(
           // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-          valuePath as keyof ValuePathsToConverters,
+          valuePath as keyof ValuePathsToAdapters,
           // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-          typePath as keyof TypePathsToConverters,
+          typePath as keyof TypePathsToAdapters,
         )
       },
     )
   }
 
-  private maybeSynthesizeFieldByValuePath(valuePath: keyof ValuePathsToConverters): FormField | undefined {
-    let typePath: keyof TypePathsToConverters
+  private maybeSynthesizeFieldByValuePath(valuePath: keyof ValuePathsToAdapters): Field | undefined {
+    let typePath: keyof TypePathsToAdapters
     try {
       // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
       typePath = jsonValuePathToTypePath<JsonPaths, keyof JsonPaths>(
         this.typeDef,
         // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
         valuePath as keyof JsonPaths,
-      ) as keyof TypePathsToConverters
+      ) as keyof TypePathsToAdapters
     } catch (e) {
       // TODO make jsonValuePathToTypePath return null in the event of an invalid
       // value path instead of throwing an exception
@@ -337,19 +343,30 @@ export class FormModel<
     return this.synthesizeFieldByPaths(valuePath, typePath)
   }
 
-  private synthesizeFieldByPaths(valuePath: keyof ValuePathsToConverters, typePath: keyof TypePathsToConverters) {
-    const converter = this.converters[typePath]
-    if (converter == null) {
+  private synthesizeFieldByPaths(valuePath: keyof ValuePathsToAdapters, typePath: keyof TypePathsToAdapters) {
+    const adapter = this.converters[typePath]
+    if (adapter == null) {
       // invalid path, which can happen
       return
     }
+    const {
+      converter,
+      valueFactory,
+    } = adapter
 
     const fieldOverride = this.fieldOverrides[valuePath]
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     const accessor = this.accessors[valuePath as string]
     const value = fieldOverride
       ? fieldOverride.value
-      : converter.revert(accessor != null ? accessor.value : converter.defaultValue)
+      : converter.revert(accessor != null
+        ? accessor.value
+        : mobxCopy(
+          // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+          this.flattenedTypeDefs[typePath as string],
+          // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+          valueFactory.create(valuePath as string, this.fields),
+        ))
     const error = this.errors[valuePath]
     return {
       value,

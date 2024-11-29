@@ -4,15 +4,17 @@ import {
   type ValueTypeOf,
 } from '@de/fine'
 import { copy } from '@de/fine/transformers/copies/copy'
+import { type Field } from 'types/field'
 import {
-  type Conversion,
-  ConversionResult,
-  type Converter,
-} from 'types/converter'
-import { type FormField } from 'types/form_field'
+  type FieldConversion,
+  FieldConversionResult,
+  type FieldConverter,
+} from 'types/field_converter'
+import { type FieldValueFactory } from 'types/field_value_factory'
 
 export class NullableToBooleanConverter<E, T extends TypeDefHolder>
-  implements Converter<E, Record<string, FormField>, ValueTypeOf<T> | null, boolean>
+  implements FieldConverter<E, Record<string, Field>, ValueTypeOf<T> | null, boolean>,
+    FieldValueFactory<Record<string, Field>, ValueTypeOf<T> | null>
 {
   readonly defaultValue: ValueTypeOf<T> | null
 
@@ -24,21 +26,25 @@ export class NullableToBooleanConverter<E, T extends TypeDefHolder>
     this.defaultValue = defaultToNull ? null : prototype
   }
 
-  convert(from: boolean): Conversion<E, ValueTypeOf<T> | null> {
+  convert(from: boolean): FieldConversion<E, ValueTypeOf<T> | null> {
     if (from) {
       const value: ValueTypeOf<T> = copy(this.typeDef, this.prototype)
       return {
-        type: ConversionResult.Success,
+        type: FieldConversionResult.Success,
         value,
       }
     }
     return {
-      type: ConversionResult.Success,
+      type: FieldConversionResult.Success,
       value: null,
     }
   }
 
   revert(to: ValueTypeOf<T> | null): boolean {
     return to != null
+  }
+
+  create(): ValueTypeOf<T> | null {
+    return this.defaultValue
   }
 }

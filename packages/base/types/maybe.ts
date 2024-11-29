@@ -1,6 +1,5 @@
-export const nothing = Symbol('nothing')
+export type Just<T> = [T]
 
-export type Just<T> = T
-export type Nothing = typeof nothing
+export type Nothing = null
 
 export type Maybe<T> = Just<T> | Nothing

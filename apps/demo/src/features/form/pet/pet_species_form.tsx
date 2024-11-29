@@ -1,7 +1,7 @@
 import { toArray } from '@de/base'
 import {
+  type Field,
   type FlattenedFormFieldsOf,
-  type FormField,
   type FormProps,
   useFormRadioGroup,
 } from '@de/form-react'
@@ -19,7 +19,7 @@ import {
 export type PetSpeciesFormFields = FlattenedFormFieldsOf<
   FlattenedPetJsonValueToTypePaths,
   {
-    '$.species': FormField<never, Species>,
+    '$.species': Field<never, Species>,
   }
 >
 
