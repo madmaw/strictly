@@ -156,7 +156,7 @@ export function useFormCheckBox<
 export function useFormRadioGroup<
   K extends string,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  Fields extends Readonly<Record<K, Field<any, string>>>,
+  Fields extends Readonly<Record<K, Field<any, string | undefined | null>>>,
 >(
   k: K,
   {
