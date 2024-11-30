@@ -2,7 +2,7 @@ import {
   type boolean,
   type number,
 } from '@de/fine'
-import { type FieldAdapter } from 'react/mobx/field_adapter'
+import { type FieldAdapter } from 'core/mobx/field_adapter'
 import { type Field } from 'types/field'
 import { type FlattenedAdaptersOfFields } from 'types/flattened_adapters_of_fields'
 

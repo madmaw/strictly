@@ -3,14 +3,14 @@ import {
   FormPresenter,
   StringToIntegerConverter,
 } from '@de/form-react'
-import { SelectDiscriminatedUnionConverter } from '@de/form-react/field_converters/select_value_type_converter'
-import { TrimmingStringConverter } from '@de/form-react/field_converters/trimming_string_converter'
-import { minimumStringLengthFieldValidatorFactory } from '@de/form-react/field_validators/minimum_string_length_field_validator'
 import {
   adapterFromConverter,
   adapterFromPrototype,
   identityAdapter,
-} from '@de/form-react/react/mobx/field_adapter_builder'
+} from '@de/form-react/core/mobx/field_adapter_builder'
+import { SelectDiscriminatedUnionConverter } from '@de/form-react/field_converters/select_value_type_converter'
+import { TrimmingStringConverter } from '@de/form-react/field_converters/trimming_string_converter'
+import { minimumStringLengthFieldValidatorFactory } from '@de/form-react/field_validators/minimum_string_length_field_validator'
 import { type FlattenedAdaptersOfFields } from '@de/form-react/types/flattened_adapters_of_fields'
 import { type PetFormFields } from 'features/form/pet/pet_form'
 import { type PetSpeciesCatFormFields } from 'features/form/pet/pet_species_cat_form'

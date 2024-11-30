@@ -83,11 +83,13 @@ export class ManualPetFormModel {
       '$.alive': {
         value: this.value.alive,
         disabled: false,
+        required: false,
       },
       '$.name': {
         value: this.value.name,
         error: this.errors['$.name'],
         disabled: false,
+        required: true,
       },
     }
   }

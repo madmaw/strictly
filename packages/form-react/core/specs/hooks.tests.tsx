@@ -6,10 +6,10 @@ import {
 import {
   useFormCheckBox,
   useFormInput,
-} from 'react/hooks'
+} from 'core/hooks'
 import {
   type FormProps,
-} from 'react/props'
+} from 'core/props'
 import { type Field } from 'types/field'
 import {
   type Mock,

@@ -44,10 +44,12 @@ export const Populated: Story = {
       '$.name': {
         disabled: false,
         value: 'Fido',
+        required: true,
       },
       '$.alive': {
         disabled: false,
         value: true,
+        required: false,
       },
       // '$.species': {
       //   disabled: false,
@@ -71,10 +73,12 @@ export const Empty: Story = {
       '$.name': {
         disabled: false,
         value: '',
+        required: true,
       },
       '$.alive': {
         disabled: false,
         value: false,
+        required: false,
       },
     },
   },
@@ -87,10 +91,12 @@ export const Errors: Story = {
         disabled: false,
         value: 'Bad',
         error: NAME_TOO_SHORT_ERROR,
+        required: true,
       },
       '$.alive': {
         disabled: false,
         value: false,
+        required: false,
       },
     },
   },

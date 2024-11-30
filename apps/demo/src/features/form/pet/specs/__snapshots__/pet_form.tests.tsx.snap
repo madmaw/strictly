@@ -16,10 +16,17 @@ exports[`PetForm > renders Empty 1`] = `
     >
       <label
         class="m_8fdc1311 mantine-InputWrapper-label mantine-TextInput-label"
+        data-required="true"
         for="mantine-12voha2vo"
         id="mantine-12voha2vo-label"
       >
         Name
+        <span
+          aria-hidden="true"
+          class="m_78a94662 mantine-InputWrapper-required mantine-TextInput-required"
+        >
+           *
+        </span>
       </label>
       <div
         class="m_6c018570 mantine-Input-wrapper mantine-TextInput-wrapper"
@@ -31,6 +38,7 @@ exports[`PetForm > renders Empty 1`] = `
           data-variant="default"
           id="mantine-12voha2vo"
           name="$.name"
+          required=""
           value=""
         />
       </div>
@@ -128,10 +136,17 @@ exports[`PetForm > renders Errors 1`] = `
     >
       <label
         class="m_8fdc1311 mantine-InputWrapper-label mantine-TextInput-label"
+        data-required="true"
         for="mantine-12voha2vo"
         id="mantine-12voha2vo-label"
       >
         Name
+        <span
+          aria-hidden="true"
+          class="m_78a94662 mantine-InputWrapper-required mantine-TextInput-required"
+        >
+           *
+        </span>
       </label>
       <div
         class="m_6c018570 mantine-Input-wrapper mantine-TextInput-wrapper"
@@ -147,6 +162,7 @@ exports[`PetForm > renders Errors 1`] = `
           data-variant="default"
           id="mantine-12voha2vo"
           name="$.name"
+          required=""
           value="Bad"
         />
       </div>
@@ -249,10 +265,17 @@ exports[`PetForm > renders Populated 1`] = `
     >
       <label
         class="m_8fdc1311 mantine-InputWrapper-label mantine-TextInput-label"
+        data-required="true"
         for="mantine-1fu8n1fu8"
         id="mantine-1fu8n1fu8-label"
       >
         Name
+        <span
+          aria-hidden="true"
+          class="m_78a94662 mantine-InputWrapper-required mantine-TextInput-required"
+        >
+           *
+        </span>
       </label>
       <div
         class="m_6c018570 mantine-Input-wrapper mantine-TextInput-wrapper"
@@ -264,6 +287,7 @@ exports[`PetForm > renders Populated 1`] = `
           data-variant="default"
           id="mantine-1fu8n1fu8"
           name="$.name"
+          required=""
           value="Fido"
         />
       </div>

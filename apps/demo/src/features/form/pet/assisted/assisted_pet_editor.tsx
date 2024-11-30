@@ -2,7 +2,7 @@ import { type EditorProps } from '@de/form-react'
 import {
   type RenderTypeOfPresenterValuePath,
   type ValuePathsOfPresenter,
-} from '@de/form-react/react/mobx/types'
+} from '@de/form-react/core/mobx/types'
 import { usePartialObserverComponent } from '@de/form-react/util/partial'
 import { PetForm as PetFormImpl } from 'features/form/pet/pet_form'
 import { PetSpeciesCatForm } from 'features/form/pet/pet_species_cat_form'

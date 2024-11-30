@@ -3,7 +3,7 @@ import {
   type TypeDefHolder,
   type ValueTypeOf,
 } from '@de/fine'
-import { type FieldAdapter } from 'react/mobx/field_adapter'
+import { type FieldAdapter } from 'core/mobx/field_adapter'
 import {
   type SimplifyDeep,
   type ValueOf,

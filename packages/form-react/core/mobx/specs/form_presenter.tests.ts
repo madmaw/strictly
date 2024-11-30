@@ -12,20 +12,20 @@ import {
   union,
   type ValueTypeOf,
 } from '@de/fine'
-import { NullableToBooleanConverter } from 'field_converters/nullable_to_boolean_converter'
-import { StringToIntegerConverter } from 'field_converters/string_to_integer_converter'
-import { type FieldAdapter } from 'react/mobx/field_adapter'
+import { type FieldAdapter } from 'core/mobx/field_adapter'
 import {
   adapterFromConverter,
   adapterFromPrototype,
   identityAdapter,
-} from 'react/mobx/field_adapter_builder'
+} from 'core/mobx/field_adapter_builder'
 import {
   type FlattenedTypePathsToAdaptersOf,
   FormModel,
   FormPresenter,
   type ValuePathsToAdaptersOf,
-} from 'react/mobx/form_presenter'
+} from 'core/mobx/form_presenter'
+import { NullableToBooleanConverter } from 'field_converters/nullable_to_boolean_converter'
+import { StringToIntegerConverter } from 'field_converters/string_to_integer_converter'
 import { type Field } from 'types/field'
 import {
   FieldConversionResult,
@@ -756,6 +756,7 @@ describe('all', function () {
               // eslint-disable-next-line no-undefined
               error: undefined,
               value: false,
+              required: false,
             },
           })
         })

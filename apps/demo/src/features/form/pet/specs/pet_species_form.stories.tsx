@@ -53,6 +53,7 @@ export const Cat: Story = {
       '$.species': {
         disabled: false,
         value: 'cat',
+        required: false,
       },
     },
   },
@@ -64,6 +65,7 @@ export const Dog: Story = {
       '$.species': {
         disabled: false,
         value: 'dog',
+        required: false,
       },
     },
   },

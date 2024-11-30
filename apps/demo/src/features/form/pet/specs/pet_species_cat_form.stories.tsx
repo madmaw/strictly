@@ -28,6 +28,7 @@ export const Valid: Story = {
       '$.species.cat:meows': {
         disabled: false,
         value: '1',
+        required: true,
       },
     },
   },
@@ -40,6 +41,7 @@ export const Error: Story = {
         disabled: false,
         value: '',
         error: NOT_A_NUMBER_ERROR,
+        required: true,
       },
     },
   },

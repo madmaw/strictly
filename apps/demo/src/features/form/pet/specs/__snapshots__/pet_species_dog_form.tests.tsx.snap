@@ -17,10 +17,17 @@ exports[`PetSpeciesDogForm > renders Error 1`] = `
     >
       <label
         class="m_8fdc1311 mantine-InputWrapper-label mantine-TextInput-label"
+        data-required="true"
         for="mantine-0px4bipx4"
         id="mantine-0px4bipx4-label"
       >
         Barks
+        <span
+          aria-hidden="true"
+          class="m_78a94662 mantine-InputWrapper-required mantine-TextInput-required"
+        >
+           *
+        </span>
       </label>
       <div
         class="m_6c018570 mantine-Input-wrapper mantine-TextInput-wrapper"
@@ -36,6 +43,7 @@ exports[`PetSpeciesDogForm > renders Error 1`] = `
           data-variant="default"
           id="mantine-0px4bipx4"
           name="$.species.dog:barks"
+          required=""
           type="number"
           value=""
         />
@@ -67,10 +75,17 @@ exports[`PetSpeciesDogForm > renders Valid 1`] = `
     >
       <label
         class="m_8fdc1311 mantine-InputWrapper-label mantine-TextInput-label"
+        data-required="true"
         for="mantine-12voha2vo"
         id="mantine-12voha2vo-label"
       >
         Barks
+        <span
+          aria-hidden="true"
+          class="m_78a94662 mantine-InputWrapper-required mantine-TextInput-required"
+        >
+           *
+        </span>
       </label>
       <div
         class="m_6c018570 mantine-Input-wrapper mantine-TextInput-wrapper"
@@ -82,6 +97,7 @@ exports[`PetSpeciesDogForm > renders Valid 1`] = `
           data-variant="default"
           id="mantine-12voha2vo"
           name="$.species.dog:barks"
+          required=""
           type="number"
           value="1"
         />
