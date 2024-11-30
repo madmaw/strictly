@@ -1,6 +1,6 @@
 import {
   assertExistsAndReturn,
-  reduce,
+  toArray,
   UnreachableError,
 } from '@de/base'
 import {
@@ -103,7 +103,7 @@ export class FormPresenter<
   ) {
   }
 
-  private getAdapterForValuePath(
+  private maybeGetAdapterForValuePath(
     model: FormModel<T, JsonPaths, TypePathsToAdapters, ValuePathsToAdapters>,
     valuePath: keyof ValuePathsToAdapters,
   ) {
@@ -114,23 +114,17 @@ export class FormPresenter<
       valuePath,
       Object.keys(model.jsonPaths),
     )
-    return assertExistsAndReturn(
-      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-      this.adapters[typePath as keyof TypePathsToAdapters],
-      'expected converter to be defined {} ({})',
-      typePath,
-      valuePath,
-    )
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+    return this.adapters[typePath as keyof TypePathsToAdapters]
   }
 
-  private getAccessorForValuePath(
+  private getAdapterForValuePath(
     model: FormModel<T, JsonPaths, TypePathsToAdapters, ValuePathsToAdapters>,
     valuePath: keyof ValuePathsToAdapters,
   ) {
     return assertExistsAndReturn(
-      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-      model.accessors[valuePath as string],
-      'no accessor found for value path {}',
+      this.maybeGetAdapterForValuePath(model, valuePath),
+      'expected adapter to be defined {}',
       valuePath,
     )
   }
@@ -140,35 +134,47 @@ export class FormPresenter<
     valuePath: K,
     value: FromTypeOfFieldAdapter<ValuePathsToAdapters[K]>,
   ): boolean {
-    const { converter } = this.getAdapterForValuePath(model, valuePath)
-
-    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-explicit-any
-    const conversion = converter.convert(value, valuePath as any, model.fields)
-    return runInAction(() => {
-      model.fieldOverrides[valuePath] = {
-        value,
-      }
-      switch (conversion.type) {
-        case FieldConversionResult.Failure:
-          model.errors[valuePath] = conversion.error
-          return false
-        case FieldConversionResult.Success:
-          delete model.errors[valuePath]
-          return true
-        default:
-          throw new UnreachableError(conversion)
-      }
-    })
+    return this.internalSetFieldValue(model, valuePath, value, true)
   }
 
   setFieldValue<K extends keyof ValuePathsToAdapters>(
     model: FormModel<T, JsonPaths, TypePathsToAdapters, ValuePathsToAdapters>,
     valuePath: K,
     value: FromTypeOfFieldAdapter<ValuePathsToAdapters[K]>,
-  ): void {
-    runInAction(function () {
+  ): boolean {
+    return this.internalSetFieldValue(model, valuePath, value, false)
+  }
+
+  private internalSetFieldValue<K extends keyof ValuePathsToAdapters>(
+    model: FormModel<T, JsonPaths, TypePathsToAdapters, ValuePathsToAdapters>,
+    valuePath: K,
+    value: FromTypeOfFieldAdapter<ValuePathsToAdapters[K]>,
+    displayValidation: boolean,
+  ): boolean {
+    const { converter } = this.getAdapterForValuePath(model, valuePath)
+
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-explicit-any
+    const conversion = converter.convert(value, valuePath as any, model.fields)
+    const accessor = model.getAccessorForValuePath(valuePath)
+    return runInAction(() => {
       model.fieldOverrides[valuePath] = {
         value,
+      }
+      switch (conversion.type) {
+        case FieldConversionResult.Failure:
+          if (displayValidation) {
+            model.errors[valuePath] = conversion.error
+          }
+          if (conversion.value != null) {
+            accessor?.set(conversion.value[0])
+          }
+          return false
+        case FieldConversionResult.Success:
+          delete model.errors[valuePath]
+          accessor?.set(conversion.value)
+          return true
+        default:
+          throw new UnreachableError(conversion)
       }
     })
   }
@@ -197,50 +203,89 @@ export class FormPresenter<
     model: FormModel<T, JsonPaths, TypePathsToAdapters, ValuePathsToAdapters>,
     valuePath: K,
   ): boolean {
+    const {
+      converter,
+      valueFactory,
+    } = this.getAdapterForValuePath(model, valuePath)
     const fieldOverride = model.fieldOverrides[valuePath]
-    if (fieldOverride != null) {
-      const { converter } = this.getAdapterForValuePath(model, valuePath)
-      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-explicit-any
-      const conversion = converter.convert(fieldOverride.value, valuePath as any, model.fields)
-      return runInAction(function () {
-        switch (conversion.type) {
-          case FieldConversionResult.Failure:
-            model.errors[valuePath] = conversion.error
-            return false
-          case FieldConversionResult.Success:
-            delete model.errors[valuePath]
-            return true
-          default:
-            throw new UnreachableError(conversion)
-        }
-      })
-    }
-    return true
+    const accessor = model.getAccessorForValuePath(valuePath)
+    const storedValue = converter.revert(
+      accessor != null
+        ? accessor.value
+        // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+        : valueFactory.create(valuePath as string, model.fields),
+    )
+    const value = fieldOverride != null
+      ? fieldOverride.value
+      : storedValue
+    const dirty = storedValue !== value
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-explicit-any
+    const conversion = converter.convert(value, valuePath as any, model.fields)
+    return runInAction(function () {
+      switch (conversion.type) {
+        case FieldConversionResult.Failure:
+          model.errors[valuePath] = conversion.error
+          if (conversion.value != null && accessor != null && dirty) {
+            accessor.set(conversion.value[0])
+          }
+          return false
+        case FieldConversionResult.Success:
+          delete model.errors[valuePath]
+          if (accessor != null && dirty) {
+            accessor.set(conversion.value)
+          }
+          return true
+        default:
+          throw new UnreachableError(conversion)
+      }
+    })
   }
 
-  validateAndMaybeSaveAll(model: FormModel<T, JsonPaths, TypePathsToAdapters, ValuePathsToAdapters>): boolean {
-    // TODO want to iteratively reduce accessors (start from shortest key to longest key and every time
-    // we successfully set the value, restart the validate and save process)
+  validateAll(model: FormModel<T, JsonPaths, TypePathsToAdapters, ValuePathsToAdapters>): boolean {
+    // sort keys shortest to longest so parent changes don't overwrite child changes
+    const accessors = toArray(model.accessors).toSorted(function ([a], [b]) {
+      return a.length - b.length
+    })
     return runInAction(() => {
-      return reduce(
-        // eslint-disable-next-line @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-explicit-any
-        model.fieldOverrides as Record<keyof ValuePathsToAdapters, FieldOverride<any>>,
+      return accessors.reduce(
         (
-          success: boolean,
-          valuePath: keyof ValuePathsToAdapters,
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          { value }: FieldOverride<any>,
+          success,
+          [
+            valuePath,
+            accessor,
+          ],
         ): boolean => {
-          const { converter } = this.getAdapterForValuePath(model, valuePath)
-          // eslint-disable-next-line @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-explicit-any
-          const conversion = converter.convert(value, valuePath as any, model.fields)
+          // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+          const adapterPath = valuePath as keyof ValuePathsToAdapters
+          const adapter = this.maybeGetAdapterForValuePath(model, adapterPath)
+          if (adapter == null) {
+            // no adapter == there should be nothing specified for this field
+            return success
+          }
+          const {
+            converter,
+          } = adapter
+          const fieldOverride = model.fieldOverrides[adapterPath]
+          const storedValue = converter.revert(accessor.value)
+          const value = fieldOverride != null
+            ? fieldOverride.value
+            : storedValue
+          // TODO more nuanced comparison
+          const dirty = fieldOverride != null && fieldOverride.value !== storedValue
+
+          const conversion = converter.convert(value, valuePath, model.fields)
           switch (conversion.type) {
             case FieldConversionResult.Failure:
-              model.errors[valuePath] = conversion.error
+              model.errors[adapterPath] = conversion.error
+              if (conversion.value != null && dirty) {
+                accessor.set(conversion.value[0])
+              }
               return false
             case FieldConversionResult.Success:
-              this.getAccessorForValuePath(model, valuePath).set(conversion.value)
-              delete model.errors[valuePath]
+              if (dirty) {
+                accessor.set(conversion.value)
+              }
+              delete model.errors[adapterPath]
               return success
             default:
               throw new UnreachableError(conversion)
@@ -355,8 +400,7 @@ export class FormModel<
     } = adapter
 
     const fieldOverride = this.fieldOverrides[valuePath]
-    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-    const accessor = this.accessors[valuePath as string]
+    const accessor = this.getAccessorForValuePath(valuePath)
     const value = fieldOverride
       ? fieldOverride.value
       : converter.revert(accessor != null
@@ -374,6 +418,15 @@ export class FormModel<
       // if we can't write it back, then we have to disable it
       disabled: accessor == null,
     }
+  }
+
+  getAccessorForValuePath(valuePath: keyof ValuePathsToAdapters) {
+    return assertExistsAndReturn(
+      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+      this.accessors[valuePath as string],
+      'no accessor found for value path {}',
+      valuePath,
+    )
   }
 
   @computed

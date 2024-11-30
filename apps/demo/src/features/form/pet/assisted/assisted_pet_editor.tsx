@@ -63,7 +63,7 @@ export function AssistedPetEditor({
 
   const onSubmit = useCallback(
     function () {
-      if (presenter.validateAndMaybeSaveAll(model)) {
+      if (presenter.validateAll(model)) {
         onValueChange(model.value)
       }
     },

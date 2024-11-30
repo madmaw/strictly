@@ -27,7 +27,10 @@ import {
   type ValuePathsToAdaptersOf,
 } from 'react/mobx/form_presenter'
 import { type Field } from 'types/field'
-import { type FieldConverter } from 'types/field_converter'
+import {
+  FieldConversionResult,
+  type FieldConverter,
+} from 'types/field_converter'
 import { type FieldValueFactory } from 'types/field_value_factory'
 import { type Mocked } from 'vitest'
 import {
@@ -44,9 +47,10 @@ function createMockedAdapter<
 >({
   converter,
   valueFactory,
-}: FieldAdapter<E, Record<string, Field>, To, From>): Mocked<
-  FieldAdapter<E, Record<string, Field>, To, From>
-> {
+}: FieldAdapter<E, Record<string, Field>, To, From>): {
+  converter: Mocked<FieldConverter<E, Record<string, Field>, To, From>>,
+  valueFactory: Mocked<FieldValueFactory<Record<string, Field>, To>>,
+} {
   const mockedConverter = mock<FieldConverter<E, Record<string, Field>, To, From>>()
   mockedConverter.convert.mockImplementation(converter.convert.bind(converter))
   mockedConverter.revert.mockImplementation(converter.revert.bind(converter))
@@ -443,25 +447,24 @@ describe('all', function () {
   describe('FormPresenter', function () {
     describe('literal', function () {
       const typeDef = number
-      const converters = {
+      const adapters = {
         $: stringToIntegerAdapter,
       } as const
       const presenter = new FormPresenter<
         typeof typeDef,
         FlattenedJsonValueToTypePathsOf<typeof typeDef>,
-        typeof converters
+        typeof adapters
       >(
         typeDef,
-        converters,
+        adapters,
       )
-      let originalValue: ValueTypeOf<typeof typeDef>
+      const originalValue: ValueTypeOf<typeof typeDef> = 2
       let model: FormModel<
         typeof typeDef,
         FlattenedJsonValueToTypePathsOf<typeof typeDef>,
-        typeof converters
+        typeof adapters
       >
       beforeEach(function () {
-        originalValue = 2
         model = presenter.createModel(originalValue)
       })
 
@@ -471,8 +474,8 @@ describe('all', function () {
             presenter.setFieldValueAndValidate<'$'>(model, '$', '1')
           })
 
-          it('does not set the underlying value', function () {
-            expect(model.value).toEqual(originalValue)
+          it('does set the underlying value', function () {
+            expect(model.value).toEqual(1)
           })
 
           it('sets the fields', function () {
@@ -487,35 +490,70 @@ describe('all', function () {
         })
 
         describe('failure', function () {
-          beforeEach(function () {
-            presenter.setFieldValueAndValidate<'$'>(model, '$', 'x')
+          describe('conversion fails', function () {
+            beforeEach(function () {
+              presenter.setFieldValueAndValidate<'$'>(model, '$', 'x')
+            })
+
+            it('does not set the underlying value', function () {
+              expect(model.value).toEqual(originalValue)
+            })
+
+            it('sets the error state', function () {
+              expect(model.fields).toEqual(expect.objectContaining({
+                $: expect.objectContaining({
+                  value: 'x',
+                  error: IS_NAN_ERROR,
+                }),
+              }))
+            })
           })
 
-          it('does not set the underlying value', function () {
-            expect(model.value).toEqual(originalValue)
-          })
+          describe('conversion succeeds, but validation fails', function () {
+            const newValue = -1
+            const errorCode = 65
+            beforeEach(function () {
+              stringToIntegerAdapter.converter.convert.mockReturnValueOnce({
+                type: FieldConversionResult.Failure,
+                error: errorCode,
+                value: [newValue],
+              })
+              presenter.setFieldValueAndValidate<'$'>(model, '$', '-1')
+            })
 
-          it('sets the error state', function () {
-            expect(model.fields).toEqual(expect.objectContaining({
-              $: expect.objectContaining({
-                value: 'x',
-                error: IS_NAN_ERROR,
-              }),
-            }))
+            it('does set the underlying value', function () {
+              expect(model.value).toEqual(newValue)
+            })
+
+            it('does update the field', function () {
+              expect(model.fields).toEqual({
+                $: expect.objectContaining({
+                  value: '-1',
+                  error: errorCode,
+                  disabled: false,
+                }),
+              })
+            })
           })
         })
       })
 
       describe.each([
-        '1',
-        'x',
-      ])('setFieldValue to %s', function (newValue) {
+        [
+          '1',
+          1,
+        ],
+        [
+          'x',
+          originalValue,
+        ],
+      ] as const)('setFieldValue to %s', function (newValue, expectedValue) {
         beforeEach(function () {
           presenter.setFieldValue<'$'>(model, '$', newValue)
         })
 
-        it('does not set the underlying value', function () {
-          expect(model.value).toEqual(originalValue)
+        it('does set the underlying value', function () {
+          expect(model.value).toEqual(expectedValue)
         })
 
         it('sets the field value', function () {
@@ -564,8 +602,12 @@ describe('all', function () {
             presenter.setFieldValueAndValidate<'$[0]'>(model, '$[0]', '100')
           })
 
-          it('does not set the underlying value', function () {
-            expect(model.value).toEqual(originalValue)
+          it('sets the underlying value', function () {
+            expect(model.value).toEqual([
+              100,
+              3,
+              7,
+            ])
           })
 
           it('sets the fields', function () {
@@ -627,7 +669,7 @@ describe('all', function () {
           presenter.setFieldValue<'$[0]'>(model, '$[0]', 'x')
           presenter.setFieldValue<'$[1]'>(model, '$[1]', '2')
           presenter.setFieldValue<'$[2]'>(model, '$[2]', 'z')
-          presenter.validateAndMaybeSaveAll(model)
+          presenter.validateAll(model)
         })
 
         it('contains errors for all invalid fields', function () {
@@ -724,8 +766,8 @@ describe('all', function () {
               presenter.setFieldValueAndValidate<'$'>(model, '$', true)
             })
 
-            it('does not set the underlying value', function () {
-              expect(model.value).toEqual(originalValue)
+            it('sets the underlying value', function () {
+              expect(model.value).toEqual([1])
             })
           })
         })
