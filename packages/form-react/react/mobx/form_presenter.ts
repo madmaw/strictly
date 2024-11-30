@@ -58,7 +58,8 @@ export type FlattenedTypePathsToAdaptersOf<
   ]?: FieldAdapter<any, Readonly<Record<string, Field>>, F[K], any>
 }
 
-type FieldOverride<V> = {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type FieldOverride<V = any> = {
   value: V,
   // seems like something we'll need?
   // dirty: boolean,
@@ -317,7 +318,7 @@ export class FormModel<
   @observable.ref
   accessor value: MobxValueTypeOf<T>
   @observable.shallow
-  accessor fieldOverrides: FlattenedFieldOverrides<ValuePathsToAdapters> = {}
+  accessor fieldOverrides: FlattenedFieldOverrides<ValuePathsToAdapters>
   @observable.shallow
   accessor errors: FlattenedErrors<ValuePathsToAdapters> = {}
 
@@ -326,10 +327,28 @@ export class FormModel<
   constructor(
     private readonly typeDef: T,
     value: ValueTypeOf<T>,
-    private readonly converters: TypePathsToAdapters,
+    private readonly adapters: TypePathsToAdapters,
   ) {
     this.value = mobxCopy(typeDef, value)
     this.flattenedTypeDefs = flattenTypeDefsOf(typeDef)
+    // pre-populate field overrides for consistent behavior
+    this.fieldOverrides = flattenValueTypeTo(
+      typeDef,
+      value,
+      () => {},
+      (_t: StrictTypeDef, value: AnyValueType, _setter, typePath): FieldOverride | undefined => {
+        // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+        const adapter = adapters[typePath as keyof TypePathsToAdapters]
+        if (adapter == null) {
+          return
+        }
+        const { converter } = adapter
+        const displayValue = converter.revert(value)
+        return {
+          value: displayValue,
+        }
+      },
+    )
   }
 
   @computed
@@ -389,7 +408,7 @@ export class FormModel<
   }
 
   private synthesizeFieldByPaths(valuePath: keyof ValuePathsToAdapters, typePath: keyof TypePathsToAdapters) {
-    const adapter = this.converters[typePath]
+    const adapter = this.adapters[typePath]
     if (adapter == null) {
       // invalid path, which can happen
       return
