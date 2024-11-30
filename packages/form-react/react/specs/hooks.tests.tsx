@@ -67,6 +67,7 @@ describe('hooks', function () {
         $: {
           value: 'zzz',
           disabled: false,
+          required: false,
         },
       },
       onFieldBlur,
@@ -88,6 +89,7 @@ describe('hooks', function () {
               $: {
                 value,
                 disabled: false,
+                required: false,
               },
             }}
           />
@@ -148,6 +150,7 @@ describe('hooks', function () {
         $: {
           value: false,
           disabled: false,
+          required: false,
         },
       },
       onFieldBlur,
@@ -168,6 +171,7 @@ describe('hooks', function () {
               $: {
                 value,
                 disabled: false,
+                required: false,
               },
             }}
           />

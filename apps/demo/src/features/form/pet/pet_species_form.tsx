@@ -56,6 +56,7 @@ export function PetSpeciesForm(props: PetSpeciesFormProps) {
             ]) {
               return (
                 <Radio
+                  disabled={species.disabled}
                   key={value}
                   label={displayName}
                   value={value}

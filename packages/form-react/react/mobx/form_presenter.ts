@@ -331,7 +331,8 @@ export class FormModel<
   ) {
     this.value = mobxCopy(typeDef, value)
     this.flattenedTypeDefs = flattenTypeDefsOf(typeDef)
-    // pre-populate field overrides for consistent behavior
+    // pre-populate field overrides for consistent behavior when default information is overwritten
+    // then returned to
     this.fieldOverrides = flattenValueTypeTo(
       typeDef,
       value,
@@ -435,7 +436,8 @@ export class FormModel<
       value,
       error,
       // if we can't write it back, then we have to disable it
-      disabled: accessor == null,
+      disabled: accessor == null || this.isDisabled(valuePath),
+      required: this.isRequired(valuePath),
     }
   }
 
@@ -469,5 +471,15 @@ export class FormModel<
       this.typeDef,
       this.value,
     )
+  }
+
+  protected isDisabled(_valuePath: keyof ValuePathsToAdapters): boolean {
+    // TODO infer from types
+    return false
+  }
+
+  protected isRequired(_valuePath: keyof ValuePathsToAdapters): boolean {
+    // TODO infer from types
+    return false
   }
 }

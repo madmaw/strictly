@@ -72,6 +72,7 @@ export function useFormInput<
     value,
     error,
     disabled,
+    required,
   } = fields[k]
 
   const renderedError = useMemo(function () {
@@ -90,6 +91,7 @@ export function useFormInput<
     value,
     error: renderedError,
     disabled,
+    required,
   }
 }
 
@@ -129,6 +131,7 @@ export function useFormCheckBox<
     value,
     error,
     disabled,
+    required,
   } = fields[k]
 
   const renderedError = useMemo(function () {
@@ -146,6 +149,7 @@ export function useFormCheckBox<
     checked: value,
     error: renderedError,
     disabled,
+    required,
   }
 }
 
@@ -186,6 +190,7 @@ export function useFormRadioGroup<
     value,
     error,
     disabled,
+    required,
   } = fields[k]
 
   const renderedError = useMemo(function () {
@@ -203,5 +208,6 @@ export function useFormRadioGroup<
     value,
     error: renderedError,
     disabled,
+    required,
   }
 }
