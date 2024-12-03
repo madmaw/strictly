@@ -7,6 +7,8 @@
     "react": "^18.3.1"
   },
   "devDependencies": {
+    "@babel/plugin-proposal-decorators": "^7.25.9",
+    "@babel/plugin-transform-class-static-block": "^7.26.0",
     "@de/support-vite": "*",
     "@mantine/core": "^7.13.4",
     "@storybook/addon-actions": "^8.4.5",

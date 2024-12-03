@@ -78,7 +78,6 @@ export function AssistedPetEditor({
       return {
         fields: model.fields,
         onFieldValueChange,
-        onSubmit,
         onFieldSubmit,
         onFieldBlur,
       }
@@ -86,7 +85,6 @@ export function AssistedPetEditor({
     [
       model,
       onFieldValueChange,
-      onSubmit,
       onFieldSubmit,
       onFieldBlur,
     ],
@@ -98,7 +96,6 @@ export function AssistedPetEditor({
       return {
         fields: model.fields,
         onFieldValueChange,
-        onSubmit,
         onFieldSubmit,
         onFieldBlur,
       }
@@ -106,7 +103,6 @@ export function AssistedPetEditor({
     [
       model,
       onFieldValueChange,
-      onSubmit,
       onFieldSubmit,
       onFieldBlur,
     ],
@@ -128,7 +124,6 @@ export function AssistedPetEditor({
       return {
         fields: model.fields,
         onFieldValueChange,
-        onSubmit,
         onFieldSubmit,
         onFieldBlur,
         speciesComponents,
@@ -137,7 +132,6 @@ export function AssistedPetEditor({
     [
       model,
       onFieldValueChange,
-      onSubmit,
       onFieldSubmit,
       onFieldBlur,
       speciesComponents,

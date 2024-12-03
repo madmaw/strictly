@@ -1,23 +1,19 @@
-import { TextInput } from '@mantine/core'
 import { action } from '@storybook/addon-actions'
 import {
   type Meta,
   type StoryObj,
 } from '@storybook/react'
-import { useFormInput } from 'core/hooks'
 import { type FormProps } from 'core/props'
+import { useMantineForm } from 'mantine/hooks'
 import { type Field } from 'types/field'
+import { CHECKBOX_LABEL } from './constants'
 
 function Component(props: FormProps<{
-  $: Field<string, string>,
+  $: Field<string, boolean>,
 }>) {
-  const inputProps = useFormInput('$', props)
-  return (
-    <TextInput
-      {...inputProps}
-      label='Text Input'
-    />
-  )
+  const inputProps = useMantineForm(props)
+  const CheckboxComponent = inputProps.checkboxComponent('$')
+  return <CheckboxComponent label={CHECKBOX_LABEL} />
 }
 
 const meta: Meta<typeof Component> = {
@@ -34,25 +30,25 @@ export default meta
 
 type Story = StoryObj<typeof Component>
 
-export const Empty: Story = {
+export const Off: Story = {
   args: {
     fields: {
       $: {
         disabled: false,
         required: false,
-        value: '',
+        value: false,
       },
     },
   },
 }
 
-export const Populated: Story = {
+export const On: Story = {
   args: {
     fields: {
       $: {
         disabled: false,
         required: false,
-        value: 'Hello',
+        value: true,
       },
     },
   },
@@ -64,7 +60,7 @@ export const Required: Story = {
       $: {
         disabled: false,
         required: true,
-        value: 'xxx',
+        value: false,
       },
     },
   },
@@ -76,7 +72,7 @@ export const Disabled: Story = {
       $: {
         disabled: true,
         required: false,
-        value: 'xxx',
+        value: false,
       },
     },
   },

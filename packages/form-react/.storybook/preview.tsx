@@ -1,8 +1,7 @@
 import '@mantine/core/styles.css'
 import { MantineProvider } from '@mantine/core'
-import { StrictMode } from 'react'
 import { type Preview } from '@storybook/react'
-import * as React from 'react'
+import { StrictMode } from 'react'
 
 const preview: Preview = {
   parameters: {

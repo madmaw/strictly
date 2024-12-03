@@ -3,11 +3,10 @@ import {
   type Field,
   type FlattenedFormFieldsOf,
   type FormProps,
-  useFormRadioGroup,
 } from '@de/form-react'
+import { useMantineForm } from '@de/form-react/mantine/hooks'
 import {
   Group,
-  Radio,
   Stack,
 } from '@mantine/core'
 import { type ComponentType } from 'react'
@@ -37,15 +36,14 @@ export function PetSpeciesForm(props: PetSpeciesFormProps) {
     speciesComponents,
     fields,
   } = props
-  const species = useFormRadioGroup('$.species', props)
+  const form = useMantineForm(props)
+  const species = form.radioGroup('$.species')
+  const SpeciesRadioGroup = species.Component
   const speciesValue = fields['$.species'].value
   const SpeciesComponent = speciesComponents[speciesValue]
   return (
     <Stack>
-      <Radio.Group
-        {...species}
-        label='Species'
-      >
+      <SpeciesRadioGroup label='Species'>
         <Group>
           {toArray(
             SPECIES_NAMES,
@@ -54,18 +52,17 @@ export function PetSpeciesForm(props: PetSpeciesFormProps) {
               value,
               displayName,
             ]) {
+              const SpeciesRadio = species.radioComponent(value)
               return (
-                <Radio
-                  disabled={species.disabled}
+                <SpeciesRadio
                   key={value}
                   label={displayName}
-                  value={value}
                 />
               )
             },
           )}
         </Group>
-      </Radio.Group>
+      </SpeciesRadioGroup>
       <SpeciesComponent />
     </Stack>
   )

@@ -4,10 +4,6 @@ import {
   type RenderResult,
 } from '@testing-library/react'
 import {
-  useFormCheckBox,
-  useFormInput,
-} from 'core/hooks'
-import {
   type FormProps,
 } from 'core/props'
 import { type Field } from 'types/field'

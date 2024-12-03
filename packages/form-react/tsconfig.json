@@ -7,6 +7,10 @@
   "include": [
     "**/*.ts",
     "**/*.tsx",
+    ".storybook/**/*.ts",
+    ".storybook/**/*.tsx",
+    ".vitest/**/*.ts",
+    "babel.config.cjs",
     "tsconfig.json"
   ],
   "references": [

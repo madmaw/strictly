@@ -2,11 +2,10 @@ import {
   type Field,
   type FlattenedFormFieldsOf,
   type FormProps,
-  useFormInput,
 } from '@de/form-react'
+import { useMantineForm } from '@de/form-react/mantine/hooks'
 import {
   Stack,
-  TextInput,
 } from '@mantine/core'
 import {
   type FlattenedPetJsonValueToTypePaths,
@@ -23,11 +22,11 @@ export type PetSpeciesCatFormFields = FlattenedFormFieldsOf<
 export type PetSpeciesFormCatProps = FormProps<PetSpeciesCatFormFields>
 
 export function PetSpeciesCatForm(props: PetSpeciesFormCatProps) {
-  const meows = useFormInput('$.species.cat:meows', props)
+  const form = useMantineForm(props)
+  const MeowsTextInput = form.textInputComponent('$.species.cat:meows')
   return (
     <Stack>
-      <TextInput
-        {...meows}
+      <MeowsTextInput
         label='Meows'
         type='number'
       />

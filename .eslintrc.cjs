@@ -523,6 +523,7 @@ module.exports = {
     '!.vitest',
     '!.vscode',
     '!.github',
+    '!.storybook',
     'node_modules',
     '**/dist/**',
     '**/.out/**',

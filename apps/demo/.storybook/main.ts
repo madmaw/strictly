@@ -27,15 +27,14 @@ const config: StorybookConfig = {
       name: getAbsolutePath('@storybook/builder-vite'),
       options: {
         viteConfigPath: './vite.config.mts',
-      }
+      },
     },
   },
   framework: {
     // NOTE: the documentation says this should be @storybook/react-vite, which fails completely
     // https://storybook.js.org/docs/get-started/frameworks/react-vite
     name: getAbsolutePath('@storybook/react'),
-    options: {
-    },
+    options: {},
   },
 }
 export default config

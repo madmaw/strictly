@@ -5,7 +5,6 @@ import {
 } from '@testing-library/react'
 import * as stories from './pet_species_dog_form.stories'
 
-// example of importing a story as a test component
 const composedStories = composeStories(stories)
 
 describe('PetSpeciesDogForm', function () {

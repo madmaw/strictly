@@ -1,5 +1,4 @@
 import {
-  Radio,
   Stack,
 } from '@mantine/core'
 import { action } from '@storybook/addon-actions'
@@ -7,46 +6,38 @@ import {
   type Meta,
   type StoryObj,
 } from '@storybook/react'
-import {
-  useFormRadioGroup,
-} from 'core/hooks'
 import { type FormProps } from 'core/props'
+import { useMantineForm } from 'mantine/hooks'
 import { type Field } from 'types/field'
-
-const VALUES = [
-  '1',
-  '2',
-  '3',
-] as const
-type Value = typeof VALUES[number]
-const DISPLAY_VALUES: Record<Value, string> = {
-  1: 'One',
-  2: 'Two',
-  3: 'Three',
-}
+import {
+  RADIO_GROUP_LABEL,
+  RADIO_LABELS,
+  RADIO_VALUES,
+  type RadioValue,
+} from './constants'
 
 function Component(props: FormProps<{
-  $: Field<string, Value | null>,
+  $: Field<string, RadioValue | null>,
 }>) {
-  const inputProps = useFormRadioGroup('$', props)
+  const form = useMantineForm(props)
+  const radioGroup = form.radioGroup('$')
+  const RadioGroupComponent = radioGroup.Component
+
   return (
-    <Radio.Group
-      {...inputProps}
-      label='Checkbox'
-    >
+    <RadioGroupComponent label={RADIO_GROUP_LABEL}>
       <Stack>
-        {VALUES.map(function (value: Value) {
-          const label = DISPLAY_VALUES[value]
+        {RADIO_VALUES.map(function (value: RadioValue) {
+          const label = RADIO_LABELS[value]
+          const RadioComponent = radioGroup.radioComponent(value)
           return (
-            <Radio
+            <RadioComponent
               key={label}
               label={label}
-              value={value}
             />
           )
         })}
       </Stack>
-    </Radio.Group>
+    </RadioGroupComponent>
   )
 }
 

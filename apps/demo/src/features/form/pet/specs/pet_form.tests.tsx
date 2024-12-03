@@ -8,7 +8,6 @@ import { LABEL_SUBMIT } from 'features/form/pet/pet_form'
 import { vi } from 'vitest'
 import * as stories from './pet_form.stories'
 
-// example of importing a story as a test component
 const composedStories = composeStories(stories)
 const {
   Populated,
