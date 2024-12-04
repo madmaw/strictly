@@ -257,15 +257,15 @@ describe('all', function () {
       describe('accessors', function () {
         it.each([
           [
-            '$[0]',
+            '$.0',
             1,
           ],
           [
-            '$[1]',
+            '$.1',
             4,
           ],
           [
-            '$[2]',
+            '$.2',
             17,
           ],
         ] as const)('gets the expected values for %s', function (valuePath, value) {
@@ -274,7 +274,7 @@ describe('all', function () {
         })
 
         it('sets a value', function () {
-          const accessor = expectDefinedAndReturn(model.accessors['$[0]'])
+          const accessor = expectDefinedAndReturn(model.accessors['$.0'])
           accessor.set(100)
           expect(model.value).toEqual([
             100,
@@ -599,7 +599,7 @@ describe('all', function () {
       describe('setFieldValueAndValidate', function () {
         describe('success', function () {
           beforeEach(function () {
-            presenter.setFieldValueAndValidate<'$[0]'>(model, '$[0]', '100')
+            presenter.setFieldValueAndValidate<'$.0'>(model, '$.0', '100')
           })
 
           it('sets the underlying value', function () {
@@ -612,7 +612,7 @@ describe('all', function () {
 
           it('sets the fields', function () {
             expect(model.fields).toEqual(expect.objectContaining({
-              '$[0]': expect.objectContaining({
+              '$.0': expect.objectContaining({
                 value: '100',
                 // eslint-disable-next-line no-undefined
                 error: undefined,
@@ -623,7 +623,7 @@ describe('all', function () {
 
         describe('failure', function () {
           beforeEach(function () {
-            presenter.setFieldValueAndValidate<'$[0]'>(model, '$[0]', 'x')
+            presenter.setFieldValueAndValidate<'$.0'>(model, '$.0', 'x')
           })
 
           it('does not set the underlying value', function () {
@@ -632,7 +632,7 @@ describe('all', function () {
 
           it('sets the error state', function () {
             expect(model.fields).toEqual(expect.objectContaining({
-              '$[0]': expect.objectContaining({
+              '$.0': expect.objectContaining({
                 value: 'x',
                 error: IS_NAN_ERROR,
               }),
@@ -646,7 +646,7 @@ describe('all', function () {
         'x',
       ])('setFieldValue to %s', function (newValue) {
         beforeEach(function () {
-          presenter.setFieldValue<'$[0]'>(model, '$[0]', newValue)
+          presenter.setFieldValue(model, '$.0', newValue)
         })
 
         it('does not set the underlying value', function () {
@@ -655,7 +655,7 @@ describe('all', function () {
 
         it('sets the field value', function () {
           expect(model.fields).toEqual(expect.objectContaining({
-            '$[0]': expect.objectContaining({
+            '$.0': expect.objectContaining({
               value: newValue,
               // eslint-disable-next-line no-undefined
               error: undefined,
@@ -666,24 +666,24 @@ describe('all', function () {
 
       describe('validate', function () {
         beforeEach(function () {
-          presenter.setFieldValue<'$[0]'>(model, '$[0]', 'x')
-          presenter.setFieldValue<'$[1]'>(model, '$[1]', '2')
-          presenter.setFieldValue<'$[2]'>(model, '$[2]', 'z')
+          presenter.setFieldValue(model, '$.0', 'x')
+          presenter.setFieldValue(model, '$.1', '2')
+          presenter.setFieldValue(model, '$.2', 'z')
           presenter.validateAll(model)
         })
 
         it('contains errors for all invalid fields', function () {
           expect(model.fields).toEqual(expect.objectContaining({
-            '$[0]': expect.objectContaining({
+            '$.0': expect.objectContaining({
               value: 'x',
               error: IS_NAN_ERROR,
             }),
-            '$[1]': expect.objectContaining({
+            '$.1': expect.objectContaining({
               value: '2',
               // eslint-disable-next-line no-undefined
               error: undefined,
             }),
-            '$[2]': expect.objectContaining({
+            '$.2': expect.objectContaining({
               value: 'z',
               error: IS_NAN_ERROR,
             }),
@@ -701,14 +701,14 @@ describe('all', function () {
 
       describe('passes context', function () {
         it('supplies the full, previous context when converting', function () {
-          presenter.setFieldValueAndValidate<'$[2]'>(model, '$[2]', '4')
+          presenter.setFieldValueAndValidate(model, '$.2', '4')
 
           expect(stringToIntegerAdapter.converter.convert).toHaveBeenCalledOnce()
           expect(stringToIntegerAdapter.converter.convert).toHaveBeenCalledWith(
             '4',
-            '$[2]',
+            '$.2',
             expect.objectContaining({
-              '$[2]': expect.objectContaining({
+              '$.2': expect.objectContaining({
                 value: '7',
               }),
             }),

@@ -33,7 +33,7 @@ describe('JsonPathsOf', function () {
   })
 
   describe('list', function () {
-    let path: '$' | `$[${number}]`
+    let path: '$' | `$.${number}`
 
     describe('mutable', function () {
       const builder = list(string)
@@ -74,7 +74,7 @@ describe('JsonPathsOf', function () {
   })
 
   describe('map', function () {
-    let path: '$' | `$.${string}` | `$[${number}]`
+    let path: '$' | `$.${string}` | `$.${number}`
 
     describe('mutable', function () {
       const builder = map(string)
@@ -99,7 +99,7 @@ describe('JsonPathsOf', function () {
       const builder = map<typeof string, 1 | 2 | 3>(string)
       type T = JsonPathsOf<typeof builder>
 
-      let path: '$' | '$[1]' | '$[2]' | '$[3]'
+      let path: '$' | '$.1' | '$.2' | '$.3'
       it('equals expected type', function () {
         expectTypeOf(path).toEqualTypeOf<T>()
       })
@@ -194,7 +194,7 @@ describe('JsonPathsOf', function () {
       describe('no override', function () {
         type T = JsonPathsOf<typeof builder>
 
-        let path: '$' | '$.l' | `$.l[${number}]`
+        let path: '$' | '$.l' | `$.l.${number}`
         it('equals expected type', function () {
           expectTypeOf(path).toEqualTypeOf<T>()
         })

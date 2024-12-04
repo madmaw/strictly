@@ -32,8 +32,8 @@ describe('flattenJsonValueToTypePathsOf', function () {
     it('equals expected value', function () {
       expect(flattened).toEqual({
         $: '$',
-        '$[0]': '$.*',
-        '$[1]': '$.*',
+        '$.0': '$.*',
+        '$.1': '$.*',
       })
     })
   })
@@ -86,9 +86,9 @@ describe('flattenJsonValueToTypePathsOf', function () {
       it('equals expected value', function () {
         expect(flattened).toEqual({
           $: '$',
-          '$[0]': '$.*',
-          '$[1]': '$.*',
-          '$[2]': '$.*',
+          '$.0': '$.*',
+          '$.1': '$.*',
+          '$.2': '$.*',
         })
       })
     })

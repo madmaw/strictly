@@ -119,9 +119,9 @@ describe('flattenValueTypeTo', function () {
       it('equals expected type', function () {
         expect(flattened).toEqual({
           $: '[1,2,3]',
-          ['$[0]']: '1',
-          ['$[1]']: '2',
-          ['$[2]']: '3',
+          ['$.0']: '1',
+          ['$.1']: '2',
+          ['$.2']: '3',
         })
       })
 
@@ -142,7 +142,7 @@ describe('flattenValueTypeTo', function () {
       })
 
       it('sets a value in the list', function () {
-        flattened['$[1]'](4)
+        flattened['$.1'](4)
         expect(l).toEqual([
           1,
           4,
@@ -412,9 +412,9 @@ describe('flattenValueTypeTo', function () {
         it('equals expected type', function () {
           expect(flattened).toEqual({
             $: '[1,2,3]',
-            ['$[0]']: '1',
-            ['$[1]']: '2',
-            ['$[2]']: '3',
+            ['$.0']: '1',
+            ['$.1']: '2',
+            ['$.2']: '3',
           })
         })
       })
@@ -439,7 +439,7 @@ describe('flattenValueTypeTo', function () {
         it('sets a subordinate value', function () {
           // need to cast to any as TS cannot guarantee that '$.a' is present
           // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/consistent-type-assertions
-          ;(flattened as any)['$[1]'](4)
+          ;(flattened as any)['$.1'](4)
           expect(u).toEqual([
             1,
             4,

@@ -4,6 +4,9 @@
     "check-types": {
       "dependsOn": ["^check-types"]
     },
+    "dev": {
+      "dependsOn": ["^dev"]
+    },
     "lint": {
       "dependsOn": ["^lint"]
     },

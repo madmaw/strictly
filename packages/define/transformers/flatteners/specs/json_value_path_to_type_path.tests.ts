@@ -36,7 +36,7 @@ describe('jsonValuePathToTypePath', function () {
         '$',
       ],
       [
-        '$[0]',
+        '$.0',
         '$.*',
       ],
     ] as const)('it maps "%s"', function (from, to) {

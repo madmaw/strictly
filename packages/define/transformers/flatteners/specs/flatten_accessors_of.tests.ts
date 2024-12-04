@@ -62,13 +62,13 @@ describe('flattenAccessorsOf', function () {
           4,
         ],
       }),
-      '$.a[0]': expect.objectContaining({
+      '$.a.0': expect.objectContaining({
         value: 1,
       }),
-      '$.a[1]': expect.objectContaining({
+      '$.a.1': expect.objectContaining({
         value: 2,
       }),
-      '$.a[2]': expect.objectContaining({
+      '$.a.2': expect.objectContaining({
         value: 4,
       }),
       '$.b': expect.objectContaining({
@@ -87,7 +87,7 @@ describe('flattenAccessorsOf', function () {
   })
 
   it('sets an internal value of an array', function () {
-    expectDefinedAndReturn(flattened['$.a[1]']).set(99)
+    expectDefinedAndReturn(flattened['$.a.1']).set(99)
 
     expect(value).toEqual({
       a: [

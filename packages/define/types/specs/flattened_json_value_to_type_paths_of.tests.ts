@@ -33,8 +33,8 @@ describe('FlattenedJsonPathsOf', function () {
 
     let t: {
       readonly $: '$',
-      readonly [_: `$[${number}]`]: '$.*',
-      readonly [_: `$[${number}][${number}]`]: '$.*.*',
+      readonly [_: `$.${number}`]: '$.*',
+      readonly [_: `$.${number}.${number}`]: '$.*.*',
     }
     it('equals expected type', function () {
       expectTypeOf(t).toEqualTypeOf<T>()
@@ -50,15 +50,15 @@ describe('FlattenedJsonPathsOf', function () {
       readonly $: '$',
       readonly [`$.a`]: '$.*',
       readonly [`$.b`]: '$.*',
-      readonly [_: `$.a[${number}]`]: '$.*.*',
-      readonly [_: `$.b[${number}]`]: '$.*.*',
+      readonly [_: `$.a.${number}`]: '$.*.*',
+      readonly [_: `$.b.${number}`]: '$.*.*',
     }
     it('equals expected type', function () {
       expectTypeOf(t).toEqualTypeOf<T>()
     })
 
     it('allows lookup of type path', function () {
-      expectTypeOf<T['$.a[1]']>().toEqualTypeOf<'$.*.*'>()
+      expectTypeOf<T['$.a.1']>().toEqualTypeOf<'$.*.*'>()
     })
   })
 
@@ -76,7 +76,7 @@ describe('FlattenedJsonPathsOf', function () {
       readonly [`$.b`]: '$.b',
       readonly [`$.c`]: '$.c',
       readonly [`$.d`]: '$.d',
-      readonly [_: `$.a[${number}]`]: '$.a.*',
+      readonly [_: `$.a.${number}`]: '$.a.*',
     }
     it('equals expected type', function () {
       expectTypeOf(t).toEqualTypeOf<T>()
@@ -102,7 +102,7 @@ describe('FlattenedJsonPathsOf', function () {
 
       let t: {
         readonly $: '$',
-        readonly [_: `$[${number}]`]: '$.*',
+        readonly [_: `$.${number}`]: '$.*',
       }
 
       it('equals expected type', function () {
@@ -146,8 +146,8 @@ describe('FlattenedJsonPathsOf', function () {
 
     let t: {
       readonly $: '$',
-      readonly [_: `$[${number}]`]: '$.*',
-      readonly [_: `$[${number}][${number}]`]: '$.*.*',
+      readonly [_: `$.${number}`]: '$.*',
+      readonly [_: `$.${number}.${number}`]: '$.*.*',
     }
     it('equals expected type', function () {
       expectTypeOf(t).toEqualTypeOf<T>()
@@ -161,8 +161,8 @@ describe('FlattenedJsonPathsOf', function () {
 
     let t: {
       readonly $: '$',
-      readonly [_: `$[${number}]`]: '$.*',
-      readonly [_: `$[${number}][${number}]`]: '$.*.*',
+      readonly [_: `$.${number}`]: '$.*',
+      readonly [_: `$.${number}.${number}`]: '$.*.*',
     }
     it('equals expected type', function () {
       expectTypeOf(t).toEqualTypeOf<T>()
