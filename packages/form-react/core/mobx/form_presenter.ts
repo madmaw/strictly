@@ -7,7 +7,6 @@ import {
   type Accessor,
   flattenAccessorsOf,
   type FlattenedValueTypesOf,
-  flattenJsonValueToTypePathsOf,
   type MobxValueTypeOf,
   type TypeDefHolder,
   type ValueTypeOf,
@@ -104,27 +103,16 @@ export class FormPresenter<
   ) {
   }
 
-  private maybeGetAdapterForValuePath(
-    model: FormModel<T, JsonPaths, TypePathsToAdapters, ValuePathsToAdapters>,
-    valuePath: keyof ValuePathsToAdapters,
-  ) {
-    const typePath = assertExistsAndReturn(
-      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-      model.jsonPaths[valuePath as keyof JsonPaths],
-      '{} is not a valid value path for the current value ({})',
-      valuePath,
-      Object.keys(model.jsonPaths),
-    )
+  private maybeGetAdapterForValuePath(valuePath: keyof ValuePathsToAdapters) {
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+    const typePath = jsonValuePathToTypePath(this.typeDef, valuePath as string, true)
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     return this.adapters[typePath as keyof TypePathsToAdapters]
   }
 
-  private getAdapterForValuePath(
-    model: FormModel<T, JsonPaths, TypePathsToAdapters, ValuePathsToAdapters>,
-    valuePath: keyof ValuePathsToAdapters,
-  ) {
+  private getAdapterForValuePath(valuePath: keyof ValuePathsToAdapters) {
     return assertExistsAndReturn(
-      this.maybeGetAdapterForValuePath(model, valuePath),
+      this.maybeGetAdapterForValuePath(valuePath),
       'expected adapter to be defined {}',
       valuePath,
     )
@@ -152,7 +140,7 @@ export class FormPresenter<
     value: FromTypeOfFieldAdapter<ValuePathsToAdapters[K]>,
     displayValidation: boolean,
   ): boolean {
-    const { converter } = this.getAdapterForValuePath(model, valuePath)
+    const { converter } = this.getAdapterForValuePath(valuePath)
 
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-explicit-any
     const conversion = converter.convert(value, valuePath as any, model.fields)
@@ -166,8 +154,8 @@ export class FormPresenter<
           if (displayValidation) {
             model.errors[valuePath] = conversion.error
           }
-          if (conversion.value != null) {
-            accessor?.set(conversion.value[0])
+          if (conversion.value != null && accessor != null) {
+            accessor.set(conversion.value[0])
           }
           return false
         case FieldConversionResult.Success:
@@ -207,7 +195,7 @@ export class FormPresenter<
     const {
       converter,
       valueFactory,
-    } = this.getAdapterForValuePath(model, valuePath)
+    } = this.getAdapterForValuePath(valuePath)
     const fieldOverride = model.fieldOverrides[valuePath]
     const accessor = model.getAccessorForValuePath(valuePath)
     const storedValue = converter.revert(
@@ -258,7 +246,7 @@ export class FormPresenter<
         ): boolean => {
           // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
           const adapterPath = valuePath as keyof ValuePathsToAdapters
-          const adapter = this.maybeGetAdapterForValuePath(model, adapterPath)
+          const adapter = this.maybeGetAdapterForValuePath(adapterPath)
           if (adapter == null) {
             // no adapter == there should be nothing specified for this field
             return success
@@ -398,6 +386,7 @@ export class FormModel<
         this.typeDef,
         // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
         valuePath as keyof JsonPaths,
+        true,
       ) as keyof TypePathsToAdapters
     } catch (e) {
       // TODO make jsonValuePathToTypePath return null in the event of an invalid
@@ -421,33 +410,34 @@ export class FormModel<
 
     const fieldOverride = this.fieldOverrides[valuePath]
     const accessor = this.getAccessorForValuePath(valuePath)
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+    const fieldTypeDef = this.flattenedTypeDefs[typePath as string]
     const value = fieldOverride
       ? fieldOverride.value
       : converter.revert(accessor != null
         ? accessor.value
-        : mobxCopy(
-          // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-          this.flattenedTypeDefs[typePath as string],
+        : fieldTypeDef != null
+        ? mobxCopy(
+          fieldTypeDef,
           // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
           valueFactory.create(valuePath as string, this.fields),
-        ))
+        )
+        // fake values can't be copied
+        // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+        : valueFactory.create(valuePath as string, this.fields))
     const error = this.errors[valuePath]
     return {
       value,
       error,
       // if we can't write it back, then we have to disable it
-      disabled: accessor == null || this.isDisabled(valuePath),
+      disabled: this.isDisabled(valuePath),
       required: this.isRequired(valuePath),
     }
   }
 
-  getAccessorForValuePath(valuePath: keyof ValuePathsToAdapters) {
-    return assertExistsAndReturn(
-      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-      this.accessors[valuePath as string],
-      'no accessor found for value path {}',
-      valuePath,
-    )
+  getAccessorForValuePath(valuePath: keyof ValuePathsToAdapters): Accessor | undefined {
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+    return this.accessors[valuePath as string]
   }
 
   @computed
@@ -455,21 +445,12 @@ export class FormModel<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   get accessors(): Readonly<Record<string, Accessor<any>>> {
     // TODO flatten mobx accessors of actually!
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return flattenAccessorsOf<T, Readonly<Record<string, Accessor<any>>>>(
+    return flattenAccessorsOf<T, Readonly<Record<string, Accessor>>>(
       this.typeDef,
       this.value,
       (value: ValueTypeOf<T>): void => {
         this.value = mobxCopy(this.typeDef, value)
       },
-    )
-  }
-
-  @computed
-  get jsonPaths(): JsonPaths {
-    return flattenJsonValueToTypePathsOf<T, JsonPaths>(
-      this.typeDef,
-      this.value,
     )
   }
 

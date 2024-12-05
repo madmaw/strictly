@@ -33,7 +33,9 @@ export type Pet = ValueTypeOf<ReadonlyTypeDefOf<typeof petTypeDef>>
 export type PetValuePaths = JsonPathsOf<typeof petTypeDef>
 export type PetTypePaths = JsonPathsOf<typeof petTypeDef, '*'>
 export type FlattenedPetTypeDefs = FlattenedTypeDefsOf<typeof petTypeDef, '*'>
-export type FlattenedPetJsonValueToTypePaths = FlattenedJsonValueToTypePathsOf<typeof petTypeDef>
+export type FlattenedPetJsonValueToTypePaths = FlattenedJsonValueToTypePathsOf<typeof petTypeDef> & {
+  '$.fake': '$.fake',
+}
 export type FlattenedPetValueTypes = FlattenedValueTypesOf<typeof petTypeDef>
 export type FlattenedPetAccessors = FlattenedAccessorsOf<typeof petTypeDef>
 

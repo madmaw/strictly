@@ -3,8 +3,8 @@ import {
   type number,
 } from '@de/fine'
 import { type FieldAdapter } from 'core/mobx/field_adapter'
+import { type FlattenedAdaptersOfFields } from 'core/mobx/flattened_adapters_of_fields'
 import { type Field } from 'types/field'
-import { type FlattenedAdaptersOfFields } from 'types/flattened_adapters_of_fields'
 
 describe('FlattenedAdaptersOfFIelds', function () {
   it('maps the converter types', function () {

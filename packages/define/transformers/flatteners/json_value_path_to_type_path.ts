@@ -2,13 +2,11 @@ import {
   assertEqual,
   assertExists,
   assertExistsAndReturn,
-  assertIs,
-  assertState,
+  PreconditionFailedError,
   reduce,
   UnreachableError,
 } from '@de/base'
 import {
-  type LiteralTypeDef,
   type TypeDef,
   type TypeDefHolder,
   TypeDefType,
@@ -20,6 +18,7 @@ export function jsonValuePathToTypePath<
 >(
   { typeDef }: TypeDefHolder,
   valuePath: ValuePath,
+  allowMissingPaths: boolean = false,
 ): JsonPaths[ValuePath] {
   // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
   const valueSteps = (valuePath as string).split(/\.|\[/g)
@@ -28,6 +27,7 @@ export function jsonValuePathToTypePath<
   const typeSteps = internalJsonValuePathToTypePath(
     typeDef,
     valueSteps.slice(1),
+    allowMissingPaths,
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     valuePath as string,
   )
@@ -39,6 +39,7 @@ export function jsonValuePathToTypePath<
 function internalJsonValuePathToTypePath(
   typeDef: TypeDef,
   valueSteps: string[],
+  allowMissingPaths: boolean,
   originalValuePath: string,
 ): string[] {
   if (valueSteps.length === 0) {
@@ -48,16 +49,18 @@ function internalJsonValuePathToTypePath(
     valueStep,
     ...remainingValueSteps
   ] = valueSteps
-  assertIs<TypeDef, Exclude<TypeDef, LiteralTypeDef>>(
-    typeDef,
-    function (v: TypeDef) {
-      return v.type !== TypeDefType.Literal
-    },
-    'literal should terminate path {} ({})',
-    originalValuePath,
-    valueStep,
-  )
   switch (typeDef.type) {
+    case TypeDefType.Literal:
+      if (allowMissingPaths) {
+        // fake it
+        return valueSteps
+      } else {
+        throw new PreconditionFailedError(
+          'literal should terminate path {} ({})',
+          originalValuePath,
+          valueStep,
+        )
+      }
     case TypeDefType.List:
       // TODO assert format of current step
       return [
@@ -65,6 +68,7 @@ function internalJsonValuePathToTypePath(
         ...internalJsonValuePathToTypePath(
           typeDef.elements,
           remainingValueSteps,
+          allowMissingPaths,
           originalValuePath,
         ),
       ]
@@ -74,15 +78,25 @@ function internalJsonValuePathToTypePath(
         ...internalJsonValuePathToTypePath(
           typeDef.valueTypeDef,
           remainingValueSteps,
+          allowMissingPaths,
           originalValuePath,
         ),
       ]
     case TypeDefType.Structured:
+      if (allowMissingPaths) {
+        if (typeDef.fields[valueStep] == null) {
+          // fake it
+          return valueSteps
+        }
+      } else {
+        assertExists(typeDef.fields[valueStep], 'missing field in {} ({})', originalValuePath, valueStep)
+      }
       return [
         valueStep,
         ...internalJsonValuePathToTypePath(
-          assertExistsAndReturn(typeDef.fields[valueStep], 'missing field in {} ({})', originalValuePath, valueStep),
+          typeDef.fields[valueStep],
           remainingValueSteps,
+          allowMissingPaths,
           originalValuePath,
         ),
       ]
@@ -104,6 +118,7 @@ function internalJsonValuePathToTypePath(
           return internalJsonValuePathToTypePath(
             union,
             valueSteps,
+            allowMissingPaths,
             originalValuePath,
           )
         } else {
@@ -112,7 +127,17 @@ function internalJsonValuePathToTypePath(
         }
       } else {
         const qualifierIndex = valueStep.indexOf(':')
-        assertState(qualifierIndex >= 0, 'mismatched qualifiers in {} (at {})', originalValuePath, valueStep)
+        if (qualifierIndex < 0) {
+          if (allowMissingPaths) {
+            return valueSteps
+          } else {
+            throw new PreconditionFailedError(
+              'mismatched qualifiers in {} (at {})',
+              originalValuePath,
+              valueStep,
+            )
+          }
+        }
         const qualifier = valueStep.substring(0, qualifierIndex)
         const remainder = valueStep.substring(qualifierIndex + 1)
         const union = assertExistsAndReturn(typeDef.unions[qualifier], 'missing union {}', qualifier)
@@ -125,6 +150,7 @@ function internalJsonValuePathToTypePath(
             remainder,
             ...remainingValueSteps,
           ],
+          allowMissingPaths,
           originalValuePath,
         )
         return [

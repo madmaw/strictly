@@ -8,10 +8,10 @@ import {
   adapterFromPrototype,
   identityAdapter,
 } from '@de/form-react/core/mobx/field_adapter_builder'
+import { type FlattenedAdaptersOfFields } from '@de/form-react/core/mobx/flattened_adapters_of_fields'
 import { SelectDiscriminatedUnionConverter } from '@de/form-react/field_converters/select_value_type_converter'
 import { TrimmingStringConverter } from '@de/form-react/field_converters/trimming_string_converter'
 import { minimumStringLengthFieldValidatorFactory } from '@de/form-react/field_validators/minimum_string_length_field_validator'
-import { type FlattenedAdaptersOfFields } from '@de/form-react/types/flattened_adapters_of_fields'
 import { type PetFormFields } from 'features/form/pet/pet_form'
 import { type PetSpeciesCatFormFields } from 'features/form/pet/pet_species_cat_form'
 import { type PetSpeciesDogFormFields } from 'features/form/pet/pet_species_dog_form'
@@ -59,6 +59,7 @@ const converters: SimplifyDeep<FlattenedAdaptersOfFields<
   ),
   '$.species.cat:meows': adapterFromPrototype(new StringToIntegerConverter(NOT_A_NUMBER_ERROR), 0),
   '$.species.dog:barks': adapterFromPrototype(new StringToIntegerConverter(NOT_A_NUMBER_ERROR), 0),
+  '$.fake': identityAdapter('fake!'),
 }
 
 export class AssistedPetFormPresenter extends FormPresenter<

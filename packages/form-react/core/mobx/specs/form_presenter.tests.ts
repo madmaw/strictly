@@ -216,14 +216,6 @@ describe('all', function () {
           expect(Object.keys(model.fields)).toEqual(['$'])
         })
       })
-
-      describe('jsonPaths', function () {
-        it('equals expected value', function () {
-          expect(model.jsonPaths).toEqual({
-            $: '$',
-          })
-        })
-      })
     })
 
     describe('list', function () {
@@ -351,16 +343,6 @@ describe('all', function () {
           )
         })
       })
-
-      describe('jsonPaths', function () {
-        it('equals expected value', function () {
-          expect(model.jsonPaths).toEqual({
-            $: '$',
-            '$.a': '$.*',
-            '$.b': '$.*',
-          })
-        })
-      })
     })
 
     describe('struct', function () {
@@ -427,16 +409,6 @@ describe('all', function () {
               }),
             }),
           )
-        })
-      })
-
-      describe('jsonPaths', function () {
-        it('equals expected value', function () {
-          expect(model.jsonPaths).toEqual({
-            $: '$',
-            '$.a': '$.a',
-            '$.b': '$.b',
-          })
         })
       })
     })
@@ -771,6 +743,58 @@ describe('all', function () {
               expect(model.value).toEqual([1])
             })
           })
+        })
+      })
+    })
+
+    describe('fake', function () {
+      const typeDef = number
+      const converters = {
+        $: stringToIntegerAdapter,
+        '$.fake': booleanToBooleanAdapter,
+      } as const
+      type JsonPaths = {
+        $: '$',
+        '$.fake': '$.fake',
+      }
+      const presenter = new FormPresenter<
+        typeof typeDef,
+        JsonPaths,
+        typeof converters
+      >(
+        typeDef,
+        converters,
+      )
+      let originalValue: ValueTypeOf<typeof typeDef>
+      let model: FormModel<
+        typeof typeDef,
+        JsonPaths,
+        typeof converters
+      >
+      beforeEach(function () {
+        originalValue = 1
+        model = presenter.createModel(originalValue)
+      })
+
+      it('returns the default value for the fake field', function () {
+        expect(model.fields['$.fake']).toEqual(expect.objectContaining({
+          value: false,
+        }))
+      })
+
+      describe('setting fake field', function () {
+        beforeEach(function () {
+          presenter.setFieldValue(model, '$.fake', true)
+        })
+
+        it('stores the new value', function () {
+          expect(model.fields['$.fake']).toEqual(expect.objectContaining({
+            value: true,
+          }))
+        })
+
+        it('does not change the original value', function () {
+          expect(model.value).toBe(originalValue)
         })
       })
     })

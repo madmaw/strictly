@@ -38,6 +38,7 @@
     "check-types": "turbo run check-types",
     "check-types:force": "turbo run check-types --force",
     "dev:demo": "turbo run dev --filter=@de/mo",
+    "dev:storybook": "turbo run storybook --filter=@de/mo",
     "lint": "turbo run lint --continue && yarn lint:root",
     "lint:fix": "turbo run lint:fix --continue && yarn lint:root:fix",
     "lint:root": "cross-env ESLINT_USE_FLAT_CONFIG=false eslint --max-warnings=0 *.cjs *.json .github",

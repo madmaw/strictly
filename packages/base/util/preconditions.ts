@@ -3,8 +3,8 @@ import {
   type FormatArg,
 } from './format'
 
-class PreconditionFailedError extends Error {
-  constructor(message: string, args: readonly FormatArg[]) {
+export class PreconditionFailedError extends Error {
+  constructor(message: string, ...args: readonly FormatArg[]) {
     super(format(message, ...args))
     this.name = 'PreconditionFailedError'
   }
@@ -21,7 +21,7 @@ export function assertExistsAndReturn<T>(
 
 export function assertExists<V>(v: V, message: string, ...args: readonly FormatArg[]): asserts v is NonNullable<V> {
   if (v == null) {
-    throw new PreconditionFailedError(message, args)
+    throw new PreconditionFailedError(message, ...args)
   }
 }
 
@@ -36,11 +36,9 @@ export function assertEqual<T extends FormatArg>(
   if (a !== b) {
     throw new PreconditionFailedError(
       message,
-      [
-        arg1,
-        arg2,
-        ...args,
-      ],
+      arg1,
+      arg2,
+      ...args,
     )
   }
 }
@@ -51,7 +49,7 @@ export function assertState(
   ...args: readonly FormatArg[]
 ): asserts condition is true {
   if (!condition) {
-    throw new PreconditionFailedError(message, args)
+    throw new PreconditionFailedError(message, ...args)
   }
 }
 
@@ -62,7 +60,7 @@ export function assertIs<V, T extends V>(
   ...args: readonly FormatArg[]
 ): asserts v is T {
   if (!condition(v)) {
-    throw new PreconditionFailedError(message, args)
+    throw new PreconditionFailedError(message, ...args)
   }
 }
 
@@ -72,7 +70,7 @@ export function checkUnary<T>(
   ...args: readonly FormatArg[]
 ): T {
   if (t.length !== 1) {
-    throw new PreconditionFailedError(message, args)
+    throw new PreconditionFailedError(message, ...args)
   }
   return t[0]
 }

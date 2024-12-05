@@ -17,8 +17,8 @@ exports[`PetForm > renders Empty 1`] = `
       <label
         class="m_8fdc1311 mantine-InputWrapper-label mantine-TextInput-label"
         data-required="true"
-        for="mantine-12voha2vo"
-        id="mantine-12voha2vo-label"
+        for="mantine-1fu8n1fu8"
+        id="mantine-1fu8n1fu8-label"
       >
         Name
         <span
@@ -36,7 +36,7 @@ exports[`PetForm > renders Empty 1`] = `
           aria-invalid="false"
           class="m_8fb7ebe7 mantine-Input-input mantine-TextInput-input"
           data-variant="default"
-          id="mantine-12voha2vo"
+          id="mantine-1fu8n1fu8"
           name="$.name"
           required=""
           value=""
@@ -57,7 +57,7 @@ exports[`PetForm > renders Empty 1`] = `
         >
           <input
             class="mantine-focus-auto m_26063560 mantine-Checkbox-input"
-            id="mantine-1fu8n1fu8"
+            id="mantine-1ssssssss"
             name="$.alive"
             type="checkbox"
           />
@@ -81,11 +81,35 @@ exports[`PetForm > renders Empty 1`] = `
         >
           <label
             class="m_8ee546b8 mantine-Checkbox-label"
-            for="mantine-1fu8n1fu8"
+            for="mantine-1ssssssss"
           >
             Alive
           </label>
         </div>
+      </div>
+    </div>
+    <div
+      class="m_46b77525 mantine-InputWrapper-root mantine-TextInput-root"
+    >
+      <label
+        class="m_8fdc1311 mantine-InputWrapper-label mantine-TextInput-label"
+        for="mantine-25rcyk5rc"
+        id="mantine-25rcyk5rc-label"
+      >
+        Fake
+      </label>
+      <div
+        class="m_6c018570 mantine-Input-wrapper mantine-TextInput-wrapper"
+        data-variant="default"
+      >
+        <input
+          aria-invalid="false"
+          class="m_8fb7ebe7 mantine-Input-input mantine-TextInput-input"
+          data-variant="default"
+          id="mantine-25rcyk5rc"
+          name="$.fake"
+          value=""
+        />
       </div>
     </div>
     <div
@@ -137,8 +161,8 @@ exports[`PetForm > renders Errors 1`] = `
       <label
         class="m_8fdc1311 mantine-InputWrapper-label mantine-TextInput-label"
         data-required="true"
-        for="mantine-12voha2vo"
-        id="mantine-12voha2vo-label"
+        for="mantine-1fu8n1fu8"
+        id="mantine-1fu8n1fu8-label"
       >
         Name
         <span
@@ -155,12 +179,12 @@ exports[`PetForm > renders Errors 1`] = `
         style="--input-margin-bottom: calc(var(--mantine-spacing-xs) / 2);"
       >
         <input
-          aria-describedby="mantine-12voha2vo-error"
+          aria-describedby="mantine-1fu8n1fu8-error"
           aria-invalid="true"
           class="m_8fb7ebe7 mantine-Input-input mantine-TextInput-input"
           data-error="true"
           data-variant="default"
-          id="mantine-12voha2vo"
+          id="mantine-1fu8n1fu8"
           name="$.name"
           required=""
           value="Bad"
@@ -168,7 +192,7 @@ exports[`PetForm > renders Errors 1`] = `
       </div>
       <p
         class="m_8f816625 mantine-InputWrapper-error mantine-TextInput-error"
-        id="mantine-12voha2vo-error"
+        id="mantine-1fu8n1fu8-error"
       >
         name too short
       </p>
@@ -187,7 +211,7 @@ exports[`PetForm > renders Errors 1`] = `
         >
           <input
             class="mantine-focus-auto m_26063560 mantine-Checkbox-input"
-            id="mantine-1fu8n1fu8"
+            id="mantine-1ssssssss"
             name="$.alive"
             type="checkbox"
           />
@@ -211,11 +235,35 @@ exports[`PetForm > renders Errors 1`] = `
         >
           <label
             class="m_8ee546b8 mantine-Checkbox-label"
-            for="mantine-1fu8n1fu8"
+            for="mantine-1ssssssss"
           >
             Alive
           </label>
         </div>
+      </div>
+    </div>
+    <div
+      class="m_46b77525 mantine-InputWrapper-root mantine-TextInput-root"
+    >
+      <label
+        class="m_8fdc1311 mantine-InputWrapper-label mantine-TextInput-label"
+        for="mantine-25rcyk5rc"
+        id="mantine-25rcyk5rc-label"
+      >
+        Fake
+      </label>
+      <div
+        class="m_6c018570 mantine-Input-wrapper mantine-TextInput-wrapper"
+        data-variant="default"
+      >
+        <input
+          aria-invalid="false"
+          class="m_8fb7ebe7 mantine-Input-input mantine-TextInput-input"
+          data-variant="default"
+          id="mantine-25rcyk5rc"
+          name="$.fake"
+          value=""
+        />
       </div>
     </div>
     <div
@@ -266,8 +314,8 @@ exports[`PetForm > renders Populated 1`] = `
       <label
         class="m_8fdc1311 mantine-InputWrapper-label mantine-TextInput-label"
         data-required="true"
-        for="mantine-1fu8n1fu8"
-        id="mantine-1fu8n1fu8-label"
+        for="mantine-1ssssssss"
+        id="mantine-1ssssssss-label"
       >
         Name
         <span
@@ -285,7 +333,7 @@ exports[`PetForm > renders Populated 1`] = `
           aria-invalid="false"
           class="m_8fb7ebe7 mantine-Input-input mantine-TextInput-input"
           data-variant="default"
-          id="mantine-1fu8n1fu8"
+          id="mantine-1ssssssss"
           name="$.name"
           required=""
           value="Fido"
@@ -308,7 +356,7 @@ exports[`PetForm > renders Populated 1`] = `
           <input
             checked=""
             class="mantine-focus-auto m_26063560 mantine-Checkbox-input"
-            id="mantine-1ssssssss"
+            id="mantine-25rcyk5rc"
             name="$.alive"
             type="checkbox"
           />
@@ -332,11 +380,35 @@ exports[`PetForm > renders Populated 1`] = `
         >
           <label
             class="m_8ee546b8 mantine-Checkbox-label"
-            for="mantine-1ssssssss"
+            for="mantine-25rcyk5rc"
           >
             Alive
           </label>
         </div>
+      </div>
+    </div>
+    <div
+      class="m_46b77525 mantine-InputWrapper-root mantine-TextInput-root"
+    >
+      <label
+        class="m_8fdc1311 mantine-InputWrapper-label mantine-TextInput-label"
+        for="mantine-2ipx4bipx"
+        id="mantine-2ipx4bipx-label"
+      >
+        Fake
+      </label>
+      <div
+        class="m_6c018570 mantine-Input-wrapper mantine-TextInput-wrapper"
+        data-variant="default"
+      >
+        <input
+          aria-invalid="false"
+          class="m_8fb7ebe7 mantine-Input-input mantine-TextInput-input"
+          data-variant="default"
+          id="mantine-2ipx4bipx"
+          name="$.fake"
+          value="fake"
+        />
       </div>
     </div>
     <div

@@ -26,6 +26,7 @@ export type PetFormFields = FlattenedFormFieldsOf<
   {
     '$.name': Field<typeof NAME_TOO_SHORT_ERROR, string>,
     '$.alive': Field<never, boolean>,
+    '$.fake': Field<never, string>,
   }
 >
 
@@ -42,11 +43,13 @@ export function PetForm(props: PetFormProps) {
   const form = useMantineForm(props)
   const NameTextInput = form.textInputComponent('$.name')
   const AliveCheckbox = form.checkboxComponent('$.alive')
+  const FakeTextInput = form.textInputComponent('$.fake')
 
   return (
     <Stack>
       <NameTextInput label='Name' />
       <AliveCheckbox label='Alive' />
+      <FakeTextInput label='Fake' />
       <Card withBorder={true}>
         <SpeciesComponent />
       </Card>

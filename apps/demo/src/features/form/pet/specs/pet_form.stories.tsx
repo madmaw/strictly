@@ -51,18 +51,11 @@ export const Populated: Story = {
         value: true,
         required: false,
       },
-      // '$.species': {
-      //   disabled: false,
-      //   value: 'cat',
-      // },
-      // '$.species.cat:meows': {
-      //   disabled: false,
-      //   value: '1',
-      // },
-      // '$.species.dog:barks': {
-      //   disabled: true,
-      //   value: '0',
-      // },
+      '$.fake': {
+        disabled: false,
+        value: 'fake',
+        required: false,
+      },
     },
   },
 }
@@ -78,6 +71,11 @@ export const Empty: Story = {
       '$.alive': {
         disabled: false,
         value: false,
+        required: false,
+      },
+      '$.fake': {
+        disabled: false,
+        value: '',
         required: false,
       },
     },
@@ -96,6 +94,11 @@ export const Errors: Story = {
       '$.alive': {
         disabled: false,
         value: false,
+        required: false,
+      },
+      '$.fake': {
+        disabled: false,
+        value: '',
         required: false,
       },
     },

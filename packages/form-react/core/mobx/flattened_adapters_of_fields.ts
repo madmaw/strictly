@@ -8,11 +8,11 @@ import {
   type SimplifyDeep,
   type ValueOf,
 } from 'type-fest'
-import { type Field } from './field'
+import { type Field } from 'types/field'
 
 export type FlattenedAdaptersOfFields<
   JsonPaths extends Readonly<Record<string, string>>,
-  FlattenedTypeDefs extends Readonly<Record<ValueOf<JsonPaths>, TypeDefHolder>>,
+  FlattenedTypeDefs extends Partial<Readonly<Record<ValueOf<JsonPaths>, TypeDefHolder>>>,
   FormFields extends Partial<Readonly<Record<keyof JsonPaths, Field>>>,
 > = SimplifyDeep<{
   readonly [
@@ -26,7 +26,8 @@ export type FlattenedAdaptersOfFields<
 
 type AdapterOfField<
   F extends Field,
-  T extends TypeDefHolder,
+  T extends TypeDefHolder | undefined,
   FormFields extends Readonly<Record<string, Field>>,
-> = F extends Field<infer E, infer V> ? FieldAdapter<E, FormFields, ValueTypeOf<T>, V>
+> = F extends Field<infer E, infer V> ? undefined extends T ? FieldAdapter<E, FormFields, V, V>
+  : FieldAdapter<E, FormFields, ValueTypeOf<T>, V>
   : never

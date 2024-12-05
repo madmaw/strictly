@@ -24,6 +24,20 @@ describe('jsonValuePathToTypePath', function () {
     it('has expected type', function () {
       expectTypeOf(typePath).toEqualTypeOf<'$'>()
     })
+
+    describe('fake subpath', function () {
+      const fakeTypePath = jsonValuePathToTypePath<{
+        '$.fake': '$.fake',
+      }, '$.fake'>(typeDef, '$.fake', true)
+
+      it('maps a value path to the expected type path', function () {
+        expect(fakeTypePath).toEqual('$.fake')
+      })
+
+      it('has expected type', function () {
+        expectTypeOf(fakeTypePath).toEqualTypeOf<'$.fake'>()
+      })
+    })
   })
 
   describe('list', function () {
@@ -50,10 +64,28 @@ describe('jsonValuePathToTypePath', function () {
         expectTypeOf(typePath).toEqualTypeOf(to)
       })
     })
+
+    describe('fake subpath', function () {
+      const fakeTypePath = jsonValuePathToTypePath<
+        JsonPaths & {
+          [_: `$.${number}.fake`]: '$.*.fake',
+        },
+        '$.0.fake'
+      >(typeDef, '$.0.fake', true)
+
+      it('maps a value path to the expected type path', function () {
+        expect(fakeTypePath).toEqual('$.*.fake')
+      })
+
+      it('has expected type', function () {
+        expectTypeOf(fakeTypePath).toEqualTypeOf<'$.*.fake'>()
+      })
+    })
   })
 
   describe('map', function () {
-    const typeDef = map<typeof number, 'a' | 'b'>(number)
+    type Key = 'a' | 'b'
+    const typeDef = map<typeof number, Key>(number)
     type JsonPaths = FlattenedJsonValueToTypePathsOf<typeof typeDef>
 
     describe.each([
@@ -78,6 +110,24 @@ describe('jsonValuePathToTypePath', function () {
 
       it('has expected type', function () {
         expectTypeOf(typePath).toEqualTypeOf(to)
+      })
+    })
+
+    describe('fake subpath', function () {
+      const fakeTypePath = jsonValuePathToTypePath<
+        JsonPaths & {
+          '$.a.fake': '$.*.fake',
+          '$.b.fake': '$.*.fake',
+        },
+        '$.a.fake'
+      >(typeDef, '$.a.fake', true)
+
+      it('maps a value path to the expected type path', function () {
+        expect(fakeTypePath).toEqual('$.*.fake')
+      })
+
+      it('has expected type', function () {
+        expectTypeOf(fakeTypePath).toEqualTypeOf<'$.*.fake'>()
       })
     })
   })
@@ -108,6 +158,23 @@ describe('jsonValuePathToTypePath', function () {
 
       it('has expected type', function () {
         expectTypeOf(typePath).toEqualTypeOf(to)
+      })
+    })
+
+    describe('fake field', function () {
+      const fakeTypePath = jsonValuePathToTypePath<
+        JsonPaths & {
+          '$.fake': '$.fake',
+        },
+        '$.fake'
+      >(typeDef, '$.fake', true)
+
+      it('maps a value path to the expected type path', function () {
+        expect(fakeTypePath).toEqual('$.fake')
+      })
+
+      it('has expected type', function () {
+        expectTypeOf(fakeTypePath).toEqualTypeOf<'$.fake'>()
       })
     })
   })
@@ -149,6 +216,23 @@ describe('jsonValuePathToTypePath', function () {
 
         it('has expected type', function () {
           expectTypeOf(typePath).toEqualTypeOf(to)
+        })
+      })
+
+      describe('fake', function () {
+        const fakeTypePath = jsonValuePathToTypePath<
+          JsonPaths & {
+            '$.fake': '$.fake',
+          },
+          '$.fake'
+        >(typeDef, '$.fake', true)
+
+        it('maps a value path to the expected type path', function () {
+          expect(fakeTypePath).toEqual('$.fake')
+        })
+
+        it('has expected type', function () {
+          expectTypeOf(fakeTypePath).toEqualTypeOf<'$.fake'>()
         })
       })
     })
