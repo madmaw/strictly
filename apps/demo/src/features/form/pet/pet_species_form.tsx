@@ -37,8 +37,7 @@ export function PetSpeciesForm(props: PetSpeciesFormProps) {
     fields,
   } = props
   const form = useMantineForm(props)
-  const species = form.radioGroup('$.species')
-  const SpeciesRadioGroup = species.Component
+  const SpeciesRadioGroup = form.radioGroup('$.species')
   const speciesValue = fields['$.species'].value
   const SpeciesComponent = speciesComponents[speciesValue]
   return (
@@ -52,7 +51,7 @@ export function PetSpeciesForm(props: PetSpeciesFormProps) {
               value,
               displayName,
             ]) {
-              const SpeciesRadio = species.radioComponent(value)
+              const SpeciesRadio = form.radio('$.species', value)
               return (
                 <SpeciesRadio
                   key={value}

@@ -51,7 +51,25 @@ export const Populated: Story = {
         value: true,
         required: false,
       },
-      '$.fake': {
+      '$.tags': {
+        disabled: false,
+        required: false,
+        value: [
+          '$.tags.0',
+          '$.tags.1',
+        ],
+      },
+      '$.tags.0': {
+        disabled: false,
+        required: false,
+        value: 'friendly',
+      },
+      '$.tags.1': {
+        disabled: false,
+        required: false,
+        value: 'happy',
+      },
+      '$.newTag': {
         disabled: false,
         value: 'fake',
         required: false,
@@ -73,7 +91,12 @@ export const Empty: Story = {
         value: false,
         required: false,
       },
-      '$.fake': {
+      '$.tags': {
+        disabled: false,
+        required: false,
+        value: [],
+      },
+      '$.newTag': {
         disabled: false,
         value: '',
         required: false,
@@ -96,7 +119,17 @@ export const Errors: Story = {
         value: false,
         required: false,
       },
-      '$.fake': {
+      '$.tags': {
+        disabled: false,
+        required: false,
+        value: ['$.tags.0'],
+      },
+      '$.tags.0': {
+        disabled: false,
+        required: false,
+        value: 'ugly',
+      },
+      '$.newTag': {
         disabled: false,
         value: '',
         required: false,

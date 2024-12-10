@@ -1,5 +1,8 @@
 import {
+  assertExists,
   assertExistsAndReturn,
+  type ElementOfArray,
+  type Maybe,
   toArray,
   UnreachableError,
 } from '@de/base'
@@ -8,6 +11,7 @@ import {
   flattenAccessorsOf,
   type FlattenedValueTypesOf,
   type MobxValueTypeOf,
+  type ReadonlyTypeDefOf,
   type TypeDefHolder,
   type ValueTypeOf,
 } from '@de/fine'
@@ -26,6 +30,7 @@ import {
 } from 'mobx'
 import {
   type SimplifyDeep,
+  type StringKeyOf,
   type ValueOf,
 } from 'type-fest'
 import { type Field } from 'types/field'
@@ -37,6 +42,9 @@ import {
   type FieldAdapter,
   type FromTypeOfFieldAdapter,
 } from './field_adapter'
+import {
+  type FlattenedListTypeDefsOf,
+} from './flattened_list_type_defs_of'
 
 export type FlattenedConvertedFieldsOf<
   ValuePathsToAdapters extends Readonly<Record<string, FieldAdapter>>,
@@ -98,7 +106,7 @@ export class FormPresenter<
   >,
 > {
   constructor(
-    private readonly typeDef: T,
+    readonly typeDef: T,
     private readonly adapters: TypePathsToAdapters,
   ) {
   }
@@ -118,6 +126,10 @@ export class FormPresenter<
     )
   }
 
+  typePath<K extends keyof JsonPaths>(valuePath: K): JsonPaths[K] {
+    return jsonValuePathToTypePath<JsonPaths, K>(this.typeDef, valuePath, true)
+  }
+
   setFieldValueAndValidate<K extends keyof ValuePathsToAdapters>(
     model: FormModel<T, JsonPaths, TypePathsToAdapters, ValuePathsToAdapters>,
     valuePath: K,
@@ -134,6 +146,97 @@ export class FormPresenter<
     return this.internalSetFieldValue(model, valuePath, value, false)
   }
 
+  addListItem<K extends keyof FlattenedListTypeDefsOf<T>>(
+    model: FormModel<T, JsonPaths, TypePathsToAdapters, ValuePathsToAdapters>,
+    valuePath: K,
+    elementValue: Maybe<ElementOfArray<FlattenedValueTypesOf<T>[K]>>,
+    index?: number,
+  ) {
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+    const listValuePath = valuePath as string
+    const accessor = model.accessors[valuePath]
+    const arrayTypePath = this.typePath(valuePath)
+    const definedIndex = index ?? accessor.value.length
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+    const elementAdapterTypePath = `${arrayTypePath}.*` as keyof TypePathsToAdapters
+    const elementAdapter = assertExistsAndReturn(
+      this.adapters[elementAdapterTypePath],
+      'no adapter specified for list {} ({})',
+      elementAdapterTypePath,
+      valuePath,
+    )
+    // TODO validation on new elements
+    const element = elementValue != null
+      ? elementValue[0]
+      : elementAdapter.valueFactory.create(
+        // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+        elementAdapterTypePath as string,
+        model.fields,
+      )
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const originalList: any[] = accessor.value
+    const newList = [
+      ...originalList.slice(0, definedIndex),
+      element,
+      ...originalList.slice(definedIndex),
+    ]
+    // shuffle the overrides around to account for new indices
+    // to so this we need to sort the array indices in descending order
+    const targetPaths = Object.keys(model.fieldOverrides).filter(function (v) {
+      return v.startsWith(`${listValuePath}.`)
+    }).map(function (v) {
+      const parts = v.substring(listValuePath.length + 1).split('.')
+      const index = parseInt(parts[0])
+      return [
+        index,
+        parts.slice(1),
+      ] as const
+    }).filter(function ([index]) {
+      return index >= definedIndex
+    }).sort(function ([a], [b]) {
+      // reverse index order
+      return b - a
+    })
+    runInAction(function () {
+      targetPaths.forEach(function ([
+        index,
+        postfix,
+      ]) {
+        // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+        const fromJsonPath = [
+          listValuePath,
+          `${index}`,
+          ...postfix,
+        ].join('.') as keyof ValuePathsToAdapters
+        // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+        const toJsonPath = [
+          listValuePath,
+          `${index + 1}`,
+          ...postfix,
+        ].join('.') as keyof ValuePathsToAdapters
+        const fieldOverride = model.fieldOverrides[fromJsonPath]
+        delete model.fieldOverrides[fromJsonPath]
+        model.fieldOverrides[toJsonPath] = fieldOverride
+        const error = model.errors[fromJsonPath]
+        delete model.errors[fromJsonPath]
+        model.errors[toJsonPath] = error
+      })
+      accessor.set(newList)
+      // delete any value overrides so the new list isn't shadowed
+      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+      delete model.fieldOverrides[valuePath as unknown as keyof ValuePathsToAdapters]
+    })
+  }
+
+  /*
+  removeListItem<K extends ListJsonPathsOf<T>>(
+    model: FormModel<T, JsonPaths, TypePathsToAdapters, ValuePathsToAdapters>,
+    k: K,
+    index: number,
+  ) {
+  }
+  */
+
   private internalSetFieldValue<K extends keyof ValuePathsToAdapters>(
     model: FormModel<T, JsonPaths, TypePathsToAdapters, ValuePathsToAdapters>,
     valuePath: K,
@@ -141,6 +244,9 @@ export class FormPresenter<
     displayValidation: boolean,
   ): boolean {
     const { converter } = this.getAdapterForValuePath(valuePath)
+
+    // eslint-disable-next-line @typescript-eslint/unbound-method
+    assertExists(converter.convert, 'setting value not supported {}', valuePath)
 
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-explicit-any
     const conversion = converter.convert(value, valuePath as any, model.fields)
@@ -180,9 +286,35 @@ export class FormPresenter<
     }
   }
 
+  clearFieldValue<K extends StringKeyOf<ValuePathsToAdapters>>(
+    model: FormModel<T, JsonPaths, TypePathsToAdapters, ValuePathsToAdapters>,
+    valuePath: K,
+  ) {
+    const typePath = this.typePath(valuePath)
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+    const adapter = this.adapters[typePath as keyof TypePathsToAdapters]
+    if (adapter == null) {
+      return
+    }
+    const {
+      converter,
+      valueFactory,
+    } = adapter
+    const accessor = model.accessors[valuePath]
+    const value = accessor == null ? valueFactory.create(valuePath, model.fields) : accessor.value
+    const displayValue = converter.revert(value, valuePath)
+    runInAction(function () {
+      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-explicit-any
+      model.fieldOverrides[valuePath as any as keyof ValuePathsToAdapters] = {
+        value: displayValue,
+      }
+    })
+  }
+
   clearAll(model: FormModel<T, JsonPaths, TypePathsToAdapters, ValuePathsToAdapters>, value: ValueTypeOf<T>): void {
     runInAction(() => {
       model.errors = {}
+      // TODO this isn't correct, should reload from value
       model.fieldOverrides = {}
       model.value = mobxCopy(this.typeDef, value)
     })
@@ -203,13 +335,18 @@ export class FormPresenter<
         ? accessor.value
         // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
         : valueFactory.create(valuePath as string, model.fields),
+      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+      valuePath as string,
     )
     const value = fieldOverride != null
       ? fieldOverride.value
       : storedValue
     const dirty = storedValue !== value
-    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-explicit-any
-    const conversion = converter.convert(value, valuePath as any, model.fields)
+    // eslint-disable-next-line @typescript-eslint/unbound-method
+    assertExists(converter.convert, 'changing field directly not supported {}', valuePath)
+
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+    const conversion = converter.convert(value, valuePath as string, model.fields)
     return runInAction(function () {
       switch (conversion.type) {
         case FieldConversionResult.Failure:
@@ -254,8 +391,12 @@ export class FormPresenter<
           const {
             converter,
           } = adapter
+          if (converter.convert == null) {
+            // no convert method means this field is immutable
+            return success
+          }
           const fieldOverride = model.fieldOverrides[adapterPath]
-          const storedValue = converter.revert(accessor.value)
+          const storedValue = converter.revert(accessor.value, valuePath)
           const value = fieldOverride != null
             ? fieldOverride.value
             : storedValue
@@ -285,7 +426,12 @@ export class FormPresenter<
     })
   }
 
-  createModel(value: ValueTypeOf<T>): FormModel<T, JsonPaths, TypePathsToAdapters, ValuePathsToAdapters> {
+  createModel(value: ValueTypeOf<ReadonlyTypeDefOf<T>>): FormModel<
+    T,
+    JsonPaths,
+    TypePathsToAdapters,
+    ValuePathsToAdapters
+  > {
     return new FormModel<T, JsonPaths, TypePathsToAdapters, ValuePathsToAdapters>(
       this.typeDef,
       value,
@@ -314,7 +460,7 @@ export class FormModel<
 
   constructor(
     private readonly typeDef: T,
-    value: ValueTypeOf<T>,
+    value: ValueTypeOf<ReadonlyTypeDefOf<T>>,
     private readonly adapters: TypePathsToAdapters,
   ) {
     this.value = mobxCopy(typeDef, value)
@@ -323,16 +469,20 @@ export class FormModel<
     // then returned to
     this.fieldOverrides = flattenValueTypeTo(
       typeDef,
-      value,
+      this.value,
       () => {},
-      (_t: StrictTypeDef, value: AnyValueType, _setter, typePath): FieldOverride | undefined => {
+      (_t: StrictTypeDef, value: AnyValueType, _setter, typePath, valuePath): FieldOverride | undefined => {
         // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-        const adapter = adapters[typePath as keyof TypePathsToAdapters]
+        const adapter = this.adapters[typePath as keyof TypePathsToAdapters]
         if (adapter == null) {
           return
         }
         const { converter } = adapter
-        const displayValue = converter.revert(value)
+        if (converter.convert == null) {
+          // no need to store a temporary value if the value cannot be written back
+          return
+        }
+        const displayValue = converter.revert(value, valuePath)
         return {
           value: displayValue,
         }
@@ -414,17 +564,21 @@ export class FormModel<
     const fieldTypeDef = this.flattenedTypeDefs[typePath as string]
     const value = fieldOverride
       ? fieldOverride.value
-      : converter.revert(accessor != null
-        ? accessor.value
-        : fieldTypeDef != null
-        ? mobxCopy(
-          fieldTypeDef,
+      : converter.revert(
+        accessor != null
+          ? accessor.value
+          : fieldTypeDef != null
+          ? mobxCopy(
+            fieldTypeDef,
+            // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+            valueFactory.create(valuePath as string, this.fields),
+          )
+          // fake values can't be copied
           // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-          valueFactory.create(valuePath as string, this.fields),
-        )
-        // fake values can't be copied
+          : valueFactory.create(valuePath as string, this.fields),
         // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-        : valueFactory.create(valuePath as string, this.fields))
+        valuePath as string,
+      )
     const error = this.errors[valuePath]
     return {
       value,

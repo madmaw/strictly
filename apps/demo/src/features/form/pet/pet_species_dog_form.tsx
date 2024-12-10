@@ -23,7 +23,7 @@ export type PetSpeciesFormDogProps = FormProps<PetSpeciesDogFormFields>
 
 export function PetSpeciesDogForm(props: PetSpeciesFormDogProps) {
   const form = useMantineForm(props)
-  const BarksTextInput = form.textInputComponent('$.species.dog:barks')
+  const BarksTextInput = form.textInput('$.species.dog:barks')
   return (
     <Stack>
       <BarksTextInput

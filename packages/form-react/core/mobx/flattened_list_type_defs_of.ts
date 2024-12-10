@@ -5,6 +5,8 @@ import {
 } from '@de/fine'
 import { type SimplifyDeep } from 'type-fest'
 
+export type ListJsonPathsOf<T extends TypeDefHolder> = keyof FlattenedListTypeDefsOf<T>
+
 export type FlattenedListTypeDefsOf<T extends TypeDefHolder> = FlattenedListTypeDefsOfFlattened<
   // SimplifyDeep is necessary here otherwise FlattenedListTypeDefsOfFlattened will complain about infinite depth
   SimplifyDeep<FlattenedTypeDefsOf<T, null>>

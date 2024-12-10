@@ -4,6 +4,7 @@ import {
   type FlattenedJsonValueToTypePathsOf,
   type FlattenedTypeDefsOf,
   type FlattenedValueTypesOf,
+  list,
   number,
   type ReadonlyTypeDefOf,
   string,
@@ -25,8 +26,11 @@ export type Species = keyof typeof speciesTypeDef['typeDef']['unions']
 export const petTypeDef = struct()
   .set('name', string)
   .set('alive', boolean)
+  .set('tags', list(string))
   .set('species', speciesTypeDef)
   .narrow
+
+export type TagValuePath = `$.tags.${number}`
 
 export type MutablePet = ValueTypeOf<typeof petTypeDef>
 export type Pet = ValueTypeOf<ReadonlyTypeDefOf<typeof petTypeDef>>
@@ -34,7 +38,7 @@ export type PetValuePaths = JsonPathsOf<typeof petTypeDef>
 export type PetTypePaths = JsonPathsOf<typeof petTypeDef, '*'>
 export type FlattenedPetTypeDefs = FlattenedTypeDefsOf<typeof petTypeDef, '*'>
 export type FlattenedPetJsonValueToTypePaths = FlattenedJsonValueToTypePathsOf<typeof petTypeDef> & {
-  '$.fake': '$.fake',
+  '$.newTag': '$.newTag',
 }
 export type FlattenedPetValueTypes = FlattenedValueTypesOf<typeof petTypeDef>
 export type FlattenedPetAccessors = FlattenedAccessorsOf<typeof petTypeDef>

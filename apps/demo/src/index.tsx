@@ -2,6 +2,7 @@ import '@mantine/core/styles.css'
 
 import { assertExistsAndReturn } from '@de/base'
 import {
+  Box,
   createTheme,
   MantineProvider,
 } from '@mantine/core'
@@ -24,6 +25,12 @@ window.onload = function () {
   const value: Pet = {
     name: 'Delta',
     alive: true,
+    tags: [
+      'cute',
+      'black',
+      'nervous',
+      'clever',
+    ],
     species: {
       type: 'cat',
       meows: 1000,
@@ -39,10 +46,12 @@ window.onload = function () {
     (
       <StrictMode>
         <MantineProvider theme={theme}>
-          <AssistedPetEditor
-            onValueChange={onValueChange}
-            value={value}
-          />
+          <Box m='md'>
+            <AssistedPetEditor
+              onValueChange={onValueChange}
+              value={value}
+            />
+          </Box>
         </MantineProvider>
       </StrictMode>
     ),

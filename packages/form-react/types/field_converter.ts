@@ -28,6 +28,6 @@ export type FieldConverter<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   From = any,
 > = {
-  convert(from: From, valuePath: keyof Fields, fields: Fields): FieldConversion<E, To>,
-  revert(to: To): From,
+  convert?(from: From, valuePath: keyof Fields, fields: Fields): FieldConversion<E, To>,
+  revert(to: To, valuePath: keyof Fields): From,
 }

@@ -11,6 +11,7 @@ import { PetSpeciesForm } from 'features/form/pet/pet_species_form'
 import {
   type Pet,
   type Species,
+  type TagValuePath,
 } from 'features/form/pet/types'
 import {
   type ComponentType,
@@ -44,10 +45,20 @@ export function AssistedPetEditor({
   )
 
   const onFieldSubmit = useCallback(
-    function<Path extends ValuePathsOfPresenter<typeof presenter>> (path: Path) {
-      if (presenter.validateField(model, path)) {
-        // if it successfully validates
-        // TODO move to next field
+    function<Path extends ValuePathsOfPresenter<typeof presenter>> (valuePath: Path) {
+      const typePath = presenter.typePath(valuePath)
+      if (presenter.validateField(model, valuePath)) {
+        if (typePath === '$.newTag' && model.fields['$.newTag'].value.trim().length > 0) {
+          // get the entered value, should already be validated
+          const newValue = model.fields['$.newTag'].value
+          presenter.addListItem(model, '$.tags', [newValue])
+          presenter.clearFieldValue(model, '$.newTag')
+        } else {
+          // if it successfully validates
+          // TODO move to next field
+          // eslint-disable-next-line no-console
+          console.log('move to next')
+        }
       }
       return false
     },
@@ -71,6 +82,13 @@ export function AssistedPetEditor({
       model,
       onValueChange,
     ],
+  )
+
+  const onRemoveTag = useCallback(
+    function (valuePath: TagValuePath) {
+      presenter.removeTag(model, valuePath)
+    },
+    [model],
   )
 
   const SpeciesCatComponent = usePartialObserverComponent(
@@ -147,6 +165,7 @@ export function AssistedPetEditor({
         onSubmit,
         onFieldSubmit,
         onFieldBlur,
+        onRemoveTag,
         SpeciesComponent,
       }
     },
@@ -156,6 +175,7 @@ export function AssistedPetEditor({
       onSubmit,
       onFieldSubmit,
       onFieldBlur,
+      onRemoveTag,
       SpeciesComponent,
     ],
     PetFormImpl,

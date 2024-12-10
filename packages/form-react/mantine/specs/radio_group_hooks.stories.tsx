@@ -20,15 +20,14 @@ function Component(props: FormProps<{
   $: Field<string, RadioValue | null>,
 }>) {
   const form = useMantineForm(props)
-  const radioGroup = form.radioGroup('$')
-  const RadioGroupComponent = radioGroup.Component
+  const RadioGroupComponent = form.radioGroup('$')
 
   return (
     <RadioGroupComponent label={RADIO_GROUP_LABEL}>
       <Stack>
         {RADIO_VALUES.map(function (value: RadioValue) {
           const label = RADIO_LABELS[value]
-          const RadioComponent = radioGroup.radioComponent(value)
+          const RadioComponent = form.radio('$', value)
           return (
             <RadioComponent
               key={label}

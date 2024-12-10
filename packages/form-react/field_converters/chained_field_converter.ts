@@ -1,4 +1,7 @@
-import { UnreachableError } from '@de/base'
+import {
+  assertExists,
+  UnreachableError,
+} from '@de/base'
 import { type Field } from 'types/field'
 import {
   type FieldConversion,
@@ -20,6 +23,11 @@ export class ChainedFieldConverter<
   }
 
   convert(from: From, valuePath: keyof Fields, fields: Fields): FieldConversion<E, To> {
+    // TODO have a different type for converters without convert method
+    // eslint-disable-next-line @typescript-eslint/unbound-method
+    assertExists(this.from.convert, 'attempted to call convert on null converter')
+    // eslint-disable-next-line @typescript-eslint/unbound-method
+    assertExists(this.to.convert, 'attempted to call convert on null converter')
     const fromConversion = this.from.convert(from, valuePath, fields)
     switch (fromConversion.type) {
       case FieldConversionResult.Success:
@@ -55,7 +63,7 @@ export class ChainedFieldConverter<
     }
   }
 
-  revert(to: To): From {
-    return this.from.revert(this.to.revert(to))
+  revert(to: To, valuePath: keyof Fields): From {
+    return this.from.revert(this.to.revert(to, valuePath), valuePath)
   }
 }

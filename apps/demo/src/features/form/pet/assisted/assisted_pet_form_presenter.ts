@@ -7,6 +7,7 @@ import {
   adapterFromConverter,
   adapterFromPrototype,
   identityAdapter,
+  listAdapter,
 } from '@de/form-react/core/mobx/field_adapter_builder'
 import { type FlattenedAdaptersOfFields } from '@de/form-react/core/mobx/flattened_adapters_of_fields'
 import { SelectDiscriminatedUnionConverter } from '@de/form-react/field_converters/select_value_type_converter'
@@ -23,6 +24,7 @@ import {
   NOT_A_NUMBER_ERROR,
   petTypeDef,
   speciesTypeDef,
+  type TagValuePath,
 } from 'features/form/pet/types'
 import { type SimplifyDeep } from 'type-fest'
 
@@ -59,7 +61,9 @@ const converters: SimplifyDeep<FlattenedAdaptersOfFields<
   ),
   '$.species.cat:meows': adapterFromPrototype(new StringToIntegerConverter(NOT_A_NUMBER_ERROR), 0),
   '$.species.dog:barks': adapterFromPrototype(new StringToIntegerConverter(NOT_A_NUMBER_ERROR), 0),
-  '$.fake': identityAdapter('fake!'),
+  '$.tags': listAdapter(),
+  '$.tags.*': identityAdapter(''),
+  '$.newTag': identityAdapter(''),
 }
 
 export class AssistedPetFormPresenter extends FormPresenter<
@@ -72,6 +76,11 @@ export class AssistedPetFormPresenter extends FormPresenter<
       petTypeDef,
       converters,
     )
+  }
+
+  removeTag(_model: AssistedPetFormModel, valuePath: TagValuePath) {
+    // eslint-disable-next-line no-console
+    console.log('delete', valuePath)
   }
 }
 

@@ -12,7 +12,7 @@ function Component(props: FormProps<{
   $: Field<string, boolean>,
 }>) {
   const inputProps = useMantineForm(props)
-  const CheckboxComponent = inputProps.checkboxComponent('$')
+  const CheckboxComponent = inputProps.checkbox('$')
   return <CheckboxComponent label={CHECKBOX_LABEL} />
 }
 

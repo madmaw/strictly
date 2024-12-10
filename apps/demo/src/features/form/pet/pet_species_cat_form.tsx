@@ -23,7 +23,7 @@ export type PetSpeciesFormCatProps = FormProps<PetSpeciesCatFormFields>
 
 export function PetSpeciesCatForm(props: PetSpeciesFormCatProps) {
   const form = useMantineForm(props)
-  const MeowsTextInput = form.textInputComponent('$.species.cat:meows')
+  const MeowsTextInput = form.textInput('$.species.cat:meows')
   return (
     <Stack>
       <MeowsTextInput

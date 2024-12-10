@@ -48,11 +48,13 @@ function createMockedAdapter<
   converter,
   valueFactory,
 }: FieldAdapter<E, Record<string, Field>, To, From>): {
-  converter: Mocked<FieldConverter<E, Record<string, Field>, To, From>>,
+  converter: Mocked<Required<FieldConverter<E, Record<string, Field>, To, From>>>,
   valueFactory: Mocked<FieldValueFactory<Record<string, Field>, To>>,
 } {
-  const mockedConverter = mock<FieldConverter<E, Record<string, Field>, To, From>>()
-  mockedConverter.convert.mockImplementation(converter.convert.bind(converter))
+  const mockedConverter = mock<Required<FieldConverter<E, Record<string, Field>, To, From>>>()
+  if (converter.convert) {
+    mockedConverter.convert?.mockImplementation(converter.convert.bind(converter))
+  }
   mockedConverter.revert.mockImplementation(converter.revert.bind(converter))
 
   const mockedValueFactory = mock<FieldValueFactory<Record<string, Field>, To>>()
@@ -485,7 +487,7 @@ describe('all', function () {
             const newValue = -1
             const errorCode = 65
             beforeEach(function () {
-              stringToIntegerAdapter.converter.convert.mockReturnValueOnce({
+              stringToIntegerAdapter.converter.convert?.mockReturnValueOnce({
                 type: FieldConversionResult.Failure,
                 error: errorCode,
                 value: [newValue],
@@ -685,6 +687,103 @@ describe('all', function () {
               }),
             }),
           )
+        })
+      })
+
+      describe('addListItem', function () {
+        describe('adds default to start of the list', function () {
+          beforeEach(function () {
+            model.errors['$.0'] = 0
+            model.errors['$.1'] = 1
+            model.errors['$.2'] = 2
+            presenter.addListItem(model, '$', null, 0)
+          })
+
+          it('adds the list item to the underlying value', function () {
+            expect(model.value).toEqual([
+              0,
+              1,
+              3,
+              7,
+            ])
+          })
+
+          it.each([
+            [
+              '$.0',
+              '0',
+            ],
+            [
+              '$.1',
+              '1',
+            ],
+            [
+              '$.2',
+              '3',
+            ],
+            [
+              '$.3',
+              '7',
+            ],
+          ] as const)('it reports the value of field %s as %s', function (path, fieldValue) {
+            expect(model.fields[path]?.value).toBe(fieldValue)
+          })
+
+          it.each([
+            [
+              '$.0',
+              // eslint-disable-next-line no-undefined
+              undefined,
+            ],
+            [
+              '$.1',
+              0,
+            ],
+            [
+              '$.2',
+              1,
+            ],
+            [
+              '$.3',
+              2,
+            ],
+          ] as const)('it reports the error of field %s', function (path, error) {
+            expect(model.fields[path]?.error).toBe(error)
+          })
+        })
+
+        describe('add defined value', function () {
+          beforeEach(function () {
+            presenter.addListItem(model, '$', [5])
+          })
+
+          it('adds the expected value at the end', function () {
+            expect(model.fields).toEqual(
+              expect.objectContaining({
+                '$.0': expect.objectContaining({
+                  value: '1',
+                }),
+                '$.1': expect.objectContaining({
+                  value: '3',
+                }),
+                '$.2': expect.objectContaining({
+                  value: '7',
+                }),
+                '$.3': expect.objectContaining({
+                  value: '5',
+                }),
+              }),
+            )
+          })
+
+          it('updates the underlying value', function () {
+            expect(model.value).toEqual([
+              1,
+              3,
+              7,
+              5,
+            ])
+          })
         })
       })
     })

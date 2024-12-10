@@ -10,15 +10,25 @@ import {
   useMemo,
 } from 'react'
 
-type SafeComponent<
-  Component extends ComponentType,
+export type PartialComponent<
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  Component extends ComponentType<any>,
   CurriedProps,
   AdditionalProps = {},
 > = Exclude<keyof CurriedProps, keyof ComponentProps<Component>> extends never
-  ? ForwardRefExoticComponent<PropsWithoutRef<RemainingComponentProps<Component, CurriedProps> & AdditionalProps>>
-  : keyof CurriedProps extends string
+  ? UnsafePartialComponent<Component, CurriedProps, AdditionalProps>
+  : keyof CurriedProps extends (string | number)
     ? `unmatched prop: ${Exclude<keyof CurriedProps, keyof ComponentProps<Component>>}`
   : Exclude<keyof CurriedProps, keyof ComponentProps<Component>>
+
+export type UnsafePartialComponent<
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  Component extends ComponentType<any>,
+  CurriedProps,
+  AdditionalProps = {},
+> = ForwardRefExoticComponent<
+  PropsWithoutRef<RemainingComponentProps<Component, CurriedProps> & AdditionalProps>
+>
 
 export function createSimplePartialComponent<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -27,7 +37,7 @@ export function createSimplePartialComponent<
 >(
   Component: Component,
   curriedProps: CurriedProps,
-): SafeComponent<Component, CurriedProps> {
+): PartialComponent<Component, CurriedProps> {
   // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
   return forwardRef(
     function (
@@ -47,7 +57,7 @@ export function createSimplePartialComponent<
         />
       )
     },
-  ) as SafeComponent<Component, CurriedProps>
+  ) as PartialComponent<Component, CurriedProps>
 }
 
 export function createPartialComponent<
@@ -58,7 +68,7 @@ export function createPartialComponent<
 >(
   Component: Component,
   curriedPropsSource: (additionalProps: AdditionalProps) => CurriedProps,
-): SafeComponent<Component, CurriedProps, AdditionalProps> {
+): PartialComponent<Component, CurriedProps, AdditionalProps> {
   // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
   return forwardRef(
     function (
@@ -81,7 +91,7 @@ export function createPartialComponent<
         />
       )
     },
-  ) as SafeComponent<Component, CurriedProps, AdditionalProps>
+  ) as PartialComponent<Component, CurriedProps, AdditionalProps>
 }
 
 export function usePartialComponent<
@@ -96,7 +106,7 @@ export function usePartialComponent<
   // has to be next so eslint react-hooks/exhaustive-deps can find the deps
   deps: DependencyList,
   Component: Component,
-): SafeComponent<Component, CurriedProps, AdditionalProps> {
+): PartialComponent<Component, CurriedProps, AdditionalProps> {
   return useMemo(
     function () {
       return createPartialComponent<Component, CurriedProps, AdditionalProps>(Component, createCurriedProps)
@@ -118,7 +128,21 @@ export function createPartialObserverComponent<
 >(
   Component: Component,
   curriedPropsSource: (additionalProps: AdditionalProps) => CurriedProps,
-): SafeComponent<Component, CurriedProps, AdditionalProps> {
+): PartialComponent<Component, CurriedProps, AdditionalProps> {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+  return createUnsafePartialObserverComponent(Component, curriedPropsSource) as PartialComponent<Component,
+    CurriedProps, AdditionalProps>
+}
+
+export function createUnsafePartialObserverComponent<
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  Component extends ComponentType<any>,
+  CurriedProps,
+  AdditionalProps = {},
+>(
+  Component: Component,
+  curriedPropsSource: (additionalProps: AdditionalProps) => CurriedProps,
+): UnsafePartialComponent<Component, CurriedProps, AdditionalProps> {
   // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
   return observer(
     forwardRef(
@@ -143,7 +167,7 @@ export function createPartialObserverComponent<
         )
       },
     ),
-  ) as SafeComponent<Component, CurriedProps, AdditionalProps>
+  ) as UnsafePartialComponent<Component, CurriedProps, AdditionalProps>
 }
 
 export function usePartialObserverComponent<

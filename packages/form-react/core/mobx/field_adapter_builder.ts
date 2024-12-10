@@ -1,4 +1,5 @@
 import { ChainedFieldConverter } from 'field_converters/chained_field_converter'
+import { ListConverter } from 'field_converters/list_converter'
 import { ValidatingConverter } from 'field_converters/validating_converter'
 import { PrototypingFieldValueFactory } from 'field_value_factories/prototyping_field_value_factory'
 import { type Field } from 'types/field'
@@ -99,5 +100,16 @@ export function identityAdapter<
   return new FieldAdapterBuilder(
     new ValidatingConverter<never, Readonly<Record<string, Field>>, V>(),
     new PrototypingFieldValueFactory(prototype),
+  )
+}
+
+export function listAdapter<
+  E,
+  K extends string,
+>() {
+  const listConverter = new ListConverter<E, K>()
+  return new FieldAdapterBuilder<never, Readonly<Record<string, Field>>, E[], readonly K[]>(
+    listConverter,
+    listConverter,
   )
 }

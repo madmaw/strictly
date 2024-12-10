@@ -11,12 +11,19 @@ import { useMantineForm } from '@de/form-react/mantine/hooks'
 import {
   Button,
   Card,
+  Pill,
+  type PillProps,
+  PillsInput,
   Stack,
 } from '@mantine/core'
-import { type ComponentType } from 'react'
+import {
+  type ComponentType,
+  useCallback,
+} from 'react'
 import {
   type FlattenedPetJsonValueToTypePaths,
   type NAME_TOO_SHORT_ERROR,
+  type TagValuePath,
 } from './types'
 
 export const LABEL_SUBMIT = 'Submit'
@@ -26,30 +33,52 @@ export type PetFormFields = FlattenedFormFieldsOf<
   {
     '$.name': Field<typeof NAME_TOO_SHORT_ERROR, string>,
     '$.alive': Field<never, boolean>,
-    '$.fake': Field<never, string>,
+    '$.newTag': Field<never, string>,
+    '$.tags': Field<never, readonly string[]>,
+    '$.tags.*': Field<never, string>,
   }
 >
 
 export type PetFormProps = FormProps<PetFormFields> & {
   SpeciesComponent: ComponentType,
   onSubmit: () => void,
+  onRemoveTag: (valuePath: TagValuePath) => void,
 }
 
 export function PetForm(props: PetFormProps) {
   const {
     onSubmit,
+    onRemoveTag,
     SpeciesComponent,
   } = props
   const form = useMantineForm(props)
-  const NameTextInput = form.textInputComponent('$.name')
-  const AliveCheckbox = form.checkboxComponent('$.alive')
-  const FakeTextInput = form.textInputComponent('$.fake')
+  const NameTextInput = form.textInput('$.name')
+  const AliveCheckbox = form.checkbox('$.alive')
+  const NewTagInputField = form.textInput('$.newTag', PillsInput.Field)
+  const Tags = form.list('$.tags')
 
   return (
     <Stack>
       <NameTextInput label='Name' />
       <AliveCheckbox label='Alive' />
-      <FakeTextInput label='Fake' />
+      <PillsInput label='Tags'>
+        <Pill.Group>
+          <Tags>
+            {function (tagValuePath) {
+              const Pill = form.pill(tagValuePath, TagPill)
+              return (
+                <Pill
+                  key={tagValuePath}
+                  onRemoveByValuePath={onRemoveTag}
+                  valuePath={tagValuePath}
+                  withRemoveButton={true}
+                />
+              )
+            }}
+          </Tags>
+          <NewTagInputField placeholder='Some attribute' />
+        </Pill.Group>
+      </PillsInput>
       <Card withBorder={true}>
         <SpeciesComponent />
       </Card>
@@ -60,5 +89,27 @@ export function PetForm(props: PetFormProps) {
         {LABEL_SUBMIT}
       </Button>
     </Stack>
+  )
+}
+
+function TagPill({
+  valuePath,
+  onRemoveByValuePath,
+  ...props
+}: PillProps & {
+  valuePath: TagValuePath,
+  onRemoveByValuePath: (valuePath: TagValuePath) => void,
+}) {
+  const onRemove = useCallback(function () {
+    onRemoveByValuePath(valuePath)
+  }, [
+    valuePath,
+    onRemoveByValuePath,
+  ])
+  return (
+    <Pill
+      onRemove={onRemove}
+      {...props}
+    />
   )
 }

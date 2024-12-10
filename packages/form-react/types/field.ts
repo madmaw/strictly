@@ -7,15 +7,3 @@ export type Field<E = any, V = any> = {
 }
 
 export type Fields = Readonly<Record<string, Field>>
-
-export type ErrorTypeOfField<F extends Field> = F extends Field<infer E, infer _V> ? E : never
-
-export type ValueTypeOfField<F extends Field> = F extends Field<infer _E, infer V> ? V : never
-
-export type StringFieldsOfFields<F extends Fields> = {
-  [K in keyof F as ValueTypeOfField<F[K]> extends string | undefined | null ? K : never]: F[K]
-}
-
-export type BooleanFieldsOfFields<F extends Fields> = {
-  [K in keyof F as ValueTypeOfField<F[K]> extends boolean ? K : never]: F[K]
-}

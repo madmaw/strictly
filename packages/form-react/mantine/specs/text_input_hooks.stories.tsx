@@ -12,7 +12,7 @@ function Component(props: FormProps<{
   $: Field<string, string>,
 }>) {
   const form = useMantineForm(props)
-  const TextInputComponent = form.textInputComponent('$')
+  const TextInputComponent = form.textInput('$')
   return <TextInputComponent label={TEXT_INPUT_LABEL} />
 }
 
