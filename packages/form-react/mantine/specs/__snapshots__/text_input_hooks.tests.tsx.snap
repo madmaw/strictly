@@ -71,6 +71,60 @@ exports[`checkbox mantine hooks > renders Empty 1`] = `
 </div>
 `;
 
+exports[`checkbox mantine hooks > renders OverriddenPillsInputField 1`] = `
+<div>
+  <style
+    data-mantine-styles="classes"
+  >
+    @media (max-width: 35.99375em) {.mantine-visible-from-xs {display: none !important;}}@media (min-width: 36em) {.mantine-hidden-from-xs {display: none !important;}}@media (max-width: 47.99375em) {.mantine-visible-from-sm {display: none !important;}}@media (min-width: 48em) {.mantine-hidden-from-sm {display: none !important;}}@media (max-width: 61.99375em) {.mantine-visible-from-md {display: none !important;}}@media (min-width: 62em) {.mantine-hidden-from-md {display: none !important;}}@media (max-width: 74.99375em) {.mantine-visible-from-lg {display: none !important;}}@media (min-width: 75em) {.mantine-hidden-from-lg {display: none !important;}}@media (max-width: 87.99375em) {.mantine-visible-from-xl {display: none !important;}}@media (min-width: 88em) {.mantine-hidden-from-xl {display: none !important;}}
+  </style>
+  <input
+    class="m_45c4369d mantine-PillsInputField-field"
+    data-type="visible"
+    label="Text Input"
+    name="$"
+    type="text"
+    value="PillsInputField"
+  />
+</div>
+`;
+
+exports[`checkbox mantine hooks > renders OverriddenTextarea 1`] = `
+<div>
+  <style
+    data-mantine-styles="classes"
+  >
+    @media (max-width: 35.99375em) {.mantine-visible-from-xs {display: none !important;}}@media (min-width: 36em) {.mantine-hidden-from-xs {display: none !important;}}@media (max-width: 47.99375em) {.mantine-visible-from-sm {display: none !important;}}@media (min-width: 48em) {.mantine-hidden-from-sm {display: none !important;}}@media (max-width: 61.99375em) {.mantine-visible-from-md {display: none !important;}}@media (min-width: 62em) {.mantine-hidden-from-md {display: none !important;}}@media (max-width: 74.99375em) {.mantine-visible-from-lg {display: none !important;}}@media (min-width: 75em) {.mantine-hidden-from-lg {display: none !important;}}@media (max-width: 87.99375em) {.mantine-visible-from-xl {display: none !important;}}@media (min-width: 88em) {.mantine-hidden-from-xl {display: none !important;}}
+  </style>
+  <div
+    class="m_46b77525 mantine-InputWrapper-root mantine-Textarea-root"
+  >
+    <label
+      class="m_8fdc1311 mantine-InputWrapper-label mantine-Textarea-label"
+      for="mantine-0px4bipx4"
+      id="mantine-0px4bipx4-label"
+    >
+      Text Input
+    </label>
+    <div
+      class="m_6c018570 mantine-Input-wrapper mantine-Textarea-wrapper"
+      data-multiline="true"
+      data-variant="default"
+    >
+      <textarea
+        aria-invalid="false"
+        class="m_8fb7ebe7 mantine-Input-input mantine-Textarea-input"
+        data-variant="default"
+        id="mantine-0px4bipx4"
+        name="$"
+      >
+        Textarea
+      </textarea>
+    </div>
+  </div>
+</div>
+`;
+
 exports[`checkbox mantine hooks > renders Populated 1`] = `
 <div>
   <style
