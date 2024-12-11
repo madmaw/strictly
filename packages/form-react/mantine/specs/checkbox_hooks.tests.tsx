@@ -9,8 +9,8 @@ import {
   type Mock,
   vi,
 } from 'vitest'
-import * as stories from './check_box_hooks.stories'
-import { CHECKBOX_LABEL } from './constants'
+import { CHECKBOX_LABEL } from './checkbox_constants'
+import * as stories from './checkbox_hooks.stories'
 
 const composedStories = composeStories(stories)
 const {

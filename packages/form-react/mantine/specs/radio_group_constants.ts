@@ -1,6 +1,3 @@
-export const CHECKBOX_LABEL = 'Checkbox'
-export const TEXT_INPUT_LABEL = 'Text Input'
-
 export const RADIO_GROUP_LABEL = 'Radio Group'
 export const RADIO_VALUES = [
   '1',

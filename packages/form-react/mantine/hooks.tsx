@@ -185,15 +185,17 @@ class MantineFormImpl<
   >(valuePath: K): MantineFieldComponent<SuppliedTextInputProps, TextInputProps>
   textInput<
     K extends keyof StringFieldsOfFields<F>,
-    P extends SuppliedTextInputProps,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    P extends SuppliedTextInputProps<any>,
   >(
     valuePath: K,
-    TextInput: ComponentType<P>,
+    TextInput?: ComponentType<P>,
     ErrorRenderer?: ErrorRenderer<ErrorTypeOfField<F[K]>>,
   ): MantineFieldComponent<SuppliedTextInputProps, P>
   textInput<
     K extends keyof StringFieldsOfFields<F>,
-    P extends SuppliedTextInputProps,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    P extends SuppliedTextInputProps<any>,
   >(
     valuePath: K,
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions

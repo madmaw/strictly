@@ -5,13 +5,13 @@
       "dependsOn": ["^check-types"]
     },
     "dev": {
-      "dependsOn": ["^dev"]
+      "dependsOn": ["^check-types"]
     },
     "lint": {
       "dependsOn": ["^lint"]
     },
     "storybook": {
-      "dependsOn": ["^storybook"]
+      "dependsOn": ["^check-types"]
     },
     "test": {
       "dependsOn": ["^test"]

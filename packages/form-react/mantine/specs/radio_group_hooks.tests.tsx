@@ -14,7 +14,7 @@ import {
   RADIO_LABELS,
   RADIO_VALUES,
   type RadioValue,
-} from './constants'
+} from './radio_group_constants'
 import * as stories from './radio_group_hooks.stories'
 
 const composedStories = composeStories(stories)

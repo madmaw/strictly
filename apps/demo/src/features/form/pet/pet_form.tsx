@@ -54,7 +54,10 @@ export function PetForm(props: PetFormProps) {
   const form = useMantineForm(props)
   const NameTextInput = form.textInput('$.name')
   const AliveCheckbox = form.checkbox('$.alive')
-  const NewTagInputField = form.textInput('$.newTag', PillsInput.Field)
+  const NewTagInputField = form.textInput(
+    '$.newTag',
+    PillsInput.Field,
+  )
   const Tags = form.list('$.tags')
 
   return (

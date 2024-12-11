@@ -9,7 +9,7 @@ import {
   type Mock,
   vi,
 } from 'vitest'
-import { TEXT_INPUT_LABEL } from './constants'
+import { TEXT_INPUT_LABEL } from './text_input_constants'
 import * as stories from './text_input_hooks.stories'
 
 const composedStories = composeStories(stories)

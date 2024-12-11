@@ -1,6 +1,3 @@
-import {
-  Stack,
-} from '@mantine/core'
 import { action } from '@storybook/addon-actions'
 import {
   type Meta,
@@ -9,35 +6,14 @@ import {
 import { type FormProps } from 'core/props'
 import { useMantineForm } from 'mantine/hooks'
 import { type Field } from 'types/field'
-import {
-  RADIO_GROUP_LABEL,
-  RADIO_LABELS,
-  RADIO_VALUES,
-  type RadioValue,
-} from './radio_group_constants'
+import { CHECKBOX_LABEL } from './checkbox_constants'
 
 function Component(props: FormProps<{
-  $: Field<string, RadioValue | null>,
+  $: Field<string, boolean>,
 }>) {
-  const form = useMantineForm(props)
-  const RadioGroupComponent = form.radioGroup('$')
-
-  return (
-    <RadioGroupComponent label={RADIO_GROUP_LABEL}>
-      <Stack>
-        {RADIO_VALUES.map(function (value: RadioValue) {
-          const label = RADIO_LABELS[value]
-          const RadioComponent = form.radio('$', value)
-          return (
-            <RadioComponent
-              key={label}
-              label={label}
-            />
-          )
-        })}
-      </Stack>
-    </RadioGroupComponent>
-  )
+  const inputProps = useMantineForm(props)
+  const CheckboxComponent = inputProps.checkbox('$')
+  return <CheckboxComponent label={CHECKBOX_LABEL} />
 }
 
 const meta: Meta<typeof Component> = {
@@ -54,25 +30,25 @@ export default meta
 
 type Story = StoryObj<typeof Component>
 
-export const Empty: Story = {
+export const Off: Story = {
   args: {
     fields: {
       $: {
         disabled: false,
         required: false,
-        value: null,
+        value: false,
       },
     },
   },
 }
 
-export const Populated: Story = {
+export const On: Story = {
   args: {
     fields: {
       $: {
         disabled: false,
         required: false,
-        value: '3',
+        value: true,
       },
     },
   },
@@ -84,7 +60,7 @@ export const Required: Story = {
       $: {
         disabled: false,
         required: true,
-        value: '1',
+        value: false,
       },
     },
   },
@@ -96,7 +72,7 @@ export const Disabled: Story = {
       $: {
         disabled: true,
         required: false,
-        value: '2',
+        value: false,
       },
     },
   },

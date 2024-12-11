@@ -1,3 +1,8 @@
+import {
+  Code,
+  Paper,
+  Stack,
+} from '@mantine/core'
 import { action } from '@storybook/addon-actions'
 import {
   type Meta,
@@ -6,14 +11,32 @@ import {
 import { type FormProps } from 'core/props'
 import { useMantineForm } from 'mantine/hooks'
 import { type Field } from 'types/field'
-import { CHECKBOX_LABEL } from './constants'
+
+type ListPath = `$.${number}`
 
 function Component(props: FormProps<{
-  $: Field<string, boolean>,
+  $: Field<string, ListPath[]>,
 }>) {
-  const inputProps = useMantineForm(props)
-  const CheckboxComponent = inputProps.checkbox('$')
-  return <CheckboxComponent label={CHECKBOX_LABEL} />
+  const form = useMantineForm(props)
+  const List = form.list('$')
+  return (
+    <Paper
+      p='sm'
+      withBorder={true}
+    >
+      <Stack>
+        <List>
+          {function (valuePath: ListPath) {
+            return (
+              <Code>
+                {valuePath}
+              </Code>
+            )
+          }}
+        </List>
+      </Stack>
+    </Paper>
+  )
 }
 
 const meta: Meta<typeof Component> = {
@@ -30,49 +53,30 @@ export default meta
 
 type Story = StoryObj<typeof Component>
 
-export const Off: Story = {
+export const Empty: Story = {
   args: {
     fields: {
       $: {
         disabled: false,
         required: false,
-        value: false,
+        value: [],
       },
     },
   },
 }
 
-export const On: Story = {
+export const Populated: Story = {
   args: {
     fields: {
       $: {
         disabled: false,
         required: false,
-        value: true,
-      },
-    },
-  },
-}
-
-export const Required: Story = {
-  args: {
-    fields: {
-      $: {
-        disabled: false,
-        required: true,
-        value: false,
-      },
-    },
-  },
-}
-
-export const Disabled: Story = {
-  args: {
-    fields: {
-      $: {
-        disabled: true,
-        required: false,
-        value: false,
+        value: [
+          '$.5',
+          '$.6',
+          '$.7',
+          '$.8',
+        ],
       },
     },
   },
