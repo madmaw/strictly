@@ -59,7 +59,7 @@ const converters: SimplifyDeep<FlattenedAdaptersOfFields<
       'cat',
     ),
   ),
-  '$.species.cat:meows': adapterFromPrototype(new StringToIntegerConverter(NOT_A_NUMBER_ERROR), 0),
+  '$.species.cat:meows': identityAdapter(0),
   '$.species.dog:barks': adapterFromPrototype(new StringToIntegerConverter(NOT_A_NUMBER_ERROR), 0),
   '$.tags': listAdapter(),
   '$.tags.*': identityAdapter(''),
@@ -78,9 +78,8 @@ export class AssistedPetFormPresenter extends FormPresenter<
     )
   }
 
-  removeTag(_model: AssistedPetFormModel, valuePath: TagValuePath) {
-    // eslint-disable-next-line no-console
-    console.log('delete', valuePath)
+  removeTag(model: AssistedPetFormModel, valuePath: TagValuePath) {
+    this.removeListItem(model, valuePath)
   }
 }
 

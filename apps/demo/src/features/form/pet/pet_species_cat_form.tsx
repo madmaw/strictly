@@ -5,17 +5,17 @@ import {
 } from '@de/form-react'
 import { useMantineForm } from '@de/form-react/mantine/hooks'
 import {
+  Slider,
   Stack,
 } from '@mantine/core'
 import {
   type FlattenedPetJsonValueToTypePaths,
-  type NOT_A_NUMBER_ERROR,
 } from './types'
 
 export type PetSpeciesCatFormFields = FlattenedFormFieldsOf<
   FlattenedPetJsonValueToTypePaths,
   {
-    '$.species.cat:meows': Field<typeof NOT_A_NUMBER_ERROR, string>,
+    '$.species.cat:meows': Field<never, number>,
   }
 >
 
@@ -23,12 +23,28 @@ export type PetSpeciesFormCatProps = FormProps<PetSpeciesCatFormFields>
 
 export function PetSpeciesCatForm(props: PetSpeciesFormCatProps) {
   const form = useMantineForm(props)
-  const MeowsTextInput = form.textInput('$.species.cat:meows')
+  const MeowsSlider = form.valueInput('$.species.cat:meows', Slider)
   return (
-    <Stack>
-      <MeowsTextInput
+    <Stack px='sm'>
+      <MeowsSlider
         label='Meows'
-        type='number'
+        marks={[
+          {
+            label: 'Quiet',
+            value: 0,
+          },
+          {
+            label: 'Normal',
+            value: 5,
+          },
+          {
+            label: 'Noisy',
+            value: 10,
+          },
+        ]}
+        max={10}
+        min={0}
+        pb='xl'
       />
     </Stack>
   )

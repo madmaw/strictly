@@ -1,6 +1,8 @@
 import {
   assertExists,
   assertExistsAndReturn,
+  assertState,
+  checkValidNumber,
   type ElementOfArray,
   type Maybe,
   toArray,
@@ -22,6 +24,7 @@ import {
   type AnyValueType,
   flattenValueTypeTo,
 } from '@de/fine/transformers/flatteners/flatten_value_type_to'
+import { jsonPathPop } from '@de/fine/transformers/flatteners/json_path'
 import { type StrictTypeDef } from '@de/fine/types/strict_definitions'
 import {
   computed,
@@ -155,14 +158,14 @@ export class FormPresenter<
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     const listValuePath = valuePath as string
     const accessor = model.accessors[valuePath]
-    const arrayTypePath = this.typePath(valuePath)
+    const listTypePath = this.typePath(valuePath)
     const definedIndex = index ?? accessor.value.length
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-    const elementAdapterTypePath = `${arrayTypePath}.*` as keyof TypePathsToAdapters
+    const elementTypePath = `${listTypePath}.*` as keyof TypePathsToAdapters
     const elementAdapter = assertExistsAndReturn(
-      this.adapters[elementAdapterTypePath],
+      this.adapters[elementTypePath],
       'no adapter specified for list {} ({})',
-      elementAdapterTypePath,
+      elementTypePath,
       valuePath,
     )
     // TODO validation on new elements
@@ -170,7 +173,7 @@ export class FormPresenter<
       ? elementValue[0]
       : elementAdapter.valueFactory.create(
         // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-        elementAdapterTypePath as string,
+        elementTypePath as string,
         model.fields,
       )
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -194,7 +197,7 @@ export class FormPresenter<
     }).filter(function ([index]) {
       return index >= definedIndex
     }).sort(function ([a], [b]) {
-      // reverse index order
+      // descending
       return b - a
     })
     runInAction(function () {
@@ -224,18 +227,86 @@ export class FormPresenter<
       accessor.set(newList)
       // delete any value overrides so the new list isn't shadowed
       // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-      delete model.fieldOverrides[valuePath as unknown as keyof ValuePathsToAdapters]
+      delete model.fieldOverrides[listValuePath as keyof ValuePathsToAdapters]
     })
   }
 
-  /*
-  removeListItem<K extends ListJsonPathsOf<T>>(
+  removeListItem<K extends keyof FlattenedListTypeDefsOf<T>>(
     model: FormModel<T, JsonPaths, TypePathsToAdapters, ValuePathsToAdapters>,
-    k: K,
-    index: number,
+    elementValuePath: `${K}.${number}`,
   ) {
+    const [
+      listValuePath,
+      elementIndexString,
+    ] = assertExistsAndReturn(
+      jsonPathPop(elementValuePath),
+      'expected a path with two or more segments {}',
+      elementValuePath,
+    )
+    const accessor = model.accessors[listValuePath]
+    const elementIndex = checkValidNumber(
+      parseInt(elementIndexString),
+      'unexpected index {} ({})',
+      elementIndexString,
+      elementValuePath,
+    )
+    const newList = [...accessor.value]
+    assertState(
+      elementIndex >= 0 && elementIndex < newList.length,
+      'invalid index from path {} ({})',
+      elementIndex,
+      elementValuePath,
+    )
+    newList.splice(elementIndex, 1)
+
+    // shuffle the overrides around to account for new indices
+    // to so this we need to sort the array indices in descending order
+    const targetPaths = Object.keys(model.fieldOverrides).filter(function (v) {
+      return v.startsWith(`${listValuePath}.`)
+    }).map(function (v) {
+      const parts = v.substring(listValuePath.length + 1).split('.')
+      const index = parseInt(parts[0])
+      return [
+        index,
+        parts.slice(1),
+      ] as const
+    }).filter(function ([index]) {
+      return index >= elementIndex
+    }).sort(function ([a], [b]) {
+      // ascending
+      return a - b
+    })
+
+    runInAction(function () {
+      targetPaths.forEach(function ([
+        index,
+        postfix,
+      ]) {
+        // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+        const fromJsonPath = [
+          listValuePath,
+          `${index}`,
+          ...postfix,
+        ].join('.') as keyof ValuePathsToAdapters
+        // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+        const toJsonPath = [
+          listValuePath,
+          `${index - 1}`,
+          ...postfix,
+        ].join('.') as keyof ValuePathsToAdapters
+        const fieldOverride = model.fieldOverrides[fromJsonPath]
+        delete model.fieldOverrides[fromJsonPath]
+        model.fieldOverrides[toJsonPath] = fieldOverride
+        const error = model.errors[fromJsonPath]
+        delete model.errors[fromJsonPath]
+        model.errors[toJsonPath] = error
+      })
+      accessor.set(newList)
+      // delete any value overrides so the new list isn't shadowed
+      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+      delete model.fieldOverrides[listValuePath as keyof ValuePathsToAdapters]
+    })
   }
-  */
 
   private internalSetFieldValue<K extends keyof ValuePathsToAdapters>(
     model: FormModel<T, JsonPaths, TypePathsToAdapters, ValuePathsToAdapters>,

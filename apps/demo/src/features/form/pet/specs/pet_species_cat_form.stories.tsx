@@ -4,7 +4,6 @@ import {
   type StoryObj,
 } from '@storybook/react'
 import { PetSpeciesCatForm } from 'features/form/pet/pet_species_cat_form'
-import { NOT_A_NUMBER_ERROR } from 'features/form/pet/types'
 
 const Component = PetSpeciesCatForm
 
@@ -27,20 +26,7 @@ export const Valid: Story = {
     fields: {
       '$.species.cat:meows': {
         disabled: false,
-        value: '1',
-        required: true,
-      },
-    },
-  },
-}
-
-export const Error: Story = {
-  args: {
-    fields: {
-      '$.species.cat:meows': {
-        disabled: false,
-        value: '',
-        error: NOT_A_NUMBER_ERROR,
+        value: 1,
         required: true,
       },
     },

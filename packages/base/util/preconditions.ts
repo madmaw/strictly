@@ -74,3 +74,10 @@ export function checkUnary<T>(
   }
   return t[0]
 }
+
+export function checkValidNumber(n: number, message: string, ...args: readonly FormatArg[]): number {
+  if (isNaN(n) || !isFinite(n)) {
+    throw new PreconditionFailedError(message, ...args)
+  }
+  return n
+}

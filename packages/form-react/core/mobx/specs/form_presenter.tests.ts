@@ -786,6 +786,35 @@ describe('all', function () {
           })
         })
       })
+
+      describe('removeListItem', function () {
+        beforeEach(function () {
+          model.errors['$.0'] = 0
+          model.errors['$.1'] = 1
+          model.errors['$.2'] = 2
+          presenter.removeListItem(model, '$.0')
+        })
+
+        it('updates the underlying value', function () {
+          expect(model.value).toEqual([
+            3,
+            7,
+          ])
+        })
+
+        it('updates the field values and errors', function () {
+          expect(model.fields).toEqual({
+            '$.0': expect.objectContaining({
+              value: '3',
+              error: 1,
+            }),
+            '$.1': expect.objectContaining({
+              value: '7',
+              error: 2,
+            }),
+          })
+        })
+      })
     })
 
     // TODO map / struct
