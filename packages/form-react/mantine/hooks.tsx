@@ -59,6 +59,10 @@ import {
   type SuppliedTextInputProps,
 } from './create_text_input'
 import {
+  createValueInput,
+  type SuppliedValueInputProps,
+} from './create_value_input'
+import {
   type MantineFieldComponent,
   type MantineForm,
 } from './types'
@@ -138,6 +142,14 @@ class MantineFormImpl<
   > = new Cache(
     createTextInput.bind(this),
   )
+  private readonly valueInputCache: Cache<
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    [keyof AllFieldsOfFields<F>, ComponentType<SuppliedValueInputProps<any>>, ErrorRenderer],
+    MantineFieldComponent<SuppliedTextInputProps>
+  > = new Cache(
+    createValueInput.bind(this),
+  )
+
   private readonly checkboxCache: Cache<
     [keyof BooleanFieldsOfFields<F>, ComponentType<SuppliedCheckboxProps>, ErrorRenderer],
     MantineFieldComponent<SuppliedCheckboxProps>
@@ -212,6 +224,24 @@ class MantineFormImpl<
       SuppliedTextInputProps,
       P
     >
+  }
+
+  valueInput<
+    K extends keyof AllFieldsOfFields<F>,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    P extends SuppliedValueInputProps<ValueTypeOfField<F[K]>, any>,
+  >(
+    valuePath: K,
+    ValueInput: ComponentType<P>,
+    ErrorRenderer: ErrorRenderer<ErrorTypeOfField<F[K]>> = DefaultErrorRenderer,
+  ): MantineFieldComponent<SuppliedValueInputProps<F[K]>, P> {
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+    return this.valueInputCache.retrieveOrCreate(
+      valuePath,
+      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+      ValueInput as ComponentType<SuppliedValueInputProps<ValueTypeOfField<F[K]>>>,
+      ErrorRenderer,
+    ) as MantineFieldComponent<SuppliedValueInputProps<F[K]>, P>
   }
 
   checkbox<

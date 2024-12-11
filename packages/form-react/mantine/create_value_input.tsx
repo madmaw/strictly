@@ -1,6 +1,7 @@
+import { type AllFieldsOfFields } from 'types/all_fields_of_fields'
 import { type ErrorTypeOfField } from 'types/error_type_of_field'
 import { type Fields } from 'types/field'
-import { type StringFieldsOfFields } from 'types/string_fields_of_fields'
+import { type ValueTypeOfField } from 'types/value_type_of_field'
 import { createUnsafePartialObserverComponent } from 'util/partial'
 import { type ErrorRenderer } from './hooks'
 import {
@@ -8,35 +9,32 @@ import {
   type MantineForm,
 } from './types'
 
-export type TextInputTarget = Element & {
-  value: string,
-}
-
-export type SuppliedTextInputProps<
-  T extends TextInputTarget = TextInputTarget,
+export type SuppliedValueInputProps<
+  V,
+  T extends Element = Element,
 > = Partial<{
   name: string,
-  value: string | number | readonly string[] | undefined,
+  value: V,
   disabled: boolean,
   required: boolean,
-  onChange: (e: React.ChangeEvent<T>) => void,
+  onChange: (value: V) => void,
   onFocus: (e: React.FocusEvent<T>) => void,
   onBlur: (e: React.FocusEvent<T>) => void,
   onKeyUp: (e: React.KeyboardEvent<T>) => void,
 }>
 
-export function createTextInput<
+export function createValueInput<
   F extends Fields,
-  K extends keyof StringFieldsOfFields<F>,
-  Props extends SuppliedTextInputProps,
+  K extends keyof AllFieldsOfFields<F>,
+  Props extends SuppliedValueInputProps<ValueTypeOfField<F[K]>>,
 >(
   this: MantineForm<F>,
   valuePath: K,
-  TextInput: React.ComponentType<Props>,
+  ValueInput: React.ComponentType<Props>,
   ErrorRenderer: ErrorRenderer<ErrorTypeOfField<F[K]>>,
-): MantineFieldComponent<SuppliedTextInputProps, Props> {
-  const onChange = (e: React.ChangeEvent<TextInputTarget>) => {
-    this.onFieldValueChange?.(valuePath, e.target.value)
+): MantineFieldComponent<SuppliedValueInputProps<ValueTypeOfField<F[K]>>, Props> {
+  const onChange = (value: ValueTypeOfField<F[K]>) => {
+    this.onFieldValueChange?.(valuePath, value)
   }
   const onFocus = () => {
     this.onFieldFocus?.(valuePath)
@@ -73,8 +71,11 @@ export function createTextInput<
       onKeyUp,
     }
   }
-  return createUnsafePartialObserverComponent<typeof TextInput, SuppliedTextInputProps>(
-    TextInput,
+  return createUnsafePartialObserverComponent<
+    typeof ValueInput,
+    SuppliedValueInputProps<ValueTypeOfField<F[K]>>
+  >(
+    ValueInput,
     propSource,
   )
 }
