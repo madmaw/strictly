@@ -17,7 +17,7 @@ import {
   type TypeDefHolder,
   type ValueTypeOf,
 } from '@de/fine'
-import { jsonValuePathToTypePath } from '@de/fine'
+import { valuePathToTypePath } from '@de/fine'
 import { mobxCopy } from '@de/fine/transformers/copies/mobx_copy'
 import { flattenTypeDefsOf } from '@de/fine/transformers/flatteners/flatten_type_defs_of'
 import {
@@ -103,11 +103,11 @@ export type ValuePathsToAdaptersOf<
 
 export class FormPresenter<
   T extends TypeDefHolder,
-  JsonPaths extends Readonly<Record<string, string>>,
+  ValueToTypePaths extends Readonly<Record<string, string>>,
   TypePathsToAdapters extends FlattenedTypePathsToAdaptersOf<FlattenedValueTypesOf<T, '*'>>,
-  ValuePathsToAdapters extends ValuePathsToAdaptersOf<TypePathsToAdapters, JsonPaths> = ValuePathsToAdaptersOf<
+  ValuePathsToAdapters extends ValuePathsToAdaptersOf<TypePathsToAdapters, ValueToTypePaths> = ValuePathsToAdaptersOf<
     TypePathsToAdapters,
-    JsonPaths
+    ValueToTypePaths
   >,
 > {
   constructor(
@@ -118,7 +118,7 @@ export class FormPresenter<
 
   private maybeGetAdapterForValuePath(valuePath: keyof ValuePathsToAdapters) {
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-    const typePath = jsonValuePathToTypePath(this.typeDef, valuePath as string, true)
+    const typePath = valuePathToTypePath(this.typeDef, valuePath as string, true)
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     return this.adapters[typePath as keyof TypePathsToAdapters]
   }
@@ -131,12 +131,12 @@ export class FormPresenter<
     )
   }
 
-  typePath<K extends keyof JsonPaths>(valuePath: K): JsonPaths[K] {
-    return jsonValuePathToTypePath<JsonPaths, K>(this.typeDef, valuePath, true)
+  typePath<K extends keyof ValueToTypePaths>(valuePath: K): ValueToTypePaths[K] {
+    return valuePathToTypePath<ValueToTypePaths, K>(this.typeDef, valuePath, true)
   }
 
   setFieldValueAndValidate<K extends keyof ValuePathsToAdapters>(
-    model: FormModel<T, JsonPaths, TypePathsToAdapters, ValuePathsToAdapters>,
+    model: FormModel<T, ValueToTypePaths, TypePathsToAdapters, ValuePathsToAdapters>,
     valuePath: K,
     value: ToTypeOfFieldAdapter<ValuePathsToAdapters[K]>,
   ): boolean {
@@ -144,7 +144,7 @@ export class FormPresenter<
   }
 
   setFieldValue<K extends keyof ValuePathsToAdapters>(
-    model: FormModel<T, JsonPaths, TypePathsToAdapters, ValuePathsToAdapters>,
+    model: FormModel<T, ValueToTypePaths, TypePathsToAdapters, ValuePathsToAdapters>,
     valuePath: K,
     value: ToTypeOfFieldAdapter<ValuePathsToAdapters[K]>,
   ): boolean {
@@ -152,7 +152,7 @@ export class FormPresenter<
   }
 
   addListItem<K extends keyof FlattenedListTypeDefsOf<T>>(
-    model: FormModel<T, JsonPaths, TypePathsToAdapters, ValuePathsToAdapters>,
+    model: FormModel<T, ValueToTypePaths, TypePathsToAdapters, ValuePathsToAdapters>,
     valuePath: K,
     elementValue: Maybe<ElementOfArray<FlattenedValueTypesOf<T>[K]>>,
     index?: number,
@@ -233,7 +233,7 @@ export class FormPresenter<
   }
 
   removeListItem<K extends keyof FlattenedListTypeDefsOf<T>>(
-    model: FormModel<T, JsonPaths, TypePathsToAdapters, ValuePathsToAdapters>,
+    model: FormModel<T, ValueToTypePaths, TypePathsToAdapters, ValuePathsToAdapters>,
     elementValuePath: `${K}.${number}`,
   ) {
     const [
@@ -310,7 +310,7 @@ export class FormPresenter<
   }
 
   private internalSetFieldValue<K extends keyof ValuePathsToAdapters>(
-    model: FormModel<T, JsonPaths, TypePathsToAdapters, ValuePathsToAdapters>,
+    model: FormModel<T, ValueToTypePaths, TypePathsToAdapters, ValuePathsToAdapters>,
     valuePath: K,
     value: ToTypeOfFieldAdapter<ValuePathsToAdapters[K]>,
     displayValidation: boolean,
@@ -346,7 +346,7 @@ export class FormPresenter<
   }
 
   clearFieldError<K extends keyof ValuePathsToAdapters>(
-    model: FormModel<T, JsonPaths, TypePathsToAdapters, ValuePathsToAdapters>,
+    model: FormModel<T, ValueToTypePaths, TypePathsToAdapters, ValuePathsToAdapters>,
     valuePath: K,
   ) {
     const fieldOverride = model.fieldOverrides[valuePath]
@@ -358,7 +358,7 @@ export class FormPresenter<
   }
 
   clearFieldValue<K extends StringKeyOf<ValuePathsToAdapters>>(
-    model: FormModel<T, JsonPaths, TypePathsToAdapters, ValuePathsToAdapters>,
+    model: FormModel<T, ValueToTypePaths, TypePathsToAdapters, ValuePathsToAdapters>,
     valuePath: K,
   ) {
     const typePath = this.typePath(valuePath)
@@ -382,7 +382,10 @@ export class FormPresenter<
     })
   }
 
-  clearAll(model: FormModel<T, JsonPaths, TypePathsToAdapters, ValuePathsToAdapters>, value: ValueTypeOf<T>): void {
+  clearAll(
+    model: FormModel<T, ValueToTypePaths, TypePathsToAdapters, ValuePathsToAdapters>,
+    value: ValueTypeOf<T>,
+  ): void {
     runInAction(() => {
       model.errors = {}
       // TODO this isn't correct, should reload from value
@@ -392,7 +395,7 @@ export class FormPresenter<
   }
 
   validateField<K extends keyof ValuePathsToAdapters>(
-    model: FormModel<T, JsonPaths, TypePathsToAdapters, ValuePathsToAdapters>,
+    model: FormModel<T, ValueToTypePaths, TypePathsToAdapters, ValuePathsToAdapters>,
     valuePath: K,
   ): boolean {
     const {
@@ -438,7 +441,7 @@ export class FormPresenter<
     })
   }
 
-  validateAll(model: FormModel<T, JsonPaths, TypePathsToAdapters, ValuePathsToAdapters>): boolean {
+  validateAll(model: FormModel<T, ValueToTypePaths, TypePathsToAdapters, ValuePathsToAdapters>): boolean {
     // sort keys shortest to longest so parent changes don't overwrite child changes
     const accessors = toArray(model.accessors).toSorted(function ([a], [b]) {
       return a.length - b.length
@@ -500,11 +503,11 @@ export class FormPresenter<
 
   createModel(value: ValueTypeOf<ReadonlyTypeDefOf<T>>): FormModel<
     T,
-    JsonPaths,
+    ValueToTypePaths,
     TypePathsToAdapters,
     ValuePathsToAdapters
   > {
-    return new FormModel<T, JsonPaths, TypePathsToAdapters, ValuePathsToAdapters>(
+    return new FormModel<T, ValueToTypePaths, TypePathsToAdapters, ValuePathsToAdapters>(
       this.typeDef,
       value,
       this.adapters,
@@ -514,11 +517,11 @@ export class FormPresenter<
 
 export class FormModel<
   T extends TypeDefHolder,
-  JsonPaths extends Readonly<Record<string, string>>,
+  ValueToTypePaths extends Readonly<Record<string, string>>,
   TypePathsToAdapters extends FlattenedTypePathsToAdaptersOf<FlattenedValueTypesOf<T, '*'>>,
-  ValuePathsToAdapters extends ValuePathsToAdaptersOf<TypePathsToAdapters, JsonPaths> = ValuePathsToAdaptersOf<
+  ValuePathsToAdapters extends ValuePathsToAdaptersOf<TypePathsToAdapters, ValueToTypePaths> = ValuePathsToAdaptersOf<
     TypePathsToAdapters,
-    JsonPaths
+    ValueToTypePaths
   >,
 > {
   @observable.ref
@@ -607,10 +610,10 @@ export class FormModel<
     let typePath: keyof TypePathsToAdapters
     try {
       // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-      typePath = jsonValuePathToTypePath<JsonPaths, keyof JsonPaths>(
+      typePath = valuePathToTypePath<ValueToTypePaths, keyof ValueToTypePaths>(
         this.typeDef,
         // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-        valuePath as keyof JsonPaths,
+        valuePath as keyof ValueToTypePaths,
         true,
       ) as keyof TypePathsToAdapters
     } catch (e) {

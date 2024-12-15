@@ -12,7 +12,7 @@ import {
   TypeDefType,
 } from 'types/definitions'
 
-export function jsonValuePathToTypePath<
+export function valuePathToTypePath<
   JsonPaths extends Record<string, string>,
   ValuePath extends keyof JsonPaths,
 >(

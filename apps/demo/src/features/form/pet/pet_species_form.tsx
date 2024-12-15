@@ -11,12 +11,12 @@ import {
 } from '@mantine/core'
 import { type ComponentType } from 'react'
 import {
-  type FlattenedPetJsonValueToTypePaths,
+  type PetValueToTypePaths,
   type Species,
 } from './types'
 
 export type PetSpeciesFormFields = FlattenedFormFieldsOf<
-  FlattenedPetJsonValueToTypePaths,
+  PetValueToTypePaths,
   {
     '$.species': Field<Species, never>,
   }

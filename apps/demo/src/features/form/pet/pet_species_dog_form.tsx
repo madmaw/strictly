@@ -9,12 +9,12 @@ import {
   Stack,
 } from '@mantine/core'
 import {
-  type FlattenedPetJsonValueToTypePaths,
   type NOT_A_NUMBER_ERROR,
+  type PetValueToTypePaths,
 } from './types'
 
 export type PetSpeciesDogFormFields = FlattenedFormFieldsOf<
-  FlattenedPetJsonValueToTypePaths,
+  PetValueToTypePaths,
   {
     '$.species.dog:barks': Field<string | number, typeof NOT_A_NUMBER_ERROR>,
     // TODO more fields

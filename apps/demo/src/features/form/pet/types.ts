@@ -1,7 +1,6 @@
 import {
   boolean,
   type FlattenedAccessorsOf,
-  type FlattenedJsonValueToTypePathsOf,
   type FlattenedTypeDefsOf,
   type FlattenedValueTypesOf,
   list,
@@ -10,6 +9,7 @@ import {
   string,
   struct,
   union,
+  type ValueToTypePathsOf,
   type ValueTypeOf,
 } from '@de/fine'
 import { type JsonPathsOf } from '@de/fine/types/json_paths_of'
@@ -37,7 +37,7 @@ export type Pet = ValueTypeOf<ReadonlyTypeDefOf<typeof petTypeDef>>
 export type PetValuePaths = JsonPathsOf<typeof petTypeDef>
 export type PetTypePaths = JsonPathsOf<typeof petTypeDef, '*'>
 export type FlattenedPetTypeDefs = FlattenedTypeDefsOf<typeof petTypeDef, '*'>
-export type FlattenedPetJsonValueToTypePaths = FlattenedJsonValueToTypePathsOf<typeof petTypeDef> & {
+export type PetValueToTypePaths = ValueToTypePathsOf<typeof petTypeDef> & {
   '$.newTag': '$.newTag',
 }
 export type FlattenedPetValueTypes = FlattenedValueTypesOf<typeof petTypeDef>

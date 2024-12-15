@@ -1,4 +1,4 @@
-import { jsonValuePathToTypePath } from 'transformers/flatteners/json_value_path_to_type_path'
+import { valuePathToTypePath } from 'transformers/flatteners/value_path_to_type_path'
 import {
   boolean,
   list,
@@ -8,14 +8,14 @@ import {
   struct,
   union,
 } from 'types/builders'
-import { type FlattenedJsonValueToTypePathsOf } from 'types/flattened_json_value_to_type_paths_of'
+import { type ValueToTypePathsOf } from 'types/value_to_type_paths_of'
 
-describe('jsonValuePathToTypePath', function () {
+describe('valuePathToTypePath', function () {
   describe('literal', function () {
     const typeDef = number
-    type JsonPaths = FlattenedJsonValueToTypePathsOf<typeof typeDef>
+    type JsonPaths = ValueToTypePathsOf<typeof typeDef>
 
-    const typePath = jsonValuePathToTypePath<JsonPaths, '$'>(typeDef, '$')
+    const typePath = valuePathToTypePath<JsonPaths, '$'>(typeDef, '$')
 
     it('maps a value path to the expected type path', function () {
       expect(typePath).toEqual('$')
@@ -26,7 +26,7 @@ describe('jsonValuePathToTypePath', function () {
     })
 
     describe('fake subpath', function () {
-      const fakeTypePath = jsonValuePathToTypePath<{
+      const fakeTypePath = valuePathToTypePath<{
         '$.fake': '$.fake',
       }, '$.fake'>(typeDef, '$.fake', true)
 
@@ -42,7 +42,7 @@ describe('jsonValuePathToTypePath', function () {
 
   describe('list', function () {
     const typeDef = list(number)
-    type JsonPaths = FlattenedJsonValueToTypePathsOf<typeof typeDef>
+    type JsonPaths = ValueToTypePathsOf<typeof typeDef>
 
     describe.each([
       [
@@ -54,7 +54,7 @@ describe('jsonValuePathToTypePath', function () {
         '$.*',
       ],
     ] as const)('it maps "%s"', function (from, to) {
-      const typePath = jsonValuePathToTypePath<JsonPaths, typeof from>(typeDef, from)
+      const typePath = valuePathToTypePath<JsonPaths, typeof from>(typeDef, from)
 
       it('maps a value path to the expected type path', function () {
         expect(typePath).toEqual(to)
@@ -66,7 +66,7 @@ describe('jsonValuePathToTypePath', function () {
     })
 
     describe('fake subpath', function () {
-      const fakeTypePath = jsonValuePathToTypePath<
+      const fakeTypePath = valuePathToTypePath<
         JsonPaths & {
           [_: `$.${number}.fake`]: '$.*.fake',
         },
@@ -86,7 +86,7 @@ describe('jsonValuePathToTypePath', function () {
   describe('map', function () {
     type Key = 'a' | 'b'
     const typeDef = map<typeof number, Key>(number)
-    type JsonPaths = FlattenedJsonValueToTypePathsOf<typeof typeDef>
+    type JsonPaths = ValueToTypePathsOf<typeof typeDef>
 
     describe.each([
       [
@@ -102,7 +102,7 @@ describe('jsonValuePathToTypePath', function () {
         '$.*',
       ],
     ] as const)('it maps "%s"', function (from, to) {
-      const typePath = jsonValuePathToTypePath<JsonPaths, typeof from>(typeDef, from)
+      const typePath = valuePathToTypePath<JsonPaths, typeof from>(typeDef, from)
 
       it('maps a value path to the expected type path', function () {
         expect(typePath).toEqual(to)
@@ -114,7 +114,7 @@ describe('jsonValuePathToTypePath', function () {
     })
 
     describe('fake subpath', function () {
-      const fakeTypePath = jsonValuePathToTypePath<
+      const fakeTypePath = valuePathToTypePath<
         JsonPaths & {
           '$.a.fake': '$.*.fake',
           '$.b.fake': '$.*.fake',
@@ -134,7 +134,7 @@ describe('jsonValuePathToTypePath', function () {
 
   describe('struct', function () {
     const typeDef = struct().set('a', number).set('b', boolean)
-    type JsonPaths = FlattenedJsonValueToTypePathsOf<typeof typeDef>
+    type JsonPaths = ValueToTypePathsOf<typeof typeDef>
 
     describe.each([
       [
@@ -150,7 +150,7 @@ describe('jsonValuePathToTypePath', function () {
         '$.b',
       ],
     ] as const)('it maps %s', function (from, to) {
-      const typePath = jsonValuePathToTypePath<JsonPaths, typeof from>(typeDef, from)
+      const typePath = valuePathToTypePath<JsonPaths, typeof from>(typeDef, from)
 
       it('maps a value path to the expected type path', function () {
         expect(typePath).toEqual(to)
@@ -162,7 +162,7 @@ describe('jsonValuePathToTypePath', function () {
     })
 
     describe('fake field', function () {
-      const fakeTypePath = jsonValuePathToTypePath<
+      const fakeTypePath = valuePathToTypePath<
         JsonPaths & {
           '$.fake': '$.fake',
         },
@@ -184,7 +184,7 @@ describe('jsonValuePathToTypePath', function () {
       const typeDef = union('w')
         .add('x', struct().set('a', number).set('b', boolean))
         .add('y', struct().set('b', string).set('c', boolean))
-      type JsonPaths = FlattenedJsonValueToTypePathsOf<typeof typeDef>
+      type JsonPaths = ValueToTypePathsOf<typeof typeDef>
 
       describe.each([
         [
@@ -208,7 +208,7 @@ describe('jsonValuePathToTypePath', function () {
           '$.y:c',
         ],
       ] as const)('it maps %s', function (from, to) {
-        const typePath = jsonValuePathToTypePath<JsonPaths, typeof from>(typeDef, from)
+        const typePath = valuePathToTypePath<JsonPaths, typeof from>(typeDef, from)
 
         it('maps a value path to the expected type path', function () {
           expect(typePath).toEqual(to)
@@ -220,7 +220,7 @@ describe('jsonValuePathToTypePath', function () {
       })
 
       describe('fake', function () {
-        const fakeTypePath = jsonValuePathToTypePath<
+        const fakeTypePath = valuePathToTypePath<
           JsonPaths & {
             '$.fake': '$.fake',
           },

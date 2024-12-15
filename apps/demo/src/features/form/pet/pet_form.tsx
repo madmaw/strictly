@@ -21,15 +21,15 @@ import {
   useCallback,
 } from 'react'
 import {
-  type FlattenedPetJsonValueToTypePaths,
   type NAME_TOO_SHORT_ERROR,
+  type PetValueToTypePaths,
   type TagValuePath,
 } from './types'
 
 export const LABEL_SUBMIT = 'Submit'
 
 export type PetFormFields = FlattenedFormFieldsOf<
-  FlattenedPetJsonValueToTypePaths,
+  PetValueToTypePaths,
   {
     '$.name': Field<string, typeof NAME_TOO_SHORT_ERROR>,
     '$.alive': Field<boolean, never>,

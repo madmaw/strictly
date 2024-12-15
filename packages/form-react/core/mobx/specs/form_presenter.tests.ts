@@ -1,7 +1,6 @@
 import { expectDefinedAndReturn } from '@de/base/test'
 import {
   boolean,
-  type FlattenedJsonValueToTypePathsOf,
   type FlattenedValueTypesOf,
   list,
   map,
@@ -10,6 +9,7 @@ import {
   string,
   struct,
   union,
+  type ValueToTypePathsOf,
   type ValueTypeOf,
 } from '@de/fine'
 import { type FieldAdapter } from 'core/mobx/field_adapter'
@@ -165,14 +165,14 @@ describe('all', function () {
       let originalValue: ValueTypeOf<typeof typeDef>
       let model: FormModel<
         typeof typeDef,
-        FlattenedJsonValueToTypePathsOf<typeof typeDef>,
+        ValueToTypePathsOf<typeof typeDef>,
         typeof adapters
       >
       beforeEach(function () {
         originalValue = 5
         model = new FormModel<
           typeof typeDef,
-          FlattenedJsonValueToTypePathsOf<typeof typeDef>,
+          ValueToTypePathsOf<typeof typeDef>,
           typeof adapters
         >(
           typeDef,
@@ -220,7 +220,7 @@ describe('all', function () {
       let value: ValueTypeOf<typeof typeDef>
       let model: FormModel<
         typeof typeDef,
-        FlattenedJsonValueToTypePathsOf<typeof typeDef>,
+        ValueToTypePathsOf<typeof typeDef>,
         typeof adapters
       >
       beforeEach(function () {
@@ -231,7 +231,7 @@ describe('all', function () {
         ]
         model = new FormModel<
           typeof typeDef,
-          FlattenedJsonValueToTypePathsOf<typeof typeDef>,
+          ValueToTypePathsOf<typeof typeDef>,
           typeof adapters
         >(
           typeDef,
@@ -280,7 +280,7 @@ describe('all', function () {
       let value: ValueTypeOf<typeof typeDef>
       let model: FormModel<
         typeof typeDef,
-        FlattenedJsonValueToTypePathsOf<typeof typeDef>,
+        ValueToTypePathsOf<typeof typeDef>,
         typeof converters
       >
       beforeEach(function () {
@@ -290,7 +290,7 @@ describe('all', function () {
         }
         model = new FormModel<
           typeof typeDef,
-          FlattenedJsonValueToTypePathsOf<typeof typeDef>,
+          ValueToTypePathsOf<typeof typeDef>,
           typeof converters
         >(
           typeDef,
@@ -350,7 +350,7 @@ describe('all', function () {
       let value: ValueTypeOf<typeof typeDef>
       let model: FormModel<
         typeof typeDef,
-        FlattenedJsonValueToTypePathsOf<typeof typeDef>,
+        ValueToTypePathsOf<typeof typeDef>,
         typeof converters
       >
       beforeEach(function () {
@@ -360,7 +360,7 @@ describe('all', function () {
         }
         model = new FormModel<
           typeof typeDef,
-          FlattenedJsonValueToTypePathsOf<typeof typeDef>,
+          ValueToTypePathsOf<typeof typeDef>,
           typeof converters
         >(
           typeDef,
@@ -418,7 +418,7 @@ describe('all', function () {
       } as const
       const presenter = new FormPresenter<
         typeof typeDef,
-        FlattenedJsonValueToTypePathsOf<typeof typeDef>,
+        ValueToTypePathsOf<typeof typeDef>,
         typeof adapters
       >(
         typeDef,
@@ -427,7 +427,7 @@ describe('all', function () {
       const originalValue: ValueTypeOf<typeof typeDef> = 2
       let model: FormModel<
         typeof typeDef,
-        FlattenedJsonValueToTypePathsOf<typeof typeDef>,
+        ValueToTypePathsOf<typeof typeDef>,
         typeof adapters
       >
       beforeEach(function () {
@@ -541,7 +541,7 @@ describe('all', function () {
       } as const
       const presenter = new FormPresenter<
         typeof typeDef,
-        FlattenedJsonValueToTypePathsOf<typeof typeDef>,
+        ValueToTypePathsOf<typeof typeDef>,
         typeof converters
       >(
         typeDef,
@@ -550,7 +550,7 @@ describe('all', function () {
       let originalValue: ValueTypeOf<typeof typeDef>
       let model: FormModel<
         typeof typeDef,
-        FlattenedJsonValueToTypePathsOf<typeof typeDef>,
+        ValueToTypePathsOf<typeof typeDef>,
         typeof converters
       >
       beforeEach(function () {
@@ -822,7 +822,7 @@ describe('all', function () {
           $: adapterFromTwoWayConverter(new NullableToBooleanConverter(typeDef, [1])),
           '$.*': integerToStringAdapter,
         } as const
-        type JsonPaths = FlattenedJsonValueToTypePathsOf<typeof typeDef>
+        type JsonPaths = ValueToTypePathsOf<typeof typeDef>
         const presenter = new FormPresenter<
           typeof typeDef,
           JsonPaths,

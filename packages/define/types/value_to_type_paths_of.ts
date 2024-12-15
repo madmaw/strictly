@@ -17,7 +17,7 @@ import {
 import { type JsonPathOf } from './json_path_of'
 import { type StrictTypeDefHolder } from './strict_definitions'
 
-export type FlattenedJsonValueToTypePathsOf<
+export type ValueToTypePathsOf<
   T extends StrictTypeDefHolder,
   SegmentOverride extends string = '*',
   Path extends string = '$',

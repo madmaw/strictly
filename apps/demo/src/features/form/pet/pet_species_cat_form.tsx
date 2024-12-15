@@ -9,11 +9,11 @@ import {
   Stack,
 } from '@mantine/core'
 import {
-  type FlattenedPetJsonValueToTypePaths,
+  type PetValueToTypePaths,
 } from './types'
 
 export type PetSpeciesCatFormFields = FlattenedFormFieldsOf<
-  FlattenedPetJsonValueToTypePaths,
+  PetValueToTypePaths,
   {
     '$.species.cat:meows': Field<number, never>,
   }

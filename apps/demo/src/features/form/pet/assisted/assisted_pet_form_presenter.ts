@@ -19,11 +19,11 @@ import { type PetSpeciesCatFormFields } from 'features/form/pet/pet_species_cat_
 import { type PetSpeciesDogFormFields } from 'features/form/pet/pet_species_dog_form'
 import { type PetSpeciesFormFields } from 'features/form/pet/pet_species_form'
 import {
-  type FlattenedPetJsonValueToTypePaths,
   type FlattenedPetTypeDefs,
   NAME_TOO_SHORT_ERROR,
   NOT_A_NUMBER_ERROR,
   petTypeDef,
+  type PetValueToTypePaths,
   speciesTypeDef,
   type TagValuePath,
 } from 'features/form/pet/types'
@@ -31,8 +31,8 @@ import { type SimplifyDeep } from 'type-fest'
 
 type AllFields = PetFormFields & PetSpeciesFormFields & PetSpeciesCatFormFields & PetSpeciesDogFormFields
 
-const converters: SimplifyDeep<FlattenedAdaptersOfFields<
-  FlattenedPetJsonValueToTypePaths,
+const adapters: SimplifyDeep<FlattenedAdaptersOfFields<
+  PetValueToTypePaths,
   FlattenedPetTypeDefs,
   AllFields
 >> = {
@@ -81,13 +81,13 @@ const converters: SimplifyDeep<FlattenedAdaptersOfFields<
 
 export class AssistedPetFormPresenter extends FormPresenter<
   typeof petTypeDef,
-  FlattenedPetJsonValueToTypePaths,
-  typeof converters
+  PetValueToTypePaths,
+  typeof adapters
 > {
   constructor() {
     super(
       petTypeDef,
-      converters,
+      adapters,
     )
   }
 
@@ -101,7 +101,7 @@ export class AssistedPetFormPresenter extends FormPresenter<
 
 export class AssistedPetFormModel extends FormModel<
   typeof petTypeDef,
-  FlattenedPetJsonValueToTypePaths,
-  typeof converters
+  PetValueToTypePaths,
+  typeof adapters
 > {
 }
