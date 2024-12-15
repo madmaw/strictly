@@ -31,11 +31,11 @@ export const LABEL_SUBMIT = 'Submit'
 export type PetFormFields = FlattenedFormFieldsOf<
   FlattenedPetJsonValueToTypePaths,
   {
-    '$.name': Field<typeof NAME_TOO_SHORT_ERROR, string>,
-    '$.alive': Field<never, boolean>,
-    '$.newTag': Field<never, string>,
-    '$.tags': Field<never, readonly string[]>,
-    '$.tags.*': Field<never, string>,
+    '$.name': Field<string, typeof NAME_TOO_SHORT_ERROR>,
+    '$.alive': Field<boolean, never>,
+    '$.newTag': Field<string, never>,
+    '$.tags': Field<readonly string[], never>,
+    '$.tags.*': Field<string, never>,
   }
 >
 

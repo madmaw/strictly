@@ -9,7 +9,7 @@ import { type Field } from 'types/field'
 import { CHECKBOX_LABEL } from './checkbox_constants'
 
 function Component(props: FormProps<{
-  $: Field<string, boolean>,
+  $: Field<boolean, string>,
 }>) {
   const inputProps = useMantineForm(props)
   const CheckboxComponent = inputProps.checkbox('$')

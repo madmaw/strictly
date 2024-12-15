@@ -1,5 +1,5 @@
-import { type RequiredOfRecord } from '@de/base'
 import {
+  type ReadonlyTypeDefOf,
   type TypeDefHolder,
   type ValueTypeOf,
 } from '@de/fine'
@@ -11,23 +11,25 @@ import {
 import { type Field } from 'types/field'
 
 export type FlattenedAdaptersOfFields<
-  JsonPaths extends Readonly<Record<string, string>>,
-  FlattenedTypeDefs extends Partial<Readonly<Record<ValueOf<JsonPaths>, TypeDefHolder>>>,
-  FormFields extends Partial<Readonly<Record<keyof JsonPaths, Field>>>,
+  ValuePathsToTypePaths extends Readonly<Record<string, string>>,
+  FlattenedTypeDefs extends Partial<Readonly<Record<ValueOf<ValuePathsToTypePaths>, TypeDefHolder>>>,
+  FormFields extends Partial<Readonly<Record<keyof ValuePathsToTypePaths, Field>>>,
 > = SimplifyDeep<{
   readonly [
-    K in keyof JsonPaths as FormFields[K] extends Field ? JsonPaths[K] : never
+    K in keyof ValuePathsToTypePaths as FormFields[K] extends Field ? ValuePathsToTypePaths[K] : never
   ]: AdapterOfField<
     NonNullable<FormFields[K]>,
-    FlattenedTypeDefs[JsonPaths[K]],
-    RequiredOfRecord<FormFields>
+    FlattenedTypeDefs[ValuePathsToTypePaths[K]],
+    K
   >
 }>
 
 type AdapterOfField<
   F extends Field,
   T extends TypeDefHolder | undefined,
-  FormFields extends Readonly<Record<string, Field>>,
-> = F extends Field<infer E, infer V> ? undefined extends T ? FieldAdapter<E, FormFields, V, V>
-  : FieldAdapter<E, FormFields, ValueTypeOf<T>, V>
+  ValuePath extends string | number | symbol,
+> = ValuePath extends string
+  ? F extends Field<infer V, infer E> ? undefined extends T ? FieldAdapter<V, V, E, ValuePath>
+    : FieldAdapter<ValueTypeOf<ReadonlyTypeDefOf<NonNullable<T>>>, V, E, ValuePath>
+  : never
   : never

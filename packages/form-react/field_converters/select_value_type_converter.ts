@@ -5,19 +5,17 @@ import {
 } from '@de/fine'
 import { copy } from '@de/fine/transformers/copies/copy'
 import { type ValueTypesOfDiscriminatedUnion } from '@de/fine/types/value_types_of_discriminated_union'
-import { type Field } from 'types/field'
 import {
   type FieldConversion,
   FieldConversionResult,
-  type FieldConverter,
-} from 'types/field_converter'
-import { type FieldValueFactory } from 'types/field_value_factory'
+  type TwoWayFieldConverterWithValueFactory,
+} from 'types/field_converters'
 
 export abstract class AbstractSelectValueTypeConverter<
-  Fields extends Record<string, Field>,
   T extends TypeDefHolder,
   Values extends Readonly<Record<string, ValueTypeOf<T>>>,
-> implements FieldConverter<never, Fields, ValueTypeOf<T>, keyof Values>, FieldValueFactory<Fields, ValueTypeOf<T>> {
+  ValuePath extends string,
+> implements TwoWayFieldConverterWithValueFactory<ValueTypeOf<T>, keyof Values, never, ValuePath> {
   constructor(
     protected readonly typeDef: T,
     protected readonly values: Values,
@@ -25,16 +23,18 @@ export abstract class AbstractSelectValueTypeConverter<
   ) {
   }
 
-  convert(from: keyof Values): FieldConversion<never, ValueTypeOf<T>> {
+  revert(from: keyof Values): FieldConversion<ValueTypeOf<T>, never> {
     const prototype = this.values[from]
     const value = copy(this.typeDef, prototype)
+    // TODO given we are dealing with strings, maybe we should have a check to make sure value is in the record
+    // of values?
     return {
       type: FieldConversionResult.Success,
       value,
     }
   }
 
-  abstract revert(to: ValueTypeOf<T>): keyof Values
+  abstract convert(to: ValueTypeOf<T>): keyof Values
 
   create(): ValueTypeOf<T> {
     return this.values[this.defaultValueKey]
@@ -42,9 +42,9 @@ export abstract class AbstractSelectValueTypeConverter<
 }
 
 export class SelectDiscriminatedUnionConverter<
-  Fields extends Record<string, Field>,
   U extends UnionTypeDef,
-> extends AbstractSelectValueTypeConverter<Fields, TypeDefHolder<U>, ValueTypesOfDiscriminatedUnion<U>> {
+  ValuePath extends string,
+> extends AbstractSelectValueTypeConverter<TypeDefHolder<U>, ValueTypesOfDiscriminatedUnion<U>, ValuePath> {
   constructor(
     typeDef: TypeDefHolder<U>,
     values: ValueTypesOfDiscriminatedUnion<U>,
@@ -57,7 +57,7 @@ export class SelectDiscriminatedUnionConverter<
     )
   }
 
-  override revert(to: ValueTypeOf<TypeDefHolder<U>>) {
+  override convert(to: ValueTypeOf<TypeDefHolder<U>>) {
     const {
       typeDef: {
         discriminator,

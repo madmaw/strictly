@@ -17,7 +17,7 @@ import {
 } from './radio_group_constants'
 
 function Component(props: FormProps<{
-  $: Field<string, RadioValue | null>,
+  $: Field<RadioValue | null, string>,
 }>) {
   const form = useMantineForm(props)
   const RadioGroupComponent = form.radioGroup('$')

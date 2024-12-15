@@ -5,6 +5,6 @@ describe('ValueTypeOfField', function () {
   it('equals expected type', function () {
     const v = Symbol()
     type V = typeof v
-    expectTypeOf<ValueTypeOfField<Field<unknown, V>>>().toEqualTypeOf<V>()
+    expectTypeOf<ValueTypeOfField<Field<V, unknown>>>().toEqualTypeOf<V>()
   })
 })

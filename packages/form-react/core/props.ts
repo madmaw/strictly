@@ -1,8 +1,6 @@
-import { type Field } from 'types/field'
+import { type Fields } from 'types/field'
 
-export type FormFields = Readonly<Record<string, Field>>
-
-export type FormProps<F extends FormFields> = {
+export type FormProps<F extends Fields> = {
   fields: F,
 
   onFieldValueChange<K extends keyof F>(this: void, key: K, value: F[K]['value']): void,

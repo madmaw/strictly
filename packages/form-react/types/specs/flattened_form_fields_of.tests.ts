@@ -11,14 +11,14 @@ describe('FlattenedFormFieldsOf', function () {
           readonly c: 'z',
         },
         {
-          readonly x: Field<string, 1>,
-          readonly z: Field<string, 3>,
+          readonly x: Field<1, string>,
+          readonly z: Field<3, string>,
         }
       >
 
       expectTypeOf<T>().toEqualTypeOf<{
-        readonly a: Field<string, 1>,
-        readonly c: Field<string, 3>,
+        readonly a: Field<1, string>,
+        readonly c: Field<3, string>,
       }>()
     })
   })
@@ -32,8 +32,8 @@ describe('FlattenedFormFieldsOf', function () {
           readonly c: 'z',
         },
         {
-          readonly w: Field<string, 0>,
-          readonly x: Field<string, 1>,
+          readonly w: Field<0, string>,
+          readonly x: Field<1, string>,
         }
       >
 

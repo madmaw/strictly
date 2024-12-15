@@ -1,10 +1,9 @@
-import { type Field } from 'types/field'
 import { type FieldValidator } from 'types/field_validator'
 
-export function minimumStringLengthFieldValidatorFactory<E, Fields extends Record<string, Field>>(
+export function minimumStringLengthFieldValidatorFactory<E, ValuePath extends string>(
   minimumLength: number,
   error: E,
-): FieldValidator<E, Fields, string> {
+): FieldValidator<string, E, ValuePath> {
   return function (value: string) {
     if (value.length < minimumLength) {
       return error

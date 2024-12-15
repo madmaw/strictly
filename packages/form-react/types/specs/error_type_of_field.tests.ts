@@ -5,6 +5,6 @@ describe('ErrorTypeOfField', function () {
   it('equals expected type', function () {
     const e = Symbol()
     type E = typeof e
-    expectTypeOf<ErrorTypeOfField<Field<E, unknown>>>().toEqualTypeOf<E>()
+    expectTypeOf<ErrorTypeOfField<Field<unknown, E>>>().toEqualTypeOf<E>()
   })
 })

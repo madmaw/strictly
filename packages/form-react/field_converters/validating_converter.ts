@@ -1,27 +1,25 @@
-import { type Field } from 'types/field'
 import {
   type FieldConversion,
   FieldConversionResult,
   type FieldConverter,
-} from 'types/field_converter'
+} from 'types/field_converters'
 import { type FieldValidator } from 'types/field_validator'
 
-export class ValidatingConverter<E, Fields extends Record<string, Field>, V>
-  implements FieldConverter<E, Fields, V, V>
-{
-  constructor(private readonly validators: readonly FieldValidator<E, Fields, V>[] = []) {
-  }
-
-  convert(from: V, valuePath: keyof Fields, fields: Fields): FieldConversion<E, V> {
-    return this.validators.reduce<FieldConversion<E, V>>(
+export function validatingConverter<
+  V,
+  E,
+  ValuePath extends string,
+>(validators: readonly FieldValidator<V, E, ValuePath>[] = []): FieldConverter<V, V, E, ValuePath> {
+  return function (value: V, valuePath: ValuePath): FieldConversion<V, E> {
+    return validators.reduce<FieldConversion<V, E>>(
       function (acc, validator) {
         if (acc.type === FieldConversionResult.Success) {
-          const error = validator(from, valuePath, fields)
+          const error = validator(value, valuePath)
           if (error != null) {
             return {
               type: FieldConversionResult.Failure,
               error,
-              value: [from],
+              value: [value],
             }
           }
         }
@@ -29,12 +27,8 @@ export class ValidatingConverter<E, Fields extends Record<string, Field>, V>
       },
       {
         type: FieldConversionResult.Success,
-        value: from,
+        value,
       },
     )
-  }
-
-  revert(to: V): V {
-    return to
   }
 }

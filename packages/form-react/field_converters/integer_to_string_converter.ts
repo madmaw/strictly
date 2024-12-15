@@ -1,17 +1,20 @@
-import { type Field } from 'types/field'
 import {
   type FieldConversion,
   FieldConversionResult,
-  type FieldConverter,
-} from 'types/field_converter'
+  type TwoWayFieldConverter,
+} from 'types/field_converters'
 
-export class StringToIntegerConverter<E, Fields extends Record<string, Field>>
-  implements FieldConverter<E, Fields, number, string>
+export class IntegerToStringConverter<E, ValuePath extends string>
+  implements TwoWayFieldConverter<number, string, E, ValuePath>
 {
   constructor(private readonly isNanError: E) {
   }
 
-  convert(from: string): FieldConversion<E, number> {
+  convert(from: number): string {
+    return Math.floor(from).toString()
+  }
+
+  revert(from: string): FieldConversion<number, E> {
     const value = parseInt(from, 10)
     if (Number.isNaN(value)) {
       return {
@@ -25,8 +28,5 @@ export class StringToIntegerConverter<E, Fields extends Record<string, Field>>
         value,
       }
     }
-  }
-  revert(to: number): string {
-    return Math.floor(to).toString()
   }
 }

@@ -235,16 +235,8 @@ module.exports = {
             minItems: 2,
           },
         ],
-        'comma-dangle': [
-          'warn',
-          {
-            arrays: 'always-multiline',
-            objects: 'always-multiline',
-            imports: 'always-multiline',
-            exports: 'always-multiline',
-            functions: 'always-multiline',
-          },
-        ],
+        // handled by dprint
+        'comma-dangle': ['off'],
         'default-case': 'warn',
         'dprint-integration/dprint': [
           'warn',

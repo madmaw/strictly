@@ -16,7 +16,7 @@ import {
 export type PetSpeciesDogFormFields = FlattenedFormFieldsOf<
   FlattenedPetJsonValueToTypePaths,
   {
-    '$.species.dog:barks': Field<typeof NOT_A_NUMBER_ERROR, string | number>,
+    '$.species.dog:barks': Field<string | number, typeof NOT_A_NUMBER_ERROR>,
     // TODO more fields
   }
 >

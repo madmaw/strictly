@@ -15,7 +15,7 @@ import { type Field } from 'types/field'
 type ListPath = `$.${number}`
 
 function Component(props: FormProps<{
-  $: Field<string, ListPath[]>,
+  $: Field<ListPath[], string>,
 }>) {
   const form = useMantineForm(props)
   const List = form.list('$')

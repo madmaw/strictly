@@ -34,7 +34,7 @@ function Component<
   inputs,
   ...props
 }: FormProps<{
-  $: Field<string, V>,
+  $: Field<V, string>,
 }> & {
   ValueInput: ComponentType<P>,
 } & {

@@ -1,6 +1,5 @@
 // TODO rename/split-out this file
-import { type SimplifyDeep } from 'type-fest'
-import { type FromTypeOfFieldAdapter } from './field_adapter'
+import { type ToTypeOfFieldAdapter } from './field_adapter'
 import {
   type FlattenedConvertedFieldsOf,
   type FormPresenter,
@@ -16,15 +15,15 @@ export type ValuePathsOfPresenter<
   infer _1,
   infer _2,
   infer _3,
-  infer ValuePathsToConverters
-> ? keyof SimplifyDeep<ValuePathsToConverters>
+  infer ValuePathsToAdapters
+> ? keyof ValuePathsToAdapters
   : never
 
 /**
  * Used to extract the render type (so the value that is passed to the view) of a given value path
  * from a presenter
  */
-export type RenderTypeOfPresenterValuePath<
+export type ToTypeOfPresenterValuePath<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   Presenter extends FormPresenter<any, any, any, any>,
   K extends ValuePathsOfPresenter<Presenter>,
@@ -33,7 +32,7 @@ export type RenderTypeOfPresenterValuePath<
   infer _2,
   infer _3,
   infer ValuePathsToAdapters
-> ? FromTypeOfFieldAdapter<ValuePathsToAdapters[K]>
+> ? ToTypeOfFieldAdapter<ValuePathsToAdapters[K]>
   : never
 
 /**
@@ -51,5 +50,5 @@ export type FormFieldsOfPresenter<
   infer _2,
   infer _3,
   infer ValuePathsToAdapters
-> ? SimplifyDeep<FlattenedConvertedFieldsOf<ValuePathsToAdapters>>
+> ? FlattenedConvertedFieldsOf<ValuePathsToAdapters>
   : never

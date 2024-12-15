@@ -10,14 +10,14 @@ describe('StringFieldsOfFields', function () {
     type E2 = typeof e2
     type E3 = typeof e3
     type F = {
-      b: Field<E1, boolean>,
-      s: Field<E2, string>,
-      n: Field<E3, number>,
+      b: Field<boolean, E1>,
+      s: Field<string, E2>,
+      n: Field<number, E3>,
     }
 
     it('equals expected type', function () {
       expectTypeOf<StringFieldsOfFields<F>>().toEqualTypeOf<{
-        s: Field<E2, string>,
+        s: Field<string, E2>,
       }>()
     })
   })
@@ -26,13 +26,13 @@ describe('StringFieldsOfFields', function () {
     const e = Symbol()
     type E = typeof e
     type F = {
-      s: Field<E, 'a' | 'b' | 'c' | null | undefined>,
+      s: Field<'a' | 'b' | 'c' | null | undefined, E>,
     }
 
     describe('StringFieldsOfFields', function () {
       it('equals expected type', function () {
         expectTypeOf<StringFieldsOfFields<F>>().toEqualTypeOf<{
-          s: Field<E, 'a' | 'b' | 'c' | null | undefined>,
+          s: Field<'a' | 'b' | 'c' | null | undefined, E>,
         }>()
       })
     })

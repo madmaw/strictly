@@ -1,6 +1,6 @@
 import { type EditorProps } from '@de/form-react'
 import {
-  type RenderTypeOfPresenterValuePath,
+  type ToTypeOfPresenterValuePath,
   type ValuePathsOfPresenter,
 } from '@de/form-react/core/mobx/types'
 import { usePartialObserverComponent } from '@de/form-react/util/partial'
@@ -36,10 +36,10 @@ export function AssistedPetEditor({
   const onFieldValueChange = useCallback(
     function<Path extends ValuePathsOfPresenter<typeof presenter>> (
       path: Path,
-      value: RenderTypeOfPresenterValuePath<typeof presenter, Path>,
+      value: ToTypeOfPresenterValuePath<typeof presenter, Path>,
     ) {
       presenter.clearFieldError(model, path)
-      presenter.setFieldValue(model, path, value)
+      presenter.setFieldValue<Path>(model, path, value)
     },
     [model],
   )

@@ -15,7 +15,7 @@ import {
 export type PetSpeciesCatFormFields = FlattenedFormFieldsOf<
   FlattenedPetJsonValueToTypePaths,
   {
-    '$.species.cat:meows': Field<never, number>,
+    '$.species.cat:meows': Field<number, never>,
   }
 >
 

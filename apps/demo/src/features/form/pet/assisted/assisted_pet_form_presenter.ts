@@ -1,11 +1,11 @@
 import {
   FormModel,
   FormPresenter,
-  StringToIntegerConverter,
+  IntegerToStringConverter,
 } from '@de/form-react'
 import {
-  adapterFromConverter,
   adapterFromPrototype,
+  adapterFromTwoWayConverter,
   identityAdapter,
   listAdapter,
 } from '@de/form-react/core/mobx/field_adapter_builder'
@@ -13,6 +13,7 @@ import { type FlattenedAdaptersOfFields } from '@de/form-react/core/mobx/flatten
 import { SelectDiscriminatedUnionConverter } from '@de/form-react/field_converters/select_value_type_converter'
 import { TrimmingStringConverter } from '@de/form-react/field_converters/trimming_string_converter'
 import { minimumStringLengthFieldValidatorFactory } from '@de/form-react/field_validators/minimum_string_length_field_validator'
+import { prototypingFieldValueFactory } from '@de/form-react/field_value_factories/prototyping_field_value_factory'
 import { type PetFormFields } from 'features/form/pet/pet_form'
 import { type PetSpeciesCatFormFields } from 'features/form/pet/pet_species_cat_form'
 import { type PetSpeciesDogFormFields } from 'features/form/pet/pet_species_dog_form'
@@ -28,14 +29,16 @@ import {
 } from 'features/form/pet/types'
 import { type SimplifyDeep } from 'type-fest'
 
+type AllFields = PetFormFields & PetSpeciesFormFields & PetSpeciesCatFormFields & PetSpeciesDogFormFields
+
 const converters: SimplifyDeep<FlattenedAdaptersOfFields<
   FlattenedPetJsonValueToTypePaths,
   FlattenedPetTypeDefs,
-  PetFormFields & PetSpeciesFormFields & PetSpeciesCatFormFields & PetSpeciesDogFormFields
+  AllFields
 >> = {
-  '$.name': adapterFromPrototype(
+  '$.name': adapterFromTwoWayConverter(
     new TrimmingStringConverter(),
-    '',
+    prototypingFieldValueFactory(''),
   ).validateTo(
     minimumStringLengthFieldValidatorFactory(
       2,
@@ -43,7 +46,7 @@ const converters: SimplifyDeep<FlattenedAdaptersOfFields<
     ),
   ),
   '$.alive': identityAdapter(false),
-  '$.species': adapterFromConverter(
+  '$.species': adapterFromTwoWayConverter(
     new SelectDiscriminatedUnionConverter(
       speciesTypeDef,
       {
@@ -60,7 +63,17 @@ const converters: SimplifyDeep<FlattenedAdaptersOfFields<
     ),
   ),
   '$.species.cat:meows': identityAdapter(0),
-  '$.species.dog:barks': adapterFromPrototype(new StringToIntegerConverter(NOT_A_NUMBER_ERROR), 0),
+  '$.species.dog:barks': adapterFromPrototype<
+    number,
+    string,
+    typeof NOT_A_NUMBER_ERROR,
+    '$.species.dog:barks'
+  >(
+    new IntegerToStringConverter(NOT_A_NUMBER_ERROR),
+    0,
+  ).withIdentity(
+    v => typeof v === 'number',
+  ),
   '$.tags': listAdapter(),
   '$.tags.*': identityAdapter(''),
   '$.newTag': identityAdapter(''),

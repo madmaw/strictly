@@ -1,24 +1,23 @@
-import { type Field } from 'types/field'
 import {
   type FieldConversion,
   FieldConversionResult,
-  type FieldConverter,
-} from 'types/field_converter'
+  type TwoWayFieldConverter,
+} from 'types/field_converters'
 
-export class TrimmingStringConverter<Fields extends Record<string, Field>>
-  implements FieldConverter<never, Fields, string, string>
+export class TrimmingStringConverter<ValuePath extends string>
+  implements TwoWayFieldConverter<string, string, never, ValuePath>
 {
   constructor() {
   }
 
-  convert(from: string): FieldConversion<never, string> {
+  convert(to: string): string {
+    return to.trim()
+  }
+
+  revert(from: string): FieldConversion<string, never> {
     return {
       type: FieldConversionResult.Success,
       value: from.trim(),
     }
-  }
-
-  revert(to: string): string {
-    return to
   }
 }
