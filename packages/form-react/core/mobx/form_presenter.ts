@@ -64,12 +64,14 @@ export type FlattenedConvertedFieldsOf<
 export type FlattenedTypePathsToAdaptersOf<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   FlattenedValues extends Readonly<Record<string, any>>,
+  Context,
 > = {
   readonly [
     K in keyof FlattenedValues
     // TODO would be better to use the equivalent readonly typedef, but it causes typescript to
     // infinitely recurse
-  ]?: FieldAdapter<ReadonlyDeep<FlattenedValues[K]>>
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  ]?: FieldAdapter<ReadonlyDeep<FlattenedValues[K]>, any, any, any, Context>
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -104,7 +106,10 @@ export type ValuePathsToAdaptersOf<
 export class FormPresenter<
   T extends TypeDefHolder,
   ValueToTypePaths extends Readonly<Record<string, string>>,
-  TypePathsToAdapters extends FlattenedTypePathsToAdaptersOf<FlattenedValueTypesOf<T, '*'>>,
+  TypePathsToAdapters extends FlattenedTypePathsToAdaptersOf<
+    FlattenedValueTypesOf<T, '*'>,
+    ValueTypeOf<ReadonlyTypeDefOf<T>>
+  >,
   ValuePathsToAdapters extends ValuePathsToAdaptersOf<TypePathsToAdapters, ValueToTypePaths> = ValuePathsToAdaptersOf<
     TypePathsToAdapters,
     ValueToTypePaths
@@ -176,6 +181,7 @@ export class FormPresenter<
       : elementAdapter.create(
         // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
         elementTypePath as string,
+        model.value,
       )
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const originalList: any[] = accessor.value
@@ -320,7 +326,7 @@ export class FormPresenter<
     assertExists(revert, 'setting value not supported {}', valuePath)
 
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-explicit-any
-    const conversion = revert(value, valuePath as any)
+    const conversion = revert(value, valuePath as any, model.value)
     const accessor = model.getAccessorForValuePath(valuePath)
     return runInAction(() => {
       model.fieldOverrides[valuePath] = {
@@ -372,8 +378,8 @@ export class FormPresenter<
       create,
     } = adapter
     const accessor = model.accessors[valuePath]
-    const value = accessor == null ? create(valuePath) : accessor.value
-    const displayValue = convert(value, valuePath)
+    const value = accessor == null ? create(valuePath, model.value) : accessor.value
+    const displayValue = convert(value, valuePath, model.value)
     runInAction(function () {
       // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
       model.fieldOverrides[valuePath as unknown as keyof ValuePathsToAdapters] = {
@@ -409,9 +415,10 @@ export class FormPresenter<
       accessor != null
         ? accessor.value
         // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-        : create(valuePath as string),
+        : create(valuePath as string, model.value),
       // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
       valuePath as string,
+      model.value,
     )
     const value = fieldOverride != null
       ? fieldOverride.value
@@ -420,7 +427,7 @@ export class FormPresenter<
     assertExists(revert, 'changing field directly not supported {}', valuePath)
 
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-    const conversion = revert(value, valuePath as string)
+    const conversion = revert(value, valuePath as string, model.value)
     return runInAction(function () {
       switch (conversion.type) {
         case FieldConversionResult.Failure:
@@ -471,14 +478,14 @@ export class FormPresenter<
             return success
           }
           const fieldOverride = model.fieldOverrides[adapterPath]
-          const storedValue = convert(accessor.value, valuePath)
+          const storedValue = convert(accessor.value, valuePath, model.value)
           const value = fieldOverride != null
             ? fieldOverride.value
             : storedValue
           // TODO more nuanced comparison
           const dirty = fieldOverride != null && fieldOverride.value !== storedValue
 
-          const conversion = revert(value, valuePath)
+          const conversion = revert(value, valuePath, model.value)
           switch (conversion.type) {
             case FieldConversionResult.Failure:
               model.errors[adapterPath] = conversion.error
@@ -518,7 +525,10 @@ export class FormPresenter<
 export class FormModel<
   T extends TypeDefHolder,
   ValueToTypePaths extends Readonly<Record<string, string>>,
-  TypePathsToAdapters extends FlattenedTypePathsToAdaptersOf<FlattenedValueTypesOf<T, '*'>>,
+  TypePathsToAdapters extends FlattenedTypePathsToAdaptersOf<
+    FlattenedValueTypesOf<T, '*'>,
+    ValueTypeOf<ReadonlyTypeDefOf<T>>
+  >,
   ValuePathsToAdapters extends ValuePathsToAdaptersOf<TypePathsToAdapters, ValueToTypePaths> = ValuePathsToAdaptersOf<
     TypePathsToAdapters,
     ValueToTypePaths
@@ -560,7 +570,7 @@ export class FormModel<
           // no need to store a temporary value if the value cannot be written back
           return
         }
-        const displayValue = convert(value, valuePath)
+        const displayValue = convert(value, valuePath, this.value)
         return {
           value: displayValue,
         }
@@ -649,13 +659,14 @@ export class FormModel<
           ? mobxCopy(
             fieldTypeDef,
             // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-            create(valuePath as string),
+            create(valuePath as string, this.value),
           )
           // fake values can't be copied
           // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-          : create(valuePath as string),
+          : create(valuePath as string, this.value),
         // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
         valuePath as string,
+        this.value,
       )
     const error = this.errors[valuePath]
     return {

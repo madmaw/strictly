@@ -13,10 +13,12 @@ export type FieldAdapter<
   E = any,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ValuePath extends string = any,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  Context = any,
 > = {
-  readonly convert: SafeFieldConverter<From, To, ValuePath>,
-  readonly create: FieldValueFactory<From, ValuePath>,
-  readonly revert?: FieldConverter<To, From, E, ValuePath>,
+  readonly convert: SafeFieldConverter<From, To, ValuePath, Context>,
+  readonly create: FieldValueFactory<From, ValuePath, Context>,
+  readonly revert?: FieldConverter<To, From, E, ValuePath, Context>,
 }
 
 export type FromTypeOfFieldAdapter<C extends FieldAdapter> = C extends FieldAdapter<infer From> ? From

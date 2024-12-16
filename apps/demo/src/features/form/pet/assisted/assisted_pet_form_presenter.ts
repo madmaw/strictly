@@ -22,6 +22,7 @@ import {
   type FlattenedPetTypeDefs,
   NAME_TOO_SHORT_ERROR,
   NOT_A_NUMBER_ERROR,
+  type Pet,
   petTypeDef,
   type PetValueToTypePaths,
   speciesTypeDef,
@@ -67,7 +68,8 @@ const adapters: SimplifyDeep<FlattenedAdaptersOfFields<
     number,
     string,
     typeof NOT_A_NUMBER_ERROR,
-    '$.species.dog:barks'
+    '$.species.dog:barks',
+    Pet
   >(
     new IntegerToStringConverter(NOT_A_NUMBER_ERROR),
     0,

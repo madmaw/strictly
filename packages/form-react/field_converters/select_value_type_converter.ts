@@ -15,7 +15,8 @@ export abstract class AbstractSelectValueTypeConverter<
   T extends TypeDefHolder,
   Values extends Readonly<Record<string, ValueTypeOf<T>>>,
   ValuePath extends string,
-> implements TwoWayFieldConverterWithValueFactory<ValueTypeOf<T>, keyof Values, never, ValuePath> {
+  Context,
+> implements TwoWayFieldConverterWithValueFactory<ValueTypeOf<T>, keyof Values, never, ValuePath, Context> {
   constructor(
     protected readonly typeDef: T,
     protected readonly values: Values,
@@ -44,7 +45,8 @@ export abstract class AbstractSelectValueTypeConverter<
 export class SelectDiscriminatedUnionConverter<
   U extends UnionTypeDef,
   ValuePath extends string,
-> extends AbstractSelectValueTypeConverter<TypeDefHolder<U>, ValueTypesOfDiscriminatedUnion<U>, ValuePath> {
+  Context,
+> extends AbstractSelectValueTypeConverter<TypeDefHolder<U>, ValueTypesOfDiscriminatedUnion<U>, ValuePath, Context> {
   constructor(
     typeDef: TypeDefHolder<U>,
     values: ValueTypesOfDiscriminatedUnion<U>,

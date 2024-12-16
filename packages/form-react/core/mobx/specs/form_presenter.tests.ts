@@ -78,17 +78,35 @@ describe('all', function () {
   })
 
   describe('FlattenedTypePathsToConvertersOf', function () {
+    type ConvenientFieldAdapter<
+      From,
+      Context,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      To = any,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      E = any,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ValuePath extends string = any,
+    > = FieldAdapter<
+      From,
+      To,
+      E,
+      ValuePath,
+      Context
+    >
+
     describe('map', function () {
       const typeDef = map<typeof number, 'a' | 'b'>(number)
       type T = Simplify<
         FlattenedTypePathsToAdaptersOf<
-          FlattenedValueTypesOf<typeof typeDef>
+          FlattenedValueTypesOf<typeof typeDef>,
+          ValueTypeOf<typeof typeDef>
         >
       >
       let t: Partial<{
-        readonly $: FieldAdapter<Readonly<Record<'a' | 'b', number>>>,
-        readonly ['$.a']: FieldAdapter<number>,
-        readonly ['$.b']: FieldAdapter<number>,
+        readonly $: ConvenientFieldAdapter<Readonly<Record<'a' | 'b', number>>, ValueTypeOf<typeof typeDef>>,
+        readonly ['$.a']: ConvenientFieldAdapter<number, ValueTypeOf<typeof typeDef>>,
+        readonly ['$.b']: ConvenientFieldAdapter<number, ValueTypeOf<typeof typeDef>>,
       }>
 
       it('equals expected type', function () {
@@ -101,12 +119,13 @@ describe('all', function () {
         .set('x', string)
         .set('y', boolean)
       type T = FlattenedTypePathsToAdaptersOf<
-        FlattenedValueTypesOf<typeof typeDef>
+        FlattenedValueTypesOf<typeof typeDef>,
+        ValueTypeOf<typeof typeDef>
       >
       let t: Partial<{
-        readonly $: FieldAdapter<{ readonly x: string, readonly y: boolean }>,
-        readonly ['$.x']: FieldAdapter<string>,
-        readonly ['$.y']: FieldAdapter<boolean>,
+        readonly $: ConvenientFieldAdapter<{ readonly x: string, readonly y: boolean }, ValueTypeOf<typeof typeDef>>,
+        readonly ['$.x']: ConvenientFieldAdapter<string, ValueTypeOf<typeof typeDef>>,
+        readonly ['$.y']: ConvenientFieldAdapter<boolean, ValueTypeOf<typeof typeDef>>,
       }>
       it('equals expected type', function () {
         expectTypeOf(t).toEqualTypeOf<T>()
@@ -666,7 +685,18 @@ describe('all', function () {
       })
 
       // no longer passes context, but will pass context eventually again
-      describe.skip('passes context', function () {
+      describe('passes context', function () {
+        let contextCopy: number[]
+        beforeEach(function () {
+          integerToStringAdapter.revert.mockImplementationOnce(function (_value, _path, context) {
+            contextCopy = [...context]
+            return {
+              type: FieldConversionResult.Success,
+              value: 1,
+            }
+          })
+        })
+
         it('supplies the full, previous context when converting', function () {
           presenter.setFieldValueAndValidate(model, '$.2', '4')
 
@@ -674,12 +704,17 @@ describe('all', function () {
           expect(integerToStringAdapter.revert).toHaveBeenCalledWith(
             '4',
             '$.2',
-            expect.objectContaining({
-              '$.2': expect.objectContaining({
-                value: '7',
-              }),
-            }),
+            // uses the same pointer
+            model.value,
           )
+        })
+
+        it('supplies the context as it is at the time call', function () {
+          expect(contextCopy).toEqual([
+            1,
+            3,
+            7,
+          ])
         })
       })
 

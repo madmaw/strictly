@@ -4,8 +4,8 @@ import {
   type TwoWayFieldConverter,
 } from 'types/field_converters'
 
-export class IntegerToStringConverter<E, ValuePath extends string>
-  implements TwoWayFieldConverter<number, string, E, ValuePath>
+export class IntegerToStringConverter<E, ValuePath extends string, Context>
+  implements TwoWayFieldConverter<number, string, E, ValuePath, Context>
 {
   constructor(private readonly isNanError: E) {
   }

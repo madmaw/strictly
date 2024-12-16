@@ -23,16 +23,18 @@ export type FieldConverter<
   To,
   E,
   ValuePath extends string,
+  Context,
 > = {
-  (from: From, valuePath: ValuePath): FieldConversion<To, E>,
+  (from: From, valuePath: ValuePath, context: Context): FieldConversion<To, E>,
 }
 
 export type SafeFieldConverter<
   From,
   To,
   ValuePath extends string,
+  Context,
 > = {
-  (from: From, valuePath: ValuePath): To,
+  (from: From, valuePath: ValuePath, context: Context): To,
 }
 
 export type TwoWayFieldConverter<
@@ -40,14 +42,15 @@ export type TwoWayFieldConverter<
   To,
   E,
   ValuePath extends string,
+  Context,
 > = {
-  convert: SafeFieldConverter<From, To, ValuePath>,
+  convert: SafeFieldConverter<From, To, ValuePath, Context>,
 
-  revert: FieldConverter<To, From, E, ValuePath>,
+  revert: FieldConverter<To, From, E, ValuePath, Context>,
 }
 
-export type FieldValueFactory<V, ValuePath extends string> = {
-  (valuePath: ValuePath): V,
+export type FieldValueFactory<V, ValuePath extends string, Context> = {
+  (valuePath: ValuePath, context: Context): V,
 }
 
 export type TwoWayFieldConverterWithValueFactory<
@@ -55,6 +58,7 @@ export type TwoWayFieldConverterWithValueFactory<
   To,
   E,
   ValuePath extends string,
-> = TwoWayFieldConverter<From, To, E, ValuePath> & {
-  readonly create: FieldValueFactory<From, ValuePath>,
+  Context,
+> = TwoWayFieldConverter<From, To, E, ValuePath, Context> & {
+  readonly create: FieldValueFactory<From, ValuePath, Context>,
 }

@@ -26,17 +26,29 @@ class FieldAdapterBuilder<
   To,
   E,
   ValuePath extends string,
+  Context,
 > {
   constructor(
-    readonly convert: SafeFieldConverter<From, To, ValuePath>,
-    readonly create: FieldValueFactory<From, ValuePath>,
-    readonly revert?: FieldConverter<To, From, E, ValuePath>,
+    readonly convert: SafeFieldConverter<From, To, ValuePath, Context>,
+    readonly create: FieldValueFactory<From, ValuePath, Context>,
+    readonly revert?: FieldConverter<To, From, E, ValuePath, Context>,
   ) {
   }
 
   validateFrom<
     E2,
-  >(...validators: readonly FieldValidator<From, E2, ValuePath>[]): FieldAdapterBuilder<From, To, E | E2, ValuePath> {
+  >(...validators: readonly FieldValidator<
+    From,
+    E2,
+    ValuePath,
+    Context
+  >[]): FieldAdapterBuilder<
+    From,
+    To,
+    E | E2,
+    ValuePath,
+    Context
+  > {
     return new FieldAdapterBuilder(
       this.convert,
       this.create,
@@ -49,7 +61,18 @@ class FieldAdapterBuilder<
 
   validateTo<
     E2,
-  >(...validators: readonly FieldValidator<To, E2, ValuePath>[]): FieldAdapterBuilder<From, To, E | E2, ValuePath> {
+  >(...validators: readonly FieldValidator<
+    To,
+    E2,
+    ValuePath,
+    Context
+  >[]): FieldAdapterBuilder<
+    From,
+    To,
+    E | E2,
+    ValuePath,
+    Context
+  > {
     return new FieldAdapterBuilder(
       this.convert,
       this.create,
@@ -61,15 +84,16 @@ class FieldAdapterBuilder<
   }
 
   chain<To2, E2 = E>(
-    converter: SafeFieldConverter<To, To2, ValuePath>,
-    reverter?: FieldConverter<To2, To, E2, ValuePath>,
-  ): FieldAdapterBuilder<From, To2, E | E2, ValuePath> {
+    converter: SafeFieldConverter<To, To2, ValuePath, Context>,
+    reverter?: FieldConverter<To2, To, E2, ValuePath, Context>,
+  ): FieldAdapterBuilder<From, To2, E | E2, ValuePath, Context> {
     return new FieldAdapterBuilder(
       chainSafeFieldConverter<
         From,
         To,
         To2,
-        ValuePath
+        ValuePath,
+        Context
       >(
         this.convert,
         converter,
@@ -81,7 +105,8 @@ class FieldAdapterBuilder<
         From,
         E2,
         E,
-        ValuePath
+        ValuePath,
+        Context
       >(
         reverter,
         this.revert,
@@ -89,7 +114,19 @@ class FieldAdapterBuilder<
     )
   }
 
-  withReverter(reverter: FieldConverter<To, From, E, ValuePath>): FieldAdapterBuilder<From, To, E, ValuePath> {
+  withReverter(reverter: FieldConverter<
+    To,
+    From,
+    E,
+    ValuePath,
+    Context
+  >): FieldAdapterBuilder<
+    From,
+    To,
+    E,
+    ValuePath,
+    Context
+  > {
     return new FieldAdapterBuilder(
       this.convert,
       this.create,
@@ -97,8 +134,14 @@ class FieldAdapterBuilder<
     )
   }
 
-  withIdentity(isFrom: (from: To | From) => from is From): FieldAdapterBuilder<From, To | From, E, ValuePath> {
-    const identityConverter = new MaybeIdentityConverter<From, To, E, ValuePath>({
+  withIdentity(isFrom: (from: To | From) => from is From): FieldAdapterBuilder<
+    From,
+    To | From,
+    E,
+    ValuePath,
+    Context
+  > {
+    const identityConverter = new MaybeIdentityConverter<From, To, E, ValuePath, Context>({
       convert: this.convert,
       // should never get called if null
       revert: this.revert!,
@@ -115,30 +158,33 @@ export function adapter<
   From,
   To,
   ValuePath extends string,
+  Context,
 >(
-  converter: SafeFieldConverter<From, To, ValuePath>,
-  valueFactory: FieldValueFactory<From, ValuePath>,
-): FieldAdapterBuilder<From, To, never, ValuePath>
+  converter: SafeFieldConverter<From, To, ValuePath, Context>,
+  valueFactory: FieldValueFactory<From, ValuePath, Context>,
+): FieldAdapterBuilder<From, To, never, ValuePath, Context>
 export function adapter<
   From,
   To,
   E,
   ValuePath extends string,
+  Context,
 >(
-  converter: SafeFieldConverter<From, To, ValuePath>,
-  valueFactory: FieldValueFactory<From, ValuePath>,
-  reverter: FieldConverter<To, From, E, ValuePath>,
-): FieldAdapterBuilder<From, To, E, ValuePath>
+  converter: SafeFieldConverter<From, To, ValuePath, Context>,
+  valueFactory: FieldValueFactory<From, ValuePath, Context>,
+  reverter: FieldConverter<To, From, E, ValuePath, Context>,
+): FieldAdapterBuilder<From, To, E, ValuePath, Context>
 export function adapter<
   From,
   To,
   E,
   ValuePath extends string,
+  Context,
 >(
-  converter: SafeFieldConverter<From, To, ValuePath>,
-  valueFactory: FieldValueFactory<From, ValuePath>,
-  reverter?: FieldConverter<To, From, E, ValuePath>,
-): FieldAdapterBuilder<From, To, E, ValuePath> {
+  converter: SafeFieldConverter<From, To, ValuePath, Context>,
+  valueFactory: FieldValueFactory<From, ValuePath, Context>,
+  reverter?: FieldConverter<To, From, E, ValuePath, Context>,
+): FieldAdapterBuilder<From, To, E, ValuePath, Context> {
   return new FieldAdapterBuilder(converter, valueFactory, reverter)
 }
 
@@ -147,28 +193,59 @@ export function adapterFromTwoWayConverter<
   To,
   E,
   ValuePath extends string,
+  Context,
 >(
-  converter: TwoWayFieldConverter<From, To, E, ValuePath>,
-  valueFactory: FieldValueFactory<From, ValuePath>,
-): FieldAdapterBuilder<From, To, E, ValuePath>
+  converter: TwoWayFieldConverter<From, To, E, ValuePath, Context>,
+  valueFactory: FieldValueFactory<From, ValuePath, Context>,
+): FieldAdapterBuilder<From, To, E, ValuePath, Context>
 export function adapterFromTwoWayConverter<
   From,
   To,
   E,
   ValuePath extends string,
->(converter: TwoWayFieldConverterWithValueFactory<From, To, E, ValuePath>): FieldAdapterBuilder<From, To, E, ValuePath>
+  Context,
+>(converter: TwoWayFieldConverterWithValueFactory<
+  From,
+  To,
+  E,
+  ValuePath,
+  Context
+>): FieldAdapterBuilder<
+  From,
+  To,
+  E,
+  ValuePath,
+  Context
+>
 export function adapterFromTwoWayConverter<
   From,
   To,
   E,
   ValuePath extends string,
+  Context,
 >(
-  converter: TwoWayFieldConverter<From, To, E, ValuePath> | TwoWayFieldConverterWithValueFactory<From, To, E,
-    ValuePath>,
-  valueFactory: FieldValueFactory<From, ValuePath> =
-    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-    (converter as TwoWayFieldConverterWithValueFactory<From, To, E, ValuePath>).create.bind(converter),
-): FieldAdapterBuilder<From, To, E, ValuePath> {
+  converter: TwoWayFieldConverter<
+    From,
+    To,
+    E,
+    ValuePath,
+    Context
+  > | TwoWayFieldConverterWithValueFactory<
+    From,
+    To,
+    E,
+    ValuePath,
+    Context
+  >,
+  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+  valueFactory: FieldValueFactory<From, ValuePath, Context> = (converter as TwoWayFieldConverterWithValueFactory<
+    From,
+    To,
+    E,
+    ValuePath,
+    Context
+  >).create.bind(converter),
+): FieldAdapterBuilder<From, To, E, ValuePath, Context> {
   return new FieldAdapterBuilder(
     converter.convert.bind(converter),
     valueFactory,
@@ -180,29 +257,32 @@ export function adapterFromPrototype<
   From,
   To,
   ValuePath extends string,
+  Context,
 >(
-  converter: SafeFieldConverter<From, To, ValuePath>,
+  converter: SafeFieldConverter<From, To, ValuePath, Context>,
   prototype: From,
-): FieldAdapterBuilder<From, To, never, ValuePath>
+): FieldAdapterBuilder<From, To, never, ValuePath, Context>
 export function adapterFromPrototype<
   From,
   To,
   E,
   ValuePath extends string,
+  Context,
 >(
-  converter: TwoWayFieldConverter<From, To, E, ValuePath>,
+  converter: TwoWayFieldConverter<From, To, E, ValuePath, Context>,
   prototype: From,
-): FieldAdapterBuilder<From, To, E, ValuePath>
+): FieldAdapterBuilder<From, To, E, ValuePath, Context>
 export function adapterFromPrototype<
   From,
   To,
   E,
   ValuePath extends string,
+  Context,
 >(
-  converter: SafeFieldConverter<From, To, ValuePath> | TwoWayFieldConverter<From, To, E, ValuePath>,
+  converter: SafeFieldConverter<From, To, ValuePath, Context> | TwoWayFieldConverter<From, To, E, ValuePath, Context>,
   prototype: From,
-): FieldAdapterBuilder<From, To, E, ValuePath> {
-  const factory = prototypingFieldValueFactory<From, ValuePath>(prototype)
+): FieldAdapterBuilder<From, To, E, ValuePath, Context> {
+  const factory = prototypingFieldValueFactory<From, ValuePath, Context>(prototype)
   return typeof converter === 'function'
     ? new FieldAdapterBuilder(converter, factory)
     : new FieldAdapterBuilder(converter.convert.bind(converter), factory, converter.revert.bind(converter))
@@ -211,11 +291,12 @@ export function adapterFromPrototype<
 export function identityAdapter<
   V,
   ValuePath extends string,
+  Context,
 >(prototype: V) {
   return new FieldAdapterBuilder(
-    safeIdentityConverter<V, ValuePath>(),
+    safeIdentityConverter<V, ValuePath, Context>(),
     prototypingFieldValueFactory(prototype),
-    identityConverter<V, ValuePath>(),
+    identityConverter<V, ValuePath, Context>(),
   )
 }
 
@@ -223,9 +304,10 @@ export function listAdapter<
   E,
   K extends string,
   ValuePath extends string,
+  Context,
 >() {
-  return new FieldAdapterBuilder<readonly E[], readonly K[], never, ValuePath>(
-    listConverter<E, K, ValuePath>(),
-    prototypingFieldValueFactory<readonly E[], ValuePath>([]),
+  return new FieldAdapterBuilder<readonly E[], readonly K[], never, ValuePath, Context>(
+    listConverter<E, K, ValuePath, Context>(),
+    prototypingFieldValueFactory<readonly E[], ValuePath, Context>([]),
   )
 }

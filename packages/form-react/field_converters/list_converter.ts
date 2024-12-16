@@ -4,7 +4,8 @@ export function listConverter<
   E,
   K extends string,
   ValuePath extends string,
->(): SafeFieldConverter<readonly E[], K[], ValuePath> {
+  Context,
+>(): SafeFieldConverter<readonly E[], K[], ValuePath, Context> {
   return function (from: readonly E[], valuePath: ValuePath) {
     return from.map(function (_v, i) {
       // eslint-disable-next-line @typescript-eslint/consistent-type-assertions

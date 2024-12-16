@@ -10,9 +10,18 @@ import {
   type TwoWayFieldConverterWithValueFactory,
 } from 'types/field_converters'
 
-export class NullableToBooleanConverter<T extends TypeDefHolder, E, ValuePath extends string>
-  implements TwoWayFieldConverterWithValueFactory<ValueTypeOf<ReadonlyTypeDefOf<T>> | null, boolean, E, ValuePath>
-{
+export class NullableToBooleanConverter<
+  T extends TypeDefHolder,
+  E,
+  ValuePath extends string,
+  Context,
+> implements TwoWayFieldConverterWithValueFactory<
+  ValueTypeOf<ReadonlyTypeDefOf<T>> | null,
+  boolean,
+  E,
+  ValuePath,
+  Context
+> {
   readonly defaultValue: ValueTypeOf<ReadonlyTypeDefOf<T>> | null
 
   constructor(

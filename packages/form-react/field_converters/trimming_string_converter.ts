@@ -4,8 +4,8 @@ import {
   type TwoWayFieldConverter,
 } from 'types/field_converters'
 
-export class TrimmingStringConverter<ValuePath extends string>
-  implements TwoWayFieldConverter<string, string, never, ValuePath>
+export class TrimmingStringConverter<ValuePath extends string, Context>
+  implements TwoWayFieldConverter<string, string, never, ValuePath, Context>
 {
   constructor() {
   }

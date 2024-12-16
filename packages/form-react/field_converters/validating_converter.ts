@@ -9,12 +9,13 @@ export function validatingConverter<
   V,
   E,
   ValuePath extends string,
->(validators: readonly FieldValidator<V, E, ValuePath>[] = []): FieldConverter<V, V, E, ValuePath> {
-  return function (value: V, valuePath: ValuePath): FieldConversion<V, E> {
+  Context,
+>(validators: readonly FieldValidator<V, E, ValuePath, Context>[] = []): FieldConverter<V, V, E, ValuePath, Context> {
+  return function (value: V, valuePath: ValuePath, context: Context): FieldConversion<V, E> {
     return validators.reduce<FieldConversion<V, E>>(
       function (acc, validator) {
         if (acc.type === FieldConversionResult.Success) {
-          const error = validator(value, valuePath)
+          const error = validator(value, valuePath, context)
           if (error != null) {
             return {
               type: FieldConversionResult.Failure,
