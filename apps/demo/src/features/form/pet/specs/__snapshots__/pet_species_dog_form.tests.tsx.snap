@@ -18,8 +18,8 @@ exports[`PetSpeciesDogForm > renders Error 1`] = `
       <label
         class="m_8fdc1311 mantine-InputWrapper-label mantine-NumberInput-label"
         data-required="true"
-        for="mantine-0px4bipx4"
-        id="mantine-0px4bipx4-label"
+        for="mantine-0cyk5rcyk"
+        id="mantine-0cyk5rcyk-label"
       >
         Barks
         <span
@@ -37,12 +37,12 @@ exports[`PetSpeciesDogForm > renders Error 1`] = `
         style="--input-margin-bottom: calc(var(--mantine-spacing-xs) / 2); --input-right-section-width: var(--ni-right-section-width-sm);"
       >
         <input
-          aria-describedby="mantine-0px4bipx4-error"
+          aria-describedby="mantine-0cyk5rcyk-error"
           aria-invalid="true"
           class="m_8fb7ebe7 mantine-Input-input mantine-NumberInput-input"
           data-error="true"
           data-variant="default"
-          id="mantine-0px4bipx4"
+          id="mantine-0cyk5rcyk"
           inputmode="numeric"
           name="$.species.dog:barks"
           required=""
@@ -102,7 +102,7 @@ exports[`PetSpeciesDogForm > renders Error 1`] = `
       </div>
       <p
         class="m_8f816625 mantine-InputWrapper-error mantine-NumberInput-error"
-        id="mantine-0px4bipx4-error"
+        id="mantine-0cyk5rcyk-error"
       >
         not a number
       </p>
@@ -128,8 +128,8 @@ exports[`PetSpeciesDogForm > renders Valid 1`] = `
       <label
         class="m_8fdc1311 mantine-InputWrapper-label mantine-NumberInput-label"
         data-required="true"
-        for="mantine-12voha2vo"
-        id="mantine-12voha2vo-label"
+        for="mantine-0px4bipx4"
+        id="mantine-0px4bipx4-label"
       >
         Barks
         <span
@@ -149,7 +149,7 @@ exports[`PetSpeciesDogForm > renders Valid 1`] = `
           aria-invalid="false"
           class="m_8fb7ebe7 mantine-Input-input mantine-NumberInput-input"
           data-variant="default"
-          id="mantine-12voha2vo"
+          id="mantine-0px4bipx4"
           inputmode="numeric"
           name="$.species.dog:barks"
           required=""

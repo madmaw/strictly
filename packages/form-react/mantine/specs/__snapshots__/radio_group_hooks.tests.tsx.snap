@@ -12,12 +12,12 @@ exports[`radio group mantine hooks > renders Disabled 1`] = `
   >
     <div
       class="m_8fdc1311 mantine-InputWrapper-label mantine-RadioGroup-label"
-      id="mantine-38n1fu8n1-label"
+      id="mantine-1fu8n1fu8-label"
     >
       Radio Group
     </div>
     <div
-      aria-labelledby="mantine-38n1fu8n1-label"
+      aria-labelledby="mantine-1fu8n1fu8-label"
       role="radiogroup"
     >
       <div
@@ -39,7 +39,7 @@ exports[`radio group mantine hooks > renders Disabled 1`] = `
               <input
                 class="mantine-focus-auto m_8a3dbb89 mantine-Radio-radio"
                 disabled=""
-                id="mantine-25rcyk5rc"
+                id="mantine-0cyk5rcyk"
                 name="$"
                 type="radio"
                 value="1"
@@ -66,7 +66,7 @@ exports[`radio group mantine hooks > renders Disabled 1`] = `
               <label
                 class="m_8ee546b8 mantine-Radio-label"
                 data-disabled="true"
-                for="mantine-25rcyk5rc"
+                for="mantine-0cyk5rcyk"
               >
                 One
               </label>
@@ -90,7 +90,7 @@ exports[`radio group mantine hooks > renders Disabled 1`] = `
                 checked=""
                 class="mantine-focus-auto m_8a3dbb89 mantine-Radio-radio"
                 disabled=""
-                id="mantine-2ipx4bipx"
+                id="mantine-0px4bipx4"
                 name="$"
                 type="radio"
                 value="2"
@@ -117,7 +117,7 @@ exports[`radio group mantine hooks > renders Disabled 1`] = `
               <label
                 class="m_8ee546b8 mantine-Radio-label"
                 data-disabled="true"
-                for="mantine-2ipx4bipx"
+                for="mantine-0px4bipx4"
               >
                 Two
               </label>
@@ -139,7 +139,7 @@ exports[`radio group mantine hooks > renders Disabled 1`] = `
               <input
                 class="mantine-focus-auto m_8a3dbb89 mantine-Radio-radio"
                 disabled=""
-                id="mantine-2voha2voh"
+                id="mantine-12voha2vo"
                 name="$"
                 type="radio"
                 value="3"
@@ -166,7 +166,7 @@ exports[`radio group mantine hooks > renders Disabled 1`] = `
               <label
                 class="m_8ee546b8 mantine-Radio-label"
                 data-disabled="true"
-                for="mantine-2voha2voh"
+                for="mantine-12voha2vo"
               >
                 Three
               </label>
@@ -191,12 +191,12 @@ exports[`radio group mantine hooks > renders Empty 1`] = `
   >
     <div
       class="m_8fdc1311 mantine-InputWrapper-label mantine-RadioGroup-label"
-      id="mantine-3llllllll-label"
+      id="mantine-1ssssssss-label"
     >
       Radio Group
     </div>
     <div
-      aria-labelledby="mantine-3llllllll-label"
+      aria-labelledby="mantine-1ssssssss-label"
       role="radiogroup"
     >
       <div
@@ -217,7 +217,7 @@ exports[`radio group mantine hooks > renders Empty 1`] = `
             >
               <input
                 class="mantine-focus-auto m_8a3dbb89 mantine-Radio-radio"
-                id="mantine-2ipx4bipx"
+                id="mantine-0px4bipx4"
                 name="$"
                 type="radio"
                 value="1"
@@ -242,7 +242,7 @@ exports[`radio group mantine hooks > renders Empty 1`] = `
             >
               <label
                 class="m_8ee546b8 mantine-Radio-label"
-                for="mantine-2ipx4bipx"
+                for="mantine-0px4bipx4"
               >
                 One
               </label>
@@ -263,7 +263,7 @@ exports[`radio group mantine hooks > renders Empty 1`] = `
             >
               <input
                 class="mantine-focus-auto m_8a3dbb89 mantine-Radio-radio"
-                id="mantine-2voha2voh"
+                id="mantine-12voha2vo"
                 name="$"
                 type="radio"
                 value="2"
@@ -288,7 +288,7 @@ exports[`radio group mantine hooks > renders Empty 1`] = `
             >
               <label
                 class="m_8ee546b8 mantine-Radio-label"
-                for="mantine-2voha2voh"
+                for="mantine-12voha2vo"
               >
                 Two
               </label>
@@ -309,7 +309,7 @@ exports[`radio group mantine hooks > renders Empty 1`] = `
             >
               <input
                 class="mantine-focus-auto m_8a3dbb89 mantine-Radio-radio"
-                id="mantine-38n1fu8n1"
+                id="mantine-1fu8n1fu8"
                 name="$"
                 type="radio"
                 value="3"
@@ -334,7 +334,7 @@ exports[`radio group mantine hooks > renders Empty 1`] = `
             >
               <label
                 class="m_8ee546b8 mantine-Radio-label"
-                for="mantine-38n1fu8n1"
+                for="mantine-1fu8n1fu8"
               >
                 Three
               </label>
@@ -359,12 +359,12 @@ exports[`radio group mantine hooks > renders Populated 1`] = `
   >
     <div
       class="m_8fdc1311 mantine-InputWrapper-label mantine-RadioGroup-label"
-      id="mantine-38n1fu8n1-label"
+      id="mantine-1fu8n1fu8-label"
     >
       Radio Group
     </div>
     <div
-      aria-labelledby="mantine-38n1fu8n1-label"
+      aria-labelledby="mantine-1fu8n1fu8-label"
       role="radiogroup"
     >
       <div
@@ -385,7 +385,7 @@ exports[`radio group mantine hooks > renders Populated 1`] = `
             >
               <input
                 class="mantine-focus-auto m_8a3dbb89 mantine-Radio-radio"
-                id="mantine-25rcyk5rc"
+                id="mantine-0cyk5rcyk"
                 name="$"
                 type="radio"
                 value="1"
@@ -410,7 +410,7 @@ exports[`radio group mantine hooks > renders Populated 1`] = `
             >
               <label
                 class="m_8ee546b8 mantine-Radio-label"
-                for="mantine-25rcyk5rc"
+                for="mantine-0cyk5rcyk"
               >
                 One
               </label>
@@ -431,7 +431,7 @@ exports[`radio group mantine hooks > renders Populated 1`] = `
             >
               <input
                 class="mantine-focus-auto m_8a3dbb89 mantine-Radio-radio"
-                id="mantine-2ipx4bipx"
+                id="mantine-0px4bipx4"
                 name="$"
                 type="radio"
                 value="2"
@@ -456,7 +456,7 @@ exports[`radio group mantine hooks > renders Populated 1`] = `
             >
               <label
                 class="m_8ee546b8 mantine-Radio-label"
-                for="mantine-2ipx4bipx"
+                for="mantine-0px4bipx4"
               >
                 Two
               </label>
@@ -479,7 +479,7 @@ exports[`radio group mantine hooks > renders Populated 1`] = `
               <input
                 checked=""
                 class="mantine-focus-auto m_8a3dbb89 mantine-Radio-radio"
-                id="mantine-2voha2voh"
+                id="mantine-12voha2vo"
                 name="$"
                 type="radio"
                 value="3"
@@ -504,7 +504,7 @@ exports[`radio group mantine hooks > renders Populated 1`] = `
             >
               <label
                 class="m_8ee546b8 mantine-Radio-label"
-                for="mantine-2voha2voh"
+                for="mantine-12voha2vo"
               >
                 Three
               </label>
@@ -530,7 +530,7 @@ exports[`radio group mantine hooks > renders Required 1`] = `
     <div
       class="m_8fdc1311 mantine-InputWrapper-label mantine-RadioGroup-label"
       data-required="true"
-      id="mantine-38n1fu8n1-label"
+      id="mantine-1fu8n1fu8-label"
     >
       Radio Group
       <span
@@ -541,7 +541,7 @@ exports[`radio group mantine hooks > renders Required 1`] = `
       </span>
     </div>
     <div
-      aria-labelledby="mantine-38n1fu8n1-label"
+      aria-labelledby="mantine-1fu8n1fu8-label"
       role="radiogroup"
     >
       <div
@@ -564,7 +564,7 @@ exports[`radio group mantine hooks > renders Required 1`] = `
               <input
                 checked=""
                 class="mantine-focus-auto m_8a3dbb89 mantine-Radio-radio"
-                id="mantine-25rcyk5rc"
+                id="mantine-0cyk5rcyk"
                 name="$"
                 type="radio"
                 value="1"
@@ -589,7 +589,7 @@ exports[`radio group mantine hooks > renders Required 1`] = `
             >
               <label
                 class="m_8ee546b8 mantine-Radio-label"
-                for="mantine-25rcyk5rc"
+                for="mantine-0cyk5rcyk"
               >
                 One
               </label>
@@ -610,7 +610,7 @@ exports[`radio group mantine hooks > renders Required 1`] = `
             >
               <input
                 class="mantine-focus-auto m_8a3dbb89 mantine-Radio-radio"
-                id="mantine-2ipx4bipx"
+                id="mantine-0px4bipx4"
                 name="$"
                 type="radio"
                 value="2"
@@ -635,7 +635,7 @@ exports[`radio group mantine hooks > renders Required 1`] = `
             >
               <label
                 class="m_8ee546b8 mantine-Radio-label"
-                for="mantine-2ipx4bipx"
+                for="mantine-0px4bipx4"
               >
                 Two
               </label>
@@ -656,7 +656,7 @@ exports[`radio group mantine hooks > renders Required 1`] = `
             >
               <input
                 class="mantine-focus-auto m_8a3dbb89 mantine-Radio-radio"
-                id="mantine-2voha2voh"
+                id="mantine-12voha2vo"
                 name="$"
                 type="radio"
                 value="3"
@@ -681,7 +681,7 @@ exports[`radio group mantine hooks > renders Required 1`] = `
             >
               <label
                 class="m_8ee546b8 mantine-Radio-label"
-                for="mantine-2voha2voh"
+                for="mantine-12voha2vo"
               >
                 Three
               </label>

@@ -4,7 +4,7 @@
     "@de/fine": "*",
     "mobx": "^6.13.5",
     "mobx-react": "^9.1.1",
-    "react": "^18.3.1"
+    "react": "^19.0.0"
   },
   "devDependencies": {
     "@babel/plugin-proposal-decorators": "^7.25.9",
@@ -26,8 +26,7 @@
     "@types/react-dom": "^18.3.1",
     "@vitejs/plugin-react": "^4.3.3",
     "jsdom": "^25.0.1",
-    "react-dom": "^18.3.1",
-    "react-testing-library": "^8.0.1",
+    "react-dom": "^19.0.0",
     "storybook": "^8.4.5",
     "type-fest": "^4.26.1",
     "vite": "^5.4.10"

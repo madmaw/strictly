@@ -12,8 +12,8 @@ exports[`checkbox mantine hooks > renders Disabled 1`] = `
   >
     <label
       class="m_8fdc1311 mantine-InputWrapper-label mantine-TextInput-label"
-      for="mantine-0px4bipx4"
-      id="mantine-0px4bipx4-label"
+      for="mantine-0cyk5rcyk"
+      id="mantine-0cyk5rcyk-label"
     >
       Text Input
     </label>
@@ -28,7 +28,7 @@ exports[`checkbox mantine hooks > renders Disabled 1`] = `
         data-disabled="true"
         data-variant="default"
         disabled=""
-        id="mantine-0px4bipx4"
+        id="mantine-0cyk5rcyk"
         name="$"
         value="xxx"
       />
@@ -49,8 +49,8 @@ exports[`checkbox mantine hooks > renders Empty 1`] = `
   >
     <label
       class="m_8fdc1311 mantine-InputWrapper-label mantine-TextInput-label"
-      for="mantine-12voha2vo"
-      id="mantine-12voha2vo-label"
+      for="mantine-0px4bipx4"
+      id="mantine-0px4bipx4-label"
     >
       Text Input
     </label>
@@ -62,7 +62,7 @@ exports[`checkbox mantine hooks > renders Empty 1`] = `
         aria-invalid="false"
         class="m_8fb7ebe7 mantine-Input-input mantine-TextInput-input"
         data-variant="default"
-        id="mantine-12voha2vo"
+        id="mantine-0px4bipx4"
         name="$"
         value=""
       />
@@ -101,8 +101,8 @@ exports[`checkbox mantine hooks > renders OverriddenTextarea 1`] = `
   >
     <label
       class="m_8fdc1311 mantine-InputWrapper-label mantine-Textarea-label"
-      for="mantine-0px4bipx4"
-      id="mantine-0px4bipx4-label"
+      for="mantine-0cyk5rcyk"
+      id="mantine-0cyk5rcyk-label"
     >
       Text Input
     </label>
@@ -115,7 +115,7 @@ exports[`checkbox mantine hooks > renders OverriddenTextarea 1`] = `
         aria-invalid="false"
         class="m_8fb7ebe7 mantine-Input-input mantine-Textarea-input"
         data-variant="default"
-        id="mantine-0px4bipx4"
+        id="mantine-0cyk5rcyk"
         name="$"
       >
         Textarea
@@ -137,8 +137,8 @@ exports[`checkbox mantine hooks > renders Populated 1`] = `
   >
     <label
       class="m_8fdc1311 mantine-InputWrapper-label mantine-TextInput-label"
-      for="mantine-0px4bipx4"
-      id="mantine-0px4bipx4-label"
+      for="mantine-0cyk5rcyk"
+      id="mantine-0cyk5rcyk-label"
     >
       Text Input
     </label>
@@ -150,7 +150,7 @@ exports[`checkbox mantine hooks > renders Populated 1`] = `
         aria-invalid="false"
         class="m_8fb7ebe7 mantine-Input-input mantine-TextInput-input"
         data-variant="default"
-        id="mantine-0px4bipx4"
+        id="mantine-0cyk5rcyk"
         name="$"
         value="Hello"
       />
@@ -172,8 +172,8 @@ exports[`checkbox mantine hooks > renders Required 1`] = `
     <label
       class="m_8fdc1311 mantine-InputWrapper-label mantine-TextInput-label"
       data-required="true"
-      for="mantine-0px4bipx4"
-      id="mantine-0px4bipx4-label"
+      for="mantine-0cyk5rcyk"
+      id="mantine-0cyk5rcyk-label"
     >
       Text Input
       <span
@@ -191,7 +191,7 @@ exports[`checkbox mantine hooks > renders Required 1`] = `
         aria-invalid="false"
         class="m_8fb7ebe7 mantine-Input-input mantine-TextInput-input"
         data-variant="default"
-        id="mantine-0px4bipx4"
+        id="mantine-0cyk5rcyk"
         name="$"
         required=""
         value="xxx"

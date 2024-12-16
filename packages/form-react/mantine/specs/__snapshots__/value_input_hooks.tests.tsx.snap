@@ -21,7 +21,7 @@ exports[`value input hooks > renders AnJsonInput 1`] = `
         class="m_8fb7ebe7 mantine-Input-input mantine-JsonInput-input"
         data-monospace="true"
         data-variant="default"
-        id="mantine-0px4bipx4"
+        id="mantine-0cyk5rcyk"
         name="$"
         rows="8"
       >
@@ -42,7 +42,7 @@ exports[`value input hooks > renders AnRating 1`] = `
   <div
     class="m_f8d312f2 mantine-Rating-root"
     data-size="sm"
-    id="mantine-1fu8n1fu8"
+    id="mantine-0px4bipx4"
     style="--rating-size: var(--rating-size-sm); --rating-color: var(--mantine-color-yellow-filled);"
   >
     <div
@@ -51,14 +51,14 @@ exports[`value input hooks > renders AnRating 1`] = `
       <input
         aria-label="0"
         class="m_211007ba mantine-Rating-input"
-        id="mantine-1fu8n1fu8-0-0"
+        id="mantine-0px4bipx4-0-0"
         name="$"
         type="radio"
         value="0"
       />
       <label
         class="m_21342ee4 mantine-Rating-label"
-        for="mantine-1fu8n1fu8-0-0"
+        for="mantine-0px4bipx4-0-0"
         style="--rating-item-z-index: 0;"
       >
         <div
@@ -83,14 +83,14 @@ exports[`value input hooks > renders AnRating 1`] = `
       <input
         aria-label="1"
         class="m_211007ba mantine-Rating-input"
-        id="mantine-1fu8n1fu8-0-1"
+        id="mantine-0px4bipx4-0-1"
         name="$"
         type="radio"
         value="1"
       />
       <label
         class="m_21342ee4 mantine-Rating-label"
-        for="mantine-1fu8n1fu8-0-1"
+        for="mantine-0px4bipx4-0-1"
       >
         <div
           class="m_fae05d6a mantine-Rating-symbolBody"
@@ -119,14 +119,14 @@ exports[`value input hooks > renders AnRating 1`] = `
         checked=""
         class="m_211007ba mantine-Rating-input"
         data-active="true"
-        id="mantine-1fu8n1fu8-1-0"
+        id="mantine-0px4bipx4-1-0"
         name="$"
         type="radio"
         value="2"
       />
       <label
         class="m_21342ee4 mantine-Rating-label"
-        for="mantine-1fu8n1fu8-1-0"
+        for="mantine-0px4bipx4-1-0"
       >
         <div
           class="m_fae05d6a mantine-Rating-symbolBody"
@@ -153,14 +153,14 @@ exports[`value input hooks > renders AnRating 1`] = `
       <input
         aria-label="3"
         class="m_211007ba mantine-Rating-input"
-        id="mantine-1fu8n1fu8-2-0"
+        id="mantine-0px4bipx4-2-0"
         name="$"
         type="radio"
         value="3"
       />
       <label
         class="m_21342ee4 mantine-Rating-label"
-        for="mantine-1fu8n1fu8-2-0"
+        for="mantine-0px4bipx4-2-0"
       >
         <div
           class="m_fae05d6a mantine-Rating-symbolBody"
@@ -186,14 +186,14 @@ exports[`value input hooks > renders AnRating 1`] = `
       <input
         aria-label="4"
         class="m_211007ba mantine-Rating-input"
-        id="mantine-1fu8n1fu8-3-0"
+        id="mantine-0px4bipx4-3-0"
         name="$"
         type="radio"
         value="4"
       />
       <label
         class="m_21342ee4 mantine-Rating-label"
-        for="mantine-1fu8n1fu8-3-0"
+        for="mantine-0px4bipx4-3-0"
       >
         <div
           class="m_fae05d6a mantine-Rating-symbolBody"
@@ -219,14 +219,14 @@ exports[`value input hooks > renders AnRating 1`] = `
       <input
         aria-label="5"
         class="m_211007ba mantine-Rating-input"
-        id="mantine-1fu8n1fu8-4-0"
+        id="mantine-0px4bipx4-4-0"
         name="$"
         type="radio"
         value="5"
       />
       <label
         class="m_21342ee4 mantine-Rating-label"
-        for="mantine-1fu8n1fu8-4-0"
+        for="mantine-0px4bipx4-4-0"
       >
         <div
           class="m_fae05d6a mantine-Rating-symbolBody"
@@ -347,8 +347,8 @@ exports[`value input hooks > renders DisabledNumberInput 1`] = `
   >
     <label
       class="m_8fdc1311 mantine-InputWrapper-label mantine-NumberInput-label"
-      for="mantine-0px4bipx4"
-      id="mantine-0px4bipx4-label"
+      for="mantine-0cyk5rcyk"
+      id="mantine-0cyk5rcyk-label"
     >
       Number Input
     </label>
@@ -365,7 +365,7 @@ exports[`value input hooks > renders DisabledNumberInput 1`] = `
         data-disabled="true"
         data-variant="default"
         disabled=""
-        id="mantine-0px4bipx4"
+        id="mantine-0cyk5rcyk"
         inputmode="numeric"
         name="$"
         type="text"
@@ -440,8 +440,8 @@ exports[`value input hooks > renders EmptyNumberInput 1`] = `
   >
     <label
       class="m_8fdc1311 mantine-InputWrapper-label mantine-NumberInput-label"
-      for="mantine-12voha2vo"
-      id="mantine-12voha2vo-label"
+      for="mantine-0px4bipx4"
+      id="mantine-0px4bipx4-label"
     >
       Number Input
     </label>
@@ -455,7 +455,7 @@ exports[`value input hooks > renders EmptyNumberInput 1`] = `
         aria-invalid="false"
         class="m_8fb7ebe7 mantine-Input-input mantine-NumberInput-input"
         data-variant="default"
-        id="mantine-12voha2vo"
+        id="mantine-0px4bipx4"
         inputmode="numeric"
         name="$"
         type="text"
@@ -528,8 +528,8 @@ exports[`value input hooks > renders PopulatedNumberInput 1`] = `
   >
     <label
       class="m_8fdc1311 mantine-InputWrapper-label mantine-NumberInput-label"
-      for="mantine-0px4bipx4"
-      id="mantine-0px4bipx4-label"
+      for="mantine-0cyk5rcyk"
+      id="mantine-0cyk5rcyk-label"
     >
       Number Input
     </label>
@@ -543,7 +543,7 @@ exports[`value input hooks > renders PopulatedNumberInput 1`] = `
         aria-invalid="false"
         class="m_8fb7ebe7 mantine-Input-input mantine-NumberInput-input"
         data-variant="default"
-        id="mantine-0px4bipx4"
+        id="mantine-0cyk5rcyk"
         inputmode="numeric"
         name="$"
         type="text"

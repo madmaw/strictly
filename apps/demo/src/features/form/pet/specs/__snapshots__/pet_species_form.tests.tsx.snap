@@ -16,12 +16,12 @@ exports[`PetSpeciesForm > renders Cat 1`] = `
     >
       <div
         class="m_8fdc1311 mantine-InputWrapper-label mantine-RadioGroup-label"
-        id="mantine-2voha2voh-label"
+        id="mantine-1fu8n1fu8-label"
       >
         Species
       </div>
       <div
-        aria-labelledby="mantine-2voha2voh-label"
+        aria-labelledby="mantine-1fu8n1fu8-label"
         role="radiogroup"
       >
         <div
@@ -44,7 +44,7 @@ exports[`PetSpeciesForm > renders Cat 1`] = `
                 <input
                   checked=""
                   class="mantine-focus-auto m_8a3dbb89 mantine-Radio-radio"
-                  id="mantine-25rcyk5rc"
+                  id="mantine-0px4bipx4"
                   name="$.species"
                   type="radio"
                   value="cat"
@@ -69,7 +69,7 @@ exports[`PetSpeciesForm > renders Cat 1`] = `
               >
                 <label
                   class="m_8ee546b8 mantine-Radio-label"
-                  for="mantine-25rcyk5rc"
+                  for="mantine-0px4bipx4"
                 >
                   Cat
                 </label>
@@ -90,7 +90,7 @@ exports[`PetSpeciesForm > renders Cat 1`] = `
               >
                 <input
                   class="mantine-focus-auto m_8a3dbb89 mantine-Radio-radio"
-                  id="mantine-2ipx4bipx"
+                  id="mantine-12voha2vo"
                   name="$.species"
                   type="radio"
                   value="dog"
@@ -115,7 +115,7 @@ exports[`PetSpeciesForm > renders Cat 1`] = `
               >
                 <label
                   class="m_8ee546b8 mantine-Radio-label"
-                  for="mantine-2ipx4bipx"
+                  for="mantine-12voha2vo"
                 >
                   Dog
                 </label>
@@ -152,12 +152,12 @@ exports[`PetSpeciesForm > renders Dog 1`] = `
     >
       <div
         class="m_8fdc1311 mantine-InputWrapper-label mantine-RadioGroup-label"
-        id="mantine-2ipx4bipx-label"
+        id="mantine-12voha2vo-label"
       >
         Species
       </div>
       <div
-        aria-labelledby="mantine-2ipx4bipx-label"
+        aria-labelledby="mantine-12voha2vo-label"
         role="radiogroup"
       >
         <div
@@ -178,7 +178,7 @@ exports[`PetSpeciesForm > renders Dog 1`] = `
               >
                 <input
                   class="mantine-focus-auto m_8a3dbb89 mantine-Radio-radio"
-                  id="mantine-1ssssssss"
+                  id="mantine-0cyk5rcyk"
                   name="$.species"
                   type="radio"
                   value="cat"
@@ -203,7 +203,7 @@ exports[`PetSpeciesForm > renders Dog 1`] = `
               >
                 <label
                   class="m_8ee546b8 mantine-Radio-label"
-                  for="mantine-1ssssssss"
+                  for="mantine-0cyk5rcyk"
                 >
                   Cat
                 </label>
@@ -226,7 +226,7 @@ exports[`PetSpeciesForm > renders Dog 1`] = `
                 <input
                   checked=""
                   class="mantine-focus-auto m_8a3dbb89 mantine-Radio-radio"
-                  id="mantine-25rcyk5rc"
+                  id="mantine-0px4bipx4"
                   name="$.species"
                   type="radio"
                   value="dog"
@@ -251,7 +251,7 @@ exports[`PetSpeciesForm > renders Dog 1`] = `
               >
                 <label
                   class="m_8ee546b8 mantine-Radio-label"
-                  for="mantine-25rcyk5rc"
+                  for="mantine-0px4bipx4"
                 >
                   Dog
                 </label>

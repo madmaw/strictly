@@ -17,8 +17,8 @@ exports[`PetForm > renders Empty 1`] = `
       <label
         class="m_8fdc1311 mantine-InputWrapper-label mantine-TextInput-label"
         data-required="true"
-        for="mantine-1fu8n1fu8"
-        id="mantine-1fu8n1fu8-label"
+        for="mantine-0cyk5rcyk"
+        id="mantine-0cyk5rcyk-label"
       >
         Name
         <span
@@ -36,7 +36,7 @@ exports[`PetForm > renders Empty 1`] = `
           aria-invalid="false"
           class="m_8fb7ebe7 mantine-Input-input mantine-TextInput-input"
           data-variant="default"
-          id="mantine-1fu8n1fu8"
+          id="mantine-0cyk5rcyk"
           name="$.name"
           required=""
           value=""
@@ -57,7 +57,7 @@ exports[`PetForm > renders Empty 1`] = `
         >
           <input
             class="mantine-focus-auto m_26063560 mantine-Checkbox-input"
-            id="mantine-1ssssssss"
+            id="mantine-0px4bipx4"
             name="$.alive"
             type="checkbox"
           />
@@ -81,7 +81,7 @@ exports[`PetForm > renders Empty 1`] = `
         >
           <label
             class="m_8ee546b8 mantine-Checkbox-label"
-            for="mantine-1ssssssss"
+            for="mantine-0px4bipx4"
           >
             Alive
           </label>
@@ -93,8 +93,8 @@ exports[`PetForm > renders Empty 1`] = `
     >
       <label
         class="m_8fdc1311 mantine-InputWrapper-label mantine-PillsInput-label"
-        for="mantine-25rcyk5rc"
-        id="mantine-25rcyk5rc-label"
+        for="mantine-12voha2vo"
+        id="mantine-12voha2vo-label"
       >
         Tags
       </label>
@@ -114,7 +114,7 @@ exports[`PetForm > renders Empty 1`] = `
               aria-invalid="false"
               class="m_45c4369d mantine-PillsInputField-field"
               data-type="visible"
-              id="mantine-25rcyk5rc"
+              id="mantine-12voha2vo"
               name="$.newTag"
               placeholder="Some attribute"
               type="text"
@@ -173,8 +173,8 @@ exports[`PetForm > renders Errors 1`] = `
       <label
         class="m_8fdc1311 mantine-InputWrapper-label mantine-TextInput-label"
         data-required="true"
-        for="mantine-1fu8n1fu8"
-        id="mantine-1fu8n1fu8-label"
+        for="mantine-0cyk5rcyk"
+        id="mantine-0cyk5rcyk-label"
       >
         Name
         <span
@@ -191,12 +191,12 @@ exports[`PetForm > renders Errors 1`] = `
         style="--input-margin-bottom: calc(var(--mantine-spacing-xs) / 2);"
       >
         <input
-          aria-describedby="mantine-1fu8n1fu8-error"
+          aria-describedby="mantine-0cyk5rcyk-error"
           aria-invalid="true"
           class="m_8fb7ebe7 mantine-Input-input mantine-TextInput-input"
           data-error="true"
           data-variant="default"
-          id="mantine-1fu8n1fu8"
+          id="mantine-0cyk5rcyk"
           name="$.name"
           required=""
           value="Bad"
@@ -204,7 +204,7 @@ exports[`PetForm > renders Errors 1`] = `
       </div>
       <p
         class="m_8f816625 mantine-InputWrapper-error mantine-TextInput-error"
-        id="mantine-1fu8n1fu8-error"
+        id="mantine-0cyk5rcyk-error"
       >
         name too short
       </p>
@@ -223,7 +223,7 @@ exports[`PetForm > renders Errors 1`] = `
         >
           <input
             class="mantine-focus-auto m_26063560 mantine-Checkbox-input"
-            id="mantine-1ssssssss"
+            id="mantine-0px4bipx4"
             name="$.alive"
             type="checkbox"
           />
@@ -247,7 +247,7 @@ exports[`PetForm > renders Errors 1`] = `
         >
           <label
             class="m_8ee546b8 mantine-Checkbox-label"
-            for="mantine-1ssssssss"
+            for="mantine-0px4bipx4"
           >
             Alive
           </label>
@@ -259,8 +259,8 @@ exports[`PetForm > renders Errors 1`] = `
     >
       <label
         class="m_8fdc1311 mantine-InputWrapper-label mantine-PillsInput-label"
-        for="mantine-25rcyk5rc"
-        id="mantine-25rcyk5rc-label"
+        for="mantine-12voha2vo"
+        id="mantine-12voha2vo-label"
       >
         Tags
       </label>
@@ -311,7 +311,7 @@ exports[`PetForm > renders Errors 1`] = `
               aria-invalid="false"
               class="m_45c4369d mantine-PillsInputField-field"
               data-type="visible"
-              id="mantine-25rcyk5rc"
+              id="mantine-12voha2vo"
               name="$.newTag"
               placeholder="Some attribute"
               type="text"
@@ -369,8 +369,8 @@ exports[`PetForm > renders Populated 1`] = `
       <label
         class="m_8fdc1311 mantine-InputWrapper-label mantine-TextInput-label"
         data-required="true"
-        for="mantine-1ssssssss"
-        id="mantine-1ssssssss-label"
+        for="mantine-0px4bipx4"
+        id="mantine-0px4bipx4-label"
       >
         Name
         <span
@@ -388,7 +388,7 @@ exports[`PetForm > renders Populated 1`] = `
           aria-invalid="false"
           class="m_8fb7ebe7 mantine-Input-input mantine-TextInput-input"
           data-variant="default"
-          id="mantine-1ssssssss"
+          id="mantine-0px4bipx4"
           name="$.name"
           required=""
           value="Fido"
@@ -411,7 +411,7 @@ exports[`PetForm > renders Populated 1`] = `
           <input
             checked=""
             class="mantine-focus-auto m_26063560 mantine-Checkbox-input"
-            id="mantine-25rcyk5rc"
+            id="mantine-12voha2vo"
             name="$.alive"
             type="checkbox"
           />
@@ -435,7 +435,7 @@ exports[`PetForm > renders Populated 1`] = `
         >
           <label
             class="m_8ee546b8 mantine-Checkbox-label"
-            for="mantine-25rcyk5rc"
+            for="mantine-12voha2vo"
           >
             Alive
           </label>
@@ -447,8 +447,8 @@ exports[`PetForm > renders Populated 1`] = `
     >
       <label
         class="m_8fdc1311 mantine-InputWrapper-label mantine-PillsInput-label"
-        for="mantine-2ipx4bipx"
-        id="mantine-2ipx4bipx-label"
+        for="mantine-1fu8n1fu8"
+        id="mantine-1fu8n1fu8-label"
       >
         Tags
       </label>
@@ -530,7 +530,7 @@ exports[`PetForm > renders Populated 1`] = `
               aria-invalid="false"
               class="m_45c4369d mantine-PillsInputField-field"
               data-type="visible"
-              id="mantine-2ipx4bipx"
+              id="mantine-1fu8n1fu8"
               name="$.newTag"
               placeholder="Some attribute"
               type="text"
