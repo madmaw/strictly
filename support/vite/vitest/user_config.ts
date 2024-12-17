@@ -7,7 +7,10 @@ export function createVitestUserConfig(tsconfigJson: TsconfigJson): ViteUserConf
     plugins: [createTsconfigPathsPlugin(tsconfigJson)],
     test: {
       include: ['**/specs/(*.)+(tests).[jt]s?(x)'],
-      exclude: ['.out'],
+      exclude: [
+        '.out',
+        'dist',
+      ],
       globals: true,
     },
   }
