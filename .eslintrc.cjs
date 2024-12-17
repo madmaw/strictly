@@ -32,9 +32,13 @@ module.exports = {
         ],
         'jsonc/sort-keys': [
           'warn',
-          'asc',
           {
-            natural: true,
+            pathPattern: '.*',
+            order: {
+              type: 'asc',
+              natural: true,
+            },
+            allowLineSeparatedGroups: true,
             minKeys: 2,
           },
         ],
@@ -76,6 +80,7 @@ module.exports = {
         '*.tsx',
         '*.js',
         '*.cjs',
+        '*.mts',
       ],
       settings: {
         'import/parsers': {
@@ -507,7 +512,7 @@ module.exports = {
     ],
     'no-multiple-empty-lines': [
       'warn',
-      { max: 0 },
+      { max: 1 },
     ],
     'no-trailing-spaces': ['warn'],
   },

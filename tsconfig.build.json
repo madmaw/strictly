@@ -1,5 +1,7 @@
 {
   "compilerOptions": {
+    "composite": false,
+    "incremental": false,
     "module": "commonjs",
     "moduleResolution": "Node",
     "noEmit": true

@@ -45,3 +45,7 @@ jobs:
         uses: borales/actions-yarn@v4.2.0
         with:
           cmd: test
+      - name: Run build
+        uses: borales/actions-yarn@v4.2.0
+        with:
+          cmd: build

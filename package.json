@@ -5,6 +5,7 @@
     "@typescript-eslint/eslint-plugin": "^8.11.0",
     "@typescript-eslint/parser": "^8.11.0",
     "cross-env": "^7.0.3",
+    "del-cli": "^6.0.0",
     "eslint": "^9.13.0",
     "eslint-import-resolver-typescript": "^3.6.1",
     "eslint-plugin-dprint-integration": "^0.3.0",
@@ -36,8 +37,10 @@
     "**/**/vite": "=5.4.10"
   },
   "scripts": {
+    "build": "turbo run build",
     "check-types": "turbo run check-types",
     "check-types:force": "turbo run check-types --force",
+    "clean": "turbo run clean",
     "demo:dev": "turbo run dev --filter=@de/mo",
     "demo:storybook": "turbo storybook --filter=@de/mo",
     "form-react:storybook": "turbo storybook --filter=@de/form-react",

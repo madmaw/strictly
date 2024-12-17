@@ -2,16 +2,33 @@
   "devDependencies": {
     "@de/support-vite": "*"
   },
+  "example_exports_that_break_vs_code_navigation": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+
+        "default": "./dist/index.cjs"
+      }
+    }
+  },
   "license": "MIT",
-  "main": "index.js",
+  "main": "dist/index.js",
   "name": "@de/base",
   "scripts": {
+    "build": "tsup",
     "check-types": "tsc",
+    "clean": "del-cli dist",
     "lint": "cross-env ESLINT_USE_FLAT_CONFIG=false eslint . --max-warnings=0",
     "lint:fix": "cross-env ESLINT_USE_FLAT_CONFIG=false eslint . --fix",
     "test": "vitest run",
     "test:watch": "vitest"
   },
   "type": "module",
+  "types": "dist/index.d.ts",
   "version": "0.0.1"
 }

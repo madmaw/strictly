@@ -7,12 +7,16 @@ import tsconfig from './tsconfig.json'
 // const config: UserConfig = createViteUserConfig(tsconfig)
 // export default config
 export default defineConfig({
+  build: {
+    outDir: './dist',
+  },
   plugins: [
     reactSupport({
       babel: babel,
     }),
     tsconfigPaths({
       // must specify projects otherwise we get configuration errors for unrelated projects
+      // NOTE we should use the packages rather than rely on project references
       projects: [
         '.',
         ...tsconfig.references.map(function ({ path }) {

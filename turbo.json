@@ -1,20 +1,25 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "tasks": {
+    "build": {
+      "dependsOn": ["^check-types"]
+    },
     "check-types": {
       "dependsOn": ["^check-types"]
+    },
+    "clean": {
     },
     "dev": {
       "dependsOn": ["^check-types"]
     },
     "lint": {
-      "dependsOn": ["^lint"]
+      "dependsOn": ["^check-types"]
     },
     "storybook": {
       "dependsOn": ["^check-types"]
     },
     "test": {
-      "dependsOn": ["^test"]
+      "dependsOn": ["^check-types"]
     }
   }
 }

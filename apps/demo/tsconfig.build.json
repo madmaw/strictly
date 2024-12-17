@@ -1,4 +1,11 @@
 {
+  "compilerOptions": {
+    "baseUrl": "."
+  },
   "extends": "../../tsconfig.build.json",
-  "include": [".eslintrc.cjs"]
+  "include": [
+    ".eslintrc.cjs",
+    "vite.config.mts",
+    "vitest.workspace.ts"
+  ]
 }

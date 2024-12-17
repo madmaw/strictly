@@ -7,15 +7,18 @@
     "@de/support-vite": "*"
   },
   "license": "MIT",
-  "main": "index.js",
+  "main": "dist/index.js",
   "name": "@de/fine",
   "scripts": {
+    "build": "tsup",
     "check-types": "tsc",
+    "clean": "del-cli dist",
     "lint": "cross-env ESLINT_USE_FLAT_CONFIG=false eslint . --max-warnings=0",
     "lint:fix": "cross-env ESLINT_USE_FLAT_CONFIG=false eslint . --fix",
     "test": "vitest run",
     "test:watch": "vitest"
   },
   "type": "module",
+  "types": "dist/index.d.ts",
   "version": "0.0.1"
 }
