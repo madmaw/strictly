@@ -820,26 +820,57 @@ describe('all', function () {
           model.errors['$.0'] = 0
           model.errors['$.1'] = 1
           model.errors['$.2'] = 2
-          presenter.removeListItem(model, '$.0')
         })
 
-        it('updates the underlying value', function () {
-          expect(model.value).toEqual([
-            3,
-            7,
-          ])
+        describe('remove first item', function () {
+          beforeEach(function () {
+            presenter.removeListItem(model, '$.0')
+          })
+
+          it('updates the underlying value', function () {
+            expect(model.value).toEqual([
+              3,
+              7,
+            ])
+          })
+
+          it('updates the field values and errors', function () {
+            expect(model.fields).toEqual({
+              '$.0': expect.objectContaining({
+                value: '3',
+                error: 1,
+              }),
+              '$.1': expect.objectContaining({
+                value: '7',
+                error: 2,
+              }),
+            })
+          })
         })
 
-        it('updates the field values and errors', function () {
-          expect(model.fields).toEqual({
-            '$.0': expect.objectContaining({
-              value: '3',
-              error: 1,
-            }),
-            '$.1': expect.objectContaining({
-              value: '7',
-              error: 2,
-            }),
+        describe('remove second item', function () {
+          beforeEach(function () {
+            presenter.removeListItem(model, '$.1')
+          })
+
+          it('updates the underlying value', function () {
+            expect(model.value).toEqual([
+              1,
+              7,
+            ])
+          })
+
+          it('updates the field values and errors', function () {
+            expect(model.fields).toEqual({
+              '$.0': expect.objectContaining({
+                value: '1',
+                error: 0,
+              }),
+              '$.1': expect.objectContaining({
+                value: '7',
+                error: 2,
+              }),
+            })
           })
         })
       })

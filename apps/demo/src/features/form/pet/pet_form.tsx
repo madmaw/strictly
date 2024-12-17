@@ -79,7 +79,7 @@ export function PetForm(props: PetFormProps) {
               )
             }}
           </Tags>
-          <NewTagInputField placeholder='Some attribute' />
+          <NewTagInputField placeholder='A new tag' />
         </Pill.Group>
       </PillsInput>
       <Card withBorder={true}>

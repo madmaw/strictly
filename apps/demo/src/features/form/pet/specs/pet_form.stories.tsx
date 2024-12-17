@@ -30,6 +30,7 @@ const meta: Meta<typeof Component> = {
     onFieldValueChange: action('onFieldValueChange'),
     onFieldSubmit: action('onFieldSubmit'),
     onSubmit: action('onSubmit'),
+    onRemoveTag: action('onRemoveTag'),
     SpeciesComponent,
   },
 }
@@ -57,6 +58,7 @@ export const Populated: Story = {
         value: [
           '$.tags.0',
           '$.tags.1',
+          '$.tags.2',
         ],
       },
       '$.tags.0': {
@@ -68,6 +70,11 @@ export const Populated: Story = {
         disabled: false,
         required: false,
         value: 'happy',
+      },
+      '$.tags.2': {
+        disabled: false,
+        required: false,
+        value: 'little',
       },
       '$.newTag': {
         disabled: false,

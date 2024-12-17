@@ -17,7 +17,7 @@ const {
   Populated,
 } = composedStories
 
-describe('checkbox mantine hooks', function () {
+describe('mantine checkbox hooks', function () {
   it.each(toArray(composedStories))('renders %s', function (_name, Story) {
     const wrapper = render(<Story />)
     expect(wrapper.container).toMatchSnapshot()

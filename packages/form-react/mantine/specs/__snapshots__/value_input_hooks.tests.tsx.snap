@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`value input hooks > renders AnJsonInput 1`] = `
+exports[`mantine value input hooks > renders AnJsonInput 1`] = `
 <div>
   <style
     data-mantine-styles="classes"
@@ -32,7 +32,7 @@ exports[`value input hooks > renders AnJsonInput 1`] = `
 </div>
 `;
 
-exports[`value input hooks > renders AnRating 1`] = `
+exports[`mantine value input hooks > renders AnRating 1`] = `
 <div>
   <style
     data-mantine-styles="classes"
@@ -250,7 +250,7 @@ exports[`value input hooks > renders AnRating 1`] = `
 </div>
 `;
 
-exports[`value input hooks > renders AnSlider 1`] = `
+exports[`mantine value input hooks > renders AnSlider 1`] = `
 <div>
   <style
     data-mantine-styles="classes"
@@ -335,7 +335,7 @@ exports[`value input hooks > renders AnSlider 1`] = `
 </div>
 `;
 
-exports[`value input hooks > renders DisabledNumberInput 1`] = `
+exports[`mantine value input hooks > renders DisabledNumberInput 1`] = `
 <div>
   <style
     data-mantine-styles="classes"
@@ -428,7 +428,7 @@ exports[`value input hooks > renders DisabledNumberInput 1`] = `
 </div>
 `;
 
-exports[`value input hooks > renders EmptyNumberInput 1`] = `
+exports[`mantine value input hooks > renders EmptyNumberInput 1`] = `
 <div>
   <style
     data-mantine-styles="classes"
@@ -516,7 +516,7 @@ exports[`value input hooks > renders EmptyNumberInput 1`] = `
 </div>
 `;
 
-exports[`value input hooks > renders PopulatedNumberInput 1`] = `
+exports[`mantine value input hooks > renders PopulatedNumberInput 1`] = `
 <div>
   <style
     data-mantine-styles="classes"

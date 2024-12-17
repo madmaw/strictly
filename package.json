@@ -50,8 +50,8 @@
     "lint:root": "cross-env ESLINT_USE_FLAT_CONFIG=false eslint --max-warnings=0 *.cjs *.json .github",
     "lint:root:fix": "cross-env ESLINT_USE_FLAT_CONFIG=false eslint --fix *.cjs *.json .github",
     "test": "turbo run test",
-    "test:ci": "turbo run test",
-    "test:force": "turbo run test --force"
+    "test:force": "turbo run test --force",
+    "test:update": "turbo run test:update"
   },
   "version": "0.0.1",
   "workspaces": {

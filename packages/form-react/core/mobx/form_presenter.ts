@@ -276,7 +276,7 @@ export class FormPresenter<
         parts.slice(1),
       ] as const
     }).filter(function ([index]) {
-      return index >= elementIndex
+      return index > elementIndex
     }).sort(function ([a], [b]) {
       // ascending
       return a - b

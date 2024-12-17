@@ -15,7 +15,7 @@ import { type Field } from 'types/field'
 type ListPath = `$.${number}`
 
 function Component(props: FormProps<{
-  $: Field<ListPath[], string>,
+  $: Field<string[], string>,
 }>) {
   const form = useMantineForm(props)
   const List = form.list('$')
@@ -29,7 +29,7 @@ function Component(props: FormProps<{
           {function (valuePath: ListPath) {
             return (
               <Code>
-                {valuePath}
+                ValuePath: {valuePath}
               </Code>
             )
           }}
@@ -72,10 +72,10 @@ export const Populated: Story = {
         disabled: false,
         required: false,
         value: [
-          '$.5',
+          '$.4',
           '$.6',
-          '$.7',
-          '$.8',
+          '$.19',
+          '$.0',
         ],
       },
     },

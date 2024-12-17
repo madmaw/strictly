@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`checkbox mantine hooks > renders Disabled 1`] = `
+exports[`mantine checkbox hooks > renders Disabled 1`] = `
 <div>
   <style
     data-mantine-styles="classes"
@@ -37,7 +37,7 @@ exports[`checkbox mantine hooks > renders Disabled 1`] = `
 </div>
 `;
 
-exports[`checkbox mantine hooks > renders Empty 1`] = `
+exports[`mantine checkbox hooks > renders Empty 1`] = `
 <div>
   <style
     data-mantine-styles="classes"
@@ -71,7 +71,7 @@ exports[`checkbox mantine hooks > renders Empty 1`] = `
 </div>
 `;
 
-exports[`checkbox mantine hooks > renders OverriddenPillsInputField 1`] = `
+exports[`mantine checkbox hooks > renders OverriddenPillsInputField 1`] = `
 <div>
   <style
     data-mantine-styles="classes"
@@ -89,7 +89,7 @@ exports[`checkbox mantine hooks > renders OverriddenPillsInputField 1`] = `
 </div>
 `;
 
-exports[`checkbox mantine hooks > renders OverriddenTextarea 1`] = `
+exports[`mantine checkbox hooks > renders OverriddenTextarea 1`] = `
 <div>
   <style
     data-mantine-styles="classes"
@@ -125,7 +125,7 @@ exports[`checkbox mantine hooks > renders OverriddenTextarea 1`] = `
 </div>
 `;
 
-exports[`checkbox mantine hooks > renders Populated 1`] = `
+exports[`mantine checkbox hooks > renders Populated 1`] = `
 <div>
   <style
     data-mantine-styles="classes"
@@ -159,7 +159,7 @@ exports[`checkbox mantine hooks > renders Populated 1`] = `
 </div>
 `;
 
-exports[`checkbox mantine hooks > renders Required 1`] = `
+exports[`mantine checkbox hooks > renders Required 1`] = `
 <div>
   <style
     data-mantine-styles="classes"

@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`radio group mantine hooks > renders Disabled 1`] = `
+exports[`mantine radio group hooks > renders Disabled 1`] = `
 <div>
   <style
     data-mantine-styles="classes"
@@ -179,7 +179,7 @@ exports[`radio group mantine hooks > renders Disabled 1`] = `
 </div>
 `;
 
-exports[`radio group mantine hooks > renders Empty 1`] = `
+exports[`mantine radio group hooks > renders Empty 1`] = `
 <div>
   <style
     data-mantine-styles="classes"
@@ -347,7 +347,7 @@ exports[`radio group mantine hooks > renders Empty 1`] = `
 </div>
 `;
 
-exports[`radio group mantine hooks > renders Populated 1`] = `
+exports[`mantine radio group hooks > renders Populated 1`] = `
 <div>
   <style
     data-mantine-styles="classes"
@@ -517,7 +517,7 @@ exports[`radio group mantine hooks > renders Populated 1`] = `
 </div>
 `;
 
-exports[`radio group mantine hooks > renders Required 1`] = `
+exports[`mantine radio group hooks > renders Required 1`] = `
 <div>
   <style
     data-mantine-styles="classes"

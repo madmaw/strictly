@@ -1,53 +1,57 @@
+import { type ElementOfArray } from '@de/base'
 import { type ComponentType } from 'react'
 import { type Fields } from 'types/field'
 import { type ListFieldsOfFields } from 'types/list_fields_of_fields'
+import { type ValueTypeOfField } from 'types/value_type_of_field'
 import { createUnsafePartialObserverComponent } from 'util/partial'
 import {
   type MantineFieldComponent,
   type MantineForm,
 } from './types'
 
-export type SuppliedListProps<ValuePath extends string> = {
-  valuePaths: readonly `${ValuePath}.${number}`[],
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type SuppliedListProps<Value = any> = {
+  values: readonly Value[],
 }
 
 export function createList<
   F extends Fields,
   K extends keyof ListFieldsOfFields<F>,
-  Props extends SuppliedListProps<K> & {
-    children: (valuePath: `${K}.${number}`, index: number) => React.ReactNode,
+  Props extends SuppliedListProps<ElementOfArray<ValueTypeOfField<F[K]>>> & {
+    children: (
+      value: ElementOfArray<ValueTypeOfField<F[K]>>,
+      index: number,
+    ) => React.ReactNode,
   },
 >(
   this: MantineForm<F>,
   valuePath: K,
   List: ComponentType<Props>,
-): MantineFieldComponent<SuppliedListProps<K>, Props> {
+): MantineFieldComponent<SuppliedListProps<ElementOfArray<ValueTypeOfField<F[K]>>>, Props> {
   const propSource = () => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const list: any[] = this.fields[valuePath].value
-    const valuePaths = list.map(function (_v, i) {
-      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-      return `${valuePath as string}.${i}` as `${K}.${number}`
-    })
+    const values = [...this.fields[valuePath].value]
     return {
-      valuePaths,
+      values,
     }
   }
-  return createUnsafePartialObserverComponent<typeof List, SuppliedListProps<K>>(List, propSource)
+  return createUnsafePartialObserverComponent<
+    typeof List,
+    SuppliedListProps<ElementOfArray<ValueTypeOfField<F[K]>>>
+  >(List, propSource)
 }
 
 export function DefaultList<
-  K extends string,
+  Value,
 >({
-  valuePaths,
+  values,
   children,
-}: SuppliedListProps<K> & {
-  children: (valuePath: `${K}.${number}`, index: number) => React.ReactNode,
+}: SuppliedListProps<Value> & {
+  children: (value: Value, index: number) => React.ReactNode,
 }) {
   return (
     <>
-      {valuePaths.map(function (valuePath, index) {
-        return children(valuePath, index)
+      {values.map(function (value, index) {
+        return children(value, index)
       })}
     </>
   )

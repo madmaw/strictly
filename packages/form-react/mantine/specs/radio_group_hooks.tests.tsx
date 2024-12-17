@@ -22,7 +22,7 @@ const {
   Empty,
 } = composedStories
 
-describe('radio group mantine hooks', function () {
+describe('mantine radio group hooks', function () {
   it.each(toArray(composedStories))('renders %s', function (_name, Story) {
     const wrapper = render(<Story />)
     expect(wrapper.container).toMatchSnapshot()

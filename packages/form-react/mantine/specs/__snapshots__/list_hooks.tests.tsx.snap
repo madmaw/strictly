@@ -1,0 +1,68 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`mantine list hooks > renders Empty 1`] = `
+<div>
+  <style
+    data-mantine-styles="classes"
+  >
+    @media (max-width: 35.99375em) {.mantine-visible-from-xs {display: none !important;}}@media (min-width: 36em) {.mantine-hidden-from-xs {display: none !important;}}@media (max-width: 47.99375em) {.mantine-visible-from-sm {display: none !important;}}@media (min-width: 48em) {.mantine-hidden-from-sm {display: none !important;}}@media (max-width: 61.99375em) {.mantine-visible-from-md {display: none !important;}}@media (min-width: 62em) {.mantine-hidden-from-md {display: none !important;}}@media (max-width: 74.99375em) {.mantine-visible-from-lg {display: none !important;}}@media (min-width: 75em) {.mantine-hidden-from-lg {display: none !important;}}@media (max-width: 87.99375em) {.mantine-visible-from-xl {display: none !important;}}@media (min-width: 88em) {.mantine-hidden-from-xl {display: none !important;}}
+  </style>
+  <div
+    class="m_1b7284a3 mantine-Paper-root"
+    data-with-border="true"
+  >
+    <div
+      class="m_6d731127 mantine-Stack-root"
+      style="--stack-gap: var(--mantine-spacing-md); --stack-align: stretch; --stack-justify: flex-start;"
+    />
+  </div>
+</div>
+`;
+
+exports[`mantine list hooks > renders Populated 1`] = `
+<div>
+  <style
+    data-mantine-styles="classes"
+  >
+    @media (max-width: 35.99375em) {.mantine-visible-from-xs {display: none !important;}}@media (min-width: 36em) {.mantine-hidden-from-xs {display: none !important;}}@media (max-width: 47.99375em) {.mantine-visible-from-sm {display: none !important;}}@media (min-width: 48em) {.mantine-hidden-from-sm {display: none !important;}}@media (max-width: 61.99375em) {.mantine-visible-from-md {display: none !important;}}@media (min-width: 62em) {.mantine-hidden-from-md {display: none !important;}}@media (max-width: 74.99375em) {.mantine-visible-from-lg {display: none !important;}}@media (min-width: 75em) {.mantine-hidden-from-lg {display: none !important;}}@media (max-width: 87.99375em) {.mantine-visible-from-xl {display: none !important;}}@media (min-width: 88em) {.mantine-hidden-from-xl {display: none !important;}}
+  </style>
+  <div
+    class="m_1b7284a3 mantine-Paper-root"
+    data-with-border="true"
+  >
+    <div
+      class="m_6d731127 mantine-Stack-root"
+      style="--stack-gap: var(--mantine-spacing-md); --stack-align: stretch; --stack-justify: flex-start;"
+    >
+      <code
+        class="m_b183c0a2 mantine-Code-root"
+        dir="ltr"
+      >
+        ValuePath: 
+        $.4
+      </code>
+      <code
+        class="m_b183c0a2 mantine-Code-root"
+        dir="ltr"
+      >
+        ValuePath: 
+        $.6
+      </code>
+      <code
+        class="m_b183c0a2 mantine-Code-root"
+        dir="ltr"
+      >
+        ValuePath: 
+        $.19
+      </code>
+      <code
+        class="m_b183c0a2 mantine-Code-root"
+        dir="ltr"
+      >
+        ValuePath: 
+        $.0
+      </code>
+    </div>
+  </div>
+</div>
+`;

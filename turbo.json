@@ -22,6 +22,9 @@
     },
     "test": {
       "dependsOn": ["^check-types"]
+    },
+    "test:update": {
+      "dependsOn": ["^check-types"]
     }
   }
 }

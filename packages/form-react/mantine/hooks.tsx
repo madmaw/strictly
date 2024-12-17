@@ -1,5 +1,6 @@
 import {
   Cache,
+  type ElementOfArray,
 } from '@de/base'
 import {
   Checkbox as CheckboxImpl,
@@ -176,7 +177,7 @@ class MantineFormImpl<
   )
   private readonly listCache: Cache<
     [keyof ListFieldsOfFields<F>, ComponentType<ComponentProps<typeof DefaultList>>],
-    MantineFieldComponent<SuppliedListProps<keyof ListFieldsOfFields<F>>, ComponentProps<typeof DefaultList>>
+    MantineFieldComponent<SuppliedListProps, ComponentProps<typeof DefaultList>>
   > = new Cache(
     createList.bind(this),
   )
@@ -354,11 +355,17 @@ class MantineFormImpl<
 
   list<
     K extends keyof ListFieldsOfFields<F>,
-  >(valuePath: K): MantineFieldComponent<SuppliedListProps<K>, ComponentProps<typeof DefaultList<K>>> {
+  >(valuePath: K): MantineFieldComponent<
+    SuppliedListProps<ElementOfArray<F[K]>>,
+    ComponentProps<typeof DefaultList<ElementOfArray<F[K]>>>
+  > {
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     return this.listCache.retrieveOrCreate(
       valuePath,
       DefaultList,
-    ) as MantineFieldComponent<SuppliedListProps<K>, ComponentProps<typeof DefaultList<K>>>
+    ) as MantineFieldComponent<
+      SuppliedListProps<ElementOfArray<F[K]>>,
+      ComponentProps<typeof DefaultList<ElementOfArray<F[K]>>>
+    >
   }
 }

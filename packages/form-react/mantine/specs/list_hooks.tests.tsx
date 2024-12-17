@@ -3,10 +3,11 @@ import { composeStories } from '@storybook/react'
 import {
   render,
 } from '@testing-library/react'
-import * as stories from './value_input_hooks.stories'
+import * as stories from './list_hooks.stories'
 
 const composedStories = composeStories(stories)
-describe('mantine value input hooks', function () {
+
+describe('mantine list hooks', function () {
   it.each(toArray(composedStories))('renders %s', function (_name, Story) {
     const wrapper = render(<Story />)
     expect(wrapper.container).toMatchSnapshot()
