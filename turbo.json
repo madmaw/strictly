@@ -21,7 +21,7 @@
       "dependsOn": ["^check-types"]
     },
     "test": {
-      "dependsOn": ["^build"]
+      "dependsOn": ["^check-types"]
     }
   }
 }

@@ -41,7 +41,6 @@
     "vite": "^5.4.10"
   },
   "license": "MIT",
-  "main": "index.js",
   "name": "@de/mo",
   "scripts": {
     "build": "vite build",

@@ -7,7 +7,6 @@
     "@de/support-vite": "*"
   },
   "license": "MIT",
-  "main": "dist/index.js",
   "name": "@de/fine",
   "scripts": {
     "build": "tsup",
@@ -19,6 +18,5 @@
     "test:watch": "vitest"
   },
   "type": "module",
-  "types": "dist/index.d.ts",
   "version": "0.0.1"
 }
