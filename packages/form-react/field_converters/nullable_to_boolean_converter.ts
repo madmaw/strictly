@@ -1,9 +1,9 @@
 import {
+  copy,
   type ReadonlyTypeDefOf,
   type TypeDefHolder,
   type ValueTypeOf,
 } from '@de/fine'
-import { copy } from '@de/fine/transformers/copies/copy'
 import {
   type FieldConversion,
   FieldConversionResult,

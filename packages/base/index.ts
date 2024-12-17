@@ -1,6 +1,7 @@
 export * from './errors/not_implemented'
 export * from './errors/unexpected_implementation'
 export * from './errors/unreachable'
+export * from './test'
 export * from './types/element_of_array'
 export * from './types/extract_generics'
 export * from './types/is_field_readonly'

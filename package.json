@@ -18,6 +18,7 @@
     "eslint-plugin-react-hooks": "^5.0.0",
     "eslint-plugin-unused-imports": "^4.1.4",
     "eslint-plugin-yml": "^1.15.0",
+    "tsup": "^8.3.5",
     "turbo": "^2.2.3",
     "type-fest": "^4.26.1",
     "typescript": "~5.5.3",

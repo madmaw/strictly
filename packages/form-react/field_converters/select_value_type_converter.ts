@@ -1,10 +1,10 @@
 import {
+  copy,
   type TypeDefHolder,
   type UnionTypeDef,
   type ValueTypeOf,
+  type ValueTypesOfDiscriminatedUnion,
 } from '@de/fine'
-import { copy } from '@de/fine/transformers/copies/copy'
-import { type ValueTypesOfDiscriminatedUnion } from '@de/fine/types/value_types_of_discriminated_union'
 import {
   type FieldConversion,
   FieldConversionResult,

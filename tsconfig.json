@@ -40,8 +40,10 @@
   },
   "exclude": [
     "**/.out/**",
+    "**/dist/**",
     ".out/**",
     ".turbo",
+    "dist",
     "node_modules"
   ],
   "include": [

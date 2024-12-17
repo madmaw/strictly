@@ -10,22 +10,20 @@ import {
 } from '@de/base'
 import {
   type Accessor,
+  type AnyValueType,
   flattenAccessorsOf,
   type FlattenedValueTypesOf,
+  flattenTypeDefsOf,
+  flattenValueTypeTo,
+  jsonPathPop,
+  mobxCopy,
   type MobxValueTypeOf,
   type ReadonlyTypeDefOf,
+  type StrictTypeDef,
   type TypeDefHolder,
+  valuePathToTypePath,
   type ValueTypeOf,
 } from '@de/fine'
-import { valuePathToTypePath } from '@de/fine'
-import { mobxCopy } from '@de/fine/transformers/copies/mobx_copy'
-import { flattenTypeDefsOf } from '@de/fine/transformers/flatteners/flatten_type_defs_of'
-import {
-  type AnyValueType,
-  flattenValueTypeTo,
-} from '@de/fine/transformers/flatteners/flatten_value_type_to'
-import { jsonPathPop } from '@de/fine/transformers/flatteners/json_path'
-import { type StrictTypeDef } from '@de/fine/types/strict_definitions'
 import {
   computed,
   observable,
