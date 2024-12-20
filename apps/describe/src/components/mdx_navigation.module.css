@@ -27,19 +27,19 @@ li:first-child {
   padding-top: gridBaseline;
 }
 
-.navItem {
+.current {
   font-weight: bold;
 }
 
-a {
+.navItem {
   text-decoration: none;
 }
 
-a:hover, a:active {
+.navItem:hover, .navItem:active {
   text-decoration: underline;
 }
 
-a, a:visited {
+.navItem, .navItem:visited {
   color: inherit;
 }
 

@@ -84,13 +84,13 @@ export function MdxNavigation({
           >
             {page === pageId
               ? (
-                <span className={styles.navItem}>
+                <span className={styles.current}>
                   {title}
                 </span>
               )
               : (
                 <a
-                  className={styles.a}
+                  className={styles.navItem}
                   href={`/${navPath}`}
                 >
                   {title}
@@ -126,7 +126,10 @@ function MdxNavigationLayer({
             className={styles.leaf}
             key={slug}
           >
-            <a href={`#${slug}`}>
+            <a
+              className={styles.navItem}
+              href={`#${slug}`}
+            >
               {text}
             </a>
             <MdxNavigationLayer branches={children} />
