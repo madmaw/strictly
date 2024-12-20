@@ -4,6 +4,7 @@
   "version": "0.2",
   "words": [
     "angvel",
+    "astrojs",
     "autofix",
     "autorun",
     "centerer",
@@ -12,6 +13,7 @@
     "datasources",
     "denormalize",
     "dprint",
+    "frontmatter",
     "instantiator",
     "instantiators",
     "keypoint",

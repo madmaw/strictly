@@ -1,6 +1,7 @@
-node_modules
+.astro
 .out
 .turbo
-dist
-packages/struct
 apps/scratch
+dist
+node_modules
+packages/struct

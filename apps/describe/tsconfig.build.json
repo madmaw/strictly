@@ -5,10 +5,6 @@
   "extends": "../../tsconfig.build.json",
   "include": [
     ".eslintrc.cjs",
-    ".storybook/**/*.ts",
-    ".storybook/**/*.tsx",
-    ".vitest/**/*.ts",
-    "babel.config.js",
     "vite.config.mts",
     "vitest.workspace.ts"
   ]

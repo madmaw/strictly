@@ -1,0 +1,86 @@
+---
+layout: layouts/default.astro
+page: 'why'
+---
+
+# Why Another Form library?
+
+Let's save everyone a bit of time.
+
+> UI should be stateless
+
+If you viscerally disagree with that statement you can stop reading now. There are other form libraries for you.
+
+## What is a Stateless UI?
+
+Let's consider React, which this library targets. Components in React have props and a stateless React Component has all its possible states described in its props. If you are using `useState` or making calls to the server directly in your component, it probably isn't stateless.
+
+```typescript
+export function StatefulCounter() {
+  const [count, setCount] = useState(0)
+  const onIncrement = useCallback(function () {
+    setCount(function (count) {
+      return count + 1
+    })
+  }, [setCount])
+  return (
+    <button onClick={onIncrement}>Count {count}</button>
+  )
+}
+
+export function StatelessCounter({
+  count,
+  onIncrement,
+}: {
+  count: number,
+  onIncrement: () => void,
+}) {
+  return (
+    <button onClick={onIncrement}>Count {count}</button>
+  )
+}
+```
+
+It is often quite convenient to do store state in your UI, so why would you want to have stateless components?
+
+## A brief Digression into (unit) Testability
+
+Even if you aren't a huge advocate of unit tests, considering code through the lens of whether it is testable is a great way to frame your thinking and discussions around code quality. It shouldn't be controversial to say that more testable code is better code.
+
+Once your code is testable it tends to satisfy less objective quality metrics like SOLID, composability, or reusability. Testability discourages, by virtue of making your tests more difficult to write, the use of anti-patterns like singletons, globals, or hidden state.
+
+Stateless React Components are inherently testable as all possible states are able to be represented through the props. While this does mean you need to move event handling and business logic outside of the rendering of your component, it is traditionally considered to be good practice to do so anyway.
+
+## What does it mean for a Form to be Stateless?
+
+The creator of [Formik](https://formik.org/docs/overview) is quoted as saying
+
+> form state is inherently ephemeral and local[, so tracking it in Redux (or any kind of Flux library) is unnecessary]
+
+Which is true. From the callers' perspective you absolutely do not want to be dealing with all the in-between states as a user does data entry. You want a simple APi that just exposes the finished, validated object.
+
+As an implementor of a form UI, and client of a form library, I want my form component to be stateless (and testable), while still providing that higher level abstraction to my callers.
+
+```typescript
+type DomainObject = {
+  name: string,
+  age: number,
+  tags: string[],
+}
+
+// nice for callers
+type CallerFriendlyAbstractionProps = {
+  value: DomainObject,
+  onSubmit: (value: DomainObject) => void,
+}
+
+// nice for implementors
+type StatelessFormProps<Fields extends FormFieldsOf<DomainObject>> = {
+  fields: Fields,
+  onFieldChange: <K extends keyof Fields>(fieldKey: K, value: Fields[K]['value']) => void,
+  onSubmit: () => void,
+}
+```
+
+This library attempts to bridge the gap.
+

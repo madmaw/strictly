@@ -52,6 +52,7 @@
   ],
   "references": [
     {"path": "apps/demo"},
+    {"path": "apps/describe"},
     {"path": "packages/base"},
     {"path": "packages/define"},
     {"path": "packages/form-react"},

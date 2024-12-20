@@ -1,0 +1,69 @@
+@import "./measures.module.css";
+
+.branch {
+  list-style-type: '+ ';
+  padding-inline-start: gridBaseline;
+  font-size: textSizeSmall;
+}
+
+.branch:not(:has(.branch)) {
+  list-style-type: '- ';
+}
+
+ul.root {
+  list-style-type: none;
+  padding-inline-start: 0;
+}
+
+li.root > ul {
+  padding-left: calc(gridBaseline * 2)
+}
+
+li:not(:last-child) {
+  padding-bottom: gridBaseline;
+}
+
+li:first-child {
+  padding-top: gridBaseline;
+}
+
+.navItem {
+  font-weight: bold;
+}
+
+a {
+  text-decoration: none;
+}
+
+a:hover, a:active {
+  text-decoration: underline;
+}
+
+a, a:visited {
+  color: inherit;
+}
+
+@media (mobileBreakpoint) {
+  .branch {
+    display: none;
+  }
+
+  li:first-child {
+    padding-top: 0;
+  }
+
+  ul.root {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    align-items: stretch;
+  }
+  
+  li.root {
+    padding-bottom: 0;
+    flex: 1;
+    text-align: center;
+  }
+}
+
+

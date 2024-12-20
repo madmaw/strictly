@@ -1,0 +1,5 @@
+@value mobileBreakpoint: max-width: 800px;
+@value gridBaseline: 8px;
+@value separatorWidth: 1px;
+@value textSizeMedium: 18px;
+@value textSizeSmall: 14px;

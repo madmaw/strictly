@@ -1,0 +1,36 @@
+---
+import { type MarkdownLayoutProps } from 'astro'
+import { type PageId, pagePaths, MdxNavigation } from 'components/mdx_navigation'
+import styles from './default.module.css'
+
+type Props = MarkdownLayoutProps<{
+  page?: PageId;
+}>
+
+const {
+  frontmatter: {
+    page = Astro.props.url?.substring(1) || ''
+  },
+  headings,
+} = Astro.props;
+const title = pagePaths[page as PageId] || {
+  title: page,
+}
+---
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{title}</title>
+  </head>
+  <body class={styles.body}>
+    <nav class={styles.nav}>
+      <MdxNavigation headings={headings} page={page}/>
+    </nav>
+    <div class={styles.scroll}>
+      <article class={styles.article}>
+        <slot />
+      </article>
+    </div>
+  </body>
+</html>
