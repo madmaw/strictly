@@ -122,10 +122,7 @@ function MdxNavigationLayer({
         text,
       }) {
         return (
-          <li
-            className={styles.leaf}
-            key={slug}
-          >
+          <li key={slug}>
             <a
               className={styles.navItem}
               href={`#${slug}`}

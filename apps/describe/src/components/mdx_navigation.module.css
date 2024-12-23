@@ -1,9 +1,9 @@
-@import "./measures.module.css";
+@import './measures.module.css';
 
 .branch {
+  font-size: text-size-small;
   list-style-type: '+ ';
-  padding-inline-start: gridBaseline;
-  font-size: textSizeSmall;
+  padding-inline-start: grid-baseline;
 }
 
 .branch:not(:has(.branch)) {
@@ -16,15 +16,15 @@ ul.root {
 }
 
 li.root > ul {
-  padding-left: calc(gridBaseline * 2)
+  padding-left: calc(grid-baseline * 2);
 }
 
 li:not(:last-child) {
-  padding-bottom: gridBaseline;
+  padding-bottom: grid-baseline;
 }
 
 li:first-child {
-  padding-top: gridBaseline;
+  padding-top: grid-baseline;
 }
 
 .current {
@@ -35,15 +35,17 @@ li:first-child {
   text-decoration: none;
 }
 
-.navItem:hover, .navItem:active {
+.navItem:hover,
+.navItem:active {
   text-decoration: underline;
 }
 
-.navItem, .navItem:visited {
+.navItem,
+.navItem:visited {
   color: inherit;
 }
 
-@media (mobileBreakpoint) {
+@media (mobile-breakpoint) {
   .branch {
     display: none;
   }
@@ -53,17 +55,15 @@ li:first-child {
   }
 
   ul.root {
+    align-items: stretch;
     display: flex;
     flex-direction: row;
     width: 100%;
-    align-items: stretch;
   }
-  
+
   li.root {
-    padding-bottom: 0;
     flex: 1;
+    padding-bottom: 0;
     text-align: center;
   }
 }
-
-

@@ -102,7 +102,8 @@ module.exports = {
       },
       plugins: [
         '@typescript-eslint',
-        'dprint-integration',
+        'css-modules',
+        'dprint-integration2',
         'import-newlines',
         'import',
         'no-autofix',
@@ -114,7 +115,8 @@ module.exports = {
         'eslint:recommended',
         'plugin:@eslint-community/eslint-comments/recommended',
         'plugin:@typescript-eslint/recommended-type-checked',
-        'plugin:dprint-integration/recommended',
+        'plugin:css-modules/recommended',
+        'plugin:dprint-integration2/recommended',
         'plugin:react/recommended',
         'plugin:react-hooks/recommended',
         'plugin:import/errors',
@@ -243,7 +245,7 @@ module.exports = {
         // handled by dprint
         'comma-dangle': ['off'],
         'default-case': 'warn',
-        'dprint-integration/dprint': [
+        'dprint-integration2/dprint': [
           'warn',
           {},
           {
@@ -504,6 +506,26 @@ module.exports = {
         ],
       },
     },
+    // CSS
+    {
+      files: ['*.css'],
+      parser: 'eslint-parser-plain',
+      plugins: ['dprint-integration2'],
+      rules: {
+        'dprint-integration2/dprint': [
+          'warn',
+          {},
+          {
+            malva: {
+              declarationOrder: 'alphabetical',
+              preferSingleLine: true,
+              blockSelectorLinebreak: 'always',
+              quotes: 'alwaysSingle',
+            },
+          },
+        ],
+      },
+    },
   ],
   rules: {
     'eol-last': [
@@ -512,7 +534,13 @@ module.exports = {
     ],
     'no-multiple-empty-lines': [
       'warn',
-      { max: 1 },
+      {
+        max: 1,
+        // eslint-disable-next-line @typescript-eslint/naming-convention
+        maxBOF: 0,
+        // eslint-disable-next-line @typescript-eslint/naming-convention
+        maxEOF: 0,
+      },
     ],
     'no-trailing-spaces': ['warn'],
   },

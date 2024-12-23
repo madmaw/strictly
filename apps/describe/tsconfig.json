@@ -6,8 +6,6 @@
   "exclude": [".astro"],
   "extends": "../../tsconfig.json",
   "include": [
-    "**/*.astro",
-    "**/*.mdx",
     ".astro/types.d.ts",
     "astro.config.mts",
     "src",

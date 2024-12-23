@@ -1,14 +1,16 @@
 {
   "devDependencies": {
-    "@dprint/dockerfile": "=0.3.0",
     "@eslint-community/eslint-plugin-eslint-comments": "^4.1.0",
     "@typescript-eslint/eslint-plugin": "^8.11.0",
     "@typescript-eslint/parser": "^8.11.0",
+    "any-eslint-parser": "^1.0.1",
     "cross-env": "^7.0.3",
     "del-cli": "^6.0.0",
     "eslint": "^9.13.0",
     "eslint-import-resolver-typescript": "^3.6.1",
-    "eslint-plugin-dprint-integration": "^0.3.0",
+    "eslint-parser-plain": "^0.1.0",
+    "eslint-plugin-css-modules": "^2.12.0",
+    "eslint-plugin-dprint-integration2": "^0.4.4",
     "eslint-plugin-import": "^2.30.0",
     "eslint-plugin-import-newlines": "^1.4.0",
     "eslint-plugin-jsonc": "^2.16.0",
@@ -33,7 +35,6 @@
   "packageManager": "yarn@1.22.22",
   "private": true,
   "resolutions": {
-    "**/**/@dprint/dockerfile": "=0.3.0",
     "**/**/vite": "=6.0.3"
   },
   "scripts": {

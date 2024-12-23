@@ -1,5 +1,5 @@
-@value mobileBreakpoint: max-width: 800px;
-@value gridBaseline: 8px;
-@value separatorWidth: 1px;
-@value textSizeMedium: 18px;
-@value textSizeSmall: 14px;
+@value mobile-breakpoint: max-width: 800px;
+@value grid-baseline: 8px;
+@value separator-width: 1px;
+@value text-size-medium: 18px;
+@value text-size-small: 14px;

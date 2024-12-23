@@ -482,35 +482,35 @@
     react-confetti "^6.1.0"
     strip-ansi "^7.1.0"
 
-"@dprint/dockerfile@=0.3.0", "@dprint/dockerfile@^0.3.0":
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/@dprint/dockerfile/-/dockerfile-0.3.0.tgz#c257868162586bcc5ae617af9256dfd48e991f2b"
-  integrity sha512-u2XhDkS0LrhmBrJ6ecP0TZsFv5a4W688XnD3F11/i9H0r/4/6QHLk6B2aKZmjK3rHaO1ERBYRA6YtKGxwkn2xg==
+"@dprint/dockerfile@^0.3.2":
+  version "0.3.2"
+  resolved "https://registry.yarnpkg.com/@dprint/dockerfile/-/dockerfile-0.3.2.tgz#edd404514b6d1186a23c188bb75dad20764b3dcf"
+  integrity sha512-LOZYz4gmIrDI/6FwvJXymAiSzYUeCCD3A4QGLW91zaCN8xJsdg7bgcFB4HrvhTBah9IK+COL7Hperb6GypQ/7A==
 
 "@dprint/formatter@^0.2.0":
   version "0.2.1"
   resolved "https://registry.yarnpkg.com/@dprint/formatter/-/formatter-0.2.1.tgz#36345ed2e7ed15da9ba3a7c575f5864fffcd9794"
   integrity sha512-GCzgRt2o4mhZLy8L47k2A+q9EMG/jWhzZebE29EqKsxmjDrSfv2VisEj/Q+39OOf04jTkEfB/TRO+IZSyxHdYg==
 
-"@dprint/json@^0.17.1":
-  version "0.17.4"
-  resolved "https://registry.yarnpkg.com/@dprint/json/-/json-0.17.4.tgz#5b26136985d750ac9bfe9eb7b4508866bc6b1c5d"
-  integrity sha512-9BmvkJRwICKr2hoC+WYtc3ewHi4PRRTmtk3RShpBFDEcYyMVB9+vXyxw/J/oMUlRfMY0jvOM5m+QlxgSo6g88Q==
+"@dprint/json@^0.19.4":
+  version "0.19.4"
+  resolved "https://registry.yarnpkg.com/@dprint/json/-/json-0.19.4.tgz#853b18ddba689f04f96b739c42c8816632e158bb"
+  integrity sha512-65NHNet0KXpARa4iX9ZNMtzQQoQEUnHCHGOYfA6OICz8+V+7FNjieeltlCZf0gTLs3eBbgFuy8RsFX9+jYt1Uw==
 
-"@dprint/markdown@^0.15.2":
-  version "0.15.3"
-  resolved "https://registry.yarnpkg.com/@dprint/markdown/-/markdown-0.15.3.tgz#15944f35b48f3f2b2059cb8412f875d30d355254"
-  integrity sha512-QCpvOQZtvq8HNbUobh9lAW5V4PrEncpfKLltxgM/DjLymDHUQ5EOnHUHaBlKu0ze+xtApBFnJpZS2xhjoNpj9g==
+"@dprint/markdown@^0.16.3":
+  version "0.16.4"
+  resolved "https://registry.yarnpkg.com/@dprint/markdown/-/markdown-0.16.4.tgz#ff5d204a3c2afc83fd87504a8af5c38cf7d6fd71"
+  integrity sha512-WjsC4yLybR5/76+d/2s36nOBGjETe+jJR//ddFHohDXKdis+FTUv7dJ00kmd6g0AKQwDITayM1Nid10gFNG0Yg==
 
 "@dprint/toml@^0.5.4":
   version "0.5.4"
   resolved "https://registry.yarnpkg.com/@dprint/toml/-/toml-0.5.4.tgz#11bff41e032d5c9f86402cf3ea75cb6387537056"
   integrity sha512-d+5GwwzztZD0QixmOBhaO6nWVLsAeYsJ1HJYNxDoDRbASFCpza9BBVshG5ctBRXCkkIHhD9BO1SnbOoRQltUQw==
 
-"@dprint/typescript@^0.84.1":
-  version "0.84.4"
-  resolved "https://registry.yarnpkg.com/@dprint/typescript/-/typescript-0.84.4.tgz#f6ce4bce94cce1ed11767f53ed8e64d14fdfc353"
-  integrity sha512-QIdXKI+bbtV7l+k3eBsPtbWFD4ELwY+Hbd9uH2sIOK6ZNzBquTO/EJNX77Pr25kdaj39lPr2Do1YDZM4iQVqXg==
+"@dprint/typescript@^0.93.3":
+  version "0.93.3"
+  resolved "https://registry.yarnpkg.com/@dprint/typescript/-/typescript-0.93.3.tgz#ae9ba9652dcc6a6fce25ee600425daa485b84086"
+  integrity sha512-P/AAHYDyUG+5hih8knuk3s9n2wrCD1LSh0YsLlJMx6+v0Wsjf0PpcVRn+xDvHCtwPUctB5WBkZT2U8mu6Cm7RQ==
 
 "@emnapi/runtime@^1.2.0":
   version "1.3.1"
@@ -2707,6 +2707,11 @@ ansi-styles@^6.1.0, ansi-styles@^6.2.1:
   resolved "https://registry.yarnpkg.com/ansi-styles/-/ansi-styles-6.2.1.tgz#0e62320cf99c21afff3b3012192546aacbfb05c5"
   integrity sha512-bN798gFfQX+viw3R7yrGWRqnrN2oRkEkUjjl4JNn4E8GxxbjtG3FbrEIIY3l8/hrwUwIeCZvi4QuOTP4MErVug==
 
+any-eslint-parser@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/any-eslint-parser/-/any-eslint-parser-1.0.1.tgz#ab8aff674d02a26e64c881db01048d4d45f52271"
+  integrity sha512-vQoHUcGbnsVd1N4yZtCyxR+5zjDehf6Hmi4BSbOYRFpzR8ba3UySQUoHyWnj13AV9dyrxHsTZh9Z+x+eeIdqzw==
+
 any-promise@^1.0.0:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/any-promise/-/any-promise-1.3.0.tgz#abc6afeedcea52e809cdc0376aed3ce39635d17f"
@@ -3687,7 +3692,7 @@ define-properties@^1.1.3, define-properties@^1.2.0, define-properties@^1.2.1:
     has-property-descriptors "^1.0.0"
     object-keys "^1.1.1"
 
-defu@^6.1.2:
+defu@^6.1.3:
   version "6.1.4"
   resolved "https://registry.yarnpkg.com/defu/-/defu-6.1.4.tgz#4e0c9cf9ff68fe5f3d7f2765cc1a012dfdcb0479"
   integrity sha512-mEQCMmwJu317oSz8CwdIOdwf3xMif1ttiM8LTufzc3g6kR+9Pe236twL8j3IYT1F7GfRgGcW6MWxzZjLIkuHIg==
@@ -3851,6 +3856,16 @@ dotenv@^16.4.2:
   version "16.4.7"
   resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-16.4.7.tgz#0e20c5b82950140aa99be360a8a5f52335f53c26"
   integrity sha512-47qPchRCykZC03FhkYAhrvwU4xDBFIj1QPqaarj6mdM/hgUzfPHcpkHJOn3mJAufFeeAxAzeGsr5X0M4k6fLZQ==
+
+dprint-plugin-malva@^0.10.1:
+  version "0.10.1"
+  resolved "https://registry.yarnpkg.com/dprint-plugin-malva/-/dprint-plugin-malva-0.10.1.tgz#bbf5ecd3aec61cf894ed056953509d97c87b66e7"
+  integrity sha512-nLBPBQWUDWLEIRfsZEVQwNwL3ljcJghSmGd7oLb4bETmnArQBq4Pjr0g3vksl+XY2EEFxN6o476bkK3bq/YXkw==
+
+dprint-plugin-markup@^0.2.6:
+  version "0.2.6"
+  resolved "https://registry.yarnpkg.com/dprint-plugin-markup/-/dprint-plugin-markup-0.2.6.tgz#91b5f908f2e70d588c7d2299533ad6fbd624ed22"
+  integrity sha512-/kFMWDdNzL+arSgCt6b2xbi89b+fODcWMrnX85xjLsCuozNZOaZCvJ1vcOMOaFFpFKULdWxCggX8jc9GVfF38Q==
 
 dset@^3.1.4:
   version "3.1.4"
@@ -4243,6 +4258,11 @@ eslint-module-utils@^2.12.0:
   dependencies:
     debug "^3.2.7"
 
+eslint-parser-plain@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/eslint-parser-plain/-/eslint-parser-plain-0.1.0.tgz#8f7f0ac79fe4e4f47b33cf226b837ccff9d71ad6"
+  integrity sha512-oOeA6FWU0UJT/Rxc3XF5Cq0nbIZbylm7j8+plqq0CZoE6m4u32OXJrR+9iy4srGMmF6v6pmgvP1zPxSRIGh3sg==
+
 eslint-plugin-astro@^1.3.1:
   version "1.3.1"
   resolved "https://registry.yarnpkg.com/eslint-plugin-astro/-/eslint-plugin-astro-1.3.1.tgz#087e6930c3a0435532327d9ffca1c128a7873d5e"
@@ -4257,18 +4277,28 @@ eslint-plugin-astro@^1.3.1:
     postcss "^8.4.14"
     postcss-selector-parser "^7.0.0"
 
-eslint-plugin-dprint-integration@^0.3.0:
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-dprint-integration/-/eslint-plugin-dprint-integration-0.3.0.tgz#5b44f00a959ffe24e302ca1386a43b8966610df4"
-  integrity sha512-w92Av81MjERgR4h/03APU1T/XYvgp+8UV1KIoRwSqsKrbAlkiY9+iUKVX2hjN/5Sh2NnLrBFIt+NTpO6DieikA==
+eslint-plugin-css-modules@^2.12.0:
+  version "2.12.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-css-modules/-/eslint-plugin-css-modules-2.12.0.tgz#c4102c390c7efd68c4d53677c5e763971699322c"
+  integrity sha512-ruFBdad69ABrbCDCh5mXj7UzNmrvytfzPACjyvZWIAjFZAG8BXpYSbqmE8gU5wF+pIzV3jU2CWhLvfekXT/IgQ==
   dependencies:
-    "@dprint/dockerfile" "^0.3.0"
+    gonzales-pe "^4.3.0"
+    lodash "^4.17.2"
+
+eslint-plugin-dprint-integration2@^0.4.4:
+  version "0.4.4"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-dprint-integration2/-/eslint-plugin-dprint-integration2-0.4.4.tgz#e36e8061824c227cfc35dbfd747f047b374646be"
+  integrity sha512-dH0nXU2FPQkHDw6z7QdClb4EiAlSQONsGjow+bSE7JTOJvATSRJze2UwoBH/1Iq/f/jkHQyejQ9cdXjs7rsoeA==
+  dependencies:
+    "@dprint/dockerfile" "^0.3.2"
     "@dprint/formatter" "^0.2.0"
-    "@dprint/json" "^0.17.1"
-    "@dprint/markdown" "^0.15.2"
+    "@dprint/json" "^0.19.4"
+    "@dprint/markdown" "^0.16.3"
     "@dprint/toml" "^0.5.4"
-    "@dprint/typescript" "^0.84.1"
-    defu "^6.1.2"
+    "@dprint/typescript" "^0.93.3"
+    defu "^6.1.3"
+    dprint-plugin-malva "^0.10.1"
+    dprint-plugin-markup "^0.2.6"
     find-up "^5.0.0"
     prettier-linter-helpers "^1.0.0"
 
@@ -5033,6 +5063,13 @@ globrex@^0.1.2:
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/globrex/-/globrex-0.1.2.tgz#dd5d9ec826232730cd6793a5e33a9302985e6098"
   integrity sha512-uHJgbwAMwNFf5mLst7IWLNg14x1CkeqglJb/K3doi4dw6q2IvAAmM/Y81kevy83wP+Sst+nutFTYOGg3d1lsxg==
+
+gonzales-pe@^4.3.0:
+  version "4.3.0"
+  resolved "https://registry.yarnpkg.com/gonzales-pe/-/gonzales-pe-4.3.0.tgz#fe9dec5f3c557eead09ff868c65826be54d067b3"
+  integrity sha512-otgSPpUmdWJ43VXyiNgEYE4luzHCL2pz4wQ0OnDluC6Eg4Ko3Vexy/SrSynglw/eR+OhkzmqFCZa/OFa/RgAOQ==
+  dependencies:
+    minimist "^1.2.5"
 
 gopd@^1.0.1, gopd@^1.2.0:
   version "1.2.0"
@@ -6582,7 +6619,7 @@ lodash.sortby@^4.7.0:
   resolved "https://registry.yarnpkg.com/lodash.sortby/-/lodash.sortby-4.7.0.tgz#edd14c824e2cc9c1e0b0a1b42bb5210516a42438"
   integrity sha512-HDWXG8isMntAyRF5vZ7xKuEvOhT4AhlRt/3czTSjvGUxjYCBVRQY48ViDHyfYz9VIoBkW4TMGQNapx+l3RUwdA==
 
-lodash@^4.17.21:
+lodash@^4.17.2, lodash@^4.17.21:
   version "4.17.21"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
   integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
@@ -7364,7 +7401,7 @@ minimatch@^9.0.0, minimatch@^9.0.4:
   dependencies:
     brace-expansion "^2.0.1"
 
-minimist@^1.2.0, minimist@^1.2.6, minimist@^1.2.8:
+minimist@^1.2.0, minimist@^1.2.5, minimist@^1.2.6, minimist@^1.2.8:
   version "1.2.8"
   resolved "https://registry.yarnpkg.com/minimist/-/minimist-1.2.8.tgz#c1a464e7693302e082a075cee0c057741ac4772c"
   integrity sha512-2yyAR8qBkN3YuheJanUpWC5U3bb5osDywNB8RzDVlDwDHbocAJveqqj1u8+SVD7jkWT4yvsHCpWqqWqAxb0zCA==
