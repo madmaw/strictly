@@ -1,8 +1,8 @@
 import {
   type ListTypeDef,
   type LiteralTypeDef,
-  type MapTypeDef,
-  type StructuredTypeDef,
+  type ObjectTypeDef,
+  type RecordTypeDef,
   type TypeDef,
   type TypeDefHolder,
   type TypeDefType,
@@ -28,8 +28,8 @@ type InternalPartialAndNullableOf<T extends TypeDef> = {
 
 type InternalPartialOf<T extends TypeDef> = T extends LiteralTypeDef ? InternalPartialOfLiteral<T>
   : T extends ListTypeDef ? InternalPartialOfList<T>
-  : T extends MapTypeDef ? InternalPartialOfMap<T>
-  : T extends StructuredTypeDef ? InternalPartialOfStructured<T>
+  : T extends RecordTypeDef ? InternalPartialOfRecord<T>
+  : T extends ObjectTypeDef ? InternalPartialOfObject<T>
   : T extends UnionTypeDef ? InternalPartialOfUnion<T>
   : never
 
@@ -40,13 +40,13 @@ type InternalPartialOfList<T extends ListTypeDef> = {
   readonly elements: InternalPartialAndNullableOf<T['elements']>,
 }
 
-type InternalPartialOfMap<T extends MapTypeDef> = {
+type InternalPartialOfRecord<T extends RecordTypeDef> = {
   readonly type: T['type'],
   readonly keyPrototype: T['keyPrototype'],
   readonly valueTypeDef: InternalPartialAndNullableOf<T['valueTypeDef']> | undefined,
 }
 
-type InternalPartialOfStructured<T extends StructuredTypeDef> = T extends StructuredTypeDef<infer Fields> ? {
+type InternalPartialOfObject<T extends ObjectTypeDef> = T extends ObjectTypeDef<infer Fields> ? {
     readonly type: T['type'],
     readonly fields: {
       [K in keyof Fields]+?: InternalPartialAndNullableOf<Fields[K]>

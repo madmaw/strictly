@@ -1,8 +1,8 @@
 import {
   type ListTypeDef,
   type LiteralTypeDef,
-  type MapTypeDef,
-  type StructuredTypeDef,
+  type ObjectTypeDef,
+  type RecordTypeDef,
   type TypeDef,
   type TypeDefHolder,
   type UnionTypeDef,
@@ -14,8 +14,8 @@ export type ReadonlyTypeDefOf<T extends TypeDefHolder> = {
 
 type InternalReadonlyTypeDefOf<T extends TypeDef> = T extends LiteralTypeDef ? InternalReadonlyTypeDefOfLiteral<T>
   : T extends ListTypeDef ? InternalReadonlyTypeDefOfList<T>
-  : T extends MapTypeDef ? InternalReadonlyTypeDefOfMap<T>
-  : T extends StructuredTypeDef ? InternalReadonlyTypeDefOfStruct<T>
+  : T extends RecordTypeDef ? InternalReadonlyTypeDefOfRecord<T>
+  : T extends ObjectTypeDef ? InternalReadonlyTypeDefOfObject<T>
   : T extends UnionTypeDef ? InternalReadonlyTypeDefOfUnion<T>
   : never
 
@@ -26,7 +26,7 @@ type InternalReadonlyTypeDefOfList<T extends ListTypeDef> = {
   readonly elements: InternalReadonlyTypeDefOf<T['elements']>,
 }
 
-type InternalReadonlyTypeDefOfMap<T extends MapTypeDef> = {
+type InternalReadonlyTypeDefOfRecord<T extends RecordTypeDef> = {
   readonly type: T['type'],
   readonly keyPrototype: T['keyPrototype'],
   readonly valueTypeDef: undefined extends T['valueTypeDef'] ? InternalReadonlyTypeDefOf<
@@ -35,7 +35,7 @@ type InternalReadonlyTypeDefOfMap<T extends MapTypeDef> = {
     : InternalReadonlyTypeDefOf<T['valueTypeDef']>,
 }
 
-type InternalReadonlyTypeDefOfStruct<T extends StructuredTypeDef> = T extends StructuredTypeDef<infer Fields> ? {
+type InternalReadonlyTypeDefOfObject<T extends ObjectTypeDef> = T extends ObjectTypeDef<infer Fields> ? {
     readonly type: T['type'],
     readonly fields: {
       readonly [K in keyof Fields]: InternalReadonlyTypeDefOf<Fields[K]>

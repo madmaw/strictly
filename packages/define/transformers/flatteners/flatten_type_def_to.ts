@@ -7,8 +7,8 @@ import {
 } from 'types/definitions'
 import {
   type StrictListTypeDef,
-  type StrictMapTypeDef,
-  type StrictStructuredTypeDef,
+  type StrictObjectTypeDef,
+  type StrictRecordTypeDef,
   type StrictTypeDef,
   type StrictTypeDefHolder,
   type StrictUnionTypeDef,
@@ -57,10 +57,10 @@ function internalFlattenTypeDefChildren(
       return r
     case TypeDefType.List:
       return internalFlattenedListTypeDefChildren(path, t, r)
-    case TypeDefType.Map:
-      return internalFlattenMapTypeDefChildren(path, t, r)
-    case TypeDefType.Structured:
-      return internalFlattenStructTypeDefChildren(path, qualifier, t, r)
+    case TypeDefType.Record:
+      return internalFlattenRecordTypeDefChildren(path, t, r)
+    case TypeDefType.Object:
+      return internalFlattenObjectTypeDefChildren(path, qualifier, t, r)
     case TypeDefType.Union:
       return internalFlattenUnionTypeDefChildren(path, qualifier, t, r)
     default:
@@ -76,18 +76,18 @@ function internalFlattenedListTypeDefChildren(
   return internalFlattenTypeDef(jsonPath(path, '*'), elements, r)
 }
 
-function internalFlattenMapTypeDefChildren(
+function internalFlattenRecordTypeDefChildren(
   path: string,
-  { valueTypeDef }: StrictMapTypeDef,
+  { valueTypeDef }: StrictRecordTypeDef,
   r: Record<string, StrictTypeDef>,
 ): Record<string, StrictTypeDef> {
   return internalFlattenTypeDef(jsonPath(path, '*'), valueTypeDef, r)
 }
 
-function internalFlattenStructTypeDefChildren(
+function internalFlattenObjectTypeDefChildren(
   path: string,
   qualifier: string,
-  { fields }: StrictStructuredTypeDef,
+  { fields }: StrictObjectTypeDef,
   r: Record<string, StrictTypeDef>,
 ): Record<string, StrictTypeDef> {
   return reduce(

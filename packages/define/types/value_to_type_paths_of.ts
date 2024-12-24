@@ -5,8 +5,8 @@ import {
 import {
   type ListTypeDef,
   type LiteralTypeDef,
-  type MapTypeDef,
-  type StructuredTypeDef,
+  type ObjectTypeDef,
+  type RecordTypeDef,
   type TypeDef,
   type UnionTypeDef,
 } from './definitions'
@@ -58,14 +58,14 @@ type InternalFlattenedJsonPathsOfChildren<
       TypePath,
       NextDepth
     >
-  : T extends MapTypeDef ? InternalFlattenedJsonPathsOfMapChildren<
+  : T extends RecordTypeDef ? InternalFlattenedJsonPathsOfRecordChildren<
       T,
       SegmentOverride,
       ValuePath,
       TypePath,
       NextDepth
     >
-  : T extends StructuredTypeDef ? InternalFlattenedJsonPathsOfStructChildren<
+  : T extends ObjectTypeDef ? InternalFlattenedJsonPathsOfObjectChildren<
       T,
       SegmentOverride,
       ValuePath,
@@ -99,8 +99,8 @@ type InternalFlattenedJsonPathsOfListChildren<
   Depth
 >
 
-type InternalFlattenedJsonPathsOfMapChildren<
-  T extends MapTypeDef,
+type InternalFlattenedJsonPathsOfRecordChildren<
+  T extends RecordTypeDef,
   SegmentOverride extends string,
   ValuePath extends string,
   TypePath extends string,
@@ -113,14 +113,14 @@ type InternalFlattenedJsonPathsOfMapChildren<
   Depth
 >
 
-type InternalFlattenedJsonPathsOfStructChildren<
-  T extends StructuredTypeDef,
+type InternalFlattenedJsonPathsOfObjectChildren<
+  T extends ObjectTypeDef,
   SegmentOverride extends string,
   ValuePath extends string,
   TypePath extends string,
   Qualifier extends string,
   Depth extends number,
-> = T extends StructuredTypeDef<infer Fields> ? keyof Fields extends string ? UnionToIntersection<
+> = T extends ObjectTypeDef<infer Fields> ? keyof Fields extends string ? UnionToIntersection<
       {
         readonly [K in keyof Fields]-?: InternalFlattenedJsonPathsOf<
           Exclude<Fields[K], undefined>,

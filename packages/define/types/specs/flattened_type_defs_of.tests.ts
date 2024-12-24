@@ -2,10 +2,10 @@ import { type SimplifyDeep } from 'type-fest'
 import {
   boolean,
   list,
-  map,
   number,
+  object,
+  record,
   string,
-  struct,
   union,
 } from 'types/builders'
 import { type TypeDefType } from 'types/definitions'
@@ -46,8 +46,8 @@ describe('FlattenedTypeDefsOf', function () {
     })
   })
 
-  describe('map', function () {
-    const builder = map<typeof number, 'a' | 'b'>(number)
+  describe('record', function () {
+    const builder = record<typeof number, 'a' | 'b'>(number)
     type T = SimplifyDeep<FlattenedTypeDefsOf<typeof builder, '*'>>
 
     let t: {
@@ -64,9 +64,9 @@ describe('FlattenedTypeDefsOf', function () {
     })
   })
 
-  describe('struct', function () {
+  describe('object', function () {
     describe('simple', function () {
-      const builder = struct()
+      const builder = object()
         .set('a', number)
         .setOptional('b', string)
         .setReadonly('c', boolean)
@@ -111,8 +111,8 @@ describe('union', function () {
   describe('overlapping', function () {
     describe('non-discriminated', function () {
       const builder = union()
-        .add('x', struct().set('a', boolean))
-        .add('y', struct().set('b', number))
+        .add('x', object().set('a', boolean))
+        .add('y', object().set('b', number))
       type T = SimplifyDeep<FlattenedTypeDefsOf<typeof builder, null>>
 
       let t: {
@@ -138,8 +138,8 @@ describe('union', function () {
 
     describe('discriminated', function () {
       const builder = union('x')
-        .add('1', struct().set('a', boolean))
-        .add('2', struct().set('a', number))
+        .add('1', object().set('a', boolean))
+        .add('2', object().set('a', number))
       type T = SimplifyDeep<FlattenedTypeDefsOf<typeof builder, null>>
 
       let t: {
@@ -167,14 +167,14 @@ describe('union', function () {
         .add(
           '1',
           union('y')
-            .add('p', struct().set('a', boolean))
-            .add('q', struct().set('a', string)),
+            .add('p', object().set('a', boolean))
+            .add('q', object().set('a', string)),
         )
         .add(
           '2',
           union('z')
-            .add('r', struct().set('b', number))
-            .add('s', struct().set('c', string)),
+            .add('r', object().set('b', number))
+            .add('s', object().set('c', string)),
         )
       type T = SimplifyDeep<FlattenedTypeDefsOf<typeof builder, null>>
       let t: {

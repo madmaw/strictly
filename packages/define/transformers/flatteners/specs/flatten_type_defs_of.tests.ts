@@ -3,13 +3,13 @@ import {
   boolean,
   list,
   number,
-  struct,
+  object,
 } from 'types/builders'
 
 describe('flattenTypeDefsOf', function () {
   it('flattens', function () {
     const listTypeDef = list(number)
-    const structTypeDef = struct()
+    const structTypeDef = object()
       .set('a', listTypeDef)
       .set('b', boolean)
     const flattened = flattenTypeDefsOf(

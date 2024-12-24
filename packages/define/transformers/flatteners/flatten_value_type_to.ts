@@ -10,8 +10,8 @@ import {
 import { type ReadonlyTypeDefOf } from 'types/readonly_type_def_of'
 import {
   type StrictListTypeDef,
-  type StrictMapTypeDef,
-  type StrictStructuredTypeDef,
+  type StrictObjectTypeDef,
+  type StrictRecordTypeDef,
   type StrictTypeDef,
   type StrictTypeDefHolder,
   type StrictUnionTypeDef,
@@ -83,10 +83,10 @@ function internalFlattenValueChildren<M>(
       return r
     case TypeDefType.List:
       return internalFlattenListChildren(valuePath, typePath, typeDef, v, mapper, r)
-    case TypeDefType.Map:
-      return internalFlattenMapChildren(valuePath, typePath, typeDef, v, mapper, r)
-    case TypeDefType.Structured:
-      return internalFlattenStructChildren(valuePath, typePath, qualifier, typeDef, v, mapper, r)
+    case TypeDefType.Record:
+      return internalFlattenRecordChildren(valuePath, typePath, typeDef, v, mapper, r)
+    case TypeDefType.Object:
+      return internalFlattenObjectChildren(valuePath, typePath, qualifier, typeDef, v, mapper, r)
     case TypeDefType.Union:
       return internalFlattenUnionChildren(valuePath, typePath, qualifier, typeDef, v, mapper, r)
     default:
@@ -118,10 +118,10 @@ function internalFlattenListChildren<M>(
   }, r)
 }
 
-function internalFlattenMapChildren<M>(
+function internalFlattenRecordChildren<M>(
   valuePath: string,
   typePath: string,
-  { valueTypeDef }: StrictMapTypeDef,
+  { valueTypeDef }: StrictRecordTypeDef,
   v: Record<string, AnyValueType>,
   mapper: Mapper<M>,
   r: Record<string, M>,
@@ -146,11 +146,11 @@ function internalFlattenMapChildren<M>(
   )
 }
 
-function internalFlattenStructChildren<M>(
+function internalFlattenObjectChildren<M>(
   valuePath: string,
   typePath: string,
   qualifier: string,
-  { fields }: StrictStructuredTypeDef,
+  { fields }: StrictObjectTypeDef,
   v: Record<string, AnyValueType>,
   mapper: Mapper<M>,
   r: Record<string, M>,
@@ -195,59 +195,6 @@ function internalFlattenUnionChildren<M>(
     mapper,
     r,
   )
-  // const {
-  //   unions,
-  //   discriminator,
-  // } = typeDef
-  // if (discriminator == null) {
-  //   const found = reduce(
-  //     unions,
-  //     function (found, _k, typeDef: StrictTypeDef) {
-  //       if (
-  //         !found
-  //         && typeDef.type === TypeDefType.Literal
-  //         && typeDef.valuePrototype != null
-  //         && typeDef.valuePrototype.indexOf(v) >= 0
-  //       ) {
-  //         internalFlattenValueChildren(valuePath, typePath, qualifier, typeDef, v, mapper, r)
-  //         return true
-  //       }
-  //       return false
-  //     },
-  //     false,
-  //   )
-  //   if (!found) {
-  //     const complexUnions = Object.values(unions).filter(function (u: TypeDef) {
-  //       return u.type !== TypeDefType.Literal
-  //     })
-  //     const complexUnion = checkUnary(
-  //       complexUnions,
-  //       'expected 1 complex union type, received {}',
-  //       complexUnions.length,
-  //     )
-  //     internalFlattenValueChildren(
-  //       valuePath,
-  //       typePath,
-  //       qualifier,
-  //       complexUnion,
-  //       v,
-  //       mapper,
-  //       r,
-  //     )
-  //   }
-  //   return r
-  // } else {
-  //   const discriminatorValue = v[discriminator]
-  //   return internalFlattenValueChildren(
-  //     valuePath,
-  //     typePath,
-  //     `${qualifier}${discriminatorValue}:`,
-  //     unions[discriminatorValue],
-  //     v,
-  //     mapper,
-  //     r,
-  //   )
-  // }
 }
 
 export function getUnionTypeDef<T extends UnionTypeDef>(

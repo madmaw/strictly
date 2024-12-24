@@ -1,11 +1,11 @@
 import {
   boolean,
   list,
-  map,
   nullable,
   number,
+  object,
+  record,
   string,
-  struct,
   union,
 } from 'types/builders'
 import {
@@ -83,14 +83,14 @@ describe('builder', function () {
     })
   })
 
-  describe('map', function () {
-    describe('numeric map', function () {
+  describe('record', function () {
+    describe('numeric record', function () {
       describe('mutable', function () {
-        const { typeDef } = map<typeof number, 'a' | 'b' | 'c'>(number)
+        const { typeDef } = record<typeof number, 'a' | 'b' | 'c'>(number)
 
         it('equals expected type', function () {
           type C = {
-            readonly type: TypeDefType.Map,
+            readonly type: TypeDefType.Record,
             readonly keyPrototype: 'a' | 'b' | 'c',
             valueTypeDef: {
               readonly type: TypeDefType.Literal,
@@ -103,11 +103,11 @@ describe('builder', function () {
       })
 
       describe('readonly', function () {
-        const { typeDef } = map<typeof number, 'a' | 'b' | 'c'>(number).readonly()
+        const { typeDef } = record<typeof number, 'a' | 'b' | 'c'>(number).readonly()
 
         it('equals expected type', function () {
           type C = {
-            readonly type: TypeDefType.Map,
+            readonly type: TypeDefType.Record,
             readonly keyPrototype: 'a' | 'b' | 'c',
             readonly valueTypeDef: {
               readonly type: TypeDefType.Literal,
@@ -119,11 +119,11 @@ describe('builder', function () {
       })
 
       describe('partial', function () {
-        const { typeDef } = map<typeof number, 'a' | 'b' | 'c'>(number).partial()
+        const { typeDef } = record<typeof number, 'a' | 'b' | 'c'>(number).partial()
 
         it('equals expected type', function () {
           type C = {
-            readonly type: TypeDefType.Map,
+            readonly type: TypeDefType.Record,
             readonly keyPrototype: 'a' | 'b' | 'c',
             valueTypeDef: {
               readonly type: TypeDefType.Literal,
@@ -135,11 +135,11 @@ describe('builder', function () {
       })
 
       describe('partial readonly', function () {
-        const { typeDef } = map<typeof number, 'a' | 'b' | 'c'>(number).partial().readonly()
+        const { typeDef } = record<typeof number, 'a' | 'b' | 'c'>(number).partial().readonly()
 
         it('equals expected type', function () {
           type C = {
-            readonly type: TypeDefType.Map,
+            readonly type: TypeDefType.Record,
             readonly keyPrototype: 'a' | 'b' | 'c',
             readonly valueTypeDef: {
               readonly type: TypeDefType.Literal,
@@ -152,11 +152,11 @@ describe('builder', function () {
       })
 
       describe('readonly partial', function () {
-        const { typeDef } = map<typeof number, 'a' | 'b' | 'c'>(number).readonly().partial()
+        const { typeDef } = record<typeof number, 'a' | 'b' | 'c'>(number).readonly().partial()
 
         it('equals expected type', function () {
           type C = {
-            readonly type: TypeDefType.Map,
+            readonly type: TypeDefType.Record,
             readonly keyPrototype: 'a' | 'b' | 'c',
             readonly valueTypeDef: {
               readonly type: TypeDefType.Literal,
@@ -170,8 +170,8 @@ describe('builder', function () {
     })
   })
 
-  describe('struct', function () {
-    const { typeDef } = struct()
+  describe('object', function () {
+    const { typeDef } = object()
       .set('a', number)
       .setReadonly('b', boolean)
       .setOptional('c', string)
@@ -179,7 +179,7 @@ describe('builder', function () {
 
     it('equals expected type', function () {
       type C = {
-        readonly type: TypeDefType.Structured,
+        readonly type: TypeDefType.Object,
         readonly fields:
           & {
             a: {
@@ -247,17 +247,17 @@ describe('builder', function () {
       })
     })
 
-    describe('structs', function () {
+    describe('objects', function () {
       const {
         typeDef,
       } = union()
         .add(
           '1',
-          struct().set('a', boolean),
+          object().set('a', boolean),
         )
         .add(
           '2',
-          struct().set('b', number),
+          object().set('b', number),
         )
 
       it('equals expected type', function () {
@@ -267,7 +267,7 @@ describe('builder', function () {
           readonly unions:
             & {
               readonly [1]: {
-                readonly type: TypeDefType.Structured,
+                readonly type: TypeDefType.Object,
                 readonly fields: {
                   a: {
                     readonly type: TypeDefType.Literal,
@@ -278,7 +278,7 @@ describe('builder', function () {
             }
             & {
               readonly [2]: {
-                readonly type: TypeDefType.Structured,
+                readonly type: TypeDefType.Object,
                 readonly fields: {
                   b: {
                     readonly type: TypeDefType.Literal,

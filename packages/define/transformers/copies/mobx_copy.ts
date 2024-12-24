@@ -9,7 +9,7 @@ import {
 } from 'mobx'
 import { getUnionTypeDef } from 'transformers/flatteners/flatten_value_type_to'
 import {
-  type StructuredFieldKey,
+  type ObjectFieldKey,
   TypeDefType,
 } from 'types/definitions'
 import { type MobxValueTypeOf } from 'types/mobx_value_type_of'
@@ -38,7 +38,7 @@ function observeValue(
       // can't work out that an observable array is an array
       // eslint-disable-next-line @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-explicit-any
       return observable.array(v as any[], { deep: false }) as any
-    case TypeDefType.Map:
+    case TypeDefType.Record:
       // observable observes all fields
       return observable(
         v,
@@ -47,7 +47,7 @@ function observeValue(
           deep: false,
         },
       )
-    case TypeDefType.Structured:
+    case TypeDefType.Object:
       // `makeObservable` only observes the specified props
       return makeObservable(
         v,
@@ -55,11 +55,11 @@ function observeValue(
           def.fields,
           function (acc, k) {
             // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-            acc[k as StructuredFieldKey] = observable
+            acc[k as ObjectFieldKey] = observable
             return acc
           },
           // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-          {} as Record<StructuredFieldKey, IObservableFactory>,
+          {} as Record<ObjectFieldKey, IObservableFactory>,
         ),
         {
           deep: false,

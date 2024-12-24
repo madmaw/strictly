@@ -5,9 +5,9 @@ import {
   type FlattenedValueTypesOf,
   list,
   number,
+  object,
   type ReadonlyTypeDefOf,
   string,
-  struct,
   union,
   type ValueToTypePathsOf,
   type ValueTypeOf,
@@ -18,12 +18,12 @@ export type DogBreeds = 'Alsatian' | 'Pug' | 'Other'
 export type CatBreeds = 'Burmese' | 'Siamese' | 'Domestic Short Hair'
 
 export const speciesTypeDef = union('type')
-  .add('dog', struct().set('barks', number))
-  .add('cat', struct().set('meows', number))
+  .add('dog', object().set('barks', number))
+  .add('cat', object().set('meows', number))
 
 export type Species = keyof typeof speciesTypeDef['typeDef']['unions']
 
-export const petTypeDef = struct()
+export const petTypeDef = object()
   .set('name', string)
   .set('alive', boolean)
   .set('tags', list(string))

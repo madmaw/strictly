@@ -1,10 +1,10 @@
 import { type SimplifyDeep } from 'type-fest'
 import {
   list,
-  map,
   number,
+  object,
+  record,
   string,
-  struct,
   union,
 } from 'types/builders'
 import { type TypeDefType } from 'types/definitions'
@@ -74,8 +74,8 @@ describe('PartialTypeDefOf', function () {
     })
   })
 
-  describe('map', function () {
-    const builder = map<typeof number, 'a' | 'b'>(number)
+  describe('record', function () {
+    const builder = record<typeof number, 'a' | 'b'>(number)
     type T = SimplifyDeep<PartialTypeDefOf<typeof builder>>
 
     let t: {
@@ -84,7 +84,7 @@ describe('PartialTypeDefOf', function () {
         readonly discriminator: null,
         readonly unions: {
           readonly [0]: {
-            readonly type: TypeDefType.Map,
+            readonly type: TypeDefType.Record,
             readonly keyPrototype: 'a' | 'b',
             readonly valueTypeDef: {
               readonly type: TypeDefType.Union,
@@ -114,8 +114,8 @@ describe('PartialTypeDefOf', function () {
     })
   })
 
-  describe('struct', function () {
-    const builder = struct()
+  describe('object', function () {
+    const builder = object()
       .set('a', number)
       .setReadonly('b', string)
     type T = PartialTypeDefOf<typeof builder>
@@ -126,7 +126,7 @@ describe('PartialTypeDefOf', function () {
         readonly discriminator: null,
         readonly unions: {
           readonly [0]: {
-            readonly type: TypeDefType.Structured,
+            readonly type: TypeDefType.Object,
             readonly fields: {
               a?: {
                 readonly type: TypeDefType.Union,

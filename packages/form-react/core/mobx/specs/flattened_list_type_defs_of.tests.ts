@@ -1,10 +1,10 @@
 import {
   list,
-  map,
   nullTypeDefHolder,
   number,
+  object,
+  record,
   string,
-  struct,
   union,
 } from '@de/fine'
 import {
@@ -14,14 +14,14 @@ import {
 describe('FlattenedListTypeDefsOf', function () {
   it('filters lists types', function () {
     const listTypeDef = list(number)
-    const mapTypeDef = map<typeof string, string>(string)
-    const structTypeDef = struct()
+    const recordTypeDef = record<typeof string, string>(string)
+    const objectTypeDef = object()
     const unionTypeDef = union().add('0', number).add('1', nullTypeDefHolder)
-    const typeDef = struct()
+    const typeDef = object()
       .set('literal', number)
       .set('list', listTypeDef)
-      .set('map', mapTypeDef)
-      .set('struct', structTypeDef)
+      .set('record', recordTypeDef)
+      .set('object', objectTypeDef)
       .set('union', unionTypeDef)
 
     type F = FlattenedListTypeDefsOf<typeof typeDef>

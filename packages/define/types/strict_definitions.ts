@@ -3,8 +3,8 @@ import {
   type Simplify,
 } from 'type-fest'
 import {
-  type MapKeyType,
-  type StructuredFieldKey,
+  type ObjectFieldKey,
+  type RecordKeyType,
   type TypeDefType,
   type UnionKey,
 } from './definitions'
@@ -22,8 +22,8 @@ export type StrictTypeDefHolder<T extends StrictTypeDef = StrictTypeDef> = {
 export type StrictTypeDef =
   | StrictLiteralTypeDef
   | StrictListTypeDef
-  | StrictMapTypeDef
-  | StrictStructuredTypeDef
+  | StrictRecordTypeDef
+  | StrictObjectTypeDef
   | StrictUnionTypeDef
 
 // used to avoid TS complaining about circular references
@@ -47,12 +47,12 @@ export type StrictListTypeDef<
 }
 
 // map
-export type StrictMapTypeDef<
-  K extends MapKeyType = MapKeyType,
+export type StrictRecordTypeDef<
+  K extends RecordKeyType = RecordKeyType,
   // if `V` includes `undefined` the map is partial
   V extends StrictTypeDef | undefined = AnyTypeDef,
 > = {
-  readonly type: TypeDefType.Map,
+  readonly type: TypeDefType.Record,
   // never actually populate
   readonly keyPrototype: K,
   // readonly is inherited by the output
@@ -64,17 +64,17 @@ export type StrictMapTypeDef<
 // NOTE we use the `readonly` and `?` (partial) status of these field definitions
 // to describe the same attributes of the fields
 export type StrictStructuredTypeDefFields = {
-  [Key: StructuredFieldKey]: AnyTypeDef,
+  [Key: ObjectFieldKey]: AnyTypeDef,
 }
 
 // NOTE: we cannot collapse this type to
 // `StructuredTypeDef = StructuredTypeDefFields`
 // as we rely on the `fields` field being unique to discriminate between different
 // TypeDefs
-export type StrictStructuredTypeDef<
+export type StrictObjectTypeDef<
   Fields extends StrictStructuredTypeDefFields = StrictStructuredTypeDefFields,
 > = {
-  readonly type: TypeDefType.Structured,
+  readonly type: TypeDefType.Object,
   readonly fields: Fields,
 }
 

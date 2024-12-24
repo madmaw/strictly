@@ -9,10 +9,10 @@ import {
   boolean,
   list,
   literal,
-  map,
   nullTypeDefHolder,
   number,
-  struct,
+  object,
+  record,
   union,
 } from 'types/builders'
 import {
@@ -152,8 +152,8 @@ describe('flattenValueTypeTo', function () {
     })
   })
 
-  describe('map', function () {
-    const typeDef = map<typeof number, 'a' | 'b'>(number)
+  describe('record', function () {
+    const typeDef = record<typeof number, 'a' | 'b'>(number)
     type F = FlattenedTypeDefsOf<typeof typeDef, null>
 
     let m: ValueTypeOf<typeof typeDef>
@@ -195,7 +195,7 @@ describe('flattenValueTypeTo', function () {
         )
       })
 
-      it('sets a value in the map', function () {
+      it('sets a value in the record', function () {
         flattened['$.a'](4)
         expect(m).toEqual({
           a: 4,
@@ -205,8 +205,8 @@ describe('flattenValueTypeTo', function () {
     })
   })
 
-  describe('struct', function () {
-    const typeDef = struct()
+  describe('object', function () {
+    const typeDef = object()
       .set('a', number)
       .set('b', boolean)
     type F = FlattenedTypeDefsOf<typeof typeDef, null>
@@ -250,7 +250,7 @@ describe('flattenValueTypeTo', function () {
         )
       })
 
-      it('sets "a" in the struct', function () {
+      it('sets "a" in the object', function () {
         flattened['$.a'](2)
         expect(s).toEqual({
           a: 2,
@@ -258,7 +258,7 @@ describe('flattenValueTypeTo', function () {
         })
       })
 
-      it('sets "b" in the struct', function () {
+      it('sets "b" in the object', function () {
         flattened['$.b'](true)
         expect(s).toEqual({
           a: 1,
@@ -271,8 +271,8 @@ describe('flattenValueTypeTo', function () {
   describe('union', function () {
     describe('discriminated', function () {
       const typeDef = union('d')
-        .add('1', struct().set('a', number))
-        .add('2', struct().set('b', boolean))
+        .add('1', object().set('a', number))
+        .add('2', object().set('b', boolean))
       type F = SimplifyDeep<FlattenedTypeDefsOf<typeof typeDef, null>>
       let u: ValueTypeOf<typeof typeDef>
       beforeEach(function () {

@@ -3,11 +3,11 @@ import {
   boolean,
   type FlattenedValueTypesOf,
   list,
-  map,
   nullTypeDefHolder,
   number,
+  object,
+  record,
   string,
-  struct,
   union,
   type ValueToTypePathsOf,
   type ValueTypeOf,
@@ -95,8 +95,8 @@ describe('all', function () {
       Context
     >
 
-    describe('map', function () {
-      const typeDef = map<typeof number, 'a' | 'b'>(number)
+    describe('record', function () {
+      const typeDef = record<typeof number, 'a' | 'b'>(number)
       type T = Simplify<
         FlattenedTypePathsToAdaptersOf<
           FlattenedValueTypesOf<typeof typeDef>,
@@ -114,8 +114,8 @@ describe('all', function () {
       })
     })
 
-    describe('struct', function () {
-      const typeDef = struct()
+    describe('object', function () {
+      const typeDef = object()
         .set('x', string)
         .set('y', boolean)
       type T = FlattenedTypePathsToAdaptersOf<
@@ -290,8 +290,8 @@ describe('all', function () {
       })
     })
 
-    describe('map', function () {
-      const typeDef = map<typeof number, 'a' | 'b'>(number)
+    describe('record', function () {
+      const typeDef = record<typeof number, 'a' | 'b'>(number)
       const converters = {
         '$.*': integerToStringAdapter,
         // '$.*': booleanToBooleanConverter,
@@ -358,8 +358,8 @@ describe('all', function () {
       })
     })
 
-    describe('struct', function () {
-      const typeDef = struct()
+    describe('object', function () {
+      const typeDef = object()
         .set('a', number)
         .set('b', boolean)
       const converters = {
@@ -876,7 +876,7 @@ describe('all', function () {
       })
     })
 
-    // TODO map / struct
+    // TODO record / object
 
     describe('union', function () {
       describe('non-discriminated', function () {

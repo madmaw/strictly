@@ -54,9 +54,9 @@ describe('ValueTypeOf', function () {
     })
   })
 
-  describe('map', function () {
+  describe('record', function () {
     type TypeD = {
-      readonly type: TypeDefType.Map,
+      readonly type: TypeDefType.Record,
       readonly keyPrototype: 'x' | 'y' | 'z',
       valueTypeDef: {
         readonly type: TypeDefType.Literal,
@@ -75,7 +75,7 @@ describe('ValueTypeOf', function () {
     describe('readonly', function () {
       type R = ValueTypeOf<{
         readonly typeDef: {
-          readonly type: TypeDefType.Map,
+          readonly type: TypeDefType.Record,
           readonly keyPrototype: 'x' | 'y' | 'z',
           readonly valueTypeDef: {
             readonly type: TypeDefType.Literal,
@@ -92,7 +92,7 @@ describe('ValueTypeOf', function () {
 
     describe('partial', function () {
       type TypeD = {
-        readonly type: TypeDefType.Map,
+        readonly type: TypeDefType.Record,
         readonly keyPrototype: 'x' | 'y' | 'z',
         valueTypeDef: {
           readonly type: TypeDefType.Literal,
@@ -109,7 +109,7 @@ describe('ValueTypeOf', function () {
 
     describe('partial readonly', function () {
       type TypeD = {
-        readonly type: TypeDefType.Map,
+        readonly type: TypeDefType.Record,
         readonly keyPrototype: 'x' | 'y' | 'z',
         readonly valueTypeDef: {
           readonly type: TypeDefType.Literal,
@@ -125,9 +125,9 @@ describe('ValueTypeOf', function () {
     })
   })
 
-  describe('struct', function () {
+  describe('object', function () {
     type TypeD = {
-      readonly type: TypeDefType.Structured,
+      readonly type: TypeDefType.Object,
       fields: {
         a: {
           readonly type: TypeDefType.Literal,
@@ -154,7 +154,7 @@ describe('ValueTypeOf', function () {
 
     describe('readonly', function () {
       type TypeD = {
-        readonly type: TypeDefType.Structured,
+        readonly type: TypeDefType.Object,
         fields: {
           readonly a: {
             readonly type: TypeDefType.Literal,
@@ -179,7 +179,7 @@ describe('ValueTypeOf', function () {
 
     describe('partial', function () {
       type TypeD = {
-        readonly type: TypeDefType.Structured,
+        readonly type: TypeDefType.Object,
         readonly fields: {
           a?: {
             readonly type: TypeDefType.Literal,
@@ -241,7 +241,7 @@ describe('ValueTypeOf', function () {
           readonly discriminator: null,
           readonly unions: {
             readonly [0]: {
-              readonly type: TypeDefType.Structured,
+              readonly type: TypeDefType.Object,
               readonly fields: {
                 b: {
                   readonly type: TypeDefType.Literal,
@@ -254,7 +254,7 @@ describe('ValueTypeOf', function () {
               },
             },
             readonly [1]: {
-              readonly type: TypeDefType.Structured,
+              readonly type: TypeDefType.Object,
               readonly fields: {
                 b: {
                   readonly type: TypeDefType.Literal,
@@ -291,7 +291,7 @@ describe('ValueTypeOf', function () {
             readonly discriminator: 'd',
             readonly unions: {
               readonly [1]: {
-                readonly type: TypeDefType.Structured,
+                readonly type: TypeDefType.Object,
                 readonly fields: {
                   b: {
                     readonly type: TypeDefType.Literal,
@@ -300,7 +300,7 @@ describe('ValueTypeOf', function () {
                 },
               },
               readonly [2]: {
-                readonly type: TypeDefType.Structured,
+                readonly type: TypeDefType.Object,
                 readonly fields: {
                   b: {
                     readonly type: TypeDefType.Literal,

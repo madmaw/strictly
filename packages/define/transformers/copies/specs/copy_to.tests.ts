@@ -6,10 +6,10 @@ import {
   boolean,
   list,
   literal,
-  map,
   number,
+  object,
+  record,
   string,
-  struct,
   union,
 } from 'types/builders'
 import { TypeDefType } from 'types/definitions'
@@ -52,8 +52,8 @@ describe('copyTo', function () {
     })
   })
 
-  describe('map', function () {
-    const typeDef = map<typeof number, 'a' | 'b'>(number)
+  describe('record', function () {
+    const typeDef = record<typeof number, 'a' | 'b'>(number)
     it('copies', function () {
       const c = copyTo(
         typeDef,
@@ -70,8 +70,8 @@ describe('copyTo', function () {
     })
   })
 
-  describe('struct', function () {
-    const typeDef = struct()
+  describe('object', function () {
+    const typeDef = object()
       .set('a', number)
       .set('b', boolean)
       .set('c', string)
@@ -120,8 +120,8 @@ describe('copyTo', function () {
 
     describe('discriminated', function () {
       const typeDef = union('d')
-        .add('a', struct().set('x', number))
-        .add('b', struct().set('y', boolean))
+        .add('a', object().set('x', number))
+        .add('b', object().set('y', boolean))
 
       it('copies', function () {
         const c = copyTo(

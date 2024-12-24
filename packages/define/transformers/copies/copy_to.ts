@@ -5,7 +5,7 @@ import {
   UnreachableError,
 } from '@de/base'
 import {
-  type StructuredFieldKey,
+  type ObjectFieldKey,
   type TypeDef,
   TypeDefType,
   type UnionKey,
@@ -14,8 +14,8 @@ import { type ReadonlyTypeDefOf } from 'types/readonly_type_def_of'
 import {
   type StrictListTypeDef,
   type StrictLiteralTypeDef,
-  type StrictMapTypeDef,
-  type StrictStructuredTypeDef,
+  type StrictObjectTypeDef,
+  type StrictRecordTypeDef,
   type StrictStructuredTypeDefFields,
   type StrictTypeDef,
   type StrictTypeDefHolder,
@@ -67,14 +67,14 @@ function internalCopyTo<R>(
         value,
         copier,
       )
-    case TypeDefType.Map:
-      return copyMap(
+    case TypeDefType.Record:
+      return copyRecord(
         typeDef,
         value,
         copier,
       )
-    case TypeDefType.Structured:
-      return copyStruct(
+    case TypeDefType.Object:
+      return copyObject(
         typeDef,
         value,
         copier,
@@ -120,10 +120,10 @@ function copyList<
   )
 }
 
-function copyMap<
+function copyRecord<
   R,
 >(
-  typeDef: StrictMapTypeDef,
+  typeDef: StrictRecordTypeDef,
   value: AnyValueType,
   copier: Copier<R>,
 ): R {
@@ -142,15 +142,15 @@ function copyMap<
   )
 }
 
-function copyStructFields<
+function copyObjectFields<
   R,
   Extra extends Record<string, UnionKey>,
 >(
   fields: StrictStructuredTypeDefFields,
-  value: Record<StructuredFieldKey, AnyValueType>,
+  value: Record<ObjectFieldKey, AnyValueType>,
   copier: Copier<R>,
   extra: Extra,
-): Record<StructuredFieldKey, AnyValueType> {
+): Record<ObjectFieldKey, AnyValueType> {
   const record = reduce(fields, function (acc, key, field: TypeDef) {
     const fieldValue = value[key]
     if (fieldValue != null) {
@@ -162,17 +162,17 @@ function copyStructFields<
   return record
 }
 
-function copyStruct<
+function copyObject<
   R,
 >(
-  typeDef: StrictStructuredTypeDef,
+  typeDef: StrictObjectTypeDef,
   value: AnyValueType,
   copier: Copier<R>,
 ): R {
   const {
     fields,
   } = typeDef
-  const record = copyStructFields(fields, value, copier, {})
+  const record = copyObjectFields(fields, value, copier, {})
   return copier(record, typeDef)
 }
 

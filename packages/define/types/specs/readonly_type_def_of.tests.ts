@@ -1,9 +1,9 @@
 import {
   list,
-  map,
   number,
+  object,
+  record,
   string,
-  struct,
   union,
 } from 'types/builders'
 import { type TypeDefType } from 'types/definitions'
@@ -42,13 +42,13 @@ describe('ReadonlyTypeDefOf', function () {
     })
   })
 
-  describe('map', function () {
-    const builder = map<typeof number, 'a' | 'b'>(number)
+  describe('record', function () {
+    const builder = record<typeof number, 'a' | 'b'>(number)
     type T = ReadonlyTypeDefOf<typeof builder>
 
     let t: {
       readonly typeDef: {
-        readonly type: TypeDefType.Map,
+        readonly type: TypeDefType.Record,
         readonly keyPrototype: 'a' | 'b',
         readonly valueTypeDef: {
           readonly type: TypeDefType.Literal,
@@ -61,15 +61,15 @@ describe('ReadonlyTypeDefOf', function () {
     })
   })
 
-  describe('struct', function () {
-    const builder = struct()
+  describe('object', function () {
+    const builder = object()
       .set('a', number)
       .setOptional('b', string)
     type T = ReadonlyTypeDefOf<typeof builder>
 
     let t: {
       readonly typeDef: {
-        readonly type: TypeDefType.Structured,
+        readonly type: TypeDefType.Object,
         readonly fields: {
           readonly a: {
             readonly type: TypeDefType.Literal,
@@ -89,7 +89,7 @@ describe('ReadonlyTypeDefOf', function () {
 
   describe('union', function () {
     const builder = union()
-      .add('1', map<typeof number, 'a'>(number))
+      .add('1', record<typeof number, 'a'>(number))
       .add('2', string)
     type T = ReadonlyTypeDefOf<typeof builder>
 
@@ -99,7 +99,7 @@ describe('ReadonlyTypeDefOf', function () {
         readonly discriminator: null,
         readonly unions: {
           readonly [1]: {
-            readonly type: TypeDefType.Map,
+            readonly type: TypeDefType.Record,
             readonly keyPrototype: 'a',
             readonly valueTypeDef: {
               readonly type: TypeDefType.Literal,
@@ -119,12 +119,12 @@ describe('ReadonlyTypeDefOf', function () {
   })
 
   describe('partial', function () {
-    const builder = map<typeof number, 'a'>(number).partial()
+    const builder = record<typeof number, 'a'>(number).partial()
     type T = ReadonlyTypeDefOf<typeof builder>
 
     let t: {
       readonly typeDef: {
-        readonly type: TypeDefType.Map,
+        readonly type: TypeDefType.Record,
         readonly keyPrototype: 'a',
         readonly valueTypeDef: {
           readonly type: TypeDefType.Literal,
@@ -138,12 +138,12 @@ describe('ReadonlyTypeDefOf', function () {
   })
 
   describe('readonly', function () {
-    const builder = map<typeof number, 'a'>(number).readonly()
+    const builder = record<typeof number, 'a'>(number).readonly()
     type T = ReadonlyTypeDefOf<typeof builder>
 
     let t: {
       readonly typeDef: {
-        readonly type: TypeDefType.Map,
+        readonly type: TypeDefType.Record,
         readonly keyPrototype: 'a',
         readonly valueTypeDef: {
           readonly type: TypeDefType.Literal,

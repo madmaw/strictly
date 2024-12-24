@@ -3,7 +3,7 @@ import {
   boolean,
   list,
   number,
-  struct,
+  object,
 } from 'types/builders'
 
 describe('flattenValueTypesOf', function () {
@@ -11,7 +11,7 @@ describe('flattenValueTypesOf', function () {
   // this is only a sanity check
   it('flattens', function () {
     const flattened = flattenValueTypesOf(
-      struct()
+      object()
         .set('a', list(number))
         .set('b', boolean),
       {

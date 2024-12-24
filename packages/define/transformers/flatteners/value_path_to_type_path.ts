@@ -72,7 +72,7 @@ function internalJsonValuePathToTypePath(
           originalValuePath,
         ),
       ]
-    case TypeDefType.Map:
+    case TypeDefType.Record:
       return [
         '*',
         ...internalJsonValuePathToTypePath(
@@ -82,7 +82,7 @@ function internalJsonValuePathToTypePath(
           originalValuePath,
         ),
       ]
-    case TypeDefType.Structured:
+    case TypeDefType.Object:
       if (allowMissingPaths) {
         if (typeDef.fields[valueStep] == null) {
           // fake it

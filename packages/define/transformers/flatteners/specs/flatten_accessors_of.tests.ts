@@ -4,7 +4,7 @@ import {
   boolean,
   list,
   number,
-  struct,
+  object,
 } from 'types/builders'
 import { type FlattenedAccessorsOf } from 'types/flattened_accessors_of'
 import { type ValueTypeOf } from 'types/value_type_of'
@@ -15,7 +15,7 @@ import {
 
 describe('flattenAccessorsOf', function () {
   let setter: Mock
-  const builder = struct()
+  const builder = object()
     .set('a', list(number))
     .set('b', boolean)
     .narrow

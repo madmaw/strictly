@@ -1,11 +1,11 @@
 import {
   boolean,
   list,
-  map,
   nullable,
   number,
+  object,
+  record,
   string,
-  struct,
   union,
 } from 'types/builders'
 import { type JsonPathsOf } from 'types/json_paths_of'
@@ -73,11 +73,11 @@ describe('JsonPathsOf', function () {
     })
   })
 
-  describe('map', function () {
+  describe('record', function () {
     let path: '$' | `$.${string}` | `$.${number}`
 
     describe('mutable', function () {
-      const builder = map(string)
+      const builder = record(string)
       type T = JsonPathsOf<typeof builder>
 
       it('equals expected type', function () {
@@ -86,7 +86,7 @@ describe('JsonPathsOf', function () {
     })
 
     describe('mutable with exact keys', function () {
-      const builder = map<typeof string, 'a' | 'b'>(string)
+      const builder = record<typeof string, 'a' | 'b'>(string)
       type T = JsonPathsOf<typeof builder>
 
       let path: '$' | '$.a' | '$.b'
@@ -96,7 +96,7 @@ describe('JsonPathsOf', function () {
     })
 
     describe('mutable with numeric keys', function () {
-      const builder = map<typeof string, 1 | 2 | 3>(string)
+      const builder = record<typeof string, 1 | 2 | 3>(string)
       type T = JsonPathsOf<typeof builder>
 
       let path: '$' | '$.1' | '$.2' | '$.3'
@@ -106,7 +106,7 @@ describe('JsonPathsOf', function () {
     })
 
     describe('readonly', function () {
-      const builder = map(string).readonly()
+      const builder = record(string).readonly()
       type T = JsonPathsOf<typeof builder>
 
       it('equals expected type', function () {
@@ -115,7 +115,7 @@ describe('JsonPathsOf', function () {
     })
 
     describe('partial', function () {
-      const builder = map(string).partial()
+      const builder = record(string).partial()
       type T = JsonPathsOf<typeof builder>
 
       it('equals expected type', function () {
@@ -124,7 +124,7 @@ describe('JsonPathsOf', function () {
     })
 
     describe('nullable', function () {
-      const builder = nullable(map(string))
+      const builder = nullable(record(string))
       type T = JsonPathsOf<typeof builder>
 
       it('equals expected type', function () {
@@ -133,7 +133,7 @@ describe('JsonPathsOf', function () {
     })
 
     describe('override', function () {
-      const builder = map(string)
+      const builder = record(string)
       type T = JsonPathsOf<typeof builder, 'x'>
 
       let path: '$' | '$.x'
@@ -143,9 +143,9 @@ describe('JsonPathsOf', function () {
     })
   })
 
-  describe('struct', function () {
+  describe('object', function () {
     describe('simple', function () {
-      const builder = struct()
+      const builder = object()
         .set('n', number)
         .set('b', boolean)
         .set('s', string)
@@ -156,7 +156,7 @@ describe('JsonPathsOf', function () {
         expectTypeOf(path).toEqualTypeOf<T>()
       })
 
-      it('can be used in a map', function () {
+      it('can be used in a record', function () {
         // using our types in a map has previously caused TSC to crash or
         // complain about infinitely deep types
         type M = Record<T, string>
@@ -176,9 +176,9 @@ describe('JsonPathsOf', function () {
     })
 
     describe('nested', function () {
-      const builder = struct()
-        .set('s1', struct().set('a1', boolean))
-        .set('s2', struct().set('a2', string))
+      const builder = object()
+        .set('s1', object().set('a1', boolean))
+        .set('s2', object().set('a2', string))
       type T = JsonPathsOf<typeof builder>
 
       let path: '$' | '$.s1' | '$.s1.a1' | '$.s2' | '$.s2.a2'
@@ -187,8 +187,8 @@ describe('JsonPathsOf', function () {
       })
     })
 
-    describe('struct of list', function () {
-      const builder = struct()
+    describe('object of list', function () {
+      const builder = object()
         .set('l', list(number))
 
       describe('no override', function () {
@@ -224,11 +224,11 @@ describe('JsonPathsOf', function () {
       })
     })
 
-    describe('with overlapping map', function () {
+    describe('with overlapping record', function () {
       const builder = union()
-        .add('1', struct().set('a', number).set('b', string))
-        .add('2', struct().set('b', string).set('c', string))
-        .add('3', struct().set('c', string).set('a', string))
+        .add('1', object().set('a', number).set('b', string))
+        .add('2', object().set('b', string).set('c', string))
+        .add('3', object().set('c', string).set('a', string))
       type T = JsonPathsOf<typeof builder>
 
       let path: '$' | '$.a' | '$.b' | '$.c'
@@ -239,13 +239,13 @@ describe('JsonPathsOf', function () {
 
     describe('nested', function () {
       const builder = union()
-        .add('1', struct().set(
+        .add('1', object().set(
           'a',
-          union().add('x', struct().set('aa', string)),
+          union().add('x', object().set('aa', string)),
         ))
-        .add('2', struct().set(
+        .add('2', object().set(
           'b',
-          union().add('y', struct().set('bb', string)),
+          union().add('y', object().set('bb', string)),
         ))
       type T = JsonPathsOf<typeof builder>
 
@@ -258,8 +258,8 @@ describe('JsonPathsOf', function () {
 
   describe('with discriminator', function () {
     const builder = union('x')
-      .add('1', struct().set('a', boolean))
-      .add('2', struct().set('b', number))
+      .add('1', object().set('a', boolean))
+      .add('2', object().set('b', number))
 
     type T = JsonPathsOf<typeof builder>
 
@@ -274,11 +274,11 @@ describe('JsonPathsOf', function () {
     const builder = union('x')
       .add(
         '1',
-        union('y').add('p', struct().set('a', boolean)),
+        union('y').add('p', object().set('a', boolean)),
       )
       .add(
         '2',
-        union('z').add('q', struct().set('b', number)),
+        union('z').add('q', object().set('b', number)),
       )
 
     type T = JsonPathsOf<typeof builder>

@@ -1,13 +1,13 @@
 import {
-  map,
   number,
+  record,
 } from 'types/builders'
 import { type FlattenedValueTypesOf } from 'types/flattened_value_types_of'
 
 describe('FlattenedValueTypesOf', function () {
   // note we only test a small example since most of the work is done in flatten
-  describe('map', function () {
-    const builder = map<typeof number, string>(number)
+  describe('record', function () {
+    const builder = record<typeof number, string>(number)
     type V = FlattenedValueTypesOf<typeof builder>
 
     let v: {

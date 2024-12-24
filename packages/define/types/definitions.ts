@@ -24,15 +24,15 @@ export type TypeDefHolder<T extends TypeDef = TypeDef> = {
 export type TypeDef =
   | LiteralTypeDef
   | ListTypeDef
-  | MapTypeDef
-  | StructuredTypeDef
+  | RecordTypeDef
+  | ObjectTypeDef
   | UnionTypeDef
 
 export enum TypeDefType {
   Literal = 1,
   List,
-  Map,
-  Structured,
+  Record,
+  Object,
   Union,
 }
 
@@ -57,16 +57,16 @@ export type ListTypeDef<
 }
 
 // map
-export type MapKeyType = string | number
+export type RecordKeyType = string | number
 
 // might be able to combine map and list into a single "homogeneous" type def with an implementation
 // hint, which might help with performance
-export type MapTypeDef<
-  K extends MapKeyType = MapKeyType,
+export type RecordTypeDef<
+  K extends RecordKeyType = RecordKeyType,
   // if `V` includes `undefined` the map is partial
   V extends TypeDef | undefined = AnyTypeDef,
 > = {
-  readonly type: TypeDefType.Map,
+  readonly type: TypeDefType.Record,
   // never actually populate
   readonly keyPrototype: K,
   // readonly is inherited by the output
@@ -75,22 +75,22 @@ export type MapTypeDef<
 
 // structured type
 // could be replaced with a map and an intersection
-export type StructuredFieldKey = string | number
+export type ObjectFieldKey = string | number
 
 // NOTE we use the `readonly` and `?` (partial) status of these field definitions
 // to describe the same attributes of the fields
-export type StructuredTypeDefFields = {
-  [Key: StructuredFieldKey]: AnyTypeDef,
+export type ObjectTypeDefFields = {
+  [Key: ObjectFieldKey]: AnyTypeDef,
 }
 
 // NOTE: we cannot collapse this type to
 // `StructuredTypeDef = StructuredTypeDefFields`
 // as we rely on the `fields` field being unique to discriminate between different
 // TypeDefs
-export type StructuredTypeDef<
-  Fields extends StructuredTypeDefFields = StructuredTypeDefFields,
+export type ObjectTypeDef<
+  Fields extends ObjectTypeDefFields = ObjectTypeDefFields,
 > = {
-  readonly type: TypeDefType.Structured,
+  readonly type: TypeDefType.Object,
   readonly fields: Fields,
 }
 

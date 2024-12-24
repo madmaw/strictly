@@ -1,8 +1,8 @@
 import {
   type ListTypeDef,
   type LiteralTypeDef,
-  type MapTypeDef,
-  type StructuredTypeDef,
+  type ObjectTypeDef,
+  type RecordTypeDef,
   type TypeDef,
   type TypeDefHolder,
   type UnionTypeDef,
@@ -37,8 +37,8 @@ type InternalJsonPathsOfChildren<
 > = Depth extends -1 ? never
   : F extends LiteralTypeDef ? InternalJsonPathsOfLiteralChildren
   : F extends ListTypeDef ? InternalJsonPathsOfListChildren<F, Prefix, SegmentOverride, Depth>
-  : F extends MapTypeDef ? InternalJsonPathsOfMapChildren<F, Prefix, SegmentOverride, Depth>
-  : F extends StructuredTypeDef ? InternalJsonPathsOfStructChildren<F, Prefix, SegmentOverride, Qualifier, Depth>
+  : F extends RecordTypeDef ? InternalJsonPathsOfRecordChildren<F, Prefix, SegmentOverride, Depth>
+  : F extends ObjectTypeDef ? InternalJsonPathsOfObjectChildren<F, Prefix, SegmentOverride, Qualifier, Depth>
   : F extends UnionTypeDef ? InternalJsonPathsOfUnionChildren<
       F,
       Prefix,
@@ -66,8 +66,8 @@ type InternalJsonPathsOfListChildren<
   Depth
 >
 
-type InternalJsonPathsOfMapChildren<
-  F extends MapTypeDef,
+type InternalJsonPathsOfRecordChildren<
+  F extends RecordTypeDef,
   Prefix extends string,
   SegmentOverride extends string | null,
   Depth extends number,
@@ -82,13 +82,13 @@ type InternalJsonPathsOfMapChildren<
   Depth
 >
 
-type InternalJsonPathsOfStructChildren<
-  F extends StructuredTypeDef,
+type InternalJsonPathsOfObjectChildren<
+  F extends ObjectTypeDef,
   Prefix extends string,
   SegmentOverride extends string | null,
   Qualifier extends string,
   Depth extends number,
-> = F extends StructuredTypeDef<infer Fields> ? keyof Fields extends string ? {
+> = F extends ObjectTypeDef<infer Fields> ? keyof Fields extends string ? {
       [K in keyof Fields]: InternalJsonPathsOf<
         Fields[K],
         JsonPathOf<

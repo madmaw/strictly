@@ -4,10 +4,10 @@ import {
 import {
   type ListTypeDef,
   type LiteralTypeDef,
-  type MapKeyType,
-  type MapTypeDef,
-  type StructuredFieldKey,
-  type StructuredTypeDef,
+  type ObjectFieldKey,
+  type ObjectTypeDef,
+  type RecordKeyType,
+  type RecordTypeDef,
   type TypeDef,
   type TypeDefHolder,
   TypeDefType,
@@ -42,14 +42,14 @@ class ListTypeDefBuilder<
   }
 }
 
-class MapTypeDefBuilder<T extends MapTypeDef> extends TypeDefBuilder<T> {
-  partial(): IsFieldReadonly<T, 'valueTypeDef'> extends true ? MapTypeDefBuilder<{
-      readonly type: TypeDefType.Map,
+class RecordTypeDefBuilder<T extends RecordTypeDef> extends TypeDefBuilder<T> {
+  partial(): IsFieldReadonly<T, 'valueTypeDef'> extends true ? RecordTypeDefBuilder<{
+      readonly type: TypeDefType.Record,
       readonly keyPrototype: T['keyPrototype'],
       readonly valueTypeDef: T['valueTypeDef'] | undefined,
     }>
-    : MapTypeDefBuilder<{
-      readonly type: TypeDefType.Map,
+    : RecordTypeDefBuilder<{
+      readonly type: TypeDefType.Record,
       readonly keyPrototype: T['keyPrototype'],
       valueTypeDef: T['valueTypeDef'] | undefined,
     }>
@@ -57,8 +57,8 @@ class MapTypeDefBuilder<T extends MapTypeDef> extends TypeDefBuilder<T> {
     return this
   }
 
-  readonly(): MapTypeDefBuilder<{
-    readonly type: TypeDefType.Map,
+  readonly(): RecordTypeDefBuilder<{
+    readonly type: TypeDefType.Record,
     readonly keyPrototype: T['keyPrototype'],
     readonly valueTypeDef: T['valueTypeDef'],
   }> {
@@ -66,10 +66,10 @@ class MapTypeDefBuilder<T extends MapTypeDef> extends TypeDefBuilder<T> {
   }
 }
 
-class StructuredTypeDefBuilder<
-  Fields extends Readonly<Record<StructuredFieldKey, TypeDef>> = {},
+class ObjectTypeDefBuilder<
+  Fields extends Readonly<Record<ObjectFieldKey, TypeDef>> = {},
 > extends TypeDefBuilder<
-  StructuredTypeDef<Fields>
+  ObjectTypeDef<Fields>
 > {
   set<
     Name extends string,
@@ -77,17 +77,17 @@ class StructuredTypeDefBuilder<
   >(
     name: Name,
     { typeDef }: TypeDefHolder<T>,
-  ): StructuredTypeDefBuilder<
+  ): ObjectTypeDefBuilder<
     Fields & Record<Name, T>
   > {
     const newFields = {
       [name]: typeDef,
     }
     // have to explicitly supply types as TS will infinitely recurse trying to infer them!
-    return new StructuredTypeDefBuilder<
+    return new ObjectTypeDefBuilder<
       Fields & Record<Name, T>
     >({
-      type: TypeDefType.Structured,
+      type: TypeDefType.Object,
       fields: {
         ...this.typeDef.fields,
         ...newFields,
@@ -101,17 +101,17 @@ class StructuredTypeDefBuilder<
   >(
     name: Name,
     { typeDef }: TypeDefHolder<T>,
-  ): StructuredTypeDefBuilder<
+  ): ObjectTypeDefBuilder<
     Fields & Readonly<Record<Name, T>>
   > {
     const newFields = {
       [name]: typeDef,
     }
     // have to explicitly supply types as TS will infinitely recurse trying to infer them!
-    return new StructuredTypeDefBuilder<
+    return new ObjectTypeDefBuilder<
       Fields & Readonly<Record<Name, T>>
     >({
-      type: TypeDefType.Structured,
+      type: TypeDefType.Object,
       fields: {
         ...this.typeDef.fields,
         ...newFields,
@@ -125,17 +125,17 @@ class StructuredTypeDefBuilder<
   >(
     name: Name,
     { typeDef }: TypeDefHolder<T>,
-  ): StructuredTypeDefBuilder<
+  ): ObjectTypeDefBuilder<
     Fields & Partial<Record<Name, T>>
   > {
     const newFields = {
       [name]: typeDef,
     }
     // have to explicitly supply types as TS will infinitely recurse trying to infer them!
-    return new StructuredTypeDefBuilder<
+    return new ObjectTypeDefBuilder<
       Fields & Partial<Record<Name, T>>
     >({
-      type: TypeDefType.Structured,
+      type: TypeDefType.Object,
       fields: {
         ...this.typeDef.fields,
         ...newFields,
@@ -149,17 +149,17 @@ class StructuredTypeDefBuilder<
   >(
     name: Name,
     { typeDef }: TypeDefHolder<T>,
-  ): StructuredTypeDefBuilder<
+  ): ObjectTypeDefBuilder<
     Fields & Partial<Readonly<Record<Name, T>>>
   > {
     const newFields = {
       [name]: typeDef,
     }
     // have to explicitly supply types as TS will infinitely recurse trying to infer them!
-    return new StructuredTypeDefBuilder<
+    return new ObjectTypeDefBuilder<
       Fields & Partial<Readonly<Record<Name, T>>>
     >({
-      type: TypeDefType.Structured,
+      type: TypeDefType.Object,
       fields: {
         ...this.typeDef.fields,
         ...newFields,
@@ -243,28 +243,28 @@ export function list<T extends TypeDef>(elements: TypeDefHolder<T>): ListTypeDef
   })
 }
 
-export function map<
+export function record<
   V extends TypeDefHolder,
   // NOTE if we swap these generics and the caller forgets to supply the second one (so the TypeDefHolder)
   // TSC will freeze
-  K extends MapKeyType,
+  K extends RecordKeyType,
 >({ typeDef }: V) {
-  return new MapTypeDefBuilder<{
-    readonly type: TypeDefType.Map,
+  return new RecordTypeDefBuilder<{
+    readonly type: TypeDefType.Record,
     readonly keyPrototype: K,
     valueTypeDef: V['typeDef'],
   }>({
-    type: TypeDefType.Map,
+    type: TypeDefType.Record,
     // eslint-disable-next-line no-undefined
     keyPrototype: undefined!,
     valueTypeDef: typeDef,
   })
 }
 
-export function struct(): StructuredTypeDefBuilder<{}> {
+export function object(): ObjectTypeDefBuilder<{}> {
   // have to explicitly supply types as TS will infinitely recurse trying to infer them!
-  return new StructuredTypeDefBuilder<{}>({
-    type: TypeDefType.Structured,
+  return new ObjectTypeDefBuilder<{}>({
+    type: TypeDefType.Object,
     fields: {},
   })
 }

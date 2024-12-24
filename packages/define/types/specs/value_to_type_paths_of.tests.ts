@@ -5,11 +5,11 @@ import {
 import {
   boolean,
   list,
-  map,
   nullable,
   number,
+  object,
+  record,
   string,
-  struct,
   union,
 } from 'types/builders'
 import { type FlattenedTypeDefsOf } from 'types/flattened_type_defs_of'
@@ -41,9 +41,9 @@ describe('FlattenedJsonPathsOf', function () {
     })
   })
 
-  describe('map', function () {
+  describe('record', function () {
     const l = list(number)
-    const builder = map<typeof l, 'a' | 'b'>(l)
+    const builder = record<typeof l, 'a' | 'b'>(l)
     type T = SimplifyDeep<ValueToTypePathsOf<typeof builder>>
 
     let t: {
@@ -62,8 +62,8 @@ describe('FlattenedJsonPathsOf', function () {
     })
   })
 
-  describe('struct', function () {
-    const builder = struct()
+  describe('object', function () {
+    const builder = object()
       .set('a', list(number))
       .setOptional('b', boolean)
       .setReadonly('c', string)
@@ -112,8 +112,8 @@ describe('FlattenedJsonPathsOf', function () {
 
     describe('discriminated', function () {
       const builder = union('d')
-        .add('1', struct().set('a', boolean).set('b', number))
-        .add('2', struct().set('x', number).set('y', string))
+        .add('1', object().set('a', boolean).set('b', number))
+        .add('2', object().set('x', number).set('y', string))
       type T = SimplifyDeep<ValueToTypePathsOf<typeof builder>>
 
       let t: {

@@ -2,10 +2,10 @@ import { flattenTypeDefTo } from 'transformers/flatteners/flatten_type_def_to'
 import {
   boolean,
   list,
-  map,
   nullTypeDefHolder,
   number,
-  struct,
+  object,
+  record,
   union,
 } from 'types/builders'
 import {
@@ -61,8 +61,8 @@ describe('flattenTypeDefTo', function () {
     })
   })
 
-  describe('map', function () {
-    const typeDefHolder = map<typeof number, 'a' | 'b'>(number)
+  describe('record', function () {
+    const typeDefHolder = record<typeof number, 'a' | 'b'>(number)
     beforeEach(function () {
       flattened = flattenTypeDefTo(typeDefHolder, toTypeDefType)
     })
@@ -71,7 +71,7 @@ describe('flattenTypeDefTo', function () {
       expect(
         flattened,
       ).toEqual({
-        $: TypeDefType.Map,
+        $: TypeDefType.Record,
         '$.*': TypeDefType.Literal,
       })
     })
@@ -81,15 +81,15 @@ describe('flattenTypeDefTo', function () {
     })
   })
 
-  describe('struct', function () {
-    const typeDefHolder = struct().set('a', number).set('b', list(boolean))
+  describe('object', function () {
+    const typeDefHolder = object().set('a', number).set('b', list(boolean))
     beforeEach(function () {
       flattened = flattenTypeDefTo(typeDefHolder, toTypeDefType)
     })
 
     it('equals expected type', function () {
       expect(flattened).toEqual({
-        $: TypeDefType.Structured,
+        $: TypeDefType.Object,
         '$.a': TypeDefType.Literal,
         '$.b': TypeDefType.List,
         '$.b.*': TypeDefType.Literal,
@@ -124,8 +124,8 @@ describe('flattenTypeDefTo', function () {
 
     describe('discriminated', function () {
       const typeDefHolder = union('d')
-        .add('a', struct().set('a', boolean))
-        .add('b', struct().set('b', number))
+        .add('a', object().set('a', boolean))
+        .add('b', object().set('b', number))
       beforeEach(function () {
         flattened = flattenTypeDefTo(typeDefHolder, toTypeDefType)
       })

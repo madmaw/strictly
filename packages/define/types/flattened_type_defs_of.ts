@@ -4,8 +4,8 @@ import {
 import {
   type ListTypeDef,
   type LiteralTypeDef,
-  type MapTypeDef,
-  type StructuredTypeDef,
+  type ObjectTypeDef,
+  type RecordTypeDef,
   type TypeDef,
   type TypeDefHolder,
   type UnionTypeDef,
@@ -50,9 +50,9 @@ type InternalFlattenedTypeDefsOfChildren<
   NextDepth extends -1 ? never
     : T extends LiteralTypeDef ? InternalFlattenedTypeDefsOfLiteralChildren
     : T extends ListTypeDef ? InternalFlattenedTypeDefsOfListChildren<T, SegmentOverride, Path, NextDepth>
-    : T extends MapTypeDef ? InternalFlattenedTypeDefsOfMapChildren<T, SegmentOverride, Path, NextDepth>
-    : T extends StructuredTypeDef
-      ? InternalFlattenedTypeDefsOfStructChildren<T, SegmentOverride, Path, Qualifier, NextDepth>
+    : T extends RecordTypeDef ? InternalFlattenedTypeDefsOfRecordChildren<T, SegmentOverride, Path, NextDepth>
+    : T extends ObjectTypeDef
+      ? InternalFlattenedTypeDefsOfObjectChildren<T, SegmentOverride, Path, Qualifier, NextDepth>
     : T extends UnionTypeDef ? InternalFlattenedTypeDefsOfUnionChildren<T, SegmentOverride, Path, Qualifier, NextDepth>
     : never
 
@@ -71,8 +71,8 @@ type InternalFlattenedTypeDefsOfListChildren<
   Depth
 >
 
-type InternalFlattenedTypeDefsOfMapChildren<
-  T extends MapTypeDef,
+type InternalFlattenedTypeDefsOfRecordChildren<
+  T extends RecordTypeDef,
   SegmentOverride extends string | null,
   Path extends string,
   Depth extends number,
@@ -84,14 +84,13 @@ type InternalFlattenedTypeDefsOfMapChildren<
   Depth
 >
 
-type InternalFlattenedTypeDefsOfStructChildren<
-  T extends StructuredTypeDef,
+type InternalFlattenedTypeDefsOfObjectChildren<
+  T extends ObjectTypeDef,
   SegmentOverride extends string | null,
   Path extends string,
   Qualifier extends string,
   Depth extends number,
-> = T extends StructuredTypeDef<infer Fields>
-  ? {} extends Fields ? {} : keyof Fields extends string ? UnionToIntersection<{
+> = T extends ObjectTypeDef<infer Fields> ? {} extends Fields ? {} : keyof Fields extends string ? UnionToIntersection<{
       readonly [K in keyof Fields]-?: InternalFlattenedTypeDefsOf<
         Exclude<Fields[K], undefined>,
         SegmentOverride,

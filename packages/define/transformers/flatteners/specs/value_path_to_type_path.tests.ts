@@ -2,10 +2,10 @@ import { valuePathToTypePath } from 'transformers/flatteners/value_path_to_type_
 import {
   boolean,
   list,
-  map,
   number,
+  object,
+  record,
   string,
-  struct,
   union,
 } from 'types/builders'
 import { type ValueToTypePathsOf } from 'types/value_to_type_paths_of'
@@ -83,9 +83,9 @@ describe('valuePathToTypePath', function () {
     })
   })
 
-  describe('map', function () {
+  describe('record', function () {
     type Key = 'a' | 'b'
-    const typeDef = map<typeof number, Key>(number)
+    const typeDef = record<typeof number, Key>(number)
     type JsonPaths = ValueToTypePathsOf<typeof typeDef>
 
     describe.each([
@@ -132,8 +132,8 @@ describe('valuePathToTypePath', function () {
     })
   })
 
-  describe('struct', function () {
-    const typeDef = struct().set('a', number).set('b', boolean)
+  describe('object', function () {
+    const typeDef = object().set('a', number).set('b', boolean)
     type JsonPaths = ValueToTypePathsOf<typeof typeDef>
 
     describe.each([
@@ -182,8 +182,8 @@ describe('valuePathToTypePath', function () {
   describe('union', function () {
     describe('discriminated', function () {
       const typeDef = union('w')
-        .add('x', struct().set('a', number).set('b', boolean))
-        .add('y', struct().set('b', string).set('c', boolean))
+        .add('x', object().set('a', number).set('b', boolean))
+        .add('y', object().set('b', string).set('c', boolean))
       type JsonPaths = ValueToTypePathsOf<typeof typeDef>
 
       describe.each([
