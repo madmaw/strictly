@@ -1,13 +1,13 @@
 import {
-  boolean,
+  booleanType,
   type FlattenedAccessorsOf,
   type FlattenedTypeDefsOf,
   type FlattenedValueTypesOf,
   list,
-  number,
+  numberType,
   object,
   type ReadonlyTypeDefOf,
-  string,
+  stringType,
   union,
   type ValueToTypePathsOf,
   type ValueTypeOf,
@@ -18,15 +18,15 @@ export type DogBreeds = 'Alsatian' | 'Pug' | 'Other'
 export type CatBreeds = 'Burmese' | 'Siamese' | 'Domestic Short Hair'
 
 export const speciesTypeDef = union('type')
-  .add('dog', object().set('barks', number))
-  .add('cat', object().set('meows', number))
+  .add('dog', object().set('barks', numberType))
+  .add('cat', object().set('meows', numberType))
 
-export type Species = keyof typeof speciesTypeDef['typeDef']['unions']
+export type Species = keyof typeof speciesTypeDef['definition']['unions']
 
 export const petTypeDef = object()
-  .set('name', string)
-  .set('alive', boolean)
-  .set('tags', list(string))
+  .set('name', stringType)
+  .set('alive', booleanType)
+  .set('tags', list(stringType))
   .set('species', speciesTypeDef)
   .narrow
 

@@ -6,8 +6,8 @@ import {
   type LiteralTypeDef,
   type ObjectTypeDef,
   type RecordTypeDef,
+  type Type,
   type TypeDef,
-  type TypeDefHolder,
   type UnionTypeDef,
 } from './definitions'
 import {
@@ -19,11 +19,11 @@ import { type JsonPathOf } from './json_path_of'
 // NOTE removing any ternary from this file improves the performance and the depth of data structure we can go to
 
 export type FlattenedTypeDefsOf<
-  T extends TypeDefHolder,
+  T extends Type,
   SegmentOverride extends string | null,
   Path extends string = '$',
   Depth extends number = StartingDepth,
-> = InternalFlattenedTypeDefsOf<T['typeDef'], SegmentOverride, Path, '', Depth>
+> = InternalFlattenedTypeDefsOf<T['definition'], SegmentOverride, Path, '', Depth>
 
 type InternalFlattenedTypeDefsOf<
   T extends TypeDef,
@@ -33,7 +33,7 @@ type InternalFlattenedTypeDefsOf<
   Depth extends number,
 > =
   & {
-    readonly [K in Path]: TypeDefHolder<T>
+    readonly [K in Path]: Type<T>
   }
   & InternalFlattenedTypeDefsOfChildren<T, SegmentOverride, Path, Qualifier, Depth>
 

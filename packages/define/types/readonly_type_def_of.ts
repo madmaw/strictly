@@ -3,13 +3,13 @@ import {
   type LiteralTypeDef,
   type ObjectTypeDef,
   type RecordTypeDef,
+  type Type,
   type TypeDef,
-  type TypeDefHolder,
   type UnionTypeDef,
 } from './definitions'
 
-export type ReadonlyTypeDefOf<T extends TypeDefHolder> = {
-  readonly typeDef: InternalReadonlyTypeDefOf<T['typeDef']>,
+export type ReadonlyTypeDefOf<T extends Type> = {
+  readonly definition: InternalReadonlyTypeDefOf<T['definition']>,
 }
 
 type InternalReadonlyTypeDefOf<T extends TypeDef> = T extends LiteralTypeDef ? InternalReadonlyTypeDefOfLiteral<T>

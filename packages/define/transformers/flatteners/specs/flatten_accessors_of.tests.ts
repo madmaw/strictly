@@ -1,9 +1,9 @@
 import { expectDefinedAndReturn } from '@de/base'
 import { flattenAccessorsOf } from 'transformers/flatteners/flatten_accessors_of'
 import {
-  boolean,
+  booleanType,
   list,
-  number,
+  numberType,
   object,
 } from 'types/builders'
 import { type FlattenedAccessorsOf } from 'types/flattened_accessors_of'
@@ -16,8 +16,8 @@ import {
 describe('flattenAccessorsOf', function () {
   let setter: Mock
   const builder = object()
-    .set('a', list(number))
-    .set('b', boolean)
+    .set('a', list(numberType))
+    .set('b', booleanType)
     .narrow
 
   let flattened: FlattenedAccessorsOf<typeof builder>

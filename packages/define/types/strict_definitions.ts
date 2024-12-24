@@ -15,8 +15,8 @@ import {
 
 // strict equivalent of type defs, basically just makes it so Union is introspectable
 
-export type StrictTypeDefHolder<T extends StrictTypeDef = StrictTypeDef> = {
-  readonly typeDef: T,
+export type StrictType<T extends StrictTypeDef = StrictTypeDef> = {
+  readonly definition: T,
 }
 
 export type StrictTypeDef =

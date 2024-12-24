@@ -1,18 +1,18 @@
 import { valuePathToTypePath } from 'transformers/flatteners/value_path_to_type_path'
 import {
-  boolean,
+  booleanType,
   list,
-  number,
+  numberType,
   object,
   record,
-  string,
+  stringType,
   union,
 } from 'types/builders'
 import { type ValueToTypePathsOf } from 'types/value_to_type_paths_of'
 
 describe('valuePathToTypePath', function () {
   describe('literal', function () {
-    const typeDef = number
+    const typeDef = numberType
     type JsonPaths = ValueToTypePathsOf<typeof typeDef>
 
     const typePath = valuePathToTypePath<JsonPaths, '$'>(typeDef, '$')
@@ -41,7 +41,7 @@ describe('valuePathToTypePath', function () {
   })
 
   describe('list', function () {
-    const typeDef = list(number)
+    const typeDef = list(numberType)
     type JsonPaths = ValueToTypePathsOf<typeof typeDef>
 
     describe.each([
@@ -85,7 +85,7 @@ describe('valuePathToTypePath', function () {
 
   describe('record', function () {
     type Key = 'a' | 'b'
-    const typeDef = record<typeof number, Key>(number)
+    const typeDef = record<typeof numberType, Key>(numberType)
     type JsonPaths = ValueToTypePathsOf<typeof typeDef>
 
     describe.each([
@@ -133,7 +133,7 @@ describe('valuePathToTypePath', function () {
   })
 
   describe('object', function () {
-    const typeDef = object().set('a', number).set('b', boolean)
+    const typeDef = object().set('a', numberType).set('b', booleanType)
     type JsonPaths = ValueToTypePathsOf<typeof typeDef>
 
     describe.each([
@@ -182,8 +182,8 @@ describe('valuePathToTypePath', function () {
   describe('union', function () {
     describe('discriminated', function () {
       const typeDef = union('w')
-        .add('x', object().set('a', number).set('b', boolean))
-        .add('y', object().set('b', string).set('c', boolean))
+        .add('x', object().set('a', numberType).set('b', booleanType))
+        .add('y', object().set('b', stringType).set('c', booleanType))
       type JsonPaths = ValueToTypePathsOf<typeof typeDef>
 
       describe.each([

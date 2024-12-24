@@ -8,22 +8,22 @@ import {
   type ObjectTypeDef,
   type RecordKeyType,
   type RecordTypeDef,
+  type Type,
   type TypeDef,
-  type TypeDefHolder,
   TypeDefType,
   type UnionKey,
   type UnionTypeDef,
 } from './definitions'
 
-class TypeDefBuilder<T extends TypeDef> implements TypeDefHolder<T> {
-  constructor(readonly typeDef: T) {
+class TypeDefBuilder<T extends TypeDef> implements Type<T> {
+  constructor(readonly definition: T) {
   }
 
   // returns just the relevant types, which can help typescript
   // from complaining about infinitely deep data structures
-  get narrow(): TypeDefHolder<T> {
+  get narrow(): Type<T> {
     return {
-      typeDef: this.typeDef,
+      definition: this.definition,
     }
   }
 }
@@ -76,7 +76,7 @@ class ObjectTypeDefBuilder<
     T extends TypeDef,
   >(
     name: Name,
-    { typeDef }: TypeDefHolder<T>,
+    { definition: typeDef }: Type<T>,
   ): ObjectTypeDefBuilder<
     Fields & Record<Name, T>
   > {
@@ -89,7 +89,7 @@ class ObjectTypeDefBuilder<
     >({
       type: TypeDefType.Object,
       fields: {
-        ...this.typeDef.fields,
+        ...this.definition.fields,
         ...newFields,
       },
     })
@@ -100,7 +100,7 @@ class ObjectTypeDefBuilder<
     T extends TypeDef,
   >(
     name: Name,
-    { typeDef }: TypeDefHolder<T>,
+    { definition: typeDef }: Type<T>,
   ): ObjectTypeDefBuilder<
     Fields & Readonly<Record<Name, T>>
   > {
@@ -113,7 +113,7 @@ class ObjectTypeDefBuilder<
     >({
       type: TypeDefType.Object,
       fields: {
-        ...this.typeDef.fields,
+        ...this.definition.fields,
         ...newFields,
       },
     })
@@ -124,7 +124,7 @@ class ObjectTypeDefBuilder<
     T extends TypeDef,
   >(
     name: Name,
-    { typeDef }: TypeDefHolder<T>,
+    { definition: typeDef }: Type<T>,
   ): ObjectTypeDefBuilder<
     Fields & Partial<Record<Name, T>>
   > {
@@ -137,7 +137,7 @@ class ObjectTypeDefBuilder<
     >({
       type: TypeDefType.Object,
       fields: {
-        ...this.typeDef.fields,
+        ...this.definition.fields,
         ...newFields,
       },
     })
@@ -148,7 +148,7 @@ class ObjectTypeDefBuilder<
     T extends TypeDef,
   >(
     name: Name,
-    { typeDef }: TypeDefHolder<T>,
+    { definition: typeDef }: Type<T>,
   ): ObjectTypeDefBuilder<
     Fields & Partial<Readonly<Record<Name, T>>>
   > {
@@ -161,7 +161,7 @@ class ObjectTypeDefBuilder<
     >({
       type: TypeDefType.Object,
       fields: {
-        ...this.typeDef.fields,
+        ...this.definition.fields,
         ...newFields,
       },
     })
@@ -183,13 +183,13 @@ class UnionTypeDefBuilder<
   >(
     k: K,
     {
-      typeDef,
-    }: TypeDefHolder<T>,
+      definition: typeDef,
+    }: Type<T>,
   ): UnionTypeDefBuilder<D, Readonly<Record<K, T>> & U> {
     const {
       discriminator,
       unions,
-    } = this.typeDef
+    } = this.definition
     return new UnionTypeDefBuilder<D, Readonly<Record<K, T>> & U>(
       {
         type: TypeDefType.Union,
@@ -211,12 +211,12 @@ export function literal<T>(value?: [T]): LiteralTypeDefBuilder<T> {
   })
 }
 
-export const string = literal<string>()
-export const number = literal<number>()
-export const boolean = literal<boolean>()
-export const nullTypeDefHolder = literal([null])
+export const stringType = literal<string>()
+export const numberType = literal<number>()
+export const booleanType = literal<boolean>()
+export const nullType = literal([null])
 
-export function nullable<T extends TypeDef>(nonNullable: TypeDefHolder<T>): UnionTypeDefBuilder<null, {
+export function nullable<T extends TypeDef>(nonNullable: Type<T>): UnionTypeDefBuilder<null, {
   readonly ['0']: T,
   readonly ['1']: LiteralTypeDef<null>,
 }> {
@@ -225,34 +225,34 @@ export function nullable<T extends TypeDef>(nonNullable: TypeDefHolder<T>): Unio
       type: TypeDefType.Union,
       discriminator: null,
       unions: {
-        ['0']: nonNullable.typeDef,
-        ['1']: nullTypeDefHolder.typeDef,
+        ['0']: nonNullable.definition,
+        ['1']: nullType.definition,
       },
     },
   )
 }
 
-export function list<T extends TypeDef>(elements: TypeDefHolder<T>): ListTypeDefBuilder<{
+export function list<T extends TypeDef>(elements: Type<T>): ListTypeDefBuilder<{
   readonly type: TypeDefType.List,
   elements: T,
 }> {
   // have to explicitly supply types as TS will infinitely recurse trying to infer them!
   return new ListTypeDefBuilder<ListTypeDef<T>>({
     type: TypeDefType.List,
-    elements: elements.typeDef,
+    elements: elements.definition,
   })
 }
 
 export function record<
-  V extends TypeDefHolder,
-  // NOTE if we swap these generics and the caller forgets to supply the second one (so the TypeDefHolder)
+  V extends Type,
+  // NOTE if we swap these generics and the caller forgets to supply the second one (so the Type)
   // TSC will freeze
   K extends RecordKeyType,
->({ typeDef }: V) {
+>({ definition: typeDef }: V) {
   return new RecordTypeDefBuilder<{
     readonly type: TypeDefType.Record,
     readonly keyPrototype: K,
-    valueTypeDef: V['typeDef'],
+    valueTypeDef: V['definition'],
   }>({
     type: TypeDefType.Record,
     // eslint-disable-next-line no-undefined

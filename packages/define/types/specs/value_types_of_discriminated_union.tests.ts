@@ -1,7 +1,7 @@
 import { type SimplifyDeep } from 'type-fest'
 import {
-  boolean,
-  number,
+  booleanType,
+  numberType,
   object,
   union,
 } from 'types/builders'
@@ -9,11 +9,11 @@ import { type ValueTypesOfDiscriminatedUnion } from 'types/value_types_of_discri
 
 describe('ValueTypesOfDiscriminatedUnion', function () {
   it('matches expected type', function () {
-    const { typeDef } = union('d')
-      .add('a', object().set('x', number))
-      .add('b', object().set('y', boolean))
+    const { definition } = union('d')
+      .add('a', object().set('x', numberType))
+      .add('b', object().set('y', booleanType))
     type T = SimplifyDeep<ValueTypesOfDiscriminatedUnion<
-      typeof typeDef
+      typeof definition
     >>
 
     expectTypeOf<T>().toEqualTypeOf<{

@@ -1,7 +1,7 @@
 import {
   copy,
   type ReadonlyTypeDefOf,
-  type TypeDefHolder,
+  type Type,
   type ValueTypeOf,
 } from '@de/fine'
 import {
@@ -11,7 +11,7 @@ import {
 } from 'types/field_converters'
 
 export class NullableToBooleanConverter<
-  T extends TypeDefHolder,
+  T extends Type,
   E,
   ValuePath extends string,
   Context,

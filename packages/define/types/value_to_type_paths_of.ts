@@ -15,14 +15,14 @@ import {
   type StartingDepth,
 } from './flattened'
 import { type JsonPathOf } from './json_path_of'
-import { type StrictTypeDefHolder } from './strict_definitions'
+import { type StrictType } from './strict_definitions'
 
 export type ValueToTypePathsOf<
-  T extends StrictTypeDefHolder,
+  T extends StrictType,
   SegmentOverride extends string = '*',
   Path extends string = '$',
 > = SimplifyDeep<InternalFlattenedJsonPathsOf<
-  T['typeDef'],
+  T['definition'],
   SegmentOverride,
   Path,
   Path,

@@ -3,8 +3,8 @@ import {
   type LiteralTypeDef,
   type ObjectTypeDef,
   type RecordTypeDef,
+  type Type,
   type TypeDef,
-  type TypeDefHolder,
   type UnionTypeDef,
 } from './definitions'
 import {
@@ -14,10 +14,10 @@ import {
 import { type JsonPathOf } from './json_path_of'
 
 export type JsonPathsOf<
-  T extends TypeDefHolder,
+  T extends Type,
   SegmentOverride extends string | null = null,
   Prefix extends string = '$',
-> = InternalJsonPathsOf<T['typeDef'], Prefix, SegmentOverride, StartingDepth>
+> = InternalJsonPathsOf<T['definition'], Prefix, SegmentOverride, StartingDepth>
 
 export type InternalJsonPathsOf<
   F extends TypeDef,

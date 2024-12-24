@@ -1,6 +1,6 @@
 import {
+  type Type,
   type TypeDef,
-  type TypeDefHolder,
 } from 'types/definitions'
 import {
   type Accessor,
@@ -25,7 +25,7 @@ function mapAccessor(
 }
 
 export function flattenAccessorsOf<
-  T extends TypeDefHolder,
+  T extends Type,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   R extends Readonly<Record<string, Accessor<any>>> = FlattenedAccessorsOf<T>,
 >(

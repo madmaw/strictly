@@ -1,6 +1,6 @@
 import {
   copy,
-  type TypeDefHolder,
+  type Type,
   type UnionTypeDef,
   type ValueTypeOf,
   type ValueTypesOfDiscriminatedUnion,
@@ -12,7 +12,7 @@ import {
 } from 'types/field_converters'
 
 export abstract class AbstractSelectValueTypeConverter<
-  T extends TypeDefHolder,
+  T extends Type,
   Values extends Readonly<Record<string, ValueTypeOf<T>>>,
   ValuePath extends string,
   Context,
@@ -46,9 +46,9 @@ export class SelectDiscriminatedUnionConverter<
   U extends UnionTypeDef,
   ValuePath extends string,
   Context,
-> extends AbstractSelectValueTypeConverter<TypeDefHolder<U>, ValueTypesOfDiscriminatedUnion<U>, ValuePath, Context> {
+> extends AbstractSelectValueTypeConverter<Type<U>, ValueTypesOfDiscriminatedUnion<U>, ValuePath, Context> {
   constructor(
-    typeDef: TypeDefHolder<U>,
+    typeDef: Type<U>,
     values: ValueTypesOfDiscriminatedUnion<U>,
     defaultValueKey: keyof U['unions'],
   ) {
@@ -59,9 +59,9 @@ export class SelectDiscriminatedUnionConverter<
     )
   }
 
-  override convert(to: ValueTypeOf<TypeDefHolder<U>>) {
+  override convert(to: ValueTypeOf<Type<U>>) {
     const {
-      typeDef: {
+      definition: {
         discriminator,
       },
     } = this.typeDef

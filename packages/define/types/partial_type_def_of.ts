@@ -3,15 +3,15 @@ import {
   type LiteralTypeDef,
   type ObjectTypeDef,
   type RecordTypeDef,
+  type Type,
   type TypeDef,
-  type TypeDefHolder,
   type TypeDefType,
   type UnionTypeDef,
 } from './definitions'
 
 // converts a type def to have nullable values and partial record fields
-export type PartialTypeDefOf<T extends TypeDefHolder> = {
-  readonly typeDef: InternalPartialAndNullableOf<T['typeDef']>,
+export type PartialTypeDefOf<T extends Type> = {
+  readonly typeDef: InternalPartialAndNullableOf<T['definition']>,
 }
 
 type InternalPartialAndNullableOf<T extends TypeDef> = {

@@ -28,7 +28,7 @@ function Component(props: FormProps<{
         <List>
           {function (valuePath: ListPath) {
             return (
-              <Code>
+              <Code key={valuePath}>
                 ValuePath: {valuePath}
               </Code>
             )

@@ -1,13 +1,13 @@
 import { expectDefinedAndReturn } from '@de/base/test'
 import {
-  boolean,
+  booleanType,
   type FlattenedValueTypesOf,
   list,
-  nullTypeDefHolder,
-  number,
+  nullType,
+  numberType,
   object,
   record,
-  string,
+  stringType,
   union,
   type ValueToTypePathsOf,
   type ValueTypeOf,
@@ -96,7 +96,7 @@ describe('all', function () {
     >
 
     describe('record', function () {
-      const typeDef = record<typeof number, 'a' | 'b'>(number)
+      const typeDef = record<typeof numberType, 'a' | 'b'>(numberType)
       type T = Simplify<
         FlattenedTypePathsToAdaptersOf<
           FlattenedValueTypesOf<typeof typeDef>,
@@ -116,8 +116,8 @@ describe('all', function () {
 
     describe('object', function () {
       const typeDef = object()
-        .set('x', string)
-        .set('y', boolean)
+        .set('x', stringType)
+        .set('y', booleanType)
       type T = FlattenedTypePathsToAdaptersOf<
         FlattenedValueTypesOf<typeof typeDef>,
         ValueTypeOf<typeof typeDef>
@@ -177,7 +177,7 @@ describe('all', function () {
 
   describe('FormModel', function () {
     describe('literal', function () {
-      const typeDef = number
+      const typeDef = numberType
       const adapters = {
         $: integerToStringAdapter,
       } as const
@@ -232,7 +232,7 @@ describe('all', function () {
     })
 
     describe('list', function () {
-      const typeDef = list(number)
+      const typeDef = list(numberType)
       const adapters = {
         '$.*': integerToStringAdapter,
       } as const
@@ -291,7 +291,7 @@ describe('all', function () {
     })
 
     describe('record', function () {
-      const typeDef = record<typeof number, 'a' | 'b'>(number)
+      const typeDef = record<typeof numberType, 'a' | 'b'>(numberType)
       const converters = {
         '$.*': integerToStringAdapter,
         // '$.*': booleanToBooleanConverter,
@@ -360,8 +360,8 @@ describe('all', function () {
 
     describe('object', function () {
       const typeDef = object()
-        .set('a', number)
-        .set('b', boolean)
+        .set('a', numberType)
+        .set('b', booleanType)
       const converters = {
         '$.a': integerToStringAdapter,
         '$.b': booleanToBooleanAdapter,
@@ -431,7 +431,7 @@ describe('all', function () {
 
   describe('FormPresenter', function () {
     describe('literal', function () {
-      const typeDef = number
+      const typeDef = numberType
       const adapters = {
         $: integerToStringAdapter,
       } as const
@@ -554,7 +554,7 @@ describe('all', function () {
     })
 
     describe('list', function () {
-      const typeDef = list(number)
+      const typeDef = list(numberType)
       const converters = {
         '$.*': integerToStringAdapter,
       } as const
@@ -880,9 +880,9 @@ describe('all', function () {
 
     describe('union', function () {
       describe('non-discriminated', function () {
-        const listOfNumbersTypeDef = list(number)
+        const listOfNumbersTypeDef = list(numberType)
         const typeDef = union()
-          .add('null', nullTypeDefHolder)
+          .add('null', nullType)
           .add('0', listOfNumbersTypeDef)
         const adapters = {
           $: adapterFromTwoWayConverter(new NullableToBooleanConverter(typeDef, [1])),
@@ -935,7 +935,7 @@ describe('all', function () {
     })
 
     describe('fake', function () {
-      const typeDef = number
+      const typeDef = numberType
       const converters = {
         $: integerToStringAdapter,
         '$.fake': booleanToBooleanAdapter,

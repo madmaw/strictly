@@ -1,10 +1,10 @@
 import { type SimplifyDeep } from 'type-fest'
 import {
   list,
-  number,
+  numberType,
   object,
   record,
-  string,
+  stringType,
   union,
 } from 'types/builders'
 import { type TypeDefType } from 'types/definitions'
@@ -12,7 +12,7 @@ import { type PartialTypeDefOf } from 'types/partial_type_def_of'
 
 describe('PartialTypeDefOf', function () {
   describe('literal', function () {
-    type T = PartialTypeDefOf<typeof number>
+    type T = PartialTypeDefOf<typeof numberType>
 
     let t: {
       readonly typeDef: {
@@ -37,7 +37,7 @@ describe('PartialTypeDefOf', function () {
   })
 
   describe('list', function () {
-    const builder = list(number)
+    const builder = list(numberType)
     type T = PartialTypeDefOf<typeof builder>
 
     let t: {
@@ -75,7 +75,7 @@ describe('PartialTypeDefOf', function () {
   })
 
   describe('record', function () {
-    const builder = record<typeof number, 'a' | 'b'>(number)
+    const builder = record<typeof numberType, 'a' | 'b'>(numberType)
     type T = SimplifyDeep<PartialTypeDefOf<typeof builder>>
 
     let t: {
@@ -116,8 +116,8 @@ describe('PartialTypeDefOf', function () {
 
   describe('object', function () {
     const builder = object()
-      .set('a', number)
-      .setReadonly('b', string)
+      .set('a', numberType)
+      .setReadonly('b', stringType)
     type T = PartialTypeDefOf<typeof builder>
 
     let t: {
@@ -174,8 +174,8 @@ describe('PartialTypeDefOf', function () {
   describe('union', function () {
     describe('simple', function () {
       const builder = union()
-        .add('1', number)
-        .add('2', string)
+        .add('1', numberType)
+        .add('2', stringType)
       type T = PartialTypeDefOf<typeof builder>
 
       let t: {
@@ -212,7 +212,7 @@ describe('PartialTypeDefOf', function () {
   })
 
   describe('readonly', function () {
-    const builder = list(number).readonly()
+    const builder = list(numberType).readonly()
     type T = PartialTypeDefOf<typeof builder>
 
     let t: {

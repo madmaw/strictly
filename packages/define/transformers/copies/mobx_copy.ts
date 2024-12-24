@@ -15,8 +15,8 @@ import {
 import { type MobxValueTypeOf } from 'types/mobx_value_type_of'
 import { type ReadonlyTypeDefOf } from 'types/readonly_type_def_of'
 import {
+  type StrictType,
   type StrictTypeDef,
-  type StrictTypeDefHolder,
 } from 'types/strict_definitions'
 import { type ValueTypeOf } from 'types/value_type_of'
 import {
@@ -73,7 +73,7 @@ function observeValue(
   }
 }
 
-export function mobxCopy<T extends StrictTypeDefHolder>(
+export function mobxCopy<T extends StrictType>(
   t: T,
   proto: ValueTypeOf<ReadonlyTypeDefOf<T>>,
 ): MobxValueTypeOf<T> {

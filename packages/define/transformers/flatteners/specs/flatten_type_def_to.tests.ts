@@ -1,9 +1,9 @@
 import { flattenTypeDefTo } from 'transformers/flatteners/flatten_type_def_to'
 import {
-  boolean,
+  booleanType,
   list,
-  nullTypeDefHolder,
-  number,
+  nullType,
+  numberType,
   object,
   record,
   union,
@@ -29,7 +29,7 @@ describe('flattenTypeDefTo', function () {
 
   describe('literal', function () {
     beforeEach(function () {
-      flattened = flattenTypeDefTo(number, toTypeDefType)
+      flattened = flattenTypeDefTo(numberType, toTypeDefType)
     })
 
     it('equals expected type', function () {
@@ -44,9 +44,9 @@ describe('flattenTypeDefTo', function () {
   })
 
   describe('list', function () {
-    const typeDefHolder = list(number)
+    const type = list(numberType)
     beforeEach(function () {
-      flattened = flattenTypeDefTo(typeDefHolder, toTypeDefType)
+      flattened = flattenTypeDefTo(type, toTypeDefType)
     })
 
     it('equals expected type', function () {
@@ -62,9 +62,9 @@ describe('flattenTypeDefTo', function () {
   })
 
   describe('record', function () {
-    const typeDefHolder = record<typeof number, 'a' | 'b'>(number)
+    const type = record<typeof numberType, 'a' | 'b'>(numberType)
     beforeEach(function () {
-      flattened = flattenTypeDefTo(typeDefHolder, toTypeDefType)
+      flattened = flattenTypeDefTo(type, toTypeDefType)
     })
 
     it('equals expected type', function () {
@@ -82,9 +82,9 @@ describe('flattenTypeDefTo', function () {
   })
 
   describe('object', function () {
-    const typeDefHolder = object().set('a', number).set('b', list(boolean))
+    const type = object().set('a', numberType).set('b', list(booleanType))
     beforeEach(function () {
-      flattened = flattenTypeDefTo(typeDefHolder, toTypeDefType)
+      flattened = flattenTypeDefTo(type, toTypeDefType)
     })
 
     it('equals expected type', function () {
@@ -103,12 +103,12 @@ describe('flattenTypeDefTo', function () {
 
   describe('union', function () {
     describe('non-discriminated', function () {
-      const typeDefHolder = union()
-        .add('a', nullTypeDefHolder)
-        .add('b', boolean)
-        .add('c', number)
+      const type = union()
+        .add('a', nullType)
+        .add('b', booleanType)
+        .add('c', numberType)
       beforeEach(function () {
-        flattened = flattenTypeDefTo(typeDefHolder, toTypeDefType)
+        flattened = flattenTypeDefTo(type, toTypeDefType)
       })
 
       it('equals expected type', function () {
@@ -123,11 +123,11 @@ describe('flattenTypeDefTo', function () {
     })
 
     describe('discriminated', function () {
-      const typeDefHolder = union('d')
-        .add('a', object().set('a', boolean))
-        .add('b', object().set('b', number))
+      const type = union('d')
+        .add('a', object().set('a', booleanType))
+        .add('b', object().set('b', numberType))
       beforeEach(function () {
-        flattened = flattenTypeDefTo(typeDefHolder, toTypeDefType)
+        flattened = flattenTypeDefTo(type, toTypeDefType)
       })
 
       it('equals expected type', function () {

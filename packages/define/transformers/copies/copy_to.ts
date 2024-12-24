@@ -17,8 +17,8 @@ import {
   type StrictObjectTypeDef,
   type StrictRecordTypeDef,
   type StrictStructuredTypeDefFields,
+  type StrictType,
   type StrictTypeDef,
-  type StrictTypeDefHolder,
   type StrictUnionTypeDef,
 } from 'types/strict_definitions'
 import { type ValueTypeOf } from 'types/value_type_of'
@@ -29,15 +29,15 @@ export type AnyValueType = any
 export type Copier<R> = (v: AnyValueType, t: StrictTypeDef) => R
 
 export function copyTo<
-  T extends StrictTypeDefHolder,
+  T extends StrictType,
   R extends ValueTypeOf<ReadonlyTypeDefOf<T>>,
 >(
-  { typeDef }: T,
+  { definition }: T,
   value: ValueTypeOf<ReadonlyTypeDefOf<T>>,
   copier: Copier<R>,
 ): R {
   return internalCopyTo(
-    typeDef,
+    definition,
     value,
     copier,
   )
@@ -50,43 +50,43 @@ export function copyTo<
  * @returns a copy of the supplied value
  */
 function internalCopyTo<R>(
-  typeDef: TypeDef,
+  definition: TypeDef,
   value: AnyValueType,
   copier: Copier<R>,
 ): R {
-  switch (typeDef.type) {
+  switch (definition.type) {
     case TypeDefType.Literal:
       return copyLiteral(
-        typeDef,
+        definition,
         value,
         copier,
       )
     case TypeDefType.List:
       return copyList(
-        typeDef,
+        definition,
         value,
         copier,
       )
     case TypeDefType.Record:
       return copyRecord(
-        typeDef,
+        definition,
         value,
         copier,
       )
     case TypeDefType.Object:
       return copyObject(
-        typeDef,
+        definition,
         value,
         copier,
       )
     case TypeDefType.Union:
       return copyUnion(
-        typeDef,
+        definition,
         value,
         copier,
       )
     default:
-      throw new UnreachableError(typeDef)
+      throw new UnreachableError(definition)
   }
 }
 
@@ -94,7 +94,7 @@ function copyLiteral<
   R,
 >(
   typeDef: StrictLiteralTypeDef,
-  value: ValueTypeOf<{ typeDef: StrictLiteralTypeDef }>,
+  value: ValueTypeOf<{ definition: StrictLiteralTypeDef }>,
   copier: Copier<R>,
 ): R {
   // mutable and immutable literals should be the same type

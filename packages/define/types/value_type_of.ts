@@ -6,15 +6,15 @@ import {
   type LiteralTypeDef,
   type ObjectTypeDef,
   type RecordTypeDef,
+  type Type,
   type TypeDef,
-  type TypeDefHolder,
   type UnionTypeDef,
 } from './definitions'
 
 export type ValueTypeOf<
   T,
   Extra = {},
-> = T extends TypeDefHolder ? InternalValueTypeOf<T['typeDef'], Extra> : never
+> = T extends Type ? InternalValueTypeOf<T['definition'], Extra> : never
 
 export type InternalValueTypeOf<
   F extends TypeDef,

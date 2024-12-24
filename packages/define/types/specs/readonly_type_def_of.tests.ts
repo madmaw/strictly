@@ -1,9 +1,9 @@
 import {
   list,
-  number,
+  numberType,
   object,
   record,
-  string,
+  stringType,
   union,
 } from 'types/builders'
 import { type TypeDefType } from 'types/definitions'
@@ -11,10 +11,10 @@ import { type ReadonlyTypeDefOf } from 'types/readonly_type_def_of'
 
 describe('ReadonlyTypeDefOf', function () {
   describe('literal', function () {
-    type T = ReadonlyTypeDefOf<typeof number>
+    type T = ReadonlyTypeDefOf<typeof numberType>
 
     let t: {
-      readonly typeDef: {
+      readonly definition: {
         readonly type: TypeDefType.Literal,
         readonly valuePrototype: [number],
       },
@@ -25,11 +25,11 @@ describe('ReadonlyTypeDefOf', function () {
   })
 
   describe('list', function () {
-    const builder = list(number)
+    const builder = list(numberType)
     type T = ReadonlyTypeDefOf<typeof builder>
 
     let t: {
-      readonly typeDef: {
+      readonly definition: {
         readonly type: TypeDefType.List,
         readonly elements: {
           readonly type: TypeDefType.Literal,
@@ -43,11 +43,11 @@ describe('ReadonlyTypeDefOf', function () {
   })
 
   describe('record', function () {
-    const builder = record<typeof number, 'a' | 'b'>(number)
+    const builder = record<typeof numberType, 'a' | 'b'>(numberType)
     type T = ReadonlyTypeDefOf<typeof builder>
 
     let t: {
-      readonly typeDef: {
+      readonly definition: {
         readonly type: TypeDefType.Record,
         readonly keyPrototype: 'a' | 'b',
         readonly valueTypeDef: {
@@ -63,12 +63,12 @@ describe('ReadonlyTypeDefOf', function () {
 
   describe('object', function () {
     const builder = object()
-      .set('a', number)
-      .setOptional('b', string)
+      .set('a', numberType)
+      .setOptional('b', stringType)
     type T = ReadonlyTypeDefOf<typeof builder>
 
     let t: {
-      readonly typeDef: {
+      readonly definition: {
         readonly type: TypeDefType.Object,
         readonly fields: {
           readonly a: {
@@ -89,12 +89,12 @@ describe('ReadonlyTypeDefOf', function () {
 
   describe('union', function () {
     const builder = union()
-      .add('1', record<typeof number, 'a'>(number))
-      .add('2', string)
+      .add('1', record<typeof numberType, 'a'>(numberType))
+      .add('2', stringType)
     type T = ReadonlyTypeDefOf<typeof builder>
 
     let t: {
-      readonly typeDef: {
+      readonly definition: {
         readonly type: TypeDefType.Union,
         readonly discriminator: null,
         readonly unions: {
@@ -119,11 +119,11 @@ describe('ReadonlyTypeDefOf', function () {
   })
 
   describe('partial', function () {
-    const builder = record<typeof number, 'a'>(number).partial()
+    const builder = record<typeof numberType, 'a'>(numberType).partial()
     type T = ReadonlyTypeDefOf<typeof builder>
 
     let t: {
-      readonly typeDef: {
+      readonly definition: {
         readonly type: TypeDefType.Record,
         readonly keyPrototype: 'a',
         readonly valueTypeDef: {
@@ -138,11 +138,11 @@ describe('ReadonlyTypeDefOf', function () {
   })
 
   describe('readonly', function () {
-    const builder = record<typeof number, 'a'>(number).readonly()
+    const builder = record<typeof numberType, 'a'>(numberType).readonly()
     type T = ReadonlyTypeDefOf<typeof builder>
 
     let t: {
-      readonly typeDef: {
+      readonly definition: {
         readonly type: TypeDefType.Record,
         readonly keyPrototype: 'a',
         readonly valueTypeDef: {

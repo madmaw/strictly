@@ -1,5 +1,5 @@
 import {
-  type TypeDefHolder,
+  type Type,
 } from './definitions'
 import { type ValueTypeOf } from './value_type_of'
 
@@ -13,4 +13,4 @@ export type NonMobxObservable<T = {}> = {
   [MOBX_OBSERVABLE_KEY]?: never,
 } & T
 
-export type MobxValueTypeOf<T extends TypeDefHolder> = ValueTypeOf<T, MobxObservable>
+export type MobxValueTypeOf<T extends Type> = ValueTypeOf<T, MobxObservable>

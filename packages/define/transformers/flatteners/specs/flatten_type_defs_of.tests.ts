@@ -1,17 +1,17 @@
 import { flattenTypeDefsOf } from 'transformers/flatteners/flatten_type_defs_of'
 import {
-  boolean,
+  booleanType,
   list,
-  number,
+  numberType,
   object,
 } from 'types/builders'
 
 describe('flattenTypeDefsOf', function () {
   it('flattens', function () {
-    const listTypeDef = list(number)
+    const listTypeDef = list(numberType)
     const structTypeDef = object()
       .set('a', listTypeDef)
-      .set('b', boolean)
+      .set('b', booleanType)
     const flattened = flattenTypeDefsOf(
       structTypeDef,
     )
@@ -19,8 +19,8 @@ describe('flattenTypeDefsOf', function () {
     expect(flattened).toEqual({
       $: structTypeDef.narrow,
       '$.a': listTypeDef.narrow,
-      '$.a.*': number.narrow,
-      '$.b': boolean.narrow,
+      '$.a.*': numberType.narrow,
+      '$.b': booleanType.narrow,
     })
   })
 })

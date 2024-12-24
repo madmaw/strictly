@@ -1,4 +1,4 @@
-import { type TypeDefHolder } from './definitions'
+import { type Type } from './definitions'
 import { type FlattenedValueTypesOf } from './flattened_value_types_of'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -8,7 +8,7 @@ export type Accessor<T = any> = {
 }
 
 export type FlattenedAccessorsOf<
-  T extends TypeDefHolder,
+  T extends Type,
   Flattened extends Readonly<Record<string, Accessor>> = FlattenedValueTypesOf<T>,
 > = {
   readonly [K in keyof Flattened]: Accessor<Flattened[K]>

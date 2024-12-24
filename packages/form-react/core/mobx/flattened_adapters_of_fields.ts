@@ -1,6 +1,6 @@
 import {
   type ReadonlyTypeDefOf,
-  type TypeDefHolder,
+  type Type,
   type ValueTypeOf,
 } from '@de/fine'
 import { type FieldAdapter } from 'core/mobx/field_adapter'
@@ -12,7 +12,7 @@ import { type Field } from 'types/field'
 
 export type FlattenedAdaptersOfFields<
   ValuePathsToTypePaths extends Readonly<Record<string, string>>,
-  FlattenedTypeDefs extends Partial<Readonly<Record<ValueOf<ValuePathsToTypePaths>, TypeDefHolder>>>,
+  FlattenedTypeDefs extends Partial<Readonly<Record<ValueOf<ValuePathsToTypePaths>, Type>>>,
   FormFields extends Partial<Readonly<Record<keyof ValuePathsToTypePaths, Field>>>,
 > = SimplifyDeep<{
   readonly [
@@ -26,7 +26,7 @@ export type FlattenedAdaptersOfFields<
 
 type AdapterOfField<
   F extends Field,
-  T extends TypeDefHolder | undefined,
+  T extends Type | undefined,
   ValuePath extends string | number | symbol,
 > = ValuePath extends string
   ? F extends Field<infer V, infer E> ? undefined extends T ? FieldAdapter<V, V, E, ValuePath>

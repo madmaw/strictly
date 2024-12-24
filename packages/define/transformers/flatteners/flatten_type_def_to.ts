@@ -9,8 +9,8 @@ import {
   type StrictListTypeDef,
   type StrictObjectTypeDef,
   type StrictRecordTypeDef,
+  type StrictType,
   type StrictTypeDef,
-  type StrictTypeDefHolder,
   type StrictUnionTypeDef,
 } from 'types/strict_definitions'
 import { jsonPath } from './json_path'
@@ -21,10 +21,10 @@ export type AnyValueType = any
 export type Mapper<R> = (t: StrictTypeDef) => R
 
 export function flattenTypeDefTo<M, R extends Readonly<Record<string, M>>>(
-  { typeDef }: StrictTypeDefHolder,
+  { definition }: StrictType,
   mapper: Mapper<M>,
 ): R {
-  const typeDefs = internalFlattenTypeDef('$', typeDef, {})
+  const typeDefs = internalFlattenTypeDef('$', definition, {})
   // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
   return reduce(
     typeDefs,

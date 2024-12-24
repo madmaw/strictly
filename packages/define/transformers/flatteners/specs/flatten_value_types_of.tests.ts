@@ -1,8 +1,8 @@
 import { flattenValueTypesOf } from 'transformers/flatteners/flatten_value_types_of'
 import {
-  boolean,
+  booleanType,
   list,
-  number,
+  numberType,
   object,
 } from 'types/builders'
 
@@ -12,8 +12,8 @@ describe('flattenValueTypesOf', function () {
   it('flattens', function () {
     const flattened = flattenValueTypesOf(
       object()
-        .set('a', list(number))
-        .set('b', boolean),
+        .set('a', list(numberType))
+        .set('b', booleanType),
       {
         a: [
           1,

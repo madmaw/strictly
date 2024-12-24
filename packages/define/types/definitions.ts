@@ -17,8 +17,8 @@
 // 5. Use longhand { [s: string]: number } instead of Record<string, number> when doing transformations and
 // defining types
 
-export type TypeDefHolder<T extends TypeDef = TypeDef> = {
-  readonly typeDef: T,
+export type Type<T extends TypeDef = TypeDef> = {
+  readonly definition: T,
 }
 
 export type TypeDef =

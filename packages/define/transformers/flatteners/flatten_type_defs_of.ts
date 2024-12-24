@@ -1,16 +1,16 @@
 import {
+  type Type,
   type TypeDef,
-  type TypeDefHolder,
 } from 'types/definitions'
-import { type StrictTypeDefHolder } from 'types/strict_definitions'
+import { type StrictType } from 'types/strict_definitions'
 import { flattenTypeDefTo } from './flatten_type_def_to'
 
-export function flattenTypeDefsOf<T extends StrictTypeDefHolder>(t: T) {
+export function flattenTypeDefsOf<T extends StrictType>(t: T) {
   // Type should be FlattenedTypeDefsOf<T>, but infinite depth error
-  return flattenTypeDefTo<StrictTypeDefHolder, Record<string, TypeDefHolder>>(
+  return flattenTypeDefTo<StrictType, Record<string, Type>>(
     t,
-    function (typeDef: TypeDef) {
-      return { typeDef }
+    function (definition: TypeDef) {
+      return { definition }
     },
   )
 }

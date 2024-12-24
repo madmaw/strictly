@@ -20,7 +20,7 @@ import {
   type MobxValueTypeOf,
   type ReadonlyTypeDefOf,
   type StrictTypeDef,
-  type TypeDefHolder,
+  type Type,
   valuePathToTypePath,
   type ValueTypeOf,
 } from '@de/fine'
@@ -102,7 +102,7 @@ export type ValuePathsToAdaptersOf<
   : never
 
 export class FormPresenter<
-  T extends TypeDefHolder,
+  T extends Type,
   ValueToTypePaths extends Readonly<Record<string, string>>,
   TypePathsToAdapters extends FlattenedTypePathsToAdaptersOf<
     FlattenedValueTypesOf<T, '*'>,
@@ -521,7 +521,7 @@ export class FormPresenter<
 }
 
 export class FormModel<
-  T extends TypeDefHolder,
+  T extends Type,
   ValueToTypePaths extends Readonly<Record<string, string>>,
   TypePathsToAdapters extends FlattenedTypePathsToAdaptersOf<
     FlattenedValueTypesOf<T, '*'>,
@@ -539,7 +539,7 @@ export class FormModel<
   @observable.shallow
   accessor errors: FlattenedErrors<ValuePathsToAdapters> = {}
 
-  private readonly flattenedTypeDefs: Readonly<Record<string, TypeDefHolder>>
+  private readonly flattenedTypeDefs: Readonly<Record<string, Type>>
 
   constructor(
     private readonly typeDef: T,

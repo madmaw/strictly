@@ -6,18 +6,18 @@ import {
 } from 'transformers/flatteners/flatten_value_type_to'
 import { type SimplifyDeep } from 'type-fest'
 import {
-  boolean,
+  booleanType,
   list,
   literal,
-  nullTypeDefHolder,
-  number,
+  nullType,
+  numberType,
   object,
   record,
   union,
 } from 'types/builders'
 import {
+  type Type,
   type TypeDef,
-  type TypeDefHolder,
 } from 'types/definitions'
 import { type FlattenedTypeDefsOf } from 'types/flattened_type_defs_of'
 import { type ValueTypeOf } from 'types/value_type_of'
@@ -26,11 +26,11 @@ import {
   vi,
 } from 'vitest'
 
-type FlattenedSetters<R extends Record<string, TypeDefHolder>> = {
+type FlattenedSetters<R extends Record<string, Type>> = {
   [K in keyof R]: Setter<ValueTypeOf<R[K]>>
 }
 
-type FlattenedToStrings<R extends Record<string, TypeDefHolder>> = {
+type FlattenedToStrings<R extends Record<string, Type>> = {
   [K in keyof R]: string
 }
 
@@ -49,7 +49,7 @@ describe('flattenValueTypeTo', function () {
   })
 
   describe('literal', function () {
-    const typeDef = number
+    const typeDef = numberType
     type F = FlattenedTypeDefsOf<typeof typeDef, null>
     describe('toString', function () {
       let flattened: FlattenedToStrings<F>
@@ -94,7 +94,7 @@ describe('flattenValueTypeTo', function () {
   })
 
   describe('list', function () {
-    const typeDef = list(number)
+    const typeDef = list(numberType)
     type F = FlattenedTypeDefsOf<typeof typeDef, null>
     let l: ValueTypeOf<typeof typeDef>
     beforeEach(function () {
@@ -153,7 +153,7 @@ describe('flattenValueTypeTo', function () {
   })
 
   describe('record', function () {
-    const typeDef = record<typeof number, 'a' | 'b'>(number)
+    const typeDef = record<typeof numberType, 'a' | 'b'>(numberType)
     type F = FlattenedTypeDefsOf<typeof typeDef, null>
 
     let m: ValueTypeOf<typeof typeDef>
@@ -207,8 +207,8 @@ describe('flattenValueTypeTo', function () {
 
   describe('object', function () {
     const typeDef = object()
-      .set('a', number)
-      .set('b', boolean)
+      .set('a', numberType)
+      .set('b', booleanType)
     type F = FlattenedTypeDefsOf<typeof typeDef, null>
 
     let s: ValueTypeOf<typeof typeDef>
@@ -271,8 +271,8 @@ describe('flattenValueTypeTo', function () {
   describe('union', function () {
     describe('discriminated', function () {
       const typeDef = union('d')
-        .add('1', object().set('a', number))
-        .add('2', object().set('b', boolean))
+        .add('1', object().set('a', numberType))
+        .add('2', object().set('b', booleanType))
       type F = SimplifyDeep<FlattenedTypeDefsOf<typeof typeDef, null>>
       let u: ValueTypeOf<typeof typeDef>
       beforeEach(function () {
@@ -335,8 +335,8 @@ describe('flattenValueTypeTo', function () {
     })
     describe('non-discriminated', function () {
       const typeDef = union()
-        .add('0', number)
-        .add('1', nullTypeDefHolder)
+        .add('0', numberType)
+        .add('1', nullType)
       type F = FlattenedTypeDefsOf<typeof typeDef, null>
       let u: ValueTypeOf<typeof typeDef>
 
@@ -384,8 +384,8 @@ describe('flattenValueTypeTo', function () {
 
     describe('complex non-discriminated', function () {
       const typeDef = union()
-        .add('z', list(number))
-        .add('x', nullTypeDefHolder)
+        .add('z', list(numberType))
+        .add('x', nullType)
         .add('y', literal([false]))
       type F = FlattenedTypeDefsOf<typeof typeDef, null>
 

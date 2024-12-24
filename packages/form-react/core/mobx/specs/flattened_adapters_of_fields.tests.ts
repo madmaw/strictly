@@ -1,6 +1,6 @@
 import {
-  type boolean,
-  type number,
+  type booleanType,
+  type numberType,
 } from '@de/fine'
 import { type FieldAdapter } from 'core/mobx/field_adapter'
 import { type FlattenedAdaptersOfFields } from 'core/mobx/flattened_adapters_of_fields'
@@ -19,7 +19,7 @@ describe('FlattenedAdaptersOfFIelds', function () {
         a: 'b',
       },
       {
-        b: typeof number,
+        b: typeof numberType,
       },
       Fields
     >
@@ -38,8 +38,8 @@ describe('FlattenedAdaptersOfFIelds', function () {
         c: 'd',
       },
       {
-        b: typeof number,
-        d: typeof boolean,
+        b: typeof numberType,
+        d: typeof booleanType,
       },
       FormFields
     >
@@ -59,8 +59,8 @@ describe('FlattenedAdaptersOfFIelds', function () {
         c: 'd',
       },
       {
-        b: typeof number,
-        d: typeof boolean,
+        b: typeof numberType,
+        d: typeof booleanType,
       },
       FormFields
     >

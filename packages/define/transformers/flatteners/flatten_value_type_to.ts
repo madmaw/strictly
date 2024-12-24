@@ -12,8 +12,8 @@ import {
   type StrictListTypeDef,
   type StrictObjectTypeDef,
   type StrictRecordTypeDef,
+  type StrictType,
   type StrictTypeDef,
-  type StrictTypeDefHolder,
   type StrictUnionTypeDef,
 } from 'types/strict_definitions'
 import { type ValueTypeOf } from 'types/value_type_of'
@@ -32,11 +32,11 @@ export type Mapper<R> = (
 ) => R
 
 export function flattenValueTypeTo<
-  T extends StrictTypeDefHolder,
+  T extends StrictType,
   M,
   R extends Readonly<Record<string, M>>,
 >(
-  { typeDef }: T,
+  { definition }: T,
   v: ValueTypeOf<T>,
   setter: Setter<ValueTypeOf<T>>,
   mapper: Mapper<M>,
@@ -45,7 +45,7 @@ export function flattenValueTypeTo<
   internalFlattenValue(
     '$',
     '$',
-    typeDef,
+    definition,
     v,
     setter,
     mapper,
@@ -200,7 +200,7 @@ function internalFlattenUnionChildren<M>(
 export function getUnionTypeDef<T extends UnionTypeDef>(
   typeDef: T,
   v: ValueTypeOf<ReadonlyTypeDefOf<{
-    typeDef: T,
+    definition: T,
   }>>,
 ) {
   if (typeDef.discriminator == null) {

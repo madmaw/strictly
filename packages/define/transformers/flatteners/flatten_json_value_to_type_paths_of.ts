@@ -1,6 +1,6 @@
 import {
+  type Type,
   type TypeDef,
-  type TypeDefHolder,
 } from 'types/definitions'
 import { type ValueTypeOf } from 'types/value_type_of'
 import {
@@ -19,7 +19,7 @@ function mapTypePaths(
 }
 
 export function flattenJsonValueToTypePathsOf<
-  T extends TypeDefHolder,
+  T extends Type,
   R extends Record<string, string | number | symbol>,
 >(
   t: T,

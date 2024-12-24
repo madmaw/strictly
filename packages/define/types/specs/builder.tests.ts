@@ -1,11 +1,11 @@
 import {
-  boolean,
+  booleanType,
   list,
   nullable,
-  number,
+  numberType,
   object,
   record,
-  string,
+  stringType,
   union,
 } from 'types/builders'
 import {
@@ -14,7 +14,7 @@ import {
 
 describe('builder', function () {
   describe('literal', function () {
-    const { typeDef } = number
+    const { definition: typeDef } = numberType
 
     it('equals expected type', function () {
       type C = {
@@ -26,7 +26,7 @@ describe('builder', function () {
     })
 
     describe('nullable', function () {
-      const { typeDef } = nullable(number)
+      const { definition: typeDef } = nullable(numberType)
 
       type C = {
         readonly type: TypeDefType.Union,
@@ -51,7 +51,7 @@ describe('builder', function () {
   describe('list', function () {
     describe('numeric list', function () {
       describe('mutable', function () {
-        const { typeDef } = list(number)
+        const { definition: typeDef } = list(numberType)
 
         it('equals expected type', function () {
           type C = {
@@ -67,7 +67,7 @@ describe('builder', function () {
     })
 
     describe('readonly', function () {
-      const { typeDef } = list(number).readonly()
+      const { definition: typeDef } = list(numberType).readonly()
 
       it('equals expected type', function () {
         type C = {
@@ -86,7 +86,7 @@ describe('builder', function () {
   describe('record', function () {
     describe('numeric record', function () {
       describe('mutable', function () {
-        const { typeDef } = record<typeof number, 'a' | 'b' | 'c'>(number)
+        const { definition: typeDef } = record<typeof numberType, 'a' | 'b' | 'c'>(numberType)
 
         it('equals expected type', function () {
           type C = {
@@ -103,7 +103,7 @@ describe('builder', function () {
       })
 
       describe('readonly', function () {
-        const { typeDef } = record<typeof number, 'a' | 'b' | 'c'>(number).readonly()
+        const { definition: typeDef } = record<typeof numberType, 'a' | 'b' | 'c'>(numberType).readonly()
 
         it('equals expected type', function () {
           type C = {
@@ -119,7 +119,7 @@ describe('builder', function () {
       })
 
       describe('partial', function () {
-        const { typeDef } = record<typeof number, 'a' | 'b' | 'c'>(number).partial()
+        const { definition: typeDef } = record<typeof numberType, 'a' | 'b' | 'c'>(numberType).partial()
 
         it('equals expected type', function () {
           type C = {
@@ -135,7 +135,7 @@ describe('builder', function () {
       })
 
       describe('partial readonly', function () {
-        const { typeDef } = record<typeof number, 'a' | 'b' | 'c'>(number).partial().readonly()
+        const { definition: typeDef } = record<typeof numberType, 'a' | 'b' | 'c'>(numberType).partial().readonly()
 
         it('equals expected type', function () {
           type C = {
@@ -152,7 +152,7 @@ describe('builder', function () {
       })
 
       describe('readonly partial', function () {
-        const { typeDef } = record<typeof number, 'a' | 'b' | 'c'>(number).readonly().partial()
+        const { definition: typeDef } = record<typeof numberType, 'a' | 'b' | 'c'>(numberType).readonly().partial()
 
         it('equals expected type', function () {
           type C = {
@@ -171,11 +171,11 @@ describe('builder', function () {
   })
 
   describe('object', function () {
-    const { typeDef } = object()
-      .set('a', number)
-      .setReadonly('b', boolean)
-      .setOptional('c', string)
-      .setReadonlyOptional('d', number)
+    const { definition: typeDef } = object()
+      .set('a', numberType)
+      .setReadonly('b', booleanType)
+      .setOptional('c', stringType)
+      .setReadonlyOptional('d', numberType)
 
     it('equals expected type', function () {
       type C = {
@@ -214,15 +214,15 @@ describe('builder', function () {
   describe('union', function () {
     describe('literals', function () {
       const {
-        typeDef,
+        definition: typeDef,
       } = union()
         .add(
           '1',
-          number,
+          numberType,
         )
         .add(
           '2',
-          string,
+          stringType,
         )
 
       it('equals expected type', function () {
@@ -249,15 +249,15 @@ describe('builder', function () {
 
     describe('objects', function () {
       const {
-        typeDef,
+        definition: typeDef,
       } = union()
         .add(
           '1',
-          object().set('a', boolean),
+          object().set('a', booleanType),
         )
         .add(
           '2',
-          object().set('b', number),
+          object().set('b', numberType),
         )
 
       it('equals expected type', function () {

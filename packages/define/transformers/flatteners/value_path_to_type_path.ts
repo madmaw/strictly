@@ -7,8 +7,8 @@ import {
   UnreachableError,
 } from '@de/base'
 import {
+  type Type,
   type TypeDef,
-  type TypeDefHolder,
   TypeDefType,
 } from 'types/definitions'
 
@@ -16,7 +16,7 @@ export function valuePathToTypePath<
   JsonPaths extends Record<string, string>,
   ValuePath extends keyof JsonPaths,
 >(
-  { typeDef }: TypeDefHolder,
+  { definition: typeDef }: Type,
   valuePath: ValuePath,
   allowMissingPaths: boolean = false,
 ): JsonPaths[ValuePath] {

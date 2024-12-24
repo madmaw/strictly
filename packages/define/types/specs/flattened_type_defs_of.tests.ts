@@ -1,11 +1,11 @@
 import { type SimplifyDeep } from 'type-fest'
 import {
-  boolean,
+  booleanType,
   list,
-  number,
+  numberType,
   object,
   record,
-  string,
+  stringType,
   union,
 } from 'types/builders'
 import { type TypeDefType } from 'types/definitions'
@@ -13,11 +13,11 @@ import { type FlattenedTypeDefsOf } from 'types/flattened_type_defs_of'
 
 describe('FlattenedTypeDefsOf', function () {
   describe('literal', function () {
-    type T = FlattenedTypeDefsOf<typeof number, null>
+    type T = FlattenedTypeDefsOf<typeof numberType, null>
 
     let t: {
       readonly $: {
-        readonly typeDef: {
+        readonly definition: {
           readonly type: TypeDefType.Literal,
           readonly valuePrototype: [number],
         },
@@ -29,13 +29,13 @@ describe('FlattenedTypeDefsOf', function () {
   })
 
   describe('list', function () {
-    const builder = list(number)
+    const builder = list(numberType)
     type T = SimplifyDeep<FlattenedTypeDefsOf<typeof builder, '*'>>
 
     let t: {
       readonly $: SimplifyDeep<typeof builder.narrow>,
       readonly ['$.*']: {
-        readonly typeDef: {
+        readonly definition: {
           readonly type: TypeDefType.Literal,
           readonly valuePrototype: [number],
         },
@@ -47,13 +47,13 @@ describe('FlattenedTypeDefsOf', function () {
   })
 
   describe('record', function () {
-    const builder = record<typeof number, 'a' | 'b'>(number)
+    const builder = record<typeof numberType, 'a' | 'b'>(numberType)
     type T = SimplifyDeep<FlattenedTypeDefsOf<typeof builder, '*'>>
 
     let t: {
       readonly $: SimplifyDeep<typeof builder.narrow>,
       readonly ['$.*']: {
-        readonly typeDef: {
+        readonly definition: {
           readonly type: TypeDefType.Literal,
           readonly valuePrototype: [number],
         },
@@ -67,34 +67,34 @@ describe('FlattenedTypeDefsOf', function () {
   describe('object', function () {
     describe('simple', function () {
       const builder = object()
-        .set('a', number)
-        .setOptional('b', string)
-        .setReadonly('c', boolean)
-        .setReadonlyOptional('d', string)
+        .set('a', numberType)
+        .setOptional('b', stringType)
+        .setReadonly('c', booleanType)
+        .setReadonlyOptional('d', stringType)
       type T = SimplifyDeep<FlattenedTypeDefsOf<typeof builder, null>>
 
       let t: {
         readonly $: SimplifyDeep<typeof builder.narrow>,
         readonly ['$.a']: {
-          readonly typeDef: {
+          readonly definition: {
             readonly type: TypeDefType.Literal,
             readonly valuePrototype: [number],
           },
         },
         readonly ['$.b']: {
-          readonly typeDef: {
+          readonly definition: {
             readonly type: TypeDefType.Literal,
             readonly valuePrototype: [string],
           },
         },
         readonly ['$.c']: {
-          readonly typeDef: {
+          readonly definition: {
             readonly type: TypeDefType.Literal,
             readonly valuePrototype: [boolean],
           },
         },
         readonly ['$.d']: {
-          readonly typeDef: {
+          readonly definition: {
             readonly type: TypeDefType.Literal,
             readonly valuePrototype: [string],
           },
@@ -111,20 +111,20 @@ describe('union', function () {
   describe('overlapping', function () {
     describe('non-discriminated', function () {
       const builder = union()
-        .add('x', object().set('a', boolean))
-        .add('y', object().set('b', number))
+        .add('x', object().set('a', booleanType))
+        .add('y', object().set('b', numberType))
       type T = SimplifyDeep<FlattenedTypeDefsOf<typeof builder, null>>
 
       let t: {
         readonly $: SimplifyDeep<typeof builder.narrow>,
         readonly ['$.a']: {
-          readonly typeDef: {
+          readonly definition: {
             readonly type: TypeDefType.Literal,
             readonly valuePrototype: [boolean],
           },
         },
         readonly ['$.b']: {
-          readonly typeDef: {
+          readonly definition: {
             readonly type: TypeDefType.Literal,
             readonly valuePrototype: [number],
           },
@@ -138,20 +138,20 @@ describe('union', function () {
 
     describe('discriminated', function () {
       const builder = union('x')
-        .add('1', object().set('a', boolean))
-        .add('2', object().set('a', number))
+        .add('1', object().set('a', booleanType))
+        .add('2', object().set('a', numberType))
       type T = SimplifyDeep<FlattenedTypeDefsOf<typeof builder, null>>
 
       let t: {
         readonly $: SimplifyDeep<typeof builder.narrow>,
         readonly ['$.1:a']: {
-          readonly typeDef: {
+          readonly definition: {
             readonly type: TypeDefType.Literal,
             readonly valuePrototype: [boolean],
           },
         },
         readonly ['$.2:a']: {
-          readonly typeDef: {
+          readonly definition: {
             readonly type: TypeDefType.Literal,
             readonly valuePrototype: [number],
           },
@@ -167,38 +167,38 @@ describe('union', function () {
         .add(
           '1',
           union('y')
-            .add('p', object().set('a', boolean))
-            .add('q', object().set('a', string)),
+            .add('p', object().set('a', booleanType))
+            .add('q', object().set('a', stringType)),
         )
         .add(
           '2',
           union('z')
-            .add('r', object().set('b', number))
-            .add('s', object().set('c', string)),
+            .add('r', object().set('b', numberType))
+            .add('s', object().set('c', stringType)),
         )
       type T = SimplifyDeep<FlattenedTypeDefsOf<typeof builder, null>>
       let t: {
         readonly $: SimplifyDeep<typeof builder.narrow>,
         readonly ['$.1:p:a']: {
-          readonly typeDef: {
+          readonly definition: {
             readonly type: TypeDefType.Literal,
             readonly valuePrototype: [boolean],
           },
         },
         readonly ['$.1:q:a']: {
-          readonly typeDef: {
+          readonly definition: {
             readonly type: TypeDefType.Literal,
             readonly valuePrototype: [string],
           },
         },
         readonly ['$.2:r:b']: {
-          readonly typeDef: {
+          readonly definition: {
             readonly type: TypeDefType.Literal,
             readonly valuePrototype: [number],
           },
         },
         readonly ['$.2:s:c']: {
-          readonly typeDef: {
+          readonly definition: {
             readonly type: TypeDefType.Literal,
             readonly valuePrototype: [string],
           },

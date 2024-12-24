@@ -6,7 +6,7 @@ import { type ValueTypeOf } from './value_type_of'
 export type ValueTypesOfDiscriminatedUnion<
   U extends UnionTypeDef,
 > = U extends UnionTypeDef<infer D, infer Unions> ? D extends string ? {
-      [K in keyof Unions]: ValueTypeOf<{ typeDef: Unions[K] }> & {
+      [K in keyof Unions]: ValueTypeOf<{ definition: Unions[K] }> & {
         [KD in D]: K
       }
     }
