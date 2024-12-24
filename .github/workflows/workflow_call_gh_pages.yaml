@@ -14,13 +14,33 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout your repository using git
+      - name: Checkout repository
         uses: actions/checkout@v4
-      - name: Install, build, and upload your site
-        uses: withastro/action@v3
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
         with:
-          path: ./apps/describe # The root location of your Astro project inside the repository. (optional)
-          package-manager: yarn@latest # The Node package manager that should be used to install dependencies and build your site. Automatically detected based on your lockfile. (optional)
+          node-version: '22'
+      - name: Cache Node.js modules
+        id: cache
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - name: Run install
+        # act requires exact version numbers while github is OK with just major versions
+        uses: borales/actions-yarn@v4.2.0
+        with:
+          cmd: install
+      - name: Build
+        uses: borales/actions-yarn@v4.2.0
+        with:
+          cmd: describe:build
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./apps/describe/dist
 
   deploy:
     needs: build
