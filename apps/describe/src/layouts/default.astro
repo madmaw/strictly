@@ -13,7 +13,7 @@ const {
   },
   headings,
 } = Astro.props;
-const title = pagePaths[page as PageId] || {
+const { title } = pagePaths[page as PageId] || {
   title: page,
 }
 const toAbsoluteUrl = createToAbsoluteUrl(

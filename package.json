@@ -46,6 +46,7 @@
     "demo:dev": "turbo run dev --filter=@de/mo",
     "demo:storybook": "turbo run storybook --filter=@de/mo",
     "describe:build": "turbo run build --filter=@de/scribe",
+    "describe:dev": "turbo run dev --filter=@de/scribe",
     "form-react:storybook": "turbo storybook --filter=@de/form-react",
     "lint": "turbo run lint --continue && yarn lint:root",
     "lint:fix": "turbo run lint:fix --continue && yarn lint:root:fix",
