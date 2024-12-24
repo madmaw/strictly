@@ -1,6 +1,7 @@
 import { type MarkdownHeading } from 'astro'
 import { useMemo } from 'react'
 import styles from './mdx_navigation.module.css'
+import { type ToAbsoluteUrl } from './to_absolute_url'
 
 export type PageId = 'home' | 'define' | 'deform' | 'why'
 
@@ -11,19 +12,19 @@ type PageMetadata = {
 
 export const pagePaths: Record<PageId, PageMetadata> = {
   home: {
-    path: '',
+    path: '/',
     title: 'Home',
   },
   define: {
-    path: 'define',
+    path: '/fine',
     title: '@de/fine',
   },
   deform: {
-    path: 'deform',
+    path: '/form',
     title: '@de/form',
   },
   why: {
-    path: 'why',
+    path: '/why',
     title: 'Why?',
   },
 }
@@ -37,9 +38,11 @@ type NavigationBranch = {
 export function MdxNavigation({
   headings,
   page,
+  toAbsoluteUrl,
 }: {
   headings: readonly MarkdownHeading[],
   page: string,
+  toAbsoluteUrl: ToAbsoluteUrl,
 }) {
   const branches = useMemo<readonly NavigationBranch[]>(function () {
     return headings.reduce<NavigationBranch[]>(function (
@@ -91,7 +94,7 @@ export function MdxNavigation({
               : (
                 <a
                   className={styles.navItem}
-                  href={`/${navPath}`}
+                  href={toAbsoluteUrl(navPath)}
                 >
                   {title}
                 </a>

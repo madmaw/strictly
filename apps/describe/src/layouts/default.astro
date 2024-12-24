@@ -1,21 +1,26 @@
 ---
 import { type MarkdownLayoutProps } from 'astro'
 import { type PageId, pagePaths, MdxNavigation } from 'components/mdx_navigation'
+import { createToAbsoluteUrl } from 'components/to_absolute_url'
 import styles from './default.module.css'
 
 type Props = MarkdownLayoutProps<{
   page?: PageId;
 }>
-
 const {
   frontmatter: {
-    page = Astro.props.url?.substring(1) || ''
+    page = Astro.props.url?.substring(1) || '',
   },
   headings,
 } = Astro.props;
 const title = pagePaths[page as PageId] || {
   title: page,
 }
+const toAbsoluteUrl = createToAbsoluteUrl(
+  import.meta.env.SITE || Astro.url.origin,
+  import.meta.env.PUBLIC_BASE || '',
+  page,
+)
 ---
 <html lang="en">
   <head>
@@ -25,7 +30,7 @@ const title = pagePaths[page as PageId] || {
   </head>
   <body class={styles.body}>
     <nav class={styles.nav}>
-      <MdxNavigation headings={headings} page={page}/>
+      <MdxNavigation headings={headings} page={page} toAbsoluteUrl={toAbsoluteUrl}/>
     </nav>
     <div class={styles.scroll}>
       <article class={styles.article}>

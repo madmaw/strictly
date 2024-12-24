@@ -35,7 +35,7 @@
   "packageManager": "yarn@1.22.22",
   "private": true,
   "resolutions": {
-    "**/**/vite": "=6.0.3"
+    "**/**/vite": "=6.0.5"
   },
   "scripts": {
     "build": "turbo run build",

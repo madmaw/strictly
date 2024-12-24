@@ -9,6 +9,7 @@
     ".astro/types.d.ts",
     "astro.config.mts",
     "src",
+    "src/site.json",
     "tsconfig.json"
   ],
   "references": [
