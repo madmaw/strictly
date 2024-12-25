@@ -9,6 +9,7 @@ import {
   Stack,
 } from '@mantine/core'
 import {
+  type NOT_A_BREED_ERROR,
   type PetValueToTypePaths,
 } from './types'
 
@@ -16,6 +17,7 @@ export type PetSpeciesCatFormFields = FlattenedFormFieldsOf<
   PetValueToTypePaths,
   {
     '$.species.cat:meows': Field<number, never>,
+    '$.species.cat:breed': Field<string | null, typeof NOT_A_BREED_ERROR>,
   }
 >
 
@@ -24,6 +26,7 @@ export type PetSpeciesFormCatProps = FormProps<PetSpeciesCatFormFields>
 export function PetSpeciesCatForm(props: PetSpeciesFormCatProps) {
   const form = useMantineForm(props)
   const MeowsSlider = form.valueInput('$.species.cat:meows', Slider)
+  const BreedSelect = form.select('$.species.cat:breed')
   return (
     <Stack px='sm'>
       <MeowsSlider
@@ -46,6 +49,11 @@ export function PetSpeciesCatForm(props: PetSpeciesFormCatProps) {
         min={0}
         pb='xl'
       />
+      <BreedSelect data={[
+        'Burmese',
+        'Siamese',
+        'Domestic Short Hair',
+      ]} />
     </Stack>
   )
 }

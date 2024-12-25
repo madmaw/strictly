@@ -4,6 +4,7 @@ import {
   type FlattenedTypeDefsOf,
   type FlattenedValueTypesOf,
   list,
+  literal,
   numberType,
   object,
   type ReadonlyTypeDefOf,
@@ -14,12 +15,25 @@ import {
 } from '@de/fine'
 import { type JsonPathsOf } from '@de/fine/types/json_paths_of'
 
-export type DogBreeds = 'Alsatian' | 'Pug' | 'Other'
-export type CatBreeds = 'Burmese' | 'Siamese' | 'Domestic Short Hair'
+export type DogBreed = 'Alsatian' | 'Pug' | 'other'
+export type CatBreed = 'Burmese' | 'Siamese' | 'Domestic Short Hair'
+
+export const dogBreedType = literal<DogBreed | null>()
+export const catBreedType = literal<CatBreed | null>()
 
 export const speciesTypeDef = union('type')
-  .add('dog', object().set('barks', numberType))
-  .add('cat', object().set('meows', numberType))
+  .add(
+    'dog',
+    object()
+      .set('barks', numberType)
+      .setOptional('breed', dogBreedType),
+  )
+  .add(
+    'cat',
+    object()
+      .set('meows', numberType)
+      .setOptional('breed', catBreedType),
+  )
 
 export type Species = keyof typeof speciesTypeDef['definition']['unions']
 
@@ -45,3 +59,4 @@ export type FlattenedPetAccessors = FlattenedAccessorsOf<typeof petTypeDef>
 
 export const NAME_TOO_SHORT_ERROR = 'name too short'
 export const NOT_A_NUMBER_ERROR = 'not a number'
+export const NOT_A_BREED_ERROR = 'not a breed'

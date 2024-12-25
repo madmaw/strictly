@@ -4,6 +4,7 @@ import {
   type StoryObj,
 } from '@storybook/react'
 import { PetSpeciesCatForm } from 'features/form/pet/pet_species_cat_form'
+import { NOT_A_BREED_ERROR } from 'features/form/pet/types'
 
 const Component = PetSpeciesCatForm
 
@@ -28,6 +29,29 @@ export const Valid: Story = {
         disabled: false,
         value: 1,
         required: true,
+      },
+      '$.species.cat:breed': {
+        disabled: false,
+        value: 'Burmese',
+        required: true,
+      },
+    },
+  },
+}
+
+export const Error: Story = {
+  args: {
+    fields: {
+      '$.species.cat:meows': {
+        disabled: false,
+        value: 1,
+        required: true,
+      },
+      '$.species.cat:breed': {
+        disabled: false,
+        value: 'Fish',
+        required: true,
+        error: NOT_A_BREED_ERROR,
       },
     },
   },

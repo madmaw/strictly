@@ -119,8 +119,7 @@ module.exports = {
         'plugin:dprint-integration2/recommended',
         'plugin:react/recommended',
         'plugin:react-hooks/recommended',
-        'plugin:import/errors',
-        'plugin:import/warnings',
+        'plugin:import/typescript',
       ],
       parser: '@typescript-eslint/parser',
       parserOptions: {

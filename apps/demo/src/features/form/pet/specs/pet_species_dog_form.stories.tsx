@@ -4,7 +4,10 @@ import {
   type StoryObj,
 } from '@storybook/react'
 import { PetSpeciesDogForm } from 'features/form/pet/pet_species_dog_form'
-import { NOT_A_NUMBER_ERROR } from 'features/form/pet/types'
+import {
+  NOT_A_BREED_ERROR,
+  NOT_A_NUMBER_ERROR,
+} from 'features/form/pet/types'
 
 const Component = PetSpeciesDogForm
 
@@ -30,6 +33,11 @@ export const Valid: Story = {
         value: '1',
         required: true,
       },
+      '$.species.dog:breed': {
+        disabled: false,
+        value: 'Alsatian',
+        required: true,
+      },
     },
   },
 }
@@ -41,6 +49,12 @@ export const Error: Story = {
         disabled: false,
         value: '',
         error: NOT_A_NUMBER_ERROR,
+        required: true,
+      },
+      '$.species.dog:breed': {
+        disabled: false,
+        value: 'Fish',
+        error: NOT_A_BREED_ERROR,
         required: true,
       },
     },

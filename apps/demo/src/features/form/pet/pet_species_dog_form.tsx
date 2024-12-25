@@ -9,6 +9,7 @@ import {
   Stack,
 } from '@mantine/core'
 import {
+  type NOT_A_BREED_ERROR,
   type NOT_A_NUMBER_ERROR,
   type PetValueToTypePaths,
 } from './types'
@@ -17,7 +18,7 @@ export type PetSpeciesDogFormFields = FlattenedFormFieldsOf<
   PetValueToTypePaths,
   {
     '$.species.dog:barks': Field<string | number, typeof NOT_A_NUMBER_ERROR>,
-    // TODO more fields
+    '$.species.dog:breed': Field<string | null, typeof NOT_A_BREED_ERROR>,
   }
 >
 
@@ -29,8 +30,21 @@ export function PetSpeciesDogForm(props: PetSpeciesFormDogProps) {
     '$.species.dog:barks',
     NumberInput,
   )
+  const BreedInput = form.select(
+    '$.species.dog:breed',
+  )
+
   return (
     <Stack>
+      <BreedInput
+        data={[
+          'Alsatian',
+          'Pug',
+          'Other',
+          'Burmese',
+        ]}
+        label='Breed'
+      />
       <BarksNumberInput label='Barks' />
     </Stack>
   )

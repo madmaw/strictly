@@ -10,7 +10,10 @@ import {
   listAdapter,
 } from '@de/form-react/core/mobx/field_adapter_builder'
 import { type FlattenedAdaptersOfFields } from '@de/form-react/core/mobx/flattened_adapters_of_fields'
-import { SelectDiscriminatedUnionConverter } from '@de/form-react/field_converters/select_value_type_converter'
+import {
+  SelectDiscriminatedUnionConverter,
+  SelectLiteralConverter,
+} from '@de/form-react/field_converters/select_value_type_converter'
 import { TrimmingStringConverter } from '@de/form-react/field_converters/trimming_string_converter'
 import { minimumStringLengthFieldValidatorFactory } from '@de/form-react/field_validators/minimum_string_length_field_validator'
 import { prototypingFieldValueFactory } from '@de/form-react/field_value_factories/prototyping_field_value_factory'
@@ -19,8 +22,11 @@ import { type PetSpeciesCatFormFields } from 'features/form/pet/pet_species_cat_
 import { type PetSpeciesDogFormFields } from 'features/form/pet/pet_species_dog_form'
 import { type PetSpeciesFormFields } from 'features/form/pet/pet_species_form'
 import {
+  catBreedType,
+  dogBreedType,
   type FlattenedPetTypeDefs,
   NAME_TOO_SHORT_ERROR,
+  NOT_A_BREED_ERROR,
   NOT_A_NUMBER_ERROR,
   type Pet,
   petTypeDef,
@@ -37,6 +43,7 @@ const adapters: SimplifyDeep<FlattenedAdaptersOfFields<
   FlattenedPetTypeDefs,
   AllFields
 >> = {
+  '$.alive': identityAdapter(false),
   '$.name': adapterFromTwoWayConverter(
     new TrimmingStringConverter(),
     prototypingFieldValueFactory(''),
@@ -46,7 +53,7 @@ const adapters: SimplifyDeep<FlattenedAdaptersOfFields<
       NAME_TOO_SHORT_ERROR,
     ),
   ),
-  '$.alive': identityAdapter(false),
+  '$.newTag': identityAdapter(''),
   '$.species': adapterFromTwoWayConverter(
     new SelectDiscriminatedUnionConverter(
       speciesTypeDef,
@@ -63,6 +70,18 @@ const adapters: SimplifyDeep<FlattenedAdaptersOfFields<
       'cat',
     ),
   ),
+  '$.species.cat:breed': adapterFromTwoWayConverter(
+    new SelectLiteralConverter(
+      catBreedType,
+      {
+        Siamese: 'Siamese',
+        Burmese: 'Burmese',
+        'Domestic Short Hair': 'Domestic Short Hair',
+      },
+      null,
+      NOT_A_BREED_ERROR,
+    ),
+  ),
   '$.species.cat:meows': identityAdapter(0),
   '$.species.dog:barks': adapterFromPrototype<
     number,
@@ -76,9 +95,20 @@ const adapters: SimplifyDeep<FlattenedAdaptersOfFields<
   ).withIdentity(
     v => typeof v === 'number',
   ),
+  '$.species.dog:breed': adapterFromTwoWayConverter(
+    new SelectLiteralConverter(
+      dogBreedType,
+      {
+        Alsatian: 'Alsatian',
+        Pug: 'Pug',
+        other: 'Other',
+      },
+      null,
+      NOT_A_BREED_ERROR,
+    ),
+  ),
   '$.tags': listAdapter(),
   '$.tags.*': identityAdapter(''),
-  '$.newTag': identityAdapter(''),
 }
 
 export class AssistedPetFormPresenter extends FormPresenter<

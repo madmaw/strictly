@@ -153,9 +153,9 @@ function copyObjectFields<
 ): Record<ObjectFieldKey, AnyValueType> {
   const record = reduce(fields, function (acc, key, field: TypeDef) {
     const fieldValue = value[key]
-    if (fieldValue != null) {
-      acc[key] = internalCopyTo(field, fieldValue, copier)
-    }
+    acc[key] = fieldValue != null
+      ? internalCopyTo(field, fieldValue, copier)
+      : fieldValue
     return acc
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
   }, extra as Record<string | number | symbol, AnyValueType>)

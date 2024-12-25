@@ -24,7 +24,7 @@ describe('FlattenedFormFieldsOf', function () {
   })
 
   describe('overlap', function () {
-    it('equals never', function () {
+    it('errors to callee', function () {
       type T = FlattenedFormFieldsOf<
         {
           readonly a: 'x',
@@ -37,7 +37,7 @@ describe('FlattenedFormFieldsOf', function () {
         }
       >
 
-      expectTypeOf<T>().toEqualTypeOf<never>()
+      expectTypeOf<T>().toEqualTypeOf<'fields missing paths: w'>()
     })
   })
 })

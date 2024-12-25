@@ -1,3 +1,4 @@
+import { type PrintableOf } from '@de/base'
 import { type ValueOf } from 'type-fest'
 import { type Field } from './field'
 
@@ -12,4 +13,4 @@ export type FlattenedFormFieldsOf<
       TypePathsToFormFields[JsonPaths[K]]
   }
   // TODO is there a better way of enforcing the types are a subset?
-  : never
+  : `fields missing paths: ${PrintableOf<Exclude<keyof TypePathsToFormFields, ValueOf<JsonPaths>>>}`

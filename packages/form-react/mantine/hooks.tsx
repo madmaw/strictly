@@ -10,6 +10,8 @@ import {
   Radio as RadioImpl,
   type RadioGroupProps,
   type RadioProps,
+  Select,
+  type SelectProps,
   TextInput as TextInputImpl,
   type TextInputProps,
 } from '@mantine/core'
@@ -67,6 +69,12 @@ import {
   type MantineFieldComponent,
   type MantineForm,
 } from './types'
+
+function SimpleSelect(props: SelectProps & {
+  onChange?: (value: string | null) => void,
+}) {
+  return <Select {...props} />
+}
 
 export type ErrorRendererProps<E> = {
   error: E,
@@ -232,7 +240,7 @@ class MantineFormImpl<
     valuePath: K,
     ValueInput: ComponentType<P>,
     ErrorRenderer: ErrorRenderer<ErrorTypeOfField<F[K]>> = DefaultErrorRenderer,
-  ): MantineFieldComponent<SuppliedValueInputProps<F[K]>, P> {
+  ): MantineFieldComponent<SuppliedValueInputProps<ValueTypeOfField<F[K]>>, P> {
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     return this.valueInputCache.retrieveOrCreate(
       valuePath,
@@ -240,6 +248,21 @@ class MantineFormImpl<
       ValueInput as ComponentType<SuppliedValueInputProps<ValueTypeOfField<F[K]>>>,
       ErrorRenderer,
     ) as MantineFieldComponent<SuppliedTextInputProps, P>
+  }
+
+  select<
+    K extends keyof StringFieldsOfFields<F>,
+  >(
+    valuePath: K,
+    ErrorRenderer: ErrorRenderer<ErrorTypeOfField<F[K]>> = DefaultErrorRenderer,
+  ) {
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+    return this.valueInputCache.retrieveOrCreate(
+      valuePath,
+      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+      SimpleSelect as ComponentType<SuppliedValueInputProps<ValueTypeOfField<F[K]>>>,
+      ErrorRenderer,
+    ) as MantineFieldComponent<SuppliedTextInputProps, ComponentProps<typeof SimpleSelect>>
   }
 
   checkbox<

@@ -440,10 +440,17 @@ exports[`mantine value input hooks > renders EmptyNumberInput 1`] = `
   >
     <label
       class="m_8fdc1311 mantine-InputWrapper-label mantine-NumberInput-label"
+      data-required="true"
       for="mantine-0px4bipx4"
       id="mantine-0px4bipx4-label"
     >
       Number Input
+      <span
+        aria-hidden="true"
+        class="m_78a94662 mantine-InputWrapper-required mantine-NumberInput-required"
+      >
+         *
+      </span>
     </label>
     <div
       class="m_6c018570 mantine-Input-wrapper mantine-NumberInput-wrapper"
@@ -458,6 +465,7 @@ exports[`mantine value input hooks > renders EmptyNumberInput 1`] = `
         id="mantine-0px4bipx4"
         inputmode="numeric"
         name="$"
+        required=""
         type="text"
         value=""
       />

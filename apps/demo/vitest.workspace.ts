@@ -18,6 +18,7 @@ export default defineWorkspace([
         // install storybook setup for unit tests that import stories directly
         './.vitest/install_storybook_preview.ts',
         './.vitest/match_media.ts',
+        './.vitest/resize_observer.ts',
       ],
     },
   },

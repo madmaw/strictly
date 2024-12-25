@@ -16,7 +16,9 @@ import {
 import { type FormProps } from 'core/props'
 import { type SuppliedValueInputProps } from 'mantine/create_value_input'
 import { useMantineForm } from 'mantine/hooks'
-import { type ComponentType } from 'react'
+import {
+  type ComponentType,
+} from 'react'
 import { type Field } from 'types/field'
 import {
   NUMBER_INPUT_LABEL,
@@ -74,7 +76,7 @@ export const EmptyNumberInput: Story<number | string, NumberInputProps> = {
     fields: {
       $: {
         disabled: false,
-        required: false,
+        required: true,
         value: '',
       },
     },
