@@ -60,7 +60,7 @@ jobs:
           dry-run: true
       - name: Deploy @de/form-react-mobx
         uses: JS-DevTools/npm-publish@v3
-        id: define
+        id: deform
         with:
           package: packages/form-react-mobx
           token: ${{ secrets.NPM_TOKEN }}
