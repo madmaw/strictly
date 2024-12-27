@@ -26,24 +26,24 @@ jobs:
         uses: borales/actions-yarn@v4.2.0
         with:
           cmd: install
+      - name: Run build
+        uses: borales/actions-yarn@v4.2.0
+        with:
+          cmd: build
       - name: Repackage for release
         uses: borales/actions-yarn@v4.2.0
         with:
           cmd: release:exports
-      - name: Re-run install
-        uses: borales/actions-yarn@v4.2.0
-        with:
-          cmd: install
       - name: Rewrite packages.json
         run: |
           find . -type f -name "package.release.json" | while read fname; do
             dirname=`dirname "$fname"`
             mv -f "${dirname}/package.release.json" "${dirname}/package.json"
           done
-      - name: Run build
+      - name: Check everything still works
         uses: borales/actions-yarn@v4.2.0
         with:
-          cmd: build
+          cmd: check-types
       - name: Deploy @de/base
         uses: JS-DevTools/npm-publish@v3
         id: base
