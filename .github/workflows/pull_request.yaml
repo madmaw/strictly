@@ -5,5 +5,5 @@ on:
 
 jobs:
   workflow-call-ci:
-    uses: ./.github/workflows/workflow_call_ci.yaml
+    uses: ./.github/workflows/workflow_call_validate.yaml
     secrets: inherit
