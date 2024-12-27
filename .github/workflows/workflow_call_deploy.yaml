@@ -41,15 +41,24 @@ jobs:
         uses: borales/actions-yarn@v4.2.0
         with:
           cmd: build
-      - uses: JS-DevTools/npm-publish@v3
+      - name: Deploy @de/base
+        uses: JS-DevTools/npm-publish@v3
         id: base
         with:
           package: packages/base
           token: ${{ secrets.NPM_TOKEN }}
           dry-run: true
-      - uses: JS-DevTools/npm-publish@v3
+      - name: Deploy @de/fine
+        uses: JS-DevTools/npm-publish@v3
         id: define
         with:
           package: packages/define
+          token: ${{ secrets.NPM_TOKEN }}
+          dry-run: true
+      - name: Deploy @de/form-react-mobx
+        uses: JS-DevTools/npm-publish@v3
+        id: define
+        with:
+          package: packages/form-react-mobx
           token: ${{ secrets.NPM_TOKEN }}
           dry-run: true
