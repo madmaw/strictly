@@ -1,4 +1,4 @@
-import { expectDefinedAndReturn } from '@de/base/test'
+import { expectDefinedAndReturn } from '@de/base'
 import {
   booleanType,
   type FlattenedValueTypesOf,

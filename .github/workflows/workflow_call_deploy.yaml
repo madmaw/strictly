@@ -41,3 +41,13 @@ jobs:
         uses: borales/actions-yarn@v4.2.0
         with:
           cmd: build
+      - uses: JS-DevTools/npm-publish@v3
+        id: base
+        with:
+          package: packages/base
+          token: ${{ secrets.NPM_TOKEN }}
+      - uses: JS-DevTools/npm-publish@v3
+        id: define
+        with:
+          package: packages/base
+          token: ${{ secrets.NPM_TOKEN }}
