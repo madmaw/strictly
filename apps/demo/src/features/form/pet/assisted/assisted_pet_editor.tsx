@@ -3,7 +3,7 @@ import {
   type ToTypeOfPresenterValuePath,
   usePartialObserverComponent,
   type ValuePathsOfPresenter,
-} from '@de/form-react'
+} from '@de/form-react-mobx'
 import { PetForm as PetFormImpl } from 'features/form/pet/pet_form'
 import { PetSpeciesCatForm } from 'features/form/pet/pet_species_cat_form'
 import { PetSpeciesDogForm } from 'features/form/pet/pet_species_dog_form'

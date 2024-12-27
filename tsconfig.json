@@ -55,7 +55,7 @@
     {"path": "apps/describe"},
     {"path": "packages/base"},
     {"path": "packages/define"},
-    {"path": "packages/form-react"},
+    {"path": "packages/form-react-mobx"},
     {"path": "support/vite"}
   ]
 }

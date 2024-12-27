@@ -47,7 +47,7 @@
     "demo:storybook": "turbo run storybook --filter=@de/mo",
     "describe:build": "turbo run build --filter=@de/scribe",
     "describe:dev": "turbo run dev --filter=@de/scribe",
-    "form-react:storybook": "turbo storybook --filter=@de/form-react",
+    "form:storybook": "turbo storybook --filter=@de/form-react-mobx",
     "lint": "turbo run lint --continue && yarn lint:root",
     "lint:fix": "turbo run lint:fix --continue && yarn lint:root:fix",
     "lint:root": "cross-env ESLINT_USE_FLAT_CONFIG=false eslint --max-warnings=0 *.cjs *.json .github",

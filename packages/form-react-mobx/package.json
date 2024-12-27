@@ -34,7 +34,7 @@
     "vitest-matchmedia-mock": "^1.0.6"
   },
   "license": "MIT",
-  "name": "@de/form-react",
+  "name": "@de/form-react-mobx",
   "scripts": {
     "build": "tsup",
     "check-types": "tsc",

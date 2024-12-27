@@ -4,7 +4,7 @@ import {
   type FlattenedFormFieldsOf,
   type FormProps,
   useMantineForm,
-} from '@de/form-react'
+} from '@de/form-react-mobx'
 import {
   Group,
   Stack,

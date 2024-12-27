@@ -3,7 +3,7 @@
     "@babel/plugin-proposal-class-properties": "^7.18.6",
     "@de/base": "*",
     "@de/fine": "*",
-    "@de/form-react": "*",
+    "@de/form-react-mobx": "*",
     "@mantine/core": "^7.13.4",
     "@mantine/hooks": "^7.13.4",
     "mobx": "^6.13.5",
