@@ -35,7 +35,7 @@ jobs:
         run: |
           find . -type f -name "package.release.json" | while read fname; do
             dirname=`dirname "$fname"`
-            mv -f "${dirname}/package.release.json" "{$dirname}/package.json"
+            mv -f "${dirname}/package.release.json" "${dirname}/package.json"
           done
       - name: Run build
         uses: borales/actions-yarn@v4.2.0
