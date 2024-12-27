@@ -1,22 +1,18 @@
 import {
-  FormModel,
-  FormPresenter,
-  IntegerToStringConverter,
-} from '@de/form-react'
-import {
   adapterFromPrototype,
   adapterFromTwoWayConverter,
+  type FlattenedAdaptersOfFields,
+  FormModel,
+  FormPresenter,
   identityAdapter,
+  IntegerToStringConverter,
   listAdapter,
-} from '@de/form-react/core/mobx/field_adapter_builder'
-import { type FlattenedAdaptersOfFields } from '@de/form-react/core/mobx/flattened_adapters_of_fields'
-import {
+  minimumStringLengthFieldValidatorFactory,
+  prototypingFieldValueFactory,
   SelectDiscriminatedUnionConverter,
   SelectLiteralConverter,
-} from '@de/form-react/field_converters/select_value_type_converter'
-import { TrimmingStringConverter } from '@de/form-react/field_converters/trimming_string_converter'
-import { minimumStringLengthFieldValidatorFactory } from '@de/form-react/field_validators/minimum_string_length_field_validator'
-import { prototypingFieldValueFactory } from '@de/form-react/field_value_factories/prototyping_field_value_factory'
+  TrimmingStringConverter,
+} from '@de/form-react'
 import { type PetFormFields } from 'features/form/pet/pet_form'
 import { type PetSpeciesCatFormFields } from 'features/form/pet/pet_species_cat_form'
 import { type PetSpeciesDogFormFields } from 'features/form/pet/pet_species_dog_form'

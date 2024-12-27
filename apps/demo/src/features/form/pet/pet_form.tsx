@@ -6,8 +6,8 @@ import {
   type Field,
   type FlattenedFormFieldsOf,
   type FormProps,
+  useMantineForm,
 } from '@de/form-react'
-import { useMantineForm } from '@de/form-react/mantine/hooks'
 import {
   Button,
   Card,
