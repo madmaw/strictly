@@ -17,6 +17,8 @@
     "lint": {
       "dependsOn": ["^check-types"]
     },
+    "release:exports": {
+    },
     "storybook": {
       "dependsOn": ["^check-types"]
     },

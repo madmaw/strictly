@@ -549,6 +549,7 @@ module.exports = {
     '!.github',
     '!.storybook',
     'node_modules',
+    'package.release.json',
     '**/dist/**',
     '**/.out/**',
     '**/*.d.ts',

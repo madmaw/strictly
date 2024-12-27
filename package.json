@@ -52,6 +52,7 @@
     "lint:fix": "turbo run lint:fix --continue && yarn lint:root:fix",
     "lint:root": "cross-env ESLINT_USE_FLAT_CONFIG=false eslint --max-warnings=0 *.cjs *.json .github",
     "lint:root:fix": "cross-env ESLINT_USE_FLAT_CONFIG=false eslint --fix *.cjs *.json .github",
+    "release:exports": "turbo run release:exports",
     "test": "turbo run test",
     "test:force": "turbo run test --force",
     "test:update": "turbo run test:update"

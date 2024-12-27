@@ -41,6 +41,7 @@
     "clean": "del-cli dist",
     "lint": "cross-env ESLINT_USE_FLAT_CONFIG=false eslint . --max-warnings=0",
     "lint:fix": "cross-env ESLINT_USE_FLAT_CONFIG=false eslint . --fix",
+    "release:exports": "json -f package.json -f package.exports.json --merge > package.release.json",
     "storybook": "storybook dev",
     "test": "vitest run",
     "test:update": "vitest run -u",

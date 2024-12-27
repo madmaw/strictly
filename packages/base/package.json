@@ -1,24 +1,7 @@
 {
-  "deploy": {
-    "exports": {
-      ".": {
-        "import": {
-          "types": "dist/index.d.ts",
-
-          "default": "dist/index.js"
-        },
-        "require": {
-          "types": "dist/index.d.cts",
-
-          "default": "dist/index.cjs"
-        }
-      }
-    },
-    "main": "dist/index.js",
-    "types": "dist/index.d.ts"
-  },
   "devDependencies": {
-    "@de/support-vite": "*"
+    "@de/support-vite": "*",
+    "json": "^11.0.0"
   },
   "license": "MIT",
   "name": "@de/base",
@@ -28,6 +11,7 @@
     "clean": "del-cli dist",
     "lint": "cross-env ESLINT_USE_FLAT_CONFIG=false eslint . --max-warnings=0",
     "lint:fix": "cross-env ESLINT_USE_FLAT_CONFIG=false eslint . --fix",
+    "release:exports": "json -f package.json -f package.exports.json --merge > package.release.json",
     "test": "vitest run",
     "test:watch": "vitest"
   },
