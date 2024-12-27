@@ -1,11 +1,11 @@
-name: Deploy to GitHub Pages
+name: GitHub Pages
 
 on:
   workflow_call: ~
   workflow_dispatch: ~
 
 jobs:
-  build:
+  combined:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
