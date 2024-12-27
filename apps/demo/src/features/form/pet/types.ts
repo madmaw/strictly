@@ -3,6 +3,7 @@ import {
   type FlattenedAccessorsOf,
   type FlattenedTypeDefsOf,
   type FlattenedValueTypesOf,
+  type JsonPathsOf,
   list,
   literal,
   numberType,
@@ -13,7 +14,6 @@ import {
   type ValueToTypePathsOf,
   type ValueTypeOf,
 } from '@de/fine'
-import { type JsonPathsOf } from '@de/fine/types/json_paths_of'
 
 export type DogBreed = 'Alsatian' | 'Pug' | 'other'
 export type CatBreed = 'Burmese' | 'Siamese' | 'Domestic Short Hair'
