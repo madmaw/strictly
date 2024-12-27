@@ -46,8 +46,10 @@ jobs:
         with:
           package: packages/base
           token: ${{ secrets.NPM_TOKEN }}
+          dry-run: true
       - uses: JS-DevTools/npm-publish@v3
         id: define
         with:
-          package: packages/base
+          package: packages/define
           token: ${{ secrets.NPM_TOKEN }}
+          dry-run: true
