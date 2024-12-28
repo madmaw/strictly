@@ -45,25 +45,25 @@ jobs:
         with:
           cmd: check-types
 
-    deploy:
-      needs: build
-      runs-on: ubuntu-latest
-      steps:
-        - name: Deploy @de/base
-          uses: JS-DevTools/npm-publish@v3
-          id: base
-          with:
-            package: packages/base
-            token: ${{ secrets.NPM_TOKEN }}
-        - name: Deploy @de/fine
-          uses: JS-DevTools/npm-publish@v3
-          id: define
-          with:
-            package: packages/define
-            token: ${{ secrets.NPM_TOKEN }}
-        - name: Deploy @de/form-react-mobx
-          uses: JS-DevTools/npm-publish@v3
-          id: deform
-          with:
-            package: packages/form-react-mobx
-            token: ${{ secrets.NPM_TOKEN }}
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy @de/base
+        uses: JS-DevTools/npm-publish@v3
+        id: base
+        with:
+          package: packages/base
+          token: ${{ secrets.NPM_TOKEN }}
+      - name: Deploy @de/fine
+        uses: JS-DevTools/npm-publish@v3
+        id: define
+        with:
+          package: packages/define
+          token: ${{ secrets.NPM_TOKEN }}
+      - name: Deploy @de/form-react-mobx
+        uses: JS-DevTools/npm-publish@v3
+        id: deform
+        with:
+          package: packages/form-react-mobx
+          token: ${{ secrets.NPM_TOKEN }}
