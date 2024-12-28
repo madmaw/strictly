@@ -1,4 +1,7 @@
-name: Deploy
+# Deploys all packages to NPM
+# to run locally `act workflow_dispatch --workflows ".\.github\workflows\workflow_call_npm.yaml"`-s NPM_TOKEN=X
+
+name: NPM
 
 on:
   workflow_call: ~
@@ -38,6 +41,7 @@ jobs:
         run: |
           find . -type f -name "package.release.json" | while read fname; do
             dirname=`dirname "$fname"`
+            echo "$fname"
             mv -f "${dirname}/package.release.json" "${dirname}/package.json"
           done
       - name: Check everything still works
@@ -49,7 +53,7 @@ jobs:
           pwd
       - name: What's here?
         run: |
-          ls
+          ls ./packages/base
 
   deploy-base:
     needs: build
