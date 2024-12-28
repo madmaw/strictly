@@ -38,7 +38,11 @@
   "publishConfig": {
     "access": "public"
   },
-  "repository": "git+https://github.com/madmaw/de.git",
+  "repository": {
+    "directory": "packages/form-react-mobx",
+    "type": "git",
+    "url": "git+https://github.com/madmaw/de.git"
+  },
   "scripts": {
     "build": "tsup",
     "check-types": "tsc",

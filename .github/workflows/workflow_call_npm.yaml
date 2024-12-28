@@ -49,6 +49,13 @@ jobs:
         with:
           cmd: check-types
 
+      - name: Trick NPM Publish
+        environment:
+          NPM_TOKEN:
+            from_secret: NPM_TOKEN
+        commands:
+          - echo //registry.npmjs.org/:_authToken=$NPM_TOKEN > .npmrc
+
       - name: Deploy @de/base
         uses: JS-DevTools/npm-publish@v3
         id: base
