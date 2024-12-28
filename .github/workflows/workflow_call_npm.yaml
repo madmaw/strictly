@@ -48,25 +48,33 @@ jobs:
         uses: borales/actions-yarn@v4.2.0
         with:
           cmd: check-types
-      - name: Where are we?
-        run: |
-          pwd
-      - name: What's here?
-        run: |
-          ls ./packages/base
-      - name: What's in package.json?
-        run: |
-          cat ./packages/base/package.json
+      - name: Upload @de/base
+        uses: actions/upload-artifact@v4
+        with:
+          name: base
+          path: ./packages/base
+      - name: Upload @de/fine
+        uses: actions/upload-artifact@v4
+        with:
+          name: define
+          path: ./packages/define
+      - name: Upload @de/form-react-mobx
+        uses: actions/upload-artifact@v4
+        with:
+          name: deform
+          path: ./packages/form-react-mobx
 
   deploy-base:
     needs: build
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: base
       - name: Deploy @de/base
         uses: JS-DevTools/npm-publish@v3
         id: base
         with:
-          package: ./packages/base/package.json
           token: ${{ secrets.NPM_TOKEN }}
       - if: ${{ steps.base.outputs.type }}
         run: echo ${{ steps.base.outputs.version }}
@@ -75,11 +83,13 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: define
       - name: Deploy @de/fine
         uses: JS-DevTools/npm-publish@v3
         id: define
         with:
-          package: ./packages/define/package.json
           token: ${{ secrets.NPM_TOKEN }}
       - if: ${{ steps.define.outputs.type }}
         run: echo ${{ steps.define.outputs.version }}
@@ -88,11 +98,13 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: base
       - name: Deploy @de/form-react-mobx
         uses: JS-DevTools/npm-publish@v3
         id: deform
         with:
-          package: ./packages/form-react-mobx/package.json
           token: ${{ secrets.NPM_TOKEN }}
       - if: ${{ steps.deform.outputs.type }}
         run: echo ${{ steps.deform.outputs.version }}
