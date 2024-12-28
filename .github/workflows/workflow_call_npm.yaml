@@ -8,7 +8,7 @@ on:
   workflow_dispatch: ~
 
 jobs:
-  build:
+  all:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -48,63 +48,29 @@ jobs:
         uses: borales/actions-yarn@v4.2.0
         with:
           cmd: check-types
-      - name: Upload @de/base
-        uses: actions/upload-artifact@v4
-        with:
-          name: base
-          path: ./packages/base
-      - name: Upload @de/fine
-        uses: actions/upload-artifact@v4
-        with:
-          name: define
-          path: ./packages/define
-      - name: Upload @de/form-react-mobx
-        uses: actions/upload-artifact@v4
-        with:
-          name: deform
-          path: ./packages/form-react-mobx
 
-  deploy-base:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/download-artifact@v4
-        with:
-          name: base
       - name: Deploy @de/base
         uses: JS-DevTools/npm-publish@v3
         id: base
         with:
+          package: ./packages/base
           token: ${{ secrets.NPM_TOKEN }}
-      - if: ${{ steps.base.outputs.type }}
-        run: echo ${{ steps.base.outputs.version }}
 
-  deploy-define:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/download-artifact@v4
-        with:
-          name: define
       - name: Deploy @de/fine
         uses: JS-DevTools/npm-publish@v3
         id: define
         with:
+          package: ./packages/define
           token: ${{ secrets.NPM_TOKEN }}
-      - if: ${{ steps.define.outputs.type }}
-        run: echo ${{ steps.define.outputs.version }}
 
-  deploy-deform-react-mobx:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/download-artifact@v4
-        with:
-          name: base
       - name: Deploy @de/form-react-mobx
         uses: JS-DevTools/npm-publish@v3
         id: deform
         with:
+          package: ./packages/form-react-mobx
           token: ${{ secrets.NPM_TOKEN }}
-      - if: ${{ steps.deform.outputs.type }}
-        run: echo ${{ steps.deform.outputs.version }}
+      - name: Deploy Status
+        run: |
+          echo "${{ steps.base.outputs.type }} ${{ steps.base.outputs.name }} ${{ steps.base.outputs.version }}"
+          echo "${{ steps.define.outputs.type }} ${{ steps.define.outputs.name }} ${{ steps.define.outputs.version }}"
+          echo "${{ steps.deform.outputs.type }} ${{ steps.deform.outputs.name }} ${{ steps.deform.outputs.version }}"
