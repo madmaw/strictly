@@ -34,6 +34,7 @@
   "name": "@de/de",
   "packageManager": "yarn@1.22.22",
   "private": true,
+  "repository": "git+https://github.com/madmaw/de.git",
   "resolutions": {
     "**/**/vite": "=6.0.5"
   },
