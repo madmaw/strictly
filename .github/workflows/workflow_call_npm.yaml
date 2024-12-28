@@ -71,6 +71,6 @@ jobs:
           token: ${{ secrets.NPM_TOKEN }}
       - name: Deploy Status
         run: |
-          echo "${{ steps.base.outputs.type }} ${{ steps.base.outputs.name }} ${{ steps.base.outputs.version }}"
-          echo "${{ steps.define.outputs.type }} ${{ steps.define.outputs.name }} ${{ steps.define.outputs.version }}"
-          echo "${{ steps.deform.outputs.type }} ${{ steps.deform.outputs.name }} ${{ steps.deform.outputs.version }}"
+          echo "${{ steps.base.outputs.name }} ${{ steps.base.outputs.version }} ${{ steps.base.outputs.type }}"
+          echo "${{ steps.define.outputs.name }} ${{ steps.define.outputs.version }} ${{ steps.define.outputs.type }}"
+          echo "${{ steps.deform.outputs.name }} ${{ steps.deform.outputs.version }} ${{ steps.deform.outputs.type }}"

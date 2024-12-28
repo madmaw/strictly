@@ -8,6 +8,9 @@
   },
   "license": "MIT",
   "name": "@de/fine",
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "tsup",
     "check-types": "tsc",
@@ -20,5 +23,4 @@
   },
   "type": "module",
   "version": "0.0.1"
-
 }

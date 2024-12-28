@@ -35,6 +35,9 @@
   },
   "license": "MIT",
   "name": "@de/form-react-mobx",
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "tsup",
     "check-types": "tsc",
@@ -49,5 +52,4 @@
   },
   "type": "module",
   "version": "0.0.1"
-
 }
