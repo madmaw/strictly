@@ -44,8 +44,14 @@ jobs:
         uses: borales/actions-yarn@v4.2.0
         with:
           cmd: check-types
+      - name: Where are we?
+        run: |
+          pwd
+      - name: What's here?
+        run: |
+          ls
 
-  deploy:
+  deploy-base:
     needs: build
     runs-on: ubuntu-latest
     steps:
@@ -53,17 +59,33 @@ jobs:
         uses: JS-DevTools/npm-publish@v3
         id: base
         with:
-          package: packages/base
+          package: ./packages/base
           token: ${{ secrets.NPM_TOKEN }}
+      - if: ${{ steps.base.outputs.type }}
+        run: echo ${{ steps.base.outputs.version }}
+
+  deploy-define:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
       - name: Deploy @de/fine
         uses: JS-DevTools/npm-publish@v3
         id: define
         with:
-          package: packages/define
+          package: ./packages/define
           token: ${{ secrets.NPM_TOKEN }}
+      - if: ${{ steps.define.outputs.type }}
+        run: echo ${{ steps.define.outputs.version }}
+
+  deploy-deform-react-mobx:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
       - name: Deploy @de/form-react-mobx
         uses: JS-DevTools/npm-publish@v3
         id: deform
         with:
-          package: packages/form-react-mobx
+          package: ./packages/form-react-mobx
           token: ${{ secrets.NPM_TOKEN }}
+      - if: ${{ steps.deform.outputs.type }}
+        run: echo ${{ steps.deform.outputs.version }}
