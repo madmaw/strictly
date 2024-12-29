@@ -49,9 +49,10 @@ jobs:
         with:
           cmd: check-types
 
-      - env:
+      - name: Trick NPM
+        env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-      - run: |
+        run: |
           echo //registry.npmjs.org/:_authToken=$NPM_TOKEN > .npmrc
 
       - name: Deploy @de/base
