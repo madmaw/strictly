@@ -1,4 +1,5 @@
 {
+  "author": "Chris <chris.glover@gmail.com> (@madmaw)",
   "dependencies": {
     "@strictly/base": "*",
     "@strictly/define": "*",
@@ -6,6 +7,7 @@
     "mobx-react": "^9.1.1",
     "react": "^19.0.0"
   },
+  "description": "Types and utilities for creating React forms",
   "devDependencies": {
     "@babel/plugin-proposal-decorators": "^7.25.9",
     "@babel/plugin-transform-class-static-block": "^7.26.0",
@@ -33,6 +35,12 @@
     "vite": "^6.0.5",
     "vitest-matchmedia-mock": "^1.0.6"
   },
+  "homepage": "https://madmaw.github.io/strictly/form",
+  "keywords": [
+    "react",
+    "state management",
+    "types"
+  ],
   "license": "MIT",
   "name": "@strictly/react-form",
   "publishConfig": {
@@ -41,7 +49,7 @@
   "repository": {
     "directory": "packages/react-form",
     "type": "git",
-    "url": "git+https://github.com/madmaw/de.git"
+    "url": "git+https://github.com/madmaw/strictly.git"
   },
   "scripts": {
     "build": "tsup",

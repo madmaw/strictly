@@ -30,11 +30,11 @@ jobs:
       - name: Build
         uses: borales/actions-yarn@v4.2.0
         with:
-          cmd: describe:build
+          cmd: docs:build
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./apps/describe/dist
+          path: ./apps/docs/dist
 
   deploy:
     needs: build

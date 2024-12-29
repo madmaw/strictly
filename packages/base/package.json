@@ -4,7 +4,7 @@
     "@strictly/support-vite": "*",
     "json": "^11.0.0"
   },
-  "homepage": "https://madmaw.github.io/de/base",
+  "homepage": "https://madmaw.github.io/strictly/base",
   "keywords": [
     "react",
     "state management",
@@ -19,7 +19,7 @@
   "repository": {
     "directory": "packages/base",
     "type": "git",
-    "url": "git+https://github.com/madmaw/de.git"
+    "url": "git+https://github.com/madmaw/strictly.git"
   },
   "scripts": {
     "build": "tsup",
