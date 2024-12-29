@@ -1,5 +1,5 @@
 # Deploys all packages to NPM
-# to run locally `act workflow_dispatch --workflows ".\.github\workflows\workflow_call_npm.yaml"`-s NPM_TOKEN=X
+# to run locally `act workflow_dispatch --workflows ".\.github\workflows\workflow_call_npm.yaml"-s NPM_TOKEN=X`
 
 name: NPM
 
@@ -49,20 +49,14 @@ jobs:
         with:
           cmd: check-types
 
-      # echo //registry.npmjs.org/:_authToken=$NPM_TOKEN > .npmrc
-      - name: Trick NPM
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: |
-          echo $NPM_TOKEN
-          echo ${{ secrets.NPM_TOKEN }}
-
       - name: Deploy @de/base
         uses: JS-DevTools/npm-publish@v3
         id: base
         with:
           package: ./packages/base
           token: ${{ secrets.NPM_TOKEN }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Deploy @de/fine
         uses: JS-DevTools/npm-publish@v3
