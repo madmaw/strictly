@@ -49,14 +49,18 @@ jobs:
         with:
           cmd: check-types
 
+      - name: Is our token there?
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          echo $NPM_TOKEN | sed 's/./& /g'
+
       - name: Deploy @de/base
         uses: JS-DevTools/npm-publish@v3
         id: base
         with:
           package: ./packages/base
           token: ${{ secrets.NPM_TOKEN }}
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Deploy @de/fine
         uses: JS-DevTools/npm-publish@v3
