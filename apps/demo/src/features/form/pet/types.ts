@@ -13,7 +13,7 @@ import {
   union,
   type ValueToTypePathsOf,
   type ValueTypeOf,
-} from '@de/fine'
+} from '@strictly/define'
 
 export type DogBreed = 'Alsatian' | 'Pug' | 'other'
 export type CatBreed = 'Burmese' | 'Siamese' | 'Domestic Short Hair'

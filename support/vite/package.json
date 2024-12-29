@@ -4,7 +4,7 @@
   },
   "license": "MIT",
   "main": "index.ts",
-  "name": "@de/support-vite",
+  "name": "@strictly/support-vite",
   "scripts": {
     "check-types": "tsc",
     "lint": "cross-env ESLINT_USE_FLAT_CONFIG=false eslint . --max-warnings=0",

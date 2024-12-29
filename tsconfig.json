@@ -52,10 +52,10 @@
   ],
   "references": [
     {"path": "apps/demo"},
-    {"path": "apps/describe"},
+    {"path": "apps/docs"},
     {"path": "packages/base"},
     {"path": "packages/define"},
-    {"path": "packages/form-react-mobx"},
+    {"path": "packages/react-form"},
     {"path": "support/vite"}
   ]
 }

@@ -1,14 +1,14 @@
-import { toArray } from '@de/base'
+import {
+  Group,
+  Stack,
+} from '@mantine/core'
+import { toArray } from '@strictly/base'
 import {
   type Field,
   type FlattenedFormFieldsOf,
   type FormProps,
   useMantineForm,
-} from '@de/form-react-mobx'
-import {
-  Group,
-  Stack,
-} from '@mantine/core'
+} from '@strictly/react-form'
 import { type ComponentType } from 'react'
 import {
   type PetValueToTypePaths,

@@ -1,10 +1,18 @@
 {
+  "author": "Chris <chris.glover@gmail.com> (@madmaw)",
   "devDependencies": {
-    "@de/support-vite": "*",
+    "@strictly/support-vite": "*",
     "json": "^11.0.0"
   },
+  "homepage": "https://madmaw.github.io/de/base",
+  "keywords": [
+    "react",
+    "state management",
+    "types"
+  ],
   "license": "MIT",
-  "name": "@de/base",
+  "name": "@strictly/base",
+  "packageManager": "yarn@1.22.22",
   "publishConfig": {
     "access": "public"
   },

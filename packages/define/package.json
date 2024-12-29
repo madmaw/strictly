@@ -1,13 +1,13 @@
 {
   "dependencies": {
-    "@de/base": "*",
+    "@strictly/base": "*",
     "mobx": "^6.13.5"
   },
   "devDependencies": {
-    "@de/support-vite": "*"
+    "@strictly/support-vite": "*"
   },
   "license": "MIT",
-  "name": "@de/fine",
+  "name": "@strictly/define",
   "publishConfig": {
     "access": "public"
   },

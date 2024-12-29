@@ -1,4 +1,4 @@
-import { createVitestUserConfig } from '@de/support-vite'
+import { createVitestUserConfig } from '@strictly/support-vite'
 import {
   defineWorkspace,
 } from 'vitest/config'

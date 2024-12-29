@@ -1,11 +1,11 @@
 import '@mantine/core/styles.css'
 
-import { assertExistsAndReturn } from '@de/base'
 import {
   Box,
   createTheme,
   MantineProvider,
 } from '@mantine/core'
+import { assertExistsAndReturn } from '@strictly/base'
 import { AssistedPetEditor } from 'features/form/pet/assisted/assisted_pet_editor'
 import { type Pet } from 'features/form/pet/types'
 import { StrictMode } from 'react'

@@ -1,11 +1,11 @@
 {
   "dependencies": {
     "@babel/plugin-proposal-class-properties": "^7.18.6",
-    "@de/base": "*",
-    "@de/fine": "*",
-    "@de/form-react-mobx": "*",
     "@mantine/core": "^7.13.4",
     "@mantine/hooks": "^7.13.4",
+    "@strictly/base": "*",
+    "@strictly/define": "*",
+    "@strictly/react-form": "*",
     "mobx": "^6.13.5",
     "mobx-react": "^9.1.1",
     "react": "^19.0.0"
@@ -15,7 +15,6 @@
     "@babel/plugin-proposal-decorators": "^7.25.9",
     "@babel/plugin-transform-class-static-block": "^7.26.0",
     "@chromatic-com/storybook": "^3.2.2",
-    "@de/support-vite": "*",
     "@storybook/addon-actions": "^8.4.5",
     "@storybook/addon-essentials": "^8.4.5",
     "@storybook/addon-interactions": "^8.4.5",
@@ -25,6 +24,7 @@
     "@storybook/react": "^8.4.5",
     "@storybook/react-vite": "^8.4.5",
     "@storybook/test-runner": "^0.19.1",
+    "@strictly/support-vite": "*",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/react": "^16.0.1",
     "@testing-library/user-event": "^14.5.2",
@@ -44,7 +44,7 @@
     "vitest-matchmedia-mock": "^1.0.6"
   },
   "license": "MIT",
-  "name": "@de/mo",
+  "name": "@strictly/demo",
   "scripts": {
     "build": "vite build",
     "check-types": "tsc",

@@ -1,5 +1,5 @@
-import { toArray } from '@de/base'
 import { composeStories } from '@storybook/react'
+import { toArray } from '@strictly/base'
 import {
   render,
 } from '@testing-library/react'

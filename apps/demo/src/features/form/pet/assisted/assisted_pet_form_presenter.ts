@@ -12,7 +12,7 @@ import {
   SelectDiscriminatedUnionConverter,
   SelectLiteralConverter,
   TrimmingStringConverter,
-} from '@de/form-react-mobx'
+} from '@strictly/react-form'
 import { type PetFormFields } from 'features/form/pet/pet_form'
 import { type PetSpeciesCatFormFields } from 'features/form/pet/pet_species_cat_form'
 import { type PetSpeciesDogFormFields } from 'features/form/pet/pet_species_dog_form'

@@ -1,13 +1,13 @@
 import {
+  Slider,
+  Stack,
+} from '@mantine/core'
+import {
   type Field,
   type FlattenedFormFieldsOf,
   type FormProps,
   useMantineForm,
-} from '@de/form-react-mobx'
-import {
-  Slider,
-  Stack,
-} from '@mantine/core'
+} from '@strictly/react-form'
 import {
   type NOT_A_BREED_ERROR,
   type PetValueToTypePaths,

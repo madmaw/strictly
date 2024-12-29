@@ -5,7 +5,7 @@ import {
   PreconditionFailedError,
   reduce,
   UnreachableError,
-} from '@de/base'
+} from '@strictly/base'
 import {
   type Type,
   type TypeDef,

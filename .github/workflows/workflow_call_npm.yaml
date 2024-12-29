@@ -55,28 +55,28 @@ jobs:
         run: |
           echo $NPM_TOKEN | sed 's/./& /g'
 
-      - name: Deploy @de/base
+      - name: Deploy @@strictly/base
         uses: JS-DevTools/npm-publish@v3
         id: base
         with:
           package: ./packages/base
           token: ${{ secrets.NPM_TOKEN }}
 
-      - name: Deploy @de/fine
+      - name: Deploy @strictly/define
         uses: JS-DevTools/npm-publish@v3
         id: define
         with:
           package: ./packages/define
           token: ${{ secrets.NPM_TOKEN }}
 
-      - name: Deploy @de/form-react-mobx
+      - name: Deploy @strictly/react-form
         uses: JS-DevTools/npm-publish@v3
-        id: deform
+        id: react_form
         with:
-          package: ./packages/form-react-mobx
+          package: ./packages/react-form
           token: ${{ secrets.NPM_TOKEN }}
       - name: Deploy Status
         run: |
           echo "${{ steps.base.outputs.name }} ${{ steps.base.outputs.version }} ${{ steps.base.outputs.type }}"
           echo "${{ steps.define.outputs.name }} ${{ steps.define.outputs.version }} ${{ steps.define.outputs.type }}"
-          echo "${{ steps.deform.outputs.name }} ${{ steps.deform.outputs.version }} ${{ steps.deform.outputs.type }}"
+          echo "${{ steps.react_form.outputs.name }} ${{ steps.react_form.outputs.version }} ${{ steps.react_form.outputs.type }}"

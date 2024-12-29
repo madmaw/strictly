@@ -1,6 +1,6 @@
 import {
   type IsFieldReadonly,
-} from '@de/base'
+} from '@strictly/base'
 import {
   type ListTypeDef,
   type LiteralTypeDef,

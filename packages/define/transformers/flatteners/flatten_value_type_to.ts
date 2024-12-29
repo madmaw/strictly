@@ -1,7 +1,7 @@
 import {
   reduce,
   UnreachableError,
-} from '@de/base'
+} from '@strictly/base'
 import {
   type TypeDef,
   TypeDefType,

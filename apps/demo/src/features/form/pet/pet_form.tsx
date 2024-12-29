@@ -3,12 +3,6 @@
 import styles from './pet_form.module.css'
 
 import {
-  type Field,
-  type FlattenedFormFieldsOf,
-  type FormProps,
-  useMantineForm,
-} from '@de/form-react-mobx'
-import {
   Button,
   Card,
   Pill,
@@ -16,6 +10,12 @@ import {
   PillsInput,
   Stack,
 } from '@mantine/core'
+import {
+  type Field,
+  type FlattenedFormFieldsOf,
+  type FormProps,
+  useMantineForm,
+} from '@strictly/react-form'
 import {
   type ComponentType,
   useCallback,

@@ -1,4 +1,4 @@
-import { expectDefinedAndReturn } from '@de/base'
+import { expectDefinedAndReturn } from '@strictly/base'
 import { flattenAccessorsOf } from 'transformers/flatteners/flatten_accessors_of'
 import {
   booleanType,

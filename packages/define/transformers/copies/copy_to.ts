@@ -3,7 +3,7 @@ import {
   reduce,
   UnexpectedImplementationError,
   UnreachableError,
-} from '@de/base'
+} from '@strictly/base'
 import {
   type ObjectFieldKey,
   type TypeDef,
