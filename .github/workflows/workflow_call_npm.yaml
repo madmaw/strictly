@@ -49,11 +49,13 @@ jobs:
         with:
           cmd: check-types
 
+      # echo //registry.npmjs.org/:_authToken=$NPM_TOKEN > .npmrc
       - name: Trick NPM
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
-          echo //registry.npmjs.org/:_authToken=$NPM_TOKEN > .npmrc
+          echo $NPM_TOKEN
+          echo ${{ secrets.NPM_TOKEN }}
 
       - name: Deploy @de/base
         uses: JS-DevTools/npm-publish@v3

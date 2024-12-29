@@ -16,9 +16,11 @@ jobs:
     uses: ./.github/workflows/workflow_call_validate.yaml
     secrets: inherit
   workflow-call-gh-pages:
+    needs: workflow-call-validate
     uses: ./.github/workflows/workflow_call_gh_pages.yaml
     secrets: inherit
   workflow-call-npm:
+    needs: workflow-call-validate
     uses: ./.github/workflows/workflow_call_npm.yaml
     secrets: inherit
 
