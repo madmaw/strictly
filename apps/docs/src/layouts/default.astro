@@ -4,9 +4,9 @@ import { type PageId, pagePaths, MdxNavigation } from 'components/mdx_navigation
 import { createToAbsoluteUrl } from 'components/to_absolute_url'
 import styles from './default.module.css'
 
-type Props = MarkdownLayoutProps<{
+type Props = Pick<MarkdownLayoutProps<{
   page?: PageId;
-}>
+}>, 'url' | 'frontmatter' | 'headings'>
 const {
   frontmatter: {
     page = Astro.props.url?.substring(1) || '',

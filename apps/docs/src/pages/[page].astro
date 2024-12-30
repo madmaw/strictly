@@ -1,0 +1,39 @@
+---
+import fs from 'fs/promises'
+import { marked } from 'marked'
+import Layout from 'layouts/default.astro'
+import { PageId } from 'components/mdx_navigation'
+
+// repurpose our README.md files as part of the main site
+export async function getStaticPaths() {
+  const packagesFolder = '../../packages'
+  const packages = await fs.readdir(packagesFolder)
+  return await Promise.all(
+    packages.map(async page => {
+      const buffer = await fs.readFile(`${packagesFolder}/${page}/README.md`)
+      const content = await marked.parse(buffer.toString())
+      return {
+        props: {
+          content,
+        },
+        params: {
+          page,
+        }
+      }
+    })
+  )
+}
+
+const { content } = Astro.props;
+const { page } = Astro.params;
+
+// create a fake frontmatter
+const frontmatter = {
+  page: page as PageId,
+  url: Astro.url.toString(),
+  file: page,
+}
+---
+<Layout frontmatter={frontmatter} headings={[]} url={Astro.url.toString()}>
+  <article set:html={content} />
+</Layout>

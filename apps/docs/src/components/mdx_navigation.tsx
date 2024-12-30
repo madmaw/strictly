@@ -24,7 +24,7 @@ export const pagePaths: Record<PageId, PageMetadata> = {
     title: 'Define',
   },
   deform: {
-    path: '/form',
+    path: '/react-form',
     title: 'React Form',
   },
   why: {

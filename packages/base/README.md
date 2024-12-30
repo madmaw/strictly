@@ -1,3 +1,3 @@
 # Base
 
-Utility functions and types
+Utility functions and types to support @strictly

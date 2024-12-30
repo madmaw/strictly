@@ -3,6 +3,7 @@
     "@astrojs/mdx": "^4.0.2",
     "@astrojs/react": "^4.1.1",
     "astro": "^5.0.9",
+    "marked": "^15.0.4",
     "react": "^19.0.0"
   },
   "devDependencies": {
