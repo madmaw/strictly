@@ -10,6 +10,7 @@ const config = {
     ],
     ['@babel/plugin-transform-class-static-block'],
     ['@babel/plugin-proposal-class-properties'],
+    ['@lingui/babel-plugin-lingui-macro'],
   ],
   assumptions: {
     setPublicClassFields: false,

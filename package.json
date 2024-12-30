@@ -51,6 +51,7 @@
     "demo:storybook": "turbo run storybook --filter=@strictly/demo",
     "docs:build": "turbo run build --filter=@strictly/docs",
     "docs:dev": "turbo run dev --filter=@strictly/docs",
+    "lingui:extract": "turbo run lingui:extract",
     "lint": "turbo run lint --continue && yarn lint:root",
     "lint:fix": "turbo run lint:fix --continue && yarn lint:root:fix",
     "lint:root": "cross-env ESLINT_USE_FLAT_CONFIG=false eslint --max-warnings=0 *.cjs *.json .github",

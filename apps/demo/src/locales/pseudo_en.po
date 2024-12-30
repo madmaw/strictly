@@ -1,0 +1,115 @@
+msgid ""
+msgstr ""
+"POT-Creation-Date: 2024-12-30 17:16+1100\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: @lingui/cli\n"
+"Language: pseudo_en\n"
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Plural-Forms: \n"
+
+#: src/features/form/pet/pet_form.tsx:61
+msgid "A new tag"
+msgstr ""
+
+#. label for the alive checkbox
+#: src/features/form/pet/pet_form.tsx:47
+msgid "Alive?"
+msgstr ""
+
+#. the dog breed Alsatian
+#: src/features/form/pet/pet_species_dog_form.tsx:46
+msgid "Alsatian"
+msgstr ""
+
+#. label for an input that captures the number of barks a dog has made
+#: src/features/form/pet/pet_species_dog_form.tsx:38
+msgid "Barks"
+msgstr ""
+
+#. Dog breed
+#. Input for choosing cat breed
+#: src/features/form/pet/pet_species_dog_form.tsx:31
+#: src/features/form/pet/pet_species_cat_form.tsx:28
+msgid "Breed"
+msgstr ""
+
+#. the cat breed Burmese
+#: src/features/form/pet/pet_species_cat_form.tsx:64
+msgid "Burmese"
+msgstr ""
+
+#. The name of the animal cat
+#: src/features/form/pet/pet_species_form.tsx:39
+msgid "Cat"
+msgstr ""
+
+#. The name of the animal dog
+#: src/features/form/pet/pet_species_form.tsx:44
+msgid "Dog"
+msgstr ""
+
+#. domestic short hair cat
+#: src/features/form/pet/pet_species_cat_form.tsx:74
+msgid "Domestic Short Hair"
+msgstr ""
+
+#. Input capturing the number of times a given cat has meowed
+#: src/features/form/pet/pet_species_cat_form.tsx:35
+msgid "Meows"
+msgstr ""
+
+#. label for the name text input
+#: src/features/form/pet/pet_form.tsx:40
+msgid "Name"
+msgstr ""
+
+#. cat meows often
+#: src/features/form/pet/pet_species_cat_form.tsx:56
+msgid "Noisy"
+msgstr ""
+
+#. meow frequency moderate
+#: src/features/form/pet/pet_species_cat_form.tsx:49
+msgid "Normal"
+msgstr ""
+
+#. catch all for all other dog breeds
+#: src/features/form/pet/pet_species_dog_form.tsx:56
+msgid "Other"
+msgstr ""
+
+#. the dog breed Pug
+#: src/features/form/pet/pet_species_dog_form.tsx:51
+msgid "Pug"
+msgstr ""
+
+#. cat meows infrequently
+#: src/features/form/pet/pet_species_cat_form.tsx:42
+msgid "Quiet"
+msgstr ""
+
+#. the cat breed Siamese
+#: src/features/form/pet/pet_species_cat_form.tsx:69
+msgid "Siamese"
+msgstr ""
+
+#. label for species field
+#: src/features/form/pet/pet_species_form.tsx:20
+msgid "Species"
+msgstr ""
+
+#. message that appears on the submit button for the pet form
+#: src/features/form/pet/pet_form.tsx:33
+msgid "Submit"
+msgstr ""
+
+#. label for the list of tags
+#: src/features/form/pet/pet_form.tsx:54
+msgid "Tags"
+msgstr ""

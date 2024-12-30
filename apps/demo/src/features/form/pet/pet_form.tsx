@@ -3,6 +3,9 @@
 import styles from './pet_form.module.css'
 
 import {
+  t,
+} from '@lingui/core/macro'
+import {
   Button,
   Card,
   Pill,
@@ -26,7 +29,40 @@ import {
   type TagValuePath,
 } from './types'
 
-export const LABEL_SUBMIT = 'Submit'
+export function SubmitLabel() {
+  return t({
+    message: 'Submit',
+    comment: 'message that appears on the submit button for the pet form',
+  })
+}
+
+export function NameTextInputLabel() {
+  return t({
+    message: 'Name',
+    comment: 'label for the name text input',
+  })
+}
+
+export function AliveCheckboxLabel() {
+  return t({
+    message: 'Alive?',
+    comment: 'label for the alive checkbox',
+  })
+}
+
+export function TagsInputLabel() {
+  return t({
+    message: 'Tags',
+    comment: 'label for the list of tags',
+  })
+}
+
+export function NewTagPlaceholder() {
+  return t({
+    message: 'A new tag',
+    comment: 'placeholder text for new tag',
+  })
+}
 
 export type PetFormFields = FlattenedFormFieldsOf<
   PetValueToTypePaths,
@@ -62,9 +98,9 @@ export function PetForm(props: PetFormProps) {
 
   return (
     <Stack>
-      <NameTextInput label='Name' />
-      <AliveCheckbox label='Alive' />
-      <PillsInput label='Tags'>
+      <NameTextInput label={NameTextInputLabel()} />
+      <AliveCheckbox label={AliveCheckboxLabel()} />
+      <PillsInput label={TagsInputLabel()}>
         <Pill.Group>
           <Tags>
             {function (tagValuePath) {
@@ -79,7 +115,7 @@ export function PetForm(props: PetFormProps) {
               )
             }}
           </Tags>
-          <NewTagInputField placeholder='A new tag' />
+          <NewTagInputField placeholder={NewTagPlaceholder()} />
         </Pill.Group>
       </PillsInput>
       <Card withBorder={true}>
@@ -89,7 +125,7 @@ export function PetForm(props: PetFormProps) {
         className={styles.hot}
         onClick={onSubmit}
       >
-        {LABEL_SUBMIT}
+        <SubmitLabel />
       </Button>
     </Stack>
   )

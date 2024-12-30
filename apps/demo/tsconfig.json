@@ -13,6 +13,7 @@
     {"path": "../../support/vite"},
     {"path": "../../packages/base"},
     {"path": "../../packages/define"},
-    {"path": "../../packages/react-form"}
+    {"path": "../../packages/react-form"},
+    {"path": "../../packages/spec"}
   ]
 }

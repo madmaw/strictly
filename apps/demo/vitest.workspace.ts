@@ -2,6 +2,7 @@ import { createVitestUserConfig } from '@strictly/support-vite'
 import {
   defineWorkspace,
 } from 'vitest/config'
+import viteConfig from './vite.config.mts'
 
 import tsconfig from './tsconfig.json'
 
@@ -10,6 +11,7 @@ export default defineWorkspace([
   '.',
   {
     ...config,
+    ...viteConfig,
     test: {
       ...(config.test || {}),
       environment: 'jsdom',

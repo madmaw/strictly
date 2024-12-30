@@ -1,0 +1,49 @@
+{
+  "author": "Chris <chris.glover@gmail.com> (@madmaw)",
+  "dependencies": {
+    "@lingui/core": "^5.1.2",
+    "@lingui/react": "^5.1.2",
+    "@strictly/base": "*",
+    "react": "^19.0.0"
+  },
+  "description": "Helper utilities for testing",
+  "devDependencies": {
+    "@testing-library/dom": "^10.4.0",
+    "@testing-library/react": "^16.0.1",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "jsdom": "^25.0.1",
+    "react-dom": "^19.0.0",
+    "resize-observer-polyfill": "^1.5.1",
+    "storybook": "^8.4.5",
+    "type-fest": "^4.26.1",
+    "vite": "^6.0.5",
+    "vitest-matchmedia-mock": "^1.0.6"
+  },
+  "homepage": "https://madmaw.github.io/strictly/spec",
+  "keywords": [
+    "react",
+    "state management",
+    "types"
+  ],
+  "license": "MIT",
+  "name": "@strictly/spec",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "directory": "packages/spec",
+    "type": "git",
+    "url": "git+https://github.com/madmaw/strictly.git"
+  },
+  "scripts": {
+    "build": "tsup",
+    "check-types": "tsc",
+    "clean": "del-cli dist",
+    "lint": "cross-env ESLINT_USE_FLAT_CONFIG=false eslint . --max-warnings=0",
+    "lint:fix": "cross-env ESLINT_USE_FLAT_CONFIG=false eslint . --fix",
+    "release:exports": "json -f package.json -f package.exports.json --merge > package.release.json"
+  },
+  "type": "module",
+  "version": "0.0.1"
+}

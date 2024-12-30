@@ -285,6 +285,7 @@ module.exports = {
             json: 'always',
             svg: 'always',
             js: 'ignorePackages',
+            mts: 'always',
             config: 'always',
             gql: 'always',
             html: 'always',
@@ -553,5 +554,6 @@ module.exports = {
     '**/dist/**',
     '**/.out/**',
     '**/*.d.ts',
+    '**/locales/*.ts',
   ],
 }

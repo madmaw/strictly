@@ -1,5 +1,7 @@
 import '@mantine/core/styles.css'
 
+import { i18n } from '@lingui/core'
+import { I18nProvider } from '@lingui/react'
 import {
   Box,
   createTheme,
@@ -8,6 +10,7 @@ import {
 import { assertExistsAndReturn } from '@strictly/base'
 import { AssistedPetEditor } from 'features/form/pet/assisted/assisted_pet_editor'
 import { type Pet } from 'features/form/pet/types'
+import { messages as en } from 'locales/en'
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 
@@ -42,16 +45,21 @@ window.onload = function () {
     console.log(value)
   }
 
+  i18n.load('en', en)
+  i18n.activate('en')
+
   createRoot(e).render(
     (
       <StrictMode>
         <MantineProvider theme={theme}>
-          <Box m='md'>
-            <AssistedPetEditor
-              onValueChange={onValueChange}
-              value={value}
-            />
-          </Box>
+          <I18nProvider i18n={i18n}>
+            <Box m='md'>
+              <AssistedPetEditor
+                onValueChange={onValueChange}
+                value={value}
+              />
+            </Box>
+          </I18nProvider>
         </MantineProvider>
       </StrictMode>
     ),

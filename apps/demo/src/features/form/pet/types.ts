@@ -16,7 +16,7 @@ import {
 } from '@strictly/define'
 
 export type DogBreed = 'Alsatian' | 'Pug' | 'other'
-export type CatBreed = 'Burmese' | 'Siamese' | 'Domestic Short Hair'
+export type CatBreed = 'Burmese' | 'Siamese' | 'DSH'
 
 export const dogBreedType = literal<DogBreed | null>()
 export const catBreedType = literal<CatBreed | null>()

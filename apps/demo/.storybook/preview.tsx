@@ -1,7 +1,43 @@
 import '@mantine/core/styles.css'
 import { MantineProvider } from '@mantine/core'
 import { type Preview } from '@storybook/react'
+import { messages as en } from '@strictly/demo/src/locales/en'
+import { messages as pseudo_en } from '@strictly/demo/src/locales/pseudo_en'
+import {
+  type MetaArgsOf,
+  StorybookLinguiProvider,
+} from '@strictly/spec'
 import { StrictMode } from 'react'
+// convince VSCode that this file is OK
+// eslint-disable-next-line no-restricted-imports
+import * as React from 'react'
+
+const testMessages = {
+  en,
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  pseudo_en,
+}
+
+const labelsToLocales = {
+  English: 'en',
+  Pseudo: 'pseudo_en',
+} as const
+
+const localeLabels = [...Object.keys(labelsToLocales)]
+
+export const testArgTypes = {
+  locale: {
+    options: localeLabels,
+    mapping: labelsToLocales,
+    control: {
+      type: 'select',
+    },
+  },
+} as const
+
+export const testArgs: MetaArgsOf<typeof testArgTypes> = {
+  locale: 'English',
+}
 
 const preview: Preview = {
   parameters: {
@@ -12,13 +48,21 @@ const preview: Preview = {
       },
     },
   },
+  argTypes: testArgTypes,
+  args: testArgs,
   decorators: [
-    function (Story: React.ComponentType) {
+    function (Story: React.ComponentType, { args }) {
       return (
         <MantineProvider>
-          <StrictMode>
-            <Story />
-          </StrictMode>
+          <StorybookLinguiProvider
+            labelsToLocales={labelsToLocales}
+            locale={args?.locale}
+            localeMessages={testMessages}
+          >
+            <StrictMode>
+              <Story />
+            </StrictMode>
+          </StorybookLinguiProvider>
         </MantineProvider>
       )
     },

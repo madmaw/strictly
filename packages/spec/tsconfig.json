@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "outDir": "./.out"
+  },
+  "extends": "../../tsconfig.json",
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    ".storybook/**/*.ts",
+    ".storybook/**/*.tsx",
+    ".vitest/**/*.ts",
+    "babel.config.cjs",
+    "tsconfig.json"
+  ],
+  "references": [
+    {
+      "path": "../../support/vite"
+    },
+    {
+      "path": "../define"
+    },
+    {
+      "path": "../base"
+    }
+  ]
+}

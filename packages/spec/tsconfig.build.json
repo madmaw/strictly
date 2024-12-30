@@ -5,12 +5,9 @@
   "extends": "../../tsconfig.build.json",
   "include": [
     ".eslintrc.cjs",
-    ".storybook/**/*.ts",
-    ".storybook/**/*.tsx",
-    ".vitest/**/*.ts",
-    "babel.config.js",
-    "lingui.config.ts",
-    "vite.config.mts",
+    ".storybook/vite.config.mts",
+    "tsup.config.ts",
     "vitest.workspace.ts"
+
   ]
 }

@@ -1,3 +1,5 @@
+**/locales/*.js
+**/locales/*.ts
 .astro
 .out
 .turbo

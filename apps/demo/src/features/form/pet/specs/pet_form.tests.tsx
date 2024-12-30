@@ -4,7 +4,7 @@ import {
   fireEvent,
   render,
 } from '@testing-library/react'
-import { LABEL_SUBMIT } from 'features/form/pet/pet_form'
+import { SubmitLabel } from 'features/form/pet/pet_form'
 import { vi } from 'vitest'
 import * as stories from './pet_form.stories'
 
@@ -23,7 +23,7 @@ describe('PetForm', function () {
     it('submits', async function () {
       const onSubmit = vi.fn()
       const wrapper = render(<Populated onSubmit={onSubmit} />)
-      const button = await wrapper.findByText(LABEL_SUBMIT)
+      const button = await wrapper.findByText(SubmitLabel())
 
       expect(onSubmit).not.toHaveBeenCalled()
 

@@ -1,3 +1,4 @@
+import { t } from '@lingui/core/macro'
 import {
   Group,
   Stack,
@@ -15,6 +16,13 @@ import {
   type Species,
 } from './types'
 
+export function SpeciesLabel() {
+  return t({
+    message: 'Species',
+    comment: 'label for species field',
+  })
+}
+
 export type PetSpeciesFormFields = FlattenedFormFieldsOf<
   PetValueToTypePaths,
   {
@@ -26,9 +34,17 @@ export type PetSpeciesFormProps = FormProps<PetSpeciesFormFields> & {
   speciesComponents: Record<Species, ComponentType>,
 }
 
-const SPECIES_NAMES: Record<Species, string> = {
-  cat: 'Cat',
-  dog: 'Dog',
+const SPECIES_NAMES: Record<Species, () => string> = {
+  cat: () =>
+    t({
+      message: 'Cat',
+      comment: 'The name of the animal cat',
+    }),
+  dog: () =>
+    t({
+      message: 'Dog',
+      comment: 'The name of the animal dog',
+    }),
 }
 
 export function PetSpeciesForm(props: PetSpeciesFormProps) {
@@ -42,7 +58,7 @@ export function PetSpeciesForm(props: PetSpeciesFormProps) {
   const SpeciesComponent = speciesComponents[speciesValue]
   return (
     <Stack>
-      <SpeciesRadioGroup label='Species'>
+      <SpeciesRadioGroup label={SpeciesLabel()}>
         <Group>
           {toArray(
             SPECIES_NAMES,
@@ -55,7 +71,7 @@ export function PetSpeciesForm(props: PetSpeciesFormProps) {
               return (
                 <SpeciesRadio
                   key={value}
-                  label={displayName}
+                  label={displayName()}
                 />
               )
             },

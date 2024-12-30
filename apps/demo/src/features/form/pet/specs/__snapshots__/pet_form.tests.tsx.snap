@@ -83,7 +83,7 @@ exports[`PetForm > renders Empty 1`] = `
             class="m_8ee546b8 mantine-Checkbox-label"
             for="mantine-0px4bipx4"
           >
-            Alive
+            Alive?
           </label>
         </div>
       </div>
@@ -249,7 +249,7 @@ exports[`PetForm > renders Errors 1`] = `
             class="m_8ee546b8 mantine-Checkbox-label"
             for="mantine-0px4bipx4"
           >
-            Alive
+            Alive?
           </label>
         </div>
       </div>
@@ -437,7 +437,7 @@ exports[`PetForm > renders Populated 1`] = `
             class="m_8ee546b8 mantine-Checkbox-label"
             for="mantine-12voha2vo"
           >
-            Alive
+            Alive?
           </label>
         </div>
       </div>

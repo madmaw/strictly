@@ -1,18 +1,22 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "tasks": {
+    "always": {
+    },
     "build": {
       "dependsOn": ["^check-types"],
       "outputs": ["dist/**"]
     },
     "check-types": {
-      "dependsOn": ["^check-types"]
+      "dependsOn": ["^always"]
     },
     "clean": {
       "cache": false
     },
     "dev": {
       "dependsOn": ["^check-types"]
+    },
+    "lingui:extract": {
     },
     "lint": {
       "dependsOn": ["^check-types"]
