@@ -3,7 +3,10 @@ import { type ErrorTypeOfField } from 'types/error_type_of_field'
 import { type Fields } from 'types/field'
 import { type ValueTypeOfField } from 'types/value_type_of_field'
 import { createUnsafePartialObserverComponent } from 'util/partial'
-import { type ErrorRenderer } from './hooks'
+import {
+  DefaultErrorRenderer,
+  type ErrorRenderer,
+} from './error_renderer'
 import {
   type MantineFieldComponent,
   type MantineForm,
@@ -31,8 +34,7 @@ export function createValueInput<
   this: MantineForm<F>,
   valuePath: K,
   ValueInput: React.ComponentType<Props>,
-  ErrorRenderer: ErrorRenderer<ErrorTypeOfField<F[K]>>,
-): MantineFieldComponent<SuppliedValueInputProps<ValueTypeOfField<F[K]>>, Props> {
+): MantineFieldComponent<SuppliedValueInputProps<ValueTypeOfField<F[K]>>, Props, ErrorTypeOfField<F[K]>> {
   const onChange = (value: ValueTypeOfField<F[K]>) => {
     this.onFieldValueChange?.(valuePath, value)
   }
@@ -50,7 +52,11 @@ export function createValueInput<
     }
   }
 
-  const propSource = () => {
+  const propSource = ({
+    ErrorRenderer = DefaultErrorRenderer,
+  }: {
+    ErrorRenderer?: ErrorRenderer<ErrorTypeOfField<F[K]>>,
+  }) => {
     const {
       disabled,
       required,
@@ -73,7 +79,8 @@ export function createValueInput<
   }
   return createUnsafePartialObserverComponent<
     typeof ValueInput,
-    SuppliedValueInputProps<ValueTypeOfField<F[K]>>
+    SuppliedValueInputProps<ValueTypeOfField<F[K]>>,
+    { ErrorRenderer?: ErrorRenderer<ErrorTypeOfField<F[K]>> }
   >(
     ValueInput,
     propSource,

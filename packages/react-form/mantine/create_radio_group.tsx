@@ -10,7 +10,10 @@ import { type StringFieldsOfFields } from 'types/string_fields_of_fields'
 import {
   createUnsafePartialObserverComponent,
 } from 'util/partial'
-import { type ErrorRenderer } from './hooks'
+import {
+  DefaultErrorRenderer,
+  type ErrorRenderer,
+} from './error_renderer'
 import {
   type MantineFieldComponent,
   type MantineForm,
@@ -29,8 +32,7 @@ export function createRadioGroup<
   this: MantineForm<F>,
   valuePath: K,
   RadioGroup: ComponentType<Props>,
-  ErrorRenderer: ErrorRenderer<ErrorTypeOfField<F[K]>>,
-): MantineFieldComponent<SuppliedRadioGroupProps, Props> {
+): MantineFieldComponent<SuppliedRadioGroupProps, Props, ErrorTypeOfField<F[K]>> {
   const onChange = (value: string) => {
     this.onFieldValueChange?.(valuePath, value)
   }
@@ -48,7 +50,7 @@ export function createRadioGroup<
     }
   }
 
-  const propSource = () => {
+  const propSource = ({ ErrorRenderer = DefaultErrorRenderer }: { ErrorRenderer?: ErrorRenderer }) => {
     const {
       required,
       value,

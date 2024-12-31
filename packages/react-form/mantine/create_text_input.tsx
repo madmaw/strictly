@@ -2,7 +2,10 @@ import { type ErrorTypeOfField } from 'types/error_type_of_field'
 import { type Fields } from 'types/field'
 import { type StringFieldsOfFields } from 'types/string_fields_of_fields'
 import { createUnsafePartialObserverComponent } from 'util/partial'
-import { type ErrorRenderer } from './hooks'
+import {
+  DefaultErrorRenderer,
+  type ErrorRenderer,
+} from './error_renderer'
 import {
   type MantineFieldComponent,
   type MantineForm,
@@ -33,8 +36,7 @@ export function createTextInput<
   this: MantineForm<F>,
   valuePath: K,
   TextInput: React.ComponentType<Props>,
-  ErrorRenderer: ErrorRenderer<ErrorTypeOfField<F[K]>>,
-): MantineFieldComponent<SuppliedTextInputProps, Props> {
+): MantineFieldComponent<SuppliedTextInputProps, Props, ErrorTypeOfField<F[K]>> {
   const onChange = (e: React.ChangeEvent<TextInputTarget>) => {
     this.onFieldValueChange?.(valuePath, e.target.value)
   }
@@ -52,7 +54,11 @@ export function createTextInput<
     }
   }
 
-  const propSource = () => {
+  const propSource = ({
+    ErrorRenderer = DefaultErrorRenderer,
+  }: {
+    ErrorRenderer?: ErrorRenderer<ErrorTypeOfField<F[K]>>,
+  }) => {
     const {
       disabled,
       required,
@@ -73,7 +79,11 @@ export function createTextInput<
       onKeyUp,
     }
   }
-  return createUnsafePartialObserverComponent<typeof TextInput, SuppliedTextInputProps>(
+  return createUnsafePartialObserverComponent<
+    typeof TextInput,
+    SuppliedTextInputProps,
+    { ErrorRenderer?: ErrorRenderer<ErrorTypeOfField<F[K]>> }
+  >(
     TextInput,
     propSource,
   )

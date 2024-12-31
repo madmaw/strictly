@@ -11,6 +11,7 @@ import {
   prototypingFieldValueFactory,
   SelectDiscriminatedUnionConverter,
   SelectLiteralConverter,
+  SelectStringConverter,
   TrimmingStringConverter,
 } from '@strictly/react-form'
 import { type PetFormFields } from 'features/form/pet/pet_form'
@@ -25,9 +26,9 @@ import {
   NOT_A_BREED_ERROR,
   NOT_A_NUMBER_ERROR,
   type Pet,
-  petTypeDef,
+  petType,
   type PetValueToTypePaths,
-  speciesTypeDef,
+  speciesType,
   type TagValuePath,
 } from 'features/form/pet/types'
 import { type SimplifyDeep } from 'type-fest'
@@ -45,14 +46,14 @@ const adapters: SimplifyDeep<FlattenedAdaptersOfFields<
     prototypingFieldValueFactory(''),
   ).validateTo(
     minimumStringLengthFieldValidatorFactory(
-      2,
+      NAME_TOO_SHORT_ERROR.minLength,
       NAME_TOO_SHORT_ERROR,
     ),
   ),
   '$.newTag': identityAdapter(''),
   '$.species': adapterFromTwoWayConverter(
     new SelectDiscriminatedUnionConverter(
-      speciesTypeDef,
+      speciesType,
       {
         cat: {
           type: 'cat',
@@ -67,13 +68,13 @@ const adapters: SimplifyDeep<FlattenedAdaptersOfFields<
     ),
   ),
   '$.species.cat:breed': adapterFromTwoWayConverter(
-    new SelectLiteralConverter(
+    new SelectStringConverter(
       catBreedType,
-      {
-        Siamese: 'Siamese',
-        Burmese: 'Burmese',
-        'Domestic Short Hair': 'Domestic Short Hair',
-      },
+      [
+        'Burmese',
+        'Siamese',
+        'DSH',
+      ] as const,
       null,
       NOT_A_BREED_ERROR,
     ),
@@ -108,13 +109,13 @@ const adapters: SimplifyDeep<FlattenedAdaptersOfFields<
 }
 
 export class AssistedPetFormPresenter extends FormPresenter<
-  typeof petTypeDef,
+  typeof petType,
   PetValueToTypePaths,
   typeof adapters
 > {
   constructor() {
     super(
-      petTypeDef,
+      petType,
       adapters,
     )
   }
@@ -128,7 +129,7 @@ export class AssistedPetFormPresenter extends FormPresenter<
 // export type AssistedPetFormFields = FormFieldsOfPresenter<AssistedPetFormPresenter>
 
 export class AssistedPetFormModel extends FormModel<
-  typeof petTypeDef,
+  typeof petType,
   PetValueToTypePaths,
   typeof adapters
 > {

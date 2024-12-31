@@ -13,7 +13,10 @@ import {
   PillsInput,
   Stack,
 } from '@mantine/core'
+import { UnreachableError } from '@strictly/base'
 import {
+  type ErrorRendererProps,
+  type ErrorTypeOfField,
   type Field,
   type FlattenedFormFieldsOf,
   type FormProps,
@@ -81,6 +84,18 @@ export type PetFormProps = FormProps<PetFormFields> & {
   onRemoveTag: (valuePath: TagValuePath) => void,
 }
 
+function NameInputErrorRenderer({ error }: ErrorRendererProps<ErrorTypeOfField<PetFormFields['$.name']>>) {
+  switch (error.type) {
+    case 'name too short':
+      return t({
+        message: `Name must be at least ${error.minLength} characters long`,
+        comment: 'error that is displayed when the name input is too short',
+      })
+    default:
+      throw new UnreachableError(error.type)
+  }
+}
+
 export function PetForm(props: PetFormProps) {
   const {
     onSubmit,
@@ -98,7 +113,10 @@ export function PetForm(props: PetFormProps) {
 
   return (
     <Stack>
-      <NameTextInput label={NameTextInputLabel()} />
+      <NameTextInput
+        ErrorRenderer={NameInputErrorRenderer}
+        label={NameTextInputLabel()}
+      />
       <AliveCheckbox label={AliveCheckboxLabel()} />
       <PillsInput label={TagsInputLabel()}>
         <Pill.Group>

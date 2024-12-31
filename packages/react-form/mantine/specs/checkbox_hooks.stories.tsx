@@ -4,16 +4,27 @@ import {
   type StoryObj,
 } from '@storybook/react'
 import { type FormProps } from 'core/props'
+import { type ErrorRenderer } from 'mantine/error_renderer'
 import { useMantineForm } from 'mantine/hooks'
 import { type Field } from 'types/field'
 import { CHECKBOX_LABEL } from './checkbox_constants'
 
-function Component(props: FormProps<{
+function Component({
+  ErrorRenderer,
+  ...props
+}: FormProps<{
   $: Field<boolean, string>,
-}>) {
+}> & {
+  ErrorRenderer?: ErrorRenderer,
+}) {
   const inputProps = useMantineForm(props)
   const CheckboxComponent = inputProps.checkbox('$')
-  return <CheckboxComponent label={CHECKBOX_LABEL} />
+  return (
+    <CheckboxComponent
+      ErrorRenderer={ErrorRenderer}
+      label={CHECKBOX_LABEL}
+    />
+  )
 }
 
 const meta: Meta<typeof Component> = {
@@ -74,6 +85,35 @@ export const Disabled: Story = {
         required: false,
         value: false,
       },
+    },
+  },
+}
+
+export const Error: Story = {
+  args: {
+    fields: {
+      $: {
+        disabled: false,
+        required: false,
+        value: true,
+        error: 'error',
+      },
+    },
+  },
+}
+
+export const CustomError: Story = {
+  args: {
+    fields: {
+      $: {
+        disabled: false,
+        required: false,
+        value: true,
+        error: 'error',
+      },
+    },
+    ErrorRenderer: function () {
+      return 'custom error'
     },
   },
 }

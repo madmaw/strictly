@@ -157,7 +157,8 @@ export function createUnsafePartialObserverComponent<
         // TODO is there any way we can memoize this transformation?
         // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
         const curriedProps = curriedPropsSource(exposedProps as AdditionalProps)
-
+        // TODO can we remove the additional props from the props that get passed in to the component
+        // as this generates react warnings
         return (
           <C
             ref={ref}

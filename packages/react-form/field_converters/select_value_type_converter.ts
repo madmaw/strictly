@@ -2,6 +2,7 @@ import {
   reverse,
   type StringKeyOf,
 } from '@strictly/base'
+import { type ExhaustiveArrayOfUnion } from '@strictly/base/types/exhaustive_array_of_union'
 import {
   copy,
   type LiteralTypeDef,
@@ -137,5 +138,44 @@ export class SelectLiteralConverter<
 
   protected override doConvert(from: L) {
     return from && this.valuesToStrings[from]
+  }
+}
+
+export class SelectStringConverter<
+  L extends string | null,
+  A extends readonly NonNullable<L>[],
+  NoSuchValueError,
+  ValuePath extends string,
+  Context,
+> extends AbstractSelectValueTypeConverter<
+  Type<LiteralTypeDef<L>>,
+  string | null,
+  Record<string, L>,
+  NoSuchValueError,
+  ValuePath,
+  Context
+> {
+  constructor(
+    typeDef: Type<LiteralTypeDef<L>>,
+    allowedValues: ExhaustiveArrayOfUnion<NonNullable<L>, A>,
+    defaultValue: L | null,
+    noSuchValueError: NoSuchValueError | null,
+  ) {
+    super(
+      typeDef,
+      allowedValues.reduce<Record<string, L>>(
+        function (acc, value) {
+          acc[value] = value
+          return acc
+        },
+        {},
+      ),
+      defaultValue,
+      noSuchValueError,
+    )
+  }
+
+  protected override doConvert(from: L) {
+    return from!
   }
 }

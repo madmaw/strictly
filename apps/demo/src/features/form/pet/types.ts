@@ -21,7 +21,7 @@ export type CatBreed = 'Burmese' | 'Siamese' | 'DSH'
 export const dogBreedType = literal<DogBreed | null>()
 export const catBreedType = literal<CatBreed | null>()
 
-export const speciesTypeDef = union('type')
+export const speciesType = union('type')
   .add(
     'dog',
     object()
@@ -35,28 +35,31 @@ export const speciesTypeDef = union('type')
       .setOptional('breed', catBreedType),
   )
 
-export type Species = keyof typeof speciesTypeDef['definition']['unions']
+export type Species = keyof typeof speciesType['definition']['unions']
 
-export const petTypeDef = object()
+export const petType = object()
   .set('name', stringType)
   .set('alive', booleanType)
   .set('tags', list(stringType))
-  .set('species', speciesTypeDef)
+  .set('species', speciesType)
   .narrow
 
 export type TagValuePath = `$.tags.${number}`
 
-export type MutablePet = ValueTypeOf<typeof petTypeDef>
-export type Pet = ValueTypeOf<ReadonlyTypeDefOf<typeof petTypeDef>>
-export type PetValuePaths = JsonPathsOf<typeof petTypeDef>
-export type PetTypePaths = JsonPathsOf<typeof petTypeDef, '*'>
-export type FlattenedPetTypeDefs = FlattenedTypeDefsOf<typeof petTypeDef, '*'>
-export type PetValueToTypePaths = ValueToTypePathsOf<typeof petTypeDef> & {
+export type MutablePet = ValueTypeOf<typeof petType>
+export type Pet = ValueTypeOf<ReadonlyTypeDefOf<typeof petType>>
+export type PetValuePaths = JsonPathsOf<typeof petType>
+export type PetTypePaths = JsonPathsOf<typeof petType, '*'>
+export type FlattenedPetTypeDefs = FlattenedTypeDefsOf<typeof petType, '*'>
+export type PetValueToTypePaths = ValueToTypePathsOf<typeof petType> & {
   '$.newTag': '$.newTag',
 }
-export type FlattenedPetValueTypes = FlattenedValueTypesOf<typeof petTypeDef>
-export type FlattenedPetAccessors = FlattenedAccessorsOf<typeof petTypeDef>
+export type FlattenedPetValueTypes = FlattenedValueTypesOf<typeof petType>
+export type FlattenedPetAccessors = FlattenedAccessorsOf<typeof petType>
 
-export const NAME_TOO_SHORT_ERROR = 'name too short'
+export const NAME_TOO_SHORT_ERROR = {
+  type: 'name too short',
+  minLength: 2,
+} as const
 export const NOT_A_NUMBER_ERROR = 'not a number'
 export const NOT_A_BREED_ERROR = 'not a breed'

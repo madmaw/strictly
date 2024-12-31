@@ -7,6 +7,9 @@ import {
   type StoryObj,
 } from '@storybook/react'
 import { type FormProps } from 'core/props'
+import {
+  type ErrorRenderer,
+} from 'mantine/error_renderer'
 import { useMantineForm } from 'mantine/hooks'
 import { type Field } from 'types/field'
 import {
@@ -16,14 +19,22 @@ import {
   type RadioValue,
 } from './radio_group_constants'
 
-function Component(props: FormProps<{
+function Component({
+  ErrorRenderer,
+  ...props
+}: FormProps<{
   $: Field<RadioValue | null, string>,
-}>) {
+}> & {
+  ErrorRenderer?: ErrorRenderer,
+}) {
   const form = useMantineForm(props)
   const RadioGroupComponent = form.radioGroup('$')
 
   return (
-    <RadioGroupComponent label={RADIO_GROUP_LABEL}>
+    <RadioGroupComponent
+      ErrorRenderer={ErrorRenderer}
+      label={RADIO_GROUP_LABEL}
+    >
       <Stack>
         {RADIO_VALUES.map(function (value: RadioValue) {
           const label = RADIO_LABELS[value]
@@ -98,6 +109,35 @@ export const Disabled: Story = {
         required: false,
         value: '2',
       },
+    },
+  },
+}
+
+export const Error: Story = {
+  args: {
+    fields: {
+      $: {
+        disabled: false,
+        required: false,
+        value: '2',
+        error: 'error',
+      },
+    },
+  },
+}
+
+export const CustomError: Story = {
+  args: {
+    fields: {
+      $: {
+        disabled: false,
+        required: false,
+        value: '2',
+        error: 'error',
+      },
+    },
+    ErrorRenderer: function () {
+      return 'custom error'
     },
   },
 }

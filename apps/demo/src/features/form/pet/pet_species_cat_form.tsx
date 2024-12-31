@@ -3,16 +3,21 @@ import {
   Slider,
   Stack,
 } from '@mantine/core'
-import { toArray } from '@strictly/base'
 import {
+  toArray,
+  UnreachableError,
+} from '@strictly/base'
+import {
+  type ErrorTypeOfField,
   type Field,
   type FlattenedFormFieldsOf,
   type FormProps,
   useMantineForm,
 } from '@strictly/react-form'
+import { type ErrorRendererProps } from '@strictly/react-form'
 import {
   type CatBreed,
-  type NOT_A_BREED_ERROR,
+  NOT_A_BREED_ERROR,
   type PetValueToTypePaths,
 } from './types'
 
@@ -59,6 +64,20 @@ export function MeowFrequencyHigh() {
   })
 }
 
+function BreedInputErrorRenderer({
+  error,
+}: ErrorRendererProps<ErrorTypeOfField<PetSpeciesCatFormFields['$.species.cat:breed']>>) {
+  switch (error) {
+    case NOT_A_BREED_ERROR:
+      return t({
+        message: 'Not a recognized cat breed',
+        comment: 'error that is displayed when an invalid breed is selected',
+      })
+    default:
+      throw new UnreachableError(error)
+  }
+}
+
 const BREED_NAMES: Record<CatBreed, () => string> = {
   Burmese: () =>
     t({
@@ -87,6 +106,7 @@ export function PetSpeciesCatForm(props: PetSpeciesFormCatProps) {
   return (
     <Stack>
       <BreedSelect
+        ErrorRenderer={BreedInputErrorRenderer}
         data={toArray(BREED_NAMES).map(function ([
           value,
           label,

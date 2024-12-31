@@ -206,7 +206,7 @@ exports[`PetForm > renders Errors 1`] = `
         class="m_8f816625 mantine-InputWrapper-error mantine-TextInput-error"
         id="mantine-0cyk5rcyk-error"
       >
-        name too short
+        Name must be at least 2 characters long
       </p>
     </div>
     <div

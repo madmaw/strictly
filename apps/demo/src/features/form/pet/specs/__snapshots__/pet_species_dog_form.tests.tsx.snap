@@ -75,7 +75,7 @@ exports[`PetSpeciesDogForm > renders Error 1`] = `
         class="m_8f816625 mantine-InputWrapper-error mantine-Select-error"
         id="mantine-12voha2vo-error"
       >
-        not a breed
+        Not a recognized dog breed
       </p>
     </div>
     <input
@@ -176,7 +176,7 @@ exports[`PetSpeciesDogForm > renders Error 1`] = `
         class="m_8f816625 mantine-InputWrapper-error mantine-NumberInput-error"
         id="mantine-1fu8n1fu8-error"
       >
-        not a number
+        Number of barks must be a number
       </p>
     </div>
   </div>

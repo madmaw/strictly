@@ -15,6 +15,7 @@ import {
 } from '@storybook/react'
 import { type FormProps } from 'core/props'
 import { type SuppliedValueInputProps } from 'mantine/create_value_input'
+import { type ErrorRenderer } from 'mantine/error_renderer'
 import { useMantineForm } from 'mantine/hooks'
 import {
   type ComponentType,
@@ -33,14 +34,17 @@ function Component<
   P extends StoryValueInputProps<V>,
 >({
   ValueInput,
-  inputs,
+  ErrorRenderer,
+  inputProps,
   ...props
 }: FormProps<{
   $: Field<V, string>,
 }> & {
   ValueInput: ComponentType<P>,
 } & {
-  inputs: P,
+  inputProps: P,
+} & {
+  ErrorRenderer?: ErrorRenderer,
 }) {
   const form = useMantineForm(props)
   const ValueInputComponent = form.valueInput<'$', P>('$', ValueInput)
@@ -48,8 +52,9 @@ function Component<
     <ValueInputComponent
       {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/consistent-type-assertions
-        ...inputs as any
+        ...inputProps as any
       }
+      ErrorRenderer={ErrorRenderer}
     />
   )
 }
@@ -81,7 +86,7 @@ export const EmptyNumberInput: Story<number | string, NumberInputProps> = {
       },
     },
     ValueInput: NumberInput,
-    inputs: {
+    inputProps: {
       label: NUMBER_INPUT_LABEL,
     },
   },
@@ -97,7 +102,27 @@ export const PopulatedNumberInput: Story<number | string, NumberInputProps> = {
       },
     },
     ValueInput: NumberInput,
-    inputs: {
+    inputProps: {
+      label: NUMBER_INPUT_LABEL,
+    },
+  },
+}
+
+export const CustomErrorNumberInput: Story<number | string, NumberInputProps> = {
+  args: {
+    fields: {
+      $: {
+        disabled: false,
+        required: false,
+        value: 3,
+        error: 'an error',
+      },
+    },
+    ValueInput: NumberInput,
+    ErrorRenderer: function () {
+      return 'a custom error'
+    },
+    inputProps: {
       label: NUMBER_INPUT_LABEL,
     },
   },
@@ -113,7 +138,7 @@ export const DisabledNumberInput: Story<number | string, NumberInputProps> = {
       },
     },
     ValueInput: NumberInput,
-    inputs: {
+    inputProps: {
       label: NUMBER_INPUT_LABEL,
     },
   },
@@ -129,7 +154,7 @@ export const AnSlider: Story<number, SliderProps> = {
       },
     },
     ValueInput: Slider,
-    inputs: {
+    inputProps: {
       label: SLIDER_LABEL,
       min: 1,
       max: 10,
@@ -161,7 +186,7 @@ export const AnRating: Story<number, RatingProps> = {
       },
     },
     ValueInput: Rating,
-    inputs: {},
+    inputProps: {},
   },
 }
 
@@ -175,7 +200,7 @@ export const AnJsonInput: Story<string, JsonInputProps> = {
       },
     },
     ValueInput: JsonInput,
-    inputs: {
+    inputProps: {
       rows: 8,
     },
   },

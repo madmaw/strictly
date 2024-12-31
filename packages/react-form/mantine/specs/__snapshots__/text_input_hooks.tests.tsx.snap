@@ -1,5 +1,50 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`mantine checkbox hooks > renders CustomError 1`] = `
+<div>
+  <style
+    data-mantine-styles="classes"
+  >
+    @media (max-width: 35.99375em) {.mantine-visible-from-xs {display: none !important;}}@media (min-width: 36em) {.mantine-hidden-from-xs {display: none !important;}}@media (max-width: 47.99375em) {.mantine-visible-from-sm {display: none !important;}}@media (min-width: 48em) {.mantine-hidden-from-sm {display: none !important;}}@media (max-width: 61.99375em) {.mantine-visible-from-md {display: none !important;}}@media (min-width: 62em) {.mantine-hidden-from-md {display: none !important;}}@media (max-width: 74.99375em) {.mantine-visible-from-lg {display: none !important;}}@media (min-width: 75em) {.mantine-hidden-from-lg {display: none !important;}}@media (max-width: 87.99375em) {.mantine-visible-from-xl {display: none !important;}}@media (min-width: 88em) {.mantine-hidden-from-xl {display: none !important;}}
+  </style>
+  <div
+    class="m_46b77525 mantine-InputWrapper-root mantine-TextInput-root"
+    data-error="true"
+  >
+    <label
+      class="m_8fdc1311 mantine-InputWrapper-label mantine-TextInput-label"
+      for="mantine-0cyk5rcyk"
+      id="mantine-0cyk5rcyk-label"
+    >
+      Text Input
+    </label>
+    <div
+      class="m_6c018570 mantine-Input-wrapper mantine-TextInput-wrapper"
+      data-error="true"
+      data-variant="default"
+      style="--input-margin-bottom: calc(var(--mantine-spacing-xs) / 2);"
+    >
+      <input
+        aria-describedby="mantine-0cyk5rcyk-error"
+        aria-invalid="true"
+        class="m_8fb7ebe7 mantine-Input-input mantine-TextInput-input"
+        data-error="true"
+        data-variant="default"
+        id="mantine-0cyk5rcyk"
+        name="$"
+        value="xxx"
+      />
+    </div>
+    <p
+      class="m_8f816625 mantine-InputWrapper-error mantine-TextInput-error"
+      id="mantine-0cyk5rcyk-error"
+    >
+      custom error
+    </p>
+  </div>
+</div>
+`;
+
 exports[`mantine checkbox hooks > renders Disabled 1`] = `
 <div>
   <style

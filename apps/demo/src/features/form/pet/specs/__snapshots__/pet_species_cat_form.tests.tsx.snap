@@ -75,7 +75,7 @@ exports[`PetSpeciesCatForm > renders Error 1`] = `
         class="m_8f816625 mantine-InputWrapper-error mantine-Select-error"
         id="mantine-12voha2vo-error"
       >
-        not a breed
+        Not a recognized cat breed
       </p>
     </div>
     <input
