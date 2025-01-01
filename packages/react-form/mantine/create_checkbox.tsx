@@ -78,8 +78,9 @@ export function createCheckbox<
       onKeyUp,
     }
   }
-  return createUnsafePartialObserverComponent<typeof Checkbox, SuppliedCheckboxProps>(
+  return createUnsafePartialObserverComponent(
     Checkbox,
     propSource,
+    ['ErrorRenderer'],
   )
 }

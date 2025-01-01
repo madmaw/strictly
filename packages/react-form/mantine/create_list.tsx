@@ -34,10 +34,7 @@ export function createList<
       values,
     }
   }
-  return createUnsafePartialObserverComponent<
-    typeof List,
-    SuppliedListProps<ElementOfArray<ValueTypeOfField<F[K]>>>
-  >(List, propSource)
+  return createUnsafePartialObserverComponent(List, propSource)
 }
 
 export function DefaultList<

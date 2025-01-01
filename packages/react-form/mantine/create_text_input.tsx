@@ -82,9 +82,11 @@ export function createTextInput<
   return createUnsafePartialObserverComponent<
     typeof TextInput,
     SuppliedTextInputProps,
-    { ErrorRenderer?: ErrorRenderer<ErrorTypeOfField<F[K]>> }
+    { ErrorRenderer?: ErrorRenderer<ErrorTypeOfField<F[K]>> },
+    ['ErrorRenderer']
   >(
     TextInput,
     propSource,
+    ['ErrorRenderer'],
   )
 }

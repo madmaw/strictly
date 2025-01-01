@@ -80,9 +80,11 @@ export function createValueInput<
   return createUnsafePartialObserverComponent<
     typeof ValueInput,
     SuppliedValueInputProps<ValueTypeOfField<F[K]>>,
-    { ErrorRenderer?: ErrorRenderer<ErrorTypeOfField<F[K]>> }
+    { ErrorRenderer?: ErrorRenderer<ErrorTypeOfField<F[K]>> },
+    ['ErrorRenderer']
   >(
     ValueInput,
     propSource,
+    ['ErrorRenderer'],
   )
 }

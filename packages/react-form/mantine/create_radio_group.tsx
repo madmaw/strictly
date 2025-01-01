@@ -69,5 +69,5 @@ export function createRadioGroup<
     }
   }
 
-  return createUnsafePartialObserverComponent(RadioGroup, propSource)
+  return createUnsafePartialObserverComponent(RadioGroup, propSource, ['ErrorRenderer'])
 }
