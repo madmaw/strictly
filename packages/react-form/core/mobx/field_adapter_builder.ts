@@ -1,3 +1,4 @@
+import { type Validator } from '@strictly/define'
 import {
   chainFieldConverter,
   chainSafeFieldConverter,
@@ -19,7 +20,6 @@ import {
   type TwoWayFieldConverter,
   type TwoWayFieldConverterWithValueFactory,
 } from 'types/field_converters'
-import { type FieldValidator } from 'types/field_validator'
 
 class FieldAdapterBuilder<
   From,
@@ -37,7 +37,7 @@ class FieldAdapterBuilder<
 
   validateFrom<
     E2,
-  >(...validators: readonly FieldValidator<
+  >(...validators: readonly Validator<
     From,
     E2,
     ValuePath,
@@ -61,7 +61,7 @@ class FieldAdapterBuilder<
 
   validateTo<
     E2,
-  >(...validators: readonly FieldValidator<
+  >(...validators: readonly Validator<
     To,
     E2,
     ValuePath,

@@ -11,18 +11,18 @@ import {
 import {
   type Accessor,
   type AnyValueType,
-  flattenAccessorsOf,
-  type FlattenedValueTypesOf,
+  flattenAccessorsOfType,
+  type FlattenedValuesOfType,
   flattenTypeDefsOf,
   flattenValueTypeTo,
   jsonPathPop,
   mobxCopy,
   type MobxValueTypeOf,
-  type ReadonlyTypeDefOf,
+  type ReadonlyTypeOfType,
   type StrictTypeDef,
   type Type,
+  type ValueOfType,
   valuePathToTypePath,
-  type ValueTypeOf,
 } from '@strictly/define'
 import {
   computed,
@@ -47,8 +47,8 @@ import {
   type ToTypeOfFieldAdapter,
 } from './field_adapter'
 import {
-  type FlattenedListTypeDefsOf,
-} from './flattened_list_type_defs_of'
+  type FlattenedListTypesOfType,
+} from './flattened_list_types_of_type'
 
 export type FlattenedConvertedFieldsOf<
   ValuePathsToAdapters extends Readonly<Record<string, FieldAdapter>>,
@@ -105,8 +105,8 @@ export class FormPresenter<
   T extends Type,
   ValueToTypePaths extends Readonly<Record<string, string>>,
   TypePathsToAdapters extends FlattenedTypePathsToAdaptersOf<
-    FlattenedValueTypesOf<T, '*'>,
-    ValueTypeOf<ReadonlyTypeDefOf<T>>
+    FlattenedValuesOfType<T, '*'>,
+    ValueOfType<ReadonlyTypeOfType<T>>
   >,
   ValuePathsToAdapters extends ValuePathsToAdaptersOf<TypePathsToAdapters, ValueToTypePaths> = ValuePathsToAdaptersOf<
     TypePathsToAdapters,
@@ -154,10 +154,11 @@ export class FormPresenter<
     return this.internalSetFieldValue(model, valuePath, value, false)
   }
 
-  addListItem<K extends keyof FlattenedListTypeDefsOf<T>>(
+  addListItem<K extends keyof FlattenedListTypesOfType<T>>(
     model: FormModel<T, ValueToTypePaths, TypePathsToAdapters, ValuePathsToAdapters>,
     valuePath: K,
-    elementValue: Maybe<ElementOfArray<FlattenedValueTypesOf<T>[K]>>,
+    // TODO can this type be simplified?
+    elementValue: Maybe<ElementOfArray<FlattenedValuesOfType<T>[K]>>,
     index?: number,
   ) {
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
@@ -236,7 +237,7 @@ export class FormPresenter<
     })
   }
 
-  removeListItem<K extends keyof FlattenedListTypeDefsOf<T>>(
+  removeListItem<K extends keyof FlattenedListTypesOfType<T>>(
     model: FormModel<T, ValueToTypePaths, TypePathsToAdapters, ValuePathsToAdapters>,
     elementValuePath: `${K}.${number}`,
   ) {
@@ -388,7 +389,7 @@ export class FormPresenter<
 
   clearAll(
     model: FormModel<T, ValueToTypePaths, TypePathsToAdapters, ValuePathsToAdapters>,
-    value: ValueTypeOf<T>,
+    value: ValueOfType<T>,
   ): void {
     runInAction(() => {
       model.errors = {}
@@ -506,7 +507,7 @@ export class FormPresenter<
     })
   }
 
-  createModel(value: ValueTypeOf<ReadonlyTypeDefOf<T>>): FormModel<
+  createModel(value: ValueOfType<ReadonlyTypeOfType<T>>): FormModel<
     T,
     ValueToTypePaths,
     TypePathsToAdapters,
@@ -524,8 +525,8 @@ export class FormModel<
   T extends Type,
   ValueToTypePaths extends Readonly<Record<string, string>>,
   TypePathsToAdapters extends FlattenedTypePathsToAdaptersOf<
-    FlattenedValueTypesOf<T, '*'>,
-    ValueTypeOf<ReadonlyTypeDefOf<T>>
+    FlattenedValuesOfType<T, '*'>,
+    ValueOfType<ReadonlyTypeOfType<T>>
   >,
   ValuePathsToAdapters extends ValuePathsToAdaptersOf<TypePathsToAdapters, ValueToTypePaths> = ValuePathsToAdaptersOf<
     TypePathsToAdapters,
@@ -543,7 +544,7 @@ export class FormModel<
 
   constructor(
     private readonly typeDef: T,
-    value: ValueTypeOf<ReadonlyTypeDefOf<T>>,
+    value: ValueOfType<ReadonlyTypeOfType<T>>,
     private readonly adapters: TypePathsToAdapters,
   ) {
     this.value = mobxCopy(typeDef, value)
@@ -684,10 +685,10 @@ export class FormModel<
   @computed
   // should only be referenced internally, so loosely typed
   get accessors(): Readonly<Record<string, Accessor>> {
-    return flattenAccessorsOf<T, Readonly<Record<string, Accessor>>>(
+    return flattenAccessorsOfType<T, Readonly<Record<string, Accessor>>>(
       this.typeDef,
       this.value,
-      (value: ValueTypeOf<T>): void => {
+      (value: ValueOfType<T>): void => {
         this.value = mobxCopy(this.typeDef, value)
       },
     )

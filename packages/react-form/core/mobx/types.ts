@@ -23,7 +23,7 @@ export type ValuePathsOfPresenter<
  * Used to extract the render type (so the value that is passed to the view) of a given value path
  * from a presenter
  */
-export type ToTypeOfPresenterValuePath<
+export type ToValueOfPresenterValuePath<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   Presenter extends FormPresenter<any, any, any, any>,
   K extends ValuePathsOfPresenter<Presenter>,

@@ -8,7 +8,7 @@ import {
   type UnionTypeDef,
 } from './definitions'
 
-export type ReadonlyTypeDefOf<T extends Type> = {
+export type ReadonlyTypeOfType<T extends Type> = {
   readonly definition: InternalReadonlyTypeDefOf<T['definition']>,
 }
 

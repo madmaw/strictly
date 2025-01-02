@@ -15,6 +15,10 @@ import {
 } from '@mantine/core'
 import { UnreachableError } from '@strictly/base'
 import {
+  type MinimumStringLengthValidationError,
+  MinimumStringLengthValidationErrorType,
+} from '@strictly/define'
+import {
   type ErrorRendererProps,
   type ErrorTypeOfField,
   type Field,
@@ -27,7 +31,6 @@ import {
   useCallback,
 } from 'react'
 import {
-  type NAME_TOO_SHORT_ERROR,
   type PetValueToTypePaths,
   type TagValuePath,
 } from './types'
@@ -70,7 +73,7 @@ export function NewTagPlaceholder() {
 export type PetFormFields = FlattenedFormFieldsOf<
   PetValueToTypePaths,
   {
-    '$.name': Field<string, typeof NAME_TOO_SHORT_ERROR>,
+    '$.name': Field<string, MinimumStringLengthValidationError>,
     '$.alive': Field<boolean, never>,
     '$.newTag': Field<string, never>,
     '$.tags': Field<readonly string[], never>,
@@ -86,9 +89,9 @@ export type PetFormProps = FormProps<PetFormFields> & {
 
 function NameInputErrorRenderer({ error }: ErrorRendererProps<ErrorTypeOfField<PetFormFields['$.name']>>) {
   switch (error.type) {
-    case 'name too short':
+    case MinimumStringLengthValidationErrorType:
       return t({
-        message: `Name must be at least ${error.minLength} characters long`,
+        message: `Name must be at least ${error.minimumLength} characters long`,
         comment: 'error that is displayed when the name input is too short',
       })
     default:

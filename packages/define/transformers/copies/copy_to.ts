@@ -10,7 +10,7 @@ import {
   TypeDefType,
   type UnionKey,
 } from 'types/definitions'
-import { type ReadonlyTypeDefOf } from 'types/readonly_type_def_of'
+import { type ReadonlyTypeOfType } from 'types/readonly_type_of_type'
 import {
   type StrictListTypeDef,
   type StrictLiteralTypeDef,
@@ -21,7 +21,7 @@ import {
   type StrictTypeDef,
   type StrictUnionTypeDef,
 } from 'types/strict_definitions'
-import { type ValueTypeOf } from 'types/value_type_of'
+import { type ValueOfType } from 'types/value_of_type'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type AnyValueType = any
@@ -30,10 +30,10 @@ export type Copier<R> = (v: AnyValueType, t: StrictTypeDef) => R
 
 export function copyTo<
   T extends StrictType,
-  R extends ValueTypeOf<ReadonlyTypeDefOf<T>>,
+  R extends ValueOfType<ReadonlyTypeOfType<T>>,
 >(
   { definition }: T,
-  value: ValueTypeOf<ReadonlyTypeDefOf<T>>,
+  value: ValueOfType<ReadonlyTypeOfType<T>>,
   copier: Copier<R>,
 ): R {
   return internalCopyTo(
@@ -94,7 +94,7 @@ function copyLiteral<
   R,
 >(
   typeDef: StrictLiteralTypeDef,
-  value: ValueTypeOf<{ definition: StrictLiteralTypeDef }>,
+  value: ValueOfType<{ definition: StrictLiteralTypeDef }>,
   copier: Copier<R>,
 ): R {
   // mutable and immutable literals should be the same type

@@ -1,7 +1,7 @@
 import { expectDefinedAndReturn } from '@strictly/base'
 import {
   booleanType,
-  type FlattenedValueTypesOf,
+  type FlattenedValuesOfType,
   list,
   nullType,
   numberType,
@@ -9,8 +9,8 @@ import {
   record,
   stringType,
   union,
+  type ValueOfType,
   type ValueToTypePathsOf,
-  type ValueTypeOf,
 } from '@strictly/define'
 import { type FieldAdapter } from 'core/mobx/field_adapter'
 import {
@@ -99,14 +99,14 @@ describe('all', function () {
       const typeDef = record<typeof numberType, 'a' | 'b'>(numberType)
       type T = Simplify<
         FlattenedTypePathsToAdaptersOf<
-          FlattenedValueTypesOf<typeof typeDef>,
-          ValueTypeOf<typeof typeDef>
+          FlattenedValuesOfType<typeof typeDef>,
+          ValueOfType<typeof typeDef>
         >
       >
       let t: Partial<{
-        readonly $: ConvenientFieldAdapter<Readonly<Record<'a' | 'b', number>>, ValueTypeOf<typeof typeDef>>,
-        readonly ['$.a']: ConvenientFieldAdapter<number, ValueTypeOf<typeof typeDef>>,
-        readonly ['$.b']: ConvenientFieldAdapter<number, ValueTypeOf<typeof typeDef>>,
+        readonly $: ConvenientFieldAdapter<Readonly<Record<'a' | 'b', number>>, ValueOfType<typeof typeDef>>,
+        readonly ['$.a']: ConvenientFieldAdapter<number, ValueOfType<typeof typeDef>>,
+        readonly ['$.b']: ConvenientFieldAdapter<number, ValueOfType<typeof typeDef>>,
       }>
 
       it('equals expected type', function () {
@@ -119,13 +119,13 @@ describe('all', function () {
         .set('x', stringType)
         .set('y', booleanType)
       type T = FlattenedTypePathsToAdaptersOf<
-        FlattenedValueTypesOf<typeof typeDef>,
-        ValueTypeOf<typeof typeDef>
+        FlattenedValuesOfType<typeof typeDef>,
+        ValueOfType<typeof typeDef>
       >
       let t: Partial<{
-        readonly $: ConvenientFieldAdapter<{ readonly x: string, readonly y: boolean }, ValueTypeOf<typeof typeDef>>,
-        readonly ['$.x']: ConvenientFieldAdapter<string, ValueTypeOf<typeof typeDef>>,
-        readonly ['$.y']: ConvenientFieldAdapter<boolean, ValueTypeOf<typeof typeDef>>,
+        readonly $: ConvenientFieldAdapter<{ readonly x: string, readonly y: boolean }, ValueOfType<typeof typeDef>>,
+        readonly ['$.x']: ConvenientFieldAdapter<string, ValueOfType<typeof typeDef>>,
+        readonly ['$.y']: ConvenientFieldAdapter<boolean, ValueOfType<typeof typeDef>>,
       }>
       it('equals expected type', function () {
         expectTypeOf(t).toEqualTypeOf<T>()
@@ -181,7 +181,7 @@ describe('all', function () {
       const adapters = {
         $: integerToStringAdapter,
       } as const
-      let originalValue: ValueTypeOf<typeof typeDef>
+      let originalValue: ValueOfType<typeof typeDef>
       let model: FormModel<
         typeof typeDef,
         ValueToTypePathsOf<typeof typeDef>,
@@ -236,7 +236,7 @@ describe('all', function () {
       const adapters = {
         '$.*': integerToStringAdapter,
       } as const
-      let value: ValueTypeOf<typeof typeDef>
+      let value: ValueOfType<typeof typeDef>
       let model: FormModel<
         typeof typeDef,
         ValueToTypePathsOf<typeof typeDef>,
@@ -296,7 +296,7 @@ describe('all', function () {
         '$.*': integerToStringAdapter,
         // '$.*': booleanToBooleanConverter,
       } as const
-      let value: ValueTypeOf<typeof typeDef>
+      let value: ValueOfType<typeof typeDef>
       let model: FormModel<
         typeof typeDef,
         ValueToTypePathsOf<typeof typeDef>,
@@ -366,7 +366,7 @@ describe('all', function () {
         '$.a': integerToStringAdapter,
         '$.b': booleanToBooleanAdapter,
       } as const
-      let value: ValueTypeOf<typeof typeDef>
+      let value: ValueOfType<typeof typeDef>
       let model: FormModel<
         typeof typeDef,
         ValueToTypePathsOf<typeof typeDef>,
@@ -443,7 +443,7 @@ describe('all', function () {
         typeDef,
         adapters,
       )
-      const originalValue: ValueTypeOf<typeof typeDef> = 2
+      const originalValue: ValueOfType<typeof typeDef> = 2
       let model: FormModel<
         typeof typeDef,
         ValueToTypePathsOf<typeof typeDef>,
@@ -566,7 +566,7 @@ describe('all', function () {
         typeDef,
         converters,
       )
-      let originalValue: ValueTypeOf<typeof typeDef>
+      let originalValue: ValueOfType<typeof typeDef>
       let model: FormModel<
         typeof typeDef,
         ValueToTypePathsOf<typeof typeDef>,
@@ -897,7 +897,7 @@ describe('all', function () {
           typeDef,
           adapters,
         )
-        let originalValue: ValueTypeOf<typeof typeDef>
+        let originalValue: ValueOfType<typeof typeDef>
         let model: FormModel<
           typeof typeDef,
           JsonPaths,
@@ -952,7 +952,7 @@ describe('all', function () {
         typeDef,
         converters,
       )
-      let originalValue: ValueTypeOf<typeof typeDef>
+      let originalValue: ValueOfType<typeof typeDef>
       let model: FormModel<
         typeof typeDef,
         JsonPaths,

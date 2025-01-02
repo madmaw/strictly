@@ -2,15 +2,15 @@ import { type SimplifyDeep } from 'type-fest'
 import {
   type TypeDefType,
 } from 'types/definitions'
-import { type ValueTypeOf } from 'types/value_type_of'
+import { type ValueOfType } from 'types/value_of_type'
 
-describe('ValueTypeOf', function () {
+describe('ValueOfType', function () {
   describe('literal', function () {
     type TypeD = {
       readonly type: TypeDefType.Literal,
       readonly valuePrototype: ['a' | 'b' | 'c'],
     }
-    type T = ValueTypeOf<{ definition: TypeD }>
+    type T = ValueOfType<{ definition: TypeD }>
 
     let t: 'a' | 'b' | 'c'
     it('equals expected type', function () {
@@ -27,7 +27,7 @@ describe('ValueTypeOf', function () {
           readonly valuePrototype: ['a' | 'b' | 'c'],
         },
       }
-      type T = ValueTypeOf<{ definition: TypeD }>
+      type T = ValueOfType<{ definition: TypeD }>
       describe('mutable', function () {
         let a: ('a' | 'b' | 'c')[]
         it('equals expected type', function () {
@@ -36,7 +36,7 @@ describe('ValueTypeOf', function () {
       })
 
       describe('readonly', function () {
-        type R = ValueTypeOf<{
+        type R = ValueOfType<{
           definition: {
             readonly type: TypeDefType.List,
             readonly elements: {
@@ -63,7 +63,7 @@ describe('ValueTypeOf', function () {
         readonly valuePrototype: ['a' | 'b' | 'c'],
       },
     }
-    type T = ValueTypeOf<{ definition: TypeD }>
+    type T = ValueOfType<{ definition: TypeD }>
 
     describe('mutable', function () {
       let t: Record<'x' | 'y' | 'z', 'a' | 'b' | 'c'>
@@ -73,7 +73,7 @@ describe('ValueTypeOf', function () {
     })
 
     describe('readonly', function () {
-      type R = ValueTypeOf<{
+      type R = ValueOfType<{
         readonly definition: {
           readonly type: TypeDefType.Record,
           readonly keyPrototype: 'x' | 'y' | 'z',
@@ -99,7 +99,7 @@ describe('ValueTypeOf', function () {
           readonly valuePrototype: ['a' | 'b' | 'c'],
         } | undefined,
       }
-      type T = ValueTypeOf<{ definition: TypeD }>
+      type T = ValueOfType<{ definition: TypeD }>
 
       let t: Partial<Record<'x' | 'y' | 'z', 'a' | 'b' | 'c'>>
       it('equals expected type', function () {
@@ -116,7 +116,7 @@ describe('ValueTypeOf', function () {
           readonly valuePrototype: ['a' | 'b' | 'c'],
         } | undefined,
       }
-      type T = ValueTypeOf<{ definition: TypeD }>
+      type T = ValueOfType<{ definition: TypeD }>
 
       let t: Partial<Readonly<Record<'x' | 'y' | 'z', 'a' | 'b' | 'c'>>>
       it('equals expected type', function () {
@@ -139,7 +139,7 @@ describe('ValueTypeOf', function () {
         },
       },
     }
-    type T = ValueTypeOf<{ definition: TypeD }>
+    type T = ValueOfType<{ definition: TypeD }>
 
     describe('mutable', function () {
       let value: {
@@ -166,7 +166,7 @@ describe('ValueTypeOf', function () {
           },
         },
       }
-      type T = ValueTypeOf<{ definition: TypeD }>
+      type T = ValueOfType<{ definition: TypeD }>
 
       let value: {
         readonly a: 'a' | 'b',
@@ -191,7 +191,7 @@ describe('ValueTypeOf', function () {
           },
         },
       }
-      type T = ValueTypeOf<{ definition: TypeD }>
+      type T = ValueOfType<{ definition: TypeD }>
 
       let v: {
         a?: 'a' | 'b',
@@ -206,7 +206,7 @@ describe('ValueTypeOf', function () {
 
   describe('union', function () {
     describe('non-discriminated', function () {
-      type T = ValueTypeOf<{
+      type T = ValueOfType<{
         definition: {
           readonly type: TypeDefType.Union,
           readonly discriminator: null,
@@ -235,7 +235,7 @@ describe('ValueTypeOf', function () {
     })
 
     describe('implicitly discriminated', function () {
-      type T = ValueTypeOf<{
+      type T = ValueOfType<{
         definition: {
           readonly type: TypeDefType.Union,
           readonly discriminator: null,
@@ -285,7 +285,7 @@ describe('ValueTypeOf', function () {
 
     describe('explicitly discriminated', function () {
       type T = SimplifyDeep<
-        ValueTypeOf<{
+        ValueOfType<{
           definition: {
             readonly type: TypeDefType.Union,
             readonly discriminator: 'd',

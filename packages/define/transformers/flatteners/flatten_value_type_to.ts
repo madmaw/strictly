@@ -7,7 +7,7 @@ import {
   TypeDefType,
   type UnionTypeDef,
 } from 'types/definitions'
-import { type ReadonlyTypeDefOf } from 'types/readonly_type_def_of'
+import { type ReadonlyTypeOfType } from 'types/readonly_type_of_type'
 import {
   type StrictListTypeDef,
   type StrictObjectTypeDef,
@@ -16,7 +16,7 @@ import {
   type StrictTypeDef,
   type StrictUnionTypeDef,
 } from 'types/strict_definitions'
-import { type ValueTypeOf } from 'types/value_type_of'
+import { type ValueOfType } from 'types/value_of_type'
 import { jsonPath } from './json_path'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -37,8 +37,8 @@ export function flattenValueTypeTo<
   R extends Readonly<Record<string, M>>,
 >(
   { definition }: T,
-  v: ValueTypeOf<T>,
-  setter: Setter<ValueTypeOf<T>>,
+  v: ValueOfType<T>,
+  setter: Setter<ValueOfType<T>>,
   mapper: Mapper<M>,
 ): R {
   const r: Record<string, AnyValueType> = {}
@@ -199,7 +199,7 @@ function internalFlattenUnionChildren<M>(
 
 export function getUnionTypeDef<T extends UnionTypeDef>(
   typeDef: T,
-  v: ValueTypeOf<ReadonlyTypeDefOf<{
+  v: ValueOfType<ReadonlyTypeOfType<{
     definition: T,
   }>>,
 ) {

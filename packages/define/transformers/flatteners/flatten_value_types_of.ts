@@ -1,6 +1,6 @@
 import { type Type } from 'types/definitions'
 import { type StrictTypeDef } from 'types/strict_definitions'
-import { type ValueTypeOf } from 'types/value_type_of'
+import { type ValueOfType } from 'types/value_of_type'
 import {
   type AnyValueType,
   flattenValueTypeTo,
@@ -12,7 +12,7 @@ function mapper(_t: StrictTypeDef, v: AnyValueType) {
 
 export function flattenValueTypesOf<T extends Type>(
   typeDef: Type,
-  value: ValueTypeOf<T>,
+  value: ValueOfType<T>,
 ) {
   return flattenValueTypeTo(
     typeDef,

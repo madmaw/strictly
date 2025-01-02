@@ -1,6 +1,6 @@
-import { type ReadonlyTypeDefOf } from 'types/readonly_type_def_of'
+import { type ReadonlyTypeOfType } from 'types/readonly_type_of_type'
 import { type StrictType } from 'types/strict_definitions'
-import { type ValueTypeOf } from 'types/value_type_of'
+import { type ValueOfType } from 'types/value_of_type'
 import {
   type AnyValueType,
   copyTo,
@@ -12,7 +12,7 @@ function identity(v: AnyValueType): AnyValueType {
 
 export function copy<T extends StrictType>(
   t: T,
-  proto: ValueTypeOf<ReadonlyTypeDefOf<T>>,
-): ValueTypeOf<T> {
+  proto: ValueOfType<ReadonlyTypeOfType<T>>,
+): ValueOfType<T> {
   return copyTo(t, proto, identity)
 }

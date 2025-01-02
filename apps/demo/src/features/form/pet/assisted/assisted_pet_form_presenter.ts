@@ -1,3 +1,4 @@
+import { minimumStringLengthValidatorFactory } from '@strictly/define'
 import {
   adapterFromPrototype,
   adapterFromTwoWayConverter,
@@ -7,7 +8,6 @@ import {
   identityAdapter,
   IntegerToStringConverter,
   listAdapter,
-  minimumStringLengthFieldValidatorFactory,
   prototypingFieldValueFactory,
   SelectDiscriminatedUnionConverter,
   SelectLiteralConverter,
@@ -22,7 +22,6 @@ import {
   catBreedType,
   dogBreedType,
   type FlattenedPetTypeDefs,
-  NAME_TOO_SHORT_ERROR,
   NOT_A_BREED_ERROR,
   NOT_A_NUMBER_ERROR,
   type Pet,
@@ -45,9 +44,8 @@ const adapters: SimplifyDeep<FlattenedAdaptersOfFields<
     new TrimmingStringConverter(),
     prototypingFieldValueFactory(''),
   ).validateTo(
-    minimumStringLengthFieldValidatorFactory(
-      NAME_TOO_SHORT_ERROR.minLength,
-      NAME_TOO_SHORT_ERROR,
+    minimumStringLengthValidatorFactory(
+      3,
     ),
   ),
   '$.newTag': identityAdapter(''),

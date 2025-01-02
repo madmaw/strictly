@@ -1,4 +1,4 @@
-export type JsonPathOf<
+export type PathOf<
   Prefix extends string,
   Accessor extends string | number | symbol,
   SegmentOverride extends string | null = null,

@@ -11,9 +11,9 @@ import {
   type Depths,
   type StartingDepth,
 } from './flattened'
-import { type JsonPathOf } from './json_path_of'
+import { type PathOf } from './path_of'
 
-export type JsonPathsOf<
+export type PathsOfType<
   T extends Type,
   SegmentOverride extends string | null = null,
   Prefix extends string = '$',
@@ -57,7 +57,7 @@ type InternalJsonPathsOfListChildren<
   Depth extends number,
 > = InternalJsonPathsOf<
   F['elements'],
-  JsonPathOf<
+  PathOf<
     Prefix,
     number,
     SegmentOverride
@@ -73,7 +73,7 @@ type InternalJsonPathsOfRecordChildren<
   Depth extends number,
 > = InternalJsonPathsOf<
   F['valueTypeDef'],
-  JsonPathOf<
+  PathOf<
     Prefix,
     F['keyPrototype'],
     SegmentOverride
@@ -91,7 +91,7 @@ type InternalJsonPathsOfObjectChildren<
 > = F extends ObjectTypeDef<infer Fields> ? keyof Fields extends string ? {
       [K in keyof Fields]: InternalJsonPathsOf<
         Fields[K],
-        JsonPathOf<
+        PathOf<
           Prefix,
           `${Qualifier}${K}`,
           null

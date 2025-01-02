@@ -4,10 +4,8 @@ import {
   type Meta,
   type StoryObj,
 } from '@storybook/react'
+import { MinimumStringLengthValidationErrorType } from '@strictly/define'
 import { PetForm } from 'features/form/pet/pet_form'
-import {
-  NAME_TOO_SHORT_ERROR,
-} from 'features/form/pet/types'
 
 const Component = PetForm
 
@@ -118,7 +116,11 @@ export const Errors: Story = {
       '$.name': {
         disabled: false,
         value: 'Bad',
-        error: NAME_TOO_SHORT_ERROR,
+        error: {
+          type: MinimumStringLengthValidationErrorType,
+          minimumLength: 8,
+          receivedLength: 3,
+        },
         required: true,
       },
       '$.alive': {

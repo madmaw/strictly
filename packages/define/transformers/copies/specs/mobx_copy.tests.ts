@@ -3,13 +3,13 @@ import {
   numberType,
   object,
 } from 'types/builders'
-import { type ValueTypeOf } from 'types/value_type_of'
+import { type ValueOfType } from 'types/value_of_type'
 
 describe('mobxCopy', function () {
   describe('object', function () {
     describe('optional field', function () {
       const type = object().setOptional('n', numberType)
-      type T = ValueTypeOf<typeof type>
+      type T = ValueOfType<typeof type>
       it('copies unpopulated', function () {
         const v: T = {}
         const c = mobxCopy(type, v)

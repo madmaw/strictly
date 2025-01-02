@@ -14,11 +14,11 @@ import {
   type Depths,
   type StartingDepth,
 } from './flattened'
-import { type JsonPathOf } from './json_path_of'
+import { type PathOf } from './path_of'
 
 // NOTE removing any ternary from this file improves the performance and the depth of data structure we can go to
 
-export type FlattenedTypeDefsOf<
+export type FlattenedTypesOfType<
   T extends Type,
   SegmentOverride extends string | null,
   Path extends string = '$',
@@ -66,7 +66,7 @@ type InternalFlattenedTypeDefsOfListChildren<
 > = InternalFlattenedTypeDefsOf<
   T['elements'],
   SegmentOverride,
-  JsonPathOf<Path, number, SegmentOverride>,
+  PathOf<Path, number, SegmentOverride>,
   '',
   Depth
 >
@@ -79,7 +79,7 @@ type InternalFlattenedTypeDefsOfRecordChildren<
 > = InternalFlattenedTypeDefsOf<
   T['valueTypeDef'],
   SegmentOverride,
-  JsonPathOf<Path, T['keyPrototype'], SegmentOverride>,
+  PathOf<Path, T['keyPrototype'], SegmentOverride>,
   '',
   Depth
 >
@@ -94,7 +94,7 @@ type InternalFlattenedTypeDefsOfObjectChildren<
       readonly [K in keyof Fields]-?: InternalFlattenedTypeDefsOf<
         Exclude<Fields[K], undefined>,
         SegmentOverride,
-        JsonPathOf<Path, `${Qualifier}${K}`, null>,
+        PathOf<Path, `${Qualifier}${K}`, null>,
         '',
         Depth
       >

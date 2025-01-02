@@ -1,18 +1,18 @@
 import {
   booleanType,
-  type FlattenedAccessorsOf,
-  type FlattenedTypeDefsOf,
-  type FlattenedValueTypesOf,
-  type JsonPathsOf,
+  type FlattenedAccessorsOfType,
+  type FlattenedTypesOfType,
+  type FlattenedValuesOfType,
   list,
   literal,
   numberType,
   object,
-  type ReadonlyTypeDefOf,
+  type PathsOfType,
+  type ReadonlyTypeOfType,
   stringType,
   union,
+  type ValueOfType,
   type ValueToTypePathsOf,
-  type ValueTypeOf,
 } from '@strictly/define'
 
 export type DogBreed = 'Alsatian' | 'Pug' | 'other'
@@ -46,20 +46,16 @@ export const petType = object()
 
 export type TagValuePath = `$.tags.${number}`
 
-export type MutablePet = ValueTypeOf<typeof petType>
-export type Pet = ValueTypeOf<ReadonlyTypeDefOf<typeof petType>>
-export type PetValuePaths = JsonPathsOf<typeof petType>
-export type PetTypePaths = JsonPathsOf<typeof petType, '*'>
-export type FlattenedPetTypeDefs = FlattenedTypeDefsOf<typeof petType, '*'>
+export type MutablePet = ValueOfType<typeof petType>
+export type Pet = ValueOfType<ReadonlyTypeOfType<typeof petType>>
+export type PetValuePaths = PathsOfType<typeof petType>
+export type PetTypePaths = PathsOfType<typeof petType, '*'>
+export type FlattenedPetTypeDefs = FlattenedTypesOfType<typeof petType, '*'>
 export type PetValueToTypePaths = ValueToTypePathsOf<typeof petType> & {
   '$.newTag': '$.newTag',
 }
-export type FlattenedPetValueTypes = FlattenedValueTypesOf<typeof petType>
-export type FlattenedPetAccessors = FlattenedAccessorsOf<typeof petType>
+export type FlattenedPetValueTypes = FlattenedValuesOfType<typeof petType>
+export type FlattenedPetAccessors = FlattenedAccessorsOfType<typeof petType>
 
-export const NAME_TOO_SHORT_ERROR = {
-  type: 'name too short',
-  minLength: 2,
-} as const
 export const NOT_A_NUMBER_ERROR = 'not a number'
 export const NOT_A_BREED_ERROR = 'not a breed'

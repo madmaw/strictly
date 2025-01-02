@@ -8,10 +8,10 @@ import {
   union,
 } from '@strictly/define'
 import {
-  type FlattenedListTypeDefsOf,
-} from 'core/mobx/flattened_list_type_defs_of'
+  type FlattenedListTypesOfType,
+} from 'core/mobx/flattened_list_types_of_type'
 
-describe('FlattenedListTypeDefsOf', function () {
+describe('FlattenedListTypesOfType', function () {
   it('filters lists types', function () {
     const listTypeDef = list(numberType)
     const recordTypeDef = record<typeof stringType, string>(stringType)
@@ -24,7 +24,7 @@ describe('FlattenedListTypeDefsOf', function () {
       .set('object', objectTypeDef)
       .set('union', unionTypeDef)
 
-    type F = FlattenedListTypeDefsOf<typeof typeDef>
+    type F = FlattenedListTypesOfType<typeof typeDef>
 
     type E = {
       readonly '$.list': typeof listTypeDef.narrow,

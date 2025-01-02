@@ -11,7 +11,7 @@ import {
   type UnionTypeDef,
 } from './definitions'
 
-export type ValueTypeOf<
+export type ValueOfType<
   T,
   Extra = {},
 > = T extends Type ? InternalValueTypeOf<T['definition'], Extra> : never

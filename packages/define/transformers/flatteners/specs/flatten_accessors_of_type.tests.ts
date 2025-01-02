@@ -1,27 +1,27 @@
 import { expectDefinedAndReturn } from '@strictly/base'
-import { flattenAccessorsOf } from 'transformers/flatteners/flatten_accessors_of'
+import { flattenAccessorsOfType } from 'transformers/flatteners/flatten_accessors_of_type'
 import {
   booleanType,
   list,
   numberType,
   object,
 } from 'types/builders'
-import { type FlattenedAccessorsOf } from 'types/flattened_accessors_of'
-import { type ValueTypeOf } from 'types/value_type_of'
+import { type FlattenedAccessorsOfType } from 'types/flattened_accessors_of_type'
+import { type ValueOfType } from 'types/value_of_type'
 import {
   type Mock,
   vi,
 } from 'vitest'
 
-describe('flattenAccessorsOf', function () {
+describe('flattenAccessorsOfType', function () {
   let setter: Mock
   const builder = object()
     .set('a', list(numberType))
     .set('b', booleanType)
     .narrow
 
-  let flattened: FlattenedAccessorsOf<typeof builder>
-  let value: ValueTypeOf<typeof builder>
+  let flattened: FlattenedAccessorsOfType<typeof builder>
+  let value: ValueOfType<typeof builder>
 
   beforeEach(function () {
     setter = vi.fn()
@@ -33,7 +33,7 @@ describe('flattenAccessorsOf', function () {
       ],
       b: false,
     }
-    flattened = flattenAccessorsOf<typeof builder>(
+    flattened = flattenAccessorsOfType<typeof builder>(
       builder,
       value,
       setter,
@@ -100,7 +100,7 @@ describe('flattenAccessorsOf', function () {
   })
 
   it('sets the top level value', function () {
-    const newValue: ValueTypeOf<typeof builder> = {
+    const newValue: ValueOfType<typeof builder> = {
       a: [
         -1,
         5,

@@ -1,7 +1,7 @@
 import {
   type Type,
 } from './definitions'
-import { type ValueTypeOf } from './value_type_of'
+import { type ValueOfType } from './value_of_type'
 
 const MOBX_OBSERVABLE_KEY = '___mobx_observable'
 
@@ -13,4 +13,4 @@ export type NonMobxObservable<T = {}> = {
   [MOBX_OBSERVABLE_KEY]?: never,
 } & T
 
-export type MobxValueTypeOf<T extends Type> = ValueTypeOf<T, MobxObservable>
+export type MobxValueTypeOf<T extends Type> = ValueOfType<T, MobxObservable>

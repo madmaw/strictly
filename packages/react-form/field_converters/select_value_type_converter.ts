@@ -8,7 +8,7 @@ import {
   type LiteralTypeDef,
   type Type,
   type UnionTypeDef,
-  type ValueTypeOf,
+  type ValueOfType,
   type ValueTypesOfDiscriminatedUnion,
 } from '@strictly/define'
 import {
@@ -20,12 +20,12 @@ import {
 export abstract class AbstractSelectValueTypeConverter<
   T extends Type,
   To extends string | null,
-  Values extends Readonly<Record<NonNullable<To>, ValueTypeOf<T>>>,
+  Values extends Readonly<Record<NonNullable<To>, ValueOfType<T>>>,
   NoSuchValueError,
   ValuePath extends string,
   Context,
 > implements TwoWayFieldConverterWithValueFactory<
-  ValueTypeOf<T>,
+  ValueOfType<T>,
   keyof Values | null,
   NoSuchValueError,
   ValuePath,
@@ -39,8 +39,8 @@ export abstract class AbstractSelectValueTypeConverter<
   ) {
   }
 
-  revert(from: keyof Values | null): FieldConversion<ValueTypeOf<T>, NoSuchValueError> {
-    const prototype: ValueTypeOf<T> | null = from == null ? null : this.values[from]
+  revert(from: keyof Values | null): FieldConversion<ValueOfType<T>, NoSuchValueError> {
+    const prototype: ValueOfType<T> | null = from == null ? null : this.values[from]
     if (prototype == null && this.noSuchValueError != null) {
       return {
         type: FieldConversionResult.Failure,
@@ -57,16 +57,16 @@ export abstract class AbstractSelectValueTypeConverter<
     }
   }
 
-  convert(from: ValueTypeOf<T>): To {
+  convert(from: ValueOfType<T>): To {
     if (from == null) {
       return null!
     }
     return this.doConvert(from)
   }
 
-  protected abstract doConvert(from: ValueTypeOf<T>): To
+  protected abstract doConvert(from: ValueOfType<T>): To
 
-  create(): ValueTypeOf<T> {
+  create(): ValueOfType<T> {
     return this.defaultValueKey != null ? this.values[this.defaultValueKey] : null!
   }
 }
@@ -97,7 +97,7 @@ export class SelectDiscriminatedUnionConverter<
     )
   }
 
-  protected override doConvert(from: ValueTypeOf<Type<U>>) {
+  protected override doConvert(from: ValueOfType<Type<U>>) {
     const {
       definition: {
         discriminator,

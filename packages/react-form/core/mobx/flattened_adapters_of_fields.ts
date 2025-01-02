@@ -1,7 +1,7 @@
 import {
-  type ReadonlyTypeDefOf,
+  type ReadonlyTypeOfType,
   type Type,
-  type ValueTypeOf,
+  type ValueOfType,
 } from '@strictly/define'
 import { type FieldAdapter } from 'core/mobx/field_adapter'
 import {
@@ -30,6 +30,6 @@ type AdapterOfField<
   ValuePath extends string | number | symbol,
 > = ValuePath extends string
   ? F extends Field<infer V, infer E> ? undefined extends T ? FieldAdapter<V, V, E, ValuePath>
-    : FieldAdapter<ValueTypeOf<ReadonlyTypeDefOf<NonNullable<T>>>, V, E, ValuePath>
+    : FieldAdapter<ValueOfType<ReadonlyTypeOfType<NonNullable<T>>>, V, E, ValuePath>
   : never
   : never

@@ -12,10 +12,10 @@ import {
   stringType,
   union,
 } from 'types/builders'
-import { type FlattenedTypeDefsOf } from 'types/flattened_type_defs_of'
+import { type FlattenedTypesOfType } from 'types/flattened_types_of_type'
 import { type ValueToTypePathsOf } from 'types/value_to_type_paths_of'
 
-describe('FlattenedJsonPathsOf', function () {
+describe('ValueToTypePathsOf', function () {
   describe('literal', function () {
     type T = ValueToTypePathsOf<typeof numberType>
 
@@ -83,12 +83,12 @@ describe('FlattenedJsonPathsOf', function () {
     })
 
     it('has the same value paths', function () {
-      type ValuePaths = keyof FlattenedTypeDefsOf<typeof builder, null>
+      type ValuePaths = keyof FlattenedTypesOfType<typeof builder, null>
       expectTypeOf<ValuePaths>().toEqualTypeOf<keyof T>()
     })
 
     it('has the same type paths', function () {
-      type TypePaths = keyof FlattenedTypeDefsOf<typeof builder, '*'>
+      type TypePaths = keyof FlattenedTypesOfType<typeof builder, '*'>
       expectTypeOf<TypePaths>().toEqualTypeOf<ValueOf<T>>()
     })
   })
@@ -128,12 +128,12 @@ describe('FlattenedJsonPathsOf', function () {
       })
 
       it('has the same value paths', function () {
-        type ValuePaths = keyof FlattenedTypeDefsOf<typeof builder, null>
+        type ValuePaths = keyof FlattenedTypesOfType<typeof builder, null>
         expectTypeOf<ValuePaths>().toEqualTypeOf<keyof T>()
       })
 
       it('has the same type paths', function () {
-        type TypePaths = keyof FlattenedTypeDefsOf<typeof builder, '*'>
+        type TypePaths = keyof FlattenedTypesOfType<typeof builder, '*'>
         expectTypeOf<TypePaths>().toEqualTypeOf<ValueOf<T>>()
       })
     })
@@ -169,12 +169,12 @@ describe('FlattenedJsonPathsOf', function () {
     })
 
     it('has the same value paths', function () {
-      type ValuePaths = keyof FlattenedTypeDefsOf<typeof builder, null>
+      type ValuePaths = keyof FlattenedTypesOfType<typeof builder, null>
       expectTypeOf<ValuePaths>().toEqualTypeOf<keyof T>()
     })
 
     it('has the same type paths', function () {
-      type TypePaths = keyof FlattenedTypeDefsOf<typeof builder, '*'>
+      type TypePaths = keyof FlattenedTypesOfType<typeof builder, '*'>
       expectTypeOf<TypePaths>().toEqualTypeOf<ValueOf<T>>()
     })
   })

@@ -13,12 +13,12 @@ import {
   TypeDefType,
 } from 'types/definitions'
 import { type MobxValueTypeOf } from 'types/mobx_value_type_of'
-import { type ReadonlyTypeDefOf } from 'types/readonly_type_def_of'
+import { type ReadonlyTypeOfType } from 'types/readonly_type_of_type'
 import {
   type StrictType,
   type StrictTypeDef,
 } from 'types/strict_definitions'
-import { type ValueTypeOf } from 'types/value_type_of'
+import { type ValueOfType } from 'types/value_of_type'
 import {
   type AnyValueType,
   copyTo,
@@ -75,7 +75,7 @@ function observeValue(
 
 export function mobxCopy<T extends StrictType>(
   t: T,
-  proto: ValueTypeOf<ReadonlyTypeDefOf<T>>,
+  proto: ValueOfType<ReadonlyTypeOfType<T>>,
 ): MobxValueTypeOf<T> {
   return copyTo(t, proto, observeValue)
 }

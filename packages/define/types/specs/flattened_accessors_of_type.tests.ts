@@ -2,13 +2,13 @@ import {
   numberType,
   record,
 } from 'types/builders'
-import { type FlattenedAccessorsOf } from 'types/flattened_accessors_of'
+import { type FlattenedAccessorsOfType } from 'types/flattened_accessors_of_type'
 
-describe('FlattenedAccessorsOf', function () {
+describe('FlattenedAccessorsOfType', function () {
   // note we only test a small example since most of the work is done in flatten
   describe('record', function () {
     const builder = record<typeof numberType, string>(numberType)
-    type V = FlattenedAccessorsOf<typeof builder>
+    type V = FlattenedAccessorsOfType<typeof builder>
 
     let v: {
       readonly $: {

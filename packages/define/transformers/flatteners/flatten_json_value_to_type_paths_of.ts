@@ -2,7 +2,7 @@ import {
   type Type,
   type TypeDef,
 } from 'types/definitions'
-import { type ValueTypeOf } from 'types/value_type_of'
+import { type ValueOfType } from 'types/value_of_type'
 import {
   type AnyValueType,
   flattenValueTypeTo,
@@ -23,7 +23,7 @@ export function flattenJsonValueToTypePathsOf<
   R extends Record<string, string | number | symbol>,
 >(
   t: T,
-  value: ValueTypeOf<T>,
+  value: ValueOfType<T>,
   // TODO
   // : FlattenedJsonValueToTypePathsOf<T>
 ): R {

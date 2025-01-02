@@ -4,9 +4,9 @@ import {
 } from 'types/definitions'
 import {
   type Accessor,
-  type FlattenedAccessorsOf,
-} from 'types/flattened_accessors_of'
-import { type ValueTypeOf } from 'types/value_type_of'
+  type FlattenedAccessorsOfType,
+} from 'types/flattened_accessors_of_type'
+import { type ValueOfType } from 'types/value_of_type'
 import {
   type AnyValueType,
   flattenValueTypeTo,
@@ -24,14 +24,14 @@ function mapAccessor(
   }
 }
 
-export function flattenAccessorsOf<
+export function flattenAccessorsOfType<
   T extends Type,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  R extends Readonly<Record<string, Accessor<any>>> = FlattenedAccessorsOf<T>,
+  R extends Readonly<Record<string, Accessor<any>>> = FlattenedAccessorsOfType<T>,
 >(
   t: T,
-  value: ValueTypeOf<T>,
-  setValue: Setter<ValueTypeOf<T>>,
+  value: ValueOfType<T>,
+  setValue: Setter<ValueOfType<T>>,
 ): R {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return flattenValueTypeTo<T, Accessor<any>, R>(

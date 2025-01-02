@@ -10,7 +10,7 @@ import {
 } from './definitions'
 
 // converts a type def to have nullable values and partial record fields
-export type PartialTypeDefOf<T extends Type> = {
+export type PartialTypeOfType<T extends Type> = {
   readonly typeDef: InternalPartialAndNullableOf<T['definition']>,
 }
 

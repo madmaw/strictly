@@ -12,6 +12,7 @@
     ".vitest/**/*.ts",
     "babel.config.cjs",
     "tsconfig.json"
+
   ],
   "references": [
     {

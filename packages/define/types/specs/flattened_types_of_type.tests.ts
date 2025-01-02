@@ -9,11 +9,11 @@ import {
   union,
 } from 'types/builders'
 import { type TypeDefType } from 'types/definitions'
-import { type FlattenedTypeDefsOf } from 'types/flattened_type_defs_of'
+import { type FlattenedTypesOfType } from 'types/flattened_types_of_type'
 
-describe('FlattenedTypeDefsOf', function () {
+describe('FlattenedTypesOfType', function () {
   describe('literal', function () {
-    type T = FlattenedTypeDefsOf<typeof numberType, null>
+    type T = FlattenedTypesOfType<typeof numberType, null>
 
     let t: {
       readonly $: {
@@ -30,7 +30,7 @@ describe('FlattenedTypeDefsOf', function () {
 
   describe('list', function () {
     const builder = list(numberType)
-    type T = SimplifyDeep<FlattenedTypeDefsOf<typeof builder, '*'>>
+    type T = SimplifyDeep<FlattenedTypesOfType<typeof builder, '*'>>
 
     let t: {
       readonly $: SimplifyDeep<typeof builder.narrow>,
@@ -48,7 +48,7 @@ describe('FlattenedTypeDefsOf', function () {
 
   describe('record', function () {
     const builder = record<typeof numberType, 'a' | 'b'>(numberType)
-    type T = SimplifyDeep<FlattenedTypeDefsOf<typeof builder, '*'>>
+    type T = SimplifyDeep<FlattenedTypesOfType<typeof builder, '*'>>
 
     let t: {
       readonly $: SimplifyDeep<typeof builder.narrow>,
@@ -71,7 +71,7 @@ describe('FlattenedTypeDefsOf', function () {
         .setOptional('b', stringType)
         .setReadonly('c', booleanType)
         .setReadonlyOptional('d', stringType)
-      type T = SimplifyDeep<FlattenedTypeDefsOf<typeof builder, null>>
+      type T = SimplifyDeep<FlattenedTypesOfType<typeof builder, null>>
 
       let t: {
         readonly $: SimplifyDeep<typeof builder.narrow>,
@@ -113,7 +113,7 @@ describe('union', function () {
       const builder = union()
         .add('x', object().set('a', booleanType))
         .add('y', object().set('b', numberType))
-      type T = SimplifyDeep<FlattenedTypeDefsOf<typeof builder, null>>
+      type T = SimplifyDeep<FlattenedTypesOfType<typeof builder, null>>
 
       let t: {
         readonly $: SimplifyDeep<typeof builder.narrow>,
@@ -140,7 +140,7 @@ describe('union', function () {
       const builder = union('x')
         .add('1', object().set('a', booleanType))
         .add('2', object().set('a', numberType))
-      type T = SimplifyDeep<FlattenedTypeDefsOf<typeof builder, null>>
+      type T = SimplifyDeep<FlattenedTypesOfType<typeof builder, null>>
 
       let t: {
         readonly $: SimplifyDeep<typeof builder.narrow>,
@@ -176,7 +176,7 @@ describe('union', function () {
             .add('r', object().set('b', numberType))
             .add('s', object().set('c', stringType)),
         )
-      type T = SimplifyDeep<FlattenedTypeDefsOf<typeof builder, null>>
+      type T = SimplifyDeep<FlattenedTypesOfType<typeof builder, null>>
       let t: {
         readonly $: SimplifyDeep<typeof builder.narrow>,
         readonly ['$.1:p:a']: {

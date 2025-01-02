@@ -1,8 +1,8 @@
 import {
   copy,
-  type ReadonlyTypeDefOf,
+  type ReadonlyTypeOfType,
   type Type,
-  type ValueTypeOf,
+  type ValueOfType,
 } from '@strictly/define'
 import {
   type FieldConversion,
@@ -16,29 +16,29 @@ export class NullableToBooleanConverter<
   ValuePath extends string,
   Context,
 > implements TwoWayFieldConverterWithValueFactory<
-  ValueTypeOf<ReadonlyTypeDefOf<T>> | null,
+  ValueOfType<ReadonlyTypeOfType<T>> | null,
   boolean,
   E,
   ValuePath,
   Context
 > {
-  readonly defaultValue: ValueTypeOf<ReadonlyTypeDefOf<T>> | null
+  readonly defaultValue: ValueOfType<ReadonlyTypeOfType<T>> | null
 
   constructor(
     private readonly typeDef: T,
-    private readonly prototype: ValueTypeOf<ReadonlyTypeDefOf<T>>,
+    private readonly prototype: ValueOfType<ReadonlyTypeOfType<T>>,
     defaultToNull = true,
   ) {
     this.defaultValue = defaultToNull ? null : prototype
   }
 
-  convert(from: ValueTypeOf<ReadonlyTypeDefOf<T>> | null): boolean {
+  convert(from: ValueOfType<ReadonlyTypeOfType<T>> | null): boolean {
     return from != null
   }
 
-  revert(from: boolean): FieldConversion<ValueTypeOf<ReadonlyTypeDefOf<T>> | null, E> {
+  revert(from: boolean): FieldConversion<ValueOfType<ReadonlyTypeOfType<T>> | null, E> {
     if (from) {
-      const value: ValueTypeOf<T> = copy(this.typeDef, this.prototype)
+      const value: ValueOfType<T> = copy(this.typeDef, this.prototype)
       return {
         type: FieldConversionResult.Success,
         value,
@@ -50,7 +50,7 @@ export class NullableToBooleanConverter<
     }
   }
 
-  create(): ValueTypeOf<ReadonlyTypeDefOf<T>> | null {
+  create(): ValueOfType<ReadonlyTypeOfType<T>> | null {
     return this.defaultValue
   }
 }
