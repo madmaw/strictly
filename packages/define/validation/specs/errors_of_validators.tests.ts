@@ -1,9 +1,9 @@
-import { type ValidationsOfValidators } from 'validation/validations_of_validators'
+import { type ErrorsOfValidators } from 'validation/errors_of_validators'
 import { type Validator } from 'validation/validator'
 
-describe('ValidationsOfValidators', function () {
+describe('ErrorsOfValidators', function () {
   describe('simple', function () {
-    type T = ValidationsOfValidators<{
+    type T = ErrorsOfValidators<{
       x: Validator<string, 'a'>,
       y: Validator<number, 'b'>,
     }>

@@ -31,7 +31,7 @@ export type Mapper<R> = (
   valuePath: string,
 ) => R
 
-export function flattenValueTypeTo<
+export function flattenValueTo<
   T extends StrictType,
   M,
   R extends Readonly<Record<string, M>>,

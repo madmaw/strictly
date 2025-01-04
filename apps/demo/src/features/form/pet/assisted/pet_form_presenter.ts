@@ -1,4 +1,3 @@
-import { minimumStringLengthValidatorFactory } from '@strictly/define'
 import {
   adapterFromPrototype,
   adapterFromTwoWayConverter,
@@ -14,6 +13,7 @@ import {
   SelectStringConverter,
   TrimmingStringConverter,
 } from '@strictly/react-form'
+import { mergeAdaptersWithValidators } from '@strictly/react-form/core/mobx/merge_field_adapters_with_validators'
 import { type PetFormFields } from 'features/form/pet/pet_form'
 import { type PetSpeciesCatFormFields } from 'features/form/pet/pet_species_cat_form'
 import { type PetSpeciesDogFormFields } from 'features/form/pet/pet_species_dog_form'
@@ -21,11 +21,12 @@ import { type PetSpeciesFormFields } from 'features/form/pet/pet_species_form'
 import {
   catBreedType,
   dogBreedType,
-  type FlattenedPetTypeDefs,
+  type FlattenedPetTypes,
   NOT_A_BREED_ERROR,
   NOT_A_NUMBER_ERROR,
   type Pet,
   petType,
+  petValidators,
   type PetValueToTypePaths,
   speciesType,
   type TagValuePath,
@@ -34,19 +35,17 @@ import { type SimplifyDeep } from 'type-fest'
 
 type AllFields = PetFormFields & PetSpeciesFormFields & PetSpeciesCatFormFields & PetSpeciesDogFormFields
 
-const adapters: SimplifyDeep<FlattenedAdaptersOfFields<
-  PetValueToTypePaths,
-  FlattenedPetTypeDefs,
-  AllFields
->> = {
+const adapters: SimplifyDeep<
+  FlattenedAdaptersOfFields<
+    PetValueToTypePaths,
+    FlattenedPetTypes,
+    AllFields
+  >
+> = {
   '$.alive': identityAdapter(false),
   '$.name': adapterFromTwoWayConverter(
     new TrimmingStringConverter(),
     prototypingFieldValueFactory(''),
-  ).validateTo(
-    minimumStringLengthValidatorFactory(
-      3,
-    ),
   ),
   '$.newTag': identityAdapter(''),
   '$.species': adapterFromTwoWayConverter(
@@ -106,19 +105,24 @@ const adapters: SimplifyDeep<FlattenedAdaptersOfFields<
   '$.tags.*': identityAdapter(''),
 }
 
-export class AssistedPetFormPresenter extends FormPresenter<
+const validatedAdapters = mergeAdaptersWithValidators(
+  adapters,
+  petValidators,
+)
+
+export class PetFormPresenter extends FormPresenter<
   typeof petType,
   PetValueToTypePaths,
-  typeof adapters
+  typeof validatedAdapters
 > {
   constructor() {
     super(
       petType,
-      adapters,
+      validatedAdapters,
     )
   }
 
-  removeTag(model: AssistedPetFormModel, valuePath: TagValuePath) {
+  removeTag(model: PetFormModel, valuePath: TagValuePath) {
     this.removeListItem(model, valuePath)
   }
 }
@@ -126,9 +130,9 @@ export class AssistedPetFormPresenter extends FormPresenter<
 // should be identical to `PetFormFields`
 // export type AssistedPetFormFields = FormFieldsOfPresenter<AssistedPetFormPresenter>
 
-export class AssistedPetFormModel extends FormModel<
+export class PetFormModel extends FormModel<
   typeof petType,
   PetValueToTypePaths,
-  typeof adapters
+  typeof validatedAdapters
 > {
 }

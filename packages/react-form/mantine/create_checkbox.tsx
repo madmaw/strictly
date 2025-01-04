@@ -3,7 +3,7 @@ import {
 } from '@mantine/core'
 import { type ComponentType } from 'react'
 import { type BooleanFieldsOfFields } from 'types/boolean_fields_of_fields'
-import { type ErrorTypeOfField } from 'types/error_type_of_field'
+import { type ErrorOfField } from 'types/error_of_field'
 import { type Fields } from 'types/field'
 import { createUnsafePartialObserverComponent } from 'util/partial'
 import {
@@ -36,7 +36,7 @@ export function createCheckbox<
   this: MantineForm<F>,
   valuePath: K,
   Checkbox: ComponentType<Props>,
-): MantineFieldComponent<SuppliedCheckboxProps, Props, ErrorTypeOfField<F[K]>> {
+): MantineFieldComponent<SuppliedCheckboxProps, Props, ErrorOfField<F[K]>> {
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     this.onFieldValueChange?.(valuePath, e.target.checked)
   }
@@ -57,7 +57,7 @@ export function createCheckbox<
   const propSource = ({
     ErrorRenderer = DefaultErrorRenderer,
   }: {
-    ErrorRenderer?: ErrorRenderer<ErrorTypeOfField<F[K]>>,
+    ErrorRenderer?: ErrorRenderer<ErrorOfField<F[K]>>,
   }) => {
     const {
       disabled,

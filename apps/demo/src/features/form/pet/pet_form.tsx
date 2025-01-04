@@ -19,8 +19,8 @@ import {
   MinimumStringLengthValidationErrorType,
 } from '@strictly/define'
 import {
+  type ErrorOfField,
   type ErrorRendererProps,
-  type ErrorTypeOfField,
   type Field,
   type FlattenedFormFieldsOf,
   type FormProps,
@@ -87,7 +87,7 @@ export type PetFormProps = FormProps<PetFormFields> & {
   onRemoveTag: (valuePath: TagValuePath) => void,
 }
 
-function NameInputErrorRenderer({ error }: ErrorRendererProps<ErrorTypeOfField<PetFormFields['$.name']>>) {
+function NameInputErrorRenderer({ error }: ErrorRendererProps<ErrorOfField<PetFormFields['$.name']>>) {
   switch (error.type) {
     case MinimumStringLengthValidationErrorType:
       return t({

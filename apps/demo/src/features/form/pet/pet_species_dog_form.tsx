@@ -14,7 +14,7 @@ import {
   type FormProps,
   useMantineForm,
 } from '@strictly/react-form'
-import { type ErrorTypeOfField } from '@strictly/react-form'
+import { type ErrorOfField } from '@strictly/react-form'
 import {
   type DogBreed,
   NOT_A_BREED_ERROR,
@@ -48,7 +48,7 @@ export function BarksLabel() {
 
 function BreedInputErrorRenderer({
   error,
-}: ErrorRendererProps<ErrorTypeOfField<PetSpeciesDogFormFields['$.species.dog:breed']>>) {
+}: ErrorRendererProps<ErrorOfField<PetSpeciesDogFormFields['$.species.dog:breed']>>) {
   switch (error) {
     case NOT_A_BREED_ERROR:
       return t({
@@ -63,7 +63,7 @@ function BreedInputErrorRenderer({
 function BarksInputErrorRenderer({
   error,
 }: {
-  error: ErrorTypeOfField<PetSpeciesDogFormFields['$.species.dog:barks']>,
+  error: ErrorOfField<PetSpeciesDogFormFields['$.species.dog:barks']>,
 }) {
   switch (error) {
     case NOT_A_NUMBER_ERROR:

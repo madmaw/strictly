@@ -1,4 +1,4 @@
-import { flattenValidationsOfType } from 'transformers/flatteners/flatten_validations_of_type'
+import { flattenValidationErrorsOfType } from 'transformers/flatteners/flatten_validation_errors_of_type'
 import { literal } from 'types/builders'
 import { type ValueToTypePathsOf } from 'types/value_to_type_paths_of'
 
@@ -10,7 +10,7 @@ describe('flattenValidationsOfType', function () {
         $: () => 'error',
       }
 
-      const errors = flattenValidationsOfType<
+      const errors = flattenValidationErrorsOfType<
         typeof type,
         ValueToTypePathsOf<typeof type>,
         typeof validators
@@ -30,7 +30,7 @@ describe('flattenValidationsOfType', function () {
         $: () => null,
       }
 
-      const errors = flattenValidationsOfType<
+      const errors = flattenValidationErrorsOfType<
         typeof type,
         ValueToTypePathsOf<typeof type>,
         typeof validators

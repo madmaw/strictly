@@ -1,20 +1,20 @@
 import {
   type booleanType,
   type numberType,
+  type Validator,
 } from '@strictly/define'
-import { type FieldAdapter } from 'core/mobx/field_adapter'
-import { type FlattenedAdaptersOfFields } from 'core/mobx/flattened_adapters_of_fields'
 import { type Field } from 'types/field'
+import { type FlattenedValidatorsOfFields } from 'types/flattened_validators_of_fields'
 
 const error = Symbol()
 type Error = typeof error
 
-describe('FlattenedAdaptersOfFields', function () {
+describe('FlattenedValidatorsOfFields', function () {
   it('maps the converter types', function () {
     type Fields = {
       a: Field<string, Error>,
     }
-    type T = FlattenedAdaptersOfFields<
+    type T = FlattenedValidatorsOfFields<
       {
         a: 'b',
       },
@@ -24,7 +24,7 @@ describe('FlattenedAdaptersOfFields', function () {
       Fields
     >
     expectTypeOf<T>().toEqualTypeOf<{
-      readonly b: FieldAdapter<number, string, Error, 'a'>,
+      readonly b: Validator<number, Error, 'a'>,
     }>()
   })
 
@@ -32,7 +32,7 @@ describe('FlattenedAdaptersOfFields', function () {
     type FormFields = {
       a: Field<string, Error>,
     }
-    type T = FlattenedAdaptersOfFields<
+    type T = FlattenedValidatorsOfFields<
       {
         a: 'b',
         c: 'd',
@@ -44,7 +44,7 @@ describe('FlattenedAdaptersOfFields', function () {
       FormFields
     >
     expectTypeOf<T>().toEqualTypeOf<{
-      readonly b: FieldAdapter<number, string, Error, 'a'>,
+      readonly b: Validator<number, Error, 'a'>,
     }>()
   })
 
@@ -53,7 +53,7 @@ describe('FlattenedAdaptersOfFields', function () {
       a: Field<string, Error>,
       c: Field<boolean, never>,
     }
-    type T = FlattenedAdaptersOfFields<
+    type T = FlattenedValidatorsOfFields<
       {
         a: 'b',
         c: 'd',
@@ -65,17 +65,17 @@ describe('FlattenedAdaptersOfFields', function () {
       FormFields
     >
     expectTypeOf<T>().toEqualTypeOf<{
-      readonly b: FieldAdapter<number, string, Error, 'a'>,
-      readonly d: FieldAdapter<boolean, boolean, never, 'c'>,
+      readonly b: Validator<number, Error, 'a'>,
+      readonly d: Validator<boolean, never, 'c'>,
     }>()
   })
 
   it('allows synthesized fields', function () {
     type FormFields = {
       a: Field<string, Error>,
-      c: Field<boolean, never>,
+      c: Field<number, never>,
     }
-    type T = FlattenedAdaptersOfFields<
+    type T = FlattenedValidatorsOfFields<
       {
         a: 'b',
         c: 'd',
@@ -86,8 +86,8 @@ describe('FlattenedAdaptersOfFields', function () {
       FormFields
     >
     expectTypeOf<T>().toEqualTypeOf<{
-      readonly b: FieldAdapter<number, string, Error, 'a'>,
-      readonly d: FieldAdapter<boolean, boolean, never, 'c'>,
+      readonly b: Validator<number, Error, 'a'>,
+      readonly d: Validator<number, never, 'c'>,
     }>()
   })
 })

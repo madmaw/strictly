@@ -4,7 +4,8 @@ export enum FieldConversionResult {
   Success = 0,
   Failure = 1,
 }
-export type FieldConversion<V, E> = {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type FieldConversion<V = any, E = any> = {
   type: FieldConversionResult.Success,
   value: V,
 } | {

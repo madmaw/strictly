@@ -1,4 +1,4 @@
-import { flattenTypeDefTo } from 'transformers/flatteners/flatten_type_def_to'
+import { flattenTypeTo } from 'transformers/flatteners/flatten_type_to'
 import {
   booleanType,
   list,
@@ -29,7 +29,7 @@ describe('flattenTypeDefTo', function () {
 
   describe('literal', function () {
     beforeEach(function () {
-      flattened = flattenTypeDefTo(numberType, toTypeDefType)
+      flattened = flattenTypeTo(numberType, toTypeDefType)
     })
 
     it('equals expected type', function () {
@@ -46,7 +46,7 @@ describe('flattenTypeDefTo', function () {
   describe('list', function () {
     const type = list(numberType)
     beforeEach(function () {
-      flattened = flattenTypeDefTo(type, toTypeDefType)
+      flattened = flattenTypeTo(type, toTypeDefType)
     })
 
     it('equals expected type', function () {
@@ -64,7 +64,7 @@ describe('flattenTypeDefTo', function () {
   describe('record', function () {
     const type = record<typeof numberType, 'a' | 'b'>(numberType)
     beforeEach(function () {
-      flattened = flattenTypeDefTo(type, toTypeDefType)
+      flattened = flattenTypeTo(type, toTypeDefType)
     })
 
     it('equals expected type', function () {
@@ -84,7 +84,7 @@ describe('flattenTypeDefTo', function () {
   describe('object', function () {
     const type = object().set('a', numberType).set('b', list(booleanType))
     beforeEach(function () {
-      flattened = flattenTypeDefTo(type, toTypeDefType)
+      flattened = flattenTypeTo(type, toTypeDefType)
     })
 
     it('equals expected type', function () {
@@ -108,7 +108,7 @@ describe('flattenTypeDefTo', function () {
         .add('b', booleanType)
         .add('c', numberType)
       beforeEach(function () {
-        flattened = flattenTypeDefTo(type, toTypeDefType)
+        flattened = flattenTypeTo(type, toTypeDefType)
       })
 
       it('equals expected type', function () {
@@ -127,7 +127,7 @@ describe('flattenTypeDefTo', function () {
         .add('a', object().set('a', booleanType))
         .add('b', object().set('b', numberType))
       beforeEach(function () {
-        flattened = flattenTypeDefTo(type, toTypeDefType)
+        flattened = flattenTypeTo(type, toTypeDefType)
       })
 
       it('equals expected type', function () {

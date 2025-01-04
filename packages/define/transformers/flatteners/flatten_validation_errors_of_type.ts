@@ -1,8 +1,8 @@
 import { type AnyValueType } from 'transformers/copies/copy_to'
 import {
-  flattenValueTypeTo,
+  flattenValueTo,
   type Setter,
-} from 'transformers/flatteners/flatten_value_type_to'
+} from 'transformers/flatteners/flatten_value_to'
 import {
   type ReadonlyDeep,
   type ValueOf,
@@ -15,12 +15,12 @@ import { type StrictTypeDef } from 'types/strict_definitions'
 import { type ValueOfType } from 'types/value_of_type'
 import { type Validator } from 'validation/validator'
 
-type ValidationOfValidator<V extends Validator> = V extends Validator<infer _V, infer E> ? E | null : never
+type ErrorOfValidator<V extends Validator> = V extends Validator<infer _V, infer E> ? E | null : never
 
-export type ValidationsOfFlattenedValidators<
+export type ErrorsOfFlattenedValidators<
   TypePathsToValidators extends Readonly<Record<string, Validator>>,
 > = {
-  [K in keyof TypePathsToValidators]: ValidationOfValidator<TypePathsToValidators[K]>
+  [K in keyof TypePathsToValidators]: ErrorOfValidator<TypePathsToValidators[K]>
 }
 
 export type FlattenedTypePathsToValidatorsOf<
@@ -53,7 +53,7 @@ export type FlattenedValidatorsOfType<
   [K in keyof Flattened]: Validator
 }
 
-export function flattenValidationsOfType<
+export function flattenValidationErrorsOfType<
   T extends Type,
   ValueToTypePaths extends Readonly<Record<string, string>>,
   TypePathsToValidators extends FlattenedTypePathsToValidatorsOf<
@@ -69,8 +69,8 @@ export function flattenValidationsOfType<
   type: T,
   value: ValueOfType<T>,
   validators: TypePathsToValidators,
-): ValidationsOfFlattenedValidators<ValuePathsToValidators> {
-  return flattenValueTypeTo(
+): ErrorsOfFlattenedValidators<ValuePathsToValidators> {
+  return flattenValueTo(
     type,
     value,
     () => {},

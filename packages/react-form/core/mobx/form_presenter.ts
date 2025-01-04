@@ -13,8 +13,8 @@ import {
   type AnyValueType,
   flattenAccessorsOfType,
   type FlattenedValuesOfType,
-  flattenTypeDefsOf,
-  flattenValueTypeTo,
+  flattenTypesOfType,
+  flattenValueTo,
   jsonPathPop,
   mobxCopy,
   type MobxValueTypeOf,
@@ -543,16 +543,16 @@ export class FormModel<
   private readonly flattenedTypeDefs: Readonly<Record<string, Type>>
 
   constructor(
-    private readonly typeDef: T,
+    private readonly type: T,
     value: ValueOfType<ReadonlyTypeOfType<T>>,
     private readonly adapters: TypePathsToAdapters,
   ) {
-    this.value = mobxCopy(typeDef, value)
-    this.flattenedTypeDefs = flattenTypeDefsOf(typeDef)
+    this.value = mobxCopy(type, value)
+    this.flattenedTypeDefs = flattenTypesOfType(type)
     // pre-populate field overrides for consistent behavior when default information is overwritten
     // then returned to
-    this.fieldOverrides = flattenValueTypeTo(
-      typeDef,
+    this.fieldOverrides = flattenValueTo(
+      type,
       this.value,
       () => {},
       (_t: StrictTypeDef, value: AnyValueType, _setter, typePath, valuePath): FieldOverride | undefined => {
@@ -599,8 +599,8 @@ export class FormModel<
 
   @computed
   private get knownFields(): SimplifyDeep<FlattenedConvertedFieldsOf<ValuePathsToAdapters>> {
-    return flattenValueTypeTo(
-      this.typeDef,
+    return flattenValueTo(
+      this.type,
       this.value,
       () => {},
       // TODO swap these to valuePath, typePath in flatten
@@ -620,7 +620,7 @@ export class FormModel<
     try {
       // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
       typePath = valuePathToTypePath<ValueToTypePaths, keyof ValueToTypePaths>(
-        this.typeDef,
+        this.type,
         // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
         valuePath as keyof ValueToTypePaths,
         true,
@@ -686,10 +686,10 @@ export class FormModel<
   // should only be referenced internally, so loosely typed
   get accessors(): Readonly<Record<string, Accessor>> {
     return flattenAccessorsOfType<T, Readonly<Record<string, Accessor>>>(
-      this.typeDef,
+      this.type,
       this.value,
       (value: ValueOfType<T>): void => {
-        this.value = mobxCopy(this.typeDef, value)
+        this.value = mobxCopy(this.type, value)
       },
     )
   }

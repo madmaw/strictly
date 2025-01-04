@@ -8,7 +8,7 @@ import {
   MantineProvider,
 } from '@mantine/core'
 import { assertExistsAndReturn } from '@strictly/base'
-import { AssistedPetEditor } from 'features/form/pet/assisted/assisted_pet_editor'
+import { PetEditor } from 'features/form/pet/assisted/pet_editor'
 import { type Pet } from 'features/form/pet/types'
 import { messages as en } from 'locales/en'
 import { StrictMode } from 'react'
@@ -54,7 +54,7 @@ window.onload = function () {
         <MantineProvider theme={theme}>
           <I18nProvider i18n={i18n}>
             <Box m='md'>
-              <AssistedPetEditor
+              <PetEditor
                 onValueChange={onValueChange}
                 value={value}
               />

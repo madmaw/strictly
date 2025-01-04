@@ -5,9 +5,9 @@ import {
 import { type ValueOfType } from 'types/value_of_type'
 import {
   type AnyValueType,
-  flattenValueTypeTo,
+  flattenValueTo,
   type Setter,
-} from './flatten_value_type_to'
+} from './flatten_value_to'
 
 function mapTypePaths(
   _t: TypeDef,
@@ -28,7 +28,7 @@ export function flattenJsonValueToTypePathsOf<
   // : FlattenedJsonValueToTypePathsOf<T>
 ): R {
   // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-  return flattenValueTypeTo(
+  return flattenValueTo(
     t,
     value,
     function () {

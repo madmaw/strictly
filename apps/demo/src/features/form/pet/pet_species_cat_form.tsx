@@ -8,7 +8,7 @@ import {
   UnreachableError,
 } from '@strictly/base'
 import {
-  type ErrorTypeOfField,
+  type ErrorOfField,
   type Field,
   type FlattenedFormFieldsOf,
   type FormProps,
@@ -66,7 +66,7 @@ export function MeowFrequencyHigh() {
 
 function BreedInputErrorRenderer({
   error,
-}: ErrorRendererProps<ErrorTypeOfField<PetSpeciesCatFormFields['$.species.cat:breed']>>) {
+}: ErrorRendererProps<ErrorOfField<PetSpeciesCatFormFields['$.species.cat:breed']>>) {
   switch (error) {
     case NOT_A_BREED_ERROR:
       return t({

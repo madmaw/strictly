@@ -1,9 +1,9 @@
 import {
   type AnyValueType,
-  flattenValueTypeTo,
+  flattenValueTo,
   type Mapper,
   type Setter,
-} from 'transformers/flatteners/flatten_value_type_to'
+} from 'transformers/flatteners/flatten_value_to'
 import { type SimplifyDeep } from 'type-fest'
 import {
   booleanType,
@@ -34,7 +34,7 @@ type FlattenedToStrings<R extends Record<string, Type>> = {
   [K in keyof R]: string
 }
 
-describe('flattenValueTypeTo', function () {
+describe('flattenValueTo', function () {
   let toStringMapper: Mock<Mapper<string>>
   let setMapper: Mock<Mapper<(v: AnyValueType) => void>>
   let setter: Mock<(v: AnyValueType) => void>
@@ -54,7 +54,7 @@ describe('flattenValueTypeTo', function () {
     describe('toString', function () {
       let flattened: FlattenedToStrings<F>
       beforeEach(function () {
-        flattened = flattenValueTypeTo(
+        flattened = flattenValueTo(
           type,
           1,
           setter,
@@ -76,7 +76,7 @@ describe('flattenValueTypeTo', function () {
     describe('setter', function () {
       let flattened: FlattenedSetters<F>
       beforeEach(function () {
-        flattened = flattenValueTypeTo(
+        flattened = flattenValueTo(
           type,
           1,
           setter,
@@ -108,7 +108,7 @@ describe('flattenValueTypeTo', function () {
     describe('toString', function () {
       let flattened: FlattenedToStrings<F>
       beforeEach(function () {
-        flattened = flattenValueTypeTo(
+        flattened = flattenValueTo(
           typeDef,
           l,
           setter,
@@ -133,7 +133,7 @@ describe('flattenValueTypeTo', function () {
     describe('setter', function () {
       let flattened: FlattenedSetters<F>
       beforeEach(function () {
-        flattened = flattenValueTypeTo(
+        flattened = flattenValueTo(
           typeDef,
           l,
           setter,
@@ -167,7 +167,7 @@ describe('flattenValueTypeTo', function () {
     describe('toString', function () {
       let flattened: FlattenedToStrings<F>
       beforeEach(function () {
-        flattened = flattenValueTypeTo(
+        flattened = flattenValueTo(
           typeDef,
           m,
           setter,
@@ -187,7 +187,7 @@ describe('flattenValueTypeTo', function () {
     describe('setter', function () {
       let flattened: FlattenedSetters<F>
       beforeEach(function () {
-        flattened = flattenValueTypeTo(
+        flattened = flattenValueTo(
           typeDef,
           m,
           setter,
@@ -222,7 +222,7 @@ describe('flattenValueTypeTo', function () {
     describe('toString', function () {
       let flattened: FlattenedToStrings<F>
       beforeEach(function () {
-        flattened = flattenValueTypeTo(
+        flattened = flattenValueTo(
           type,
           s,
           setter,
@@ -242,7 +242,7 @@ describe('flattenValueTypeTo', function () {
     describe('setter', function () {
       let flattened: FlattenedSetters<F>
       beforeEach(function () {
-        flattened = flattenValueTypeTo(
+        flattened = flattenValueTo(
           type,
           s,
           setter,
@@ -285,7 +285,7 @@ describe('flattenValueTypeTo', function () {
       describe('toString', function () {
         let flattened: FlattenedToStrings<F>
         beforeEach(function () {
-          flattened = flattenValueTypeTo(
+          flattened = flattenValueTo(
             typeDef,
             u,
             setter,
@@ -305,7 +305,7 @@ describe('flattenValueTypeTo', function () {
         type G = SimplifyDeep<FlattenedSetters<F>>
         let flattened: G
         beforeEach(function () {
-          flattened = flattenValueTypeTo(
+          flattened = flattenValueTo(
             typeDef,
             u,
             setter,
@@ -347,7 +347,7 @@ describe('flattenValueTypeTo', function () {
       describe('toString', function () {
         let flattened: FlattenedToStrings<F>
         beforeEach(function () {
-          flattened = flattenValueTypeTo(
+          flattened = flattenValueTo(
             type,
             u,
             setter,
@@ -365,7 +365,7 @@ describe('flattenValueTypeTo', function () {
       describe('setter', function () {
         let flattened: FlattenedSetters<F>
         beforeEach(function () {
-          flattened = flattenValueTypeTo(
+          flattened = flattenValueTo(
             type,
             u,
             setter,
@@ -401,7 +401,7 @@ describe('flattenValueTypeTo', function () {
       describe('toString', function () {
         let flattened: FlattenedToStrings<F>
         beforeEach(function () {
-          flattened = flattenValueTypeTo(
+          flattened = flattenValueTo(
             type,
             u,
             setter,
@@ -422,7 +422,7 @@ describe('flattenValueTypeTo', function () {
       describe('setter', function () {
         let flattened: FlattenedSetters<F>
         beforeEach(function () {
-          flattened = flattenValueTypeTo(
+          flattened = flattenValueTo(
             type,
             u,
             setter,

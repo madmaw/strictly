@@ -2,7 +2,7 @@ import {
   type RadioGroupProps,
 } from '@mantine/core'
 import { type ComponentType } from 'react'
-import { type ErrorTypeOfField } from 'types/error_type_of_field'
+import { type ErrorOfField } from 'types/error_of_field'
 import {
   type Fields,
 } from 'types/field'
@@ -32,7 +32,7 @@ export function createRadioGroup<
   this: MantineForm<F>,
   valuePath: K,
   RadioGroup: ComponentType<Props>,
-): MantineFieldComponent<SuppliedRadioGroupProps, Props, ErrorTypeOfField<F[K]>> {
+): MantineFieldComponent<SuppliedRadioGroupProps, Props, ErrorOfField<F[K]>> {
   const onChange = (value: string) => {
     this.onFieldValueChange?.(valuePath, value)
   }

@@ -7,7 +7,7 @@ import {
   makeObservable,
   observable,
 } from 'mobx'
-import { getUnionTypeDef } from 'transformers/flatteners/flatten_value_type_to'
+import { getUnionTypeDef } from 'transformers/flatteners/flatten_value_to'
 import {
   type ObjectFieldKey,
   TypeDefType,

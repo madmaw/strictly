@@ -1,4 +1,4 @@
-import { flattenTypeDefsOf } from 'transformers/flatteners/flatten_type_defs_of'
+import { flattenTypesOfType } from 'transformers/flatteners/flatten_types_of_type'
 import {
   booleanType,
   list,
@@ -12,7 +12,7 @@ describe('flattenTypeDefsOf', function () {
     const structTypeDef = object()
       .set('a', listTypeDef)
       .set('b', booleanType)
-    const flattened = flattenTypeDefsOf(
+    const flattened = flattenTypesOfType(
       structTypeDef,
     )
 

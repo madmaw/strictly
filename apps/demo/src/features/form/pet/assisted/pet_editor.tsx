@@ -19,13 +19,13 @@ import {
   useMemo,
 } from 'react'
 import {
-  AssistedPetFormPresenter,
-} from './assisted_pet_form_presenter'
+  PetFormPresenter,
+} from './pet_form_presenter'
 
-const presenter = new AssistedPetFormPresenter()
+const presenter = new PetFormPresenter()
 
 // TODO feels like we should be able to make much of this implementation generic
-export function AssistedPetEditor({
+export function PetEditor({
   value,
   onValueChange,
 }: EditorProps<Pet>) {

@@ -1,4 +1,4 @@
-export type Just<T> = [T]
+export type Just<T> = readonly [T]
 
 export type Nothing = null
 

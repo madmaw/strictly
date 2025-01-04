@@ -29,7 +29,7 @@ import {
 } from 'react'
 import { type AllFieldsOfFields } from 'types/all_fields_of_fields'
 import { type BooleanFieldsOfFields } from 'types/boolean_fields_of_fields'
-import { type ErrorTypeOfField } from 'types/error_type_of_field'
+import { type ErrorOfField } from 'types/error_of_field'
 import {
   type Fields,
 } from 'types/field'
@@ -206,13 +206,13 @@ class MantineFormImpl<
     valuePath: K,
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     TextInput: ComponentType<P> = TextInputImpl as ComponentType<P>,
-  ): MantineFieldComponent<SuppliedTextInputProps, P, ErrorTypeOfField<F[K]>> {
+  ): MantineFieldComponent<SuppliedTextInputProps, P, ErrorOfField<F[K]>> {
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     return this.textInputCache.retrieveOrCreate(
       valuePath,
       // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
       TextInput as ComponentType<SuppliedTextInputProps>,
-    ) as MantineFieldComponent<SuppliedTextInputProps, P, ErrorTypeOfField<F[K]>>
+    ) as MantineFieldComponent<SuppliedTextInputProps, P, ErrorOfField<F[K]>>
   }
 
   valueInput<
@@ -222,13 +222,13 @@ class MantineFormImpl<
   >(
     valuePath: K,
     ValueInput: ComponentType<P>,
-  ): MantineFieldComponent<SuppliedValueInputProps<ValueTypeOfField<F[K]>>, P, ErrorTypeOfField<F[K]>> {
+  ): MantineFieldComponent<SuppliedValueInputProps<ValueTypeOfField<F[K]>>, P, ErrorOfField<F[K]>> {
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     return this.valueInputCache.retrieveOrCreate(
       valuePath,
       // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
       ValueInput as ComponentType<SuppliedValueInputProps<ValueTypeOfField<F[K]>>>,
-    ) as MantineFieldComponent<SuppliedTextInputProps, P, ErrorTypeOfField<F[K]>>
+    ) as MantineFieldComponent<SuppliedTextInputProps, P, ErrorOfField<F[K]>>
   }
 
   select<
@@ -239,7 +239,7 @@ class MantineFormImpl<
       valuePath,
       // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
       SimpleSelect as ComponentType<SuppliedValueInputProps<ValueTypeOfField<F[K]>>>,
-    ) as MantineFieldComponent<SuppliedTextInputProps, ComponentProps<typeof SimpleSelect>, ErrorTypeOfField<F[K]>>
+    ) as MantineFieldComponent<SuppliedTextInputProps, ComponentProps<typeof SimpleSelect>, ErrorOfField<F[K]>>
   }
 
   checkbox<
@@ -251,12 +251,12 @@ class MantineFormImpl<
   >(
     valuePath: K,
     Checkbox: ComponentType<P>,
-  ): MantineFieldComponent<SuppliedCheckboxProps, P, ErrorTypeOfField<F[K]>>
+  ): MantineFieldComponent<SuppliedCheckboxProps, P, ErrorOfField<F[K]>>
   checkbox<K extends keyof BooleanFieldsOfFields<F>, P extends SuppliedCheckboxProps>(
     valuePath: K,
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     Checkbox: ComponentType<P> = CheckboxImpl as ComponentType<P>,
-  ): MantineFieldComponent<SuppliedCheckboxProps, P, ErrorTypeOfField<F[K]>> {
+  ): MantineFieldComponent<SuppliedCheckboxProps, P, ErrorOfField<F[K]>> {
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     return this.checkboxCache.retrieveOrCreate(
       valuePath,
@@ -282,13 +282,13 @@ class MantineFormImpl<
     valuePath: K,
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     RadioGroup: ComponentType<P> = RadioImpl.Group as ComponentType<PropsWithChildren<P>>,
-  ): MantineFieldComponent<SuppliedRadioGroupProps, P, ErrorTypeOfField<F[K]>> {
+  ): MantineFieldComponent<SuppliedRadioGroupProps, P, ErrorOfField<F[K]>> {
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     return this.radioGroupCache.retrieveOrCreate(
       valuePath,
       // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
       RadioGroup as ComponentType<SuppliedRadioGroupProps>,
-    ) as MantineFieldComponent<SuppliedRadioGroupProps, P, ErrorTypeOfField<F[K]>>
+    ) as MantineFieldComponent<SuppliedRadioGroupProps, P, ErrorOfField<F[K]>>
   }
 
   radio<
@@ -296,7 +296,7 @@ class MantineFormImpl<
   >(
     valuePath: K,
     value: ValueTypeOfField<F[K]>,
-  ): MantineFieldComponent<SuppliedRadioProps, RadioProps, ErrorTypeOfField<F[K]>>
+  ): MantineFieldComponent<SuppliedRadioProps, RadioProps, ErrorOfField<F[K]>>
   radio<
     K extends keyof StringFieldsOfFields<F>,
     P extends SuppliedRadioProps,
@@ -304,7 +304,7 @@ class MantineFormImpl<
     valuePath: K,
     value: ValueTypeOfField<F[K]>,
     Radio: ComponentType<P>,
-  ): MantineFieldComponent<SuppliedRadioProps, P, ErrorTypeOfField<F[K]>>
+  ): MantineFieldComponent<SuppliedRadioProps, P, ErrorOfField<F[K]>>
   radio<
     K extends keyof StringFieldsOfFields<F>,
     P extends SuppliedRadioProps,
@@ -313,7 +313,7 @@ class MantineFormImpl<
     value: ValueTypeOfField<F[K]>,
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     Radio: ComponentType<P> = RadioImpl as ComponentType<P>,
-  ): MantineFieldComponent<SuppliedRadioProps, P, ErrorTypeOfField<F[K]>> {
+  ): MantineFieldComponent<SuppliedRadioProps, P, ErrorOfField<F[K]>> {
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     return this.radioCache.retrieveOrCreate(
       valuePath,
@@ -325,7 +325,7 @@ class MantineFormImpl<
 
   pill<
     K extends keyof AllFieldsOfFields<F>,
-  >(valuePath: K): MantineFieldComponent<SuppliedPillProps, PillProps, ErrorTypeOfField<F[K]>>
+  >(valuePath: K): MantineFieldComponent<SuppliedPillProps, PillProps, ErrorOfField<F[K]>>
   pill<
     K extends keyof AllFieldsOfFields<F>,
     P extends SuppliedPillProps,
@@ -340,13 +340,13 @@ class MantineFormImpl<
     valuePath: K,
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     Pill: ComponentType<P> = PillImpl as ComponentType<P>,
-  ): MantineFieldComponent<SuppliedPillProps, P, ErrorTypeOfField<F[K]>> {
+  ): MantineFieldComponent<SuppliedPillProps, P, ErrorOfField<F[K]>> {
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     return this.pillCache.retrieveOrCreate(
       valuePath,
       // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
       Pill as ComponentType<SuppliedPillProps>,
-    ) as MantineFieldComponent<SuppliedPillProps, P, ErrorTypeOfField<F[K]>>
+    ) as MantineFieldComponent<SuppliedPillProps, P, ErrorOfField<F[K]>>
   }
 
   list<
@@ -362,7 +362,7 @@ class MantineFormImpl<
     ) as MantineFieldComponent<
       SuppliedListProps<ElementOfArray<F[K]>>,
       ComponentProps<typeof DefaultList<ElementOfArray<F[K]>>>,
-      ErrorTypeOfField<F[K]>
+      ErrorOfField<F[K]>
     >
   }
 }

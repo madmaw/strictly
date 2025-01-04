@@ -31,35 +31,10 @@ import { type Field } from 'types/field'
 import {
   FieldConversionResult,
 } from 'types/field_converters'
-import { type Mocked } from 'vitest'
-import {
-  mock,
-  mockClear,
-} from 'vitest-mock-extended'
+import { mockClear } from 'vitest-mock-extended'
+import { createMockedAdapter } from './fixtures'
 
 const IS_NAN_ERROR = 1
-
-function createMockedAdapter<
-  E,
-  To,
-  From,
-  ValuePath extends string,
->({
-  convert,
-  revert,
-  create,
-}: FieldAdapter<From, To, E, ValuePath>): Mocked<
-  Required<FieldAdapter<From, To, E, ValuePath>>
-> {
-  const mockedAdapter = mock<Required<FieldAdapter<From, To, E, ValuePath>>>()
-  if (revert) {
-    mockedAdapter.revert?.mockImplementation(revert)
-  }
-  mockedAdapter.convert.mockImplementation(convert)
-  mockedAdapter.create.mockImplementation(create)
-
-  return mockedAdapter
-}
 
 describe('all', function () {
   const integerToStringAdapter = createMockedAdapter(

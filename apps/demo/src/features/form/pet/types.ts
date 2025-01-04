@@ -1,3 +1,4 @@
+import { type Reverse } from '@strictly/base'
 import {
   booleanType,
   type FlattenedAccessorsOfType,
@@ -5,12 +6,14 @@ import {
   type FlattenedValuesOfType,
   list,
   literal,
+  minimumStringLengthValidatorFactory,
   numberType,
   object,
   type PathsOfType,
   type ReadonlyTypeOfType,
   stringType,
   union,
+  type ValidatorsOfValues,
   type ValueOfType,
   type ValueToTypePathsOf,
 } from '@strictly/define'
@@ -50,12 +53,22 @@ export type MutablePet = ValueOfType<typeof petType>
 export type Pet = ValueOfType<ReadonlyTypeOfType<typeof petType>>
 export type PetValuePaths = PathsOfType<typeof petType>
 export type PetTypePaths = PathsOfType<typeof petType, '*'>
-export type FlattenedPetTypeDefs = FlattenedTypesOfType<typeof petType, '*'>
+export type FlattenedPetTypes = FlattenedTypesOfType<typeof petType, '*'>
 export type PetValueToTypePaths = ValueToTypePathsOf<typeof petType> & {
   '$.newTag': '$.newTag',
 }
-export type FlattenedPetValueTypes = FlattenedValuesOfType<typeof petType>
+export type FlattenedPetValues = FlattenedValuesOfType<typeof petType>
 export type FlattenedPetAccessors = FlattenedAccessorsOfType<typeof petType>
 
 export const NOT_A_NUMBER_ERROR = 'not a number'
 export const NOT_A_BREED_ERROR = 'not a breed'
+
+type PetTypeToValuePaths = Reverse<PetValueToTypePaths>
+
+export const petValidators = {
+  '$.name': minimumStringLengthValidatorFactory(3),
+} as const satisfies Partial<ValidatorsOfValues<
+  FlattenedValuesOfType<typeof petType, '*'>,
+  PetTypeToValuePaths,
+  Pet
+>>
