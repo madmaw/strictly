@@ -17,7 +17,7 @@ import {
   flattenValueTo,
   jsonPathPop,
   mobxCopy,
-  type MobxValueTypeOf,
+  type MobxValueOfType,
   type ReadonlyTypeOfType,
   type StrictTypeDef,
   type Type,
@@ -534,7 +534,7 @@ export class FormModel<
   >,
 > {
   @observable.ref
-  accessor value: MobxValueTypeOf<T>
+  accessor value: MobxValueOfType<T>
   @observable.shallow
   accessor fieldOverrides: FlattenedFieldOverrides<ValuePathsToAdapters>
   @observable.shallow

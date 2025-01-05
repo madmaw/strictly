@@ -26,9 +26,6 @@ export class PetFormPresenter extends FormPresenter<
   }
 }
 
-// should be identical to `PetFormFields`
-// export type AssistedPetFormFields = FormFieldsOfPresenter<AssistedPetFormPresenter>
-
 export class PetFormModel extends FormModel<
   typeof petType,
   PetValueToTypePaths,

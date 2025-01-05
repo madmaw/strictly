@@ -12,7 +12,7 @@ import {
   type ObjectFieldKey,
   TypeDefType,
 } from 'types/definitions'
-import { type MobxValueTypeOf } from 'types/mobx_value_type_of'
+import { type MobxValueOfType } from 'types/mobx_value_of_type'
 import { type ReadonlyTypeOfType } from 'types/readonly_type_of_type'
 import {
   type StrictType,
@@ -76,6 +76,6 @@ function observeValue(
 export function mobxCopy<T extends StrictType>(
   t: T,
   proto: ValueOfType<ReadonlyTypeOfType<T>>,
-): MobxValueTypeOf<T> {
+): MobxValueOfType<T> {
   return copyTo(t, proto, observeValue)
 }

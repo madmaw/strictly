@@ -13,4 +13,4 @@ export type NonMobxObservable<T = {}> = {
   [MOBX_OBSERVABLE_KEY]?: never,
 } & T
 
-export type MobxValueTypeOf<T extends Type> = ValueOfType<T, MobxObservable>
+export type MobxValueOfType<T extends Type> = ValueOfType<T, MobxObservable>
