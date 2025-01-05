@@ -10,7 +10,7 @@ import {
   stringType,
   union,
   type ValueOfType,
-  type ValueToTypePathsOf,
+  type ValueToTypePathsOfType,
 } from '@strictly/define'
 import { type FieldAdapter } from 'core/mobx/field_adapter'
 import {
@@ -160,14 +160,14 @@ describe('all', function () {
       let originalValue: ValueOfType<typeof typeDef>
       let model: FormModel<
         typeof typeDef,
-        ValueToTypePathsOf<typeof typeDef>,
+        ValueToTypePathsOfType<typeof typeDef>,
         typeof adapters
       >
       beforeEach(function () {
         originalValue = 5
         model = new FormModel<
           typeof typeDef,
-          ValueToTypePathsOf<typeof typeDef>,
+          ValueToTypePathsOfType<typeof typeDef>,
           typeof adapters
         >(
           typeDef,
@@ -215,7 +215,7 @@ describe('all', function () {
       let value: ValueOfType<typeof typeDef>
       let model: FormModel<
         typeof typeDef,
-        ValueToTypePathsOf<typeof typeDef>,
+        ValueToTypePathsOfType<typeof typeDef>,
         typeof adapters
       >
       beforeEach(function () {
@@ -226,7 +226,7 @@ describe('all', function () {
         ]
         model = new FormModel<
           typeof typeDef,
-          ValueToTypePathsOf<typeof typeDef>,
+          ValueToTypePathsOfType<typeof typeDef>,
           typeof adapters
         >(
           typeDef,
@@ -275,7 +275,7 @@ describe('all', function () {
       let value: ValueOfType<typeof typeDef>
       let model: FormModel<
         typeof typeDef,
-        ValueToTypePathsOf<typeof typeDef>,
+        ValueToTypePathsOfType<typeof typeDef>,
         typeof converters
       >
       beforeEach(function () {
@@ -285,7 +285,7 @@ describe('all', function () {
         }
         model = new FormModel<
           typeof typeDef,
-          ValueToTypePathsOf<typeof typeDef>,
+          ValueToTypePathsOfType<typeof typeDef>,
           typeof converters
         >(
           typeDef,
@@ -345,7 +345,7 @@ describe('all', function () {
       let value: ValueOfType<typeof typeDef>
       let model: FormModel<
         typeof typeDef,
-        ValueToTypePathsOf<typeof typeDef>,
+        ValueToTypePathsOfType<typeof typeDef>,
         typeof converters
       >
       beforeEach(function () {
@@ -355,7 +355,7 @@ describe('all', function () {
         }
         model = new FormModel<
           typeof typeDef,
-          ValueToTypePathsOf<typeof typeDef>,
+          ValueToTypePathsOfType<typeof typeDef>,
           typeof converters
         >(
           typeDef,
@@ -413,7 +413,7 @@ describe('all', function () {
       } as const
       const presenter = new FormPresenter<
         typeof typeDef,
-        ValueToTypePathsOf<typeof typeDef>,
+        ValueToTypePathsOfType<typeof typeDef>,
         typeof adapters
       >(
         typeDef,
@@ -422,7 +422,7 @@ describe('all', function () {
       const originalValue: ValueOfType<typeof typeDef> = 2
       let model: FormModel<
         typeof typeDef,
-        ValueToTypePathsOf<typeof typeDef>,
+        ValueToTypePathsOfType<typeof typeDef>,
         typeof adapters
       >
       beforeEach(function () {
@@ -536,7 +536,7 @@ describe('all', function () {
       } as const
       const presenter = new FormPresenter<
         typeof typeDef,
-        ValueToTypePathsOf<typeof typeDef>,
+        ValueToTypePathsOfType<typeof typeDef>,
         typeof converters
       >(
         typeDef,
@@ -545,7 +545,7 @@ describe('all', function () {
       let originalValue: ValueOfType<typeof typeDef>
       let model: FormModel<
         typeof typeDef,
-        ValueToTypePathsOf<typeof typeDef>,
+        ValueToTypePathsOfType<typeof typeDef>,
         typeof converters
       >
       beforeEach(function () {
@@ -864,7 +864,7 @@ describe('all', function () {
           $: adapterFromTwoWayConverter(new NullableToBooleanConverter(type, [1])),
           '$.*': integerToStringAdapter,
         } as const
-        type ValueToTypePaths = ValueToTypePathsOf<typeof type>
+        type ValueToTypePaths = ValueToTypePathsOfType<typeof type>
         const presenter = new FormPresenter<
           typeof type,
           ValueToTypePaths,
@@ -915,7 +915,7 @@ describe('all', function () {
         const type = union('d')
           .add('x', struct1)
           .add('y', struct2)
-        type ValueToTypePaths = ValueToTypePathsOf<typeof type>
+        type ValueToTypePaths = ValueToTypePathsOfType<typeof type>
 
         const adapters = {
           $: adapterFromTwoWayConverter(new SelectDiscriminatedUnionConverter(

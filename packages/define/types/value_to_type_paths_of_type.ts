@@ -17,7 +17,7 @@ import {
 import { type PathOf } from './path_of'
 import { type StrictType } from './strict_definitions'
 
-export type ValueToTypePathsOf<
+export type ValueToTypePathsOfType<
   T extends StrictType,
   SegmentOverride extends string = '*',
   Path extends string = '$',

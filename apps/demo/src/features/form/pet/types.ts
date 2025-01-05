@@ -15,7 +15,7 @@ import {
   union,
   type ValidatorsOfValues,
   type ValueOfType,
-  type ValueToTypePathsOf,
+  type ValueToTypePathsOfType,
 } from '@strictly/define'
 
 export type DogBreed = 'Alsatian' | 'Pug' | 'other'
@@ -54,7 +54,7 @@ export type Pet = ValueOfType<ReadonlyTypeOfType<typeof petType>>
 export type PetValuePaths = PathsOfType<typeof petType>
 export type PetTypePaths = PathsOfType<typeof petType, '*'>
 export type FlattenedPetTypes = FlattenedTypesOfType<typeof petType, '*'>
-export type PetValueToTypePaths = ValueToTypePathsOf<typeof petType> & {
+export type PetValueToTypePaths = ValueToTypePathsOfType<typeof petType> & {
   '$.newTag': '$.newTag',
 }
 export type FlattenedPetValues = FlattenedValuesOfType<typeof petType>

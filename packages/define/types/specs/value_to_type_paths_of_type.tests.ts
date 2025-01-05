@@ -13,11 +13,11 @@ import {
   union,
 } from 'types/builders'
 import { type FlattenedTypesOfType } from 'types/flattened_types_of_type'
-import { type ValueToTypePathsOf } from 'types/value_to_type_paths_of'
+import { type ValueToTypePathsOfType } from 'types/value_to_type_paths_of_type'
 
-describe('ValueToTypePathsOf', function () {
+describe('ValueToTypePathsOfType', function () {
   describe('literal', function () {
-    type T = ValueToTypePathsOf<typeof numberType>
+    type T = ValueToTypePathsOfType<typeof numberType>
 
     let t: {
       readonly $: '$',
@@ -29,7 +29,7 @@ describe('ValueToTypePathsOf', function () {
 
   describe('list', function () {
     const builder = list(list(numberType))
-    type T = SimplifyDeep<ValueToTypePathsOf<typeof builder>>
+    type T = SimplifyDeep<ValueToTypePathsOfType<typeof builder>>
 
     let t: {
       readonly $: '$',
@@ -44,7 +44,7 @@ describe('ValueToTypePathsOf', function () {
   describe('record', function () {
     const l = list(numberType)
     const builder = record<typeof l, 'a' | 'b'>(l)
-    type T = SimplifyDeep<ValueToTypePathsOf<typeof builder>>
+    type T = SimplifyDeep<ValueToTypePathsOfType<typeof builder>>
 
     let t: {
       readonly $: '$',
@@ -68,7 +68,7 @@ describe('ValueToTypePathsOf', function () {
       .setOptional('b', booleanType)
       .setReadonly('c', stringType)
       .setReadonlyOptional('d', stringType)
-    type T = SimplifyDeep<ValueToTypePathsOf<typeof builder>>
+    type T = SimplifyDeep<ValueToTypePathsOfType<typeof builder>>
 
     let t: {
       readonly $: '$',
@@ -98,7 +98,7 @@ describe('ValueToTypePathsOf', function () {
       const builder = union()
         .add('1', list(numberType))
         .add('2', stringType)
-      type T = SimplifyDeep<ValueToTypePathsOf<typeof builder>>
+      type T = SimplifyDeep<ValueToTypePathsOfType<typeof builder>>
 
       let t: {
         readonly $: '$',
@@ -114,7 +114,7 @@ describe('ValueToTypePathsOf', function () {
       const builder = union('d')
         .add('1', object().set('a', booleanType).set('b', numberType))
         .add('2', object().set('x', numberType).set('y', stringType))
-      type T = SimplifyDeep<ValueToTypePathsOf<typeof builder>>
+      type T = SimplifyDeep<ValueToTypePathsOfType<typeof builder>>
 
       let t: {
         readonly $: '$',
@@ -142,7 +142,7 @@ describe('ValueToTypePathsOf', function () {
   describe('readonly', function () {
     const builder = list(list(numberType)).readonly()
 
-    type T = SimplifyDeep<ValueToTypePathsOf<typeof builder>>
+    type T = SimplifyDeep<ValueToTypePathsOfType<typeof builder>>
 
     let t: {
       readonly $: '$',
@@ -157,7 +157,7 @@ describe('ValueToTypePathsOf', function () {
   describe('nullable', function () {
     const builder = nullable(list(nullable(list(numberType))))
 
-    type T = SimplifyDeep<ValueToTypePathsOf<typeof builder>>
+    type T = SimplifyDeep<ValueToTypePathsOfType<typeof builder>>
 
     let t: {
       readonly $: '$',

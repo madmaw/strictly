@@ -8,14 +8,14 @@ import {
   stringType,
   union,
 } from 'types/builders'
-import { type ValueToTypePathsOf } from 'types/value_to_type_paths_of'
+import { type ValueToTypePathsOfType } from 'types/value_to_type_paths_of_type'
 
 describe('valuePathToTypePath', function () {
   describe('literal', function () {
     const typeDef = numberType
-    type JsonPaths = ValueToTypePathsOf<typeof typeDef>
+    type Paths = ValueToTypePathsOfType<typeof typeDef>
 
-    const typePath = valuePathToTypePath<JsonPaths, '$'>(typeDef, '$')
+    const typePath = valuePathToTypePath<Paths, '$'>(typeDef, '$')
 
     it('maps a value path to the expected type path', function () {
       expect(typePath).toEqual('$')
@@ -42,7 +42,7 @@ describe('valuePathToTypePath', function () {
 
   describe('list', function () {
     const typeDef = list(numberType)
-    type JsonPaths = ValueToTypePathsOf<typeof typeDef>
+    type Paths = ValueToTypePathsOfType<typeof typeDef>
 
     describe.each([
       [
@@ -54,7 +54,7 @@ describe('valuePathToTypePath', function () {
         '$.*',
       ],
     ] as const)('it maps "%s"', function (from, to) {
-      const typePath = valuePathToTypePath<JsonPaths, typeof from>(typeDef, from)
+      const typePath = valuePathToTypePath<Paths, typeof from>(typeDef, from)
 
       it('maps a value path to the expected type path', function () {
         expect(typePath).toEqual(to)
@@ -67,7 +67,7 @@ describe('valuePathToTypePath', function () {
 
     describe('fake subpath', function () {
       const fakeTypePath = valuePathToTypePath<
-        JsonPaths & {
+        Paths & {
           [_: `$.${number}.fake`]: '$.*.fake',
         },
         '$.0.fake'
@@ -86,7 +86,7 @@ describe('valuePathToTypePath', function () {
   describe('record', function () {
     type Key = 'a' | 'b'
     const typeDef = record<typeof numberType, Key>(numberType)
-    type JsonPaths = ValueToTypePathsOf<typeof typeDef>
+    type Paths = ValueToTypePathsOfType<typeof typeDef>
 
     describe.each([
       [
@@ -102,7 +102,7 @@ describe('valuePathToTypePath', function () {
         '$.*',
       ],
     ] as const)('it maps "%s"', function (from, to) {
-      const typePath = valuePathToTypePath<JsonPaths, typeof from>(typeDef, from)
+      const typePath = valuePathToTypePath<Paths, typeof from>(typeDef, from)
 
       it('maps a value path to the expected type path', function () {
         expect(typePath).toEqual(to)
@@ -115,7 +115,7 @@ describe('valuePathToTypePath', function () {
 
     describe('fake subpath', function () {
       const fakeTypePath = valuePathToTypePath<
-        JsonPaths & {
+        Paths & {
           '$.a.fake': '$.*.fake',
           '$.b.fake': '$.*.fake',
         },
@@ -134,7 +134,7 @@ describe('valuePathToTypePath', function () {
 
   describe('object', function () {
     const typeDef = object().set('a', numberType).set('b', booleanType)
-    type JsonPaths = ValueToTypePathsOf<typeof typeDef>
+    type Paths = ValueToTypePathsOfType<typeof typeDef>
 
     describe.each([
       [
@@ -150,7 +150,7 @@ describe('valuePathToTypePath', function () {
         '$.b',
       ],
     ] as const)('it maps %s', function (from, to) {
-      const typePath = valuePathToTypePath<JsonPaths, typeof from>(typeDef, from)
+      const typePath = valuePathToTypePath<Paths, typeof from>(typeDef, from)
 
       it('maps a value path to the expected type path', function () {
         expect(typePath).toEqual(to)
@@ -163,7 +163,7 @@ describe('valuePathToTypePath', function () {
 
     describe('fake field', function () {
       const fakeTypePath = valuePathToTypePath<
-        JsonPaths & {
+        Paths & {
           '$.fake': '$.fake',
         },
         '$.fake'
@@ -184,7 +184,7 @@ describe('valuePathToTypePath', function () {
       const typeDef = union('w')
         .add('x', object().set('a', numberType).set('b', booleanType))
         .add('y', object().set('b', stringType).set('c', booleanType))
-      type JsonPaths = ValueToTypePathsOf<typeof typeDef>
+      type Paths = ValueToTypePathsOfType<typeof typeDef>
 
       describe.each([
         [
@@ -208,7 +208,7 @@ describe('valuePathToTypePath', function () {
           '$.y:c',
         ],
       ] as const)('it maps %s', function (from, to) {
-        const typePath = valuePathToTypePath<JsonPaths, typeof from>(typeDef, from)
+        const typePath = valuePathToTypePath<Paths, typeof from>(typeDef, from)
 
         it('maps a value path to the expected type path', function () {
           expect(typePath).toEqual(to)
@@ -221,7 +221,7 @@ describe('valuePathToTypePath', function () {
 
       describe('fake', function () {
         const fakeTypePath = valuePathToTypePath<
-          JsonPaths & {
+          Paths & {
             '$.fake': '$.fake',
           },
           '$.fake'
