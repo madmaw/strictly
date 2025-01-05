@@ -3,7 +3,7 @@ import {
   type Meta,
   type StoryObj,
 } from '@storybook/react'
-import { PetEditor } from 'features/form/pet/assisted/pet_editor'
+import { PetEditor } from 'features/form/pet/mobx/pet_editor'
 
 const Component = PetEditor
 
