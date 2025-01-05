@@ -24,6 +24,7 @@ import {
   type ValueOfType,
   valuePathToTypePath,
 } from '@strictly/define'
+import { flattenValuesOfType } from '@strictly/define/transformers/flatteners/flatten_values_of_type'
 import {
   computed,
   observable,
@@ -114,14 +115,14 @@ export class FormPresenter<
   >,
 > {
   constructor(
-    readonly typeDef: T,
+    readonly type: T,
     private readonly adapters: TypePathsToAdapters,
   ) {
   }
 
   private maybeGetAdapterForValuePath(valuePath: keyof ValuePathsToAdapters) {
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-    const typePath = valuePathToTypePath(this.typeDef, valuePath as string, true)
+    const typePath = valuePathToTypePath(this.type, valuePath as string, true)
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     return this.adapters[typePath as keyof TypePathsToAdapters]
   }
@@ -135,7 +136,7 @@ export class FormPresenter<
   }
 
   typePath<K extends keyof ValueToTypePaths>(valuePath: K): ValueToTypePaths[K] {
-    return valuePathToTypePath<ValueToTypePaths, K>(this.typeDef, valuePath, true)
+    return valuePathToTypePath<ValueToTypePaths, K>(this.type, valuePath, true)
   }
 
   setFieldValueAndValidate<K extends keyof ValuePathsToAdapters>(
@@ -395,8 +396,18 @@ export class FormPresenter<
       model.errors = {}
       // TODO this isn't correct, should reload from value
       model.fieldOverrides = {}
-      model.value = mobxCopy(this.typeDef, value)
+      model.value = mobxCopy(this.type, value)
     })
+  }
+
+  isValuePathActive<K extends keyof ValuePathsToAdapters>(
+    model: FormModel<T, ValueToTypePaths, TypePathsToAdapters, ValuePathsToAdapters>,
+    valuePath: K,
+  ): boolean {
+    const values = flattenValuesOfType(this.type, model.value)
+    const keys = new Set(Object.keys(values))
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+    return keys.has(valuePath as string)
   }
 
   validateField<K extends keyof ValuePathsToAdapters>(
@@ -514,7 +525,7 @@ export class FormPresenter<
     ValuePathsToAdapters
   > {
     return new FormModel<T, ValueToTypePaths, TypePathsToAdapters, ValuePathsToAdapters>(
-      this.typeDef,
+      this.type,
       value,
       this.adapters,
     )

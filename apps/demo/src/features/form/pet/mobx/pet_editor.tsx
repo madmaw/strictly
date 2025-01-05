@@ -67,7 +67,14 @@ export function PetEditor({
 
   const onFieldBlur = useCallback(
     function<Path extends ValuePathsOfPresenter<typeof presenter>> (path: Path) {
-      presenter.validateField(model, path)
+      // work around potential loss of focus prior to state potentially invalidating change triggering
+      // (e.g. changing a discriminator)
+      // TODO debounce?
+      setTimeout(function () {
+        if (presenter.isValuePathActive(model, path)) {
+          presenter.validateField(model, path)
+        }
+      }, 100)
     },
     [model],
   )

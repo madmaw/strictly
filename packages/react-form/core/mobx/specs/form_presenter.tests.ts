@@ -25,6 +25,7 @@ import {
 } from 'core/mobx/form_presenter'
 import { IntegerToStringConverter } from 'field_converters/integer_to_string_converter'
 import { NullableToBooleanConverter } from 'field_converters/nullable_to_boolean_converter'
+import { SelectDiscriminatedUnionConverter } from 'field_converters/select_value_type_converter'
 import { prototypingFieldValueFactory } from 'field_value_factories/prototyping_field_value_factory'
 import { type Simplify } from 'type-fest'
 import { type Field } from 'types/field'
@@ -856,26 +857,26 @@ describe('all', function () {
     describe('union', function () {
       describe('non-discriminated', function () {
         const listOfNumbersTypeDef = list(numberType)
-        const typeDef = union()
+        const type = union()
           .add('null', nullType)
           .add('0', listOfNumbersTypeDef)
         const adapters = {
-          $: adapterFromTwoWayConverter(new NullableToBooleanConverter(typeDef, [1])),
+          $: adapterFromTwoWayConverter(new NullableToBooleanConverter(type, [1])),
           '$.*': integerToStringAdapter,
         } as const
-        type JsonPaths = ValueToTypePathsOf<typeof typeDef>
+        type ValueToTypePaths = ValueToTypePathsOf<typeof type>
         const presenter = new FormPresenter<
-          typeof typeDef,
-          JsonPaths,
+          typeof type,
+          ValueToTypePaths,
           typeof adapters
         >(
-          typeDef,
+          type,
           adapters,
         )
-        let originalValue: ValueOfType<typeof typeDef>
+        let originalValue: ValueOfType<typeof type>
         let model: FormModel<
-          typeof typeDef,
-          JsonPaths,
+          typeof type,
+          ValueToTypePaths,
           typeof adapters
         >
         beforeEach(function () {
@@ -903,6 +904,92 @@ describe('all', function () {
 
             it('sets the underlying value', function () {
               expect(model.value).toEqual([1])
+            })
+          })
+        })
+      })
+
+      describe('discriminated', function () {
+        const struct1 = object().set('a', numberType)
+        const struct2 = object().set('b', booleanType)
+        const type = union('d')
+          .add('x', struct1)
+          .add('y', struct2)
+        type ValueToTypePaths = ValueToTypePathsOf<typeof type>
+
+        const adapters = {
+          $: adapterFromTwoWayConverter(new SelectDiscriminatedUnionConverter(
+            type,
+            {
+              x: {
+                d: 'x',
+                a: 0,
+              },
+              y: {
+                d: 'y',
+                b: false,
+              },
+            },
+            'x',
+          )),
+          '$.x:a': identityAdapter(0).narrow(),
+          '$.y:b': identityAdapter(false).narrow(),
+        } as const
+        const presenter = new FormPresenter<
+          typeof type,
+          ValueToTypePaths,
+          typeof adapters
+        >(
+          type,
+          adapters,
+        )
+
+        describe('isValuePathActive', function () {
+          describe('discriminator x', function () {
+            const model = presenter.createModel({
+              d: 'x',
+              a: 1,
+            })
+            it.each([
+              [
+                '$',
+                true,
+              ],
+              [
+                '$.x:a',
+                true,
+              ],
+              [
+                '$.y:b',
+                false,
+              ],
+            ] as const)('value path %s is active %s', function (path, expected) {
+              const isValid = presenter.isValuePathActive(model, path)
+              expect(isValid).toBe(expected)
+            })
+          })
+
+          describe('discriminator y', function () {
+            const model = presenter.createModel({
+              d: 'y',
+              b: false,
+            })
+            it.each([
+              [
+                '$',
+                true,
+              ],
+              [
+                '$.x:a',
+                false,
+              ],
+              [
+                '$.y:b',
+                true,
+              ],
+            ] as const)('value path %s is active %s', function (path, expected) {
+              const isValid = presenter.isValuePathActive(model, path)
+              expect(isValid).toBe(expected)
             })
           })
         })
