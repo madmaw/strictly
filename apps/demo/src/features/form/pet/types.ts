@@ -60,10 +60,14 @@ export type PetValueToTypePaths = ValueToTypePathsOf<typeof petType> & {
 export type FlattenedPetValues = FlattenedValuesOfType<typeof petType>
 export type FlattenedPetAccessors = FlattenedAccessorsOfType<typeof petType>
 
-export const NOT_A_NUMBER_ERROR = 'not a number'
-export const NOT_A_BREED_ERROR = 'not a breed'
+// eslint false negative
+// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+export const NOT_A_NUMBER_ERROR = 'not a number' as const
+// eslint false negative
+// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+export const NOT_A_BREED_ERROR = 'not a breed' as const
 
-type PetTypeToValuePaths = Reverse<PetValueToTypePaths>
+export type PetTypeToValuePaths = Reverse<PetValueToTypePaths>
 
 export const petValidators = {
   '$.name': minimumStringLengthValidatorFactory(3),

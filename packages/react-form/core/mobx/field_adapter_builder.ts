@@ -1,4 +1,3 @@
-import { type Validator } from '@strictly/define'
 import {
   chainFieldConverter,
   chainSafeFieldConverter,
@@ -9,9 +8,6 @@ import {
 } from 'field_converters/identity_converter'
 import { listConverter } from 'field_converters/list_converter'
 import { MaybeIdentityConverter } from 'field_converters/maybe_identity_converter'
-import {
-  validatingConverter,
-} from 'field_converters/validating_converter'
 import { prototypingFieldValueFactory } from 'field_value_factories/prototyping_field_value_factory'
 import {
   type FieldConverter,
@@ -20,6 +16,7 @@ import {
   type TwoWayFieldConverter,
   type TwoWayFieldConverterWithValueFactory,
 } from 'types/field_converters'
+import { type FieldAdapter } from './field_adapter'
 
 class FieldAdapterBuilder<
   From,
@@ -33,54 +30,6 @@ class FieldAdapterBuilder<
     readonly create: FieldValueFactory<From, ValuePath, Context>,
     readonly revert?: FieldConverter<To, From, E, ValuePath, Context>,
   ) {
-  }
-
-  validateFrom<
-    E2,
-  >(...validators: readonly Validator<
-    From,
-    E2,
-    ValuePath,
-    Context
-  >[]): FieldAdapterBuilder<
-    From,
-    To,
-    E | E2,
-    ValuePath,
-    Context
-  > {
-    return new FieldAdapterBuilder(
-      this.convert,
-      this.create,
-      this.revert && chainFieldConverter(
-        this.revert,
-        validatingConverter(validators),
-      ),
-    )
-  }
-
-  validateTo<
-    E2,
-  >(...validators: readonly Validator<
-    To,
-    E2,
-    ValuePath,
-    Context
-  >[]): FieldAdapterBuilder<
-    From,
-    To,
-    E | E2,
-    ValuePath,
-    Context
-  > {
-    return new FieldAdapterBuilder(
-      this.convert,
-      this.create,
-      this.revert && chainFieldConverter(
-        validatingConverter(validators),
-        this.revert,
-      ),
-    )
   }
 
   chain<To2, E2 = E>(
@@ -151,6 +100,10 @@ class FieldAdapterBuilder<
       this.create,
       this.revert && identityConverter.revert.bind(identityConverter),
     )
+  }
+
+  narrow(): FieldAdapter<From, To, E, ValuePath, Context> {
+    return this
   }
 }
 

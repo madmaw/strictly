@@ -5,14 +5,12 @@ import {
 } from '@mantine/core'
 import { toArray } from '@strictly/base'
 import {
-  type Field,
-  type FlattenedFormFieldsOf,
   type FormProps,
   useMantineForm,
 } from '@strictly/react-form'
 import { type ComponentType } from 'react'
+import { type PetFields } from './fields'
 import {
-  type PetValueToTypePaths,
   type Species,
 } from './types'
 
@@ -23,11 +21,9 @@ export function SpeciesLabel() {
   })
 }
 
-export type PetSpeciesFormFields = FlattenedFormFieldsOf<
-  PetValueToTypePaths,
-  {
-    '$.species': Field<Species, never>,
-  }
+export type PetSpeciesFormFields = Pick<
+  PetFields,
+  '$.species'
 >
 
 export type PetSpeciesFormProps = FormProps<PetSpeciesFormFields> & {
@@ -55,7 +51,7 @@ export function PetSpeciesForm(props: PetSpeciesFormProps) {
   const form = useMantineForm(props)
   const SpeciesRadioGroup = form.radioGroup('$.species')
   const speciesValue = fields['$.species'].value
-  const SpeciesComponent = speciesComponents[speciesValue]
+  const SpeciesComponent = speciesValue && speciesComponents[speciesValue]
   return (
     <Stack>
       <SpeciesRadioGroup label={SpeciesLabel()}>
@@ -78,7 +74,7 @@ export function PetSpeciesForm(props: PetSpeciesFormProps) {
           )}
         </Group>
       </SpeciesRadioGroup>
-      <SpeciesComponent />
+      {SpeciesComponent && <SpeciesComponent />}
     </Stack>
   )
 }

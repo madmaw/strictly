@@ -22,8 +22,9 @@ type MergedOfFieldAdapterWithValidator<
   A extends FieldAdapter,
   V extends Validator | undefined,
 > = undefined extends V ? A
-  : A extends FieldAdapter<infer From, infer To, infer E1, infer P, infer C>
-    ? V extends Validator<From, infer E2, P, C> ? FieldAdapter<From, To, E1 | E2, P, C> : never
+  : A extends FieldAdapter<infer From, infer To, infer E1, infer P1, infer C1>
+    ? V extends Validator<From, infer E2, infer P2, infer C2> ? FieldAdapter<From, To, E1 | E2, P1 | P2, C1 | C2>
+    : never
   : never
 
 export function mergeAdaptersWithValidators<

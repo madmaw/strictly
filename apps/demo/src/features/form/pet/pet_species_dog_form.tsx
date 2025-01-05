@@ -9,25 +9,20 @@ import {
 } from '@strictly/base'
 import {
   type ErrorRendererProps,
-  type Field,
-  type FlattenedFormFieldsOf,
   type FormProps,
   useMantineForm,
 } from '@strictly/react-form'
 import { type ErrorOfField } from '@strictly/react-form'
+import { type PetFields } from './fields'
 import {
   type DogBreed,
   NOT_A_BREED_ERROR,
   NOT_A_NUMBER_ERROR,
-  type PetValueToTypePaths,
 } from './types'
 
-export type PetSpeciesDogFormFields = FlattenedFormFieldsOf<
-  PetValueToTypePaths,
-  {
-    '$.species.dog:barks': Field<string | number, typeof NOT_A_NUMBER_ERROR>,
-    '$.species.dog:breed': Field<string | null, typeof NOT_A_BREED_ERROR>,
-  }
+export type PetSpeciesDogFormFields = Pick<
+  PetFields,
+  '$.species.dog:barks' | '$.species.dog:breed'
 >
 
 export type PetSpeciesFormDogProps = FormProps<PetSpeciesDogFormFields>

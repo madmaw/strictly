@@ -47,6 +47,23 @@ describe('MergedOfFieldAdaptersWithValidators', function () {
     })
   })
 
+  describe('different x', function () {
+    type Adapters = {
+      readonly a: FieldAdapter<number, string, typeof error1, string, typeof context>,
+    }
+    type Validators = {
+      readonly a: Validator<number, typeof error2, 'a', typeof context>,
+    }
+
+    type Merged = MergedOfFieldAdaptersWithValidators<Adapters, Validators>
+
+    it('merges the error types', function () {
+      expectTypeOf<Merged>().toEqualTypeOf<{
+        readonly a: FieldAdapter<number, string, typeof error1 | typeof error2, string, typeof context>,
+      }>()
+    })
+  })
+
   describe('different values', function () {
     type Adapters = {
       readonly a: FieldAdapter<number, string, typeof error1, 'a', typeof context>,

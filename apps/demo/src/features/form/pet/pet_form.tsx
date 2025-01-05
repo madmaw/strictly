@@ -15,14 +15,11 @@ import {
 } from '@mantine/core'
 import { UnreachableError } from '@strictly/base'
 import {
-  type MinimumStringLengthValidationError,
   MinimumStringLengthValidationErrorType,
 } from '@strictly/define'
 import {
   type ErrorOfField,
   type ErrorRendererProps,
-  type Field,
-  type FlattenedFormFieldsOf,
   type FormProps,
   useMantineForm,
 } from '@strictly/react-form'
@@ -30,8 +27,8 @@ import {
   type ComponentType,
   useCallback,
 } from 'react'
+import { type PetFields } from './fields'
 import {
-  type PetValueToTypePaths,
   type TagValuePath,
 } from './types'
 
@@ -70,15 +67,9 @@ export function NewTagPlaceholder() {
   })
 }
 
-export type PetFormFields = FlattenedFormFieldsOf<
-  PetValueToTypePaths,
-  {
-    '$.name': Field<string, MinimumStringLengthValidationError>,
-    '$.alive': Field<boolean, never>,
-    '$.newTag': Field<string, never>,
-    '$.tags': Field<readonly string[], never>,
-    '$.tags.*': Field<string, never>,
-  }
+export type PetFormFields = Pick<
+  PetFields,
+  '$.name' | '$.alive' | '$.newTag' | '$.tags' | `$.tags.${number}`
 >
 
 export type PetFormProps = FormProps<PetFormFields> & {
