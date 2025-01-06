@@ -42,20 +42,6 @@ export async function getStaticPaths() {
                 slug: `${folder}/${file}`,
               }
             }
-            if (file === 'README.md') {
-              return [
-                page,
-                {
-                  props: {
-                    content,
-                    page: folder
-                  },
-                  params: {
-                    slug: `${folder}/`,
-                  }
-                }
-              ]
-            }
             return [page]
           } catch (e) {
             console.error(e)

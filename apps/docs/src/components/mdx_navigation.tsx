@@ -16,15 +16,15 @@ export const pagePaths: Record<PageId, PageMetadata> = {
     title: 'Home',
   },
   base: {
-    path: '/base',
+    path: '/base/README.md',
     title: 'Base',
   },
   define: {
-    path: '/define',
+    path: '/define/README.md',
     title: 'Define',
   },
   'react-form': {
-    path: '/react-form',
+    path: '/react-form/README.md',
     title: 'React Form',
   },
   why: {

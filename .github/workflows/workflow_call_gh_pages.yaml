@@ -41,9 +41,9 @@ jobs:
           cmd: demo:build
       - name: Copy outputs
         run: |
-          cp -r -f ./packages/react-form/storybook-static ./apps/docs/dist/form-react-storybook
-          cp -r -f ./apps/demo/storybook-static ./apps/docs/dist/demo-storybook
-          cp -r -f ./apps/demo/dist ./apps/docs/dist/demo
+          cp -r -f ./packages/react-form/storybook-static/. ./apps/docs/dist/form-react-storybook
+          cp -r -f ./apps/demo/storybook-static/. ./apps/docs/dist/demo-storybook
+          cp -r -f ./apps/demo/dist/. ./apps/docs/dist/demo
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

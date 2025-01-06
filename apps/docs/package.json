@@ -14,6 +14,7 @@
     "@types/react-dom": "^19.0.2",
     "eslint-plugin-astro": "^1.3.1",
     "eslint-plugin-mdx": "^3.1.5",
+    "http-server": "^14.1.1",
     "vite": "^6.0.5"
   },
   "license": "MIT",
@@ -25,7 +26,8 @@
     "clean": "del-cli dist .out .turbo",
     "dev": "astro dev",
     "lint": "cross-env ESLINT_USE_FLAT_CONFIG=false eslint . --max-warnings=0",
-    "preview": "astro preview"
+    "preview": "astro preview",
+    "serve": "http-server dist"
   },
   "version": "1.0.0"
 }

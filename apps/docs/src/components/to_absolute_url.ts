@@ -14,15 +14,6 @@ export function createToAbsoluteUrl(
     } else {
       absoluteUrl = new URL(path, pageUrl).toString()
     }
-    if (path.indexOf('.') > path.lastIndexOf('/')) {
-      if (absoluteUrl.endsWith('/')) {
-        return absoluteUrl.substring(0, absoluteUrl.length - 1)
-      }
-    } else {
-      if (!absoluteUrl.endsWith('/')) {
-        return absoluteUrl + '/'
-      }
-    }
     return absoluteUrl
   }
 }
