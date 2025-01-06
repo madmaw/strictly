@@ -50,7 +50,7 @@ jobs:
       - name: Run storybook tests
         uses: borales/actions-yarn@v4.2.0
         with:
-          cmd: storybok:test
+          cmd: storybook:test
       - name: Run build
         uses: borales/actions-yarn@v4.2.0
         with:
