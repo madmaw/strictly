@@ -52,10 +52,10 @@
   "license": "MIT",
   "name": "@strictly/demo",
   "scripts": {
-    "always": "lingui compile",
+    "always": "yarn lingui:compile",
     "build": "vite build",
     "check-types": "tsc",
-    "clean": "del-cli dist .out .turbo",
+    "clean": "del-cli dist .out .turbo src/locales/*.ts",
     "dev": "vite",
     "lingui": "yarn lingui:extract && yarn lingui:compile",
     "lingui:compile": "lingui compile --typescript",

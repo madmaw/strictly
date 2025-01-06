@@ -5,14 +5,14 @@
     },
     "build": {
       "dependsOn": [
-        "^build",
-        "^check-types"
+        "check-types",
+        "^build"
       ],
       "outputs": ["dist/**"]
     },
     "check-types": {
       "dependsOn": [
-        "^always",
+        "always",
         "^check-types"
       ]
     },
@@ -20,26 +20,26 @@
       "cache": false
     },
     "dev": {
-      "dependsOn": ["^check-types"]
+      "dependsOn": ["check-types"]
     },
     "lingui:extract": {
     },
     "lint": {
-      "dependsOn": ["^check-types"]
+      "dependsOn": ["check-types"]
     },
     "release:exports": {
     },
     "storybook": {
-      "dependsOn": ["^check-types"]
+      "dependsOn": ["check-types"]
     },
     "storybook:test": {
-      "dependsOn": ["^check-types"]
+      "dependsOn": ["check-types"]
     },
     "test": {
-      "dependsOn": ["^check-types"]
+      "dependsOn": ["check-types"]
     },
     "test:update": {
-      "dependsOn": ["^check-types"]
+      "dependsOn": ["check-types"]
     }
   }
 }

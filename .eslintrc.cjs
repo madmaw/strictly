@@ -22,7 +22,8 @@ module.exports = {
         'jsonc/sort-array-values': [
           'warn',
           {
-            pathPattern: '.*',
+            // exclude JSON paths as required
+            pathPattern: '^((?!\\.dependsOn).)*$',
             order: {
               type: 'asc',
               natural: true,
@@ -549,11 +550,12 @@ module.exports = {
     '!.vscode',
     '!.github',
     '!.storybook',
-    'node_modules',
-    'package.release.json',
     '**/dist/**',
     '**/.out/**',
     '**/*.d.ts',
     '**/locales/*.ts',
+    'node_modules',
+    'package.release.json',
+    'storybook-static',
   ],
 }
