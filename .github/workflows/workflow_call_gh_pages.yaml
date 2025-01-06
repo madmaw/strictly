@@ -41,7 +41,7 @@ jobs:
           cmd: demo:build
       - name: Copy outputs
         run: |
-          cp -r -f ./packages/react-form/storybook-static/. ./apps/docs/dist/form-react-storybook
+          cp -r -f ./packages/react-form/storybook-static/. ./apps/docs/dist/react-form-storybook
           cp -r -f ./apps/demo/storybook-static/. ./apps/docs/dist/demo-storybook
           cp -r -f ./apps/demo/dist/. ./apps/docs/dist/demo
       - name: Upload artifact

@@ -9,6 +9,7 @@ import tsconfig from './tsconfig.json'
 // const config: UserConfig = createViteUserConfig(tsconfig)
 // export default config
 export default defineConfig({
+  base: '',
   build: {
     outDir: './dist',
   },
