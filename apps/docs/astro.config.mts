@@ -11,7 +11,7 @@ const {
 const x: ReturnType<typeof defineConfig<['en']>> = defineConfig({
   site: PUBLIC_SITE,
   base: PUBLIC_BASE,
-  trailingSlash: 'never',
+  trailingSlash: 'ignore',
   redirects: {
     '/': `/${PUBLIC_BASE}/home`,
   },
@@ -26,7 +26,7 @@ const x: ReturnType<typeof defineConfig<['en']>> = defineConfig({
     mdx({}),
   ],
   build: {
-    format: 'file',
+    format: 'preserve',
   },
 })
 export default x
