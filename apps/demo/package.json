@@ -28,7 +28,7 @@
     "@storybook/builder-vite": "^8.4.5",
     "@storybook/react": "^8.4.5",
     "@storybook/react-vite": "^8.4.5",
-    "@storybook/test-runner": "^0.19.1",
+    "@storybook/test-runner": "^0.21.0",
     "@strictly/spec": "*",
     "@strictly/support-vite": "*",
     "@testing-library/dom": "^10.4.0",
@@ -64,6 +64,9 @@
     "lint:fix": "cross-env ESLINT_USE_FLAT_CONFIG=false eslint . --fix",
     "preview": "vite preview",
     "storybook": "storybook dev",
+    "storybook:build": "storybook build",
+    "storybook:test": "yarn playwright install && yarn storybook:build && concurrently -k -s first -n \"SB,TEST\" \"npx http-server storybook-static --port 6006 --silent\" \"npx wait-on tcp:127.0.0.1:6006 && yarn storybook:test:client\"",
+    "storybook:test:client": "test-storybook",
     "test": "vitest run",
     "test:update": "vitest run -u",
     "test:watch": "vitest"

@@ -26,6 +26,9 @@
     "storybook": {
       "dependsOn": ["^check-types"]
     },
+    "storybook:test": {
+      "dependsOn": ["^check-types"]
+    },
     "test": {
       "dependsOn": ["^check-types"]
     },

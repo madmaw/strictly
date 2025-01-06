@@ -58,6 +58,7 @@
     "lint:root:fix": "cross-env ESLINT_USE_FLAT_CONFIG=false eslint --fix *.cjs *.json .github",
     "react-form:storybook": "turbo storybook --filter=@strictly/react-form",
     "release:exports": "turbo run release:exports",
+    "storybook:test": "turbo run storybook:test --concurrency=1",
     "test": "turbo run test",
     "test:force": "turbo run test --force",
     "test:update": "turbo run test:update"
