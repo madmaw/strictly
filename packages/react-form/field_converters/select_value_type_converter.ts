@@ -1,8 +1,8 @@
 import {
+  type ExhaustiveArrayOfUnion,
   reverse,
   type StringKeyOf,
 } from '@strictly/base'
-import { type ExhaustiveArrayOfUnion } from '@strictly/base/types/exhaustive_array_of_union'
 import {
   copy,
   type LiteralTypeDef,

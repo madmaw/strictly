@@ -317,6 +317,7 @@ module.exports = {
         'no-autofix/unused-imports/no-unused-imports': 'warn',
         'no-console': 'warn',
         'no-debugger': 'warn',
+        'no-duplicate-imports': 'warn',
         'no-multi-spaces': 'warn',
         'no-multiple-empty-lines': [
           'warn',
@@ -442,6 +443,12 @@ module.exports = {
         'no-restricted-imports': [
           'warn',
           {
+            patterns: [
+              {
+                group: ['@strictly/*/*'],
+                message: 'you can\'t import subfolders from workspace packages, export the file in the package instead',
+              },
+            ],
             paths: [
               {
                 name: 'react',
@@ -487,6 +494,12 @@ module.exports = {
         'no-restricted-imports': [
           'warn',
           {
+            patterns: [
+              {
+                group: ['@strictly/*/*'],
+                message: 'you can\'t import subfolders from workspace packages, export the file in the package instead',
+              },
+            ],
             paths: [
               {
                 name: 'vitest',

@@ -6,9 +6,12 @@
   "editor.tabSize": 2,
   "eslint.useFlatConfig": false,
   "eslint.validate": [
+    "astro",
     "css",
     "javascript",
     "json",
+    "md",
+    "mdx",
     "typescript",
     "yaml"
   ],

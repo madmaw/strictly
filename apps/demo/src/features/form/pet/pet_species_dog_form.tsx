@@ -8,11 +8,11 @@ import {
   UnreachableError,
 } from '@strictly/base'
 import {
+  type ErrorOfField,
   type ErrorRendererProps,
   type FormProps,
   useMantineForm,
 } from '@strictly/react-form'
-import { type ErrorOfField } from '@strictly/react-form'
 import { type PetFields } from './fields'
 import {
   type DogBreed,

@@ -14,6 +14,7 @@ import {
   flattenAccessorsOfType,
   type FlattenedValuesOfType,
   flattenTypesOfType,
+  flattenValuesOfType,
   flattenValueTo,
   jsonPathPop,
   mobxCopy,
@@ -24,7 +25,6 @@ import {
   type ValueOfType,
   valuePathToTypePath,
 } from '@strictly/define'
-import { flattenValuesOfType } from '@strictly/define/transformers/flatteners/flatten_values_of_type'
 import {
   computed,
   observable,

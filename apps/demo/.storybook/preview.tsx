@@ -1,7 +1,11 @@
 import '@mantine/core/styles.css'
 import { MantineProvider } from '@mantine/core'
 import { type Preview } from '@storybook/react'
+// special case: needs to be fully qualified
+// eslint-disable-next-line no-restricted-imports
 import { messages as en } from '@strictly/demo/src/locales/en'
+// special case: needs to be fully qualified
+// eslint-disable-next-line no-restricted-imports
 import { messages as pseudo_en } from '@strictly/demo/src/locales/pseudo_en'
 import {
   type MetaArgsOf,

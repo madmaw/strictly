@@ -9,10 +9,10 @@ import {
 } from '@strictly/base'
 import {
   type ErrorOfField,
+  type ErrorRendererProps,
   type FormProps,
   useMantineForm,
 } from '@strictly/react-form'
-import { type ErrorRendererProps } from '@strictly/react-form'
 import { type PetFields } from './fields'
 import {
   type CatBreed,
