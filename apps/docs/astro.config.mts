@@ -11,7 +11,10 @@ const {
 const x: ReturnType<typeof defineConfig<['en']>> = defineConfig({
   site: PUBLIC_SITE,
   base: PUBLIC_BASE,
-  trailingSlash: 'never',
+  trailingSlash: 'ignore',
+  redirects: {
+    '/': `/${PUBLIC_BASE}/home`,
+  },
   i18n: {
     locales: ['en'],
     defaultLocale: 'en',

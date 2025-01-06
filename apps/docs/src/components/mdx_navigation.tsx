@@ -3,7 +3,7 @@ import { useMemo } from 'react'
 import styles from './mdx_navigation.module.css'
 import { type ToAbsoluteUrl } from './to_absolute_url'
 
-export type PageId = 'home' | 'base' | 'define' | 'deform' | 'why'
+export type PageId = 'home' | 'base' | 'define' | 'react-form' | 'why'
 
 type PageMetadata = {
   title: string,
@@ -12,7 +12,7 @@ type PageMetadata = {
 
 export const pagePaths: Record<PageId, PageMetadata> = {
   home: {
-    path: '/',
+    path: '/home',
     title: 'Home',
   },
   base: {
@@ -23,7 +23,7 @@ export const pagePaths: Record<PageId, PageMetadata> = {
     path: '/define',
     title: 'Define',
   },
-  deform: {
+  'react-form': {
     path: '/react-form',
     title: 'React Form',
   },

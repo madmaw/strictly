@@ -1,0 +1,85 @@
+---
+import fs from 'fs/promises'
+import { marked } from 'marked'
+import Layout from 'layouts/default.astro'
+import { PageId } from 'components/mdx_navigation'
+import { isDefined } from '@strictly/base'
+
+type StaticPath = {
+  props: {
+    content: string,
+    page: string,
+  },
+  params: {
+    slug: string,
+  }
+}
+
+// repurpose our README.md files as part of the main site
+export async function getStaticPaths() {
+  const packagesFolder = '../../packages'
+  const packages = await fs.readdir(packagesFolder)
+  const promises = packages.map(async function (folder) {
+    const promises = (await fs.readdir(`${packagesFolder}/${folder}`))
+      .filter(
+        function (file) {
+          return file.endsWith('.md')
+        }
+      )
+      .map(
+        async function (file): Promise<readonly StaticPath[] | undefined> {
+          const path = `${packagesFolder}/${folder}/${file}`
+          try {
+            const buffer = await fs.readFile(path)
+            const content = await marked.parse(buffer.toString())
+            
+            const page = {
+              props: {
+                content,
+                page: folder
+              },
+              params: {
+                slug: `${folder}/${file}`,
+              }
+            }
+            if (file === 'README.md') {
+              return [
+                page,
+                {
+                  props: {
+                    content,
+                    page: folder
+                  },
+                  params: {
+                    slug: `${folder}/`,
+                  }
+                }
+              ]
+            }
+            return [page]
+          } catch (e) {
+            console.error(e)
+            return
+          }
+        }
+      )
+    return (await Promise.all(promises)).filter(isDefined).flat()
+  })
+  return (await Promise.all(promises)).flat()
+}
+
+const { page, content } = Astro.props;
+const { slug } = Astro.params;
+
+console.log(page, slug)
+
+// create a fake frontmatter
+const frontmatter = {
+  page: page as PageId,
+  url: Astro.url.toString(),
+  file: page,
+}
+---
+<Layout frontmatter={frontmatter} headings={[]} url={Astro.url.toString()}>
+  <article set:html={content} />
+</Layout>
