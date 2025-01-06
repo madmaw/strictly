@@ -11,15 +11,16 @@ const {
 const x: ReturnType<typeof defineConfig<['en']>> = defineConfig({
   site: PUBLIC_SITE,
   base: PUBLIC_BASE,
+  trailingSlash: 'never',
   i18n: {
     locales: ['en'],
     defaultLocale: 'en',
   },
   integrations: [
-    mdx({}),
     react({
       experimentalReactChildren: true,
     }),
+    mdx({}),
   ],
 })
 export default x

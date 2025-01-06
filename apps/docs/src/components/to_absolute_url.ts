@@ -8,9 +8,15 @@ export function createToAbsoluteUrl(
   const baseUrl = new URL(base.endsWith('/') ? base : base + '/', site)
   const pageUrl = new URL(currentPath, baseUrl)
   return function (path: string) {
+    let absoluteUrl: string
     if (path.startsWith('/')) {
-      return new URL(path.substring(1), baseUrl).toString()
+      absoluteUrl = new URL(path.substring(1), baseUrl).toString()
+    } else {
+      absoluteUrl = new URL(path, pageUrl).toString()
     }
-    return new URL(path, pageUrl).toString()
+    if (absoluteUrl.endsWith('/')) {
+      return absoluteUrl.substring(0, absoluteUrl.length - 1)
+    }
+    return absoluteUrl
   }
 }

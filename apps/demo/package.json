@@ -55,7 +55,7 @@
     "always": "lingui compile",
     "build": "vite build",
     "check-types": "tsc",
-    "clean": "del-cli dist",
+    "clean": "del-cli dist .out .turbo",
     "dev": "vite",
     "lingui": "yarn lingui:extract && yarn lingui:compile",
     "lingui:compile": "lingui compile --typescript",

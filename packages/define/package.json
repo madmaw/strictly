@@ -27,7 +27,7 @@
   "scripts": {
     "build": "tsup",
     "check-types": "tsc",
-    "clean": "del-cli dist",
+    "clean": "del-cli dist .out .turbo",
     "lint": "cross-env ESLINT_USE_FLAT_CONFIG=false eslint . --max-warnings=0",
     "lint:fix": "cross-env ESLINT_USE_FLAT_CONFIG=false eslint . --fix",
     "release:exports": "json -f package.json -f package.exports.json --merge > package.release.json",

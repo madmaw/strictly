@@ -35,14 +35,14 @@ jobs:
             echo "The yarn.lock file has been modified. Please commit the updated lockfile."
             exit 1
           fi
-      - name: Run linting
-        uses: borales/actions-yarn@v4.2.0
-        with:
-          cmd: lint
       - name: Run typechecking
         uses: borales/actions-yarn@v4.2.0
         with:
           cmd: check-types
+      - name: Run linting
+        uses: borales/actions-yarn@v4.2.0
+        with:
+          cmd: lint
       - name: Run tests
         uses: borales/actions-yarn@v4.2.0
         with:

@@ -2,6 +2,9 @@
   "dependencies": {
     "@astrojs/mdx": "^4.0.2",
     "@astrojs/react": "^4.1.1",
+    "@strictly/base": "*",
+    "@strictly/define": "*",
+    "@strictly/react-form": "*",
     "astro": "^5.0.9",
     "marked": "^15.0.4",
     "react": "^19.0.0"
@@ -19,6 +22,7 @@
   "scripts": {
     "build": "astro build",
     "check-types": "tsc",
+    "clean": "del-cli dist .out .turbo",
     "dev": "astro dev",
     "lint": "cross-env ESLINT_USE_FLAT_CONFIG=false eslint . --max-warnings=0",
     "preview": "astro preview"

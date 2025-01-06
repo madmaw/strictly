@@ -4,11 +4,17 @@
     "always": {
     },
     "build": {
-      "dependsOn": ["^check-types"],
+      "dependsOn": [
+        "^build",
+        "^check-types"
+      ],
       "outputs": ["dist/**"]
     },
     "check-types": {
-      "dependsOn": ["^always"]
+      "dependsOn": [
+        "^always",
+        "^check-types"
+      ]
     },
     "clean": {
       "cache": false
