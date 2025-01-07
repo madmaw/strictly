@@ -12,9 +12,10 @@ import {
   type ValueTypesOfDiscriminatedUnion,
 } from '@strictly/define'
 import {
-  type FieldConversion,
-  FieldConversionResult,
+  type AnnotatedFieldConversion,
   type TwoWayFieldConverterWithValueFactory,
+  type UnreliableFieldConversion,
+  UnreliableFieldConversionType,
 } from 'types/field_converters'
 
 export abstract class AbstractSelectValueTypeConverter<
@@ -36,14 +37,15 @@ export abstract class AbstractSelectValueTypeConverter<
     protected readonly values: Values,
     private readonly defaultValueKey: keyof Values | null,
     private readonly noSuchValueError: NoSuchValueError | null,
+    private readonly required: boolean,
   ) {
   }
 
-  revert(from: keyof Values | null): FieldConversion<ValueOfType<T>, NoSuchValueError> {
+  revert(from: keyof Values | null): UnreliableFieldConversion<ValueOfType<T>, NoSuchValueError> {
     const prototype: ValueOfType<T> | null = from == null ? null : this.values[from]
     if (prototype == null && this.noSuchValueError != null) {
       return {
-        type: FieldConversionResult.Failure,
+        type: UnreliableFieldConversionType.Failure,
         error: this.noSuchValueError,
         value: null,
       }
@@ -52,19 +54,20 @@ export abstract class AbstractSelectValueTypeConverter<
     // TODO given we are dealing with strings, maybe we should have a check to make sure value is in the record
     // of values?
     return {
-      type: FieldConversionResult.Success,
+      type: UnreliableFieldConversionType.Success,
       value: value!,
     }
   }
 
-  convert(from: ValueOfType<T>): To {
-    if (from == null) {
-      return null!
+  convert(from: ValueOfType<T>): AnnotatedFieldConversion<To> {
+    const value = from == null ? null! : this.doConvert(from)
+    return {
+      value,
+      required: this.required,
     }
-    return this.doConvert(from)
   }
 
-  protected abstract doConvert(from: ValueOfType<T>): To
+  protected abstract doConvert(from: NonNullable<ValueOfType<T>>): To
 
   create(): ValueOfType<T> {
     return this.defaultValueKey != null ? this.values[this.defaultValueKey] : null!
@@ -94,10 +97,11 @@ export class SelectDiscriminatedUnionConverter<
       values,
       defaultValueKey,
       null,
+      true,
     )
   }
 
-  protected override doConvert(from: ValueOfType<Type<U>>) {
+  protected override doConvert(from: NonNullable<ValueOfType<Type<U>>>) {
     const {
       definition: {
         discriminator,
@@ -127,17 +131,19 @@ export class SelectLiteralConverter<
     private readonly valuesToStrings: Values,
     defaultValue: L | null,
     noSuchValueError: NoSuchValueError | null,
+    required = false,
   ) {
     super(
       typeDef,
       reverse(valuesToStrings),
       defaultValue && valuesToStrings[defaultValue],
       noSuchValueError,
+      required,
     )
   }
 
-  protected override doConvert(from: L) {
-    return from && this.valuesToStrings[from]
+  protected override doConvert(from: NonNullable<L>) {
+    return this.valuesToStrings[from]
   }
 }
 
@@ -160,6 +166,7 @@ export class SelectStringConverter<
     allowedValues: ExhaustiveArrayOfUnion<NonNullable<L>, A>,
     defaultValue: L | null,
     noSuchValueError: NoSuchValueError | null,
+    required = false,
   ) {
     super(
       typeDef,
@@ -172,10 +179,11 @@ export class SelectStringConverter<
       ),
       defaultValue,
       noSuchValueError,
+      required,
     )
   }
 
-  protected override doConvert(from: L) {
-    return from!
+  protected override doConvert(from: NonNullable<L>) {
+    return from
   }
 }

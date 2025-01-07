@@ -1,9 +1,14 @@
 import { reduce } from '@strictly/base'
-import { type Validator } from '@strictly/define'
+import {
+  annotations,
+  validate,
+  type Validator,
+} from '@strictly/define'
 import { type Simplify } from 'type-fest'
 import {
-  type FieldConversion,
-  FieldConversionResult,
+  type AnnotatedFieldConversion,
+  type UnreliableFieldConversion,
+  UnreliableFieldConversionType,
 } from 'types/field_converters'
 import { type FieldAdapter } from './field_adapter'
 
@@ -50,23 +55,36 @@ export function mergeAdaptersWithValidators<
         return acc
       }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      function revert(to: any, ...params: [any, any]): FieldConversion {
+      function revert(to: any, ...params: [any, any]): UnreliableFieldConversion {
         const result = adapter.revert!(to, ...params)
-        if (result.type === FieldConversionResult.Failure) {
+        if (result.type === UnreliableFieldConversionType.Failure) {
           return result
         }
-        const validationError = validator(result.value, ...params)
+        const validationError = validate(validator, result.value, ...params)
         if (validationError == null) {
           return result
         }
         return {
-          type: FieldConversionResult.Failure,
+          type: UnreliableFieldConversionType.Failure,
           value: [result.value] as const,
           error: validationError,
         }
       }
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      function convert(from: any, ...params: [any, any]): AnnotatedFieldConversion {
+        const {
+          required: required1,
+          value,
+        } = adapter.convert(from, ...params)
+        const { required: required2 } = annotations(validator, ...params)
+        return {
+          value,
+          required: required1 || required2,
+        }
+      }
       acc[key] = {
         ...adapter,
+        convert,
         revert: adapter.revert && revert,
       }
       return acc

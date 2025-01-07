@@ -18,6 +18,7 @@ import {
   type DogBreed,
   NOT_A_BREED_ERROR,
   NOT_A_NUMBER_ERROR,
+  REQUIRED_ERROR,
 } from './types'
 
 export type PetSpeciesDogFormFields = Pick<
@@ -49,6 +50,11 @@ function BreedInputErrorRenderer({
       return t({
         message: 'Not a recognized dog breed',
         comment: 'error that is displayed when an invalid breed is selected',
+      })
+    case REQUIRED_ERROR:
+      return t({
+        message: 'Must specify a breed',
+        comment: 'error that is displayed when no breed is selected',
       })
     default:
       throw new UnreachableError(error)

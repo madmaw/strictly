@@ -30,27 +30,33 @@ import { prototypingFieldValueFactory } from 'field_value_factories/prototyping_
 import { type Simplify } from 'type-fest'
 import { type Field } from 'types/field'
 import {
-  FieldConversionResult,
+  UnreliableFieldConversionType,
 } from 'types/field_converters'
-import { mockClear } from 'vitest-mock-extended'
-import { createMockedAdapter } from './fixtures'
+import {
+  createMockedAdapter,
+  resetMockAdapter,
+} from './fixtures'
 
 const IS_NAN_ERROR = 1
 
+const originalIntegerToStringAdapter = adapterFromTwoWayConverter(
+  new IntegerToStringConverter(IS_NAN_ERROR),
+  prototypingFieldValueFactory(0),
+)
+
+const originalBooleanToBooleanAdapter = identityAdapter(false)
+
 describe('all', function () {
   const integerToStringAdapter = createMockedAdapter(
-    adapterFromTwoWayConverter(
-      new IntegerToStringConverter(IS_NAN_ERROR),
-      prototypingFieldValueFactory(0),
-    ),
+    originalIntegerToStringAdapter,
   )
   const booleanToBooleanAdapter = createMockedAdapter(
-    identityAdapter(false),
+    originalBooleanToBooleanAdapter,
   )
 
   beforeEach(function () {
-    mockClear(integerToStringAdapter)
-    mockClear(booleanToBooleanAdapter)
+    resetMockAdapter(originalIntegerToStringAdapter, integerToStringAdapter)
+    resetMockAdapter(originalBooleanToBooleanAdapter, booleanToBooleanAdapter)
   })
 
   describe('FlattenedTypePathsToConvertersOf', function () {
@@ -153,56 +159,98 @@ describe('all', function () {
 
   describe('FormModel', function () {
     describe('literal', function () {
-      const typeDef = numberType
-      const adapters = {
-        $: integerToStringAdapter,
-      } as const
-      let originalValue: ValueOfType<typeof typeDef>
-      let model: FormModel<
-        typeof typeDef,
-        ValueToTypePathsOfType<typeof typeDef>,
-        typeof adapters
-      >
-      beforeEach(function () {
-        originalValue = 5
-        model = new FormModel<
+      describe('optional', function () {
+        const typeDef = numberType
+        const adapters = {
+          $: integerToStringAdapter,
+        } as const
+        let originalValue: ValueOfType<typeof typeDef>
+        let model: FormModel<
           typeof typeDef,
           ValueToTypePathsOfType<typeof typeDef>,
           typeof adapters
-        >(
-          typeDef,
-          originalValue,
-          adapters,
-        )
-      })
-
-      describe('accessors', function () {
-        it('gets the expected value', function () {
-          const accessor = expectDefinedAndReturn(model.accessors.$)
-          expect(accessor.value).toEqual(originalValue)
-        })
-
-        it('sets the underlying value', function () {
-          const newValue = 1
-          const accessor = expectDefinedAndReturn(model.accessors.$)
-          accessor.set(newValue)
-          expect(model.value).toEqual(newValue)
-        })
-      })
-
-      describe('fields', function () {
-        it('equals expected value', function () {
-          expect(model.fields).toEqual(
-            expect.objectContaining({
-              $: expect.objectContaining({
-                value: '5',
-              }),
-            }),
+        >
+        beforeEach(function () {
+          originalValue = 5
+          model = new FormModel<
+            typeof typeDef,
+            ValueToTypePathsOfType<typeof typeDef>,
+            typeof adapters
+          >(
+            typeDef,
+            originalValue,
+            adapters,
           )
         })
 
-        it('has the expected keys', function () {
-          expect(Object.keys(model.fields)).toEqual(['$'])
+        describe('accessors', function () {
+          it('gets the expected value', function () {
+            const accessor = expectDefinedAndReturn(model.accessors.$)
+            expect(accessor.value).toEqual(originalValue)
+          })
+
+          it('sets the underlying value', function () {
+            const newValue = 1
+            const accessor = expectDefinedAndReturn(model.accessors.$)
+            accessor.set(newValue)
+            expect(model.value).toEqual(newValue)
+          })
+        })
+
+        describe('fields', function () {
+          it('equals expected value', function () {
+            expect(model.fields).toEqual(
+              expect.objectContaining({
+                $: expect.objectContaining({
+                  value: '5',
+                }),
+              }),
+            )
+          })
+
+          it('has the expected keys', function () {
+            expect(Object.keys(model.fields)).toEqual(['$'])
+          })
+        })
+      })
+
+      describe('required', function () {
+        const typeDef = numberType
+        const adapters = {
+          $: integerToStringAdapter,
+        } as const
+        let originalValue: ValueOfType<typeof typeDef>
+        let model: FormModel<
+          typeof typeDef,
+          ValueToTypePathsOfType<typeof typeDef>,
+          typeof adapters
+        >
+        beforeEach(function () {
+          integerToStringAdapter.convert.mockReturnValue({
+            value: 'x',
+            required: true,
+          })
+          originalValue = 5
+          model = new FormModel<
+            typeof typeDef,
+            ValueToTypePathsOfType<typeof typeDef>,
+            typeof adapters
+          >(
+            typeDef,
+            originalValue,
+            adapters,
+          )
+        })
+
+        it('reports required status', function () {
+          expect(model.fields).toEqual(
+            expect.objectContaining({
+              $: expect.objectContaining({
+                value: 'x',
+                required: true,
+              }),
+            }),
+          )
         })
       })
     })
@@ -262,6 +310,25 @@ describe('all', function () {
             4,
             17,
           ])
+        })
+      })
+
+      describe('fields', function () {
+        it('equals the expected value', function () {
+          expect(model.fields).toEqual(expect.objectContaining({
+            '$.0': expect.objectContaining({
+              value: '1',
+              required: false,
+            }),
+            '$.1': expect.objectContaining({
+              value: '4',
+              required: false,
+            }),
+            '$.2': expect.objectContaining({
+              value: '17',
+              required: false,
+            }),
+          }))
         })
       })
     })
@@ -475,7 +542,7 @@ describe('all', function () {
             const errorCode = 65
             beforeEach(function () {
               integerToStringAdapter.revert?.mockReturnValueOnce({
-                type: FieldConversionResult.Failure,
+                type: UnreliableFieldConversionType.Failure,
                 error: errorCode,
                 value: [newValue],
               })
@@ -667,7 +734,7 @@ describe('all', function () {
           integerToStringAdapter.revert.mockImplementationOnce(function (_value, _path, context) {
             contextCopy = [...context]
             return {
-              type: FieldConversionResult.Success,
+              type: UnreliableFieldConversionType.Success,
               value: 1,
             }
           })

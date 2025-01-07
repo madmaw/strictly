@@ -1,29 +1,32 @@
 import {
-  FieldConversionResult,
-  type FieldConverter,
-  type SafeFieldConverter,
+  type AnnotatedFieldConverter,
+  UnreliableFieldConversionType,
+  type UnreliableFieldConverter,
 } from 'types/field_converters'
 
-export function safeIdentityConverter<
+export function annotatedIdentityConverter<
   V,
   ValuePath extends string,
   Context,
->(): SafeFieldConverter<
+>(required: boolean = false): AnnotatedFieldConverter<
   V,
   V,
   ValuePath,
   Context
 > {
-  return function (v: V) {
-    return v
+  return function (value: V) {
+    return {
+      value,
+      required,
+    }
   }
 }
 
-export function identityConverter<
+export function unreliableIdentityConverter<
   V,
   ValuePath extends string,
   Context,
->(): FieldConverter<
+>(): UnreliableFieldConverter<
   V,
   V,
   never,
@@ -32,7 +35,7 @@ export function identityConverter<
 > {
   return function (value: V) {
     return {
-      type: FieldConversionResult.Success,
+      type: UnreliableFieldConversionType.Success,
       value,
     }
   }

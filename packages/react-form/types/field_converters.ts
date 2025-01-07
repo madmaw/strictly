@@ -1,15 +1,15 @@
 import { type Maybe } from '@strictly/base'
 
-export enum FieldConversionResult {
+export enum UnreliableFieldConversionType {
   Success = 0,
   Failure = 1,
 }
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type FieldConversion<V = any, E = any> = {
-  type: FieldConversionResult.Success,
+export type UnreliableFieldConversion<V = any, E = any> = {
+  type: UnreliableFieldConversionType.Success,
   value: V,
 } | {
-  type: FieldConversionResult.Failure,
+  type: UnreliableFieldConversionType.Failure,
   error: E,
   value: Maybe<V>,
 }
@@ -19,23 +19,29 @@ export type FieldConversion<V = any, E = any> = {
 // a `from` type of `string`, and a `to` type of `number`
 
 // TODO converter can also have the allowable value path as a parameter
-export type FieldConverter<
+export type UnreliableFieldConverter<
   From,
   To,
   E,
   ValuePath extends string,
   Context,
 > = {
-  (from: From, valuePath: ValuePath, context: Context): FieldConversion<To, E>,
+  (from: From, valuePath: ValuePath, context: Context): UnreliableFieldConversion<To, E>,
 }
 
-export type SafeFieldConverter<
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type AnnotatedFieldConversion<V = any> = {
+  value: V,
+  required: boolean,
+}
+
+export type AnnotatedFieldConverter<
   From,
   To,
   ValuePath extends string,
   Context,
 > = {
-  (from: From, valuePath: ValuePath, context: Context): To,
+  (from: From, valuePath: ValuePath, context: Context): AnnotatedFieldConversion<To>,
 }
 
 export type TwoWayFieldConverter<
@@ -45,9 +51,9 @@ export type TwoWayFieldConverter<
   ValuePath extends string,
   Context,
 > = {
-  convert: SafeFieldConverter<From, To, ValuePath, Context>,
+  convert: AnnotatedFieldConverter<From, To, ValuePath, Context>,
 
-  revert: FieldConverter<To, From, E, ValuePath, Context>,
+  revert: UnreliableFieldConverter<To, From, E, ValuePath, Context>,
 }
 
 export type FieldValueFactory<V, ValuePath extends string, Context> = {

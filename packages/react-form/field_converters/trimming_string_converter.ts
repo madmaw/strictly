@@ -1,7 +1,8 @@
 import {
-  type FieldConversion,
-  FieldConversionResult,
+  type AnnotatedFieldConversion,
   type TwoWayFieldConverter,
+  type UnreliableFieldConversion,
+  UnreliableFieldConversionType,
 } from 'types/field_converters'
 
 export class TrimmingStringConverter<ValuePath extends string, Context>
@@ -10,13 +11,16 @@ export class TrimmingStringConverter<ValuePath extends string, Context>
   constructor() {
   }
 
-  convert(to: string): string {
-    return to.trim()
+  convert(to: string): AnnotatedFieldConversion<string> {
+    return {
+      value: to.trim(),
+      required: false,
+    }
   }
 
-  revert(from: string): FieldConversion<string, never> {
+  revert(from: string): UnreliableFieldConversion<string, never> {
     return {
-      type: FieldConversionResult.Success,
+      type: UnreliableFieldConversionType.Success,
       value: from.trim(),
     }
   }

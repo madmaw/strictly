@@ -1,6 +1,7 @@
 import {
-  type FieldConversion,
+  type AnnotatedFieldConversion,
   type TwoWayFieldConverter,
+  type UnreliableFieldConversion,
 } from 'types/field_converters'
 
 export class MaybeIdentityConverter<From, To, E, ValuePath extends string, Context>
@@ -12,12 +13,14 @@ export class MaybeIdentityConverter<From, To, E, ValuePath extends string, Conte
   ) {
   }
 
-  convert(from: From, valuePath: ValuePath, context: Context): To | From {
+  convert(from: From, valuePath: ValuePath, context: Context): AnnotatedFieldConversion<To | From> {
     return this.converter.convert(from, valuePath, context)
   }
 
-  revert(from: To | From, valuePath: ValuePath, context: Context): FieldConversion<From, E> {
-    const value = this.isFrom(from) ? this.converter.convert(from, valuePath, context) : from
+  revert(from: To | From, valuePath: ValuePath, context: Context): UnreliableFieldConversion<From, E> {
+    const value = this.isFrom(from)
+      ? this.converter.convert(from, valuePath, context).value
+      : from
     return this.converter.revert(value, valuePath, context)
   }
 }

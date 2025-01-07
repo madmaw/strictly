@@ -1,12 +1,13 @@
 import { type Reverse } from '@strictly/base'
 import {
   booleanType,
+  DefinedValidator,
   type FlattenedAccessorsOfType,
   type FlattenedTypesOfType,
   type FlattenedValuesOfType,
   list,
   literal,
-  minimumStringLengthValidatorFactory,
+  MinimumStringLengthValidator,
   numberType,
   object,
   type PathsOfType,
@@ -66,11 +67,17 @@ export const NOT_A_NUMBER_ERROR = 'not a number' as const
 // eslint false negative
 // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
 export const NOT_A_BREED_ERROR = 'not a breed' as const
+// eslint false negative
+// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+export const REQUIRED_ERROR = 'is required' as const
 
 export type PetTypeToValuePaths = Reverse<PetValueToTypePaths>
 
 export const petValidators = {
-  '$.name': minimumStringLengthValidatorFactory(3),
+  '$.name': new MinimumStringLengthValidator(3),
+  '$.species': new DefinedValidator(REQUIRED_ERROR),
+  '$.species.cat:breed': new DefinedValidator(REQUIRED_ERROR),
+  '$.species.dog:breed': new DefinedValidator(REQUIRED_ERROR),
 } as const satisfies Partial<ValidatorsOfValues<
   FlattenedValuesOfType<typeof petType, '*'>,
   PetTypeToValuePaths,

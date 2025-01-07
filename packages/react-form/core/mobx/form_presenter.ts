@@ -4,6 +4,7 @@ import {
   assertState,
   checkValidNumber,
   type ElementOfArray,
+  map,
   type Maybe,
   toArray,
   UnreachableError,
@@ -40,7 +41,8 @@ import {
   type Field,
 } from 'types/field'
 import {
-  FieldConversionResult,
+  type AnnotatedFieldConversion,
+  UnreliableFieldConversionType,
 } from 'types/field_converters'
 import {
   type ErrorTypeOfFieldAdapter,
@@ -74,9 +76,7 @@ export type FlattenedTypePathsToAdaptersOf<
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-type FieldOverride<V = any> = {
-  value: V,
-}
+type FieldOverride<V = any> = Maybe<V>
 
 type FlattenedFieldOverrides<
   ValuePathsToAdapters extends Readonly<Record<string, FieldAdapter>>,
@@ -159,7 +159,7 @@ export class FormPresenter<
     model: FormModel<T, ValueToTypePaths, TypePathsToAdapters, ValuePathsToAdapters>,
     valuePath: K,
     // TODO can this type be simplified?
-    elementValue: Maybe<ElementOfArray<FlattenedValuesOfType<T>[K]>>,
+    elementValue: Maybe<ElementOfArray<FlattenedValuesOfType<T>[K]>> = null,
     index?: number,
   ) {
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
@@ -329,11 +329,9 @@ export class FormPresenter<
     const conversion = revert(value, valuePath as any, model.value)
     const accessor = model.getAccessorForValuePath(valuePath)
     return runInAction(() => {
-      model.fieldOverrides[valuePath] = {
-        value,
-      }
+      model.fieldOverrides[valuePath] = [value]
       switch (conversion.type) {
-        case FieldConversionResult.Failure:
+        case UnreliableFieldConversionType.Failure:
           if (displayValidation) {
             model.errors[valuePath] = conversion.error
           }
@@ -341,7 +339,7 @@ export class FormPresenter<
             accessor.set(conversion.value[0])
           }
           return false
-        case FieldConversionResult.Success:
+        case UnreliableFieldConversionType.Success:
           delete model.errors[valuePath]
           accessor?.set(conversion.value)
           return true
@@ -379,12 +377,15 @@ export class FormPresenter<
     } = adapter
     const accessor = model.accessors[valuePath]
     const value = accessor == null ? create(valuePath, model.value) : accessor.value
-    const displayValue = convert(value, valuePath, model.value)
+    const {
+      value: displayValue,
+      required,
+    } = convert(value, valuePath, model.value)
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+    const key = valuePath as unknown as keyof ValuePathsToAdapters
     runInAction(function () {
-      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-      model.fieldOverrides[valuePath as unknown as keyof ValuePathsToAdapters] = {
-        value: displayValue,
-      }
+      model.fieldOverrides[key] = [displayValue]
+      model.requiredCache[key] = required
     })
   }
 
@@ -421,7 +422,10 @@ export class FormPresenter<
     } = this.getAdapterForValuePath(valuePath)
     const fieldOverride = model.fieldOverrides[valuePath]
     const accessor = model.getAccessorForValuePath(valuePath)
-    const storedValue = convert(
+    const {
+      value: storedValue,
+      required,
+    } = convert(
       accessor != null
         ? accessor.value
         // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
@@ -431,7 +435,7 @@ export class FormPresenter<
       model.value,
     )
     const value = fieldOverride != null
-      ? fieldOverride.value
+      ? fieldOverride[0]
       : storedValue
     const dirty = storedValue !== value
     assertExists(revert, 'changing field directly not supported {}', valuePath)
@@ -439,14 +443,15 @@ export class FormPresenter<
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     const conversion = revert(value, valuePath as string, model.value)
     return runInAction(function () {
+      model.requiredCache[valuePath] = required
       switch (conversion.type) {
-        case FieldConversionResult.Failure:
+        case UnreliableFieldConversionType.Failure:
           model.errors[valuePath] = conversion.error
           if (conversion.value != null && accessor != null && dirty) {
             accessor.set(conversion.value[0])
           }
           return false
-        case FieldConversionResult.Success:
+        case UnreliableFieldConversionType.Success:
           delete model.errors[valuePath]
           if (accessor != null && dirty) {
             accessor.set(conversion.value)
@@ -488,22 +493,26 @@ export class FormPresenter<
             return success
           }
           const fieldOverride = model.fieldOverrides[adapterPath]
-          const storedValue = convert(accessor.value, valuePath, model.value)
+          const {
+            value: storedValue,
+            required,
+          } = convert(accessor.value, valuePath, model.value)
           const value = fieldOverride != null
-            ? fieldOverride.value
+            ? fieldOverride[0]
             : storedValue
           // TODO more nuanced comparison
-          const dirty = fieldOverride != null && fieldOverride.value !== storedValue
+          const dirty = fieldOverride != null && fieldOverride[0] !== storedValue
 
           const conversion = revert(value, valuePath, model.value)
+          model.requiredCache[adapterPath] = required
           switch (conversion.type) {
-            case FieldConversionResult.Failure:
+            case UnreliableFieldConversionType.Failure:
               model.errors[adapterPath] = conversion.error
               if (conversion.value != null && dirty) {
                 accessor.set(conversion.value[0])
               }
               return false
-            case FieldConversionResult.Success:
+            case UnreliableFieldConversionType.Success:
               if (dirty) {
                 accessor.set(conversion.value)
               }
@@ -550,6 +559,8 @@ export class FormModel<
   accessor fieldOverrides: FlattenedFieldOverrides<ValuePathsToAdapters>
   @observable.shallow
   accessor errors: FlattenedErrors<ValuePathsToAdapters> = {}
+  @observable.shallow
+  accessor requiredCache: Partial<Record<keyof ValuePathsToAdapters, boolean>>
 
   private readonly flattenedTypeDefs: Readonly<Record<string, Type>>
 
@@ -562,11 +573,17 @@ export class FormModel<
     this.flattenedTypeDefs = flattenTypesOfType(type)
     // pre-populate field overrides for consistent behavior when default information is overwritten
     // then returned to
-    this.fieldOverrides = flattenValueTo(
+    const conversions = flattenValueTo(
       type,
       this.value,
       () => {},
-      (_t: StrictTypeDef, value: AnyValueType, _setter, typePath, valuePath): FieldOverride | undefined => {
+      (
+        _t: StrictTypeDef,
+        value: AnyValueType,
+        _setter,
+        typePath,
+        valuePath,
+      ): AnnotatedFieldConversion<FieldOverride> | undefined => {
         // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
         const adapter = this.adapters[typePath as keyof TypePathsToAdapters]
         if (adapter == null) {
@@ -580,12 +597,17 @@ export class FormModel<
           // no need to store a temporary value if the value cannot be written back
           return
         }
-        const displayValue = convert(value, valuePath, this.value)
-        return {
-          value: displayValue,
-        }
+        return convert(value, valuePath, this.value)
       },
     )
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+    this.fieldOverrides = map(conversions, function (_k, v) {
+      return v && [v.value]
+    }) as FlattenedFieldOverrides<ValuePathsToAdapters>
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+    this.requiredCache = map(conversions, function (_k, v) {
+      return !!v?.required
+    }) as Partial<Record<keyof ValuePathsToAdapters, boolean>>
   }
 
   @computed
@@ -660,8 +682,14 @@ export class FormModel<
     const accessor = this.getAccessorForValuePath(valuePath)
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     const fieldTypeDef = this.flattenedTypeDefs[typePath as string]
-    const value = fieldOverride
-      ? fieldOverride.value
+    const {
+      value,
+      required,
+    } = fieldOverride
+      ? {
+        value: fieldOverride[0],
+        required: !!this.requiredCache[valuePath],
+      }
       : convert(
         accessor != null
           ? accessor.value
@@ -684,7 +712,7 @@ export class FormModel<
       error,
       // if we can't write it back, then we have to disable it
       disabled: this.isDisabled(valuePath),
-      required: this.isRequired(valuePath),
+      required,
     }
   }
 
@@ -706,12 +734,7 @@ export class FormModel<
   }
 
   protected isDisabled(_valuePath: keyof ValuePathsToAdapters): boolean {
-    // TODO infer from types
-    return false
-  }
-
-  protected isRequired(_valuePath: keyof ValuePathsToAdapters): boolean {
-    // TODO infer from types
+    // TODO
     return false
   }
 }

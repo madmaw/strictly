@@ -1,7 +1,7 @@
 import {
-  type FieldConverter,
+  type AnnotatedFieldConverter,
   type FieldValueFactory,
-  type SafeFieldConverter,
+  type UnreliableFieldConverter,
 } from 'types/field_converters'
 
 export type FieldAdapter<
@@ -16,9 +16,9 @@ export type FieldAdapter<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   Context = any,
 > = {
-  readonly convert: SafeFieldConverter<From, To, ValuePath, Context>,
+  readonly convert: AnnotatedFieldConverter<From, To, ValuePath, Context>,
   readonly create: FieldValueFactory<From, ValuePath, Context>,
-  readonly revert?: FieldConverter<To, From, E, ValuePath, Context>,
+  readonly revert?: UnreliableFieldConverter<To, From, E, ValuePath, Context>,
 }
 
 export type FromTypeOfFieldAdapter<C extends FieldAdapter> = C extends FieldAdapter<infer From> ? From

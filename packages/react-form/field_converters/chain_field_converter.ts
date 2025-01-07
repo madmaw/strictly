@@ -2,10 +2,11 @@ import {
   UnreachableError,
 } from '@strictly/base'
 import {
-  type FieldConversion,
-  FieldConversionResult,
-  type FieldConverter,
-  type SafeFieldConverter,
+  type AnnotatedFieldConversion,
+  type AnnotatedFieldConverter,
+  type UnreliableFieldConversion,
+  UnreliableFieldConversionType,
+  type UnreliableFieldConverter,
 } from 'types/field_converters'
 
 export function chainFieldConverter<
@@ -17,27 +18,27 @@ export function chainFieldConverter<
   ValuePath extends string,
   Context,
 >(
-  from: FieldConverter<From, Intermediate, E1, ValuePath, Context>,
-  to: FieldConverter<Intermediate, To, E2, ValuePath, Context>,
-): FieldConverter<From, To, E1 | E2, ValuePath, Context> {
-  return function (value: From, valuePath: ValuePath, context: Context): FieldConversion<To, E1 | E2> {
+  from: UnreliableFieldConverter<From, Intermediate, E1, ValuePath, Context>,
+  to: UnreliableFieldConverter<Intermediate, To, E2, ValuePath, Context>,
+): UnreliableFieldConverter<From, To, E1 | E2, ValuePath, Context> {
+  return function (value: From, valuePath: ValuePath, context: Context): UnreliableFieldConversion<To, E1 | E2> {
     const fromConversion = from(value, valuePath, context)
     switch (fromConversion.type) {
-      case FieldConversionResult.Success:
+      case UnreliableFieldConversionType.Success:
         return to(fromConversion.value, valuePath, context)
-      case FieldConversionResult.Failure:
+      case UnreliableFieldConversionType.Failure:
         if (fromConversion.value != null) {
           const toConversion = to(fromConversion.value[0], valuePath, context)
           switch (toConversion.type) {
-            case FieldConversionResult.Success:
+            case UnreliableFieldConversionType.Success:
               return {
-                type: FieldConversionResult.Failure,
+                type: UnreliableFieldConversionType.Failure,
                 error: fromConversion.error,
                 value: [toConversion.value],
               }
-            case FieldConversionResult.Failure:
+            case UnreliableFieldConversionType.Failure:
               return {
-                type: FieldConversionResult.Failure,
+                type: UnreliableFieldConversionType.Failure,
                 error: fromConversion.error,
                 value: toConversion.value,
               }
@@ -46,7 +47,7 @@ export function chainFieldConverter<
           }
         } else {
           return {
-            type: FieldConversionResult.Failure,
+            type: UnreliableFieldConversionType.Failure,
             error: fromConversion.error,
             value: null,
           }
@@ -64,11 +65,21 @@ export function chainSafeFieldConverter<
   ValuePath extends string,
   Context,
 >(
-  from: SafeFieldConverter<From, Intermediate, ValuePath, Context>,
-  to: SafeFieldConverter<Intermediate, To, ValuePath, Context>,
-): SafeFieldConverter<From, To, ValuePath, Context> {
-  return function (value: From, valuePath: ValuePath, context: Context): To {
-    const intermediate = from(value, valuePath, context)
-    return to(intermediate, valuePath, context)
+  from: AnnotatedFieldConverter<From, Intermediate, ValuePath, Context>,
+  to: AnnotatedFieldConverter<Intermediate, To, ValuePath, Context>,
+): AnnotatedFieldConverter<From, To, ValuePath, Context> {
+  return function (value: From, valuePath: ValuePath, context: Context): AnnotatedFieldConversion {
+    const {
+      required: intermediateRequired,
+      value: intermediateValue,
+    } = from(value, valuePath, context)
+    const {
+      required: finalRequired,
+      value: finalValue,
+    } = to(intermediateValue, valuePath, context)
+    return {
+      value: finalValue,
+      required: intermediateRequired || finalRequired,
+    }
   }
 }

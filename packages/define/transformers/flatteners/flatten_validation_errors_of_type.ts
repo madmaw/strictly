@@ -13,7 +13,10 @@ import { type FlattenedValuesOfType } from 'types/flattened_values_of_type'
 import { type ReadonlyTypeOfType } from 'types/readonly_type_of_type'
 import { type StrictTypeDef } from 'types/strict_definitions'
 import { type ValueOfType } from 'types/value_of_type'
-import { type Validator } from 'validation/validator'
+import {
+  validate,
+  type Validator,
+} from 'validation/validator'
 
 type ErrorOfValidator<V extends Validator> = V extends Validator<infer _V, infer E> ? E | null : never
 
@@ -83,7 +86,8 @@ export function flattenValidationErrorsOfType<
     ) {
       // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
       const validator = validators[typePath as keyof TypePathsToValidators]
-      return validator?.(v, valuePath, value)
+      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+      return validator != null ? validate(validator as Validator, v, valuePath, value) : null
     },
   )
 }

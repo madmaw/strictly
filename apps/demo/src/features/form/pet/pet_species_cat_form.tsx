@@ -17,6 +17,7 @@ import { type PetFields } from './fields'
 import {
   type CatBreed,
   NOT_A_BREED_ERROR,
+  REQUIRED_ERROR,
 } from './types'
 
 export type PetSpeciesCatFormFields = Pick<
@@ -68,6 +69,11 @@ function BreedInputErrorRenderer({
         message: 'Not a recognized cat breed',
         comment: 'error that is displayed when an invalid breed is selected',
       })
+    case REQUIRED_ERROR:
+      return t({
+        message: 'Must specify a breed',
+        comment: 'error that is displayed when no breed is selected',
+      })
     default:
       throw new UnreachableError(error)
   }
@@ -87,7 +93,7 @@ const BREED_NAMES: Record<CatBreed, () => string> = {
   ['DSH']: () =>
     t({
       message: 'Domestic Short Hair',
-      comment: 'domestic short hair cat',
+      comment: 'domestic short hair cat breed',
     }),
 }
 

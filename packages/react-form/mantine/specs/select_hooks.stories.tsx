@@ -51,7 +51,7 @@ export const EmptySelect: Story = {
     fields: {
       $: {
         disabled: false,
-        required: true,
+        required: false,
         value: '',
       },
     },
@@ -63,7 +63,7 @@ export const PopulatedSelect: Story = {
     fields: {
       $: {
         disabled: false,
-        required: true,
+        required: false,
         value: 'a',
       },
     },
@@ -75,9 +75,33 @@ export const InvalidSelect: Story = {
     fields: {
       $: {
         disabled: false,
-        required: true,
+        required: false,
         value: 'd',
         error: 'invalid option',
+      },
+    },
+  },
+}
+
+export const RequiredSelect: Story = {
+  args: {
+    fields: {
+      $: {
+        disabled: false,
+        required: true,
+        value: 'a',
+      },
+    },
+  },
+}
+
+export const DisabledSelect: Story = {
+  args: {
+    fields: {
+      $: {
+        disabled: true,
+        required: false,
+        value: 'a',
       },
     },
   },

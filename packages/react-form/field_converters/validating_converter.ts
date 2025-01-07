@@ -1,8 +1,11 @@
-import { type Validator } from '@strictly/define'
 import {
-  type FieldConversion,
-  FieldConversionResult,
-  type FieldConverter,
+  validate,
+  type Validator,
+} from '@strictly/define'
+import {
+  type UnreliableFieldConversion,
+  UnreliableFieldConversionType,
+  type UnreliableFieldConverter,
 } from 'types/field_converters'
 
 // delete this?
@@ -11,15 +14,21 @@ export function validatingConverter<
   E,
   ValuePath extends string,
   Context,
->(validators: readonly Validator<V, E, ValuePath, Context>[] = []): FieldConverter<V, V, E, ValuePath, Context> {
-  return function (value: V, valuePath: ValuePath, context: Context): FieldConversion<V, E> {
-    return validators.reduce<FieldConversion<V, E>>(
+>(validators: readonly Validator<V, E, ValuePath, Context>[] = []): UnreliableFieldConverter<
+  V,
+  V,
+  E,
+  ValuePath,
+  Context
+> {
+  return function (value: V, valuePath: ValuePath, context: Context): UnreliableFieldConversion<V, E> {
+    return validators.reduce<UnreliableFieldConversion<V, E>>(
       function (acc, validator) {
-        if (acc.type === FieldConversionResult.Success) {
-          const error = validator(value, valuePath, context)
+        if (acc.type === UnreliableFieldConversionType.Success) {
+          const error = validate(validator, value, valuePath, context)
           if (error != null) {
             return {
-              type: FieldConversionResult.Failure,
+              type: UnreliableFieldConversionType.Failure,
               error,
               value: [value],
             }
@@ -28,7 +37,7 @@ export function validatingConverter<
         return acc
       },
       {
-        type: FieldConversionResult.Success,
+        type: UnreliableFieldConversionType.Success,
         value,
       },
     )

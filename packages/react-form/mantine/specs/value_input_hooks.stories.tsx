@@ -81,7 +81,7 @@ export const EmptyNumberInput: Story<number | string, NumberInputProps> = {
     fields: {
       $: {
         disabled: false,
-        required: true,
+        required: false,
         value: '',
       },
     },
@@ -98,6 +98,22 @@ export const PopulatedNumberInput: Story<number | string, NumberInputProps> = {
       $: {
         disabled: false,
         required: false,
+        value: 3,
+      },
+    },
+    ValueInput: NumberInput,
+    inputProps: {
+      label: NUMBER_INPUT_LABEL,
+    },
+  },
+}
+
+export const RequiredNumberInput: Story<number | string, NumberInputProps> = {
+  args: {
+    fields: {
+      $: {
+        disabled: false,
+        required: true,
         value: 3,
       },
     },

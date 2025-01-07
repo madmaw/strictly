@@ -1,4 +1,7 @@
-import { type Validator } from '@strictly/define'
+import {
+  validate,
+  type Validator,
+} from '@strictly/define'
 import { type Simplify } from 'type-fest'
 
 export type MergedOfValidators<
@@ -49,11 +52,11 @@ export function mergeValidators<
       const validator2 = validators2[key as keyof Validators2]
       // eslint-disable-next-line @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-explicit-any
       validators[key as Keys] = function (value: any, valuePath: string, context: any) {
-        const error = validator1!(value, valuePath, context)
+        const error = validate(validator1!, value, valuePath, context)
         if (error != null) {
           return error
         }
-        return validator2!(value, valuePath, context)
+        return validate(validator2!, value, valuePath, context)
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } as any
       return validators

@@ -1,4 +1,6 @@
-import { type Validator } from 'validation/validator'
+import {
+  type AnnotatedValidator,
+} from 'validation/validator'
 
 export const MinimumStringLengthValidationErrorType = 'minimum_string_length'
 
@@ -8,23 +10,26 @@ export type MinimumStringLengthValidationError = {
   minimumLength: number,
 }
 
-export function minimumStringLengthValidatorFactory<
-  ValuePath extends string,
-  Context,
->(minimumLength: number): Validator<
-  string,
-  MinimumStringLengthValidationError,
-  ValuePath,
-  Context
-> {
-  return function (value: string) {
-    if (value.length < minimumLength) {
+export class MinimumStringLengthValidator<ValuePath extends string, Context>
+  implements AnnotatedValidator<string, MinimumStringLengthValidationError, ValuePath, Context>
+{
+  constructor(private readonly minimumLength: number) {
+  }
+
+  validate(value: string): MinimumStringLengthValidationError | null {
+    if (value.length < this.minimumLength) {
       return {
         type: MinimumStringLengthValidationErrorType,
-        minimumLength,
+        minimumLength: this.minimumLength,
         receivedLength: value.length,
       }
     }
     return null
+  }
+
+  annotations() {
+    return {
+      required: true,
+    }
   }
 }

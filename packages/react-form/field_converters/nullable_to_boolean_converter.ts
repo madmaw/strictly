@@ -5,9 +5,10 @@ import {
   type ValueOfType,
 } from '@strictly/define'
 import {
-  type FieldConversion,
-  FieldConversionResult,
+  type AnnotatedFieldConversion,
   type TwoWayFieldConverterWithValueFactory,
+  type UnreliableFieldConversion,
+  UnreliableFieldConversionType,
 } from 'types/field_converters'
 
 export class NullableToBooleanConverter<
@@ -32,20 +33,23 @@ export class NullableToBooleanConverter<
     this.defaultValue = defaultToNull ? null : prototype
   }
 
-  convert(from: ValueOfType<ReadonlyTypeOfType<T>> | null): boolean {
-    return from != null
+  convert(from: ValueOfType<ReadonlyTypeOfType<T>> | null): AnnotatedFieldConversion<boolean> {
+    return {
+      value: from != null,
+      required: false,
+    }
   }
 
-  revert(from: boolean): FieldConversion<ValueOfType<ReadonlyTypeOfType<T>> | null, E> {
+  revert(from: boolean): UnreliableFieldConversion<ValueOfType<ReadonlyTypeOfType<T>> | null, E> {
     if (from) {
       const value: ValueOfType<T> = copy(this.typeDef, this.prototype)
       return {
-        type: FieldConversionResult.Success,
+        type: UnreliableFieldConversionType.Success,
         value,
       }
     }
     return {
-      type: FieldConversionResult.Success,
+      type: UnreliableFieldConversionType.Success,
       value: null,
     }
   }

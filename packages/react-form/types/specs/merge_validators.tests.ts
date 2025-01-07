@@ -1,4 +1,8 @@
-import { type Validator } from '@strictly/define'
+import {
+  type FunctionalValidator,
+  validate,
+  type Validator,
+} from '@strictly/define'
 import {
   type MergedOfValidators,
   mergeValidators,
@@ -71,9 +75,9 @@ describe('MergedOfValidators', function () {
 })
 
 describe('mergeValidators', function () {
-  const validatorA1: Mock<Validator<string, 'error a1', 'a', null>> = vi.fn()
-  const validatorA2: Mock<Validator<string, 'error a2', 'a', null>> = vi.fn()
-  const validatorB: Mock<Validator<boolean, 'error b', 'b', null>> = vi.fn()
+  const validatorA1: Mock<FunctionalValidator<string, 'error a1', 'a', null>> = vi.fn()
+  const validatorA2: Mock<FunctionalValidator<string, 'error a2', 'a', null>> = vi.fn()
+  const validatorB: Mock<FunctionalValidator<boolean, 'error b', 'b', null>> = vi.fn()
   describe('produces expected type', function () {
     describe('empty validators 1', function () {
       const validators1 = {
@@ -128,21 +132,21 @@ describe('mergeValidators', function () {
       })
 
       it('reports no error when validators report no error', function () {
-        const result = validators.a('x', 'a', null)
+        const result = validate(validators.a, 'x', 'a', null)
         expect(result).toBeUndefined()
       })
 
       it('reports an error from first validator', function () {
         validatorA1.mockReturnValueOnce('error a1')
 
-        const result = validators.a('x', 'a', null)
+        const result = validate(validators.a, 'x', 'a', null)
         expect(result).toEqual('error a1')
       })
 
       it('reports an error from second validator', function () {
         validatorA2.mockReturnValueOnce('error a2')
 
-        const result = validators.a('x', 'a', null)
+        const result = validate(validators.a, 'x', 'a', null)
         expect(result).toEqual('error a2')
       })
     })
