@@ -18,6 +18,7 @@ export function annotatedIdentityConverter<
     return {
       value,
       required,
+      disabled: false,
     }
   }
 }

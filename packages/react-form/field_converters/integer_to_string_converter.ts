@@ -16,6 +16,7 @@ export class IntegerToStringConverter<E, ValuePath extends string, Context>
     return {
       value,
       required: false,
+      disabled: false,
     }
   }
 

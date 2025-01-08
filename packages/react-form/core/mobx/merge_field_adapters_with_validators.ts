@@ -74,12 +74,14 @@ export function mergeAdaptersWithValidators<
       function convert(from: any, ...params: [any, any]): AnnotatedFieldConversion {
         const {
           required: required1,
+          disabled,
           value,
         } = adapter.convert(from, ...params)
         const { required: required2 } = annotations(validator, ...params)
         return {
           value,
           required: required1 || required2,
+          disabled,
         }
       }
       acc[key] = {

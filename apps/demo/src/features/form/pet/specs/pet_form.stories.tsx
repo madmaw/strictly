@@ -146,3 +146,49 @@ export const Errors: Story = {
     },
   },
 }
+
+export const Disabled: Story = {
+  args: {
+    fields: {
+      '$.name': {
+        disabled: true,
+        value: 'Fido',
+        required: true,
+      },
+      '$.alive': {
+        disabled: true,
+        value: true,
+        required: false,
+      },
+      '$.tags': {
+        disabled: true,
+        required: false,
+        value: [
+          '$.tags.0',
+          '$.tags.1',
+          '$.tags.2',
+        ],
+      },
+      '$.tags.0': {
+        disabled: true,
+        required: false,
+        value: 'friendly',
+      },
+      '$.tags.1': {
+        disabled: true,
+        required: false,
+        value: 'happy',
+      },
+      '$.tags.2': {
+        disabled: true,
+        required: false,
+        value: 'little',
+      },
+      '$.newTag': {
+        disabled: true,
+        value: 'fake',
+        required: false,
+      },
+    },
+  },
+}

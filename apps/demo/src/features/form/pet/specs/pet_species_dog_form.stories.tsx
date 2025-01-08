@@ -60,3 +60,20 @@ export const Error: Story = {
     },
   },
 }
+
+export const Disabled: Story = {
+  args: {
+    fields: {
+      '$.species.dog:barks': {
+        disabled: true,
+        value: '3',
+        required: true,
+      },
+      '$.species.dog:breed': {
+        disabled: true,
+        value: 'other',
+        required: true,
+      },
+    },
+  },
+}

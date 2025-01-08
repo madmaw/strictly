@@ -45,9 +45,9 @@ import {
   UnreliableFieldConversionType,
 } from 'types/field_converters'
 import {
-  type ErrorTypeOfFieldAdapter,
+  type ErrorOfFieldAdapter,
   type FieldAdapter,
-  type ToTypeOfFieldAdapter,
+  type ToOfFieldAdapter,
 } from './field_adapter'
 import {
   type FlattenedListTypesOfType,
@@ -57,8 +57,8 @@ export type FlattenedConvertedFieldsOf<
   ValuePathsToAdapters extends Readonly<Record<string, FieldAdapter>>,
 > = {
   readonly [K in keyof ValuePathsToAdapters]: Field<
-    ToTypeOfFieldAdapter<ValuePathsToAdapters[K]>,
-    ErrorTypeOfFieldAdapter<ValuePathsToAdapters[K]>
+    ToOfFieldAdapter<ValuePathsToAdapters[K]>,
+    ErrorOfFieldAdapter<ValuePathsToAdapters[K]>
   >
 }
 
@@ -82,14 +82,14 @@ type FlattenedFieldOverrides<
   ValuePathsToAdapters extends Readonly<Record<string, FieldAdapter>>,
 > = {
   -readonly [K in keyof ValuePathsToAdapters]?: FieldOverride<
-    ToTypeOfFieldAdapter<ValuePathsToAdapters[K]>
+    ToOfFieldAdapter<ValuePathsToAdapters[K]>
   >
 }
 
 type FlattenedErrors<
   ValuePathsToAdapters extends Readonly<Record<string, FieldAdapter>>,
 > = {
-  -readonly [K in keyof ValuePathsToAdapters]?: ErrorTypeOfFieldAdapter<ValuePathsToAdapters[K]>
+  -readonly [K in keyof ValuePathsToAdapters]?: ErrorOfFieldAdapter<ValuePathsToAdapters[K]>
 }
 
 export type ValuePathsToAdaptersOf<
@@ -142,7 +142,7 @@ export class FormPresenter<
   setFieldValueAndValidate<K extends keyof ValuePathsToAdapters>(
     model: FormModel<T, ValueToTypePaths, TypePathsToAdapters, ValuePathsToAdapters>,
     valuePath: K,
-    value: ToTypeOfFieldAdapter<ValuePathsToAdapters[K]>,
+    value: ToOfFieldAdapter<ValuePathsToAdapters[K]>,
   ): boolean {
     return this.internalSetFieldValue(model, valuePath, value, true)
   }
@@ -150,7 +150,7 @@ export class FormPresenter<
   setFieldValue<K extends keyof ValuePathsToAdapters>(
     model: FormModel<T, ValueToTypePaths, TypePathsToAdapters, ValuePathsToAdapters>,
     valuePath: K,
-    value: ToTypeOfFieldAdapter<ValuePathsToAdapters[K]>,
+    value: ToOfFieldAdapter<ValuePathsToAdapters[K]>,
   ): boolean {
     return this.internalSetFieldValue(model, valuePath, value, false)
   }
@@ -318,7 +318,7 @@ export class FormPresenter<
   private internalSetFieldValue<K extends keyof ValuePathsToAdapters>(
     model: FormModel<T, ValueToTypePaths, TypePathsToAdapters, ValuePathsToAdapters>,
     valuePath: K,
-    value: ToTypeOfFieldAdapter<ValuePathsToAdapters[K]>,
+    value: ToOfFieldAdapter<ValuePathsToAdapters[K]>,
     displayValidation: boolean,
   ): boolean {
     const { revert } = this.getAdapterForValuePath(valuePath)
@@ -379,13 +379,11 @@ export class FormPresenter<
     const value = accessor == null ? create(valuePath, model.value) : accessor.value
     const {
       value: displayValue,
-      required,
     } = convert(value, valuePath, model.value)
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     const key = valuePath as unknown as keyof ValuePathsToAdapters
     runInAction(function () {
       model.fieldOverrides[key] = [displayValue]
-      model.requiredCache[key] = required
     })
   }
 
@@ -424,7 +422,6 @@ export class FormPresenter<
     const accessor = model.getAccessorForValuePath(valuePath)
     const {
       value: storedValue,
-      required,
     } = convert(
       accessor != null
         ? accessor.value
@@ -443,7 +440,6 @@ export class FormPresenter<
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     const conversion = revert(value, valuePath as string, model.value)
     return runInAction(function () {
-      model.requiredCache[valuePath] = required
       switch (conversion.type) {
         case UnreliableFieldConversionType.Failure:
           model.errors[valuePath] = conversion.error
@@ -495,7 +491,6 @@ export class FormPresenter<
           const fieldOverride = model.fieldOverrides[adapterPath]
           const {
             value: storedValue,
-            required,
           } = convert(accessor.value, valuePath, model.value)
           const value = fieldOverride != null
             ? fieldOverride[0]
@@ -504,7 +499,6 @@ export class FormPresenter<
           const dirty = fieldOverride != null && fieldOverride[0] !== storedValue
 
           const conversion = revert(value, valuePath, model.value)
-          model.requiredCache[adapterPath] = required
           switch (conversion.type) {
             case UnreliableFieldConversionType.Failure:
               model.errors[adapterPath] = conversion.error
@@ -559,8 +553,6 @@ export class FormModel<
   accessor fieldOverrides: FlattenedFieldOverrides<ValuePathsToAdapters>
   @observable.shallow
   accessor errors: FlattenedErrors<ValuePathsToAdapters> = {}
-  @observable.shallow
-  accessor requiredCache: Partial<Record<keyof ValuePathsToAdapters, boolean>>
 
   private readonly flattenedTypeDefs: Readonly<Record<string, Type>>
 
@@ -604,10 +596,6 @@ export class FormModel<
     this.fieldOverrides = map(conversions, function (_k, v) {
       return v && [v.value]
     }) as FlattenedFieldOverrides<ValuePathsToAdapters>
-    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-    this.requiredCache = map(conversions, function (_k, v) {
-      return !!v?.required
-    }) as Partial<Record<keyof ValuePathsToAdapters, boolean>>
   }
 
   @computed
@@ -685,33 +673,28 @@ export class FormModel<
     const {
       value,
       required,
-    } = fieldOverride
-      ? {
-        value: fieldOverride[0],
-        required: !!this.requiredCache[valuePath],
-      }
-      : convert(
-        accessor != null
-          ? accessor.value
-          : fieldTypeDef != null
-          ? mobxCopy(
-            fieldTypeDef,
-            // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-            create(valuePath as string, this.value),
-          )
-          // fake values can't be copied
+      disabled,
+    } = convert(
+      accessor != null
+        ? accessor.value
+        : fieldTypeDef != null
+        ? mobxCopy(
+          fieldTypeDef,
           // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-          : create(valuePath as string, this.value),
+          create(valuePath as string, this.value),
+        )
+        // fake values can't be copied
         // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-        valuePath as string,
-        this.value,
-      )
+        : create(valuePath as string, this.value),
+      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+      valuePath as string,
+      this.value,
+    )
     const error = this.errors[valuePath]
     return {
-      value,
+      value: fieldOverride != null ? fieldOverride[0] : value,
       error,
-      // if we can't write it back, then we have to disable it
-      disabled: this.isDisabled(valuePath),
+      disabled,
       required,
     }
   }
@@ -731,10 +714,5 @@ export class FormModel<
         this.value = mobxCopy(this.type, value)
       },
     )
-  }
-
-  protected isDisabled(_valuePath: keyof ValuePathsToAdapters): boolean {
-    // TODO
-    return false
   }
 }

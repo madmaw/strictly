@@ -37,6 +37,7 @@ export class NullableToBooleanConverter<
     return {
       value: from != null,
       required: false,
+      disabled: false,
     }
   }
 

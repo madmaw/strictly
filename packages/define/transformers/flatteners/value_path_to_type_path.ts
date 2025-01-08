@@ -13,13 +13,13 @@ import {
 } from 'types/definitions'
 
 export function valuePathToTypePath<
-  JsonPaths extends Record<string, string>,
-  ValuePath extends keyof JsonPaths,
+  ValuePathsToTypePaths extends Record<string, string>,
+  ValuePath extends keyof ValuePathsToTypePaths,
 >(
   { definition: typeDef }: Type,
   valuePath: ValuePath,
   allowMissingPaths: boolean = false,
-): JsonPaths[ValuePath] {
+): ValuePathsToTypePaths[ValuePath] {
   // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
   const valueSteps = (valuePath as string).split(/\.|\[/g)
   assertEqual(valueSteps[0], '$')
@@ -33,7 +33,7 @@ export function valuePathToTypePath<
   )
   typeSteps.unshift('$')
   // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-  return typeSteps.join('.') as JsonPaths[ValuePath]
+  return typeSteps.join('.') as ValuePathsToTypePaths[ValuePath]
 }
 
 function internalJsonValuePathToTypePath(

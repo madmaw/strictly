@@ -229,6 +229,7 @@ describe('all', function () {
           integerToStringAdapter.convert.mockReturnValue({
             value: 'x',
             required: true,
+            disabled: false,
           })
           originalValue = 5
           model = new FormModel<

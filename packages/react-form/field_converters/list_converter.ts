@@ -14,6 +14,7 @@ export function listConverter<
     return {
       value,
       required: false,
+      disabled: false,
     }
   }
 }

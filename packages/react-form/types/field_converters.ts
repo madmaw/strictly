@@ -29,11 +29,15 @@ export type UnreliableFieldConverter<
   (from: From, valuePath: ValuePath, context: Context): UnreliableFieldConversion<To, E>,
 }
 
+export type Annotation = {
+  required: boolean,
+  disabled: boolean,
+}
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type AnnotatedFieldConversion<V = any> = {
   value: V,
-  required: boolean,
-}
+} & Annotation
 
 export type AnnotatedFieldConverter<
   From,

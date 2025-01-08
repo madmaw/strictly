@@ -70,3 +70,27 @@ export const Dog: Story = {
     },
   },
 }
+
+export const Disabled: Story = {
+  args: {
+    fields: {
+      '$.species': {
+        disabled: true,
+        value: 'cat',
+        required: false,
+      },
+    },
+  },
+}
+
+export const Required: Story = {
+  args: {
+    fields: {
+      '$.species': {
+        disabled: false,
+        value: 'cat',
+        required: true,
+      },
+    },
+  },
+}

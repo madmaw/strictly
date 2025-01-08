@@ -1,6 +1,6 @@
 import {
-  chainFieldConverter,
-  chainSafeFieldConverter,
+  chainAnnotatedFieldConverter,
+  chainUnreliableFieldConverter,
 } from 'field_converters/chain_field_converter'
 import {
   annotatedIdentityConverter,
@@ -37,7 +37,7 @@ class FieldAdapterBuilder<
     reverter?: UnreliableFieldConverter<To2, To, E2, ValuePath, Context>,
   ): FieldAdapterBuilder<From, To2, E | E2, ValuePath, Context> {
     return new FieldAdapterBuilder(
-      chainSafeFieldConverter<
+      chainAnnotatedFieldConverter<
         From,
         To,
         To2,
@@ -48,7 +48,7 @@ class FieldAdapterBuilder<
         converter,
       ),
       this.create,
-      this.revert && reverter && chainFieldConverter<
+      this.revert && reverter && chainUnreliableFieldConverter<
         To2,
         To,
         From,

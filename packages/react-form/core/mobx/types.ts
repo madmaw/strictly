@@ -1,5 +1,5 @@
 // TODO rename/split-out this file
-import { type ToTypeOfFieldAdapter } from './field_adapter'
+import { type ToOfFieldAdapter } from './field_adapter'
 import {
   type FlattenedConvertedFieldsOf,
   type FormPresenter,
@@ -32,7 +32,7 @@ export type ToValueOfPresenterValuePath<
   infer _2,
   infer _3,
   infer ValuePathsToAdapters
-> ? ToTypeOfFieldAdapter<ValuePathsToAdapters[K]>
+> ? ToOfFieldAdapter<ValuePathsToAdapters[K]>
   : never
 
 /**

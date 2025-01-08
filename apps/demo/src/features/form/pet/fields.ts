@@ -12,12 +12,14 @@ import {
   IntegerToStringConverter,
   listAdapter,
   mergeAdaptersWithValidators,
+  mergeFieldAdaptersWithTwoWayConverter,
   prototypingFieldValueFactory,
   SelectDiscriminatedUnionConverter,
   SelectLiteralConverter,
   SelectStringConverter,
   TrimmingStringConverter,
 } from '@strictly/react-form'
+import { IsAliveTwoWayConverter } from './is_alive_field_converter'
 import {
   catBreedType,
   dogBreedType,
@@ -97,9 +99,12 @@ const petFieldConverters = {
   }
 >
 
-export const petFieldAdapters = mergeAdaptersWithValidators(
-  petFieldConverters,
-  petValidators,
+export const petFieldAdapters = mergeFieldAdaptersWithTwoWayConverter(
+  mergeAdaptersWithValidators(
+    petFieldConverters,
+    petValidators,
+  ),
+  new IsAliveTwoWayConverter(),
 )
 
 export type PetFields = FormFieldsOfFieldAdapters<PetValueToTypePaths, typeof petFieldAdapters>

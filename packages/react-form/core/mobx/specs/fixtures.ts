@@ -1,4 +1,5 @@
 import { type FieldAdapter } from 'core/mobx/field_adapter'
+import { type TwoWayFieldConverter } from 'types/field_converters'
 import { type Mocked } from 'vitest'
 import {
   mock,
@@ -37,4 +38,36 @@ export function resetMockAdapter<
   }
   mockedAdapter.convert.mockImplementation(convert)
   mockedAdapter.create.mockImplementation(create)
+}
+
+export function createMockTwoWayFieldConverter<
+  From,
+  To,
+  E,
+  ValuePath extends string,
+  Context,
+>(_original: TwoWayFieldConverter<From, To, E, ValuePath, Context>): Mocked<
+  TwoWayFieldConverter<From, To, E, ValuePath, Context>
+> {
+  return mock<TwoWayFieldConverter<From, To, E, ValuePath, Context>>()
+}
+
+export function resetMockTwoWayFieldConverter<
+  From,
+  To,
+  E,
+  ValuePath extends string,
+  Context,
+>(
+  {
+    convert,
+    revert,
+  }: TwoWayFieldConverter<From, To, E, ValuePath, Context>,
+  mockedConverter: Mocked<
+    TwoWayFieldConverter<From, To, E, ValuePath, Context>
+  >,
+) {
+  mockReset(mockedConverter)
+  mockedConverter.convert.mockImplementation(convert)
+  mockedConverter.revert.mockImplementation(revert)
 }

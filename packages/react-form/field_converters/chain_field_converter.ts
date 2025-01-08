@@ -9,7 +9,7 @@ import {
   type UnreliableFieldConverter,
 } from 'types/field_converters'
 
-export function chainFieldConverter<
+export function chainUnreliableFieldConverter<
   From,
   Intermediate,
   To,
@@ -58,7 +58,7 @@ export function chainFieldConverter<
   }
 }
 
-export function chainSafeFieldConverter<
+export function chainAnnotatedFieldConverter<
   From,
   Intermediate,
   To,
@@ -71,15 +71,18 @@ export function chainSafeFieldConverter<
   return function (value: From, valuePath: ValuePath, context: Context): AnnotatedFieldConversion {
     const {
       required: intermediateRequired,
+      disabled: intermediateDisabled,
       value: intermediateValue,
     } = from(value, valuePath, context)
     const {
       required: finalRequired,
+      disabled: finalDisabled,
       value: finalValue,
     } = to(intermediateValue, valuePath, context)
     return {
       value: finalValue,
       required: intermediateRequired || finalRequired,
+      disabled: intermediateDisabled || finalDisabled,
     }
   }
 }
