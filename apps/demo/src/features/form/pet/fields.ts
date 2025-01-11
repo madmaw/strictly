@@ -37,12 +37,12 @@ import {
 } from './types'
 
 const petFieldConverters = {
-  '$.alive': identityAdapter(false).narrow(),
+  '$.alive': identityAdapter(false).narrow,
   '$.name': adapterFromTwoWayConverter(
     new TrimmingStringConverter(),
     prototypingFieldValueFactory(''),
-  ).narrow(),
-  '$.newTag': identityAdapter('').narrow(),
+  ).narrow,
+  '$.newTag': identityAdapter('').narrow,
   '$.owner': adapterFromTwoWayConverter(
     new NullableToBooleanConverter(
       ownerType,
@@ -54,12 +54,12 @@ const petFieldConverters = {
       },
       undefined,
     ),
-  ).narrow(),
+  ).narrow,
   // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-  '$.owner.email': identityAdapter('' as string | undefined).narrow(),
-  '$.owner.firstName': identityAdapter('').narrow(),
-  '$.owner.phoneNumber': identityAdapter('').narrow(),
-  '$.owner.surname': identityAdapter('').narrow(),
+  '$.owner.email': identityAdapter('' as string | undefined).narrow,
+  '$.owner.firstName': identityAdapter('').narrow,
+  '$.owner.phoneNumber': identityAdapter('').narrow,
+  '$.owner.surname': identityAdapter('').narrow,
   '$.species': adapterFromTwoWayConverter(
     new SelectDiscriminatedUnionConverter(
       speciesType,
@@ -76,7 +76,7 @@ const petFieldConverters = {
       'cat',
       true,
     ),
-  ).narrow(),
+  ).narrow,
   '$.species.cat:breed': adapterFromTwoWayConverter(
     new SelectStringConverter(
       catBreedType,
@@ -88,14 +88,14 @@ const petFieldConverters = {
       undefined,
       NOT_A_BREED_ERROR,
     ),
-  ).narrow(),
-  '$.species.cat:meows': identityAdapter(0).narrow(),
+  ).narrow,
+  '$.species.cat:meows': identityAdapter(0).narrow,
   '$.species.dog:barks': adapterFromPrototype(
     new IntegerToStringConverter(NOT_A_NUMBER_ERROR),
     0,
   ).withIdentity(
     v => typeof v === 'number',
-  ).narrow(),
+  ).narrow,
   '$.species.dog:breed': adapterFromTwoWayConverter(
     new SelectLiteralConverter(
       dogBreedType,
@@ -109,9 +109,9 @@ const petFieldConverters = {
       NOT_A_BREED_ERROR,
       false,
     ),
-  ).narrow(),
-  '$.tags': listAdapter<string, string, '$.tags', Pet>().narrow(),
-  '$.tags.*': identityAdapter('').narrow(),
+  ).narrow,
+  '$.tags': listAdapter<string, string, '$.tags', Pet>().narrow,
+  '$.tags.*': identityAdapter('').narrow,
 } as const satisfies Partial<
   FieldAdaptersOfValues<
     FlattenedValuesOfType<ReadonlyTypeOfType<typeof petType>, '*'>,

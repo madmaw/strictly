@@ -102,7 +102,7 @@ class FieldAdapterBuilder<
     )
   }
 
-  narrow(): FieldAdapter<From, To, E, ValuePath, Context> {
+  get narrow(): FieldAdapter<From, To, E, ValuePath, Context> {
     return this
   }
 }

@@ -993,9 +993,9 @@ describe('all', function () {
             },
             'x',
             true,
-          )),
-          '$.x:a': identityAdapter(0).narrow(),
-          '$.y:b': identityAdapter(false).narrow(),
+          )).narrow,
+          '$.x:a': identityAdapter(0).narrow,
+          '$.y:b': identityAdapter(false).narrow,
         } as const
         const presenter = new FormPresenter<
           typeof type,
