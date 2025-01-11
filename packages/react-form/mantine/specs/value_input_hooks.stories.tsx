@@ -80,7 +80,7 @@ export const EmptyNumberInput: Story<number | string, NumberInputProps> = {
   args: {
     fields: {
       $: {
-        disabled: false,
+        readonly: false,
         required: false,
         value: '',
       },
@@ -96,7 +96,7 @@ export const PopulatedNumberInput: Story<number | string, NumberInputProps> = {
   args: {
     fields: {
       $: {
-        disabled: false,
+        readonly: false,
         required: false,
         value: 3,
       },
@@ -112,7 +112,7 @@ export const RequiredNumberInput: Story<number | string, NumberInputProps> = {
   args: {
     fields: {
       $: {
-        disabled: false,
+        readonly: false,
         required: true,
         value: 3,
       },
@@ -128,7 +128,7 @@ export const CustomErrorNumberInput: Story<number | string, NumberInputProps> = 
   args: {
     fields: {
       $: {
-        disabled: false,
+        readonly: false,
         required: false,
         value: 3,
         error: 'an error',
@@ -148,7 +148,7 @@ export const DisabledNumberInput: Story<number | string, NumberInputProps> = {
   args: {
     fields: {
       $: {
-        disabled: true,
+        readonly: true,
         required: false,
         value: 3,
       },
@@ -164,7 +164,7 @@ export const AnSlider: Story<number, SliderProps> = {
   args: {
     fields: {
       $: {
-        disabled: false,
+        readonly: false,
         required: false,
         value: 3,
       },
@@ -196,7 +196,7 @@ export const AnRating: Story<number, RatingProps> = {
   args: {
     fields: {
       $: {
-        disabled: false,
+        readonly: false,
         required: false,
         value: 2,
       },
@@ -210,7 +210,7 @@ export const AnJsonInput: Story<string, JsonInputProps> = {
   args: {
     fields: {
       $: {
-        disabled: false,
+        readonly: false,
         required: false,
         value: '{}',
       },

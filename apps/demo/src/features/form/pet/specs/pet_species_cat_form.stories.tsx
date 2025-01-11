@@ -26,12 +26,12 @@ export const Valid: Story = {
   args: {
     fields: {
       '$.species.cat:meows': {
-        disabled: false,
+        readonly: false,
         value: 1,
         required: true,
       },
       '$.species.cat:breed': {
-        disabled: false,
+        readonly: false,
         value: 'Burmese',
         required: true,
       },
@@ -43,12 +43,12 @@ export const Error: Story = {
   args: {
     fields: {
       '$.species.cat:meows': {
-        disabled: false,
+        readonly: false,
         value: 1,
         required: true,
       },
       '$.species.cat:breed': {
-        disabled: false,
+        readonly: false,
         value: 'Fish',
         required: true,
         error: NOT_A_BREED_ERROR,
@@ -61,12 +61,12 @@ export const Disabled: Story = {
   args: {
     fields: {
       '$.species.cat:meows': {
-        disabled: true,
+        readonly: true,
         value: 4,
         required: true,
       },
       '$.species.cat:breed': {
-        disabled: true,
+        readonly: true,
         value: 'DSH',
         required: true,
       },

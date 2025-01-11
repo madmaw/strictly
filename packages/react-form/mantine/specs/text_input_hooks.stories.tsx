@@ -62,7 +62,7 @@ export const Empty: Story = {
   args: {
     fields: {
       $: {
-        disabled: false,
+        readonly: false,
         required: false,
         value: '',
       },
@@ -74,7 +74,7 @@ export const Populated: Story = {
   args: {
     fields: {
       $: {
-        disabled: false,
+        readonly: false,
         required: false,
         value: 'Hello',
       },
@@ -86,7 +86,7 @@ export const Required: Story = {
   args: {
     fields: {
       $: {
-        disabled: false,
+        readonly: false,
         required: true,
         value: 'xxx',
       },
@@ -98,7 +98,7 @@ export const Disabled: Story = {
   args: {
     fields: {
       $: {
-        disabled: true,
+        readonly: true,
         required: false,
         value: 'xxx',
       },
@@ -110,7 +110,7 @@ export const CustomError: Story = {
   args: {
     fields: {
       $: {
-        disabled: false,
+        readonly: false,
         required: false,
         value: 'xxx',
         error: 'error',
@@ -126,7 +126,7 @@ export const OverriddenTextarea: Story<HTMLTextAreaElement> = {
   args: {
     fields: {
       $: {
-        disabled: false,
+        readonly: false,
         required: false,
         value: 'Textarea',
       },
@@ -139,7 +139,7 @@ export const OverriddenPillsInputField: Story = {
   args: {
     fields: {
       $: {
-        disabled: false,
+        readonly: false,
         required: false,
         value: 'PillsInputField',
       },

@@ -15,7 +15,7 @@ export class TrimmingStringConverter<ValuePath extends string, Context>
     return {
       value: to.trim(),
       required: false,
-      disabled: false,
+      readonly: false,
     }
   }
 

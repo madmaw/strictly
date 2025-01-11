@@ -60,7 +60,7 @@ export function createCheckbox<
     ErrorRenderer?: ErrorRenderer<ErrorOfField<F[K]>>,
   }) => {
     const {
-      disabled,
+      readonly,
       required,
       value,
       error,
@@ -69,7 +69,7 @@ export function createCheckbox<
     return {
       name: valuePath,
       checked: value,
-      disabled,
+      disabled: readonly,
       required,
       error: error && <ErrorRenderer error={error} />,
       onChange,

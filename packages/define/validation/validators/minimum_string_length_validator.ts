@@ -30,6 +30,7 @@ export class MinimumStringLengthValidator<ValuePath extends string, Context>
   annotations() {
     return {
       required: true,
+      readonly: false,
     }
   }
 }

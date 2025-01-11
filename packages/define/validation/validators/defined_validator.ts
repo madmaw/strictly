@@ -16,6 +16,7 @@ export class DefinedValidator<V, E, ValuePath extends string, Context>
   annotations() {
     return {
       required: true,
+      readonly: false,
     }
   }
 }

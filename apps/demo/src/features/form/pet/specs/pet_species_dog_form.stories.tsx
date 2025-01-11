@@ -29,12 +29,12 @@ export const Valid: Story = {
   args: {
     fields: {
       '$.species.dog:barks': {
-        disabled: false,
+        readonly: false,
         value: '1',
         required: true,
       },
       '$.species.dog:breed': {
-        disabled: false,
+        readonly: false,
         value: 'Alsatian',
         required: true,
       },
@@ -46,13 +46,13 @@ export const Error: Story = {
   args: {
     fields: {
       '$.species.dog:barks': {
-        disabled: false,
+        readonly: false,
         value: '',
         error: NOT_A_NUMBER_ERROR,
         required: true,
       },
       '$.species.dog:breed': {
-        disabled: false,
+        readonly: false,
         value: 'Fish',
         error: NOT_A_BREED_ERROR,
         required: true,
@@ -65,12 +65,12 @@ export const Disabled: Story = {
   args: {
     fields: {
       '$.species.dog:barks': {
-        disabled: true,
+        readonly: true,
         value: '3',
         required: true,
       },
       '$.species.dog:breed': {
-        disabled: true,
+        readonly: true,
         value: 'other',
         required: true,
       },

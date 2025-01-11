@@ -39,7 +39,7 @@ export class NullableToBooleanConverter<
     return {
       value: from !== this.nullType,
       required: false,
-      disabled: false,
+      readonly: false,
     }
   }
 

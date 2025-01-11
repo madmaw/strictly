@@ -24,6 +24,7 @@ export type AnnotatedValidator<
   readonly validate: (v: V, valuePath: ValuePath, context: Context) => E | null,
   readonly annotations: (valuePath: ValuePath, context: Context) => {
     readonly required: boolean,
+    readonly readonly: boolean,
   },
 }
 

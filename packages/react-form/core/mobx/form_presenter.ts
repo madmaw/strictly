@@ -673,7 +673,7 @@ export class FormModel<
     const {
       value,
       required,
-      disabled,
+      readonly,
     } = convert(
       accessor != null
         ? accessor.value
@@ -694,7 +694,7 @@ export class FormModel<
     return {
       value: fieldOverride != null ? fieldOverride[0] : value,
       error,
-      disabled,
+      readonly,
       required,
     }
   }

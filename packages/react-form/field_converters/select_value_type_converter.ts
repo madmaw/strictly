@@ -66,7 +66,7 @@ export abstract class AbstractSelectValueTypeConverter<
     return {
       value,
       required: this.required,
-      disabled: false,
+      readonly: false,
     }
   }
 

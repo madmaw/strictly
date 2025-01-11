@@ -229,7 +229,7 @@ describe('all', function () {
           integerToStringAdapter.convert.mockReturnValue({
             value: 'x',
             required: true,
-            disabled: false,
+            readonly: false,
           })
           originalValue = 5
           model = new FormModel<
@@ -558,7 +558,7 @@ describe('all', function () {
                 $: expect.objectContaining({
                   value: '-1',
                   error: errorCode,
-                  disabled: false,
+                  readonly: false,
                 }),
               })
             })
@@ -949,7 +949,7 @@ describe('all', function () {
         it('has the expected fields', function () {
           expect(model.fields).toEqual({
             $: {
-              disabled: false,
+              readonly: false,
               error: undefined,
               value: false,
               required: false,

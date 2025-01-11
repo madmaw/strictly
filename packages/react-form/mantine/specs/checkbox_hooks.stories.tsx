@@ -45,7 +45,7 @@ export const Off: Story = {
   args: {
     fields: {
       $: {
-        disabled: false,
+        readonly: false,
         required: false,
         value: false,
       },
@@ -57,7 +57,7 @@ export const On: Story = {
   args: {
     fields: {
       $: {
-        disabled: false,
+        readonly: false,
         required: false,
         value: true,
       },
@@ -69,7 +69,7 @@ export const Required: Story = {
   args: {
     fields: {
       $: {
-        disabled: false,
+        readonly: false,
         required: true,
         value: false,
       },
@@ -81,7 +81,7 @@ export const Disabled: Story = {
   args: {
     fields: {
       $: {
-        disabled: true,
+        readonly: true,
         required: false,
         value: false,
       },
@@ -93,7 +93,7 @@ export const Error: Story = {
   args: {
     fields: {
       $: {
-        disabled: false,
+        readonly: false,
         required: false,
         value: true,
         error: 'error',
@@ -106,7 +106,7 @@ export const CustomError: Story = {
   args: {
     fields: {
       $: {
-        disabled: false,
+        readonly: false,
         required: false,
         value: true,
         error: 'error',

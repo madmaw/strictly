@@ -25,7 +25,7 @@ export function createRadio<
 ): MantineFieldComponent<SuppliedRadioProps, Props> {
   const propSource = () => {
     return {
-      disabled: this.fields[valuePath].disabled,
+      disabled: this.fields[valuePath].readonly,
       value,
     }
   }

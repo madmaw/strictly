@@ -114,6 +114,7 @@ describe('mergeFieldAdaptersWithValidators', function () {
     validate: () => null,
     annotations: () => ({
       required: true,
+      readonly: false,
     }),
   }
 

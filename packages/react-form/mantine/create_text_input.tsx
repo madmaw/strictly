@@ -60,7 +60,7 @@ export function createTextInput<
     ErrorRenderer?: ErrorRenderer<ErrorOfField<F[K]>>,
   }) => {
     const {
-      disabled,
+      readonly,
       required,
       value,
       error,
@@ -70,7 +70,7 @@ export function createTextInput<
       // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
       name: valuePath as string,
       value,
-      disabled,
+      disabled: readonly,
       required,
       error: error && <ErrorRenderer error={error} />,
       onChange,

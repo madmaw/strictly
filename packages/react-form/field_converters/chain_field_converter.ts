@@ -71,18 +71,18 @@ export function chainAnnotatedFieldConverter<
   return function (value: From, valuePath: ValuePath, context: Context): AnnotatedFieldConversion {
     const {
       required: intermediateRequired,
-      disabled: intermediateDisabled,
+      readonly: intermediateDisabled,
       value: intermediateValue,
     } = from(value, valuePath, context)
     const {
       required: finalRequired,
-      disabled: finalDisabled,
+      readonly: finalDisabled,
       value: finalValue,
     } = to(intermediateValue, valuePath, context)
     return {
       value: finalValue,
       required: intermediateRequired || finalRequired,
-      disabled: intermediateDisabled || finalDisabled,
+      readonly: intermediateDisabled || finalDisabled,
     }
   }
 }

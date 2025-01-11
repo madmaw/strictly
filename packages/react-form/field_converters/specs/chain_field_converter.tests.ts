@@ -182,12 +182,12 @@ describe('chainAnnotatedFieldConverter', function () {
     beforeEach(function () {
       from.mockReturnValue({
         value: true,
-        disabled: false,
+        readonly: false,
         required: false,
       })
       to.mockReturnValue({
         value: 1,
-        disabled: false,
+        readonly: false,
         required: false,
       })
       result = chained('z', 'x', CONTEXT)
@@ -239,12 +239,12 @@ describe('chainAnnotatedFieldConverter', function () {
       beforeEach(function () {
         from.mockReturnValue({
           value: true,
-          disabled: false,
+          readonly: false,
           required: fromRequired,
         })
         to.mockReturnValue({
           value: 1,
-          disabled: false,
+          readonly: false,
           required: toRequired,
         })
         result = chained('z', 'x', CONTEXT)
@@ -283,19 +283,19 @@ describe('chainAnnotatedFieldConverter', function () {
       beforeEach(function () {
         from.mockReturnValue({
           value: true,
-          disabled: fromDisabled,
+          readonly: fromDisabled,
           required: false,
         })
         to.mockReturnValue({
           value: 1,
-          disabled: toDisabled,
+          readonly: toDisabled,
           required: false,
         })
         result = chained('z', 'x', CONTEXT)
       })
 
       it('required matches expected', function () {
-        expect(result.disabled).toEqual(disabled)
+        expect(result.readonly).toEqual(disabled)
       })
     },
   )

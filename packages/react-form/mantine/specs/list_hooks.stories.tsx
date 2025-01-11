@@ -57,7 +57,7 @@ export const Empty: Story = {
   args: {
     fields: {
       $: {
-        disabled: false,
+        readonly: false,
         required: false,
         value: [],
       },
@@ -69,7 +69,7 @@ export const Populated: Story = {
   args: {
     fields: {
       $: {
-        disabled: false,
+        readonly: false,
         required: false,
         value: [
           '$.4',

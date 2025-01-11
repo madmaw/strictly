@@ -50,7 +50,7 @@ export const EmptySelect: Story = {
   args: {
     fields: {
       $: {
-        disabled: false,
+        readonly: false,
         required: false,
         value: '',
       },
@@ -62,7 +62,7 @@ export const PopulatedSelect: Story = {
   args: {
     fields: {
       $: {
-        disabled: false,
+        readonly: false,
         required: false,
         value: 'a',
       },
@@ -74,7 +74,7 @@ export const InvalidSelect: Story = {
   args: {
     fields: {
       $: {
-        disabled: false,
+        readonly: false,
         required: false,
         value: 'd',
         error: 'invalid option',
@@ -87,7 +87,7 @@ export const RequiredSelect: Story = {
   args: {
     fields: {
       $: {
-        disabled: false,
+        readonly: false,
         required: true,
         value: 'a',
       },
@@ -99,7 +99,7 @@ export const DisabledSelect: Story = {
   args: {
     fields: {
       $: {
-        disabled: true,
+        readonly: true,
         required: false,
         value: 'a',
       },
@@ -111,7 +111,7 @@ export const CustomErrorSelect: Story = {
   args: {
     fields: {
       $: {
-        disabled: false,
+        readonly: false,
         required: true,
         value: 'c',
         error: 'error',

@@ -30,8 +30,8 @@ export type UnreliableFieldConverter<
 }
 
 export type Annotation = {
-  required: boolean,
-  disabled: boolean,
+  readonly required: boolean,
+  readonly readonly: boolean,
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

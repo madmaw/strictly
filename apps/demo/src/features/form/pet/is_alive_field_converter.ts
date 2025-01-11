@@ -23,11 +23,11 @@ export class IsAliveTwoWayConverter<
   convert(value: V, valuePath: ValuePath, context: Pet): AnnotatedFieldConversion<V> {
     const typePath = valuePathToTypePath(petType, valuePath, true)
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-    const disabled = !ALWAYS_MODIFIABLE.has(typePath as Extract<PetTypePaths, string>) && !context.alive
+    const readonly = !ALWAYS_MODIFIABLE.has(typePath as Extract<PetTypePaths, string>) && !context.alive
     return {
       value,
       required: false,
-      disabled,
+      readonly,
     }
   }
 

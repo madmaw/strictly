@@ -51,7 +51,7 @@ export const Cat: Story = {
   args: {
     fields: {
       '$.species': {
-        disabled: false,
+        readonly: false,
         value: 'cat',
         required: false,
       },
@@ -63,7 +63,7 @@ export const Dog: Story = {
   args: {
     fields: {
       '$.species': {
-        disabled: false,
+        readonly: false,
         value: 'dog',
         required: false,
       },
@@ -75,7 +75,7 @@ export const Disabled: Story = {
   args: {
     fields: {
       '$.species': {
-        disabled: true,
+        readonly: true,
         value: 'cat',
         required: false,
       },
@@ -87,7 +87,7 @@ export const Required: Story = {
   args: {
     fields: {
       '$.species': {
-        disabled: false,
+        readonly: false,
         value: 'cat',
         required: true,
       },

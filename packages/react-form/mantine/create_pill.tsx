@@ -28,7 +28,7 @@ export function createPill<
 ): MantineFieldComponent<SuppliedPillProps, Props> {
   const propSource = () => {
     const {
-      disabled,
+      readonly,
       value,
       // note: individual pills cannot display an error!
       // error,
@@ -36,7 +36,7 @@ export function createPill<
     } = this.fields[valuePath as string]
     return {
       children: value,
-      disabled,
+      disabled: readonly,
     }
   }
   return createUnsafePartialObserverComponent<typeof Pill, SuppliedPillProps>(Pill, propSource)

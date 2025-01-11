@@ -52,22 +52,22 @@ export const Populated: Story = {
   args: {
     fields: {
       '$.name': {
-        disabled: false,
+        readonly: false,
         value: 'Fido',
         required: true,
       },
       '$.alive': {
-        disabled: false,
+        readonly: false,
         value: true,
         required: false,
       },
       '$.owner': {
-        disabled: false,
+        readonly: false,
         value: true,
         required: false,
       },
       '$.tags': {
-        disabled: false,
+        readonly: false,
         required: false,
         value: [
           '$.tags.0',
@@ -76,22 +76,22 @@ export const Populated: Story = {
         ],
       },
       '$.tags.0': {
-        disabled: false,
+        readonly: false,
         required: false,
         value: 'friendly',
       },
       '$.tags.1': {
-        disabled: false,
+        readonly: false,
         required: false,
         value: 'happy',
       },
       '$.tags.2': {
-        disabled: false,
+        readonly: false,
         required: false,
         value: 'little',
       },
       '$.newTag': {
-        disabled: false,
+        readonly: false,
         value: 'fake',
         required: false,
       },
@@ -103,27 +103,27 @@ export const Empty: Story = {
   args: {
     fields: {
       '$.name': {
-        disabled: false,
+        readonly: false,
         value: '',
         required: true,
       },
       '$.alive': {
-        disabled: false,
+        readonly: false,
         value: false,
         required: false,
       },
       '$.owner': {
-        disabled: false,
+        readonly: false,
         value: false,
         required: false,
       },
       '$.tags': {
-        disabled: false,
+        readonly: false,
         required: false,
         value: [],
       },
       '$.newTag': {
-        disabled: false,
+        readonly: false,
         value: '',
         required: false,
       },
@@ -135,7 +135,7 @@ export const Errors: Story = {
   args: {
     fields: {
       '$.name': {
-        disabled: false,
+        readonly: false,
         value: 'Bad',
         error: {
           type: MinimumStringLengthValidationErrorType,
@@ -145,27 +145,27 @@ export const Errors: Story = {
         required: true,
       },
       '$.alive': {
-        disabled: false,
+        readonly: false,
         value: false,
         required: false,
       },
       '$.owner': {
-        disabled: false,
+        readonly: false,
         value: true,
         required: false,
       },
       '$.tags': {
-        disabled: false,
+        readonly: false,
         required: false,
         value: ['$.tags.0'],
       },
       '$.tags.0': {
-        disabled: false,
+        readonly: false,
         required: false,
         value: 'ugly',
       },
       '$.newTag': {
-        disabled: false,
+        readonly: false,
         value: '',
         required: false,
       },
@@ -177,22 +177,22 @@ export const Disabled: Story = {
   args: {
     fields: {
       '$.name': {
-        disabled: true,
+        readonly: true,
         value: 'Fido',
         required: true,
       },
       '$.alive': {
-        disabled: true,
+        readonly: true,
         value: true,
         required: false,
       },
       '$.owner': {
-        disabled: true,
+        readonly: true,
         value: true,
         required: false,
       },
       '$.tags': {
-        disabled: true,
+        readonly: true,
         required: false,
         value: [
           '$.tags.0',
@@ -201,22 +201,22 @@ export const Disabled: Story = {
         ],
       },
       '$.tags.0': {
-        disabled: true,
+        readonly: true,
         required: false,
         value: 'friendly',
       },
       '$.tags.1': {
-        disabled: true,
+        readonly: true,
         required: false,
         value: 'happy',
       },
       '$.tags.2': {
-        disabled: true,
+        readonly: true,
         required: false,
         value: 'little',
       },
       '$.newTag': {
-        disabled: true,
+        readonly: true,
         value: 'fake',
         required: false,
       },
