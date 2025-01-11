@@ -98,8 +98,8 @@ describe('all', function () {
 
     describe('object', function () {
       const typeDef = object()
-        .set('x', stringType)
-        .set('y', booleanType)
+        .field('x', stringType)
+        .field('y', booleanType)
       type T = FlattenedTypePathsToAdaptersOf<
         FlattenedValuesOfType<typeof typeDef>,
         ValueOfType<typeof typeDef>
@@ -404,8 +404,8 @@ describe('all', function () {
 
     describe('object', function () {
       const typeDef = object()
-        .set('a', numberType)
-        .set('b', booleanType)
+        .field('a', numberType)
+        .field('b', booleanType)
       const converters = {
         '$.a': integerToStringAdapter,
         '$.b': booleanToBooleanAdapter,
@@ -920,8 +920,8 @@ describe('all', function () {
       describe('non-discriminated', function () {
         const listOfNumbersTypeDef = list(numberType)
         const type = union()
-          .add('null', nullType)
-          .add('0', listOfNumbersTypeDef)
+          .or('null', nullType)
+          .or('0', listOfNumbersTypeDef)
         const adapters = {
           $: adapterFromTwoWayConverter(new NullableToBooleanConverter(type, [1], null)),
           '$.*': integerToStringAdapter,
@@ -971,11 +971,11 @@ describe('all', function () {
       })
 
       describe('discriminated', function () {
-        const struct1 = object().set('a', numberType)
-        const struct2 = object().set('b', booleanType)
+        const struct1 = object().field('a', numberType)
+        const struct2 = object().field('b', booleanType)
         const type = union('d')
-          .add('x', struct1)
-          .add('y', struct2)
+          .or('x', struct1)
+          .or('y', struct2)
         type ValueToTypePaths = ValueToTypePathsOfType<typeof type>
 
         const adapters = {

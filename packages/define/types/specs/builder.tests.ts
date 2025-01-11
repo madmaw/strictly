@@ -172,10 +172,10 @@ describe('builder', function () {
 
   describe('object', function () {
     const { definition: typeDef } = object()
-      .set('a', numberType)
-      .setReadonly('b', booleanType)
-      .setOptional('c', stringType)
-      .setReadonlyOptional('d', numberType)
+      .field('a', numberType)
+      .readonlyField('b', booleanType)
+      .optionalField('c', stringType)
+      .readonlyOptionalField('d', numberType)
 
     it('equals expected type', function () {
       type C = {
@@ -216,11 +216,11 @@ describe('builder', function () {
       const {
         definition: typeDef,
       } = union()
-        .add(
+        .or(
           '1',
           numberType,
         )
-        .add(
+        .or(
           '2',
           stringType,
         )
@@ -251,13 +251,13 @@ describe('builder', function () {
       const {
         definition: typeDef,
       } = union()
-        .add(
+        .or(
           '1',
-          object().set('a', booleanType),
+          object().field('a', booleanType),
         )
-        .add(
+        .or(
           '2',
-          object().set('b', numberType),
+          object().field('b', numberType),
         )
 
       it('equals expected type', function () {

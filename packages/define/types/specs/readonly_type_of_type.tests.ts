@@ -63,8 +63,8 @@ describe('ReadonlyTypeDefOf', function () {
 
   describe('object', function () {
     const builder = object()
-      .set('a', numberType)
-      .setOptional('b', stringType)
+      .field('a', numberType)
+      .optionalField('b', stringType)
     type T = ReadonlyTypeOfType<typeof builder>
 
     let t: {
@@ -89,8 +89,8 @@ describe('ReadonlyTypeDefOf', function () {
 
   describe('union', function () {
     const builder = union()
-      .add('1', record<typeof numberType, 'a'>(numberType))
-      .add('2', stringType)
+      .or('1', record<typeof numberType, 'a'>(numberType))
+      .or('2', stringType)
     type T = ReadonlyTypeOfType<typeof builder>
 
     let t: {

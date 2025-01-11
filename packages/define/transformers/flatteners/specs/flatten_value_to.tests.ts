@@ -208,8 +208,8 @@ describe('flattenValueTo', function () {
   describe('object', function () {
     describe('mandatory fields', function () {
       const type = object()
-        .set('a', numberType)
-        .set('b', booleanType)
+        .field('a', numberType)
+        .field('b', booleanType)
       type F = FlattenedTypesOfType<typeof type, null>
 
       let s: ValueOfType<typeof type>
@@ -271,7 +271,7 @@ describe('flattenValueTo', function () {
 
     describe('nested optional field', function () {
       const type = object()
-        .setOptional('a', object().setOptional('b', numberType))
+        .optionalField('a', object().optionalField('b', numberType))
       type F = FlattenedTypesOfType<typeof type, null>
 
       describe('empty', function () {
@@ -304,8 +304,8 @@ describe('flattenValueTo', function () {
   describe('union', function () {
     describe('discriminated', function () {
       const typeDef = union('d')
-        .add('1', object().set('a', numberType))
-        .add('2', object().set('b', booleanType))
+        .or('1', object().field('a', numberType))
+        .or('2', object().field('b', booleanType))
       type F = SimplifyDeep<FlattenedTypesOfType<typeof typeDef, null>>
       let u: ValueOfType<typeof typeDef>
       beforeEach(function () {
@@ -368,8 +368,8 @@ describe('flattenValueTo', function () {
     })
     describe('non-discriminated', function () {
       const type = union()
-        .add('0', numberType)
-        .add('1', nullType)
+        .or('0', numberType)
+        .or('1', nullType)
       type F = FlattenedTypesOfType<typeof type, null>
       let u: ValueOfType<typeof type>
 
@@ -417,9 +417,9 @@ describe('flattenValueTo', function () {
 
     describe('complex non-discriminated', function () {
       const type = union()
-        .add('z', list(numberType))
-        .add('x', nullType)
-        .add('y', literal([false]))
+        .or('z', list(numberType))
+        .or('x', nullType)
+        .or('y', literal([false]))
       type F = FlattenedTypesOfType<typeof type, null>
 
       let u: ValueOfType<typeof type>

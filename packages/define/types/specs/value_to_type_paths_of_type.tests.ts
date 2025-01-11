@@ -64,10 +64,10 @@ describe('ValueToTypePathsOfType', function () {
 
   describe('object', function () {
     const builder = object()
-      .set('a', list(numberType))
-      .setOptional('b', booleanType)
-      .setReadonly('c', stringType)
-      .setReadonlyOptional('d', stringType)
+      .field('a', list(numberType))
+      .optionalField('b', booleanType)
+      .readonlyField('c', stringType)
+      .readonlyOptionalField('d', stringType)
     type T = SimplifyDeep<ValueToTypePathsOfType<typeof builder>>
 
     let t: {
@@ -96,8 +96,8 @@ describe('ValueToTypePathsOfType', function () {
   describe('union', function () {
     describe('non-discriminated', function () {
       const builder = union()
-        .add('1', list(numberType))
-        .add('2', stringType)
+        .or('1', list(numberType))
+        .or('2', stringType)
       type T = SimplifyDeep<ValueToTypePathsOfType<typeof builder>>
 
       let t: {
@@ -112,8 +112,8 @@ describe('ValueToTypePathsOfType', function () {
 
     describe('discriminated', function () {
       const builder = union('d')
-        .add('1', object().set('a', booleanType).set('b', numberType))
-        .add('2', object().set('x', numberType).set('y', stringType))
+        .or('1', object().field('a', booleanType).field('b', numberType))
+        .or('2', object().field('x', numberType).field('y', stringType))
       type T = SimplifyDeep<ValueToTypePathsOfType<typeof builder>>
 
       let t: {

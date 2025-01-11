@@ -116,8 +116,8 @@ describe('PartialTypeDefOf', function () {
 
   describe('object', function () {
     const builder = object()
-      .set('a', numberType)
-      .setReadonly('b', stringType)
+      .field('a', numberType)
+      .readonlyField('b', stringType)
     type T = PartialTypeOfType<typeof builder>
 
     let t: {
@@ -174,8 +174,8 @@ describe('PartialTypeDefOf', function () {
   describe('union', function () {
     describe('simple', function () {
       const builder = union()
-        .add('1', numberType)
-        .add('2', stringType)
+        .or('1', numberType)
+        .or('2', stringType)
       type T = PartialTypeOfType<typeof builder>
 
       let t: {

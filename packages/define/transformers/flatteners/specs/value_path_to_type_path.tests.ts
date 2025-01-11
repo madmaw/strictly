@@ -133,7 +133,9 @@ describe('valuePathToTypePath', function () {
   })
 
   describe('object', function () {
-    const typeDef = object().set('a', numberType).set('b', booleanType)
+    const typeDef = object()
+      .field('a', numberType)
+      .field('b', booleanType)
     type Paths = ValueToTypePathsOfType<typeof typeDef>
 
     describe.each([
@@ -182,8 +184,8 @@ describe('valuePathToTypePath', function () {
   describe('union', function () {
     describe('discriminated', function () {
       const typeDef = union('w')
-        .add('x', object().set('a', numberType).set('b', booleanType))
-        .add('y', object().set('b', stringType).set('c', booleanType))
+        .or('x', object().field('a', numberType).field('b', booleanType))
+        .or('y', object().field('b', stringType).field('c', booleanType))
       type Paths = ValueToTypePathsOfType<typeof typeDef>
 
       describe.each([

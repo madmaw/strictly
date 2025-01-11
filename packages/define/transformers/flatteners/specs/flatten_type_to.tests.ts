@@ -82,7 +82,9 @@ describe('flattenTypeDefTo', function () {
   })
 
   describe('object', function () {
-    const type = object().set('a', numberType).set('b', list(booleanType))
+    const type = object()
+      .field('a', numberType)
+      .field('b', list(booleanType))
     beforeEach(function () {
       flattened = flattenTypeTo(type, toTypeDefType)
     })
@@ -104,9 +106,9 @@ describe('flattenTypeDefTo', function () {
   describe('union', function () {
     describe('non-discriminated', function () {
       const type = union()
-        .add('a', nullType)
-        .add('b', booleanType)
-        .add('c', numberType)
+        .or('a', nullType)
+        .or('b', booleanType)
+        .or('c', numberType)
       beforeEach(function () {
         flattened = flattenTypeTo(type, toTypeDefType)
       })
@@ -124,8 +126,8 @@ describe('flattenTypeDefTo', function () {
 
     describe('discriminated', function () {
       const type = union('d')
-        .add('a', object().set('a', booleanType))
-        .add('b', object().set('b', numberType))
+        .or('a', object().field('a', booleanType))
+        .or('b', object().field('b', numberType))
       beforeEach(function () {
         flattened = flattenTypeTo(type, toTypeDefType)
       })

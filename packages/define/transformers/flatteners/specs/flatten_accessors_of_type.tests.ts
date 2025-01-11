@@ -16,8 +16,8 @@ import {
 describe('flattenAccessorsOfType', function () {
   let setter: Mock
   const builder = object()
-    .set('a', list(numberType))
-    .set('b', booleanType)
+    .field('a', list(numberType))
+    .field('b', booleanType)
     .narrow
 
   let flattened: FlattenedAccessorsOfType<typeof builder>

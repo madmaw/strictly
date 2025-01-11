@@ -146,6 +146,7 @@ function PetFormImpl(props: PetFormProps) {
           label={OwnerCheckboxLabel()}
           pb={form.fields['$.owner'].value ? 'md' : undefined}
         />
+        {/* TODO making the child fields disabled might be more interesting */}
         {form.fields['$.owner'].value && <OwnerComponent />}
       </Card>
       <Card withBorder={true}>
@@ -183,4 +184,6 @@ function TagPill({
   )
 }
 
+// has to be an observer since we watch the value of the $.owner field to decide
+// whether to render the PetOwnerForm component
 export const PetForm = observer(PetFormImpl)

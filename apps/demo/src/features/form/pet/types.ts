@@ -26,34 +26,34 @@ export const dogBreedType = literal<DogBreed>()
 export const catBreedType = literal<CatBreed>()
 
 export const ownerType = object()
-  .set('firstName', stringType)
-  .set('surname', stringType)
-  .set('phoneNumber', stringType)
-  .setOptional('email', stringType)
+  .field('firstName', stringType)
+  .field('surname', stringType)
+  .field('phoneNumber', stringType)
+  .optionalField('email', stringType)
   .narrow
 
 export const speciesType = union('type')
-  .add(
+  .or(
     'dog',
     object()
-      .set('barks', numberType)
-      .setOptional('breed', dogBreedType),
+      .field('barks', numberType)
+      .optionalField('breed', dogBreedType),
   )
-  .add(
+  .or(
     'cat',
     object()
-      .set('meows', numberType)
-      .setOptional('breed', catBreedType),
+      .field('meows', numberType)
+      .optionalField('breed', catBreedType),
   )
 
 export type Species = keyof typeof speciesType['definition']['unions']
 
 export const petType = object()
-  .set('name', stringType)
-  .set('alive', booleanType)
-  .set('tags', list(stringType))
-  .setOptional('owner', ownerType)
-  .set('species', speciesType)
+  .field('name', stringType)
+  .field('alive', booleanType)
+  .field('tags', list(stringType))
+  .optionalField('owner', ownerType)
+  .field('species', speciesType)
   .narrow
 
 export type TagValuePath = `$.tags.${number}`

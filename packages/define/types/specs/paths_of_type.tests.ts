@@ -146,9 +146,9 @@ describe('PathsOfType', function () {
   describe('object', function () {
     describe('simple', function () {
       const builder = object()
-        .set('n', numberType)
-        .set('b', booleanType)
-        .set('s', stringType)
+        .field('n', numberType)
+        .field('b', booleanType)
+        .field('s', stringType)
       type T = PathsOfType<typeof builder>
 
       let path: '$' | '$.n' | '$.b' | '$.s'
@@ -177,8 +177,8 @@ describe('PathsOfType', function () {
 
     describe('nested', function () {
       const builder = object()
-        .set('s1', object().set('a1', booleanType))
-        .set('s2', object().set('a2', stringType))
+        .field('s1', object().field('a1', booleanType))
+        .field('s2', object().field('a2', stringType))
       type T = PathsOfType<typeof builder>
 
       let path: '$' | '$.s1' | '$.s1.a1' | '$.s2' | '$.s2.a2'
@@ -189,7 +189,7 @@ describe('PathsOfType', function () {
 
     describe('object of list', function () {
       const builder = object()
-        .set('l', list(numberType))
+        .field('l', list(numberType))
 
       describe('no override', function () {
         type T = PathsOfType<typeof builder>
@@ -214,8 +214,8 @@ describe('PathsOfType', function () {
   describe('union', function () {
     describe('with primitives', function () {
       const builder = union()
-        .add('1', numberType)
-        .add('2', stringType)
+        .or('1', numberType)
+        .or('2', stringType)
       type T = PathsOfType<typeof builder>
 
       let path: '$'
@@ -226,9 +226,9 @@ describe('PathsOfType', function () {
 
     describe('with overlapping record', function () {
       const builder = union()
-        .add('1', object().set('a', numberType).set('b', stringType))
-        .add('2', object().set('b', stringType).set('c', stringType))
-        .add('3', object().set('c', stringType).set('a', stringType))
+        .or('1', object().field('a', numberType).field('b', stringType))
+        .or('2', object().field('b', stringType).field('c', stringType))
+        .or('3', object().field('c', stringType).field('a', stringType))
       type T = PathsOfType<typeof builder>
 
       let path: '$' | '$.a' | '$.b' | '$.c'
@@ -239,13 +239,13 @@ describe('PathsOfType', function () {
 
     describe('nested', function () {
       const builder = union()
-        .add('1', object().set(
+        .or('1', object().field(
           'a',
-          union().add('x', object().set('aa', stringType)),
+          union().or('x', object().field('aa', stringType)),
         ))
-        .add('2', object().set(
+        .or('2', object().field(
           'b',
-          union().add('y', object().set('bb', stringType)),
+          union().or('y', object().field('bb', stringType)),
         ))
       type T = PathsOfType<typeof builder>
 
@@ -258,8 +258,8 @@ describe('PathsOfType', function () {
 
   describe('with discriminator', function () {
     const builder = union('x')
-      .add('1', object().set('a', booleanType))
-      .add('2', object().set('b', numberType))
+      .or('1', object().field('a', booleanType))
+      .or('2', object().field('b', numberType))
 
     type T = PathsOfType<typeof builder>
 
@@ -272,13 +272,13 @@ describe('PathsOfType', function () {
 
   describe('with nested discriminator', function () {
     const builder = union('x')
-      .add(
+      .or(
         '1',
-        union('y').add('p', object().set('a', booleanType)),
+        union('y').or('p', object().field('a', booleanType)),
       )
-      .add(
+      .or(
         '2',
-        union('z').add('q', object().set('b', numberType)),
+        union('z').or('q', object().field('b', numberType)),
       )
 
     type T = PathsOfType<typeof builder>

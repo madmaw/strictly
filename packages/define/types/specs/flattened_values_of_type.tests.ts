@@ -22,7 +22,7 @@ describe('FlattenedValuesOfType', function () {
   })
 
   describe('object', function () {
-    const builder = object().setOptional('a', stringType)
+    const builder = object().optionalField('a', stringType)
     type V = FlattenedValuesOfType<typeof builder>
 
     let v: {

@@ -10,8 +10,8 @@ describe('flattenTypeDefsOf', function () {
   it('flattens', function () {
     const listTypeDef = list(numberType)
     const structTypeDef = object()
-      .set('a', listTypeDef)
-      .set('b', booleanType)
+      .field('a', listTypeDef)
+      .field('b', booleanType)
     const flattened = flattenTypesOfType(
       structTypeDef,
     )

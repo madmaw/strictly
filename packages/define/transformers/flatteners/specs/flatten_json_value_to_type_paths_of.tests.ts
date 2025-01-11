@@ -56,8 +56,8 @@ describe('flattenJsonValueToTypePathsOf', function () {
 
   describe('object', function () {
     const typeDef = object()
-      .set('a', numberType)
-      .set('b', booleanType)
+      .field('a', numberType)
+      .field('b', booleanType)
     const flattened = flattenJsonValueToTypePathsOf(typeDef, {
       a: 1,
       b: true,
@@ -75,8 +75,8 @@ describe('flattenJsonValueToTypePathsOf', function () {
   describe('union', function () {
     describe('non-discriminated', function () {
       const typeDef = union()
-        .add('a', list(numberType))
-        .add('b', nullType)
+        .or('a', list(numberType))
+        .or('b', nullType)
       const flattened = flattenJsonValueToTypePathsOf(typeDef, [
         1,
         2,
@@ -95,8 +95,8 @@ describe('flattenJsonValueToTypePathsOf', function () {
 
     describe('discriminated', function () {
       const typeDef = union('d')
-        .add('x', object().set('a', numberType).set('b', booleanType))
-        .add('y', object().set('c', stringType).set('d', booleanType))
+        .or('x', object().field('a', numberType).field('b', booleanType))
+        .or('y', object().field('c', stringType).field('d', booleanType))
       const flattened = flattenJsonValueToTypePathsOf(typeDef, {
         d: 'x',
         a: 1,

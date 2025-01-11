@@ -12,8 +12,8 @@ describe('flattenValueTypesOf', function () {
   it('flattens', function () {
     const flattened = flattenValuesOfType(
       object()
-        .set('a', list(numberType))
-        .set('b', booleanType),
+        .field('a', list(numberType))
+        .field('b', booleanType),
       {
         a: [
           1,

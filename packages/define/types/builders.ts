@@ -71,7 +71,7 @@ class ObjectTypeDefBuilder<
 > extends TypeDefBuilder<
   ObjectTypeDef<Fields>
 > {
-  set<
+  field<
     Name extends string,
     T extends TypeDef,
   >(
@@ -95,7 +95,7 @@ class ObjectTypeDefBuilder<
     })
   }
 
-  setReadonly<
+  readonlyField<
     Name extends string,
     T extends TypeDef,
   >(
@@ -119,7 +119,7 @@ class ObjectTypeDefBuilder<
     })
   }
 
-  setOptional<
+  optionalField<
     Name extends string,
     T extends TypeDef,
   >(
@@ -143,7 +143,7 @@ class ObjectTypeDefBuilder<
     })
   }
 
-  setReadonlyOptional<
+  readonlyOptionalField<
     Name extends string,
     T extends TypeDef,
   >(
@@ -177,7 +177,7 @@ class UnionTypeDefBuilder<
     U
   >
 > {
-  add<
+  or<
     K extends Exclude<UnionKey, keyof U>,
     T extends TypeDef,
   >(

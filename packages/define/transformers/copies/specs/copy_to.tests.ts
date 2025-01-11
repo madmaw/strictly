@@ -72,9 +72,9 @@ describe('copyTo', function () {
 
   describe('object', function () {
     const typeDef = object()
-      .set('a', numberType)
-      .set('b', booleanType)
-      .set('c', stringType)
+      .field('a', numberType)
+      .field('b', booleanType)
+      .field('c', stringType)
     it('copies', function () {
       const c = copyTo(
         typeDef,
@@ -96,9 +96,9 @@ describe('copyTo', function () {
   describe('union', function () {
     describe('non-discriminated', function () {
       const typeDef = union()
-        .add('0', list(numberType))
-        .add('1', literal(['b']))
-        .add('2', literal([false]))
+        .or('0', list(numberType))
+        .or('1', literal(['b']))
+        .or('2', literal([false]))
       it('copies string literal', function () {
         const c = copyTo(
           typeDef,
@@ -120,8 +120,8 @@ describe('copyTo', function () {
 
     describe('discriminated', function () {
       const typeDef = union('d')
-        .add('a', object().set('x', numberType))
-        .add('b', object().set('y', booleanType))
+        .or('a', object().field('x', numberType))
+        .or('b', object().field('y', booleanType))
 
       it('copies', function () {
         const c = copyTo(

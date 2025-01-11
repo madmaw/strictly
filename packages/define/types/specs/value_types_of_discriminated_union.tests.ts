@@ -10,8 +10,8 @@ import { type ValueTypesOfDiscriminatedUnion } from 'types/value_types_of_discri
 describe('ValueTypesOfDiscriminatedUnion', function () {
   it('matches expected type', function () {
     const { definition } = union('d')
-      .add('a', object().set('x', numberType))
-      .add('b', object().set('y', booleanType))
+      .or('a', object().field('x', numberType))
+      .or('b', object().field('y', booleanType))
     type T = SimplifyDeep<ValueTypesOfDiscriminatedUnion<
       typeof definition
     >>

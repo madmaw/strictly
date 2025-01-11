@@ -67,10 +67,10 @@ describe('FlattenedTypesOfType', function () {
   describe('object', function () {
     describe('simple', function () {
       const builder = object()
-        .set('a', numberType)
-        .setOptional('b', stringType)
-        .setReadonly('c', booleanType)
-        .setReadonlyOptional('d', stringType)
+        .field('a', numberType)
+        .optionalField('b', stringType)
+        .readonlyField('c', booleanType)
+        .readonlyOptionalField('d', stringType)
       type T = SimplifyDeep<FlattenedTypesOfType<typeof builder, null>>
       let t: {
         readonly $: SimplifyDeep<typeof builder.narrow>,
@@ -125,7 +125,7 @@ describe('FlattenedTypesOfType', function () {
     })
 
     describe('optional', function () {
-      const builder = object().setOptional('a', stringType)
+      const builder = object().optionalField('a', stringType)
       type T = SimplifyDeep<FlattenedTypesOfType<typeof builder, null>>
 
       let t: {
@@ -159,8 +159,8 @@ describe('union', function () {
   describe('overlapping', function () {
     describe('non-discriminated', function () {
       const builder = union()
-        .add('x', object().set('a', booleanType))
-        .add('y', object().set('b', numberType))
+        .or('x', object().field('a', booleanType))
+        .or('y', object().field('b', numberType))
       type T = SimplifyDeep<FlattenedTypesOfType<typeof builder, null>>
 
       let t: {
@@ -186,8 +186,8 @@ describe('union', function () {
 
     describe('discriminated', function () {
       const builder = union('x')
-        .add('1', object().set('a', booleanType))
-        .add('2', object().set('a', numberType))
+        .or('1', object().field('a', booleanType))
+        .or('2', object().field('a', numberType))
       type T = SimplifyDeep<FlattenedTypesOfType<typeof builder, null>>
 
       let t: {
@@ -212,17 +212,17 @@ describe('union', function () {
 
     describe('nested discriminated', function () {
       const builder = union('x')
-        .add(
+        .or(
           '1',
           union('y')
-            .add('p', object().set('a', booleanType))
-            .add('q', object().set('a', stringType)),
+            .or('p', object().field('a', booleanType))
+            .or('q', object().field('a', stringType)),
         )
-        .add(
+        .or(
           '2',
           union('z')
-            .add('r', object().set('b', numberType))
-            .add('s', object().set('c', stringType)),
+            .or('r', object().field('b', numberType))
+            .or('s', object().field('c', stringType)),
         )
       type T = SimplifyDeep<FlattenedTypesOfType<typeof builder, null>>
       let t: {
