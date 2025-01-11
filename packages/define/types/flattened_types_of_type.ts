@@ -90,14 +90,24 @@ type InternalFlattenedTypeDefsOfObjectChildren<
   Path extends string,
   Qualifier extends string,
   Depth extends number,
-> = T extends ObjectTypeDef<infer Fields> ? {} extends Fields ? {} : keyof Fields extends string ? UnionToIntersection<{
-      readonly [K in keyof Fields]-?: InternalFlattenedTypeDefsOf<
-        Exclude<Fields[K], undefined>,
-        SegmentOverride,
-        PathOf<Path, `${Qualifier}${K}`, null>,
-        '',
-        Depth
-      >
+> = T extends ObjectTypeDef<infer Fields> ? keyof Fields extends string ? UnionToIntersection<{
+      readonly [K in keyof Fields]-?: undefined extends Fields[K] ? InternalFlattenedTypeDefsOf<
+          UnionTypeDef<null, {
+            readonly '0': Exclude<Fields[K], undefined>,
+            readonly '1': LiteralTypeDef<undefined>,
+          }>,
+          SegmentOverride,
+          PathOf<Path, `${Qualifier}${K}`, null>,
+          '',
+          Depth
+        >
+        : InternalFlattenedTypeDefsOf<
+          Exclude<Fields[K], undefined>,
+          SegmentOverride,
+          PathOf<Path, `${Qualifier}${K}`, null>,
+          '',
+          Depth
+        >
     }[keyof Fields]>
   : never
   : never

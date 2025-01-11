@@ -7,7 +7,7 @@ export type FormFieldsOfFieldAdapters<
   FieldAdapters extends Partial<Readonly<Record<ValueOf<ValuePathsToTypePaths>, FieldAdapter>>>,
 > = {
   [
-    K in keyof ValuePathsToTypePaths as FieldAdapters[ValuePathsToTypePaths[K]] extends undefined ? never : K
+    K in keyof ValuePathsToTypePaths as undefined extends FieldAdapters[ValuePathsToTypePaths[K]] ? never : K
   ]: FormFieldOfFieldAdapter<FieldAdapters[ValuePathsToTypePaths[K]]>
 }
 

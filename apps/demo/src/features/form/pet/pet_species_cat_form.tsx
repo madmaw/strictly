@@ -102,7 +102,6 @@ export type PetSpeciesFormCatProps = FormProps<PetSpeciesCatFormFields>
 export function PetSpeciesCatForm(props: PetSpeciesFormCatProps) {
   const form = useMantineForm(props)
   const MeowsSlider = form.valueInput('$.species.cat:meows', Slider)
-  // TODO error rendering
   const BreedSelect = form.select('$.species.cat:breed')
   return (
     <Stack>

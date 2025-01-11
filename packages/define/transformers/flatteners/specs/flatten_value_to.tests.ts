@@ -206,63 +206,96 @@ describe('flattenValueTo', function () {
   })
 
   describe('object', function () {
-    const type = object()
-      .set('a', numberType)
-      .set('b', booleanType)
-    type F = FlattenedTypesOfType<typeof type, null>
+    describe('mandatory fields', function () {
+      const type = object()
+        .set('a', numberType)
+        .set('b', booleanType)
+      type F = FlattenedTypesOfType<typeof type, null>
 
-    let s: ValueOfType<typeof type>
-    beforeEach(function () {
-      s = {
-        a: 1,
-        b: false,
-      }
-    })
-
-    describe('toString', function () {
-      let flattened: FlattenedToStrings<F>
+      let s: ValueOfType<typeof type>
       beforeEach(function () {
-        flattened = flattenValueTo(
-          type,
-          s,
-          setter,
-          toStringMapper,
-        )
-      })
-
-      it('equals expected type', function () {
-        expect(flattened).toEqual({
-          $: '{"a":1,"b":false}',
-          ['$.a']: '1',
-          ['$.b']: 'false',
-        })
-      })
-    })
-
-    describe('setter', function () {
-      let flattened: FlattenedSetters<F>
-      beforeEach(function () {
-        flattened = flattenValueTo(
-          type,
-          s,
-          setter,
-          setMapper,
-        )
-      })
-
-      it('sets "a" in the object', function () {
-        flattened['$.a'](2)
-        expect(s).toEqual({
-          a: 2,
-          b: false,
-        })
-      })
-
-      it('sets "b" in the object', function () {
-        flattened['$.b'](true)
-        expect(s).toEqual({
+        s = {
           a: 1,
-          b: true,
+          b: false,
+        }
+      })
+
+      describe('toString', function () {
+        let flattened: FlattenedToStrings<F>
+        beforeEach(function () {
+          flattened = flattenValueTo(
+            type,
+            s,
+            setter,
+            toStringMapper,
+          )
+        })
+
+        it('equals expected type', function () {
+          expect(flattened).toEqual({
+            $: '{"a":1,"b":false}',
+            ['$.a']: '1',
+            ['$.b']: 'false',
+          })
+        })
+      })
+
+      describe('setter', function () {
+        let flattened: FlattenedSetters<F>
+        beforeEach(function () {
+          flattened = flattenValueTo(
+            type,
+            s,
+            setter,
+            setMapper,
+          )
+        })
+
+        it('sets "a" in the object', function () {
+          flattened['$.a'](2)
+          expect(s).toEqual({
+            a: 2,
+            b: false,
+          })
+        })
+
+        it('sets "b" in the object', function () {
+          flattened['$.b'](true)
+          expect(s).toEqual({
+            a: 1,
+            b: true,
+          })
+        })
+      })
+    })
+
+    describe('nested optional field', function () {
+      const type = object()
+        .setOptional('a', object().setOptional('b', numberType))
+      type F = FlattenedTypesOfType<typeof type, null>
+
+      describe('empty', function () {
+        let s: ValueOfType<typeof type>
+        beforeEach(function () {
+          s = {}
+        })
+
+        describe('toString', function () {
+          let flattened: FlattenedToStrings<F>
+          beforeEach(function () {
+            flattened = flattenValueTo(
+              type,
+              s,
+              setter,
+              toStringMapper,
+            )
+          })
+
+          it('equals expected type', function () {
+            expect(flattened).toEqual({
+              $: '{}',
+            })
+          })
         })
       })
     })

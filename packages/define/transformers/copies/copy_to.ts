@@ -54,6 +54,10 @@ function internalCopyTo<R>(
   value: AnyValueType,
   copier: Copier<R>,
 ): R {
+  if (value === undefined) {
+    // don't copy things that don't exist
+    return undefined!
+  }
   switch (definition.type) {
     case TypeDefType.Literal:
       return copyLiteral(

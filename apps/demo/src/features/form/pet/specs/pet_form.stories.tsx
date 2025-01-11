@@ -20,6 +20,16 @@ function SpeciesComponent() {
   )
 }
 
+function OwnerComponent() {
+  return (
+    <Card>
+      <h1>
+        Owner
+      </h1>
+    </Card>
+  )
+}
+
 const meta: Meta<typeof Component> = {
   component: Component,
   args: {
@@ -30,6 +40,7 @@ const meta: Meta<typeof Component> = {
     onSubmit: action('onSubmit'),
     onRemoveTag: action('onRemoveTag'),
     SpeciesComponent,
+    OwnerComponent,
   },
 }
 
@@ -46,6 +57,11 @@ export const Populated: Story = {
         required: true,
       },
       '$.alive': {
+        disabled: false,
+        value: true,
+        required: false,
+      },
+      '$.owner': {
         disabled: false,
         value: true,
         required: false,
@@ -96,6 +112,11 @@ export const Empty: Story = {
         value: false,
         required: false,
       },
+      '$.owner': {
+        disabled: false,
+        value: false,
+        required: false,
+      },
       '$.tags': {
         disabled: false,
         required: false,
@@ -128,6 +149,11 @@ export const Errors: Story = {
         value: false,
         required: false,
       },
+      '$.owner': {
+        disabled: false,
+        value: true,
+        required: false,
+      },
       '$.tags': {
         disabled: false,
         required: false,
@@ -156,6 +182,11 @@ export const Disabled: Story = {
         required: true,
       },
       '$.alive': {
+        disabled: true,
+        value: true,
+        required: false,
+      },
+      '$.owner': {
         disabled: true,
         value: true,
         required: false,

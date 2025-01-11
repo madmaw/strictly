@@ -18,12 +18,12 @@ describe('ValueTypesOfDiscriminatedUnion', function () {
 
     expectTypeOf<T>().toEqualTypeOf<{
       readonly a: {
-        d: 'a',
-        x: number,
+        readonly d: 'a',
+        readonly x: number,
       },
       readonly b: {
-        d: 'b',
-        y: boolean,
+        readonly d: 'b',
+        readonly y: boolean,
       },
     }>()
   })

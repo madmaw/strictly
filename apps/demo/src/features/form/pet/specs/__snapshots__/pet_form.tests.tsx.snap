@@ -232,6 +232,68 @@ exports[`PetForm > renders Disabled 1`] = `
       data-with-border="true"
     >
       <div
+        class="m_bf2d988c mantine-Checkbox-root m_5f75b09e mantine-Checkbox-root"
+        data-checked="true"
+        data-label-position="right"
+        style="--checkbox-color: var(--mantine-color-blue-filled);"
+      >
+        <div
+          class="m_5f6e695e mantine-Checkbox-body"
+        >
+          <div
+            class="m_26062bec mantine-Checkbox-inner"
+            data-label-position="right"
+          >
+            <input
+              checked=""
+              class="mantine-focus-auto m_26063560 mantine-Checkbox-input"
+              disabled=""
+              id="mantine-1fu8n1fu8"
+              name="$.owner"
+              type="checkbox"
+            />
+            <svg
+              aria-hidden="true"
+              class="m_bf295423 mantine-Checkbox-icon"
+              fill="none"
+              viewBox="0 0 10 7"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                clip-rule="evenodd"
+                d="M4 4.586L1.707 2.293A1 1 0 1 0 .293 3.707l3 3a.997.997 0 0 0 1.414 0l5-5A1 1 0 1 0 8.293.293L4 4.586z"
+                fill="currentColor"
+                fill-rule="evenodd"
+              />
+            </svg>
+          </div>
+          <div
+            class="m_d3ea56bb mantine-Checkbox-labelWrapper"
+            data-disabled="true"
+          >
+            <label
+              class="m_8ee546b8 mantine-Checkbox-label"
+              data-disabled="true"
+              for="mantine-1fu8n1fu8"
+            >
+              Has Owner?
+            </label>
+          </div>
+        </div>
+      </div>
+      <div
+        class="m_e615b15f mantine-Card-root m_1b7284a3 mantine-Paper-root"
+      >
+        <h1>
+          Owner
+        </h1>
+      </div>
+    </div>
+    <div
+      class="m_e615b15f mantine-Card-root m_1b7284a3 mantine-Paper-root"
+      data-with-border="true"
+    >
+      <div
         class="m_e615b15f mantine-Card-root m_1b7284a3 mantine-Paper-root"
       >
         <h1>
@@ -378,6 +440,56 @@ exports[`PetForm > renders Empty 1`] = `
               type="text"
               value=""
             />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="m_e615b15f mantine-Card-root m_1b7284a3 mantine-Paper-root"
+      data-with-border="true"
+    >
+      <div
+        class="m_bf2d988c mantine-Checkbox-root m_5f75b09e mantine-Checkbox-root"
+        data-label-position="right"
+        style="--checkbox-color: var(--mantine-color-blue-filled);"
+      >
+        <div
+          class="m_5f6e695e mantine-Checkbox-body"
+        >
+          <div
+            class="m_26062bec mantine-Checkbox-inner"
+            data-label-position="right"
+          >
+            <input
+              class="mantine-focus-auto m_26063560 mantine-Checkbox-input"
+              id="mantine-1fu8n1fu8"
+              name="$.owner"
+              type="checkbox"
+            />
+            <svg
+              aria-hidden="true"
+              class="m_bf295423 mantine-Checkbox-icon"
+              fill="none"
+              viewBox="0 0 10 7"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                clip-rule="evenodd"
+                d="M4 4.586L1.707 2.293A1 1 0 1 0 .293 3.707l3 3a.997.997 0 0 0 1.414 0l5-5A1 1 0 1 0 8.293.293L4 4.586z"
+                fill="currentColor"
+                fill-rule="evenodd"
+              />
+            </svg>
+          </div>
+          <div
+            class="m_d3ea56bb mantine-Checkbox-labelWrapper"
+          >
+            <label
+              class="m_8ee546b8 mantine-Checkbox-label"
+              for="mantine-1fu8n1fu8"
+            >
+              Has Owner?
+            </label>
           </div>
         </div>
       </div>
@@ -577,6 +689,65 @@ exports[`PetForm > renders Errors 1`] = `
             />
           </div>
         </div>
+      </div>
+    </div>
+    <div
+      class="m_e615b15f mantine-Card-root m_1b7284a3 mantine-Paper-root"
+      data-with-border="true"
+    >
+      <div
+        class="m_bf2d988c mantine-Checkbox-root m_5f75b09e mantine-Checkbox-root"
+        data-checked="true"
+        data-label-position="right"
+        style="--checkbox-color: var(--mantine-color-blue-filled);"
+      >
+        <div
+          class="m_5f6e695e mantine-Checkbox-body"
+        >
+          <div
+            class="m_26062bec mantine-Checkbox-inner"
+            data-label-position="right"
+          >
+            <input
+              checked=""
+              class="mantine-focus-auto m_26063560 mantine-Checkbox-input"
+              id="mantine-1fu8n1fu8"
+              name="$.owner"
+              type="checkbox"
+            />
+            <svg
+              aria-hidden="true"
+              class="m_bf295423 mantine-Checkbox-icon"
+              fill="none"
+              viewBox="0 0 10 7"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                clip-rule="evenodd"
+                d="M4 4.586L1.707 2.293A1 1 0 1 0 .293 3.707l3 3a.997.997 0 0 0 1.414 0l5-5A1 1 0 1 0 8.293.293L4 4.586z"
+                fill="currentColor"
+                fill-rule="evenodd"
+              />
+            </svg>
+          </div>
+          <div
+            class="m_d3ea56bb mantine-Checkbox-labelWrapper"
+          >
+            <label
+              class="m_8ee546b8 mantine-Checkbox-label"
+              for="mantine-1fu8n1fu8"
+            >
+              Has Owner?
+            </label>
+          </div>
+        </div>
+      </div>
+      <div
+        class="m_e615b15f mantine-Card-root m_1b7284a3 mantine-Paper-root"
+      >
+        <h1>
+          Owner
+        </h1>
       </div>
     </div>
     <div
@@ -827,6 +998,65 @@ exports[`PetForm > renders Populated 1`] = `
             />
           </div>
         </div>
+      </div>
+    </div>
+    <div
+      class="m_e615b15f mantine-Card-root m_1b7284a3 mantine-Paper-root"
+      data-with-border="true"
+    >
+      <div
+        class="m_bf2d988c mantine-Checkbox-root m_5f75b09e mantine-Checkbox-root"
+        data-checked="true"
+        data-label-position="right"
+        style="--checkbox-color: var(--mantine-color-blue-filled);"
+      >
+        <div
+          class="m_5f6e695e mantine-Checkbox-body"
+        >
+          <div
+            class="m_26062bec mantine-Checkbox-inner"
+            data-label-position="right"
+          >
+            <input
+              checked=""
+              class="mantine-focus-auto m_26063560 mantine-Checkbox-input"
+              id="mantine-1ssssssss"
+              name="$.owner"
+              type="checkbox"
+            />
+            <svg
+              aria-hidden="true"
+              class="m_bf295423 mantine-Checkbox-icon"
+              fill="none"
+              viewBox="0 0 10 7"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                clip-rule="evenodd"
+                d="M4 4.586L1.707 2.293A1 1 0 1 0 .293 3.707l3 3a.997.997 0 0 0 1.414 0l5-5A1 1 0 1 0 8.293.293L4 4.586z"
+                fill="currentColor"
+                fill-rule="evenodd"
+              />
+            </svg>
+          </div>
+          <div
+            class="m_d3ea56bb mantine-Checkbox-labelWrapper"
+          >
+            <label
+              class="m_8ee546b8 mantine-Checkbox-label"
+              for="mantine-1ssssssss"
+            >
+              Has Owner?
+            </label>
+          </div>
+        </div>
+      </div>
+      <div
+        class="m_e615b15f mantine-Card-root m_1b7284a3 mantine-Paper-root"
+      >
+        <h1>
+          Owner
+        </h1>
       </div>
     </div>
     <div

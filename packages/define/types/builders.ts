@@ -255,7 +255,6 @@ export function record<
     valueTypeDef: V['definition'],
   }>({
     type: TypeDefType.Record,
-    // eslint-disable-next-line no-undefined
     keyPrototype: undefined!,
     valueTypeDef: typeDef,
   })

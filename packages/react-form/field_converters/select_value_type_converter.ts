@@ -6,6 +6,7 @@ import {
 import {
   copy,
   type LiteralTypeDef,
+  type ReadonlyTypeOfType,
   type Type,
   type UnionTypeDef,
   type ValueOfType,
@@ -20,14 +21,15 @@ import {
 
 export abstract class AbstractSelectValueTypeConverter<
   T extends Type,
+  From extends ValueOfType<T> | undefined,
   To extends string | null,
-  Values extends Readonly<Record<NonNullable<To>, ValueOfType<T>>>,
+  Values extends Readonly<Record<NonNullable<To>, From>>,
   NoSuchValueError,
   ValuePath extends string,
   Context,
 > implements TwoWayFieldConverterWithValueFactory<
-  ValueOfType<T>,
-  keyof Values | null,
+  From,
+  To,
   NoSuchValueError,
   ValuePath,
   Context
@@ -35,14 +37,14 @@ export abstract class AbstractSelectValueTypeConverter<
   constructor(
     protected readonly typeDef: T,
     protected readonly values: Values,
-    private readonly defaultValueKey: keyof Values | null,
+    private readonly defaultValueKey: keyof Values | null | undefined,
     private readonly noSuchValueError: NoSuchValueError | null,
     private readonly required: boolean,
   ) {
   }
 
-  revert(from: keyof Values | null): UnreliableFieldConversion<ValueOfType<T>, NoSuchValueError> {
-    const prototype: ValueOfType<T> | null = from == null ? null : this.values[from]
+  revert(from: To): UnreliableFieldConversion<From, NoSuchValueError> {
+    const prototype: From = from == null ? null! : this.values[from]
     if (prototype == null && this.noSuchValueError != null) {
       return {
         type: UnreliableFieldConversionType.Failure,
@@ -50,7 +52,7 @@ export abstract class AbstractSelectValueTypeConverter<
         value: null,
       }
     }
-    const value = prototype == null ? null : copy(this.typeDef, prototype)
+    const value = prototype == null ? prototype : copy(this.typeDef, prototype)
     // TODO given we are dealing with strings, maybe we should have a check to make sure value is in the record
     // of values?
     return {
@@ -59,8 +61,8 @@ export abstract class AbstractSelectValueTypeConverter<
     }
   }
 
-  convert(from: ValueOfType<T>): AnnotatedFieldConversion<To> {
-    const value = from == null ? null! : this.doConvert(from)
+  convert(from: From): AnnotatedFieldConversion<To> {
+    const value = from == null ? from! : this.doConvert(from)
     return {
       value,
       required: this.required,
@@ -70,18 +72,21 @@ export abstract class AbstractSelectValueTypeConverter<
 
   protected abstract doConvert(from: NonNullable<ValueOfType<T>>): To
 
-  create(): ValueOfType<T> {
+  create(): From {
     return this.defaultValueKey != null ? this.values[this.defaultValueKey] : null!
   }
 }
 
 export class SelectDiscriminatedUnionConverter<
   U extends UnionTypeDef,
+  From extends ValueOfType<ReadonlyTypeOfType<Type<U>>> | (Required extends true ? never : undefined),
   To extends StringKeyOf<U['unions']> | null,
   ValuePath extends string,
   Context,
+  Required extends boolean,
 > extends AbstractSelectValueTypeConverter<
   Type<U>,
+  From,
   To,
   ValueTypesOfDiscriminatedUnion<U>,
   never,
@@ -89,16 +94,17 @@ export class SelectDiscriminatedUnionConverter<
   Context
 > {
   constructor(
-    typeDef: Type<U>,
+    type: Type<U>,
     values: ValueTypesOfDiscriminatedUnion<U>,
     defaultValueKey: keyof U['unions'],
+    required: Required,
   ) {
     super(
-      typeDef,
+      type,
       values,
       defaultValueKey,
       null,
-      true,
+      required,
     )
   }
 
@@ -114,15 +120,18 @@ export class SelectDiscriminatedUnionConverter<
 
 export class SelectLiteralConverter<
   L extends string | number | null,
+  From extends L | (Required extends true ? never : undefined),
   To extends string | null,
-  Values extends Record<NonNullable<L>, NonNullable<To>>,
+  Values extends Record<NonNullable<From>, NonNullable<To>>,
   NoSuchValueError,
   ValuePath extends string,
   Context,
+  Required extends boolean,
 > extends AbstractSelectValueTypeConverter<
   Type<LiteralTypeDef<L>>,
+  From,
   To,
-  Record<NonNullable<To>, L>,
+  Record<NonNullable<To>, NonNullable<From>>,
   NoSuchValueError,
   ValuePath,
   Context
@@ -130,9 +139,9 @@ export class SelectLiteralConverter<
   constructor(
     typeDef: Type<LiteralTypeDef<L>>,
     private readonly valuesToStrings: Values,
-    defaultValue: L | null,
+    defaultValue: From,
     noSuchValueError: NoSuchValueError | null,
-    required = false,
+    required: Required,
   ) {
     super(
       typeDef,
@@ -143,35 +152,37 @@ export class SelectLiteralConverter<
     )
   }
 
-  protected override doConvert(from: NonNullable<L>) {
+  protected override doConvert(from: NonNullable<From>) {
     return this.valuesToStrings[from]
   }
 }
 
 export class SelectStringConverter<
   L extends string | null,
-  A extends readonly NonNullable<L>[],
+  From extends L | undefined,
+  A extends readonly NonNullable<From>[],
   NoSuchValueError,
   ValuePath extends string,
   Context,
 > extends AbstractSelectValueTypeConverter<
   Type<LiteralTypeDef<L>>,
+  From,
   string | null,
-  Record<string, L>,
+  Record<string, From>,
   NoSuchValueError,
   ValuePath,
   Context
 > {
   constructor(
     typeDef: Type<LiteralTypeDef<L>>,
-    allowedValues: ExhaustiveArrayOfUnion<NonNullable<L>, A>,
-    defaultValue: L | null,
+    allowedValues: ExhaustiveArrayOfUnion<NonNullable<From>, A>,
+    defaultValue: L | undefined,
     noSuchValueError: NoSuchValueError | null,
     required = false,
   ) {
     super(
       typeDef,
-      allowedValues.reduce<Record<string, L>>(
+      allowedValues.reduce<Record<string, From>>(
         function (acc, value) {
           acc[value] = value
           return acc

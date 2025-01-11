@@ -23,6 +23,7 @@ import {
   type FormProps,
   useMantineForm,
 } from '@strictly/react-form'
+import { observer } from 'mobx-react'
 import {
   type ComponentType,
   useCallback,
@@ -43,6 +44,13 @@ export function NameTextInputLabel() {
   return t({
     message: 'Name',
     comment: 'label for the name text input',
+  })
+}
+
+export function OwnerCheckboxLabel() {
+  return t({
+    message: 'Has Owner?',
+    comment: 'label for a checkbox indicating the pet has an owner',
   })
 }
 
@@ -69,11 +77,12 @@ export function NewTagPlaceholder() {
 
 export type PetFormFields = Pick<
   PetFields,
-  '$.name' | '$.alive' | '$.newTag' | '$.tags' | `$.tags.${number}`
+  '$.name' | '$.alive' | '$.newTag' | '$.owner' | '$.tags' | `$.tags.${number}`
 >
 
 export type PetFormProps = FormProps<PetFormFields> & {
   SpeciesComponent: ComponentType,
+  OwnerComponent: ComponentType,
   onSubmit: () => void,
   onRemoveTag: (valuePath: TagValuePath) => void,
 }
@@ -90,15 +99,17 @@ function NameInputErrorRenderer({ error }: ErrorRendererProps<ErrorOfField<PetFo
   }
 }
 
-export function PetForm(props: PetFormProps) {
+function PetFormImpl(props: PetFormProps) {
   const {
     onSubmit,
     onRemoveTag,
+    OwnerComponent,
     SpeciesComponent,
   } = props
   const form = useMantineForm(props)
   const NameTextInput = form.textInput('$.name')
   const AliveCheckbox = form.checkbox('$.alive')
+  const OwnerCheckbox = form.checkbox('$.owner')
   const NewTagInputField = form.textInput(
     '$.newTag',
     PillsInput.Field,
@@ -130,6 +141,13 @@ export function PetForm(props: PetFormProps) {
           <NewTagInputField placeholder={NewTagPlaceholder()} />
         </Pill.Group>
       </PillsInput>
+      <Card withBorder={true}>
+        <OwnerCheckbox
+          label={OwnerCheckboxLabel()}
+          pb={form.fields['$.owner'].value ? 'md' : undefined}
+        />
+        {form.fields['$.owner'].value && <OwnerComponent />}
+      </Card>
       <Card withBorder={true}>
         <SpeciesComponent />
       </Card>
@@ -164,3 +182,5 @@ function TagPill({
     />
   )
 }
+
+export const PetForm = observer(PetFormImpl)

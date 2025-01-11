@@ -22,8 +22,15 @@ import {
 export type DogBreed = 'Alsatian' | 'Pug' | 'other'
 export type CatBreed = 'Burmese' | 'Siamese' | 'DSH'
 
-export const dogBreedType = literal<DogBreed | null>()
-export const catBreedType = literal<CatBreed | null>()
+export const dogBreedType = literal<DogBreed>()
+export const catBreedType = literal<CatBreed>()
+
+export const ownerType = object()
+  .set('firstName', stringType)
+  .set('surname', stringType)
+  .set('phoneNumber', stringType)
+  .setOptional('email', stringType)
+  .narrow
 
 export const speciesType = union('type')
   .add(
@@ -45,6 +52,7 @@ export const petType = object()
   .set('name', stringType)
   .set('alive', booleanType)
   .set('tags', list(stringType))
+  .setOptional('owner', ownerType)
   .set('species', speciesType)
   .narrow
 

@@ -13,6 +13,7 @@ import {
   listAdapter,
   mergeAdaptersWithValidators,
   mergeFieldAdaptersWithTwoWayConverter,
+  NullableToBooleanConverter,
   prototypingFieldValueFactory,
   SelectDiscriminatedUnionConverter,
   SelectLiteralConverter,
@@ -22,9 +23,11 @@ import {
 import { IsAliveTwoWayConverter } from './is_alive_field_converter'
 import {
   catBreedType,
+  type DogBreed,
   dogBreedType,
   NOT_A_BREED_ERROR,
   NOT_A_NUMBER_ERROR,
+  ownerType,
   type Pet,
   type petType,
   type PetTypeToValuePaths,
@@ -40,6 +43,23 @@ const petFieldConverters = {
     prototypingFieldValueFactory(''),
   ).narrow(),
   '$.newTag': identityAdapter('').narrow(),
+  '$.owner': adapterFromTwoWayConverter(
+    new NullableToBooleanConverter(
+      ownerType,
+      {
+        firstName: '',
+        surname: '',
+        phoneNumber: '',
+        email: '',
+      },
+      undefined,
+    ),
+  ).narrow(),
+  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+  '$.owner.email': identityAdapter('' as string | undefined).narrow(),
+  '$.owner.firstName': identityAdapter('').narrow(),
+  '$.owner.phoneNumber': identityAdapter('').narrow(),
+  '$.owner.surname': identityAdapter('').narrow(),
   '$.species': adapterFromTwoWayConverter(
     new SelectDiscriminatedUnionConverter(
       speciesType,
@@ -54,6 +74,7 @@ const petFieldConverters = {
         },
       },
       'cat',
+      true,
     ),
   ).narrow(),
   '$.species.cat:breed': adapterFromTwoWayConverter(
@@ -64,7 +85,7 @@ const petFieldConverters = {
         'Siamese',
         'DSH',
       ] as const,
-      null,
+      undefined,
       NOT_A_BREED_ERROR,
     ),
   ).narrow(),
@@ -83,8 +104,10 @@ const petFieldConverters = {
         Pug: 'Pug',
         other: 'Other',
       },
-      null,
+      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+      undefined as undefined | DogBreed,
       NOT_A_BREED_ERROR,
+      false,
     ),
   ).narrow(),
   '$.tags': listAdapter<string, string, '$.tags', Pet>().narrow(),

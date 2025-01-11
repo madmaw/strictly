@@ -511,7 +511,6 @@ describe('all', function () {
             expect(model.fields).toEqual(expect.objectContaining({
               $: expect.objectContaining({
                 value: '1',
-                // eslint-disable-next-line no-undefined
                 error: undefined,
               }),
             }))
@@ -589,7 +588,6 @@ describe('all', function () {
           expect(model.fields).toEqual(expect.objectContaining({
             $: expect.objectContaining({
               value: newValue,
-              // eslint-disable-next-line no-undefined
               error: undefined,
             }),
           }))
@@ -643,7 +641,6 @@ describe('all', function () {
             expect(model.fields).toEqual(expect.objectContaining({
               '$.0': expect.objectContaining({
                 value: '100',
-                // eslint-disable-next-line no-undefined
                 error: undefined,
               }),
             }))
@@ -686,7 +683,6 @@ describe('all', function () {
           expect(model.fields).toEqual(expect.objectContaining({
             '$.0': expect.objectContaining({
               value: newValue,
-              // eslint-disable-next-line no-undefined
               error: undefined,
             }),
           }))
@@ -709,7 +705,6 @@ describe('all', function () {
             }),
             '$.1': expect.objectContaining({
               value: '2',
-              // eslint-disable-next-line no-undefined
               error: undefined,
             }),
             '$.2': expect.objectContaining({
@@ -804,7 +799,6 @@ describe('all', function () {
           it.each([
             [
               '$.0',
-              // eslint-disable-next-line no-undefined
               undefined,
             ],
             [
@@ -929,7 +923,7 @@ describe('all', function () {
           .add('null', nullType)
           .add('0', listOfNumbersTypeDef)
         const adapters = {
-          $: adapterFromTwoWayConverter(new NullableToBooleanConverter(type, [1])),
+          $: adapterFromTwoWayConverter(new NullableToBooleanConverter(type, [1], null)),
           '$.*': integerToStringAdapter,
         } as const
         type ValueToTypePaths = ValueToTypePathsOfType<typeof type>
@@ -956,7 +950,6 @@ describe('all', function () {
           expect(model.fields).toEqual({
             $: {
               disabled: false,
-              // eslint-disable-next-line no-undefined
               error: undefined,
               value: false,
               required: false,
@@ -999,6 +992,7 @@ describe('all', function () {
               },
             },
             'x',
+            true,
           )),
           '$.x:a': identityAdapter(0).narrow(),
           '$.y:b': identityAdapter(false).narrow(),

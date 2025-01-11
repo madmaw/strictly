@@ -159,17 +159,22 @@ function internalFlattenObjectChildren<M>(
     fields,
     function (r, k, fieldTypeDef) {
       const fieldValue = v[k]
-      return internalFlattenValue(
-        jsonPath(valuePath, k, qualifier),
-        jsonPath(typePath, k, qualifier),
-        fieldTypeDef,
-        fieldValue,
-        (value: AnyValueType) => {
-          v[k] = value
-        },
-        mapper,
-        r,
-      )
+      // assume undefined means the field is optional and not populated
+      // TODO: actually capture if field is optional in typedef (or in builder for creating validator)
+      if (fieldValue !== undefined) {
+        return internalFlattenValue(
+          jsonPath(valuePath, k, qualifier),
+          jsonPath(typePath, k, qualifier),
+          fieldTypeDef,
+          fieldValue,
+          (value: AnyValueType) => {
+            v[k] = value
+          },
+          mapper,
+          r,
+        )
+      }
+      return r
     },
     r,
   )

@@ -16,32 +16,34 @@ export class NullableToBooleanConverter<
   E,
   ValuePath extends string,
   Context,
+  NullType extends null | undefined,
 > implements TwoWayFieldConverterWithValueFactory<
-  ValueOfType<ReadonlyTypeOfType<T>> | null,
+  ValueOfType<ReadonlyTypeOfType<T>> | NullType,
   boolean,
   E,
   ValuePath,
   Context
 > {
-  readonly defaultValue: ValueOfType<ReadonlyTypeOfType<T>> | null
+  readonly defaultValue: ValueOfType<ReadonlyTypeOfType<T>> | NullType
 
   constructor(
     private readonly typeDef: T,
     private readonly prototype: ValueOfType<ReadonlyTypeOfType<T>>,
+    private readonly nullType: NullType,
     defaultToNull = true,
   ) {
-    this.defaultValue = defaultToNull ? null : prototype
+    this.defaultValue = defaultToNull ? this.nullType : prototype
   }
 
-  convert(from: ValueOfType<ReadonlyTypeOfType<T>> | null): AnnotatedFieldConversion<boolean> {
+  convert(from: ValueOfType<ReadonlyTypeOfType<T>> | NullType): AnnotatedFieldConversion<boolean> {
     return {
-      value: from != null,
+      value: from !== this.nullType,
       required: false,
       disabled: false,
     }
   }
 
-  revert(from: boolean): UnreliableFieldConversion<ValueOfType<ReadonlyTypeOfType<T>> | null, E> {
+  revert(from: boolean): UnreliableFieldConversion<ValueOfType<ReadonlyTypeOfType<T>> | NullType, E> {
     if (from) {
       const value: ValueOfType<T> = copy(this.typeDef, this.prototype)
       return {
@@ -51,11 +53,11 @@ export class NullableToBooleanConverter<
     }
     return {
       type: UnreliableFieldConversionType.Success,
-      value: null,
+      value: this.nullType,
     }
   }
 
-  create(): ValueOfType<ReadonlyTypeOfType<T>> | null {
+  create(): ValueOfType<ReadonlyTypeOfType<T>> | NullType {
     return this.defaultValue
   }
 }

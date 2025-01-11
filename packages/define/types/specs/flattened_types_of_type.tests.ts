@@ -72,7 +72,6 @@ describe('FlattenedTypesOfType', function () {
         .setReadonly('c', booleanType)
         .setReadonlyOptional('d', stringType)
       type T = SimplifyDeep<FlattenedTypesOfType<typeof builder, null>>
-
       let t: {
         readonly $: SimplifyDeep<typeof builder.narrow>,
         readonly ['$.a']: {
@@ -83,8 +82,18 @@ describe('FlattenedTypesOfType', function () {
         },
         readonly ['$.b']: {
           readonly definition: {
-            readonly type: TypeDefType.Literal,
-            readonly valuePrototype: [string],
+            readonly discriminator: null,
+            readonly type: TypeDefType.Union,
+            readonly unions: {
+              readonly '0': {
+                readonly type: TypeDefType.Literal,
+                readonly valuePrototype: [string],
+              },
+              readonly '1': {
+                readonly type: TypeDefType.Literal,
+                readonly valuePrototype: [undefined],
+              },
+            },
           },
         },
         readonly ['$.c']: {
@@ -95,11 +104,50 @@ describe('FlattenedTypesOfType', function () {
         },
         readonly ['$.d']: {
           readonly definition: {
-            readonly type: TypeDefType.Literal,
-            readonly valuePrototype: [string],
+            readonly discriminator: null,
+            readonly type: TypeDefType.Union,
+            readonly unions: {
+              readonly '0': {
+                readonly type: TypeDefType.Literal,
+                readonly valuePrototype: [string],
+              },
+              readonly '1': {
+                readonly type: TypeDefType.Literal,
+                readonly valuePrototype: [undefined],
+              },
+            },
           },
         },
       }
+      it('equals expected type', function () {
+        expectTypeOf(t).toEqualTypeOf<T>()
+      })
+    })
+
+    describe('optional', function () {
+      const builder = object().setOptional('a', stringType)
+      type T = SimplifyDeep<FlattenedTypesOfType<typeof builder, null>>
+
+      let t: {
+        readonly $: SimplifyDeep<typeof builder.narrow>,
+        readonly '$.a': {
+          readonly definition: {
+            readonly discriminator: null,
+            readonly type: TypeDefType.Union,
+            readonly unions: {
+              readonly '0': {
+                readonly type: TypeDefType.Literal,
+                readonly valuePrototype: [string],
+              },
+              readonly '1': {
+                readonly type: TypeDefType.Literal,
+                readonly valuePrototype: [undefined],
+              },
+            },
+          },
+        },
+      }
+
       it('equals expected type', function () {
         expectTypeOf(t).toEqualTypeOf<T>()
       })

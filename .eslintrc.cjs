@@ -344,8 +344,9 @@ module.exports = {
             message: 'do not use const enum instead in a monorepo',
           },
         ],
+        // causes problems
+        'no-undefined': 'off',
         // disable in favour of unused-imports/no-unused-vars as it gives more control
-        'no-undefined': 'warn',
         'no-unused-vars': 'off',
         'object-curly-newline': [
           'warn',
