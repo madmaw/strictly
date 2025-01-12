@@ -1,4 +1,5 @@
 import {
+  annotations,
   validate,
   type Validator,
 } from '@strictly/define'
@@ -50,13 +51,26 @@ export function mergeValidators<
       const validator1 = validators1[key as keyof Validators1]
       // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
       const validator2 = validators2[key as keyof Validators2]
-      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-explicit-any
-      validators[key as Keys] = function (value: any, valuePath: string, context: any) {
-        const error = validate(validator1!, value, valuePath, context)
-        if (error != null) {
-          return error
-        }
-        return validate(validator2!, value, valuePath, context)
+
+      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+      validators[key as Keys] = {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        validate: function (value: any, valuePath: string, context: any) {
+          const error = validate(validator1!, value, valuePath, context)
+          if (error != null) {
+            return error
+          }
+          return validate(validator2!, value, valuePath, context)
+        },
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        annotations: function (valuePath: string, context: any) {
+          const annotations1 = annotations(validator1!, valuePath, context)
+          const annotations2 = annotations(validator2!, valuePath, context)
+          return {
+            readonly: annotations1.readonly || annotations2.readonly,
+            required: annotations1.required || annotations2.required,
+          }
+        },
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } as any
       return validators

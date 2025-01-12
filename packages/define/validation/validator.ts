@@ -47,6 +47,14 @@ export type ValidationError<Type extends string, Data = {}> = Simplify<
   } & Data
 >
 
+export function isFunctionalValidator(v: Validator): v is FunctionalValidator {
+  return typeof v === 'function'
+}
+
+export function isAnnotatedValidator(v: Validator): v is AnnotatedValidator {
+  return typeof v !== 'function'
+}
+
 export function validate<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   V = any,
@@ -62,10 +70,11 @@ export function validate<
   valuePath: ValuePath,
   context: Context,
 ): E | null {
-  if (typeof validator === 'function') {
-    return validator(v, valuePath, context)
-  } else {
+  if (isAnnotatedValidator(validator)) {
     return validator.validate(v, valuePath, context)
+  } else {
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+    return (validator as FunctionalValidator<V, E, ValuePath, Context>)(v, valuePath, context)
   }
 }
 
@@ -83,11 +92,12 @@ export function annotations<
   valuePath: ValuePath,
   context: Context,
 ) {
-  if (typeof validator === 'function') {
+  if (isAnnotatedValidator(validator)) {
+    return validator.annotations(valuePath, context)
+  } else {
     return {
       required: false,
+      readonly: false,
     }
-  } else {
-    return validator.annotations(valuePath, context)
   }
 }

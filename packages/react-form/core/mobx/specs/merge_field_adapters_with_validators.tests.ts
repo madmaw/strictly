@@ -118,6 +118,14 @@ describe('mergeFieldAdaptersWithValidators', function () {
     }),
   }
 
+  const readonlyValidator: AnnotatedValidator = {
+    validate: () => null,
+    annotations: () => ({
+      required: false,
+      readonly: true,
+    }),
+  }
+
   beforeEach(function () {
     resetMockAdapter(originalIntegerToIntegerAdapter, integerToIntegerAdapter)
     resetMockAdapter(originalBooleanToBooleanAdapter, booleanToBooleanAdapter)
@@ -144,11 +152,13 @@ describe('mergeFieldAdaptersWithValidators', function () {
         a: integerToIntegerAdapter,
         b: booleanToBooleanAdapter,
         c: integerToIntegerAdapter,
+        d: integerToIntegerAdapter,
       } as const
       const validators = {
         a: failingValidator1,
         b: failingValidator2,
         c: requiredValidator,
+        d: readonlyValidator,
       } as const
 
       const merged = mergeAdaptersWithValidators(adapters, validators)
@@ -159,6 +169,7 @@ describe('mergeFieldAdaptersWithValidators', function () {
             'a',
             'b',
             'c',
+            'd',
           ])
         })
       })
@@ -188,8 +199,12 @@ describe('mergeFieldAdaptersWithValidators', function () {
           [
             'c',
             1,
-          ] as const,
-        ])('field %s succeeds with value %s', function (key, value) {
+          ],
+          [
+            'd',
+            true,
+          ],
+        ] as const)('field %s succeeds with value %s', function (key, value) {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           const mergedAdapter: FieldAdapter<any, any, string, any> = merged[key]
           expectDefined(mergedAdapter.revert)
@@ -204,24 +219,40 @@ describe('mergeFieldAdaptersWithValidators', function () {
           [
             'a',
             false,
+            false,
             1,
           ],
           [
             'b',
             true,
+            false,
             true,
           ],
           [
             'c',
             true,
+            false,
             2,
           ],
-        ] as const)('field %s is required %s', function (key, expectedRequired, expectedValue) {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          const adapter: FieldAdapter<any, any, string, any> = merged[key]
-          const { required } = adapter.convert(expectedValue, key, null)
-          expect(required).toEqual(expectedRequired)
-        })
+          [
+            'd',
+            false,
+            true,
+            3,
+          ],
+        ] as const)(
+          'field %s is required %s and readonly %s',
+          function (key, expectedRequired, expectedReadonly, value) {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const adapter: FieldAdapter<any, any, string, any> = merged[key]
+            const {
+              required,
+              readonly,
+            } = adapter.convert(value, key, null)
+            expect(required).toEqual(expectedRequired)
+            expect(readonly).toEqual(expectedReadonly)
+          },
+        )
       })
     })
   })
