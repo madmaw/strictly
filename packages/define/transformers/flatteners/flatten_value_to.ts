@@ -65,7 +65,12 @@ function internalFlattenValue<M>(
   r: Record<string, M>,
 ) {
   r[valuePath] = mapper(typeDef, v, setter, typePath, valuePath)
-  return internalFlattenValueChildren(valuePath, typePath, '', typeDef, v, mapper, r)
+  // assume undefined means the field is optional and not populated
+  // TODO: actually capture if field is optional in typedef (or in builder for creating validator)
+  if (v !== undefined) {
+    return internalFlattenValueChildren(valuePath, typePath, '', typeDef, v, mapper, r)
+  }
+  return r
 }
 
 function internalFlattenValueChildren<M>(
@@ -159,22 +164,17 @@ function internalFlattenObjectChildren<M>(
     fields,
     function (r, k, fieldTypeDef) {
       const fieldValue = v[k]
-      // assume undefined means the field is optional and not populated
-      // TODO: actually capture if field is optional in typedef (or in builder for creating validator)
-      if (fieldValue !== undefined) {
-        return internalFlattenValue(
-          jsonPath(valuePath, k, qualifier),
-          jsonPath(typePath, k, qualifier),
-          fieldTypeDef,
-          fieldValue,
-          (value: AnyValueType) => {
-            v[k] = value
-          },
-          mapper,
-          r,
-        )
-      }
-      return r
+      return internalFlattenValue(
+        jsonPath(valuePath, k, qualifier),
+        jsonPath(typePath, k, qualifier),
+        fieldTypeDef,
+        fieldValue,
+        (value: AnyValueType) => {
+          v[k] = value
+        },
+        mapper,
+        r,
+      )
     },
     r,
   )
