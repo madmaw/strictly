@@ -14,31 +14,31 @@ import {
 export type ValueOfType<
   T,
   Extra = {},
-> = T extends Type ? InternalValueTypeOf<T['definition'], Extra> : never
+> = T extends Type ? ValueOfTypeDef<T['definition'], Extra> : never
 
-export type InternalValueTypeOf<
+export type ValueOfTypeDef<
   F extends TypeDef,
-  Extra,
-> = F extends LiteralTypeDef ? InternalValueTypeOfLiteral<F>
-  : F extends ListTypeDef ? InternalValueTypeOfList<F, Extra>
-  : F extends RecordTypeDef ? InternalValueTypeOfRecord<F, Extra>
-  : F extends ObjectTypeDef ? InternalValueTypeOfObject<F, Extra>
-  : F extends UnionTypeDef ? InternalValueTypeOfUnion<F, Extra>
+  Extra = {},
+> = F extends LiteralTypeDef ? ValueOfLiteralTypeDef<F>
+  : F extends ListTypeDef ? ValueOfListTypeDef<F, Extra>
+  : F extends RecordTypeDef ? ValueOfRecordTypeDef<F, Extra>
+  : F extends ObjectTypeDef ? ValueOfObjectTypeDef<F, Extra>
+  : F extends UnionTypeDef ? ValueOfUnionTypeDef<F, Extra>
   : never
 
-type InternalValueTypeOfLiteral<F extends LiteralTypeDef> = F['valuePrototype'][number]
+type ValueOfLiteralTypeDef<F extends LiteralTypeDef> = F['valuePrototype'][number]
 
-type InternalValueTypeOfList<F extends ListTypeDef, Extra> = IsFieldReadonly<F, 'elements'> extends true
-  ? readonly InternalValueTypeOf<
+type ValueOfListTypeDef<F extends ListTypeDef, Extra> = IsFieldReadonly<F, 'elements'> extends true
+  ? readonly ValueOfTypeDef<
     F['elements'],
     Extra
   >[] & Extra
-  : InternalValueTypeOf<
+  : ValueOfTypeDef<
     F['elements'],
     Extra
   >[] & Extra
 
-type InternalValueTypeOfRecord<
+type ValueOfRecordTypeDef<
   F extends RecordTypeDef,
   Extra,
 > = undefined extends F['valueTypeDef']
@@ -46,39 +46,39 @@ type InternalValueTypeOfRecord<
   ? IsFieldReadonly<F, 'valueTypeDef'> extends true
     // readonly
     ? {
-      readonly [k in F['keyPrototype']]?: InternalValueTypeOf<F['valueTypeDef'], Extra>
+      readonly [k in F['keyPrototype']]?: ValueOfTypeDef<F['valueTypeDef'], Extra>
     }
   : {
-    [k in F['keyPrototype']]?: InternalValueTypeOf<F['valueTypeDef'], Extra>
+    [k in F['keyPrototype']]?: ValueOfTypeDef<F['valueTypeDef'], Extra>
   }
   // complete
   : IsFieldReadonly<F, 'valueTypeDef'> extends true
   // readonly
     ? {
-      readonly [k in F['keyPrototype']]: InternalValueTypeOf<F['valueTypeDef'], Extra>
+      readonly [k in F['keyPrototype']]: ValueOfTypeDef<F['valueTypeDef'], Extra>
     }
   : {
-    [k in F['keyPrototype']]: InternalValueTypeOf<F['valueTypeDef'], Extra>
+    [k in F['keyPrototype']]: ValueOfTypeDef<F['valueTypeDef'], Extra>
   }
 
-type InternalValueTypeOfObject<
+type ValueOfObjectTypeDef<
   F extends ObjectTypeDef,
   Extra,
 > = F extends ObjectTypeDef<infer Fields> ? {
-    [K in keyof Fields]: InternalValueTypeOf<
+    [K in keyof Fields]: ValueOfTypeDef<
       Fields[K],
       Extra
     >
   } & Extra
   : never
 
-type InternalValueTypeOfUnion<
+type ValueOfUnionTypeDef<
   F extends UnionTypeDef,
   Extra,
 > = F extends UnionTypeDef<infer D, infer U> ? D extends string ? {
-      [K in keyof U]: InternalValueTypeOf<U[K], Extra> & Readonly<Record<D, K>>
+      [K in keyof U]: ValueOfTypeDef<U[K], Extra> & Readonly<Record<D, K>>
     }[keyof U]
   : {
-    [K in keyof U]: InternalValueTypeOf<U[K], Extra>
+    [K in keyof U]: ValueOfTypeDef<U[K], Extra>
   }[keyof U]
   : never

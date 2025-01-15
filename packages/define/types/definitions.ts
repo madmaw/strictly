@@ -73,9 +73,9 @@ export type RecordTypeDef<
   readonly valueTypeDef: V,
 }
 
-// structured type
+// object type
 // could be replaced with a map and an intersection
-export type ObjectFieldKey = string | number
+export type ObjectFieldKey = string
 
 // NOTE we use the `readonly` and `?` (partial) status of these field definitions
 // to describe the same attributes of the fields

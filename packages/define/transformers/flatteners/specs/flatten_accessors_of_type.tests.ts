@@ -18,7 +18,6 @@ describe('flattenAccessorsOfType', function () {
   const builder = object()
     .field('a', list(numberType))
     .field('b', booleanType)
-    .narrow
 
   let flattened: FlattenedAccessorsOfType<typeof builder>
   let value: ValueOfType<typeof builder>

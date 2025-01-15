@@ -29,6 +29,7 @@ export type ValueToTypePathsOfType<
   StartingDepth
 >>
 
+// TODO rename to FlattenTypePathsOfTypeDef and apply pattern to subsequent types
 type InternalFlattenedTypePathsOf<
   T extends TypeDef,
   SegmentOverride extends string,

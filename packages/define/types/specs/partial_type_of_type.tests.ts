@@ -12,7 +12,7 @@ import { type PartialTypeOfType } from 'types/partial_type_of_type'
 
 describe('PartialTypeDefOf', function () {
   describe('literal', function () {
-    type T = PartialTypeOfType<typeof numberType>
+    type T = PartialTypeOfType<typeof numberType._type>
 
     let t: {
       readonly typeDef: {
@@ -38,7 +38,7 @@ describe('PartialTypeDefOf', function () {
 
   describe('list', function () {
     const builder = list(numberType)
-    type T = PartialTypeOfType<typeof builder>
+    type T = PartialTypeOfType<typeof builder._type>
 
     let t: {
       readonly typeDef: {
@@ -76,7 +76,7 @@ describe('PartialTypeDefOf', function () {
 
   describe('record', function () {
     const builder = record<typeof numberType, 'a' | 'b'>(numberType)
-    type T = SimplifyDeep<PartialTypeOfType<typeof builder>>
+    type T = SimplifyDeep<PartialTypeOfType<typeof builder._type>>
 
     let t: {
       readonly typeDef: {
@@ -118,7 +118,7 @@ describe('PartialTypeDefOf', function () {
     const builder = object()
       .field('a', numberType)
       .readonlyField('b', stringType)
-    type T = PartialTypeOfType<typeof builder>
+    type T = PartialTypeOfType<typeof builder._type>
 
     let t: {
       readonly typeDef: {
@@ -176,7 +176,7 @@ describe('PartialTypeDefOf', function () {
       const builder = union()
         .or('1', numberType)
         .or('2', stringType)
-      type T = PartialTypeOfType<typeof builder>
+      type T = PartialTypeOfType<typeof builder._type>
 
       let t: {
         readonly typeDef: {
@@ -213,7 +213,7 @@ describe('PartialTypeDefOf', function () {
 
   describe('readonly', function () {
     const builder = list(numberType).readonly()
-    type T = PartialTypeOfType<typeof builder>
+    type T = PartialTypeOfType<typeof builder._type>
 
     let t: {
       readonly typeDef: {

@@ -15,8 +15,8 @@ import {
   type StrictListTypeDef,
   type StrictLiteralTypeDef,
   type StrictObjectTypeDef,
+  type StrictObjectTypeDefFields,
   type StrictRecordTypeDef,
-  type StrictStructuredTypeDefFields,
   type StrictType,
   type StrictTypeDef,
   type StrictUnionTypeDef,
@@ -150,7 +150,7 @@ function copyObjectFields<
   R,
   Extra extends Record<string, UnionKey>,
 >(
-  fields: StrictStructuredTypeDefFields,
+  fields: StrictObjectTypeDefFields,
   value: Record<ObjectFieldKey, AnyValueType>,
   copier: Copier<R>,
   extra: Extra,

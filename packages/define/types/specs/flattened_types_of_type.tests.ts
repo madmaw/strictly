@@ -13,7 +13,7 @@ import { type FlattenedTypesOfType } from 'types/flattened_types_of_type'
 
 describe('FlattenedTypesOfType', function () {
   describe('literal', function () {
-    type T = FlattenedTypesOfType<typeof numberType, null>
+    type T = FlattenedTypesOfType<typeof numberType._type, null>
 
     let t: {
       readonly $: {
@@ -30,10 +30,10 @@ describe('FlattenedTypesOfType', function () {
 
   describe('list', function () {
     const builder = list(numberType)
-    type T = SimplifyDeep<FlattenedTypesOfType<typeof builder, '*'>>
+    type T = SimplifyDeep<FlattenedTypesOfType<typeof builder._type, '*'>>
 
     let t: {
-      readonly $: SimplifyDeep<typeof builder.narrow>,
+      readonly $: SimplifyDeep<typeof builder._type>,
       readonly ['$.*']: {
         readonly definition: {
           readonly type: TypeDefType.Literal,
@@ -48,10 +48,10 @@ describe('FlattenedTypesOfType', function () {
 
   describe('record', function () {
     const builder = record<typeof numberType, 'a' | 'b'>(numberType)
-    type T = SimplifyDeep<FlattenedTypesOfType<typeof builder, '*'>>
+    type T = SimplifyDeep<FlattenedTypesOfType<typeof builder._type, '*'>>
 
     let t: {
-      readonly $: SimplifyDeep<typeof builder.narrow>,
+      readonly $: SimplifyDeep<typeof builder._type>,
       readonly ['$.*']: {
         readonly definition: {
           readonly type: TypeDefType.Literal,
@@ -71,9 +71,9 @@ describe('FlattenedTypesOfType', function () {
         .optionalField('b', stringType)
         .readonlyField('c', booleanType)
         .readonlyOptionalField('d', stringType)
-      type T = SimplifyDeep<FlattenedTypesOfType<typeof builder, null>>
+      type T = SimplifyDeep<FlattenedTypesOfType<typeof builder._type, null>>
       let t: {
-        readonly $: SimplifyDeep<typeof builder.narrow>,
+        readonly $: SimplifyDeep<typeof builder._type>,
         readonly ['$.a']: {
           readonly definition: {
             readonly type: TypeDefType.Literal,
@@ -126,10 +126,10 @@ describe('FlattenedTypesOfType', function () {
 
     describe('optional', function () {
       const builder = object().optionalField('a', stringType)
-      type T = SimplifyDeep<FlattenedTypesOfType<typeof builder, null>>
+      type T = SimplifyDeep<FlattenedTypesOfType<typeof builder._type, null>>
 
       let t: {
-        readonly $: SimplifyDeep<typeof builder.narrow>,
+        readonly $: SimplifyDeep<typeof builder._type>,
         readonly '$.a': {
           readonly definition: {
             readonly discriminator: null,
@@ -161,10 +161,10 @@ describe('union', function () {
       const builder = union()
         .or('x', object().field('a', booleanType))
         .or('y', object().field('b', numberType))
-      type T = SimplifyDeep<FlattenedTypesOfType<typeof builder, null>>
+      type T = SimplifyDeep<FlattenedTypesOfType<typeof builder._type, null>>
 
       let t: {
-        readonly $: SimplifyDeep<typeof builder.narrow>,
+        readonly $: SimplifyDeep<typeof builder._type>,
         readonly ['$.a']: {
           readonly definition: {
             readonly type: TypeDefType.Literal,
@@ -188,10 +188,10 @@ describe('union', function () {
       const builder = union('x')
         .or('1', object().field('a', booleanType))
         .or('2', object().field('a', numberType))
-      type T = SimplifyDeep<FlattenedTypesOfType<typeof builder, null>>
+      type T = SimplifyDeep<FlattenedTypesOfType<typeof builder._type, null>>
 
       let t: {
-        readonly $: SimplifyDeep<typeof builder.narrow>,
+        readonly $: SimplifyDeep<typeof builder._type>,
         readonly ['$.1:a']: {
           readonly definition: {
             readonly type: TypeDefType.Literal,
@@ -224,9 +224,9 @@ describe('union', function () {
             .or('r', object().field('b', numberType))
             .or('s', object().field('c', stringType)),
         )
-      type T = SimplifyDeep<FlattenedTypesOfType<typeof builder, null>>
+      type T = SimplifyDeep<FlattenedTypesOfType<typeof builder._type, null>>
       let t: {
-        readonly $: SimplifyDeep<typeof builder.narrow>,
+        readonly $: SimplifyDeep<typeof builder._type>,
         readonly ['$.1:p:a']: {
           readonly definition: {
             readonly type: TypeDefType.Literal,

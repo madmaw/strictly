@@ -8,46 +8,47 @@ import {
   type UnionTypeDef,
 } from './definitions'
 
+// TODO rename to ReadonlyOfType
 export type ReadonlyTypeOfType<T extends Type> = {
-  readonly definition: InternalReadonlyTypeDefOf<T['definition']>,
+  readonly definition: ReadonlyOfTypeDef<T['definition']>,
 }
 
-type InternalReadonlyTypeDefOf<T extends TypeDef> = T extends LiteralTypeDef ? InternalReadonlyTypeDefOfLiteral<T>
-  : T extends ListTypeDef ? InternalReadonlyTypeDefOfList<T>
-  : T extends RecordTypeDef ? InternalReadonlyTypeDefOfRecord<T>
-  : T extends ObjectTypeDef ? InternalReadonlyTypeDefOfObject<T>
-  : T extends UnionTypeDef ? InternalReadonlyTypeDefOfUnion<T>
+export type ReadonlyOfTypeDef<T extends TypeDef> = T extends LiteralTypeDef ? ReadonlyOfLiteralTypeDef<T>
+  : T extends ListTypeDef ? ReadonlyOfListTypeDef<T>
+  : T extends RecordTypeDef ? ReadonlyOfRecordTypeDef<T>
+  : T extends ObjectTypeDef ? ReadonlyOfObjectTypeDef<T>
+  : T extends UnionTypeDef ? ReadonlyOfUnionTypeDef<T>
   : never
 
-type InternalReadonlyTypeDefOfLiteral<T extends LiteralTypeDef> = T
+type ReadonlyOfLiteralTypeDef<T extends LiteralTypeDef> = T
 
-type InternalReadonlyTypeDefOfList<T extends ListTypeDef> = {
+type ReadonlyOfListTypeDef<T extends ListTypeDef> = {
   readonly type: T['type'],
-  readonly elements: InternalReadonlyTypeDefOf<T['elements']>,
+  readonly elements: ReadonlyOfTypeDef<T['elements']>,
 }
 
-type InternalReadonlyTypeDefOfRecord<T extends RecordTypeDef> = {
+type ReadonlyOfRecordTypeDef<T extends RecordTypeDef> = {
   readonly type: T['type'],
   readonly keyPrototype: T['keyPrototype'],
-  readonly valueTypeDef: undefined extends T['valueTypeDef'] ? InternalReadonlyTypeDefOf<
+  readonly valueTypeDef: undefined extends T['valueTypeDef'] ? ReadonlyOfTypeDef<
       Exclude<T['valueTypeDef'], undefined>
     > | undefined
-    : InternalReadonlyTypeDefOf<T['valueTypeDef']>,
+    : ReadonlyOfTypeDef<T['valueTypeDef']>,
 }
 
-type InternalReadonlyTypeDefOfObject<T extends ObjectTypeDef> = T extends ObjectTypeDef<infer Fields> ? {
+type ReadonlyOfObjectTypeDef<T extends ObjectTypeDef> = T extends ObjectTypeDef<infer Fields> ? {
     readonly type: T['type'],
     readonly fields: {
-      readonly [K in keyof Fields]: InternalReadonlyTypeDefOf<Fields[K]>
+      readonly [K in keyof Fields]: ReadonlyOfTypeDef<Fields[K]>
     },
   }
   : never
 
-type InternalReadonlyTypeDefOfUnion<T extends UnionTypeDef> = T extends UnionTypeDef<infer D, infer Unions> ? {
+type ReadonlyOfUnionTypeDef<T extends UnionTypeDef> = T extends UnionTypeDef<infer D, infer Unions> ? {
     readonly type: T['type'],
     readonly discriminator: D,
     readonly unions: {
-      readonly [K in keyof Unions]: InternalReadonlyTypeDefOf<Unions[K]>
+      readonly [K in keyof Unions]: ReadonlyOfTypeDef<Unions[K]>
     },
   }
   : never

@@ -63,16 +63,16 @@ export type StrictRecordTypeDef<
 
 // NOTE we use the `readonly` and `?` (partial) status of these field definitions
 // to describe the same attributes of the fields
-export type StrictStructuredTypeDefFields = {
+export type StrictObjectTypeDefFields = {
   [Key: ObjectFieldKey]: AnyTypeDef,
 }
 
 // NOTE: we cannot collapse this type to
-// `StructuredTypeDef = StructuredTypeDefFields`
+// `ObjectTypeDef = ObjectTypeDefFields`
 // as we rely on the `fields` field being unique to discriminate between different
 // TypeDefs
 export type StrictObjectTypeDef<
-  Fields extends StrictStructuredTypeDefFields = StrictStructuredTypeDefFields,
+  Fields extends StrictObjectTypeDefFields = StrictObjectTypeDefFields,
 > = {
   readonly type: TypeDefType.Object,
   readonly fields: Fields,

@@ -17,7 +17,7 @@ import { type ValueToTypePathsOfType } from 'types/value_to_type_paths_of_type'
 
 describe('ValueToTypePathsOfType', function () {
   describe('literal', function () {
-    type T = ValueToTypePathsOfType<typeof numberType>
+    type T = ValueToTypePathsOfType<typeof numberType.narrow>
 
     let t: {
       readonly $: '$',
@@ -29,7 +29,7 @@ describe('ValueToTypePathsOfType', function () {
 
   describe('list', function () {
     const builder = list(list(numberType))
-    type T = SimplifyDeep<ValueToTypePathsOfType<typeof builder>>
+    type T = SimplifyDeep<ValueToTypePathsOfType<typeof builder.narrow>>
 
     let t: {
       readonly $: '$',
@@ -68,6 +68,7 @@ describe('ValueToTypePathsOfType', function () {
       .optionalField('b', booleanType)
       .readonlyField('c', stringType)
       .readonlyOptionalField('d', stringType)
+
     type T = SimplifyDeep<ValueToTypePathsOfType<typeof builder>>
 
     let t: {

@@ -17,10 +17,10 @@ describe('flattenTypeDefsOf', function () {
     )
 
     expect(flattened).toEqual({
-      $: structTypeDef.narrow,
-      '$.a': listTypeDef.narrow,
-      '$.a.*': numberType.narrow,
-      '$.b': booleanType.narrow,
+      $: structTypeDef._type,
+      '$.a': listTypeDef._type,
+      '$.a.*': numberType._type,
+      '$.b': booleanType._type,
     })
   })
 })

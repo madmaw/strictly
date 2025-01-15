@@ -10,7 +10,7 @@ describe('FlattenedValuesOfType', function () {
   // note we only test a small example since most of the work is done in flatten
   describe('record', function () {
     const builder = record<typeof numberType, string>(numberType)
-    type V = FlattenedValuesOfType<typeof builder>
+    type V = FlattenedValuesOfType<typeof builder.narrow>
 
     let v: {
       readonly $: Record<string, number>,
