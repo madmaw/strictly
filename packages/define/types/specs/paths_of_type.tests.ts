@@ -115,7 +115,7 @@ describe('PathsOfType', function () {
     })
 
     describe('partial', function () {
-      const builder = record(stringType).partial()
+      const builder = record(stringType).partialKeys()
       type T = PathsOfType<typeof builder>
 
       it('equals expected type', function () {

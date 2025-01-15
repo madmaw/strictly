@@ -15,17 +15,35 @@ import {
   type ReadonlyTypeOfType,
   stringType,
   union,
-  type ValidatorsOfValues,
   type ValueOfType,
   type ValueToTypePathsOfType,
 } from '@strictly/define'
-import { mergeValidators } from '@strictly/react-form'
+
+// eslint false negative
+// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+export const NOT_A_NUMBER_ERROR = 'not a number' as const
+// eslint false negative
+// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+export const NOT_A_BREED_ERROR = 'not a breed' as const
+// eslint false negative
+// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+export const REQUIRED_ERROR = 'is required' as const
+
+const minimumNameLengthValidator = new MinimumStringLengthValidator(3)
+const minimumTagLengthValidator = new MinimumStringLengthValidator(2)
+const definedValidator = new DefinedValidator(REQUIRED_ERROR)
 
 export type DogBreed = 'Alsatian' | 'Pug' | 'other'
 export type CatBreed = 'Burmese' | 'Siamese' | 'DSH'
 
 export const dogBreedType = literal<DogBreed>()
+  .required()
+  .enforce(definedValidator.validate.bind(definedValidator))
+  .narrow
 export const catBreedType = literal<CatBreed>()
+  .required()
+  .enforce(definedValidator.validate.bind(definedValidator))
+  .narrow
 
 export const ownerType = object()
   .field('firstName', stringType)
@@ -50,13 +68,10 @@ export const speciesType = union('type')
 
 export type Species = keyof typeof speciesType['definition']['unions']
 
-const minimumNameLengthValidator = new MinimumStringLengthValidator(3)
-const minimumTagLengthValidator = new MinimumStringLengthValidator(2)
-
 export const petType = object()
-  .field('name', stringType.addRule(minimumNameLengthValidator.validate.bind(minimumNameLengthValidator)))
+  .field('name', stringType, minimumNameLengthValidator.validate.bind(minimumNameLengthValidator))
   .field('alive', booleanType)
-  .field('tags', list(stringType.addRule(minimumTagLengthValidator.validate.bind(minimumTagLengthValidator))))
+  .field('tags', list(stringType.enforce(minimumTagLengthValidator.validate.bind(minimumTagLengthValidator))))
   .optionalField('owner', ownerType)
   .field('species', speciesType)
   .narrow
@@ -74,42 +89,8 @@ export type PetValueToTypePaths = ValueToTypePathsOfType<typeof petType> & {
 export type FlattenedPetValues = FlattenedValuesOfType<typeof petType>
 export type FlattenedPetAccessors = FlattenedAccessorsOfType<typeof petType>
 
-// eslint false negative
-// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-export const NOT_A_NUMBER_ERROR = 'not a number' as const
-// eslint false negative
-// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-export const NOT_A_BREED_ERROR = 'not a breed' as const
-// eslint false negative
-// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-export const REQUIRED_ERROR = 'is required' as const
-
 export type PetTypeToValuePaths = Reverse<PetValueToTypePaths>
 
-const petValidators1 = flattenValidatorsOfValidatingType<typeof petType, PetTypeToValuePaths>(
+export const petValidators = flattenValidatorsOfValidatingType<typeof petType, PetTypeToValuePaths>(
   petType,
-) satisfies Partial<ValidatorsOfValues<
-  FlattenedValuesOfType<typeof petType, '*'>,
-  PetTypeToValuePaths,
-  Pet
->>
-
-// TODO remove these and make mandatory/readonly enforcement/exposition part of field validators
-const petValidators2 = {
-  '$.species': new DefinedValidator(REQUIRED_ERROR),
-  '$.species.cat:breed': new DefinedValidator(REQUIRED_ERROR),
-  '$.species.dog:breed': new DefinedValidator(REQUIRED_ERROR),
-  // TODO validation of synthesized fields
-  // '$.newTag': minimumTagLengthValidator,
-} as const satisfies Partial<ValidatorsOfValues<
-  FlattenedValuesOfType<typeof petType, '*'>,
-  PetTypeToValuePaths,
-  Pet
->>
-
-export const petValidators = mergeValidators<typeof petValidators1, typeof petValidators2>(petValidators1,
-  petValidators2) satisfies Partial<ValidatorsOfValues<
-    FlattenedValuesOfType<typeof petType, '*'>,
-    PetTypeToValuePaths,
-    Pet
-  >>
+)

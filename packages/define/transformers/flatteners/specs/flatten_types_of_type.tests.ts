@@ -12,12 +12,13 @@ describe('flattenTypeDefsOf', function () {
     const structTypeDef = object()
       .field('a', listTypeDef)
       .field('b', booleanType)
+      ._type
     const flattened = flattenTypesOfType(
       structTypeDef,
     )
 
     expect(flattened).toEqual({
-      $: structTypeDef._type,
+      $: structTypeDef,
       '$.a': listTypeDef._type,
       '$.a.*': numberType._type,
       '$.b': booleanType._type,

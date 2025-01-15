@@ -39,7 +39,7 @@ describe('TypeOfType', function () {
       })
     })
     describe('readonly', function () {
-      const listType = list(numberType).readonly()
+      const listType = list(numberType).readonlyElements()
       type T = TypeOfType<typeof listType>
       let t: {
         readonly definition: {

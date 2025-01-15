@@ -30,6 +30,8 @@ type ValidatingLiteralTypeDefWithError<T extends ValidatingLiteralTypeDef, E2> =
     readonly type: TypeDefType.Literal,
     readonly valuePrototype: [V],
     readonly rule: Rule<E1 | E2>,
+    readonly required: boolean,
+    readonly readonly: boolean,
   }
   : never
 
@@ -38,11 +40,15 @@ type ValidatingListTypeDefWithError<T extends ValidatingListTypeDef, E2> = T ext
       readonly type: TypeDefType.List,
       readonly elements: E,
       readonly rule: Rule<E1 | E2>,
+      readonly required: boolean,
+      readonly readonly: boolean,
     }
   : {
     readonly type: TypeDefType.List,
     elements: E,
     readonly rule: Rule<E1 | E2>,
+    readonly required: boolean,
+    readonly readonly: boolean,
   }
   : never
 
@@ -52,12 +58,16 @@ type ValidatingRecordTypeDefWithError<T extends ValidatingRecordTypeDef, E2> = T
       readonly keyPrototype: K,
       readonly valueTypeDef: V,
       readonly rule: Rule<E1 | E2>,
+      readonly required: boolean,
+      readonly readonly: boolean,
     }
   : {
     readonly type: TypeDefType.Record,
     readonly keyPrototype: K,
     valueTypeDef: V,
     readonly rule: Rule<E1 | E2>,
+    readonly required: boolean,
+    readonly readonly: boolean,
   }
   : never
 
@@ -66,6 +76,8 @@ type ValidatingObjectTypeDefWithError<T extends ValidatingObjectTypeDef, E2> = T
     readonly type: TypeDefType.Object,
     readonly fields: Fields,
     readonly rule: Rule<E1 | E2>,
+    readonly required: boolean,
+    readonly readonly: boolean,
   }
   : never
 
@@ -75,5 +87,7 @@ type ValidatingUnionTypeDefWithError<T extends ValidatingUnionTypeDef, E2> = T e
     readonly discriminator: D,
     readonly unions: U,
     readonly rule: Rule<E1 | E2>,
+    readonly required: boolean,
+    readonly readonly: boolean,
   }
   : never

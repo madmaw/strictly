@@ -9,7 +9,7 @@ import { type Validator } from 'validation/validator'
 
 describe('FlattenedValidatorsOfValidatingType', function () {
   describe('literal', function () {
-    const literalType = numberType.addRule(function (): 'a' {
+    const literalType = numberType.enforce(function (): 'a' {
       return 'a'
     })
     type T = FlattenedValidatorsOfValidatingType<
@@ -27,10 +27,10 @@ describe('FlattenedValidatorsOfValidatingType', function () {
   })
 
   describe('list', function () {
-    const literalType = numberType.addRule(function (): 'x' {
+    const literalType = numberType.enforce(function (): 'x' {
       return 'x'
     })
-    const listType = list(literalType.narrow).addRule(function (): 'y' {
+    const listType = list(literalType.narrow).enforce(function (): 'y' {
       return 'y'
     })
     type T = FlattenedValidatorsOfValidatingType<typeof listType, Reverse<ValueToTypePathsOfType<typeof listType>>>

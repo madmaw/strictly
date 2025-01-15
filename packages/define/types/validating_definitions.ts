@@ -34,6 +34,8 @@ export type ValidatingLiteralTypeDef<E = any, V = any> = {
   readonly type: TypeDefType.Literal,
   readonly valuePrototype: [V],
   readonly rule: Rule<E>,
+  readonly required: boolean,
+  readonly readonly: boolean,
 }
 
 // list
@@ -46,6 +48,8 @@ export type ValidatingListTypeDef<
   // readonly is inherited by the output
   readonly elements: Ele,
   readonly rule: Rule<E>,
+  readonly required: boolean,
+  readonly readonly: boolean,
 }
 
 // map
@@ -62,6 +66,8 @@ export type ValidatingRecordTypeDef<
   // readonly is inherited by the output
   readonly valueTypeDef: V,
   readonly rule: Rule<E>,
+  readonly required: boolean,
+  readonly readonly: boolean,
 }
 
 // structured type
@@ -84,6 +90,8 @@ export type ValidatingObjectTypeDef<
   readonly type: TypeDefType.Object,
   readonly fields: Fields,
   readonly rule: Rule<E>,
+  readonly required: boolean,
+  readonly readonly: boolean,
 }
 
 export type ValidatingUnionTypeDef<
@@ -96,4 +104,6 @@ export type ValidatingUnionTypeDef<
   readonly type: TypeDefType.Union,
   readonly unions: U,
   readonly rule: Rule<E>,
+  readonly required: boolean,
+  readonly readonly: boolean,
 }

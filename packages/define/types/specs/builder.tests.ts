@@ -22,6 +22,8 @@ describe('builder', function () {
         readonly type: TypeDefType.Literal,
         readonly valuePrototype: [number],
         readonly rule: Rule<never>,
+        readonly required: boolean,
+        readonly readonly: boolean,
       }
 
       expectTypeOf(typeDef).toEqualTypeOf<C>()
@@ -38,14 +40,20 @@ describe('builder', function () {
             readonly type: TypeDefType.Literal,
             readonly valuePrototype: [number],
             readonly rule: Rule<never>,
+            readonly required: boolean,
+            readonly readonly: boolean,
           },
           readonly [1]: {
             readonly type: TypeDefType.Literal,
             readonly valuePrototype: [null],
             readonly rule: Rule<never>,
+            readonly required: boolean,
+            readonly readonly: boolean,
           },
         },
         readonly rule: Rule<never>,
+        readonly required: boolean,
+        readonly readonly: boolean,
       }
 
       it('equals expected type', function () {
@@ -66,16 +74,20 @@ describe('builder', function () {
               readonly type: TypeDefType.Literal,
               readonly valuePrototype: [number],
               readonly rule: Rule<never>,
+              readonly required: boolean,
+              readonly readonly: boolean,
             },
             readonly rule: Rule<never>,
+            readonly required: boolean,
+            readonly readonly: boolean,
           }
           expectTypeOf(typeDef).toEqualTypeOf<C>()
         })
       })
     })
 
-    describe('readonly', function () {
-      const { definition: typeDef } = list(numberType).readonly()
+    describe('readonlyElements', function () {
+      const { definition: typeDef } = list(numberType).readonlyElements()
 
       it('equals expected type', function () {
         type C = {
@@ -84,8 +96,12 @@ describe('builder', function () {
             readonly type: TypeDefType.Literal,
             readonly valuePrototype: [number],
             readonly rule: Rule<never>,
+            readonly required: boolean,
+            readonly readonly: boolean,
           },
           readonly rule: Rule<never>,
+          readonly required: boolean,
+          readonly readonly: boolean,
         }
 
         expectTypeOf(typeDef).toEqualTypeOf<C>()
@@ -106,8 +122,12 @@ describe('builder', function () {
               readonly type: TypeDefType.Literal,
               readonly valuePrototype: [number],
               readonly rule: Rule<never>,
+              readonly required: boolean,
+              readonly readonly: boolean,
             },
             readonly rule: Rule<never>,
+            readonly required: boolean,
+            readonly readonly: boolean,
           }
 
           expectTypeOf(typeDef).toEqualTypeOf<C>()
@@ -115,7 +135,7 @@ describe('builder', function () {
       })
 
       describe('readonly', function () {
-        const { definition: typeDef } = record<typeof numberType, 'a' | 'b' | 'c'>(numberType).readonly()
+        const { definition: typeDef } = record<typeof numberType, 'a' | 'b' | 'c'>(numberType).readonlyKeys()
 
         it('equals expected type', function () {
           type C = {
@@ -125,15 +145,19 @@ describe('builder', function () {
               readonly type: TypeDefType.Literal,
               readonly valuePrototype: [number],
               readonly rule: Rule<never>,
+              readonly required: boolean,
+              readonly readonly: boolean,
             },
             readonly rule: Rule<never>,
+            readonly required: boolean,
+            readonly readonly: boolean,
           }
           expectTypeOf(typeDef).toEqualTypeOf<C>()
         })
       })
 
       describe('partial', function () {
-        const { definition: typeDef } = record<typeof numberType, 'a' | 'b' | 'c'>(numberType).partial()
+        const { definition: typeDef } = record<typeof numberType, 'a' | 'b' | 'c'>(numberType).partialKeys()
 
         it('equals expected type', function () {
           type C = {
@@ -143,15 +167,20 @@ describe('builder', function () {
               readonly type: TypeDefType.Literal,
               readonly valuePrototype: [number],
               readonly rule: Rule<never>,
+              readonly required: boolean,
+              readonly readonly: boolean,
             } | undefined,
             readonly rule: Rule<never>,
+            readonly required: boolean,
+            readonly readonly: boolean,
           }
           expectTypeOf(typeDef).toEqualTypeOf<C>()
         })
       })
 
-      describe('partial readonly', function () {
-        const { definition: typeDef } = record<typeof numberType, 'a' | 'b' | 'c'>(numberType).partial().readonly()
+      describe('partial and readonly', function () {
+        const { definition: typeDef } = record<typeof numberType, 'a' | 'b' | 'c'>(numberType).partialKeys()
+          .readonlyKeys()
 
         it('equals expected type', function () {
           type C = {
@@ -161,16 +190,21 @@ describe('builder', function () {
               readonly type: TypeDefType.Literal,
               readonly valuePrototype: [number],
               readonly rule: Rule<never>,
+              readonly required: boolean,
+              readonly readonly: boolean,
             } | undefined,
             readonly rule: Rule<never>,
+            readonly required: boolean,
+            readonly readonly: boolean,
           }
 
           expectTypeOf(typeDef).toEqualTypeOf<C>()
         })
       })
 
-      describe('readonly partial', function () {
-        const { definition: typeDef } = record<typeof numberType, 'a' | 'b' | 'c'>(numberType).readonly().partial()
+      describe('readonly and partial', function () {
+        const { definition: typeDef } = record<typeof numberType, 'a' | 'b' | 'c'>(numberType).readonlyKeys()
+          .partialKeys()
 
         it('equals expected type', function () {
           type C = {
@@ -180,8 +214,12 @@ describe('builder', function () {
               readonly type: TypeDefType.Literal,
               readonly valuePrototype: [number],
               readonly rule: Rule<never>,
+              readonly required: boolean,
+              readonly readonly: boolean,
             } | undefined,
             readonly rule: Rule<never>,
+            readonly required: boolean,
+            readonly readonly: boolean,
           }
 
           expectTypeOf(typeDef).toEqualTypeOf<C>()
@@ -206,6 +244,8 @@ describe('builder', function () {
               readonly type: TypeDefType.Literal,
               readonly valuePrototype: [number],
               readonly rule: Rule<never>,
+              readonly required: boolean,
+              readonly readonly: boolean,
             },
           }
           & {
@@ -213,6 +253,8 @@ describe('builder', function () {
               readonly type: TypeDefType.Literal,
               readonly valuePrototype: [boolean],
               readonly rule: Rule<never>,
+              readonly required: boolean,
+              readonly readonly: boolean,
             },
           }
           & {
@@ -220,6 +262,8 @@ describe('builder', function () {
               readonly type: TypeDefType.Literal,
               readonly valuePrototype: [string],
               readonly rule: Rule<never>,
+              readonly required: boolean,
+              readonly readonly: boolean,
             },
           }
           & {
@@ -227,9 +271,13 @@ describe('builder', function () {
               readonly type: TypeDefType.Literal,
               readonly valuePrototype: [number],
               readonly rule: Rule<never>,
+              readonly required: boolean,
+              readonly readonly: boolean,
             },
           },
         readonly rule: Rule<never>,
+        readonly required: boolean,
+        readonly readonly: boolean,
       }
 
       expectTypeOf(typeDef).toEqualTypeOf<C>()
@@ -260,6 +308,8 @@ describe('builder', function () {
                 readonly type: TypeDefType.Literal,
                 readonly valuePrototype: [number],
                 readonly rule: Rule<never>,
+                readonly required: boolean,
+                readonly readonly: boolean,
               },
             }
             & {
@@ -267,61 +317,77 @@ describe('builder', function () {
                 readonly type: TypeDefType.Literal,
                 readonly valuePrototype: [string],
                 readonly rule: Rule<never>,
+                readonly required: boolean,
+                readonly readonly: boolean,
               },
             },
           readonly rule: Rule<never>,
+          readonly required: boolean,
+          readonly readonly: boolean,
         }
         expectTypeOf(typeDef).toEqualTypeOf<C>()
       })
     })
 
     describe('objects', function () {
-      const {
-        definition: typeDef,
-      } = union()
-        .or(
-          '1',
-          object().field('a', booleanType),
-        )
-        .or(
-          '2',
-          object().field('b', numberType),
-        )
+      describe('mutable', function () {
+        const {
+          definition: typeDef,
+        } = union()
+          .or(
+            '1',
+            object().field('a', booleanType),
+          )
+          .or(
+            '2',
+            object().field('b', numberType),
+          )
 
-      it('equals expected type', function () {
-        type C = {
-          readonly type: TypeDefType.Union,
-          readonly discriminator: null,
-          readonly unions:
-            & {
-              readonly [1]: {
-                readonly type: TypeDefType.Object,
-                readonly fields: {
-                  a: {
-                    readonly type: TypeDefType.Literal,
-                    readonly valuePrototype: [boolean],
-                    readonly rule: Rule<never>,
+        it('equals expected type', function () {
+          type C = {
+            readonly type: TypeDefType.Union,
+            readonly discriminator: null,
+            readonly unions:
+              & {
+                readonly [1]: {
+                  readonly type: TypeDefType.Object,
+                  readonly fields: {
+                    a: {
+                      readonly type: TypeDefType.Literal,
+                      readonly valuePrototype: [boolean],
+                      readonly rule: Rule<never>,
+                      readonly required: boolean,
+                      readonly readonly: boolean,
+                    },
                   },
+                  readonly rule: Rule<never>,
+                  readonly required: boolean,
+                  readonly readonly: boolean,
                 },
-                readonly rule: Rule<never>,
-              },
-            }
-            & {
-              readonly [2]: {
-                readonly type: TypeDefType.Object,
-                readonly fields: {
-                  b: {
-                    readonly type: TypeDefType.Literal,
-                    readonly valuePrototype: [number],
-                    readonly rule: Rule<never>,
+              }
+              & {
+                readonly [2]: {
+                  readonly type: TypeDefType.Object,
+                  readonly fields: {
+                    b: {
+                      readonly type: TypeDefType.Literal,
+                      readonly valuePrototype: [number],
+                      readonly rule: Rule<never>,
+                      readonly required: boolean,
+                      readonly readonly: boolean,
+                    },
                   },
+                  readonly rule: Rule<never>,
+                  readonly required: boolean,
+                  readonly readonly: boolean,
                 },
-                readonly rule: Rule<never>,
               },
-            },
-          readonly rule: Rule<never>,
-        }
-        expectTypeOf(typeDef).toEqualTypeOf<C>()
+            readonly rule: Rule<never>,
+            readonly required: boolean,
+            readonly readonly: boolean,
+          }
+          expectTypeOf(typeDef).toEqualTypeOf<C>()
+        })
       })
     })
   })

@@ -119,7 +119,7 @@ describe('ReadonlyTypeDefOf', function () {
   })
 
   describe('partial', function () {
-    const builder = record<typeof numberType, 'a'>(numberType).partial()
+    const builder = record<typeof numberType, 'a'>(numberType).partialKeys()
     type T = ReadonlyTypeOfType<typeof builder._type>
 
     let t: {
@@ -138,7 +138,7 @@ describe('ReadonlyTypeDefOf', function () {
   })
 
   describe('readonly', function () {
-    const builder = record<typeof numberType, 'a'>(numberType).readonly()
+    const builder = record<typeof numberType, 'a'>(numberType).readonlyKeys()
     type T = ReadonlyTypeOfType<typeof builder._type>
 
     let t: {
