@@ -9,13 +9,13 @@ import {
   union,
 } from 'types/builders'
 import {
-  type TypeDefType,
+  TypeDefType,
 } from 'types/definitions'
 import { type Rule } from 'types/validating_definitions'
 
 describe('builder', function () {
   describe('literal', function () {
-    const { definition: typeDef } = numberType
+    const { definition } = numberType
 
     it('equals expected type', function () {
       type C = {
@@ -26,11 +26,21 @@ describe('builder', function () {
         readonly readonly: boolean,
       }
 
-      expectTypeOf(typeDef).toEqualTypeOf<C>()
+      expectTypeOf(definition).toEqualTypeOf<C>()
+    })
+
+    it('equals expected value', function () {
+      expect(definition).toEqual({
+        type: TypeDefType.Literal,
+        valuePrototype: undefined,
+        rule: expect.anything(),
+        required: false,
+        readonly: false,
+      })
     })
 
     describe('nullable', function () {
-      const { definition: typeDef } = nullable(numberType)
+      const { definition } = nullable(numberType)
 
       type C = {
         readonly type: TypeDefType.Union,
@@ -57,7 +67,49 @@ describe('builder', function () {
       }
 
       it('equals expected type', function () {
-        expectTypeOf(typeDef).toEqualTypeOf<C>()
+        expectTypeOf(definition).toEqualTypeOf<C>()
+      })
+    })
+
+    describe('required', function () {
+      const { definition } = numberType.required()
+
+      it('equals expected value', function () {
+        expect(definition).toEqual({
+          type: TypeDefType.Literal,
+          valuePrototype: undefined,
+          rule: expect.anything(),
+          required: true,
+          readonly: false,
+        })
+      })
+    })
+
+    describe('readonly', function () {
+      const { definition } = numberType.readonly()
+
+      it('equals expected value', function () {
+        expect(definition).toEqual({
+          type: TypeDefType.Literal,
+          valuePrototype: undefined,
+          rule: expect.anything(),
+          required: false,
+          readonly: true,
+        })
+      })
+    })
+
+    describe('readonly & required', function () {
+      const { definition } = numberType.readonly().required()
+
+      it('equals expected value', function () {
+        expect(definition).toEqual({
+          type: TypeDefType.Literal,
+          valuePrototype: undefined,
+          rule: expect.anything(),
+          required: true,
+          readonly: true,
+        })
       })
     })
   })

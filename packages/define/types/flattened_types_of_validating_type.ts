@@ -19,8 +19,7 @@ import {
   type ValidatingUnionTypeDef,
 } from './validating_definitions'
 
-// NOTE removing any ternary from this file improves the performance and the depth of data structure we can go to
-
+// TODO rename to FlattenedValidatingTypesOfValidatingType
 export type FlattenedTypesOfValidatingType<
   T extends Type,
   SegmentOverride extends string | null,

@@ -83,6 +83,7 @@ class TypeDefBuilder<T extends ValidatingTypeDef> implements ValidatingType<T> {
     )
   }
 
+  // should only be used in test requiring Types, client code should be happy with validating types
   // eslint-disable-next-line @typescript-eslint/naming-convention
   get _type(): TypeOfType<Type<T>> {
     return typeOfType<Type<T>>(this)
