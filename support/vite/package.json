@@ -1,6 +1,6 @@
 {
   "devDependencies": {
-    "vite": "^6.0.5"
+    "vite": "^6.0.9"
   },
   "license": "MIT",
   "main": "index.ts",
