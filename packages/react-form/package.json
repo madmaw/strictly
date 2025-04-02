@@ -1,17 +1,19 @@
 {
   "author": "Chris <chris.glover@gmail.com> (@madmaw)",
   "dependencies": {
+    "@mantine/core": "^7.13.4",
+    "@mantine/hooks": "^7.13.4",
     "@strictly/base": "*",
     "@strictly/define": "*",
     "mobx": "^6.13.5",
     "mobx-react": "^9.1.1",
-    "react": "^19.0.0"
+    "react": "^19.0.0 || ^18.3.1",
+    "react-dom": "^19.0.0 || ^18.3.1"
   },
   "description": "Types and utilities for creating React forms",
   "devDependencies": {
     "@babel/plugin-proposal-decorators": "^7.25.9",
     "@babel/plugin-transform-class-static-block": "^7.26.0",
-    "@mantine/core": "^7.13.4",
     "@storybook/addon-actions": "^8.4.5",
     "@storybook/addon-essentials": "^8.4.5",
     "@storybook/addon-interactions": "^8.4.5",
@@ -29,7 +31,6 @@
     "@vitejs/plugin-react": "^4.3.3",
     "concurrently": "^9.1.2",
     "jsdom": "^25.0.1",
-    "react-dom": "^19.0.0",
     "resize-observer-polyfill": "^1.5.1",
     "storybook": "^8.4.5",
     "type-fest": "^4.26.1",
@@ -68,5 +69,5 @@
     "test:watch": "vitest"
   },
   "type": "module",
-  "version": "0.0.2"
+  "version": "0.0.3"
 }
