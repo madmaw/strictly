@@ -34,6 +34,7 @@ const minimumNameLengthValidator = new MinimumStringLengthValidator(3)
 const minimumTagLengthValidator = new MinimumStringLengthValidator(2)
 const definedValidator = new DefinedValidator(REQUIRED_ERROR)
 
+// TODO  move individual types to relevant forms
 export type DogBreed = 'Alsatian' | 'Pug' | 'other'
 export type CatBreed = 'Burmese' | 'Siamese' | 'DSH'
 

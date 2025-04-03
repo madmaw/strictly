@@ -159,6 +159,7 @@ function PetFormImpl(props: PetFormProps) {
         {form.fields['$.owner'].value && <Owner />}
       </Card>
       <Card withBorder={true}>
+        {/* TODO either use a SubForm or add the ability to use an editable form that takes an entire value here */}
         <SpeciesComponent />
       </Card>
       <Button
