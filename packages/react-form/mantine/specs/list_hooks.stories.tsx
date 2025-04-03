@@ -26,10 +26,20 @@ function Component(props: FormProps<{
     >
       <Stack>
         <List>
-          {function (valuePath: ListPath) {
+          {function (valuePath: ListPath, value: string, index: number) {
             return (
               <Code key={valuePath}>
-                ValuePath: {valuePath}
+                <span>
+                  ValuePath: {valuePath}
+                </span>
+                <br />
+                <span>
+                  Value: {value}
+                </span>
+                <br />
+                <span>
+                  Index: {index}
+                </span>
               </Code>
             )
           }}
@@ -72,10 +82,10 @@ export const Populated: Story = {
         readonly: false,
         required: false,
         value: [
-          '$.4',
-          '$.6',
-          '$.19',
-          '$.0',
+          'A',
+          'B',
+          'C',
+          'D',
         ],
       },
     },

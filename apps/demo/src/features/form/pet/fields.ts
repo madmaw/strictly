@@ -110,7 +110,7 @@ const rawPetFieldAdapters = {
       false,
     ),
   ).narrow,
-  '$.tags': listAdapter<string, string, '$.tags', Pet>().narrow,
+  '$.tags': listAdapter<string, '$.tags', Pet>().narrow,
   '$.tags.*': identityAdapter('').narrow,
 } as const satisfies Partial<
   FieldAdaptersOfValues<

@@ -10,8 +10,9 @@ import {
 } from './types'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type SuppliedListProps<Value = any> = {
+export type SuppliedListProps<Value = any, ListPath extends string = string> = {
   values: readonly Value[],
+  listPath: ListPath,
 }
 
 export function createList<
@@ -19,6 +20,7 @@ export function createList<
   K extends keyof ListFieldsOfFields<F>,
   Props extends SuppliedListProps<ElementOfArray<ValueTypeOfField<F[K]>>> & {
     children: (
+      valuePath: `${K}.${number}`,
       value: ElementOfArray<ValueTypeOfField<F[K]>>,
       index: number,
     ) => React.ReactNode,
@@ -32,6 +34,7 @@ export function createList<
     const values = [...this.fields[valuePath].value]
     return {
       values,
+      listPath: valuePath,
     }
   }
   return createUnsafePartialObserverComponent(List, propSource)
@@ -39,16 +42,19 @@ export function createList<
 
 export function DefaultList<
   Value,
+  ListPath extends string,
 >({
   values,
+  listPath,
   children,
-}: SuppliedListProps<Value> & {
-  children: (value: Value, index: number) => React.ReactNode,
+}: SuppliedListProps<Value, ListPath> & {
+  children: (valuePath: `${ListPath}.${number}`, value: Value, index: number) => React.ReactNode,
 }) {
   return (
     <>
       {values.map(function (value, index) {
-        return children(value, index)
+        const valuePath: `${ListPath}.${number}` = `${listPath}.${index}`
+        return children(valuePath, value, index)
       })}
     </>
   )

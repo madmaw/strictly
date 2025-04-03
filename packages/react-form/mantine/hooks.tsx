@@ -13,6 +13,7 @@ import {
 } from '@mantine/core'
 import {
   Cache,
+  type ElementOfArray,
 } from '@strictly/base'
 import { type FormProps } from 'core/props'
 import {
@@ -362,7 +363,7 @@ class MantineFormImpl<
     K extends keyof ListFieldsOfFields<F>,
   >(valuePath: K): MantineFieldComponent<
     SuppliedListProps<`${K}.${number}`>,
-    ComponentProps<typeof DefaultList<`${K}.${number}`>>
+    ComponentProps<typeof DefaultList<ElementOfArray<F[K]['value']>, K>>
   > {
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     return this.listCache.retrieveOrCreate(
@@ -370,7 +371,7 @@ class MantineFormImpl<
       DefaultList,
     ) as MantineFieldComponent<
       SuppliedListProps<`${K}.${number}`>,
-      ComponentProps<typeof DefaultList<`${K}.${number}`>>,
+      ComponentProps<typeof DefaultList<ElementOfArray<F[K]['value']>, K>>,
       ErrorOfField<F[K]>
     >
   }

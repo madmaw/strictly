@@ -6,7 +6,6 @@ import {
   annotatedIdentityConverter,
   unreliableIdentityConverter,
 } from 'field_converters/identity_converter'
-import { listConverter } from 'field_converters/list_converter'
 import { MaybeIdentityConverter } from 'field_converters/maybe_identity_converter'
 import { prototypingFieldValueFactory } from 'field_value_factories/prototyping_field_value_factory'
 import {
@@ -266,12 +265,12 @@ export function identityAdapter<
 
 export function listAdapter<
   E,
-  K extends string,
   ValuePath extends string,
   Context,
 >() {
-  return new FieldAdapterBuilder<readonly E[], readonly K[], never, ValuePath, Context>(
-    listConverter<E, K, ValuePath, Context>(),
+  return new FieldAdapterBuilder<readonly E[], readonly E[], never, ValuePath, Context>(
+    annotatedIdentityConverter<readonly E[], ValuePath, Context>(false),
     prototypingFieldValueFactory<readonly E[], ValuePath, Context>([]),
+    unreliableIdentityConverter<readonly E[], ValuePath, Context>(),
   )
 }
