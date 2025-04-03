@@ -3,15 +3,56 @@ import {
   Group,
   Stack,
 } from '@mantine/core'
+import { type Reverse } from '@strictly/base'
 import {
+  type FlattenedTypesOfType,
+  type FlattenedValuesOfType,
+  object,
+  type PathsOfType,
+  type ReadonlyTypeOfType,
+  stringType,
+  type ValueOfType,
+  type ValueToTypePathsOfType,
+} from '@strictly/define'
+import {
+  type FieldAdaptersOfValues,
+  type FormFieldsOfFieldAdapters,
   type FormProps,
+  identityAdapter,
   useMantineForm,
 } from '@strictly/react-form'
-import { type PetFields } from './fields'
 
-export type PetOwnerFormFields = Pick<
-  PetFields,
-  '$.owner.email' | '$.owner.firstName' | '$.owner.surname' | '$.owner.phoneNumber'
+export const petOwnerType = object()
+  .field('firstName', stringType.required())
+  .field('surname', stringType.required())
+  .field('phoneNumber', stringType.required())
+  .optionalField('email', stringType)
+  .narrow
+
+export type PetOwner = ValueOfType<typeof petOwnerType>
+export type PetOwnerValuePaths = PathsOfType<typeof petOwnerType>
+export type PetOwnerTypePaths = PathsOfType<typeof petOwnerType, '*'>
+export type FlattenedPetOwnerTypes = FlattenedTypesOfType<typeof petOwnerType, '*'>
+export type PetOwnerValueToTypePaths = ValueToTypePathsOfType<typeof petOwnerType>
+export type PetOwnerTypeToValuePaths = Reverse<PetOwnerValueToTypePaths>
+
+export const unvalidatedPetOwnerFieldAdapters = {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+  '$.email': identityAdapter('' as string | undefined).narrow,
+  '$.firstName': identityAdapter('').narrow,
+  '$.phoneNumber': identityAdapter('').narrow,
+  '$.surname': identityAdapter('').narrow,
+} as const satisfies Partial<
+  FieldAdaptersOfValues<
+    FlattenedValuesOfType<ReadonlyTypeOfType<typeof petOwnerType>, '*'>,
+    PetOwnerTypeToValuePaths,
+    PetOwner
+  >
+>
+
+export type PetOwnerFields = FormFieldsOfFieldAdapters<
+  PetOwnerValueToTypePaths,
+  typeof unvalidatedPetOwnerFieldAdapters
 >
 
 export function FirstNameLabel() {
@@ -56,14 +97,14 @@ export function EmailPlaceholder() {
   })
 }
 
-export type PetOwnerFormProps = FormProps<PetOwnerFormFields>
+export type PetOwnerFormProps = FormProps<PetOwnerFields>
 
 export function PetOwnerForm(props: PetOwnerFormProps) {
   const form = useMantineForm(props)
-  const FirstNameInput = form.textInput('$.owner.firstName')
-  const SurnameInput = form.textInput('$.owner.surname')
-  const EmailInput = form.textInput('$.owner.email')
-  const PhoneNumberInput = form.textInput('$.owner.phoneNumber')
+  const FirstNameInput = form.textInput('$.firstName')
+  const SurnameInput = form.textInput('$.surname')
+  const EmailInput = form.textInput('$.email')
+  const PhoneNumberInput = form.textInput('$.phoneNumber')
 
   return (
     <Stack>

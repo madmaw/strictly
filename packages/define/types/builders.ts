@@ -212,7 +212,6 @@ class ObjectTypeDefBuilder<
           rule: function (v: any) {
             return definition.rule(v) || rule?.(v)
           },
-          required: true,
         },
       } as Fields & Record<Name, ValidatingTypeDefWithError<T, RequiredError>>,
     })
@@ -231,7 +230,6 @@ class ObjectTypeDefBuilder<
     const newFields = {
       [name]: {
         ...definition,
-        required: true,
         readonly: true,
       },
     }

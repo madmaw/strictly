@@ -29,6 +29,7 @@ import {
   useCallback,
 } from 'react'
 import { type PetFields } from './fields'
+import { PetOwnerForm } from './pet_owner_form'
 import {
   type TagValuePath,
 } from './types'
@@ -77,12 +78,20 @@ export function NewTagPlaceholder() {
 
 export type PetFormFields = Pick<
   PetFields,
-  '$.name' | '$.alive' | '$.newTag' | '$.owner' | '$.tags' | `$.tags.${number}`
+  | '$.name'
+  | '$.alive'
+  | '$.newTag'
+  | '$.owner'
+  | '$.owner.firstName'
+  | '$.owner.surname'
+  | '$.owner.email'
+  | '$.owner.phoneNumber'
+  | '$.tags'
+  | `$.tags.${number}`
 >
 
 export type PetFormProps = FormProps<PetFormFields> & {
   SpeciesComponent: ComponentType,
-  OwnerComponent: ComponentType,
   onSubmit: () => void,
   onRemoveTag: (valuePath: TagValuePath) => void,
 }
@@ -103,7 +112,6 @@ function PetFormImpl(props: PetFormProps) {
   const {
     onSubmit,
     onRemoveTag,
-    OwnerComponent,
     SpeciesComponent,
   } = props
   const form = useMantineForm(props)
@@ -115,6 +123,7 @@ function PetFormImpl(props: PetFormProps) {
     PillsInput.Field,
   )
   const Tags = form.list('$.tags')
+  const Owner = form.subForm('$.owner', PetOwnerForm)
 
   return (
     <Stack>
@@ -147,7 +156,7 @@ function PetFormImpl(props: PetFormProps) {
           pb={form.fields['$.owner'].value ? 'md' : undefined}
         />
         {/* TODO making the child fields disabled might be more interesting */}
-        {form.fields['$.owner'].value && <OwnerComponent />}
+        {form.fields['$.owner'].value && <Owner />}
       </Card>
       <Card withBorder={true}>
         <SpeciesComponent />

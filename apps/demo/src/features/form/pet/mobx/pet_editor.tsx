@@ -5,7 +5,6 @@ import {
   type ValuePathsOfPresenter,
 } from '@strictly/react-form'
 import { PetForm as PetFormImpl } from 'features/form/pet/pet_form'
-import { PetOwnerForm } from 'features/form/pet/pet_owner_form'
 import { PetSpeciesCatForm } from 'features/form/pet/pet_species_cat_form'
 import { PetSpeciesDogForm } from 'features/form/pet/pet_species_dog_form'
 import { PetSpeciesForm } from 'features/form/pet/pet_species_form'
@@ -165,24 +164,6 @@ export function PetEditor({
     PetSpeciesForm,
   )
 
-  const OwnerComponent = usePartialObserverComponent(
-    function () {
-      return {
-        fields: model.fields,
-        onFieldValueChange,
-        onFieldSubmit,
-        onFieldBlur,
-      }
-    },
-    [
-      model,
-      onFieldValueChange,
-      onFieldSubmit,
-      onFieldBlur,
-    ],
-    PetOwnerForm,
-  )
-
   const PetForm = usePartialObserverComponent(
     function () {
       return {
@@ -193,7 +174,6 @@ export function PetEditor({
         onFieldBlur,
         onRemoveTag,
         SpeciesComponent,
-        OwnerComponent,
       }
     },
     [
@@ -204,7 +184,6 @@ export function PetEditor({
       onFieldBlur,
       onRemoveTag,
       SpeciesComponent,
-      OwnerComponent,
     ],
     PetFormImpl,
   )

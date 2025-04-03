@@ -18,6 +18,7 @@ import {
   type ValueOfType,
   type ValueToTypePathsOfType,
 } from '@strictly/define'
+import { petOwnerType } from './pet_owner_form'
 
 // eslint false negative
 // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
@@ -45,34 +46,27 @@ export const catBreedType = literal<CatBreed>()
   .enforce(definedValidator.validate.bind(definedValidator))
   .narrow
 
-export const ownerType = object()
-  .field('firstName', stringType)
-  .field('surname', stringType)
-  .field('phoneNumber', stringType)
-  .optionalField('email', stringType)
-  .narrow
-
 export const speciesType = union('type')
   .or(
     'dog',
     object()
-      .field('barks', numberType)
+      .field('barks', numberType.required())
       .optionalField('breed', dogBreedType),
   )
   .or(
     'cat',
     object()
-      .field('meows', numberType)
+      .field('meows', numberType.required())
       .optionalField('breed', catBreedType),
   ).narrow
 
 export type Species = keyof typeof speciesType['definition']['unions']
 
 export const petType = object()
-  .field('name', stringType, minimumNameLengthValidator.validate.bind(minimumNameLengthValidator))
+  .field('name', stringType.required(), minimumNameLengthValidator.validate.bind(minimumNameLengthValidator))
   .field('alive', booleanType)
   .field('tags', list(stringType.enforce(minimumTagLengthValidator.validate.bind(minimumTagLengthValidator))))
-  .optionalField('owner', ownerType)
+  .optionalField('owner', petOwnerType)
   .field('species', speciesType)
   .narrow
 

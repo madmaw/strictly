@@ -13,7 +13,6 @@ import {
 } from '@mantine/core'
 import {
   Cache,
-  type ElementOfArray,
 } from '@strictly/base'
 import { type FormProps } from 'core/props'
 import {
@@ -35,6 +34,7 @@ import {
 } from 'types/field'
 import { type ListFieldsOfFields } from 'types/list_fields_of_fields'
 import { type StringFieldsOfFields } from 'types/string_fields_of_fields'
+import { type SubFormFields } from 'types/sub_form_fields'
 import { type ValueTypeOfField } from 'types/value_type_of_field'
 import {
   createCheckbox,
@@ -57,6 +57,7 @@ import {
   createRadioGroup,
   type SuppliedRadioGroupProps,
 } from './create_radio_group'
+import { createSubForm } from './create_sub_form'
 import {
   createTextInput,
   type SuppliedTextInputProps,
@@ -175,10 +176,18 @@ class MantineFormImpl<
   > = new Cache(
     createList.bind(this),
   )
+  private readonly subFormCache: Cache<
+    // the cache cannot reference keys, so we just use any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    [keyof AllFieldsOfFields<F>, ComponentType<any>, FormProps<F>],
+    ComponentType
+  > = new Cache(
+    createSubForm.bind(this),
+  )
 
   @observable.ref
   accessor fields: F
-  onFieldValueChange: (<K extends keyof F>(this: void, key: K, value: F[K]['value']) => void) | undefined
+  onFieldValueChange!: <K extends keyof F>(this: void, key: K, value: F[K]['value']) => void
   onFieldFocus: ((this: void, key: keyof F) => void) | undefined
   onFieldBlur: ((this: void, key: keyof F) => void) | undefined
   onFieldSubmit: ((this: void, key: keyof F) => boolean | void) | undefined
@@ -352,17 +361,31 @@ class MantineFormImpl<
   list<
     K extends keyof ListFieldsOfFields<F>,
   >(valuePath: K): MantineFieldComponent<
-    SuppliedListProps<ElementOfArray<F[K]>>,
-    ComponentProps<typeof DefaultList<ElementOfArray<F[K]>>>
+    SuppliedListProps<`${K}.${number}`>,
+    ComponentProps<typeof DefaultList<`${K}.${number}`>>
   > {
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     return this.listCache.retrieveOrCreate(
       valuePath,
       DefaultList,
     ) as MantineFieldComponent<
-      SuppliedListProps<ElementOfArray<F[K]>>,
-      ComponentProps<typeof DefaultList<ElementOfArray<F[K]>>>,
+      SuppliedListProps<`${K}.${number}`>,
+      ComponentProps<typeof DefaultList<`${K}.${number}`>>,
       ErrorOfField<F[K]>
     >
+  }
+
+  // TODO have the returned component take any non-overlapping props as props
+  subForm<
+    K extends keyof AllFieldsOfFields<F>,
+    S extends SubFormFields<F, K>,
+  >(valuePath: K, SubForm: ComponentType<FormProps<S>>): ComponentType {
+    return this.subFormCache.retrieveOrCreate(
+      valuePath,
+      // strip props from component since we lose information in the cache
+      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+      SubForm as ComponentType,
+      this,
+    )
   }
 }

@@ -18,16 +18,20 @@ import {
   SelectDiscriminatedUnionConverter,
   SelectLiteralConverter,
   SelectStringConverter,
+  subFormFieldAdapters,
   TrimmingStringConverter,
 } from '@strictly/react-form'
 import { IsAliveTwoWayConverter } from './is_alive_field_converter'
+import {
+  petOwnerType,
+  unvalidatedPetOwnerFieldAdapters,
+} from './pet_owner_form'
 import {
   catBreedType,
   type DogBreed,
   dogBreedType,
   NOT_A_BREED_ERROR,
   NOT_A_NUMBER_ERROR,
-  ownerType,
   type Pet,
   type petType,
   type PetTypeToValuePaths,
@@ -36,16 +40,17 @@ import {
   speciesType,
 } from './types'
 
-const petFieldConverters = {
+const rawPetFieldAdapters = {
   '$.alive': identityAdapter(false).narrow,
   '$.name': adapterFromTwoWayConverter(
     new TrimmingStringConverter(),
     prototypingFieldValueFactory(''),
   ).narrow,
   '$.newTag': identityAdapter('').narrow,
+  ...subFormFieldAdapters(unvalidatedPetOwnerFieldAdapters, '$.owner'),
   '$.owner': adapterFromTwoWayConverter(
     new NullableToBooleanConverter(
-      ownerType,
+      petOwnerType,
       {
         firstName: '',
         surname: '',
@@ -55,11 +60,6 @@ const petFieldConverters = {
       undefined,
     ),
   ).narrow,
-  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-  '$.owner.email': identityAdapter('' as string | undefined).narrow,
-  '$.owner.firstName': identityAdapter('').narrow,
-  '$.owner.phoneNumber': identityAdapter('').narrow,
-  '$.owner.surname': identityAdapter('').narrow,
   '$.species': adapterFromTwoWayConverter(
     new SelectDiscriminatedUnionConverter(
       speciesType,
@@ -124,7 +124,7 @@ const petFieldConverters = {
 
 export const petFieldAdapters = mergeFieldAdaptersWithTwoWayConverter(
   mergeAdaptersWithValidators(
-    petFieldConverters,
+    rawPetFieldAdapters,
     petValidators,
   ),
   new IsAliveTwoWayConverter(),

@@ -20,16 +20,6 @@ function SpeciesComponent() {
   )
 }
 
-function OwnerComponent() {
-  return (
-    <Card>
-      <h1>
-        Owner
-      </h1>
-    </Card>
-  )
-}
-
 const meta: Meta<typeof Component> = {
   component: Component,
   args: {
@@ -40,7 +30,7 @@ const meta: Meta<typeof Component> = {
     onSubmit: action('onSubmit'),
     onRemoveTag: action('onRemoveTag'),
     SpeciesComponent,
-    OwnerComponent,
+    // TODO maybe allow overriding of OwnerComponent
   },
 }
 
@@ -51,19 +41,44 @@ type Story = StoryObj<typeof Component>
 export const Populated: Story = {
   args: {
     fields: {
-      '$.name': {
-        readonly: false,
-        value: 'Fido',
-        required: true,
-      },
       '$.alive': {
         readonly: false,
         value: true,
         required: false,
       },
+      '$.name': {
+        readonly: false,
+        value: 'Fido',
+        required: true,
+      },
+      '$.newTag': {
+        readonly: false,
+        value: 'fake',
+        required: false,
+      },
       '$.owner': {
         readonly: false,
         value: true,
+        required: false,
+      },
+      '$.owner.email': {
+        readonly: false,
+        value: 'x@y.z',
+        required: false,
+      },
+      '$.owner.firstName': {
+        readonly: false,
+        value: 'Peggy',
+        required: false,
+      },
+      '$.owner.phoneNumber': {
+        readonly: false,
+        value: '0404040404',
+        required: false,
+      },
+      '$.owner.surname': {
+        readonly: false,
+        value: 'Sue',
         required: false,
       },
       '$.tags': {
@@ -89,11 +104,6 @@ export const Populated: Story = {
         readonly: false,
         required: false,
         value: 'little',
-      },
-      '$.newTag': {
-        readonly: false,
-        value: 'fake',
-        required: false,
       },
     },
   },
@@ -117,6 +127,26 @@ export const Empty: Story = {
         value: false,
         required: false,
       },
+      '$.owner.email': {
+        readonly: false,
+        value: '',
+        required: false,
+      },
+      '$.owner.firstName': {
+        readonly: false,
+        value: '',
+        required: false,
+      },
+      '$.owner.phoneNumber': {
+        readonly: false,
+        value: '',
+        required: false,
+      },
+      '$.owner.surname': {
+        readonly: false,
+        value: '',
+        required: false,
+      },
       '$.tags': {
         readonly: false,
         required: false,
@@ -134,6 +164,11 @@ export const Empty: Story = {
 export const Errors: Story = {
   args: {
     fields: {
+      '$.alive': {
+        readonly: false,
+        value: false,
+        required: false,
+      },
       '$.name': {
         readonly: false,
         value: 'Bad',
@@ -144,14 +179,34 @@ export const Errors: Story = {
         },
         required: true,
       },
-      '$.alive': {
+      '$.newTag': {
         readonly: false,
-        value: false,
+        value: '',
         required: false,
       },
       '$.owner': {
         readonly: false,
         value: true,
+        required: false,
+      },
+      '$.owner.email': {
+        readonly: false,
+        value: '',
+        required: false,
+      },
+      '$.owner.firstName': {
+        readonly: false,
+        value: '',
+        required: false,
+      },
+      '$.owner.phoneNumber': {
+        readonly: false,
+        value: '',
+        required: false,
+      },
+      '$.owner.surname': {
+        readonly: false,
+        value: '',
         required: false,
       },
       '$.tags': {
@@ -164,11 +219,6 @@ export const Errors: Story = {
         required: false,
         value: 'ugly',
       },
-      '$.newTag': {
-        readonly: false,
-        value: '',
-        required: false,
-      },
     },
   },
 }
@@ -176,19 +226,44 @@ export const Errors: Story = {
 export const Disabled: Story = {
   args: {
     fields: {
-      '$.name': {
-        readonly: true,
-        value: 'Fido',
-        required: true,
-      },
       '$.alive': {
         readonly: true,
         value: true,
         required: false,
       },
+      '$.name': {
+        readonly: true,
+        value: 'Fido',
+        required: true,
+      },
+      '$.newTag': {
+        readonly: true,
+        value: 'fake',
+        required: false,
+      },
       '$.owner': {
         readonly: true,
         value: true,
+        required: false,
+      },
+      '$.owner.email': {
+        readonly: true,
+        value: '',
+        required: false,
+      },
+      '$.owner.firstName': {
+        readonly: true,
+        value: '',
+        required: false,
+      },
+      '$.owner.phoneNumber': {
+        readonly: true,
+        value: '',
+        required: false,
+      },
+      '$.owner.surname': {
+        readonly: true,
+        value: '',
         required: false,
       },
       '$.tags': {
@@ -214,11 +289,6 @@ export const Disabled: Story = {
         readonly: true,
         required: false,
         value: 'little',
-      },
-      '$.newTag': {
-        readonly: true,
-        value: 'fake',
-        required: false,
       },
     },
   },

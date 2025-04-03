@@ -282,11 +282,131 @@ exports[`PetForm > renders Disabled 1`] = `
         </div>
       </div>
       <div
-        class="m_e615b15f mantine-Card-root m_1b7284a3 mantine-Paper-root"
+        class="m_6d731127 mantine-Stack-root"
+        style="--stack-gap: var(--mantine-spacing-md); --stack-align: stretch; --stack-justify: flex-start;"
       >
-        <h1>
-          Owner
-        </h1>
+        <div
+          class="m_4081bf90 mantine-Group-root"
+          data-grow="true"
+          style="--group-child-width: calc(50% - (var(--mantine-spacing-md) - var(--mantine-spacing-md) / 2)); --group-gap: var(--mantine-spacing-md); --group-align: center; --group-justify: flex-start; --group-wrap: wrap;"
+        >
+          <div
+            class="m_46b77525 mantine-InputWrapper-root mantine-TextInput-root"
+          >
+            <label
+              class="m_8fdc1311 mantine-InputWrapper-label mantine-TextInput-label"
+              for="mantine-1ssssssss"
+              id="mantine-1ssssssss-label"
+            >
+              First Name
+            </label>
+            <div
+              class="m_6c018570 mantine-Input-wrapper mantine-TextInput-wrapper"
+              data-disabled="true"
+              data-variant="default"
+            >
+              <input
+                aria-invalid="false"
+                autocapitalize="words"
+                class="m_8fb7ebe7 mantine-Input-input mantine-TextInput-input"
+                data-disabled="true"
+                data-variant="default"
+                disabled=""
+                id="mantine-1ssssssss"
+                name="$.firstName"
+                type="text"
+                value=""
+              />
+            </div>
+          </div>
+          <div
+            class="m_46b77525 mantine-InputWrapper-root mantine-TextInput-root"
+          >
+            <label
+              class="m_8fdc1311 mantine-InputWrapper-label mantine-TextInput-label"
+              for="mantine-25rcyk5rc"
+              id="mantine-25rcyk5rc-label"
+            >
+              Surname
+            </label>
+            <div
+              class="m_6c018570 mantine-Input-wrapper mantine-TextInput-wrapper"
+              data-disabled="true"
+              data-variant="default"
+            >
+              <input
+                aria-invalid="false"
+                autocapitalize="words"
+                class="m_8fb7ebe7 mantine-Input-input mantine-TextInput-input"
+                data-disabled="true"
+                data-variant="default"
+                disabled=""
+                id="mantine-25rcyk5rc"
+                name="$.surname"
+                type="text"
+                value=""
+              />
+            </div>
+          </div>
+        </div>
+        <div
+          class="m_46b77525 mantine-InputWrapper-root mantine-TextInput-root"
+        >
+          <label
+            class="m_8fdc1311 mantine-InputWrapper-label mantine-TextInput-label"
+            for="mantine-2ipx4bipx"
+            id="mantine-2ipx4bipx-label"
+          >
+            Phone number
+          </label>
+          <div
+            class="m_6c018570 mantine-Input-wrapper mantine-TextInput-wrapper"
+            data-disabled="true"
+            data-variant="default"
+          >
+            <input
+              aria-invalid="false"
+              class="m_8fb7ebe7 mantine-Input-input mantine-TextInput-input"
+              data-disabled="true"
+              data-variant="default"
+              disabled=""
+              id="mantine-2ipx4bipx"
+              name="$.phoneNumber"
+              placeholder="04xxxxxxxx"
+              type="tel"
+              value=""
+            />
+          </div>
+        </div>
+        <div
+          class="m_46b77525 mantine-InputWrapper-root mantine-TextInput-root"
+        >
+          <label
+            class="m_8fdc1311 mantine-InputWrapper-label mantine-TextInput-label"
+            for="mantine-2voha2voh"
+            id="mantine-2voha2voh-label"
+          >
+            Email
+          </label>
+          <div
+            class="m_6c018570 mantine-Input-wrapper mantine-TextInput-wrapper"
+            data-disabled="true"
+            data-variant="default"
+          >
+            <input
+              aria-invalid="false"
+              class="m_8fb7ebe7 mantine-Input-input mantine-TextInput-input"
+              data-disabled="true"
+              data-variant="default"
+              disabled=""
+              id="mantine-2voha2voh"
+              name="$.email"
+              placeholder="me@somewhere.org"
+              type="email"
+              value=""
+            />
+          </div>
+        </div>
       </div>
     </div>
     <div
@@ -743,11 +863,119 @@ exports[`PetForm > renders Errors 1`] = `
         </div>
       </div>
       <div
-        class="m_e615b15f mantine-Card-root m_1b7284a3 mantine-Paper-root"
+        class="m_6d731127 mantine-Stack-root"
+        style="--stack-gap: var(--mantine-spacing-md); --stack-align: stretch; --stack-justify: flex-start;"
       >
-        <h1>
-          Owner
-        </h1>
+        <div
+          class="m_4081bf90 mantine-Group-root"
+          data-grow="true"
+          style="--group-child-width: calc(50% - (var(--mantine-spacing-md) - var(--mantine-spacing-md) / 2)); --group-gap: var(--mantine-spacing-md); --group-align: center; --group-justify: flex-start; --group-wrap: wrap;"
+        >
+          <div
+            class="m_46b77525 mantine-InputWrapper-root mantine-TextInput-root"
+          >
+            <label
+              class="m_8fdc1311 mantine-InputWrapper-label mantine-TextInput-label"
+              for="mantine-1ssssssss"
+              id="mantine-1ssssssss-label"
+            >
+              First Name
+            </label>
+            <div
+              class="m_6c018570 mantine-Input-wrapper mantine-TextInput-wrapper"
+              data-variant="default"
+            >
+              <input
+                aria-invalid="false"
+                autocapitalize="words"
+                class="m_8fb7ebe7 mantine-Input-input mantine-TextInput-input"
+                data-variant="default"
+                id="mantine-1ssssssss"
+                name="$.firstName"
+                type="text"
+                value=""
+              />
+            </div>
+          </div>
+          <div
+            class="m_46b77525 mantine-InputWrapper-root mantine-TextInput-root"
+          >
+            <label
+              class="m_8fdc1311 mantine-InputWrapper-label mantine-TextInput-label"
+              for="mantine-25rcyk5rc"
+              id="mantine-25rcyk5rc-label"
+            >
+              Surname
+            </label>
+            <div
+              class="m_6c018570 mantine-Input-wrapper mantine-TextInput-wrapper"
+              data-variant="default"
+            >
+              <input
+                aria-invalid="false"
+                autocapitalize="words"
+                class="m_8fb7ebe7 mantine-Input-input mantine-TextInput-input"
+                data-variant="default"
+                id="mantine-25rcyk5rc"
+                name="$.surname"
+                type="text"
+                value=""
+              />
+            </div>
+          </div>
+        </div>
+        <div
+          class="m_46b77525 mantine-InputWrapper-root mantine-TextInput-root"
+        >
+          <label
+            class="m_8fdc1311 mantine-InputWrapper-label mantine-TextInput-label"
+            for="mantine-2ipx4bipx"
+            id="mantine-2ipx4bipx-label"
+          >
+            Phone number
+          </label>
+          <div
+            class="m_6c018570 mantine-Input-wrapper mantine-TextInput-wrapper"
+            data-variant="default"
+          >
+            <input
+              aria-invalid="false"
+              class="m_8fb7ebe7 mantine-Input-input mantine-TextInput-input"
+              data-variant="default"
+              id="mantine-2ipx4bipx"
+              name="$.phoneNumber"
+              placeholder="04xxxxxxxx"
+              type="tel"
+              value=""
+            />
+          </div>
+        </div>
+        <div
+          class="m_46b77525 mantine-InputWrapper-root mantine-TextInput-root"
+        >
+          <label
+            class="m_8fdc1311 mantine-InputWrapper-label mantine-TextInput-label"
+            for="mantine-2voha2voh"
+            id="mantine-2voha2voh-label"
+          >
+            Email
+          </label>
+          <div
+            class="m_6c018570 mantine-Input-wrapper mantine-TextInput-wrapper"
+            data-variant="default"
+          >
+            <input
+              aria-invalid="false"
+              class="m_8fb7ebe7 mantine-Input-input mantine-TextInput-input"
+              data-variant="default"
+              id="mantine-2voha2voh"
+              name="$.email"
+              placeholder="me@somewhere.org"
+              type="email"
+              value=""
+            />
+          </div>
+        </div>
       </div>
     </div>
     <div
@@ -1052,11 +1280,119 @@ exports[`PetForm > renders Populated 1`] = `
         </div>
       </div>
       <div
-        class="m_e615b15f mantine-Card-root m_1b7284a3 mantine-Paper-root"
+        class="m_6d731127 mantine-Stack-root"
+        style="--stack-gap: var(--mantine-spacing-md); --stack-align: stretch; --stack-justify: flex-start;"
       >
-        <h1>
-          Owner
-        </h1>
+        <div
+          class="m_4081bf90 mantine-Group-root"
+          data-grow="true"
+          style="--group-child-width: calc(50% - (var(--mantine-spacing-md) - var(--mantine-spacing-md) / 2)); --group-gap: var(--mantine-spacing-md); --group-align: center; --group-justify: flex-start; --group-wrap: wrap;"
+        >
+          <div
+            class="m_46b77525 mantine-InputWrapper-root mantine-TextInput-root"
+          >
+            <label
+              class="m_8fdc1311 mantine-InputWrapper-label mantine-TextInput-label"
+              for="mantine-25rcyk5rc"
+              id="mantine-25rcyk5rc-label"
+            >
+              First Name
+            </label>
+            <div
+              class="m_6c018570 mantine-Input-wrapper mantine-TextInput-wrapper"
+              data-variant="default"
+            >
+              <input
+                aria-invalid="false"
+                autocapitalize="words"
+                class="m_8fb7ebe7 mantine-Input-input mantine-TextInput-input"
+                data-variant="default"
+                id="mantine-25rcyk5rc"
+                name="$.firstName"
+                type="text"
+                value="Peggy"
+              />
+            </div>
+          </div>
+          <div
+            class="m_46b77525 mantine-InputWrapper-root mantine-TextInput-root"
+          >
+            <label
+              class="m_8fdc1311 mantine-InputWrapper-label mantine-TextInput-label"
+              for="mantine-2ipx4bipx"
+              id="mantine-2ipx4bipx-label"
+            >
+              Surname
+            </label>
+            <div
+              class="m_6c018570 mantine-Input-wrapper mantine-TextInput-wrapper"
+              data-variant="default"
+            >
+              <input
+                aria-invalid="false"
+                autocapitalize="words"
+                class="m_8fb7ebe7 mantine-Input-input mantine-TextInput-input"
+                data-variant="default"
+                id="mantine-2ipx4bipx"
+                name="$.surname"
+                type="text"
+                value="Sue"
+              />
+            </div>
+          </div>
+        </div>
+        <div
+          class="m_46b77525 mantine-InputWrapper-root mantine-TextInput-root"
+        >
+          <label
+            class="m_8fdc1311 mantine-InputWrapper-label mantine-TextInput-label"
+            for="mantine-2voha2voh"
+            id="mantine-2voha2voh-label"
+          >
+            Phone number
+          </label>
+          <div
+            class="m_6c018570 mantine-Input-wrapper mantine-TextInput-wrapper"
+            data-variant="default"
+          >
+            <input
+              aria-invalid="false"
+              class="m_8fb7ebe7 mantine-Input-input mantine-TextInput-input"
+              data-variant="default"
+              id="mantine-2voha2voh"
+              name="$.phoneNumber"
+              placeholder="04xxxxxxxx"
+              type="tel"
+              value="0404040404"
+            />
+          </div>
+        </div>
+        <div
+          class="m_46b77525 mantine-InputWrapper-root mantine-TextInput-root"
+        >
+          <label
+            class="m_8fdc1311 mantine-InputWrapper-label mantine-TextInput-label"
+            for="mantine-38n1fu8n1"
+            id="mantine-38n1fu8n1-label"
+          >
+            Email
+          </label>
+          <div
+            class="m_6c018570 mantine-Input-wrapper mantine-TextInput-wrapper"
+            data-variant="default"
+          >
+            <input
+              aria-invalid="false"
+              class="m_8fb7ebe7 mantine-Input-input mantine-TextInput-input"
+              data-variant="default"
+              id="mantine-38n1fu8n1"
+              name="$.email"
+              placeholder="me@somewhere.org"
+              type="email"
+              value="x@y.z"
+            />
+          </div>
+        </div>
       </div>
     </div>
     <div
