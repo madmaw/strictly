@@ -4299,6 +4299,11 @@ emoji-regex@^9.2.2:
   resolved "https://registry.yarnpkg.com/emoji-regex/-/emoji-regex-9.2.2.tgz#840c8803b0d8047f4ff0cf963176b32d4ef3ed72"
   integrity sha512-L18DaJsXSUk2+42pv8mLs5jJT2hqFkFE4j21wOmgbUqsZ2hL72NsUU785g9RXgo3s0ZNgVl42TiHp3ZtOv/Vyg==
 
+emulate-tab@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/emulate-tab/-/emulate-tab-1.2.1.tgz#09d470c8d098ace83fd0c5b16b372542b1dedad4"
+  integrity sha512-msvZDjWv3hTSpq/j0hqudE+Zthulpo1AuSAHcMqCgv2PmJbIXjWXDTx4sLrY3adMiHT4IXDT4cS9LMbwSlzScw==
+
 enhanced-resolve@^5.15.0:
   version "5.18.0"
   resolved "https://registry.yarnpkg.com/enhanced-resolve/-/enhanced-resolve-5.18.0.tgz#91eb1db193896b9801251eeff1c6980278b1e404"

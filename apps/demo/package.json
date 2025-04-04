@@ -8,6 +8,7 @@
     "@strictly/define": "*",
     "@strictly/react-form": "*",
     "@strictly/spec": "*",
+    "emulate-tab": "^1.2.1",
     "mobx": "^6.13.5",
     "mobx-react": "^9.1.1",
     "react": "^19.0.0",
@@ -72,5 +73,5 @@
     "test:update": "vitest run -u",
     "test:watch": "vitest"
   },
-  "version": "0.0.5"
+  "version": "0.0.6"
 }
