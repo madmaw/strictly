@@ -1,6 +1,4 @@
-// TODO typescript plugin https://www.npmjs.com/package/typescript-plugin-css-modules#visual-studio-code
-// TODO remove project references
-import styles from './pet_form.module.css'
+import styles from './pet_fields_view.module.css'
 
 import {
   t,
@@ -20,8 +18,8 @@ import {
 import {
   type ErrorOfField,
   type ErrorRendererProps,
-  type FormProps,
-  useMantineForm,
+  type FieldsViewProps,
+  useMantineFormFields,
 } from '@strictly/react-form'
 import { observer } from 'mobx-react'
 import {
@@ -29,7 +27,7 @@ import {
   useCallback,
 } from 'react'
 import { type PetFields } from './fields'
-import { PetOwnerForm } from './pet_owner_form'
+import { PetOwnerFieldsView } from './pet_owner_fields_view'
 import {
   type TagValuePath,
 } from './types'
@@ -90,7 +88,7 @@ export type PetFormFields = Pick<
   | `$.tags.${number}`
 >
 
-export type PetFormProps = FormProps<PetFormFields> & {
+export type PetFieldsViewProps = FieldsViewProps<PetFormFields> & {
   SpeciesComponent: ComponentType,
   onSubmit: () => void,
   onRemoveTag: (valuePath: TagValuePath) => void,
@@ -108,13 +106,13 @@ function NameInputErrorRenderer({ error }: ErrorRendererProps<ErrorOfField<PetFo
   }
 }
 
-function PetFormImpl(props: PetFormProps) {
+function PetFieldsViewImpl(props: PetFieldsViewProps) {
   const {
     onSubmit,
     onRemoveTag,
     SpeciesComponent,
   } = props
-  const form = useMantineForm(props)
+  const form = useMantineFormFields(props)
   const NameTextInput = form.textInput('$.name')
   const AliveCheckbox = form.checkbox('$.alive')
   const OwnerCheckbox = form.checkbox('$.owner')
@@ -123,7 +121,7 @@ function PetFormImpl(props: PetFormProps) {
     PillsInput.Field,
   )
   const Tags = form.list('$.tags')
-  const Owner = form.subForm('$.owner', PetOwnerForm)
+  const Owner = form.fieldsView('$.owner', PetOwnerFieldsView)
 
   return (
     <Stack>
@@ -196,4 +194,4 @@ function TagPill({
 
 // has to be an observer since we watch the value of the $.owner field to decide
 // whether to render the PetOwnerForm component
-export const PetForm = observer(PetFormImpl)
+export const PetFieldsView = observer(PetFieldsViewImpl)

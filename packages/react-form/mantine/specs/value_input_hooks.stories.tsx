@@ -13,10 +13,10 @@ import {
   type Meta,
   type StoryObj,
 } from '@storybook/react'
-import { type FormProps } from 'core/props'
+import { type FieldsViewProps } from 'core/props'
 import { type SuppliedValueInputProps } from 'mantine/create_value_input'
 import { type ErrorRenderer } from 'mantine/error_renderer'
-import { useMantineForm } from 'mantine/hooks'
+import { useMantineFormFields } from 'mantine/hooks'
 import {
   type ComponentType,
 } from 'react'
@@ -37,7 +37,7 @@ function Component<
   ErrorRenderer,
   inputProps,
   ...props
-}: FormProps<{
+}: FieldsViewProps<{
   $: Field<V, string>,
 }> & {
   ValueInput: ComponentType<P>,
@@ -46,7 +46,7 @@ function Component<
 } & {
   ErrorRenderer?: ErrorRenderer,
 }) {
-  const form = useMantineForm(props)
+  const form = useMantineFormFields(props)
   const ValueInputComponent = form.valueInput<'$', P>('$', ValueInput)
   return (
     <ValueInputComponent

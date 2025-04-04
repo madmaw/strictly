@@ -5,8 +5,8 @@ import {
 } from '@mantine/core'
 import { toArray } from '@strictly/base'
 import {
-  type FormProps,
-  useMantineForm,
+  type FieldsViewProps,
+  useMantineFormFields,
 } from '@strictly/react-form'
 import { type ComponentType } from 'react'
 import { type PetFields } from './fields'
@@ -26,7 +26,7 @@ export type PetSpeciesFormFields = Pick<
   '$.species'
 >
 
-export type PetSpeciesFormProps = FormProps<PetSpeciesFormFields> & {
+export type PetSpeciesFieldsViewProps = FieldsViewProps<PetSpeciesFormFields> & {
   speciesComponents: Record<Species, ComponentType>,
 }
 
@@ -43,12 +43,12 @@ const SPECIES_NAMES: Record<Species, () => string> = {
     }),
 }
 
-export function PetSpeciesForm(props: PetSpeciesFormProps) {
+export function PetSpeciesFormFieldsView(props: PetSpeciesFieldsViewProps) {
   const {
     speciesComponents,
     fields,
   } = props
-  const form = useMantineForm(props)
+  const form = useMantineFormFields(props)
   const SpeciesRadioGroup = form.radioGroup('$.species')
   const speciesValue = fields['$.species'].value
   const SpeciesComponent = speciesValue && speciesComponents[speciesValue]

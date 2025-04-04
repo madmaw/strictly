@@ -8,13 +8,13 @@ import {
   type Meta,
   type StoryObj,
 } from '@storybook/react'
-import { type FormProps } from 'core/props'
+import { type FieldsViewProps } from 'core/props'
 import {
   type SuppliedTextInputProps,
   type TextInputTarget,
 } from 'mantine/create_text_input'
 import { type ErrorRenderer } from 'mantine/error_renderer'
-import { useMantineForm } from 'mantine/hooks'
+import { useMantineFormFields } from 'mantine/hooks'
 import { type ComponentType } from 'react'
 import { type Field } from 'types/field'
 import { TEXT_INPUT_LABEL } from './text_input_constants'
@@ -25,14 +25,14 @@ function Component<T extends TextInputTarget>({
   TextInput,
   ErrorRenderer,
   ...props
-}: FormProps<{
+}: FieldsViewProps<{
   $: Field<string, string>,
 }> & {
   TextInput?: ComponentType<StoryTextInputProps<T>>,
 } & {
   ErrorRenderer?: ErrorRenderer,
 }) {
-  const form = useMantineForm(props)
+  const form = useMantineFormFields(props)
   const TextInputComponent = form.textInput<'$', StoryTextInputProps<T>>('$', TextInput)
   return (
     <TextInputComponent

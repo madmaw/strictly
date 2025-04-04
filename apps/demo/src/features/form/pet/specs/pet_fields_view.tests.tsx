@@ -4,16 +4,16 @@ import {
   fireEvent,
   render,
 } from '@testing-library/react'
-import { SubmitLabel } from 'features/form/pet/pet_form'
+import { SubmitLabel } from 'features/form/pet/pet_fields_view'
 import { vi } from 'vitest'
-import * as stories from './pet_form.stories'
+import * as stories from './pet_fields_view.stories'
 
 const composedStories = composeStories(stories)
 const {
   Populated,
 } = composedStories
 
-describe('PetForm', function () {
+describe('PetFieldsView', function () {
   it.each(toArray(composedStories))('renders %s', function (_name, Story) {
     const wrapper = render(<Story />)
     expect(wrapper.container).toMatchSnapshot()

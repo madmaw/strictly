@@ -8,16 +8,16 @@ import {
   type Meta,
   type StoryObj,
 } from '@storybook/react'
-import { type FormProps } from 'core/props'
-import { useMantineForm } from 'mantine/hooks'
+import { type FieldsViewProps } from 'core/props'
+import { useMantineFormFields } from 'mantine/hooks'
 import { type Field } from 'types/field'
 
 type ListPath = `$.${number}`
 
-function Component(props: FormProps<{
+function Component(props: FieldsViewProps<{
   $: Field<string[], string>,
 }>) {
-  const form = useMantineForm(props)
+  const form = useMantineFormFields(props)
   const List = form.list('$')
   return (
     <Paper

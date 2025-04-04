@@ -3,10 +3,10 @@ import {
   type Meta,
   type StoryObj,
 } from '@storybook/react'
-import { PetSpeciesCatForm } from 'features/form/pet/pet_species_cat_form'
+import { PetSpeciesCatFieldsView } from 'features/form/pet/pet_species_cat_fields_view'
 import { NOT_A_BREED_ERROR } from 'features/form/pet/types'
 
-const Component = PetSpeciesCatForm
+const Component = PetSpeciesCatFieldsView
 
 const meta: Meta<typeof Component> = {
   component: Component,

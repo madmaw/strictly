@@ -25,7 +25,7 @@ import { IsAliveTwoWayConverter } from './is_alive_field_converter'
 import {
   petOwnerType,
   unvalidatedPetOwnerFieldAdapters,
-} from './pet_owner_form'
+} from './pet_owner_fields_view'
 import {
   catBreedType,
   type DogBreed,
@@ -39,6 +39,8 @@ import {
   type PetValueToTypePaths,
   speciesType,
 } from './types'
+
+// TODO move fields into respective views
 
 const rawPetFieldAdapters = {
   '$.alive': identityAdapter(false).narrow,

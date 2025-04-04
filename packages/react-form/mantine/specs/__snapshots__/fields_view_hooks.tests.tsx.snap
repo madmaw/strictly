@@ -1,0 +1,460 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`field view hooks > renders CustomError 1`] = `
+<div>
+  <style
+    data-mantine-styles="classes"
+  >
+    @media (max-width: 35.99375em) {.mantine-visible-from-xs {display: none !important;}}@media (min-width: 36em) {.mantine-hidden-from-xs {display: none !important;}}@media (max-width: 47.99375em) {.mantine-visible-from-sm {display: none !important;}}@media (min-width: 48em) {.mantine-hidden-from-sm {display: none !important;}}@media (max-width: 61.99375em) {.mantine-visible-from-md {display: none !important;}}@media (min-width: 62em) {.mantine-hidden-from-md {display: none !important;}}@media (max-width: 74.99375em) {.mantine-visible-from-lg {display: none !important;}}@media (min-width: 75em) {.mantine-hidden-from-lg {display: none !important;}}@media (max-width: 87.99375em) {.mantine-visible-from-xl {display: none !important;}}@media (min-width: 88em) {.mantine-hidden-from-xl {display: none !important;}}
+  </style>
+  <div
+    class="m_6d731127 mantine-Stack-root"
+    style="--stack-gap: var(--mantine-spacing-md); --stack-align: stretch; --stack-justify: flex-start;"
+  >
+    <div
+      class="m_46b77525 mantine-InputWrapper-root mantine-TextInput-root"
+      data-error="true"
+    >
+      <label
+        class="m_8fdc1311 mantine-InputWrapper-label mantine-TextInput-label"
+        for="mantine-0cyk5rcyk"
+        id="mantine-0cyk5rcyk-label"
+      >
+        fields view
+      </label>
+      <div
+        class="m_6c018570 mantine-Input-wrapper mantine-TextInput-wrapper"
+        data-error="true"
+        data-variant="default"
+        style="--input-margin-bottom: calc(var(--mantine-spacing-xs) / 2);"
+      >
+        <input
+          aria-describedby="mantine-0cyk5rcyk-error"
+          aria-invalid="true"
+          class="m_8fb7ebe7 mantine-Input-input mantine-TextInput-input"
+          data-error="true"
+          data-variant="default"
+          id="mantine-0cyk5rcyk"
+          name="$"
+          value="xxx"
+        />
+      </div>
+      <p
+        class="m_8f816625 mantine-InputWrapper-error mantine-TextInput-error"
+        id="mantine-0cyk5rcyk-error"
+      >
+        form error
+      </p>
+    </div>
+    <div
+      class="m_6d731127 mantine-Stack-root"
+      style="--stack-gap: var(--mantine-spacing-md); --stack-align: stretch; --stack-justify: flex-start;"
+    >
+      <div
+        class="m_46b77525 mantine-InputWrapper-root mantine-TextInput-root"
+        data-error="true"
+      >
+        <label
+          class="m_8fdc1311 mantine-InputWrapper-label mantine-TextInput-label"
+          for="mantine-0px4bipx4"
+          id="mantine-0px4bipx4-label"
+        >
+          sub fields view
+        </label>
+        <div
+          class="m_6c018570 mantine-Input-wrapper mantine-TextInput-wrapper"
+          data-error="true"
+          data-variant="default"
+          style="--input-margin-bottom: calc(var(--mantine-spacing-xs) / 2);"
+        >
+          <input
+            aria-describedby="mantine-0px4bipx4-error"
+            aria-invalid="true"
+            class="m_8fb7ebe7 mantine-Input-input mantine-TextInput-input"
+            data-error="true"
+            data-variant="default"
+            id="mantine-0px4bipx4"
+            name="$"
+            value="xxx"
+          />
+        </div>
+        <p
+          class="m_8f816625 mantine-InputWrapper-error mantine-TextInput-error"
+          id="mantine-0px4bipx4-error"
+        >
+          sub form error
+        </p>
+      </div>
+      <button
+        class="mantine-focus-auto mantine-active m_77c9d27d mantine-Button-root m_87cf2631 mantine-UnstyledButton-root"
+        style="--button-color: var(--mantine-color-white);"
+        type="button"
+      >
+        <span
+          class="m_80f1301b mantine-Button-inner"
+        >
+          <span
+            class="m_811560b9 mantine-Button-label"
+          >
+            Bonus Button
+          </span>
+        </span>
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`field view hooks > renders Disabled 1`] = `
+<div>
+  <style
+    data-mantine-styles="classes"
+  >
+    @media (max-width: 35.99375em) {.mantine-visible-from-xs {display: none !important;}}@media (min-width: 36em) {.mantine-hidden-from-xs {display: none !important;}}@media (max-width: 47.99375em) {.mantine-visible-from-sm {display: none !important;}}@media (min-width: 48em) {.mantine-hidden-from-sm {display: none !important;}}@media (max-width: 61.99375em) {.mantine-visible-from-md {display: none !important;}}@media (min-width: 62em) {.mantine-hidden-from-md {display: none !important;}}@media (max-width: 74.99375em) {.mantine-visible-from-lg {display: none !important;}}@media (min-width: 75em) {.mantine-hidden-from-lg {display: none !important;}}@media (max-width: 87.99375em) {.mantine-visible-from-xl {display: none !important;}}@media (min-width: 88em) {.mantine-hidden-from-xl {display: none !important;}}
+  </style>
+  <div
+    class="m_6d731127 mantine-Stack-root"
+    style="--stack-gap: var(--mantine-spacing-md); --stack-align: stretch; --stack-justify: flex-start;"
+  >
+    <div
+      class="m_46b77525 mantine-InputWrapper-root mantine-TextInput-root"
+    >
+      <label
+        class="m_8fdc1311 mantine-InputWrapper-label mantine-TextInput-label"
+        for="mantine-0cyk5rcyk"
+        id="mantine-0cyk5rcyk-label"
+      >
+        fields view
+      </label>
+      <div
+        class="m_6c018570 mantine-Input-wrapper mantine-TextInput-wrapper"
+        data-disabled="true"
+        data-variant="default"
+      >
+        <input
+          aria-invalid="false"
+          class="m_8fb7ebe7 mantine-Input-input mantine-TextInput-input"
+          data-disabled="true"
+          data-variant="default"
+          disabled=""
+          id="mantine-0cyk5rcyk"
+          name="$"
+          value="xxx"
+        />
+      </div>
+    </div>
+    <div
+      class="m_6d731127 mantine-Stack-root"
+      style="--stack-gap: var(--mantine-spacing-md); --stack-align: stretch; --stack-justify: flex-start;"
+    >
+      <div
+        class="m_46b77525 mantine-InputWrapper-root mantine-TextInput-root"
+      >
+        <label
+          class="m_8fdc1311 mantine-InputWrapper-label mantine-TextInput-label"
+          for="mantine-0px4bipx4"
+          id="mantine-0px4bipx4-label"
+        >
+          sub fields view
+        </label>
+        <div
+          class="m_6c018570 mantine-Input-wrapper mantine-TextInput-wrapper"
+          data-disabled="true"
+          data-variant="default"
+        >
+          <input
+            aria-invalid="false"
+            class="m_8fb7ebe7 mantine-Input-input mantine-TextInput-input"
+            data-disabled="true"
+            data-variant="default"
+            disabled=""
+            id="mantine-0px4bipx4"
+            name="$"
+            value="yyy"
+          />
+        </div>
+      </div>
+      <button
+        class="mantine-focus-auto mantine-active m_77c9d27d mantine-Button-root m_87cf2631 mantine-UnstyledButton-root"
+        style="--button-color: var(--mantine-color-white);"
+        type="button"
+      >
+        <span
+          class="m_80f1301b mantine-Button-inner"
+        >
+          <span
+            class="m_811560b9 mantine-Button-label"
+          >
+            Bonus Button
+          </span>
+        </span>
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`field view hooks > renders Empty 1`] = `
+<div>
+  <style
+    data-mantine-styles="classes"
+  >
+    @media (max-width: 35.99375em) {.mantine-visible-from-xs {display: none !important;}}@media (min-width: 36em) {.mantine-hidden-from-xs {display: none !important;}}@media (max-width: 47.99375em) {.mantine-visible-from-sm {display: none !important;}}@media (min-width: 48em) {.mantine-hidden-from-sm {display: none !important;}}@media (max-width: 61.99375em) {.mantine-visible-from-md {display: none !important;}}@media (min-width: 62em) {.mantine-hidden-from-md {display: none !important;}}@media (max-width: 74.99375em) {.mantine-visible-from-lg {display: none !important;}}@media (min-width: 75em) {.mantine-hidden-from-lg {display: none !important;}}@media (max-width: 87.99375em) {.mantine-visible-from-xl {display: none !important;}}@media (min-width: 88em) {.mantine-hidden-from-xl {display: none !important;}}
+  </style>
+  <div
+    class="m_6d731127 mantine-Stack-root"
+    style="--stack-gap: var(--mantine-spacing-md); --stack-align: stretch; --stack-justify: flex-start;"
+  >
+    <div
+      class="m_46b77525 mantine-InputWrapper-root mantine-TextInput-root"
+    >
+      <label
+        class="m_8fdc1311 mantine-InputWrapper-label mantine-TextInput-label"
+        for="mantine-0px4bipx4"
+        id="mantine-0px4bipx4-label"
+      >
+        fields view
+      </label>
+      <div
+        class="m_6c018570 mantine-Input-wrapper mantine-TextInput-wrapper"
+        data-variant="default"
+      >
+        <input
+          aria-invalid="false"
+          class="m_8fb7ebe7 mantine-Input-input mantine-TextInput-input"
+          data-variant="default"
+          id="mantine-0px4bipx4"
+          name="$"
+          value=""
+        />
+      </div>
+    </div>
+    <div
+      class="m_6d731127 mantine-Stack-root"
+      style="--stack-gap: var(--mantine-spacing-md); --stack-align: stretch; --stack-justify: flex-start;"
+    >
+      <div
+        class="m_46b77525 mantine-InputWrapper-root mantine-TextInput-root"
+      >
+        <label
+          class="m_8fdc1311 mantine-InputWrapper-label mantine-TextInput-label"
+          for="mantine-12voha2vo"
+          id="mantine-12voha2vo-label"
+        >
+          sub fields view
+        </label>
+        <div
+          class="m_6c018570 mantine-Input-wrapper mantine-TextInput-wrapper"
+          data-variant="default"
+        >
+          <input
+            aria-invalid="false"
+            class="m_8fb7ebe7 mantine-Input-input mantine-TextInput-input"
+            data-variant="default"
+            id="mantine-12voha2vo"
+            name="$"
+            value=""
+          />
+        </div>
+      </div>
+      <button
+        class="mantine-focus-auto mantine-active m_77c9d27d mantine-Button-root m_87cf2631 mantine-UnstyledButton-root"
+        style="--button-color: var(--mantine-color-white);"
+        type="button"
+      >
+        <span
+          class="m_80f1301b mantine-Button-inner"
+        >
+          <span
+            class="m_811560b9 mantine-Button-label"
+          >
+            Bonus Button
+          </span>
+        </span>
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`field view hooks > renders Populated 1`] = `
+<div>
+  <style
+    data-mantine-styles="classes"
+  >
+    @media (max-width: 35.99375em) {.mantine-visible-from-xs {display: none !important;}}@media (min-width: 36em) {.mantine-hidden-from-xs {display: none !important;}}@media (max-width: 47.99375em) {.mantine-visible-from-sm {display: none !important;}}@media (min-width: 48em) {.mantine-hidden-from-sm {display: none !important;}}@media (max-width: 61.99375em) {.mantine-visible-from-md {display: none !important;}}@media (min-width: 62em) {.mantine-hidden-from-md {display: none !important;}}@media (max-width: 74.99375em) {.mantine-visible-from-lg {display: none !important;}}@media (min-width: 75em) {.mantine-hidden-from-lg {display: none !important;}}@media (max-width: 87.99375em) {.mantine-visible-from-xl {display: none !important;}}@media (min-width: 88em) {.mantine-hidden-from-xl {display: none !important;}}
+  </style>
+  <div
+    class="m_6d731127 mantine-Stack-root"
+    style="--stack-gap: var(--mantine-spacing-md); --stack-align: stretch; --stack-justify: flex-start;"
+  >
+    <div
+      class="m_46b77525 mantine-InputWrapper-root mantine-TextInput-root"
+    >
+      <label
+        class="m_8fdc1311 mantine-InputWrapper-label mantine-TextInput-label"
+        for="mantine-0cyk5rcyk"
+        id="mantine-0cyk5rcyk-label"
+      >
+        fields view
+      </label>
+      <div
+        class="m_6c018570 mantine-Input-wrapper mantine-TextInput-wrapper"
+        data-variant="default"
+      >
+        <input
+          aria-invalid="false"
+          class="m_8fb7ebe7 mantine-Input-input mantine-TextInput-input"
+          data-variant="default"
+          id="mantine-0cyk5rcyk"
+          name="$"
+          value="Hello"
+        />
+      </div>
+    </div>
+    <div
+      class="m_6d731127 mantine-Stack-root"
+      style="--stack-gap: var(--mantine-spacing-md); --stack-align: stretch; --stack-justify: flex-start;"
+    >
+      <div
+        class="m_46b77525 mantine-InputWrapper-root mantine-TextInput-root"
+      >
+        <label
+          class="m_8fdc1311 mantine-InputWrapper-label mantine-TextInput-label"
+          for="mantine-0px4bipx4"
+          id="mantine-0px4bipx4-label"
+        >
+          sub fields view
+        </label>
+        <div
+          class="m_6c018570 mantine-Input-wrapper mantine-TextInput-wrapper"
+          data-variant="default"
+        >
+          <input
+            aria-invalid="false"
+            class="m_8fb7ebe7 mantine-Input-input mantine-TextInput-input"
+            data-variant="default"
+            id="mantine-0px4bipx4"
+            name="$"
+            value="World"
+          />
+        </div>
+      </div>
+      <button
+        class="mantine-focus-auto mantine-active m_77c9d27d mantine-Button-root m_87cf2631 mantine-UnstyledButton-root"
+        style="--button-color: var(--mantine-color-white);"
+        type="button"
+      >
+        <span
+          class="m_80f1301b mantine-Button-inner"
+        >
+          <span
+            class="m_811560b9 mantine-Button-label"
+          >
+            Bonus Button
+          </span>
+        </span>
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`field view hooks > renders Required 1`] = `
+<div>
+  <style
+    data-mantine-styles="classes"
+  >
+    @media (max-width: 35.99375em) {.mantine-visible-from-xs {display: none !important;}}@media (min-width: 36em) {.mantine-hidden-from-xs {display: none !important;}}@media (max-width: 47.99375em) {.mantine-visible-from-sm {display: none !important;}}@media (min-width: 48em) {.mantine-hidden-from-sm {display: none !important;}}@media (max-width: 61.99375em) {.mantine-visible-from-md {display: none !important;}}@media (min-width: 62em) {.mantine-hidden-from-md {display: none !important;}}@media (max-width: 74.99375em) {.mantine-visible-from-lg {display: none !important;}}@media (min-width: 75em) {.mantine-hidden-from-lg {display: none !important;}}@media (max-width: 87.99375em) {.mantine-visible-from-xl {display: none !important;}}@media (min-width: 88em) {.mantine-hidden-from-xl {display: none !important;}}
+  </style>
+  <div
+    class="m_6d731127 mantine-Stack-root"
+    style="--stack-gap: var(--mantine-spacing-md); --stack-align: stretch; --stack-justify: flex-start;"
+  >
+    <div
+      class="m_46b77525 mantine-InputWrapper-root mantine-TextInput-root"
+    >
+      <label
+        class="m_8fdc1311 mantine-InputWrapper-label mantine-TextInput-label"
+        data-required="true"
+        for="mantine-0cyk5rcyk"
+        id="mantine-0cyk5rcyk-label"
+      >
+        fields view
+        <span
+          aria-hidden="true"
+          class="m_78a94662 mantine-InputWrapper-required mantine-TextInput-required"
+        >
+           *
+        </span>
+      </label>
+      <div
+        class="m_6c018570 mantine-Input-wrapper mantine-TextInput-wrapper"
+        data-variant="default"
+      >
+        <input
+          aria-invalid="false"
+          class="m_8fb7ebe7 mantine-Input-input mantine-TextInput-input"
+          data-variant="default"
+          id="mantine-0cyk5rcyk"
+          name="$"
+          required=""
+          value="xxx"
+        />
+      </div>
+    </div>
+    <div
+      class="m_6d731127 mantine-Stack-root"
+      style="--stack-gap: var(--mantine-spacing-md); --stack-align: stretch; --stack-justify: flex-start;"
+    >
+      <div
+        class="m_46b77525 mantine-InputWrapper-root mantine-TextInput-root"
+      >
+        <label
+          class="m_8fdc1311 mantine-InputWrapper-label mantine-TextInput-label"
+          data-required="true"
+          for="mantine-0px4bipx4"
+          id="mantine-0px4bipx4-label"
+        >
+          sub fields view
+          <span
+            aria-hidden="true"
+            class="m_78a94662 mantine-InputWrapper-required mantine-TextInput-required"
+          >
+             *
+          </span>
+        </label>
+        <div
+          class="m_6c018570 mantine-Input-wrapper mantine-TextInput-wrapper"
+          data-variant="default"
+        >
+          <input
+            aria-invalid="false"
+            class="m_8fb7ebe7 mantine-Input-input mantine-TextInput-input"
+            data-variant="default"
+            id="mantine-0px4bipx4"
+            name="$"
+            required=""
+            value="yyy"
+          />
+        </div>
+      </div>
+      <button
+        class="mantine-focus-auto mantine-active m_77c9d27d mantine-Button-root m_87cf2631 mantine-UnstyledButton-root"
+        style="--button-color: var(--mantine-color-white);"
+        type="button"
+      >
+        <span
+          class="m_80f1301b mantine-Button-inner"
+        >
+          <span
+            class="m_811560b9 mantine-Button-label"
+          >
+            Bonus Button
+          </span>
+        </span>
+      </button>
+    </div>
+  </div>
+</div>
+`;

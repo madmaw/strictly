@@ -3,21 +3,21 @@ import {
   type Meta,
   type StoryObj,
 } from '@storybook/react'
-import { type FormProps } from 'core/props'
+import { type FieldsViewProps } from 'core/props'
 import { type ErrorRenderer } from 'mantine/error_renderer'
-import { useMantineForm } from 'mantine/hooks'
+import { useMantineFormFields } from 'mantine/hooks'
 import { type Field } from 'types/field'
 import { SELECT_LABEL } from './select_hooks_constant'
 
 function Component({
   ErrorRenderer,
   ...props
-}: FormProps<{
+}: FieldsViewProps<{
   $: Field<string | null, string>,
 }> & {
   ErrorRenderer?: ErrorRenderer,
 }) {
-  const form = useMantineForm(props)
+  const form = useMantineFormFields(props)
   const SelectComponent = form.select('$')
   return (
     <SelectComponent

@@ -1,13 +1,13 @@
 import {
-  type EditorProps,
+  type FormProps,
   type ToValueOfPresenterValuePath,
   usePartialObserverComponent,
   type ValuePathsOfPresenter,
 } from '@strictly/react-form'
-import { PetForm as PetFormImpl } from 'features/form/pet/pet_form'
-import { PetSpeciesCatForm } from 'features/form/pet/pet_species_cat_form'
-import { PetSpeciesDogForm } from 'features/form/pet/pet_species_dog_form'
-import { PetSpeciesForm } from 'features/form/pet/pet_species_form'
+import { PetFieldsView as PetFormImpl } from 'features/form/pet/pet_fields_view'
+import { PetSpeciesCatFieldsView } from 'features/form/pet/pet_species_cat_fields_view'
+import { PetSpeciesDogFieldsView } from 'features/form/pet/pet_species_dog_fields_view'
+import { PetSpeciesFormFieldsView } from 'features/form/pet/pet_species_fields_view'
 import {
   type Pet,
   type Species,
@@ -25,10 +25,10 @@ import {
 const presenter = new PetFormPresenter()
 
 // TODO feels like we should be able to make much of this implementation generic
-export function PetEditor({
+export function PetForm({
   value,
   onValueChange,
-}: EditorProps<Pet>) {
+}: FormProps<Pet>) {
   const model = useMemo(function () {
     return presenter.createModel(value)
   }, [value])
@@ -113,7 +113,7 @@ export function PetEditor({
       onFieldSubmit,
       onFieldBlur,
     ],
-    PetSpeciesCatForm,
+    PetSpeciesCatFieldsView,
   )
 
   const SpeciesDogComponent = usePartialObserverComponent(
@@ -131,7 +131,7 @@ export function PetEditor({
       onFieldSubmit,
       onFieldBlur,
     ],
-    PetSpeciesDogForm,
+    PetSpeciesDogFieldsView,
   )
 
   const speciesComponents = useMemo<Record<Species, ComponentType>>(function () {
@@ -161,7 +161,7 @@ export function PetEditor({
       onFieldBlur,
       speciesComponents,
     ],
-    PetSpeciesForm,
+    PetSpeciesFormFieldsView,
   )
 
   const PetForm = usePartialObserverComponent(

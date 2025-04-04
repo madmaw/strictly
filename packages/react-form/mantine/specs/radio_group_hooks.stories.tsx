@@ -6,11 +6,11 @@ import {
   type Meta,
   type StoryObj,
 } from '@storybook/react'
-import { type FormProps } from 'core/props'
+import { type FieldsViewProps } from 'core/props'
 import {
   type ErrorRenderer,
 } from 'mantine/error_renderer'
-import { useMantineForm } from 'mantine/hooks'
+import { useMantineFormFields } from 'mantine/hooks'
 import { type Field } from 'types/field'
 import {
   RADIO_GROUP_LABEL,
@@ -22,12 +22,12 @@ import {
 function Component({
   ErrorRenderer,
   ...props
-}: FormProps<{
+}: FieldsViewProps<{
   $: Field<RadioValue | null, string>,
 }> & {
   ErrorRenderer?: ErrorRenderer,
 }) {
-  const form = useMantineForm(props)
+  const form = useMantineFormFields(props)
   const RadioGroupComponent = form.radioGroup('$')
 
   return (

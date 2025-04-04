@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`PetForm > renders Disabled 1`] = `
+exports[`PetFieldsView > renders Disabled 1`] = `
 <div>
   <style
     data-mantine-styles="classes"
@@ -422,7 +422,7 @@ exports[`PetForm > renders Disabled 1`] = `
       </div>
     </div>
     <button
-      class="mantine-focus-auto mantine-active _hot_c4b7be m_77c9d27d mantine-Button-root m_87cf2631 mantine-UnstyledButton-root"
+      class="mantine-focus-auto mantine-active _hot_3200d9 m_77c9d27d mantine-Button-root m_87cf2631 mantine-UnstyledButton-root"
       style="--button-color: var(--mantine-color-white);"
       type="button"
     >
@@ -440,7 +440,7 @@ exports[`PetForm > renders Disabled 1`] = `
 </div>
 `;
 
-exports[`PetForm > renders Empty 1`] = `
+exports[`PetFieldsView > renders Empty 1`] = `
 <div>
   <style
     data-mantine-styles="classes"
@@ -627,7 +627,7 @@ exports[`PetForm > renders Empty 1`] = `
       </div>
     </div>
     <button
-      class="mantine-focus-auto mantine-active _hot_c4b7be m_77c9d27d mantine-Button-root m_87cf2631 mantine-UnstyledButton-root"
+      class="mantine-focus-auto mantine-active _hot_3200d9 m_77c9d27d mantine-Button-root m_87cf2631 mantine-UnstyledButton-root"
       style="--button-color: var(--mantine-color-white);"
       type="button"
     >
@@ -645,7 +645,7 @@ exports[`PetForm > renders Empty 1`] = `
 </div>
 `;
 
-exports[`PetForm > renders Errors 1`] = `
+exports[`PetFieldsView > renders Errors 1`] = `
 <div>
   <style
     data-mantine-styles="classes"
@@ -991,7 +991,7 @@ exports[`PetForm > renders Errors 1`] = `
       </div>
     </div>
     <button
-      class="mantine-focus-auto mantine-active _hot_c4b7be m_77c9d27d mantine-Button-root m_87cf2631 mantine-UnstyledButton-root"
+      class="mantine-focus-auto mantine-active _hot_3200d9 m_77c9d27d mantine-Button-root m_87cf2631 mantine-UnstyledButton-root"
       style="--button-color: var(--mantine-color-white);"
       type="button"
     >
@@ -1009,7 +1009,7 @@ exports[`PetForm > renders Errors 1`] = `
 </div>
 `;
 
-exports[`PetForm > renders Populated 1`] = `
+exports[`PetFieldsView > renders Populated 1`] = `
 <div>
   <style
     data-mantine-styles="classes"
@@ -1408,7 +1408,7 @@ exports[`PetForm > renders Populated 1`] = `
       </div>
     </div>
     <button
-      class="mantine-focus-auto mantine-active _hot_c4b7be m_77c9d27d mantine-Button-root m_87cf2631 mantine-UnstyledButton-root"
+      class="mantine-focus-auto mantine-active _hot_3200d9 m_77c9d27d mantine-Button-root m_87cf2631 mantine-UnstyledButton-root"
       style="--button-color: var(--mantine-color-white);"
       type="button"
     >

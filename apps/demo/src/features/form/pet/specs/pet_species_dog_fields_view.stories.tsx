@@ -3,13 +3,13 @@ import {
   type Meta,
   type StoryObj,
 } from '@storybook/react'
-import { PetSpeciesDogForm } from 'features/form/pet/pet_species_dog_form'
+import { PetSpeciesDogFieldsView } from 'features/form/pet/pet_species_dog_fields_view'
 import {
   NOT_A_BREED_ERROR,
   NOT_A_NUMBER_ERROR,
 } from 'features/form/pet/types'
 
-const Component = PetSpeciesDogForm
+const Component = PetSpeciesDogFieldsView
 
 const meta: Meta<typeof Component> = {
   component: Component,

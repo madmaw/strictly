@@ -16,10 +16,10 @@ import {
 } from '@strictly/define'
 import {
   type FieldAdaptersOfValues,
+  type FieldsViewProps,
   type FormFieldsOfFieldAdapters,
-  type FormProps,
   identityAdapter,
-  useMantineForm,
+  useMantineFormFields,
 } from '@strictly/react-form'
 
 export const petOwnerType = object()
@@ -97,10 +97,10 @@ export function EmailPlaceholder() {
   })
 }
 
-export type PetOwnerFormProps = FormProps<PetOwnerFields>
+export type PetOwnerFieldsViewProps = FieldsViewProps<PetOwnerFields>
 
-export function PetOwnerForm(props: PetOwnerFormProps) {
-  const form = useMantineForm(props)
+export function PetOwnerFieldsView(props: PetOwnerFieldsViewProps) {
+  const form = useMantineFormFields(props)
   const FirstNameInput = form.textInput('$.firstName')
   const SurnameInput = form.textInput('$.surname')
   const EmailInput = form.textInput('$.email')

@@ -3,11 +3,11 @@ import { toArray } from '@strictly/base'
 import {
   render,
 } from '@testing-library/react'
-import * as stories from './pet_species_cat_form.stories'
+import * as stories from './form_hooks.stories'
 
 const composedStories = composeStories(stories)
 
-describe('PetSpeciesCatForm', function () {
+describe('form hooks', function () {
   it.each(toArray(composedStories))('renders %s', function (_name, Story) {
     const wrapper = render(<Story />)
     expect(wrapper.container).toMatchSnapshot()

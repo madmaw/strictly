@@ -1,4 +1,5 @@
 import {
+  Button,
   Stack,
 } from '@mantine/core'
 import { action } from '@storybook/addon-actions'
@@ -6,29 +7,40 @@ import {
   type Meta,
   type StoryObj,
 } from '@storybook/react'
-import { type FormProps } from 'core/props'
-import { useMantineForm } from 'mantine/hooks'
+import { type FieldsViewProps } from 'core/props'
+import { useMantineFormFields } from 'mantine/hooks'
 import { type Field } from 'types/field'
 
-function SubFormImpl(props: FormProps<{
-  $: Field<string, string>,
-}>) {
-  const form = useMantineForm(props)
-  const TextInput = form.textInput('$')
-  return <TextInput label='sub form' />
-}
+const onClick = action('some button clicked')
 
-function Component(props: FormProps<{
+function SubFieldsView(props: FieldsViewProps<{
   $: Field<string, string>,
-  '$.a': Field<string, string>,
-}>) {
-  const form = useMantineForm(props)
-  const SubForm = form.subForm('$.a', SubFormImpl)
+}> & {
+  onClick: () => void,
+}) {
+  const form = useMantineFormFields(props)
   const TextInput = form.textInput('$')
   return (
     <Stack>
-      <TextInput label='form' />
-      <SubForm />
+      <TextInput label='sub fields view' />
+      <Button onClick={props.onClick}>
+        Bonus Button
+      </Button>
+    </Stack>
+  )
+}
+
+function Component(props: FieldsViewProps<{
+  $: Field<string, string>,
+  '$.a': Field<string, string>,
+}>) {
+  const form = useMantineFormFields(props)
+  const FieldsView = form.fieldsView('$.a', SubFieldsView)
+  const TextInput = form.textInput('$')
+  return (
+    <Stack>
+      <TextInput label='fields view' />
+      <FieldsView onClick={onClick} />
     </Stack>
   )
 }

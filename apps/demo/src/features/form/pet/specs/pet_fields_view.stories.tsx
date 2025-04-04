@@ -5,9 +5,9 @@ import {
   type StoryObj,
 } from '@storybook/react'
 import { MinimumStringLengthValidationErrorType } from '@strictly/define'
-import { PetForm } from 'features/form/pet/pet_form'
+import { PetFieldsView } from 'features/form/pet/pet_fields_view'
 
-const Component = PetForm
+const Component = PetFieldsView
 
 // TODO placeholder component
 function SpeciesComponent() {

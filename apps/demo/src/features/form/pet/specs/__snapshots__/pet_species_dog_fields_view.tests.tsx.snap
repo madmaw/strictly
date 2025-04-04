@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`PetSpeciesDogForm > renders Disabled 1`] = `
+exports[`PetSpeciesDogFieldsView > renders Disabled 1`] = `
 <div>
   <style
     data-mantine-styles="classes"
@@ -171,7 +171,7 @@ exports[`PetSpeciesDogForm > renders Disabled 1`] = `
 </div>
 `;
 
-exports[`PetSpeciesDogForm > renders Error 1`] = `
+exports[`PetSpeciesDogFieldsView > renders Error 1`] = `
 <div>
   <style
     data-mantine-styles="classes"
@@ -354,7 +354,7 @@ exports[`PetSpeciesDogForm > renders Error 1`] = `
 </div>
 `;
 
-exports[`PetSpeciesDogForm > renders Valid 1`] = `
+exports[`PetSpeciesDogFieldsView > renders Valid 1`] = `
 <div>
   <style
     data-mantine-styles="classes"

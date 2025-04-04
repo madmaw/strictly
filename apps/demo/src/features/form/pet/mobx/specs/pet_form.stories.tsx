@@ -3,9 +3,9 @@ import {
   type Meta,
   type StoryObj,
 } from '@storybook/react'
-import { PetEditor } from 'features/form/pet/mobx/pet_editor'
+import { PetForm } from 'features/form/pet/mobx/pet_form'
 
-const Component = PetEditor
+const Component = PetForm
 
 const meta: Meta<typeof Component> = {
   component: Component,

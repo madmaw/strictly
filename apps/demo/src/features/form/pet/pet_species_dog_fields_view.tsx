@@ -10,8 +10,8 @@ import {
 import {
   type ErrorOfField,
   type ErrorRendererProps,
-  type FormProps,
-  useMantineForm,
+  type FieldsViewProps,
+  useMantineFormFields,
 } from '@strictly/react-form'
 import { type PetFields } from './fields'
 import {
@@ -21,12 +21,12 @@ import {
   REQUIRED_ERROR,
 } from './types'
 
-export type PetSpeciesDogFormFields = Pick<
+export type PetSpeciesDogFields = Pick<
   PetFields,
   '$.species.dog:barks' | '$.species.dog:breed'
 >
 
-export type PetSpeciesFormDogProps = FormProps<PetSpeciesDogFormFields>
+export type PetSpeciesDogFieldsViewProps = FieldsViewProps<PetSpeciesDogFields>
 
 export function BreedLabel() {
   return t({
@@ -44,7 +44,7 @@ export function BarksLabel() {
 
 function BreedInputErrorRenderer({
   error,
-}: ErrorRendererProps<ErrorOfField<PetSpeciesDogFormFields['$.species.dog:breed']>>) {
+}: ErrorRendererProps<ErrorOfField<PetSpeciesDogFields['$.species.dog:breed']>>) {
   switch (error) {
     case NOT_A_BREED_ERROR:
       return t({
@@ -64,7 +64,7 @@ function BreedInputErrorRenderer({
 function BarksInputErrorRenderer({
   error,
 }: {
-  error: ErrorOfField<PetSpeciesDogFormFields['$.species.dog:barks']>,
+  error: ErrorOfField<PetSpeciesDogFields['$.species.dog:barks']>,
 }) {
   switch (error) {
     case NOT_A_NUMBER_ERROR:
@@ -95,8 +95,8 @@ const BREED_NAMES: Record<DogBreed, () => string> = {
     }),
 }
 
-export function PetSpeciesDogForm(props: PetSpeciesFormDogProps) {
-  const form = useMantineForm(props)
+export function PetSpeciesDogFieldsView(props: PetSpeciesDogFieldsViewProps) {
+  const form = useMantineFormFields(props)
   const BarksNumberInput = form.valueInput(
     '$.species.dog:barks',
     NumberInput,

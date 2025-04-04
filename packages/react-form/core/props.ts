@@ -1,6 +1,6 @@
 import { type Fields } from 'types/field'
 
-export type FormProps<F extends Fields> = {
+export type FieldsViewProps<F extends Fields> = {
   fields: F,
 
   onFieldValueChange<K extends keyof F>(this: void, key: K, value: F[K]['value']): void,
@@ -14,7 +14,7 @@ export type FormProps<F extends Fields> = {
   onFieldSubmit?(this: void, key: keyof F): boolean | void,
 }
 
-export type EditorProps<O> = {
+export type FormProps<O> = {
   value: O,
 
   onValueChange: (value: O) => void,

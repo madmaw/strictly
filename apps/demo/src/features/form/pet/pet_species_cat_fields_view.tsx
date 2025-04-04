@@ -10,8 +10,8 @@ import {
 import {
   type ErrorOfField,
   type ErrorRendererProps,
-  type FormProps,
-  useMantineForm,
+  type FieldsViewProps,
+  useMantineFormFields,
 } from '@strictly/react-form'
 import { type PetFields } from './fields'
 import {
@@ -20,7 +20,7 @@ import {
   REQUIRED_ERROR,
 } from './types'
 
-export type PetSpeciesCatFormFields = Pick<
+export type PetSpeciesCatFields = Pick<
   PetFields,
   '$.species.cat:meows' | '$.species.cat:breed'
 >
@@ -62,7 +62,7 @@ export function MeowFrequencyHigh() {
 
 function BreedInputErrorRenderer({
   error,
-}: ErrorRendererProps<ErrorOfField<PetSpeciesCatFormFields['$.species.cat:breed']>>) {
+}: ErrorRendererProps<ErrorOfField<PetSpeciesCatFields['$.species.cat:breed']>>) {
   switch (error) {
     case NOT_A_BREED_ERROR:
       return t({
@@ -97,10 +97,10 @@ const BREED_NAMES: Record<CatBreed, () => string> = {
     }),
 }
 
-export type PetSpeciesFormCatProps = FormProps<PetSpeciesCatFormFields>
+export type PetSpeciesCatFormFieldsViewProps = FieldsViewProps<PetSpeciesCatFields>
 
-export function PetSpeciesCatForm(props: PetSpeciesFormCatProps) {
-  const form = useMantineForm(props)
+export function PetSpeciesCatFieldsView(props: PetSpeciesCatFormFieldsViewProps) {
+  const form = useMantineFormFields(props)
   const MeowsSlider = form.valueInput('$.species.cat:meows', Slider)
   const BreedSelect = form.select('$.species.cat:breed')
   return (

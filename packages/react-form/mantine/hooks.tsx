@@ -15,7 +15,10 @@ import {
   Cache,
   type ElementOfArray,
 } from '@strictly/base'
-import { type FormProps } from 'core/props'
+import {
+  type FieldsViewProps,
+  type FormProps,
+} from 'core/props'
 import {
   observable,
   runInAction,
@@ -41,6 +44,8 @@ import {
   createCheckbox,
   type SuppliedCheckboxProps,
 } from './create_checkbox'
+import { createFieldsView } from './create_fields_view'
+import { createForm } from './create_form'
 import {
   createList,
   DefaultList,
@@ -58,7 +63,6 @@ import {
   createRadioGroup,
   type SuppliedRadioGroupProps,
 } from './create_radio_group'
-import { createSubForm } from './create_sub_form'
 import {
   createTextInput,
   type SuppliedTextInputProps,
@@ -78,7 +82,7 @@ function SimpleSelect(props: SelectProps & {
   return <Select {...props} />
 }
 
-export function useMantineForm<
+export function useMantineFormFields<
   F extends Fields,
 >({
   onFieldValueChange,
@@ -86,7 +90,7 @@ export function useMantineForm<
   onFieldFocus,
   onFieldSubmit,
   fields,
-}: FormProps<F>): MantineFormImpl<F> {
+}: FieldsViewProps<F>): MantineFormImpl<F> {
   const form = useMemo(
     function () {
       return new MantineFormImpl(fields)
@@ -177,14 +181,20 @@ class MantineFormImpl<
   > = new Cache(
     createList.bind(this),
   )
-  private readonly subFormCache: Cache<
+  private readonly fieldsViewCache: Cache<
     // the cache cannot reference keys, so we just use any
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    [keyof AllFieldsOfFields<F>, ComponentType<any>, FormProps<F>],
+    [keyof AllFieldsOfFields<F>, ComponentType<any>, FieldsViewProps<F>],
     ComponentType
   > = new Cache(
-    createSubForm.bind(this),
+    createFieldsView.bind(this),
   )
+  private readonly formCache: Cache<
+    // the cache cannot reference keys, so we just use any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    [keyof AllFieldsOfFields<F>, ComponentType<any>, FieldsViewProps<F>],
+    ComponentType
+  > = new Cache(createForm.bind(this))
 
   @observable.ref
   accessor fields: F
@@ -376,17 +386,41 @@ class MantineFormImpl<
     >
   }
 
-  // TODO have the returned component take any non-overlapping props as props
-  subForm<
+  fieldsView<
     K extends keyof AllFieldsOfFields<F>,
-    S extends SubFormFields<F, K>,
-  >(valuePath: K, SubForm: ComponentType<FormProps<S>>): ComponentType {
-    return this.subFormCache.retrieveOrCreate(
+    P extends FieldsViewProps<Fields> = FieldsViewProps<SubFormFields<F, K>>,
+  >(valuePath: K, FieldsView: ComponentType<P>): MantineFieldComponent<
+    FieldsViewProps<P['fields']>,
+    P
+  > {
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+    return this.fieldsViewCache.retrieveOrCreate(
       valuePath,
       // strip props from component since we lose information in the cache
       // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-      SubForm as ComponentType,
+      FieldsView as ComponentType,
       this,
-    )
+    ) as unknown as MantineFieldComponent<
+      FieldsViewProps<P['fields']>,
+      P
+    >
+  }
+
+  form<
+    K extends keyof AllFieldsOfFields<F>,
+    P extends FormProps<ValueTypeOfField<F[K]>> = FormProps<ValueTypeOfField<F[K]>>,
+  >(
+    valuePath: K,
+    Form: ComponentType<P>,
+  ): MantineFieldComponent<FormProps<ValueTypeOfField<F[K]>>, P> {
+    // strip props from component since we lose information in the cache
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+    return this.formCache.retrieveOrCreate(
+      valuePath,
+      // strip props from component since we lose information in the cache
+      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+      Form as ComponentType,
+      this,
+    ) as unknown as MantineFieldComponent<FormProps<ValueTypeOfField<F[K]>>, P>
   }
 }

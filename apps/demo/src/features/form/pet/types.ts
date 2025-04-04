@@ -18,7 +18,9 @@ import {
   type ValueOfType,
   type ValueToTypePathsOfType,
 } from '@strictly/define'
-import { petOwnerType } from './pet_owner_form'
+import { petOwnerType } from './pet_owner_fields_view'
+
+// TODO move definitions into respective views
 
 // eslint false negative
 // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
