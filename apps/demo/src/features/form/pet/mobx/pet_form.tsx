@@ -30,7 +30,7 @@ export function PetForm({
   value,
   onValueChange,
 }: FormProps<Pet>) {
-  const onValidSubmit = useCallback(
+  const onValidFieldSubmit = useCallback(
     function<Path extends ValuePathsOfPresenter<typeof presenter>> (model: PetFormModel, valuePath: Path) {
       const typePath = presenter.typePath(valuePath)
       if (typePath === '$.newTag' && model.fields['$.newTag'].value.trim().length > 0) {
@@ -45,25 +45,24 @@ export function PetForm({
     [],
   )
 
+  const onValidFormSubmit = useCallback(
+    function (_model: PetFormModel, value: Pet) {
+      onValueChange(value)
+    },
+    [onValueChange],
+  )
+
   const {
     model,
     onFieldValueChange,
     onFieldBlur,
     onFieldFocus,
     onFieldSubmit,
-  } = useDefaultMobxFormHooks(presenter, value, onValidSubmit)
-
-  const onSubmit = useCallback(
-    function () {
-      if (presenter.validateAll(model)) {
-        onValueChange(model.value)
-      }
-    },
-    [
-      model,
-      onValueChange,
-    ],
-  )
+    onFormSubmit,
+  } = useDefaultMobxFormHooks(presenter, value, {
+    onValidFieldSubmit,
+    onValidFormSubmit,
+  })
 
   const onRemoveTag = useCallback(
     function (valuePath: TagValuePath) {
@@ -149,7 +148,7 @@ export function PetForm({
       return {
         fields: model.fields,
         onFieldValueChange,
-        onSubmit,
+        onSubmit: onFormSubmit,
         onFieldSubmit,
         onFieldFocus,
         onFieldBlur,
@@ -160,7 +159,7 @@ export function PetForm({
     [
       model,
       onFieldValueChange,
-      onSubmit,
+      onFormSubmit,
       onFieldSubmit,
       onFieldFocus,
       onFieldBlur,

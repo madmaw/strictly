@@ -47,6 +47,7 @@ export const Valid: Story = {
         'nervous',
       ],
       species: {
+        breed: 'DSH',
         type: 'cat',
         meows: 2,
       },

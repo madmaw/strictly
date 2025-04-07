@@ -25,12 +25,16 @@ type ModelOfPresenter<P extends FormPresenter<any, any, any, any>> = ReturnType<
 export function useDefaultMobxFormHooks<P extends FormPresenter<any, any, any, any>>(
   presenter: P,
   value: ValueOfPresenter<P>,
-  onValidSubmit?: <Path extends ValuePathsOfPresenter<P>>(
-    model: ModelOfPresenter<P>,
-    valuePath: Path,
-  ) => void,
+  {
+    onValidFieldSubmit,
+    onValidFormSubmit,
+  }: {
+    onValidFieldSubmit?: <Path extends ValuePathsOfPresenter<P>>(model: ModelOfPresenter<P>, valuePath: Path) => void,
+    onValidFormSubmit?: (model: ModelOfPresenter<P>, value: ValueOfPresenter<P>) => void,
+  },
 ): {
   model: ModelOfPresenter<P>,
+  onFormSubmit?: (value: ValueOfPresenter<P>) => void,
 } & Omit<FieldsViewProps<ModelOfPresenter<P>['fields']>, 'fields'> {
   const model = useMemo(function () {
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
@@ -57,14 +61,14 @@ export function useDefaultMobxFormHooks<P extends FormPresenter<any, any, any, a
   const onFieldSubmit = useCallback(
     function<Path extends ValuePathsOfPresenter<P>> (valuePath: Path) {
       if (presenter.validateField(model, valuePath)) {
-        onValidSubmit?.(model, valuePath)
+        onValidFieldSubmit?.(model, valuePath)
       }
       return false
     },
     [
       presenter,
       model,
-      onValidSubmit,
+      onValidFieldSubmit,
     ],
   )
 
@@ -85,10 +89,24 @@ export function useDefaultMobxFormHooks<P extends FormPresenter<any, any, any, a
     ],
   )
 
+  const onFormSubmit = useCallback(
+    function () {
+      if (presenter.validateAll(model)) {
+        onValidFormSubmit?.(model, model.value)
+      }
+    },
+    [
+      presenter,
+      model,
+      onValidFormSubmit,
+    ],
+  )
+
   return {
     model,
     onFieldValueChange,
     onFieldSubmit,
     onFieldBlur,
+    onFormSubmit,
   }
 }
