@@ -13,14 +13,14 @@ describe('ReadonlyTypeDefOf', function () {
   describe('literal', function () {
     type T = ReadonlyTypeOfType<typeof numberType._type>
 
-    let t: {
+    type C = {
       readonly definition: {
         readonly type: TypeDefType.Literal,
         readonly valuePrototype: [number],
       },
     }
     it('equals expected type', function () {
-      expectTypeOf(t).toEqualTypeOf<T>()
+      expectTypeOf<C>().toEqualTypeOf<T>()
     })
   })
 
@@ -28,7 +28,7 @@ describe('ReadonlyTypeDefOf', function () {
     const builder = list(numberType)
     type T = ReadonlyTypeOfType<typeof builder._type>
 
-    let t: {
+    type C = {
       readonly definition: {
         readonly type: TypeDefType.List,
         readonly elements: {
@@ -38,7 +38,7 @@ describe('ReadonlyTypeDefOf', function () {
       },
     }
     it('equals expected type', function () {
-      expectTypeOf(t).toEqualTypeOf<T>()
+      expectTypeOf<C>().toEqualTypeOf<T>()
     })
   })
 
@@ -46,7 +46,7 @@ describe('ReadonlyTypeDefOf', function () {
     const builder = record<typeof numberType, 'a' | 'b'>(numberType)
     type T = ReadonlyTypeOfType<typeof builder._type>
 
-    let t: {
+    type C = {
       readonly definition: {
         readonly type: TypeDefType.Record,
         readonly keyPrototype: 'a' | 'b',
@@ -57,7 +57,7 @@ describe('ReadonlyTypeDefOf', function () {
       },
     }
     it('equals expected type', function () {
-      expectTypeOf(t).toEqualTypeOf<T>()
+      expectTypeOf<C>().toEqualTypeOf<T>()
     })
   })
 
@@ -67,7 +67,7 @@ describe('ReadonlyTypeDefOf', function () {
       .optionalField('b', stringType)
     type T = ReadonlyTypeOfType<typeof builder._type>
 
-    let t: {
+    type C = {
       readonly definition: {
         readonly type: TypeDefType.Object,
         readonly fields: {
@@ -83,7 +83,7 @@ describe('ReadonlyTypeDefOf', function () {
       },
     }
     it('equals expected type', function () {
-      expectTypeOf(t).toEqualTypeOf<T>()
+      expectTypeOf<C>().toEqualTypeOf<T>()
     })
   })
 
@@ -93,7 +93,7 @@ describe('ReadonlyTypeDefOf', function () {
       .or('2', stringType)
     type T = ReadonlyTypeOfType<typeof builder._type>
 
-    let t: {
+    type C = {
       readonly definition: {
         readonly type: TypeDefType.Union,
         readonly discriminator: null,
@@ -114,7 +114,7 @@ describe('ReadonlyTypeDefOf', function () {
       },
     }
     it('equals expected type', function () {
-      expectTypeOf(t).toEqualTypeOf<T>()
+      expectTypeOf<C>().toEqualTypeOf<T>()
     })
   })
 
@@ -122,7 +122,7 @@ describe('ReadonlyTypeDefOf', function () {
     const builder = record<typeof numberType, 'a'>(numberType).partialKeys()
     type T = ReadonlyTypeOfType<typeof builder._type>
 
-    let t: {
+    type C = {
       readonly definition: {
         readonly type: TypeDefType.Record,
         readonly keyPrototype: 'a',
@@ -133,7 +133,7 @@ describe('ReadonlyTypeDefOf', function () {
       },
     }
     it('equals expected type', function () {
-      expectTypeOf(t).toEqualTypeOf<T>()
+      expectTypeOf<C>().toEqualTypeOf<T>()
     })
   })
 
@@ -141,7 +141,7 @@ describe('ReadonlyTypeDefOf', function () {
     const builder = record<typeof numberType, 'a'>(numberType).readonlyKeys()
     type T = ReadonlyTypeOfType<typeof builder._type>
 
-    let t: {
+    type C = {
       readonly definition: {
         readonly type: TypeDefType.Record,
         readonly keyPrototype: 'a',
@@ -152,7 +152,7 @@ describe('ReadonlyTypeDefOf', function () {
       },
     }
     it('equals expected type', function () {
-      expectTypeOf(t).toEqualTypeOf<T>()
+      expectTypeOf<C>().toEqualTypeOf<T>()
     })
   })
 })

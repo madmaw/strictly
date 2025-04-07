@@ -12,13 +12,13 @@ import { type PathsOfType } from 'types/paths_of_type'
 
 describe('PathsOfType', function () {
   describe('literal', function () {
-    let path: '$'
+    type P = '$'
 
     describe('regular', function () {
       type T = PathsOfType<typeof stringType>
 
       it('equals expected type', function () {
-        expectTypeOf(path).toEqualTypeOf<T>()
+        expectTypeOf<P>().toEqualTypeOf<T>()
       })
     })
 
@@ -27,20 +27,20 @@ describe('PathsOfType', function () {
       type T = PathsOfType<typeof builder>
 
       it('equals expected type', function () {
-        expectTypeOf(path).toEqualTypeOf<T>()
+        expectTypeOf<P>().toEqualTypeOf<T>()
       })
     })
   })
 
   describe('list', function () {
-    let path: '$' | `$.${number}`
+    type P = '$' | `$.${number}`
 
     describe('mutable', function () {
       const builder = list(stringType)
       type T = PathsOfType<typeof builder>
 
       it('equals expected type', function () {
-        expectTypeOf(path).toEqualTypeOf<T>()
+        expectTypeOf<P>().toEqualTypeOf<T>()
       })
     })
 
@@ -49,7 +49,7 @@ describe('PathsOfType', function () {
       type T = PathsOfType<typeof builder>
 
       it('equals expected type', function () {
-        expectTypeOf(path).toEqualTypeOf<T>()
+        expectTypeOf<P>().toEqualTypeOf<T>()
       })
     })
 
@@ -58,7 +58,7 @@ describe('PathsOfType', function () {
       type T = PathsOfType<typeof builder>
 
       it('equals expected type', function () {
-        expectTypeOf(path).toEqualTypeOf<T>()
+        expectTypeOf<P>().toEqualTypeOf<T>()
       })
     })
 
@@ -66,22 +66,22 @@ describe('PathsOfType', function () {
       const builder = list(stringType)
       type T = PathsOfType<typeof builder, 'o'>
 
-      let path: '$' | `$.o`
+      type P = '$' | `$.o`
       it('equals expected type', function () {
-        expectTypeOf(path).toEqualTypeOf<T>()
+        expectTypeOf<P>().toEqualTypeOf<T>()
       })
     })
   })
 
   describe('record', function () {
-    let path: '$' | `$.${string}` | `$.${number}`
+    type P = '$' | `$.${string}` | `$.${number}`
 
     describe('mutable', function () {
       const builder = record(stringType)
       type T = PathsOfType<typeof builder>
 
       it('equals expected type', function () {
-        expectTypeOf(path).toEqualTypeOf<T>()
+        expectTypeOf<P>().toEqualTypeOf<T>()
       })
     })
 
@@ -89,9 +89,9 @@ describe('PathsOfType', function () {
       const builder = record<typeof stringType, 'a' | 'b'>(stringType)
       type T = PathsOfType<typeof builder>
 
-      let path: '$' | '$.a' | '$.b'
+      type P = '$' | '$.a' | '$.b'
       it('equals expected type', function () {
-        expectTypeOf(path).toEqualTypeOf<T>()
+        expectTypeOf<P>().toEqualTypeOf<T>()
       })
     })
 
@@ -99,9 +99,9 @@ describe('PathsOfType', function () {
       const builder = record<typeof stringType, 1 | 2 | 3>(stringType)
       type T = PathsOfType<typeof builder>
 
-      let path: '$' | '$.1' | '$.2' | '$.3'
+      type P = '$' | '$.1' | '$.2' | '$.3'
       it('equals expected type', function () {
-        expectTypeOf(path).toEqualTypeOf<T>()
+        expectTypeOf<P>().toEqualTypeOf<T>()
       })
     })
 
@@ -110,7 +110,7 @@ describe('PathsOfType', function () {
       type T = PathsOfType<typeof builder>
 
       it('equals expected type', function () {
-        expectTypeOf(path).toEqualTypeOf<T>()
+        expectTypeOf<P>().toEqualTypeOf<T>()
       })
     })
 
@@ -119,7 +119,7 @@ describe('PathsOfType', function () {
       type T = PathsOfType<typeof builder>
 
       it('equals expected type', function () {
-        expectTypeOf(path).toEqualTypeOf<T>()
+        expectTypeOf<P>().toEqualTypeOf<T>()
       })
     })
 
@@ -128,7 +128,7 @@ describe('PathsOfType', function () {
       type T = PathsOfType<typeof builder>
 
       it('equals expected type', function () {
-        expectTypeOf(path).toEqualTypeOf<T>()
+        expectTypeOf<P>().toEqualTypeOf<T>()
       })
     })
 
@@ -136,9 +136,9 @@ describe('PathsOfType', function () {
       const builder = record(stringType)
       type T = PathsOfType<typeof builder, 'x'>
 
-      let path: '$' | '$.x'
+      type P = '$' | '$.x'
       it('equals expected type', function () {
-        expectTypeOf(path).toEqualTypeOf<T>()
+        expectTypeOf<P>().toEqualTypeOf<T>()
       })
     })
   })
@@ -151,9 +151,9 @@ describe('PathsOfType', function () {
         .field('s', stringType)
       type T = PathsOfType<typeof builder>
 
-      let path: '$' | '$.n' | '$.b' | '$.s'
+      type P = '$' | '$.n' | '$.b' | '$.s'
       it('equals expected type', function () {
-        expectTypeOf(path).toEqualTypeOf<T>()
+        expectTypeOf<P>().toEqualTypeOf<T>()
       })
 
       it('can be used in a record', function () {
@@ -171,7 +171,7 @@ describe('PathsOfType', function () {
 
       it('ignores override', function () {
         type T = PathsOfType<typeof builder, 'y'>
-        expectTypeOf(path).toEqualTypeOf<T>()
+        expectTypeOf<P>().toEqualTypeOf<T>()
       })
     })
 
@@ -181,9 +181,9 @@ describe('PathsOfType', function () {
         .field('s2', object().field('a2', stringType))
       type T = PathsOfType<typeof builder>
 
-      let path: '$' | '$.s1' | '$.s1.a1' | '$.s2' | '$.s2.a2'
+      type P = '$' | '$.s1' | '$.s1.a1' | '$.s2' | '$.s2.a2'
       it('equals expected type', function () {
-        expectTypeOf(path).toEqualTypeOf<T>()
+        expectTypeOf<P>().toEqualTypeOf<T>()
       })
     })
 
@@ -194,18 +194,18 @@ describe('PathsOfType', function () {
       describe('no override', function () {
         type T = PathsOfType<typeof builder>
 
-        let path: '$' | '$.l' | `$.l.${number}`
+        type P = '$' | '$.l' | `$.l.${number}`
         it('equals expected type', function () {
-          expectTypeOf(path).toEqualTypeOf<T>()
+          expectTypeOf<P>().toEqualTypeOf<T>()
         })
       })
 
       describe('passes override', function () {
         type T = PathsOfType<typeof builder, 'o'>
 
-        let path: '$' | '$.l' | '$.l.o'
+        type P = '$' | '$.l' | '$.l.o'
         it('equals expected type', function () {
-          expectTypeOf(path).toEqualTypeOf<T>()
+          expectTypeOf<P>().toEqualTypeOf<T>()
         })
       })
     })
@@ -218,9 +218,9 @@ describe('PathsOfType', function () {
         .or('2', stringType)
       type T = PathsOfType<typeof builder>
 
-      let path: '$'
+      type P = '$'
       it('equals expected type', function () {
-        expectTypeOf(path).toEqualTypeOf<T>()
+        expectTypeOf<P>().toEqualTypeOf<T>()
       })
     })
 
@@ -231,9 +231,9 @@ describe('PathsOfType', function () {
         .or('3', object().field('c', stringType).field('a', stringType))
       type T = PathsOfType<typeof builder>
 
-      let path: '$' | '$.a' | '$.b' | '$.c'
+      type P = '$' | '$.a' | '$.b' | '$.c'
       it('equals expected type', function () {
-        expectTypeOf(path).toEqualTypeOf<T>()
+        expectTypeOf<P>().toEqualTypeOf<T>()
       })
     })
 
@@ -249,9 +249,9 @@ describe('PathsOfType', function () {
         ))
       type T = PathsOfType<typeof builder>
 
-      let path: '$' | '$.a' | '$.a.aa' | '$.b' | '$.b.bb'
+      type P = '$' | '$.a' | '$.a.aa' | '$.b' | '$.b.bb'
       it('equals expected type', function () {
-        expectTypeOf(path).toEqualTypeOf<T>()
+        expectTypeOf<P>().toEqualTypeOf<T>()
       })
     })
   })
@@ -263,10 +263,10 @@ describe('PathsOfType', function () {
 
     type T = PathsOfType<typeof builder>
 
-    let path: '$' | '$.1:a' | '$.2:b'
+    type P = '$' | '$.1:a' | '$.2:b'
 
     it('equals expected type', function () {
-      expectTypeOf(path).toEqualTypeOf<T>()
+      expectTypeOf<P>().toEqualTypeOf<T>()
     })
   })
 
@@ -283,10 +283,10 @@ describe('PathsOfType', function () {
 
     type T = PathsOfType<typeof builder>
 
-    let path: '$' | '$.1:p:a' | '$.2:q:b'
+    type P = '$' | '$.1:p:a' | '$.2:q:b'
 
     it('equals expected type', function () {
-      expectTypeOf(path).toEqualTypeOf<T>()
+      expectTypeOf<P>().toEqualTypeOf<T>()
     })
   })
 

@@ -10,7 +10,7 @@ describe('FlattenedAccessorsOfType', function () {
     const builder = record<typeof numberType, string>(numberType)
     type V = FlattenedAccessorsOfType<typeof builder>
 
-    let v: {
+    type C = {
       readonly $: {
         readonly value: Record<string, number>,
         set: (v: Record<string, number>) => void,
@@ -21,7 +21,7 @@ describe('FlattenedAccessorsOfType', function () {
       },
     }
     it('equals expected type', function () {
-      expectTypeOf(v).toEqualTypeOf<V>()
+      expectTypeOf<C>().toEqualTypeOf<V>()
     })
   })
 })

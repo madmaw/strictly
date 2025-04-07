@@ -85,14 +85,14 @@ describe('all', function () {
           ValueOfType<typeof typeDef>
         >
       >
-      let t: Partial<{
+      type C = Partial<{
         readonly $: ConvenientFieldAdapter<Readonly<Record<'a' | 'b', number>>, ValueOfType<typeof typeDef>>,
         readonly ['$.a']: ConvenientFieldAdapter<number, ValueOfType<typeof typeDef>>,
         readonly ['$.b']: ConvenientFieldAdapter<number, ValueOfType<typeof typeDef>>,
       }>
 
       it('equals expected type', function () {
-        expectTypeOf(t).toEqualTypeOf<T>()
+        expectTypeOf<C>().toEqualTypeOf<T>()
       })
     })
 
@@ -104,13 +104,13 @@ describe('all', function () {
         FlattenedValuesOfType<typeof typeDef>,
         ValueOfType<typeof typeDef>
       >
-      let t: Partial<{
+      type C = Partial<{
         readonly $: ConvenientFieldAdapter<{ readonly x: string, readonly y: boolean }, ValueOfType<typeof typeDef>>,
         readonly ['$.x']: ConvenientFieldAdapter<string, ValueOfType<typeof typeDef>>,
         readonly ['$.y']: ConvenientFieldAdapter<boolean, ValueOfType<typeof typeDef>>,
       }>
       it('equals expected type', function () {
-        expectTypeOf(t).toEqualTypeOf<T>()
+        expectTypeOf<C>().toEqualTypeOf<T>()
       })
 
       it('matches representative adapters', function () {
@@ -147,12 +147,12 @@ describe('all', function () {
         A,
         typeof valuePathsToTypePaths
       >
-      let t: {
+      type C = {
         readonly '$.a': A['$.x'],
         readonly '$.b': A['$.y'],
       }
       it('equals expected type', function () {
-        expectTypeOf(t).toEqualTypeOf<T>()
+        expectTypeOf<C>().toEqualTypeOf<T>()
       })
     })
   })

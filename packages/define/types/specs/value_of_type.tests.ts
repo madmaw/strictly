@@ -12,9 +12,9 @@ describe('ValueOfType', function () {
     }
     type T = ValueOfType<{ definition: TypeD }>
 
-    let t: 'a' | 'b' | 'c'
+    type C = 'a' | 'b' | 'c'
     it('equals expected type', function () {
-      expectTypeOf(t).toEqualTypeOf<T>()
+      expectTypeOf<C>().toEqualTypeOf<T>()
     })
   })
 
@@ -29,9 +29,9 @@ describe('ValueOfType', function () {
       }
       type T = ValueOfType<{ definition: TypeD }>
       describe('mutable', function () {
-        let a: ('a' | 'b' | 'c')[]
+        type C = ('a' | 'b' | 'c')[]
         it('equals expected type', function () {
-          expectTypeOf(a).toEqualTypeOf<T>()
+          expectTypeOf<C>().toEqualTypeOf<T>()
         })
       })
 
@@ -46,9 +46,9 @@ describe('ValueOfType', function () {
           },
         }>
 
-        let a: readonly ('a' | 'b' | 'c')[]
+        type C = readonly ('a' | 'b' | 'c')[]
         it('equals expected type', function () {
-          expectTypeOf(a).toEqualTypeOf<R>()
+          expectTypeOf<C>().toEqualTypeOf<R>()
         })
       })
     })
@@ -66,9 +66,9 @@ describe('ValueOfType', function () {
     type T = ValueOfType<{ definition: TypeD }>
 
     describe('mutable', function () {
-      let t: Record<'x' | 'y' | 'z', 'a' | 'b' | 'c'>
+      type C = Record<'x' | 'y' | 'z', 'a' | 'b' | 'c'>
       it('equals expected type', function () {
-        expectTypeOf(t).toEqualTypeOf<T>()
+        expectTypeOf<C>().toEqualTypeOf<T>()
       })
     })
 
@@ -83,10 +83,10 @@ describe('ValueOfType', function () {
           },
         },
       }>
-      let r: Readonly<Record<'x' | 'y' | 'z', 'a' | 'b' | 'c'>>
+      type C = Readonly<Record<'x' | 'y' | 'z', 'a' | 'b' | 'c'>>
 
       it('equals expected type', function () {
-        expectTypeOf(r).toEqualTypeOf<R>()
+        expectTypeOf<C>().toEqualTypeOf<R>()
       })
     })
 
@@ -101,9 +101,9 @@ describe('ValueOfType', function () {
       }
       type T = ValueOfType<{ definition: TypeD }>
 
-      let t: Partial<Record<'x' | 'y' | 'z', 'a' | 'b' | 'c'>>
+      type C = Partial<Record<'x' | 'y' | 'z', 'a' | 'b' | 'c'>>
       it('equals expected type', function () {
-        expectTypeOf(t).toEqualTypeOf<T>()
+        expectTypeOf<C>().toEqualTypeOf<T>()
       })
     })
 
@@ -118,9 +118,9 @@ describe('ValueOfType', function () {
       }
       type T = ValueOfType<{ definition: TypeD }>
 
-      let t: Partial<Readonly<Record<'x' | 'y' | 'z', 'a' | 'b' | 'c'>>>
+      type C = Partial<Readonly<Record<'x' | 'y' | 'z', 'a' | 'b' | 'c'>>>
       it('equals expected type', function () {
-        expectTypeOf(t).toEqualTypeOf<T>()
+        expectTypeOf<C>().toEqualTypeOf<T>()
       })
     })
   })
@@ -142,13 +142,13 @@ describe('ValueOfType', function () {
     type T = ValueOfType<{ definition: TypeD }>
 
     describe('mutable', function () {
-      let value: {
+      type C = {
         a: 'a' | 'b',
         b: number,
       }
 
       it('equals expected type', function () {
-        expectTypeOf(value).toEqualTypeOf<T>()
+        expectTypeOf<C>().toEqualTypeOf<T>()
       })
     })
 
@@ -168,12 +168,12 @@ describe('ValueOfType', function () {
       }
       type T = ValueOfType<{ definition: TypeD }>
 
-      let value: {
+      type C = {
         readonly a: 'a' | 'b',
         readonly b: number,
       }
       it('equals expected type', function () {
-        expectTypeOf(value).toEqualTypeOf<T>()
+        expectTypeOf<C>().toEqualTypeOf<T>()
       })
     })
 
@@ -193,13 +193,13 @@ describe('ValueOfType', function () {
       }
       type T = ValueOfType<{ definition: TypeD }>
 
-      let v: {
+      type C = {
         a?: 'a' | 'b',
         b?: number,
       }
 
       it('equals expected type', function () {
-        expectTypeOf(v).toEqualTypeOf<T>()
+        expectTypeOf<C>().toEqualTypeOf<T>()
       })
     })
   })
@@ -227,10 +227,10 @@ describe('ValueOfType', function () {
         },
       }>
 
-      let t: null | number | string
+      type C = null | number | string
 
       it('equals expected type', function () {
-        expectTypeOf(t).toEqualTypeOf<T>()
+        expectTypeOf<C>().toEqualTypeOf<T>()
       })
     })
 
@@ -270,7 +270,7 @@ describe('ValueOfType', function () {
         },
       }>
 
-      let t: {
+      type C = {
         readonly d: 1,
         b: string,
       } | {
@@ -279,7 +279,7 @@ describe('ValueOfType', function () {
       }
 
       it('equals expected type', function () {
-        expectTypeOf(t).toEqualTypeOf<T>()
+        expectTypeOf<C>().toEqualTypeOf<T>()
       })
     })
 
@@ -313,7 +313,7 @@ describe('ValueOfType', function () {
         }>
       >
 
-      let t: {
+      type C = {
         readonly d: 1,
         b: string,
       } | {
@@ -322,7 +322,7 @@ describe('ValueOfType', function () {
       }
 
       it('equals expected type', function () {
-        expectTypeOf(t).toEqualTypeOf<T>()
+        expectTypeOf<C>().toEqualTypeOf<T>()
       })
     })
   })

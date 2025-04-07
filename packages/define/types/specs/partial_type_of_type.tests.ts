@@ -14,7 +14,7 @@ describe('PartialTypeDefOf', function () {
   describe('literal', function () {
     type T = PartialTypeOfType<typeof numberType._type>
 
-    let t: {
+    type C = {
       readonly typeDef: {
         readonly type: TypeDefType.Union,
         readonly discriminator: null,
@@ -32,7 +32,7 @@ describe('PartialTypeDefOf', function () {
     }
 
     it('equals expected type', function () {
-      expectTypeOf(t).toEqualTypeOf<T>()
+      expectTypeOf<C>().toEqualTypeOf<T>()
     })
   })
 
@@ -40,7 +40,7 @@ describe('PartialTypeDefOf', function () {
     const builder = list(numberType)
     type T = PartialTypeOfType<typeof builder._type>
 
-    let t: {
+    type C = {
       readonly typeDef: {
         readonly type: TypeDefType.Union,
         readonly discriminator: null,
@@ -70,7 +70,7 @@ describe('PartialTypeDefOf', function () {
       },
     }
     it('equals expected type', function () {
-      expectTypeOf(t).toEqualTypeOf<T>()
+      expectTypeOf<C>().toEqualTypeOf<T>()
     })
   })
 
@@ -78,7 +78,7 @@ describe('PartialTypeDefOf', function () {
     const builder = record<typeof numberType, 'a' | 'b'>(numberType)
     type T = SimplifyDeep<PartialTypeOfType<typeof builder._type>>
 
-    let t: {
+    type C = {
       readonly typeDef: {
         readonly type: TypeDefType.Union,
         readonly discriminator: null,
@@ -110,7 +110,7 @@ describe('PartialTypeDefOf', function () {
     }
 
     it('equals expected type', function () {
-      expectTypeOf(t).toEqualTypeOf<T>()
+      expectTypeOf<C>().toEqualTypeOf<T>()
     })
   })
 
@@ -120,7 +120,7 @@ describe('PartialTypeDefOf', function () {
       .readonlyField('b', stringType)
     type T = PartialTypeOfType<typeof builder._type>
 
-    let t: {
+    type C = {
       readonly typeDef: {
         readonly type: TypeDefType.Union,
         readonly discriminator: null,
@@ -167,7 +167,7 @@ describe('PartialTypeDefOf', function () {
     }
 
     it('equals expected type', function () {
-      expectTypeOf(t).toEqualTypeOf<T>()
+      expectTypeOf<C>().toEqualTypeOf<T>()
     })
   })
 
@@ -178,7 +178,7 @@ describe('PartialTypeDefOf', function () {
         .or('2', stringType)
       type T = PartialTypeOfType<typeof builder._type>
 
-      let t: {
+      type C = {
         readonly typeDef: {
           readonly type: TypeDefType.Union,
           readonly discriminator: null,
@@ -206,7 +206,7 @@ describe('PartialTypeDefOf', function () {
       }
 
       it('equals expected type', function () {
-        expectTypeOf(t).toEqualTypeOf<T>()
+        expectTypeOf<C>().toEqualTypeOf<T>()
       })
     })
   })
@@ -215,7 +215,7 @@ describe('PartialTypeDefOf', function () {
     const builder = list(numberType).readonly()
     type T = PartialTypeOfType<typeof builder._type>
 
-    let t: {
+    type C = {
       readonly typeDef: {
         readonly type: TypeDefType.Union,
         readonly discriminator: null,
@@ -245,7 +245,7 @@ describe('PartialTypeDefOf', function () {
       },
     }
     it('equals expected type', function () {
-      expectTypeOf(t).toEqualTypeOf<T>()
+      expectTypeOf<C>().toEqualTypeOf<T>()
     })
   })
 })

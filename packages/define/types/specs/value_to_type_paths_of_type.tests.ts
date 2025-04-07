@@ -19,11 +19,11 @@ describe('ValueToTypePathsOfType', function () {
   describe('literal', function () {
     type T = ValueToTypePathsOfType<typeof numberType.narrow>
 
-    let t: {
+    type C = {
       readonly $: '$',
     }
     it('equals expected type', function () {
-      expectTypeOf(t).toEqualTypeOf<T>()
+      expectTypeOf<C>().toEqualTypeOf<T>()
     })
   })
 
@@ -31,13 +31,13 @@ describe('ValueToTypePathsOfType', function () {
     const builder = list(list(numberType))
     type T = SimplifyDeep<ValueToTypePathsOfType<typeof builder.narrow>>
 
-    let t: {
+    type C = {
       readonly $: '$',
       readonly [_: `$.${number}`]: '$.*',
       readonly [_: `$.${number}.${number}`]: '$.*.*',
     }
     it('equals expected type', function () {
-      expectTypeOf(t).toEqualTypeOf<T>()
+      expectTypeOf<C>().toEqualTypeOf<T>()
     })
   })
 
@@ -46,7 +46,7 @@ describe('ValueToTypePathsOfType', function () {
     const builder = record<typeof l, 'a' | 'b'>(l)
     type T = SimplifyDeep<ValueToTypePathsOfType<typeof builder>>
 
-    let t: {
+    type C = {
       readonly $: '$',
       readonly [`$.a`]: '$.*',
       readonly [`$.b`]: '$.*',
@@ -54,7 +54,7 @@ describe('ValueToTypePathsOfType', function () {
       readonly [_: `$.b.${number}`]: '$.*.*',
     }
     it('equals expected type', function () {
-      expectTypeOf(t).toEqualTypeOf<T>()
+      expectTypeOf<C>().toEqualTypeOf<T>()
     })
 
     it('allows lookup of type path', function () {
@@ -71,7 +71,7 @@ describe('ValueToTypePathsOfType', function () {
 
     type T = SimplifyDeep<ValueToTypePathsOfType<typeof builder>>
 
-    let t: {
+    type C = {
       readonly $: '$',
       readonly [`$.a`]: '$.a',
       readonly [`$.b`]: '$.b',
@@ -80,7 +80,7 @@ describe('ValueToTypePathsOfType', function () {
       readonly [_: `$.a.${number}`]: '$.a.*',
     }
     it('equals expected type', function () {
-      expectTypeOf(t).toEqualTypeOf<T>()
+      expectTypeOf<C>().toEqualTypeOf<T>()
     })
 
     it('has the same value paths', function () {
@@ -101,13 +101,13 @@ describe('ValueToTypePathsOfType', function () {
         .or('2', stringType)
       type T = SimplifyDeep<ValueToTypePathsOfType<typeof builder>>
 
-      let t: {
+      type C = {
         readonly $: '$',
         readonly [_: `$.${number}`]: '$.*',
       }
 
       it('equals expected type', function () {
-        expectTypeOf(t).toEqualTypeOf<T>()
+        expectTypeOf<C>().toEqualTypeOf<T>()
       })
     })
 
@@ -117,7 +117,7 @@ describe('ValueToTypePathsOfType', function () {
         .or('2', object().field('x', numberType).field('y', stringType))
       type T = SimplifyDeep<ValueToTypePathsOfType<typeof builder>>
 
-      let t: {
+      type C = {
         readonly $: '$',
         readonly ['$.1:a']: '$.1:a',
         readonly ['$.1:b']: '$.1:b',
@@ -125,7 +125,7 @@ describe('ValueToTypePathsOfType', function () {
         readonly ['$.2:y']: '$.2:y',
       }
       it('equals expected type', function () {
-        expectTypeOf(t).toEqualTypeOf<T>()
+        expectTypeOf<C>().toEqualTypeOf<T>()
       })
 
       it('has the same value paths', function () {
@@ -145,13 +145,13 @@ describe('ValueToTypePathsOfType', function () {
 
     type T = SimplifyDeep<ValueToTypePathsOfType<typeof builder>>
 
-    let t: {
+    type C = {
       readonly $: '$',
       readonly [_: `$.${number}`]: '$.*',
       readonly [_: `$.${number}.${number}`]: '$.*.*',
     }
     it('equals expected type', function () {
-      expectTypeOf(t).toEqualTypeOf<T>()
+      expectTypeOf<C>().toEqualTypeOf<T>()
     })
   })
 
@@ -160,13 +160,13 @@ describe('ValueToTypePathsOfType', function () {
 
     type T = SimplifyDeep<ValueToTypePathsOfType<typeof builder>>
 
-    let t: {
+    type C = {
       readonly $: '$',
       readonly [_: `$.${number}`]: '$.*',
       readonly [_: `$.${number}.${number}`]: '$.*.*',
     }
     it('equals expected type', function () {
-      expectTypeOf(t).toEqualTypeOf<T>()
+      expectTypeOf<C>().toEqualTypeOf<T>()
     })
 
     it('has the same value paths', function () {

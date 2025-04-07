@@ -13,13 +13,13 @@ describe('FlattenedValidatorsOfType', function () {
       1
     >
 
-    let t: {
+    type C = {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       readonly $: Validator<'a' | 'b' | 'c', any, '$', 1>,
     }
 
     it('has the expected type', function () {
-      expectTypeOf<T>().toEqualTypeOf(t)
+      expectTypeOf<T>().toEqualTypeOf<C>()
     })
   })
 
@@ -36,7 +36,7 @@ describe('FlattenedValidatorsOfType', function () {
       2
     >
 
-    let t: {
+    type C = {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       readonly $: Validator<number[], any, '$', 2>,
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -44,7 +44,7 @@ describe('FlattenedValidatorsOfType', function () {
     }
 
     it('has the expected type', function () {
-      expectTypeOf<T>().toEqualTypeOf(t)
+      expectTypeOf<T>().toEqualTypeOf<C>()
     })
   })
 
@@ -56,13 +56,13 @@ describe('FlattenedValidatorsOfType', function () {
       }
     >
 
-    let t: {
+    type C = {
       readonly $: Validator<number[]>,
       readonly '$.*': Validator<number>,
     }
 
     it('has the expected type', function () {
-      expectTypeOf<T>().toEqualTypeOf(t)
+      expectTypeOf<T>().toEqualTypeOf<C>()
     })
   })
 })

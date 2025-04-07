@@ -8,13 +8,13 @@ describe('ErrorsOfValidators', function () {
       y: Validator<number, 'b'>,
     }>
 
-    let t: {
+    type C = {
       readonly x: 'a',
       readonly y: 'b',
     }
 
     it('equals expected type', function () {
-      expectTypeOf<T>().toEqualTypeOf(t)
+      expectTypeOf<T>().toEqualTypeOf<C>()
     })
   })
 })

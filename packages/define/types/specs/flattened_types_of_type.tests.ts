@@ -15,7 +15,7 @@ describe('FlattenedTypesOfType', function () {
   describe('literal', function () {
     type T = FlattenedTypesOfType<typeof numberType._type, null>
 
-    let t: {
+    type C = {
       readonly $: {
         readonly definition: {
           readonly type: TypeDefType.Literal,
@@ -24,7 +24,7 @@ describe('FlattenedTypesOfType', function () {
       },
     }
     it('equals expected type', function () {
-      expectTypeOf(t).toEqualTypeOf<T>()
+      expectTypeOf<C>().toEqualTypeOf<T>()
     })
   })
 
@@ -32,7 +32,7 @@ describe('FlattenedTypesOfType', function () {
     const builder = list(numberType)
     type T = SimplifyDeep<FlattenedTypesOfType<typeof builder._type, '*'>>
 
-    let t: {
+    type C = {
       readonly $: SimplifyDeep<typeof builder._type>,
       readonly ['$.*']: {
         readonly definition: {
@@ -42,7 +42,7 @@ describe('FlattenedTypesOfType', function () {
       },
     }
     it('equals expected type', function () {
-      expectTypeOf(t).toEqualTypeOf<T>()
+      expectTypeOf<C>().toEqualTypeOf<T>()
     })
   })
 
@@ -50,7 +50,7 @@ describe('FlattenedTypesOfType', function () {
     const builder = record<typeof numberType, 'a' | 'b'>(numberType)
     type T = SimplifyDeep<FlattenedTypesOfType<typeof builder._type, '*'>>
 
-    let t: {
+    type C = {
       readonly $: SimplifyDeep<typeof builder._type>,
       readonly ['$.*']: {
         readonly definition: {
@@ -60,7 +60,7 @@ describe('FlattenedTypesOfType', function () {
       },
     }
     it('equals expected type', function () {
-      expectTypeOf<typeof t>(t).toEqualTypeOf<T>()
+      expectTypeOf<C>().toEqualTypeOf<T>()
     })
   })
 
@@ -72,7 +72,7 @@ describe('FlattenedTypesOfType', function () {
         .readonlyField('c', booleanType)
         .readonlyOptionalField('d', stringType)
       type T = SimplifyDeep<FlattenedTypesOfType<typeof builder._type, null>>
-      let t: {
+      type C = {
         readonly $: SimplifyDeep<typeof builder._type>,
         readonly ['$.a']: {
           readonly definition: {
@@ -120,7 +120,7 @@ describe('FlattenedTypesOfType', function () {
         },
       }
       it('equals expected type', function () {
-        expectTypeOf(t).toEqualTypeOf<T>()
+        expectTypeOf<C>().toEqualTypeOf<T>()
       })
     })
 
@@ -128,7 +128,7 @@ describe('FlattenedTypesOfType', function () {
       const builder = object().optionalField('a', stringType)
       type T = SimplifyDeep<FlattenedTypesOfType<typeof builder._type, null>>
 
-      let t: {
+      type C = {
         readonly $: SimplifyDeep<typeof builder._type>,
         readonly '$.a': {
           readonly definition: {
@@ -149,7 +149,7 @@ describe('FlattenedTypesOfType', function () {
       }
 
       it('equals expected type', function () {
-        expectTypeOf(t).toEqualTypeOf<T>()
+        expectTypeOf<C>().toEqualTypeOf<T>()
       })
     })
   })
@@ -163,7 +163,7 @@ describe('union', function () {
         .or('y', object().field('b', numberType))
       type T = SimplifyDeep<FlattenedTypesOfType<typeof builder._type, null>>
 
-      let t: {
+      type C = {
         readonly $: SimplifyDeep<typeof builder._type>,
         readonly ['$.a']: {
           readonly definition: {
@@ -180,7 +180,7 @@ describe('union', function () {
       }
 
       it('equals expected type', function () {
-        expectTypeOf(t).toEqualTypeOf<T>()
+        expectTypeOf<C>().toEqualTypeOf<T>()
       })
     })
 
@@ -190,7 +190,7 @@ describe('union', function () {
         .or('2', object().field('a', numberType))
       type T = SimplifyDeep<FlattenedTypesOfType<typeof builder._type, null>>
 
-      let t: {
+      type C = {
         readonly $: SimplifyDeep<typeof builder._type>,
         readonly ['$.1:a']: {
           readonly definition: {
@@ -206,7 +206,7 @@ describe('union', function () {
         },
       }
       it('equals expected type', function () {
-        expectTypeOf(t).toEqualTypeOf<T>()
+        expectTypeOf<C>().toEqualTypeOf<T>()
       })
     })
 
@@ -225,7 +225,7 @@ describe('union', function () {
             .or('s', object().field('c', stringType)),
         )
       type T = SimplifyDeep<FlattenedTypesOfType<typeof builder._type, null>>
-      let t: {
+      type C = {
         readonly $: SimplifyDeep<typeof builder._type>,
         readonly ['$.1:p:a']: {
           readonly definition: {
@@ -253,7 +253,7 @@ describe('union', function () {
         },
       }
       it('equals expected type', function () {
-        expectTypeOf(t).toEqualTypeOf<T>()
+        expectTypeOf<C>().toEqualTypeOf<T>()
       })
     })
   })

@@ -17,12 +17,12 @@ describe('FlattenedValidatorsOfValidatingType', function () {
       Reverse<ValueToTypePathsOfType<typeof literalType>>
     >
 
-    let t: {
+    type C = {
       readonly $: Validator<number, 'a', '$', number>,
     }
 
     it('equals expected type', function () {
-      expectTypeOf<T>().toEqualTypeOf(t)
+      expectTypeOf<T>().toEqualTypeOf<C>()
     })
   })
 
@@ -35,13 +35,13 @@ describe('FlattenedValidatorsOfValidatingType', function () {
     })
     type T = FlattenedValidatorsOfValidatingType<typeof listType, Reverse<ValueToTypePathsOfType<typeof listType>>>
 
-    let t: {
+    type C = {
       readonly $: Validator<readonly number[], 'y', '$', readonly number[]>,
       readonly '$.*': Validator<number, 'x', `$.${number}`, readonly number[]>,
     }
 
     it('equals expected type', function () {
-      expectTypeOf<T>().toEqualTypeOf(t)
+      expectTypeOf<T>().toEqualTypeOf<C>()
     })
   })
 })

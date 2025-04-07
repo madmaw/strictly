@@ -37,8 +37,7 @@ export type PetOwnerValueToTypePaths = ValueToTypePathsOfType<typeof petOwnerTyp
 export type PetOwnerTypeToValuePaths = Reverse<PetOwnerValueToTypePaths>
 
 export const unvalidatedPetOwnerFieldAdapters = {
-  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-  '$.email': identityAdapter('' as string | undefined).narrow,
+  '$.email': identityAdapter<string | undefined, '$.email', PetOwner>('').narrow,
   '$.firstName': identityAdapter('').narrow,
   '$.phoneNumber': identityAdapter('').narrow,
   '$.surname': identityAdapter('').narrow,

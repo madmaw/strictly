@@ -33,7 +33,7 @@ import {
   NOT_A_BREED_ERROR,
   NOT_A_NUMBER_ERROR,
   type Pet,
-  type petType,
+  petType,
   type PetTypeToValuePaths,
   petValidators,
   type PetValueToTypePaths,
@@ -49,7 +49,13 @@ const rawPetFieldAdapters = {
     prototypingFieldValueFactory(''),
   ).narrow,
   '$.newTag': identityAdapter('').narrow,
-  ...subFormFieldAdapters(unvalidatedPetOwnerFieldAdapters, '$.owner'),
+  ...subFormFieldAdapters(
+    unvalidatedPetOwnerFieldAdapters,
+    '$.owner',
+    // TODO this cast is annoying. Is there some way to generate a readonlyPetType instead?
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+    petType as ReadonlyTypeOfType<typeof petType>,
+  ),
   '$.owner': adapterFromTwoWayConverter(
     new NullableToBooleanConverter(
       petOwnerType,

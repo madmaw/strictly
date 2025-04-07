@@ -12,12 +12,12 @@ describe('FlattenedValuesOfType', function () {
     const builder = record<typeof numberType, string>(numberType)
     type V = FlattenedValuesOfType<typeof builder.narrow>
 
-    let v: {
+    type C = {
       readonly $: Record<string, number>,
       readonly [_: `$.${string}`]: number,
     }
     it('equals expected type', function () {
-      expectTypeOf(v).toEqualTypeOf<V>()
+      expectTypeOf<C>().toEqualTypeOf<V>()
     })
   })
 
@@ -25,7 +25,7 @@ describe('FlattenedValuesOfType', function () {
     const builder = object().optionalField('a', stringType)
     type V = FlattenedValuesOfType<typeof builder>
 
-    let v: {
+    type C = {
       readonly $: {
         a?: string | undefined,
       },
@@ -33,7 +33,7 @@ describe('FlattenedValuesOfType', function () {
     }
 
     it('equals expected type', function () {
-      expectTypeOf(v).toEqualTypeOf<V>()
+      expectTypeOf<C>().toEqualTypeOf<V>()
     })
   })
 })

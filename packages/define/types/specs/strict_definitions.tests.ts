@@ -151,11 +151,11 @@ describe('Strict Definitions', function () {
           },
         },
       }
-      type C = StrictUnionTypeDef<null, U>
+      type S = StrictUnionTypeDef<null, U>
 
-      let t: UnionTypeDef<null, U>
+      type C = UnionTypeDef<null, U>
       it('equals type', function () {
-        expectTypeOf(t).toEqualTypeOf<C>()
+        expectTypeOf<S>().toEqualTypeOf<C>()
       })
     })
   })
@@ -174,11 +174,11 @@ describe('Strict Definitions', function () {
         },
       },
     }
-    type C = StrictUnionTypeDef<null, U>
+    type S = StrictUnionTypeDef<null, U>
 
-    let t: UnionTypeDef<null, U>
+    type C = UnionTypeDef<null, U>
     it('equals type', function () {
-      expectTypeOf<C>().not.toMatchTypeOf(t)
+      expectTypeOf<C>().not.toMatchTypeOf<S>()
     })
   })
 })

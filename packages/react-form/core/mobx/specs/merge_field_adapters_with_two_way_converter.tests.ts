@@ -33,14 +33,14 @@ describe('MergedOfFieldAdapterWithTwoWayConverter', function () {
   }
   type M = MergedOfFieldAdaptersWithTwoWayConverter<T, typeof error4, typeof context>
 
-  let m: {
+  type C = {
     readonly x: FieldAdapter<boolean, string, typeof error1 | typeof error4, 'x', typeof context>,
     readonly y: FieldAdapter<number, boolean, typeof error2 | typeof error4, 'y', typeof context>,
     readonly z: FieldAdapter<string, number, typeof error3 | typeof error4, 'z', typeof context>,
   }
 
   it('merges the errors', function () {
-    expectTypeOf<M>().toEqualTypeOf(m)
+    expectTypeOf<M>().toEqualTypeOf<C>()
   })
 })
 
@@ -117,23 +117,23 @@ describe('mergeFieldAdaptersWithTwoWayConverter', function () {
         beforeEach(function () {
           result = merged.booleanAdapter.revert!(true, 'booleanAdapter', context)
         })
-      })
 
-      it('returns the same value on revert', function () {
-        expect(result).toEqual(expect.objectContaining({
-          value: true,
-          type: UnreliableFieldConversionType.Success,
-        }))
-      })
+        it('returns the same value on revert', function () {
+          expect(result).toEqual(expect.objectContaining({
+            value: true,
+            type: UnreliableFieldConversionType.Success,
+          }))
+        })
 
-      it('calls the mocked converter', function () {
-        expect(converter.revert).toHaveBeenCalledOnce()
-        expect(converter.revert).toHaveBeenCalledWith(true, 'booleanAdapter', context)
-      })
+        it('calls the mocked converter', function () {
+          expect(converter.revert).toHaveBeenCalledOnce()
+          expect(converter.revert).toHaveBeenCalledWith(true, 'booleanAdapter', context)
+        })
 
-      it('calls the mocked adapter', function () {
-        expect(booleanAdapter.revert).toHaveBeenCalledOnce()
-        expect(booleanAdapter.revert).toHaveBeenCalledWith(true, 'booleanAdapter', context)
+        it('calls the mocked adapter', function () {
+          expect(booleanAdapter.revert).toHaveBeenCalledOnce()
+          expect(booleanAdapter.revert).toHaveBeenCalledWith(true, 'booleanAdapter', context)
+        })
       })
     })
   })

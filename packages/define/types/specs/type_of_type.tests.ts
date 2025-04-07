@@ -9,7 +9,7 @@ describe('TypeOfType', function () {
   describe('literal', function () {
     const literalType = numberType
     type T = TypeOfType<typeof literalType>
-    let t: {
+    type C = {
       readonly definition: {
         readonly type: TypeDefType.Literal,
         readonly valuePrototype: [number],
@@ -17,7 +17,7 @@ describe('TypeOfType', function () {
     }
 
     it('equals expected type', function () {
-      expectTypeOf<T>().toEqualTypeOf(t)
+      expectTypeOf<T>().toEqualTypeOf<C>()
     })
   })
 
@@ -25,7 +25,7 @@ describe('TypeOfType', function () {
     describe('mutable', function () {
       const listType = list(numberType)
       type T = TypeOfType<typeof listType>
-      let t: {
+      type C = {
         readonly definition: {
           readonly type: TypeDefType.List,
           elements: {
@@ -35,13 +35,13 @@ describe('TypeOfType', function () {
         },
       }
       it('equals expected type', function () {
-        expectTypeOf<T>().toEqualTypeOf(t)
+        expectTypeOf<T>().toEqualTypeOf<C>()
       })
     })
     describe('readonly', function () {
       const listType = list(numberType).readonlyElements()
       type T = TypeOfType<typeof listType>
-      let t: {
+      type C = {
         readonly definition: {
           readonly type: TypeDefType.List,
           readonly elements: {
@@ -51,7 +51,7 @@ describe('TypeOfType', function () {
         },
       }
       it('equals expected type', function () {
-        expectTypeOf<T>().toEqualTypeOf(t)
+        expectTypeOf<T>().toEqualTypeOf<C>()
       })
     })
   })
