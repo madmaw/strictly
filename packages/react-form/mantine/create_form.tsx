@@ -21,7 +21,7 @@ export function createForm<
   valuePath: K,
   Form: ComponentType<P>,
   observableProps: FieldsViewProps<F>,
-): MantineFieldComponent<FormProps<ValueTypeOfField<F[K]>>, P> {
+): MantineFieldComponent<FormProps<ValueTypeOfField<F[K]>>, P, never> {
   // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
   return observer((props: ComponentProps<MantineFieldComponent<FormProps<ValueTypeOfField<F[K]>>, P>>) => {
     const { value } = observableProps.fields[valuePath]
@@ -39,5 +39,5 @@ export function createForm<
         value={value}
       />
     )
-  }) as MantineFieldComponent<FormProps<ValueTypeOfField<F[K]>>, P>
+  }) as MantineFieldComponent<FormProps<ValueTypeOfField<F[K]>>, P, never>
 }

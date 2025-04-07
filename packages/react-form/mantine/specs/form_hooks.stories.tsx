@@ -18,6 +18,10 @@ import { type Field } from 'types/field'
 
 const onCancel = action('canceled')
 
+function ErrorRenderer({ error }: { error: string }) {
+  return `error ${error}`
+}
+
 function SubForm({
   value,
   onValueChange,
@@ -44,15 +48,18 @@ function SubForm({
 }
 
 function Component(props: FieldsViewProps<{
-  $: Field<string>,
-  '$.a': Field<number>,
+  $: Field<string, string>,
+  '$.a': Field<number, string>,
 }>) {
   const form = useMantineFormFields(props)
   const Form = form.form('$.a', SubForm)
   const TextInput = form.textInput('$')
   return (
     <Stack>
-      <TextInput label='fields view' />
+      <TextInput
+        ErrorRenderer={ErrorRenderer}
+        label='fields view'
+      />
       <Form onCancel={onCancel} />
     </Stack>
   )

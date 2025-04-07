@@ -12,6 +12,10 @@ export type MantineForm<F extends Fields> = {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type MantineFieldComponent<T, P = T, E = any> = UnsafePartialComponent<ComponentType<P>, T, {
-  ErrorRenderer?: ErrorRenderer<E>,
-}>
+export type MantineFieldComponent<T, P = T, E = any> = UnsafePartialComponent<
+  ComponentType<P>,
+  T,
+  // escape hatch for never comparisons `E extends never` will not work, always returning never
+  // https://github.com/microsoft/TypeScript/issues/31751
+  [E] extends [never] ? {} : { ErrorRenderer: ErrorRenderer<E> }
+>

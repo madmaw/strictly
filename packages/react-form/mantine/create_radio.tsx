@@ -22,7 +22,7 @@ export function createRadio<
   valuePath: K,
   value: ValueTypeOfField<F[K]>,
   Radio: ComponentType<Props>,
-): MantineFieldComponent<SuppliedRadioProps, Props> {
+): MantineFieldComponent<SuppliedRadioProps, Props, never> {
   const propSource = () => {
     return {
       disabled: this.fields[valuePath].readonly,

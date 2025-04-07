@@ -78,9 +78,10 @@ export function createCheckbox<
       onKeyUp,
     }
   }
+  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
   return createUnsafePartialObserverComponent(
     Checkbox,
     propSource,
     ['ErrorRenderer'],
-  )
+  ) as MantineFieldComponent<SuppliedCheckboxProps, Props, ErrorOfField<F[K]>>
 }

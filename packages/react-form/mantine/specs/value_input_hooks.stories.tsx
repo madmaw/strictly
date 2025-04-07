@@ -15,7 +15,6 @@ import {
 } from '@storybook/react'
 import { type FieldsViewProps } from 'core/props'
 import { type SuppliedValueInputProps } from 'mantine/create_value_input'
-import { type ErrorRenderer } from 'mantine/error_renderer'
 import { useMantineFormFields } from 'mantine/hooks'
 import {
   type ComponentType,
@@ -26,6 +25,10 @@ import {
   SLIDER_LABEL,
 } from './value_input_constants'
 
+function ErrorRenderer({ error }: { error: string }) {
+  return `error ${error}`
+}
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type StoryValueInputProps<V> = SuppliedValueInputProps<V, any>
 
@@ -34,7 +37,6 @@ function Component<
   P extends StoryValueInputProps<V>,
 >({
   ValueInput,
-  ErrorRenderer,
   inputProps,
   ...props
 }: FieldsViewProps<{
@@ -43,8 +45,6 @@ function Component<
   ValueInput: ComponentType<P>,
 } & {
   inputProps: P,
-} & {
-  ErrorRenderer?: ErrorRenderer,
 }) {
   const form = useMantineFormFields(props)
   const ValueInputComponent = form.valueInput<'$', P>('$', ValueInput)
@@ -124,7 +124,7 @@ export const RequiredNumberInput: Story<number | string, NumberInputProps> = {
   },
 }
 
-export const CustomErrorNumberInput: Story<number | string, NumberInputProps> = {
+export const ErrorNumberInput: Story<number | string, NumberInputProps> = {
   args: {
     fields: {
       $: {
@@ -135,9 +135,6 @@ export const CustomErrorNumberInput: Story<number | string, NumberInputProps> = 
       },
     },
     ValueInput: NumberInput,
-    ErrorRenderer: function () {
-      return 'a custom error'
-    },
     inputProps: {
       label: NUMBER_INPUT_LABEL,
     },

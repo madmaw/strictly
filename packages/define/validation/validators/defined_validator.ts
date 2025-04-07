@@ -1,8 +1,6 @@
 import { type AnnotatedValidator } from 'validation/validator'
 
-export class DefinedValidator<V, E, ValuePath extends string, Context>
-  implements AnnotatedValidator<V | null | undefined, E, ValuePath, Context>
-{
+export class DefinedValidator<V, E> implements AnnotatedValidator<V | null | undefined, E, never, never> {
   constructor(private readonly error: E) {
   }
 

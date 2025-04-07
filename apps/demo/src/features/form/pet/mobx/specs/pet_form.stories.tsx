@@ -3,7 +3,12 @@ import {
   type Meta,
   type StoryObj,
 } from '@storybook/react'
+import {
+  userEvent,
+  within,
+} from '@storybook/test'
 import { PetForm } from 'features/form/pet/mobx/pet_form'
+import { SubmitLabel } from 'features/form/pet/pet_fields_view'
 
 const Component = PetForm
 
@@ -55,10 +60,20 @@ export const Invalid: Story = {
       alive: true,
       name: 'D',
       tags: ['white'],
+      owner: {
+        firstName: '',
+        surname: '',
+        phoneNumber: '',
+      },
       species: {
         type: 'cat',
         meows: 2,
       },
     },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const submitButton = canvas.getByText(SubmitLabel())
+    await userEvent.click(submitButton)
   },
 }

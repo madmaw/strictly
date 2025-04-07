@@ -19,14 +19,15 @@ import {
   type RadioValue,
 } from './radio_group_constants'
 
+function ErrorRenderer({ error }: { error: string }) {
+  return `custom error ${error}`
+}
+
 function Component({
-  ErrorRenderer,
   ...props
 }: FieldsViewProps<{
   $: Field<RadioValue | null, string>,
-}> & {
-  ErrorRenderer?: ErrorRenderer,
-}) {
+}>) {
   const form = useMantineFormFields(props)
   const RadioGroupComponent = form.radioGroup('$')
 
@@ -41,6 +42,7 @@ function Component({
           const RadioComponent = form.radio('$', value)
           return (
             <RadioComponent
+              ErrorRenderer={ErrorRenderer}
               key={label}
               label={label}
             />
@@ -122,22 +124,6 @@ export const Error: Story = {
         value: '2',
         error: 'error',
       },
-    },
-  },
-}
-
-export const CustomError: Story = {
-  args: {
-    fields: {
-      $: {
-        readonly: false,
-        required: false,
-        value: '2',
-        error: 'error',
-      },
-    },
-    ErrorRenderer: function () {
-      return 'custom error'
     },
   },
 }

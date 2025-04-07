@@ -25,7 +25,7 @@ export function createPill<
   this: MantineForm<F>,
   valuePath: K,
   Pill: ComponentType<Props>,
-): MantineFieldComponent<SuppliedPillProps, Props> {
+): MantineFieldComponent<SuppliedPillProps, Props, never> {
   const propSource = () => {
     const {
       readonly,

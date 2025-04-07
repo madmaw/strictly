@@ -59,13 +59,18 @@ export function createTextInput<
   }: {
     ErrorRenderer?: ErrorRenderer<ErrorOfField<F[K]>>,
   }) => {
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+    const field = this.fields[valuePath as string]
+    if (field == null) {
+      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+      throw new Error(`invalid field ${valuePath as string}`)
+    }
     const {
       readonly,
       required,
       value,
       error,
-      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-    } = this.fields[valuePath as string]
+    } = field
     return {
       // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
       name: valuePath as string,
@@ -79,6 +84,7 @@ export function createTextInput<
       onKeyUp,
     }
   }
+  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
   return createUnsafePartialObserverComponent<
     typeof TextInput,
     SuppliedTextInputProps,
@@ -88,5 +94,5 @@ export function createTextInput<
     TextInput,
     propSource,
     ['ErrorRenderer'],
-  )
+  ) as MantineFieldComponent<SuppliedTextInputProps, Props, ErrorOfField<F[K]>>
 }

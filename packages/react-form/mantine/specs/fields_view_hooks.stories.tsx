@@ -13,6 +13,10 @@ import { type Field } from 'types/field'
 
 const onClick = action('some button clicked')
 
+function ErrorRenderer({ error }: { error: string }) {
+  return `error ${error}`
+}
+
 function SubFieldsView(props: FieldsViewProps<{
   $: Field<string, string>,
 }> & {
@@ -22,7 +26,10 @@ function SubFieldsView(props: FieldsViewProps<{
   const TextInput = form.textInput('$')
   return (
     <Stack>
-      <TextInput label='sub fields view' />
+      <TextInput
+        ErrorRenderer={ErrorRenderer}
+        label='sub fields view'
+      />
       <Button onClick={props.onClick}>
         Bonus Button
       </Button>
@@ -39,8 +46,13 @@ function Component(props: FieldsViewProps<{
   const TextInput = form.textInput('$')
   return (
     <Stack>
-      <TextInput label='fields view' />
-      <FieldsView onClick={onClick} />
+      <TextInput
+        ErrorRenderer={ErrorRenderer}
+        label='fields view'
+      />
+      <FieldsView
+        onClick={onClick}
+      />
     </Stack>
   )
 }
@@ -127,7 +139,7 @@ export const Disabled: Story = {
   },
 }
 
-export const CustomError: Story = {
+export const Errors: Story = {
   args: {
     fields: {
       $: {

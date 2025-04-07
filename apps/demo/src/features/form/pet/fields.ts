@@ -41,7 +41,6 @@ import {
 } from './types'
 
 // TODO move fields into respective views
-
 const rawPetFieldAdapters = {
   '$.alive': identityAdapter(false).narrow,
   '$.name': adapterFromTwoWayConverter(
@@ -49,7 +48,12 @@ const rawPetFieldAdapters = {
     prototypingFieldValueFactory(''),
   ).narrow,
   '$.newTag': identityAdapter('').narrow,
-  ...subFormFieldAdapters(
+  ...subFormFieldAdapters<
+    typeof unvalidatedPetOwnerFieldAdapters,
+    '$.owner',
+    PetTypeToValuePaths,
+    ReadonlyTypeOfType<typeof petType>
+  >(
     unvalidatedPetOwnerFieldAdapters,
     '$.owner',
     // TODO this cast is annoying. Is there some way to generate a readonlyPetType instead?

@@ -47,11 +47,21 @@ export type ValidationError<Type extends string, Data = {}> = Simplify<
   } & Data
 >
 
-export function isFunctionalValidator(v: Validator): v is FunctionalValidator {
+export function isFunctionalValidator<
+  V,
+  E,
+  ValuePath extends string,
+  Context,
+>(v: Validator<V, E, ValuePath, Context>): v is FunctionalValidator<V, E, ValuePath, Context> {
   return typeof v === 'function'
 }
 
-export function isAnnotatedValidator(v: Validator): v is AnnotatedValidator {
+export function isAnnotatedValidator<
+  V,
+  E,
+  ValuePath extends string,
+  Context,
+>(v: Validator<V, E, ValuePath, Context>): v is AnnotatedValidator<V, E, ValuePath, Context> {
   return typeof v !== 'function'
 }
 
@@ -73,8 +83,7 @@ export function validate<
   if (isAnnotatedValidator(validator)) {
     return validator.validate(v, valuePath, context)
   } else {
-    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-    return (validator as FunctionalValidator<V, E, ValuePath, Context>)(v, valuePath, context)
+    return validator(v, valuePath, context)
   }
 }
 

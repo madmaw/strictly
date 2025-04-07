@@ -1,4 +1,5 @@
 import {
+  list,
   numberType,
   object,
   stringType,
@@ -8,16 +9,18 @@ import {
   subFormFieldAdapters,
 } from 'core/mobx/sub_form_field_adapters'
 import { UnreliableFieldConversionType } from 'types/field_converters'
-import { mockDeep } from 'vitest-mock-extended'
+import {
+  mockDeep,
+  mockReset,
+} from 'vitest-mock-extended'
 
 describe('subFormFieldAdapters', () => {
-  const mockedFieldAdapter1 = mockDeep<Required<FieldAdapter<string, boolean>>>()
-  const fieldAdapter1: FieldAdapter<string, boolean> = mockedFieldAdapter1
-  const mockedFieldAdapter2 = mockDeep<FieldAdapter<number, boolean>>()
-  const fieldAdapter2: FieldAdapter<number, boolean> = mockedFieldAdapter2
-
   describe('empty value', () => {
-    const adapters = subFormFieldAdapters({}, '$.a', stringType)
+    const adapters = subFormFieldAdapters(
+      {},
+      '$.a',
+      stringType,
+    )
 
     it('equals expected type', () => {
       expectTypeOf(adapters).toEqualTypeOf<{}>()
@@ -29,15 +32,35 @@ describe('subFormFieldAdapters', () => {
   })
 
   describe('single adapter', () => {
+    const mockedFieldAdapter1 = mockDeep<Required<FieldAdapter<string, boolean, number, '$', string>>>()
+    const fieldAdapter1: FieldAdapter<string, boolean, number, '$', string> = mockedFieldAdapter1
+
     const type = object().field('a', stringType)
-    const adapters = subFormFieldAdapters({
+    const subAdapters = {
       $: fieldAdapter1,
-    }, '$.a', type)
+    } as const
+    const adapters = subFormFieldAdapters<
+      typeof subAdapters,
+      '$.a',
+      { '$.a': '$.a' },
+      typeof type
+    >(
+      subAdapters,
+      '$.a',
+      type,
+    )
+
+    beforeEach(() => {
+      mockReset(mockedFieldAdapter1)
+    })
 
     it('equals expected type', () => {
-      // TODO toEqualTypeOf (seems to be a TS error)
+      // TODO toEqualTypeOf (cannot reason about revert optionality, seems to be a TS issue as they
+      // are both optional AFAICT)
       expectTypeOf(adapters).toMatchTypeOf<{
-        '$.a': FieldAdapter<string, boolean>,
+        '$.a': FieldAdapter<string, boolean, number, '$.a', {
+          a: string,
+        }>,
       }>()
     })
 
@@ -81,12 +104,26 @@ describe('subFormFieldAdapters', () => {
   })
 
   describe('multiple adapters', () => {
+    const mockedFieldAdapter1 = mockDeep<Required<FieldAdapter<string, boolean>>>()
+    const fieldAdapter1: FieldAdapter<string, boolean, number> = mockedFieldAdapter1
+    const mockedFieldAdapter2 = mockDeep<FieldAdapter<number, boolean>>()
+    const fieldAdapter2: FieldAdapter<number, boolean> = mockedFieldAdapter2
+
     const type = object()
       .field('a', object().field('x', stringType).field('y', numberType))
-    const adapters = subFormFieldAdapters({
-      '$.x': fieldAdapter1,
-      '$.y': fieldAdapter2,
-    }, '$.a', type)
+    const adapters = subFormFieldAdapters(
+      {
+        '$.x': fieldAdapter1,
+        '$.y': fieldAdapter2,
+      },
+      '$.a',
+      type,
+    )
+
+    beforeEach(() => {
+      mockReset(mockedFieldAdapter1)
+      mockReset(mockedFieldAdapter2)
+    })
 
     it('equals expected type', () => {
       // TODO toEqualTypeOf (seems to be a TS error)
@@ -135,6 +172,62 @@ describe('subFormFieldAdapters', () => {
 
         const returnedValue = adapters['$.a.y'].convert(2, '$.a.y', context)
         expect(fieldAdapter2.convert).toHaveBeenCalledWith(2, '$.y', subContext)
+        expect(returnedValue).toEqual(mockedReturnedValue)
+      })
+    })
+  })
+
+  describe('list adapter', () => {
+    const mockedFieldAdapter1 = mockDeep<Required<FieldAdapter<string, boolean, number, '$', string>>>()
+    const fieldAdapter1: FieldAdapter<string, boolean, number, '$', string> = mockedFieldAdapter1
+    const type = list(stringType)
+    const subAdapters = {
+      $: fieldAdapter1,
+    }
+    const adapters = subFormFieldAdapters<
+      typeof subAdapters,
+      '$.*',
+      {
+        '$.*': `$.${number}`,
+      },
+      typeof type
+    >(
+      subAdapters,
+      '$.*',
+      type,
+    )
+
+    beforeEach(() => {
+      mockReset(mockedFieldAdapter1)
+    })
+
+    it('equals expected type', () => {
+      // TODO toEqualTypeOf (seems to be a TS error)
+      expectTypeOf(adapters).toMatchTypeOf<{
+        '$.*': FieldAdapter<string, boolean, number, `$.${number}`, string[]>,
+      }>()
+    })
+
+    it('equals expected value', () => {
+      expect(adapters).toEqual({
+        '$.*': expect.anything(),
+      })
+    })
+
+    describe('calls convert with correct paths and values', () => {
+      const subContext = 'a'
+      const context = [subContext]
+
+      it('calls $.*', () => {
+        const mockedReturnedValue = {
+          value: false,
+          readonly: false,
+          required: false,
+        }
+        mockedFieldAdapter1.convert.mockReturnValue(mockedReturnedValue)
+
+        const returnedValue = adapters['$.*'].convert('b', '$.0', context)
+        expect(fieldAdapter1.convert).toHaveBeenCalledWith('b', '$', subContext)
         expect(returnedValue).toEqual(mockedReturnedValue)
       })
     })

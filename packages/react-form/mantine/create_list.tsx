@@ -29,7 +29,7 @@ export function createList<
   this: MantineForm<F>,
   valuePath: K,
   List: ComponentType<Props>,
-): MantineFieldComponent<SuppliedListProps<ElementOfArray<ValueTypeOfField<F[K]>>>, Props> {
+): MantineFieldComponent<SuppliedListProps<ElementOfArray<ValueTypeOfField<F[K]>>>, Props, never> {
   const propSource = () => {
     const values = [...this.fields[valuePath].value]
     return {

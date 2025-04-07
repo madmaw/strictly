@@ -11,5 +11,5 @@ export function DefaultErrorRenderer({
   error,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
 }: ErrorRendererProps<any>) {
-  return error
+  return JSON.stringify(error)
 }

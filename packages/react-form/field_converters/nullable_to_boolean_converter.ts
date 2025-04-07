@@ -13,14 +13,13 @@ import {
 
 export class NullableToBooleanConverter<
   T extends Type,
-  E,
   ValuePath extends string,
   Context,
   NullType extends null | undefined,
 > implements TwoWayFieldConverterWithValueFactory<
   ValueOfType<ReadonlyTypeOfType<T>> | NullType,
   boolean,
-  E,
+  never,
   ValuePath,
   Context
 > {
@@ -43,7 +42,7 @@ export class NullableToBooleanConverter<
     }
   }
 
-  revert(from: boolean): UnreliableFieldConversion<ValueOfType<ReadonlyTypeOfType<T>> | NullType, E> {
+  revert(from: boolean): UnreliableFieldConversion<ValueOfType<ReadonlyTypeOfType<T>> | NullType, never> {
     if (from) {
       const value: ValueOfType<T> = copy(this.typeDef, this.prototype)
       return {

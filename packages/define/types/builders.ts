@@ -2,6 +2,11 @@ import {
   type IsFieldReadonly,
 } from '@strictly/base'
 import {
+  isAnnotatedValidator,
+  validate,
+  type Validator,
+} from 'validation/validator'
+import {
   type ObjectFieldKey,
   type RecordKeyType,
   type Type,
@@ -37,14 +42,15 @@ class TypeDefBuilder<T extends ValidatingTypeDef> implements ValidatingType<T> {
   constructor(readonly definition: T) {
   }
 
-  enforce<E2>(rule: Rule<E2, ValueOfType<Type<T>>>) {
+  enforce<E2>(rule: Rule<E2, ValueOfType<Type<T>>> | Validator<ValueOfType<Type<T>>, E2, never, never>) {
     return new TypeDefBuilder<ValidatingTypeDefWithError<T, E2>>(
       // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
       {
         ...this.definition,
+        ...(isAnnotatedValidator(rule) ? rule.annotations(null!, null!) : {}),
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         rule: (value: any) => {
-          return this.definition.rule(value) || rule(value)
+          return this.definition.rule(value) ?? validate(rule, value, null!, null!)
         },
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } as any,

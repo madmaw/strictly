@@ -18,7 +18,7 @@ export function createFieldsView<
   valuePath: K,
   FieldsView: ComponentType<P>,
   observableProps: FieldsViewProps<F>,
-): MantineFieldComponent<FieldsViewProps<P['fields']>, P> {
+): MantineFieldComponent<FieldsViewProps<P['fields']>, P, never> {
   function toKey(subKey: string | number | symbol): string {
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     return (subKey as string).replace('$', valuePath as string)
@@ -49,18 +49,22 @@ export function createFieldsView<
   }
 
   // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-  return observer(function (props: ComponentProps<MantineFieldComponent<FieldsViewProps<P['fields']>, P>>) {
+  return observer(function (props: ComponentProps<MantineFieldComponent<FieldsViewProps<P['fields']>, P, never>>) {
     // convert fields to sub-fields
-    const subFields = Object.entries(observableProps.fields).reduce<Record<string, unknown>>((acc, [
-      fieldKey,
-      fieldValue,
-    ]) => {
+    const subFields = Object.entries(observableProps.fields).reduce<Record<string, unknown>>(
+      (acc, [
+        fieldKey,
+        fieldValue,
+      ]) => {
+        // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+        if (fieldKey.startsWith(valuePath as string)) {
+          acc[toSubKey(fieldKey)] = fieldValue
+        }
+        return acc
+      },
       // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-      if (fieldKey.startsWith(valuePath as string)) {
-        acc[toSubKey(fieldKey)] = fieldValue
-      }
-      return acc
-    }, {})
+      {} as P['fields'],
+    )
 
     return (
       <FieldsView
@@ -69,13 +73,12 @@ export function createFieldsView<
           // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/consistent-type-assertions
           ...props as any
         }
-        // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-        fields={subFields as P['fields']}
+        fields={subFields}
         onFieldBlur={onFieldBlur}
         onFieldFocus={onFieldFocus}
         onFieldSubmit={onFieldSubmit}
         onFieldValueChange={onFieldValueChange}
       />
     )
-  }) as unknown as MantineFieldComponent<FieldsViewProps<P['fields']>, P>
+  }) as unknown as MantineFieldComponent<FieldsViewProps<P['fields']>, P, never>
 }

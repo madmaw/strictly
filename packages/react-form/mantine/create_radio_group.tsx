@@ -68,6 +68,10 @@ export function createRadioGroup<
       onKeyUp,
     }
   }
-
-  return createUnsafePartialObserverComponent(RadioGroup, propSource, ['ErrorRenderer'])
+  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+  return createUnsafePartialObserverComponent(RadioGroup, propSource, ['ErrorRenderer']) as MantineFieldComponent<
+    SuppliedRadioGroupProps,
+    Props,
+    ErrorOfField<F[K]>
+  >
 }

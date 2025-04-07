@@ -4,19 +4,19 @@ import {
   type StoryObj,
 } from '@storybook/react'
 import { type FieldsViewProps } from 'core/props'
-import { type ErrorRenderer } from 'mantine/error_renderer'
 import { useMantineFormFields } from 'mantine/hooks'
 import { type Field } from 'types/field'
 import { CHECKBOX_LABEL } from './checkbox_constants'
 
+function ErrorRenderer({ error }: { error: string }) {
+  return `Error ${error}`
+}
+
 function Component({
-  ErrorRenderer,
   ...props
 }: FieldsViewProps<{
   $: Field<boolean, string>,
-}> & {
-  ErrorRenderer?: ErrorRenderer,
-}) {
+}>) {
   const inputProps = useMantineFormFields(props)
   const CheckboxComponent = inputProps.checkbox('$')
   return (
@@ -98,22 +98,6 @@ export const Error: Story = {
         value: true,
         error: 'error',
       },
-    },
-  },
-}
-
-export const CustomError: Story = {
-  args: {
-    fields: {
-      $: {
-        readonly: false,
-        required: false,
-        value: true,
-        error: 'error',
-      },
-    },
-    ErrorRenderer: function () {
-      return 'custom error'
     },
   },
 }

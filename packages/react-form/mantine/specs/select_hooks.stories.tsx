@@ -4,19 +4,19 @@ import {
   type StoryObj,
 } from '@storybook/react'
 import { type FieldsViewProps } from 'core/props'
-import { type ErrorRenderer } from 'mantine/error_renderer'
 import { useMantineFormFields } from 'mantine/hooks'
 import { type Field } from 'types/field'
 import { SELECT_LABEL } from './select_hooks_constant'
 
+function ErrorRenderer({ error }: { error: string }) {
+  return `Error ${error}`
+}
+
 function Component({
-  ErrorRenderer,
   ...props
 }: FieldsViewProps<{
   $: Field<string | null, string>,
-}> & {
-  ErrorRenderer?: ErrorRenderer,
-}) {
+}>) {
   const form = useMantineFormFields(props)
   const SelectComponent = form.select('$')
   return (
@@ -103,22 +103,6 @@ export const DisabledSelect: Story = {
         required: false,
         value: 'a',
       },
-    },
-  },
-}
-
-export const CustomErrorSelect: Story = {
-  args: {
-    fields: {
-      $: {
-        readonly: false,
-        required: true,
-        value: 'c',
-        error: 'error',
-      },
-    },
-    ErrorRenderer: function () {
-      return 'custom error'
     },
   },
 }

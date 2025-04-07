@@ -33,7 +33,6 @@ export const NOT_A_BREED_ERROR = 'not a breed' as const
 export const REQUIRED_ERROR = 'is required' as const
 
 const minimumNameLengthValidator = new MinimumStringLengthValidator(3)
-const minimumTagLengthValidator = new MinimumStringLengthValidator(2)
 const definedValidator = new DefinedValidator(REQUIRED_ERROR)
 
 // TODO  move individual types to relevant forms
@@ -66,9 +65,9 @@ export const speciesType = union('type')
 export type Species = keyof typeof speciesType['definition']['unions']
 
 export const petType = object()
-  .field('name', stringType.required(), minimumNameLengthValidator.validate.bind(minimumNameLengthValidator))
+  .field('name', stringType.enforce(minimumNameLengthValidator))
   .field('alive', booleanType)
-  .field('tags', list(stringType.enforce(minimumTagLengthValidator.validate.bind(minimumTagLengthValidator))))
+  .field('tags', list(stringType))
   .optionalField('owner', petOwnerType)
   .field('species', speciesType)
   .narrow
@@ -88,6 +87,9 @@ export type FlattenedPetAccessors = FlattenedAccessorsOfType<typeof petType>
 
 export type PetTypeToValuePaths = Reverse<PetValueToTypePaths>
 
-export const petValidators = flattenValidatorsOfValidatingType<typeof petType, PetTypeToValuePaths>(
-  petType,
-)
+export const petValidators = {
+  ...flattenValidatorsOfValidatingType<typeof petType, PetTypeToValuePaths>(
+    petType,
+  ),
+  '$.newTag': new MinimumStringLengthValidator(2),
+} as const

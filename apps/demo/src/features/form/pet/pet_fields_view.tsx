@@ -21,7 +21,7 @@ import {
   type FieldsViewProps,
   useMantineFormFields,
 } from '@strictly/react-form'
-import { observer } from 'mobx-react'
+import { Observer } from 'mobx-react'
 import {
   type ComponentType,
   useCallback,
@@ -106,7 +106,19 @@ function NameInputErrorRenderer({ error }: ErrorRendererProps<ErrorOfField<PetFo
   }
 }
 
-function PetFieldsViewImpl(props: PetFieldsViewProps) {
+function NewTagInputErrorRenderer({ error }: ErrorRendererProps<ErrorOfField<PetFormFields['$.newTag']>>) {
+  switch (error.type) {
+    case MinimumStringLengthValidationErrorType:
+      return t({
+        message: `New tag must be at least ${error.minimumLength} characters long`,
+        comment: 'error that is displayed when the new tag input is too short',
+      })
+    default:
+      throw new UnreachableError(error.type)
+  }
+}
+
+export function PetFieldsView(props: PetFieldsViewProps) {
   const {
     onSubmit,
     onRemoveTag,
@@ -145,16 +157,31 @@ function PetFieldsViewImpl(props: PetFieldsViewProps) {
               )
             }}
           </Tags>
-          <NewTagInputField placeholder={NewTagPlaceholder()} />
+          <NewTagInputField
+            ErrorRenderer={NewTagInputErrorRenderer}
+            placeholder={NewTagPlaceholder()}
+          />
         </Pill.Group>
       </PillsInput>
       <Card withBorder={true}>
-        <OwnerCheckbox
-          label={OwnerCheckboxLabel()}
-          pb={form.fields['$.owner'].value ? 'md' : undefined}
-        />
         {/* TODO making the child fields disabled might be more interesting */}
-        {form.fields['$.owner'].value && <Owner />}
+        {(
+          <Observer>
+            {() => {
+              // normally the form hides our fields observing the data, but we
+              // need to observe it here since we're not using a hook component
+              return (
+                <>
+                  <OwnerCheckbox
+                    label={OwnerCheckboxLabel()}
+                    pb={form.fields['$.owner'].value ? 'md' : undefined}
+                  />
+                  {form.fields['$.owner'].value ? <Owner /> : null}
+                </>
+              )
+            }}
+          </Observer>
+        )}
       </Card>
       <Card withBorder={true}>
         {/* TODO either use a SubForm or add the ability to use an editable form that takes an entire value here */}
@@ -191,7 +218,3 @@ function TagPill({
     />
   )
 }
-
-// has to be an observer since we watch the value of the $.owner field to decide
-// whether to render the PetOwnerForm component
-export const PetFieldsView = observer(PetFieldsViewImpl)

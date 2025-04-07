@@ -9,35 +9,51 @@ import {
   type FieldAdapter,
   type FromOfFieldAdapter,
   type ToOfFieldAdapter,
+  type ValuePathOfFieldAdapter,
 } from './field_adapter'
 
-type SubFormFieldAdapter<F extends FieldAdapter, P extends string, Context> = FieldAdapter<
+type SubFormFieldAdapter<F extends FieldAdapter, ValuePath extends string, Context> = FieldAdapter<
   FromOfFieldAdapter<F>,
   ToOfFieldAdapter<F>,
   ErrorOfFieldAdapter<F>,
-  P,
+  ValuePathOfFieldAdapter<F> extends StringConcatOf<'$', infer ValuePathSuffix> ? `${ValuePath}${ValuePathSuffix}`
+    // assume string (they don't care about the value path as a type) if there the path doesn't have a $ prefix
+    : string,
   Context
 >
 
-type SubFormFieldAdapters<SubAdapters extends Record<string, FieldAdapter>, P extends string, Context> = {
-  [K in keyof SubAdapters as K extends StringConcatOf<'$', infer S> ? `${P}${S}` : never]: K extends
-    StringConcatOf<'$', infer S> ? SubFormFieldAdapter<
-      SubAdapters[K],
-      `${P}${S}`,
-      Context
-    >
-    : never
+type SubFormFieldAdapters<
+  SubAdapters extends Record<string, FieldAdapter>,
+  TypePath extends string,
+  ValuePath extends string,
+  Context,
+> = {
+  [
+    K in keyof SubAdapters as K extends StringConcatOf<'$', infer TypePathSuffix> ? `${TypePath}${TypePathSuffix}`
+      : never
+  ]: SubFormFieldAdapter<
+    SubAdapters[K],
+    ValuePath,
+    Context
+  >
 }
 
-export function subFormFieldAdapters<SubAdapters extends Record<string, FieldAdapter>, P extends string,
-  ContextType extends Type>(
+export function subFormFieldAdapters<
+  SubAdapters extends Record<string, FieldAdapter>,
+  TypePath extends string,
+  TypePathsToValuePaths extends Record<TypePath, string>,
+  ContextType extends Type,
+>(
   subAdapters: SubAdapters,
-  prefix: P,
+  parentTypePath: TypePath,
   contextType: ContextType,
-): SubFormFieldAdapters<SubAdapters, P, ValueOfType<ContextType>> {
+): SubFormFieldAdapters<SubAdapters, TypePath, TypePathsToValuePaths[TypePath], ValueOfType<ContextType>> {
+  // assume the number of '.' in the type path will correspond to the number of '.' in the value path
+  const dotCount = parentTypePath.split('.').length
   function getSubValuePathAndContext(valuePath: string, context: ValueOfType<ContextType>) {
-    const subValuePath = valuePath.replace(prefix, '$')
-    const subContext = flattenValuesOfType(contextType, context)[prefix]
+    const parentValuePath = valuePath.split('.').slice(0, dotCount).join('.')
+    const subValuePath = valuePath.replace(parentValuePath, '$')
+    const subContext = flattenValuesOfType(contextType, context)[parentValuePath]
     return [
       subValuePath,
       subContext,
@@ -46,23 +62,23 @@ export function subFormFieldAdapters<SubAdapters extends Record<string, FieldAda
 
   // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
   return Object.entries(subAdapters).reduce<Record<string, FieldAdapter>>((acc, [
-    subKey,
-    subValue,
+    subTypePath,
+    subAdapter,
   ]) => {
-    const key = subKey.replace('$', prefix)
+    const typePath = subTypePath.replace('$', parentTypePath)
     // adapt field adapter with new path and context
     const adaptedAdapter: FieldAdapter = {
       convert: (from, valuePath, context) => {
-        return subValue.convert(from, ...getSubValuePathAndContext(valuePath, context))
+        return subAdapter.convert(from, ...getSubValuePathAndContext(valuePath, context))
       },
       create: (valuePath, context) => {
-        return subValue.create(...getSubValuePathAndContext(valuePath, context))
+        return subAdapter.create(...getSubValuePathAndContext(valuePath, context))
       },
-      revert: subValue.revert && ((from, valuePath, context) => {
-        return subValue.revert!(from, ...getSubValuePathAndContext(valuePath, context))
+      revert: subAdapter.revert && ((from, valuePath, context) => {
+        return subAdapter.revert!(from, ...getSubValuePathAndContext(valuePath, context))
       }),
     }
-    acc[key] = adaptedAdapter
+    acc[typePath] = adaptedAdapter
     return acc
-  }, {}) as SubFormFieldAdapters<SubAdapters, P, ValueOfType<ContextType>>
+  }, {}) as SubFormFieldAdapters<SubAdapters, TypePath, TypePathsToValuePaths[TypePath], ValueOfType<ContextType>>
 }

@@ -13,7 +13,6 @@ import {
   type SuppliedTextInputProps,
   type TextInputTarget,
 } from 'mantine/create_text_input'
-import { type ErrorRenderer } from 'mantine/error_renderer'
 import { useMantineFormFields } from 'mantine/hooks'
 import { type ComponentType } from 'react'
 import { type Field } from 'types/field'
@@ -21,16 +20,17 @@ import { TEXT_INPUT_LABEL } from './text_input_constants'
 
 type StoryTextInputProps<T extends TextInputTarget> = SuppliedTextInputProps<T> & Pick<TextInputProps, 'label'>
 
+function ErrorRenderer({ error }: { error: string }) {
+  return `error ${error}`
+}
+
 function Component<T extends TextInputTarget>({
   TextInput,
-  ErrorRenderer,
   ...props
 }: FieldsViewProps<{
   $: Field<string, string>,
 }> & {
   TextInput?: ComponentType<StoryTextInputProps<T>>,
-} & {
-  ErrorRenderer?: ErrorRenderer,
 }) {
   const form = useMantineFormFields(props)
   const TextInputComponent = form.textInput<'$', StoryTextInputProps<T>>('$', TextInput)
@@ -106,7 +106,7 @@ export const Disabled: Story = {
   },
 }
 
-export const CustomError: Story = {
+export const Error: Story = {
   args: {
     fields: {
       $: {
@@ -115,9 +115,6 @@ export const CustomError: Story = {
         value: 'xxx',
         error: 'error',
       },
-    },
-    ErrorRenderer: function () {
-      return 'custom error'
     },
   },
 }

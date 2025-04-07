@@ -3,10 +3,16 @@ import {
   Group,
   Stack,
 } from '@mantine/core'
-import { type Reverse } from '@strictly/base'
+import {
+  type Reverse,
+  UnreachableError,
+} from '@strictly/base'
 import {
   type FlattenedTypesOfType,
   type FlattenedValuesOfType,
+  flattenValidatorsOfValidatingType,
+  MinimumStringLengthValidationErrorType,
+  MinimumStringLengthValidator,
   object,
   type PathsOfType,
   type ReadonlyTypeOfType,
@@ -15,16 +21,21 @@ import {
   type ValueToTypePathsOfType,
 } from '@strictly/define'
 import {
+  type ErrorOfField,
+  type ErrorRendererProps,
   type FieldAdaptersOfValues,
   type FieldsViewProps,
   type FormFieldsOfFieldAdapters,
   identityAdapter,
+  mergeAdaptersWithValidators,
   useMantineFormFields,
 } from '@strictly/react-form'
 
+const minimumNameLengthValidator = new MinimumStringLengthValidator(3)
+
 export const petOwnerType = object()
-  .field('firstName', stringType.required())
-  .field('surname', stringType.required())
+  .field('firstName', stringType.enforce(minimumNameLengthValidator))
+  .field('surname', stringType.enforce(minimumNameLengthValidator))
   .field('phoneNumber', stringType.required())
   .optionalField('email', stringType)
   .narrow
@@ -49,9 +60,18 @@ export const unvalidatedPetOwnerFieldAdapters = {
   >
 >
 
+const petOwnerValidators = flattenValidatorsOfValidatingType<typeof petOwnerType, PetOwnerTypeToValuePaths>(
+  petOwnerType,
+)
+
+export const petOwnerFieldAdapters = mergeAdaptersWithValidators(
+  unvalidatedPetOwnerFieldAdapters,
+  petOwnerValidators,
+)
+
 export type PetOwnerFields = FormFieldsOfFieldAdapters<
   PetOwnerValueToTypePaths,
-  typeof unvalidatedPetOwnerFieldAdapters
+  typeof petOwnerFieldAdapters
 >
 
 export function FirstNameLabel() {
@@ -96,6 +116,30 @@ export function EmailPlaceholder() {
   })
 }
 
+function FirstNameInputErrorRenderer({ error }: ErrorRendererProps<ErrorOfField<PetOwnerFields['$.firstName']>>) {
+  switch (error.type) {
+    case MinimumStringLengthValidationErrorType:
+      return t({
+        message: `First name must be at least ${error.minimumLength} characters long`,
+        comment: 'error that is displayed when the first name input is too short',
+      })
+    default:
+      throw new UnreachableError(error.type)
+  }
+}
+
+function SurnameInputErrorRenderer({ error }: ErrorRendererProps<ErrorOfField<PetOwnerFields['$.firstName']>>) {
+  switch (error.type) {
+    case MinimumStringLengthValidationErrorType:
+      return t({
+        message: `Surname must be at least ${error.minimumLength} characters long`,
+        comment: 'error that is displayed when the last name input is too short',
+      })
+    default:
+      throw new UnreachableError(error.type)
+  }
+}
+
 export type PetOwnerFieldsViewProps = FieldsViewProps<PetOwnerFields>
 
 export function PetOwnerFieldsView(props: PetOwnerFieldsViewProps) {
@@ -108,15 +152,18 @@ export function PetOwnerFieldsView(props: PetOwnerFieldsViewProps) {
   return (
     <Stack>
       <Group
+        align='start'
         grow={true}
         preventGrowOverflow={true}
       >
         <FirstNameInput
+          ErrorRenderer={FirstNameInputErrorRenderer}
           autoCapitalize='words'
           label={FirstNameLabel()}
           type='text'
         />
         <SurnameInput
+          ErrorRenderer={SurnameInputErrorRenderer}
           autoCapitalize='words'
           label={SurnameLabel()}
           type='text'

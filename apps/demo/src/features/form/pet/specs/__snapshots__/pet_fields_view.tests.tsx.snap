@@ -288,7 +288,7 @@ exports[`PetFieldsView > renders Disabled 1`] = `
         <div
           class="m_4081bf90 mantine-Group-root"
           data-grow="true"
-          style="--group-child-width: calc(50% - (var(--mantine-spacing-md) - var(--mantine-spacing-md) / 2)); --group-gap: var(--mantine-spacing-md); --group-align: center; --group-justify: flex-start; --group-wrap: wrap;"
+          style="--group-child-width: calc(50% - (var(--mantine-spacing-md) - var(--mantine-spacing-md) / 2)); --group-gap: var(--mantine-spacing-md); --group-align: start; --group-justify: flex-start; --group-wrap: wrap;"
         >
           <div
             class="m_46b77525 mantine-InputWrapper-root mantine-TextInput-root"
@@ -869,7 +869,7 @@ exports[`PetFieldsView > renders Errors 1`] = `
         <div
           class="m_4081bf90 mantine-Group-root"
           data-grow="true"
-          style="--group-child-width: calc(50% - (var(--mantine-spacing-md) - var(--mantine-spacing-md) / 2)); --group-gap: var(--mantine-spacing-md); --group-align: center; --group-justify: flex-start; --group-wrap: wrap;"
+          style="--group-child-width: calc(50% - (var(--mantine-spacing-md) - var(--mantine-spacing-md) / 2)); --group-gap: var(--mantine-spacing-md); --group-align: start; --group-justify: flex-start; --group-wrap: wrap;"
         >
           <div
             class="m_46b77525 mantine-InputWrapper-root mantine-TextInput-root"
@@ -1286,7 +1286,7 @@ exports[`PetFieldsView > renders Populated 1`] = `
         <div
           class="m_4081bf90 mantine-Group-root"
           data-grow="true"
-          style="--group-child-width: calc(50% - (var(--mantine-spacing-md) - var(--mantine-spacing-md) / 2)); --group-gap: var(--mantine-spacing-md); --group-align: center; --group-justify: flex-start; --group-wrap: wrap;"
+          style="--group-child-width: calc(50% - (var(--mantine-spacing-md) - var(--mantine-spacing-md) / 2)); --group-gap: var(--mantine-spacing-md); --group-align: start; --group-justify: flex-start; --group-wrap: wrap;"
         >
           <div
             class="m_46b77525 mantine-InputWrapper-root mantine-TextInput-root"

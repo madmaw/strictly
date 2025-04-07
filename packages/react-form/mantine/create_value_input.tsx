@@ -77,6 +77,7 @@ export function createValueInput<
       onKeyUp,
     }
   }
+  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
   return createUnsafePartialObserverComponent<
     typeof ValueInput,
     SuppliedValueInputProps<ValueTypeOfField<F[K]>>,
@@ -86,5 +87,5 @@ export function createValueInput<
     ValueInput,
     propSource,
     ['ErrorRenderer'],
-  )
+  ) as MantineFieldComponent<SuppliedValueInputProps<ValueTypeOfField<F[K]>>, Props, ErrorOfField<F[K]>>
 }

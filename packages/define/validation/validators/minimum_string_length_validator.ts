@@ -10,8 +10,8 @@ export type MinimumStringLengthValidationError = {
   minimumLength: number,
 }
 
-export class MinimumStringLengthValidator<ValuePath extends string, Context>
-  implements AnnotatedValidator<string, MinimumStringLengthValidationError, ValuePath, Context>
+export class MinimumStringLengthValidator
+  implements AnnotatedValidator<string, MinimumStringLengthValidationError, never, never>
 {
   constructor(private readonly minimumLength: number) {
   }
