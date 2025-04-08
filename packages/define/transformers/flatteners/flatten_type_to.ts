@@ -18,7 +18,7 @@ import { jsonPath } from './json_path'
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type AnyValueType = any
 
-export type Mapper<R> = (t: StrictTypeDef) => R
+export type Mapper<R> = (t: StrictTypeDef, key: string) => R
 
 export function flattenTypeTo<M, R extends Readonly<Record<string, M>>>(
   { definition }: StrictType,
@@ -29,7 +29,7 @@ export function flattenTypeTo<M, R extends Readonly<Record<string, M>>>(
   return reduce(
     typeDefs,
     function (acc, key, typeDef) {
-      acc[key] = mapper(typeDef)
+      acc[key] = mapper(typeDef, key)
       return acc
     },
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions

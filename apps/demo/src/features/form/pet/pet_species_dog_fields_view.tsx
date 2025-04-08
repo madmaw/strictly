@@ -8,7 +8,6 @@ import {
   UnreachableError,
 } from '@strictly/base'
 import {
-  type ErrorOfField,
   type ErrorRendererProps,
   type FieldsViewProps,
   useMantineFormFields,
@@ -44,7 +43,7 @@ export function BarksLabel() {
 
 function BreedInputErrorRenderer({
   error,
-}: ErrorRendererProps<ErrorOfField<PetSpeciesDogFields['$.species.dog:breed']>>) {
+}: ErrorRendererProps<PetSpeciesDogFields, '$.species.dog:breed'>) {
   switch (error) {
     case NOT_A_BREED_ERROR:
       return t({
@@ -63,9 +62,7 @@ function BreedInputErrorRenderer({
 
 function BarksInputErrorRenderer({
   error,
-}: {
-  error: ErrorOfField<PetSpeciesDogFields['$.species.dog:barks']>,
-}) {
+}: ErrorRendererProps<PetSpeciesDogFields, '$.species.dog:barks'>) {
   switch (error) {
     case NOT_A_NUMBER_ERROR:
       return t({

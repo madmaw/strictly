@@ -1,15 +1,24 @@
 import { type ComponentType } from 'react'
+import { type ErrorOfField } from 'types/error_of_field'
+import { type Fields } from 'types/field'
 
-export type ErrorRendererProps<E> = {
+type InternalErrorRendererProps<E> = {
   error: E,
 }
 
+export type ErrorRendererProps<
+  F extends Fields,
+  K extends keyof Fields,
+> = InternalErrorRendererProps<
+  ErrorOfField<F[K]>
+>
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type ErrorRenderer<E = any> = ComponentType<ErrorRendererProps<E>>
+export type ErrorRenderer<E = any> = ComponentType<InternalErrorRendererProps<E>>
 
 export function DefaultErrorRenderer({
   error,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-}: ErrorRendererProps<any>) {
+}: InternalErrorRendererProps<any>) {
   return JSON.stringify(error)
 }

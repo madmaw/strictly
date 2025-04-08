@@ -16,7 +16,6 @@ import {
   MinimumStringLengthValidationErrorType,
 } from '@strictly/define'
 import {
-  type ErrorOfField,
   type ErrorRendererProps,
   type FieldsViewProps,
   useMantineFormFields,
@@ -94,7 +93,7 @@ export type PetFieldsViewProps = FieldsViewProps<PetFormFields> & {
   onRemoveTag: (valuePath: TagValuePath) => void,
 }
 
-function NameInputErrorRenderer({ error }: ErrorRendererProps<ErrorOfField<PetFormFields['$.name']>>) {
+function NameInputErrorRenderer({ error }: ErrorRendererProps<PetFormFields, '$.name'>) {
   switch (error.type) {
     case MinimumStringLengthValidationErrorType:
       return t({
@@ -106,7 +105,7 @@ function NameInputErrorRenderer({ error }: ErrorRendererProps<ErrorOfField<PetFo
   }
 }
 
-function NewTagInputErrorRenderer({ error }: ErrorRendererProps<ErrorOfField<PetFormFields['$.newTag']>>) {
+function NewTagInputErrorRenderer({ error }: ErrorRendererProps<PetFormFields, '$.newTag'>) {
   switch (error.type) {
     case MinimumStringLengthValidationErrorType:
       return t({

@@ -14,20 +14,22 @@ import {
   MinimumStringLengthValidationErrorType,
   MinimumStringLengthValidator,
   object,
+  OptionalValidatorProxy,
   type PathsOfType,
   type ReadonlyTypeOfType,
+  RegexpValidationErrorType,
+  RegexpValidator,
   stringType,
   type ValueOfType,
   type ValueToTypePathsOfType,
 } from '@strictly/define'
 import {
-  type ErrorOfField,
   type ErrorRendererProps,
   type FieldAdaptersOfValues,
   type FieldsViewProps,
   type FormFieldsOfFieldAdapters,
-  identityAdapter,
   mergeAdaptersWithValidators,
+  trimmingStringAdapter,
   useMantineFormFields,
 } from '@strictly/react-form'
 
@@ -36,8 +38,8 @@ const minimumNameLengthValidator = new MinimumStringLengthValidator(3)
 export const petOwnerType = object()
   .field('firstName', stringType.enforce(minimumNameLengthValidator))
   .field('surname', stringType.enforce(minimumNameLengthValidator))
-  .field('phoneNumber', stringType.required())
-  .optionalField('email', stringType)
+  .field('phoneNumber', stringType.required().enforce(RegexpValidator.phone))
+  .optionalField('email', stringType.enforce(OptionalValidatorProxy.createNullableOrEmptyString(RegexpValidator.email)))
   .narrow
 
 export type PetOwner = ValueOfType<typeof petOwnerType>
@@ -48,10 +50,10 @@ export type PetOwnerValueToTypePaths = ValueToTypePathsOfType<typeof petOwnerTyp
 export type PetOwnerTypeToValuePaths = Reverse<PetOwnerValueToTypePaths>
 
 export const unvalidatedPetOwnerFieldAdapters = {
-  '$.email': identityAdapter<string | undefined, '$.email', PetOwner>('').narrow,
-  '$.firstName': identityAdapter('').narrow,
-  '$.phoneNumber': identityAdapter('').narrow,
-  '$.surname': identityAdapter('').narrow,
+  '$.email': trimmingStringAdapter().optional().narrow,
+  '$.firstName': trimmingStringAdapter().narrow,
+  '$.phoneNumber': trimmingStringAdapter().narrow,
+  '$.surname': trimmingStringAdapter().narrow,
 } as const satisfies Partial<
   FieldAdaptersOfValues<
     FlattenedValuesOfType<ReadonlyTypeOfType<typeof petOwnerType>, '*'>,
@@ -116,7 +118,7 @@ export function EmailPlaceholder() {
   })
 }
 
-function FirstNameInputErrorRenderer({ error }: ErrorRendererProps<ErrorOfField<PetOwnerFields['$.firstName']>>) {
+function FirstNameInputErrorRenderer({ error }: ErrorRendererProps<PetOwnerFields, '$.firstName'>) {
   switch (error.type) {
     case MinimumStringLengthValidationErrorType:
       return t({
@@ -128,12 +130,36 @@ function FirstNameInputErrorRenderer({ error }: ErrorRendererProps<ErrorOfField<
   }
 }
 
-function SurnameInputErrorRenderer({ error }: ErrorRendererProps<ErrorOfField<PetOwnerFields['$.firstName']>>) {
+function SurnameInputErrorRenderer({ error }: ErrorRendererProps<PetOwnerFields, '$.firstName'>) {
   switch (error.type) {
     case MinimumStringLengthValidationErrorType:
       return t({
         message: `Surname must be at least ${error.minimumLength} characters long`,
         comment: 'error that is displayed when the last name input is too short',
+      })
+    default:
+      throw new UnreachableError(error.type)
+  }
+}
+
+function PhoneNumberErrorRenderer({ error }: ErrorRendererProps<PetOwnerFields, '$.phoneNumber'>) {
+  switch (error.type) {
+    case RegexpValidationErrorType:
+      return t({
+        message: 'Must be a valid phone number',
+        comment: 'error shown when the user puts in a weird phone number',
+      })
+    default:
+      throw new UnreachableError(error.type)
+  }
+}
+
+function EmailErrorRenderer({ error }: ErrorRendererProps<PetOwnerFields, '$.email'>) {
+  switch (error.type) {
+    case RegexpValidationErrorType:
+      return t({
+        message: 'Must be a valid email',
+        comment: 'error shown when the user puts in a weird email address',
       })
     default:
       throw new UnreachableError(error.type)
@@ -170,11 +196,13 @@ export function PetOwnerFieldsView(props: PetOwnerFieldsViewProps) {
         />
       </Group>
       <PhoneNumberInput
+        ErrorRenderer={PhoneNumberErrorRenderer}
         label={PhoneNumberLabel()}
         placeholder={PhoneNumberPlaceholder()}
         type='tel'
       />
       <EmailInput
+        ErrorRenderer={EmailErrorRenderer}
         label={EmailLabel()}
         placeholder={EmailPlaceholder()}
         type='email'

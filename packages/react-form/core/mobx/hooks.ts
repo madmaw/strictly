@@ -31,10 +31,10 @@ export function useDefaultMobxFormHooks<P extends FormPresenter<any, any, any, a
   }: {
     onValidFieldSubmit?: <Path extends ValuePathsOfPresenter<P>>(model: ModelOfPresenter<P>, valuePath: Path) => void,
     onValidFormSubmit?: (model: ModelOfPresenter<P>, value: ValueOfPresenter<P>) => void,
-  },
+  } = {},
 ): {
   model: ModelOfPresenter<P>,
-  onFormSubmit?: (value: ValueOfPresenter<P>) => void,
+  onFormSubmit?: () => void,
 } & Omit<FieldsViewProps<ModelOfPresenter<P>['fields']>, 'fields'> {
   const model = useMemo(function () {
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions

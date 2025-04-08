@@ -29,7 +29,7 @@ export class MinimumStringLengthValidator
 
   annotations() {
     return {
-      required: true,
+      required: this.minimumLength > 0,
       readonly: false,
     }
   }

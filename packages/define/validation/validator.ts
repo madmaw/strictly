@@ -1,5 +1,10 @@
 import { type Simplify } from 'type-fest'
 
+export type Annotations = {
+  readonly required: boolean,
+  readonly readonly: boolean,
+}
+
 export type FunctionalValidator<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   V = any,
@@ -22,10 +27,7 @@ export type AnnotatedValidator<
   Context = any,
 > = {
   readonly validate: (v: V, valuePath: ValuePath, context: Context) => E | null,
-  readonly annotations: (valuePath: ValuePath, context: Context) => {
-    readonly required: boolean,
-    readonly readonly: boolean,
-  },
+  readonly annotations: (valuePath: ValuePath, context: Context) => Annotations,
 }
 
 export type Validator<
@@ -108,5 +110,12 @@ export function annotations<
       required: false,
       readonly: false,
     }
+  }
+}
+
+export function mergeAnnotations(a1: Annotations, a2: Annotations) {
+  return {
+    readonly: a1.readonly || a2.readonly,
+    required: a1.required || a2.required,
   }
 }

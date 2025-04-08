@@ -3,6 +3,7 @@ import {
 } from '@strictly/base'
 import {
   isAnnotatedValidator,
+  mergeAnnotations,
   validate,
   type Validator,
 } from 'validation/validator'
@@ -47,7 +48,7 @@ class TypeDefBuilder<T extends ValidatingTypeDef> implements ValidatingType<T> {
       // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
       {
         ...this.definition,
-        ...(isAnnotatedValidator(rule) ? rule.annotations(null!, null!) : {}),
+        ...(isAnnotatedValidator(rule) ? mergeAnnotations(rule.annotations(null!, null!), this.definition) : {}),
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         rule: (value: any) => {
           return this.definition.rule(value) ?? validate(rule, value, null!, null!)
@@ -57,21 +58,11 @@ class TypeDefBuilder<T extends ValidatingTypeDef> implements ValidatingType<T> {
     )
   }
 
-  required(): TypeDefBuilder<ValidatingTypeDefWithError<T, never>>
-  required<
-    RequiredError,
-  >(rule: Rule<RequiredError, ValueOfType<typeof this.narrow>>): TypeDefBuilder<
-    ValidatingTypeDefWithError<T, RequiredError>
-  >
-  required<RequiredError = never>(rule?: Rule<RequiredError, ValueOfType<typeof this.narrow>>) {
-    return new TypeDefBuilder<ValidatingTypeDefWithError<T, RequiredError>>(
+  required(): TypeDefBuilder<T> {
+    return new TypeDefBuilder<T>(
       // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
       {
         ...this.definition,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        rule: (v: any) => {
-          return this.definition.rule(v) || rule?.(v)
-        },
         required: true,
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } as any,

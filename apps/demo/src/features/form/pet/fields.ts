@@ -14,12 +14,11 @@ import {
   mergeAdaptersWithValidators,
   mergeFieldAdaptersWithTwoWayConverter,
   NullableToBooleanConverter,
-  prototypingFieldValueFactory,
   SelectDiscriminatedUnionConverter,
   SelectLiteralConverter,
   SelectStringConverter,
   subFormFieldAdapters,
-  TrimmingStringConverter,
+  trimmingStringAdapter,
 } from '@strictly/react-form'
 import { IsAliveTwoWayConverter } from './is_alive_field_converter'
 import {
@@ -43,11 +42,8 @@ import {
 // TODO move fields into respective views
 const rawPetFieldAdapters = {
   '$.alive': identityAdapter(false).narrow,
-  '$.name': adapterFromTwoWayConverter(
-    new TrimmingStringConverter(),
-    prototypingFieldValueFactory(''),
-  ).narrow,
-  '$.newTag': identityAdapter('').narrow,
+  '$.name': trimmingStringAdapter().narrow,
+  '$.newTag': trimmingStringAdapter().narrow,
   ...subFormFieldAdapters<
     typeof unvalidatedPetOwnerFieldAdapters,
     '$.owner',
@@ -123,7 +119,7 @@ const rawPetFieldAdapters = {
     ),
   ).narrow,
   '$.tags': listAdapter<string, '$.tags', Pet>().narrow,
-  '$.tags.*': identityAdapter('').narrow,
+  '$.tags.*': trimmingStringAdapter().narrow,
 } as const satisfies Partial<
   FieldAdaptersOfValues<
     FlattenedValuesOfType<ReadonlyTypeOfType<typeof petType>, '*'>,

@@ -7,12 +7,14 @@ import {
   unreliableIdentityConverter,
 } from 'field_converters/identity_converter'
 import { MaybeIdentityConverter } from 'field_converters/maybe_identity_converter'
+import { TrimmingStringConverter } from 'field_converters/trimming_string_converter'
 import { prototypingFieldValueFactory } from 'field_value_factories/prototyping_field_value_factory'
 import {
   type AnnotatedFieldConverter,
   type FieldValueFactory,
   type TwoWayFieldConverter,
   type TwoWayFieldConverterWithValueFactory,
+  UnreliableFieldConversionType,
   type UnreliableFieldConverter,
 } from 'types/field_converters'
 import { type FieldAdapter } from './field_adapter'
@@ -79,6 +81,65 @@ class FieldAdapterBuilder<
       this.convert,
       this.create,
       reverter,
+    )
+  }
+
+  nullable(): FieldAdapterBuilder<
+    From | null,
+    To | null,
+    E,
+    ValuePath,
+    Context
+  > {
+    return this.or(null)
+  }
+
+  optional(): FieldAdapterBuilder<
+    From | undefined,
+    To | undefined,
+    E,
+    ValuePath,
+    Context
+  > {
+    return this.or(undefined)
+  }
+
+  private or<V>(proto: V): FieldAdapterBuilder<
+    From | V,
+    To | V,
+    E,
+    ValuePath,
+    Context
+  > {
+    function isFrom(v: From | V): v is From {
+      return v !== proto
+    }
+    function isTo(v: To | V): v is To {
+      return v !== proto
+    }
+    return new FieldAdapterBuilder<
+      From | V,
+      To | V,
+      E,
+      ValuePath,
+      Context
+    >(
+      (v, valuePath, context) =>
+        isFrom(v)
+          ? this.convert(v, valuePath, context)
+          : {
+            value: v,
+            readonly: false,
+            required: false,
+          },
+      this.create,
+      (v, valuePath, context) =>
+        isTo(v) && this.revert
+          ? this.revert(v, valuePath, context)
+          : {
+            type: UnreliableFieldConversionType.Success,
+            value: proto,
+          },
     )
   }
 
@@ -260,6 +321,16 @@ export function identityAdapter<
     annotatedIdentityConverter<V, ValuePath, Context>(required),
     prototypingFieldValueFactory(prototype),
     unreliableIdentityConverter<V, ValuePath, Context>(),
+  )
+}
+
+export function trimmingStringAdapter<
+  ValuePath extends string,
+  Context,
+>() {
+  return adapterFromTwoWayConverter<string, string, never, ValuePath, Context>(
+    new TrimmingStringConverter<ValuePath, Context>(),
+    prototypingFieldValueFactory<string, ValuePath, Context>(''),
   )
 }
 
