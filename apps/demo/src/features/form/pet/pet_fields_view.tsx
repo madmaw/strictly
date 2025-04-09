@@ -24,10 +24,12 @@ import { Observer } from 'mobx-react'
 import {
   type ComponentType,
   useCallback,
+  useMemo,
 } from 'react'
 import { type PetFields } from './fields'
 import { PetOwnerFieldsView } from './pet_owner_fields_view'
 import {
+  type PetValuePaths,
   type TagValuePath,
 } from './types'
 
@@ -91,6 +93,7 @@ export type PetFieldsViewProps = FieldsViewProps<PetFormFields> & {
   SpeciesComponent: ComponentType,
   onSubmit: () => void,
   onRemoveTag: (valuePath: TagValuePath) => void,
+  onClearField: (valuePath: PetValuePaths) => void,
 }
 
 function NameInputErrorRenderer({ error }: ErrorRendererProps<PetFormFields, '$.name'>) {
@@ -122,6 +125,7 @@ export function PetFieldsView(props: PetFieldsViewProps) {
     onSubmit,
     onRemoveTag,
     SpeciesComponent,
+    onClearField,
   } = props
   const form = useMantineFormFields(props)
   const NameTextInput = form.textInput('$.name')
@@ -132,7 +136,17 @@ export function PetFieldsView(props: PetFieldsViewProps) {
     PillsInput.Field,
   )
   const Tags = form.list('$.tags')
-  const Owner = form.fieldsView('$.owner', PetOwnerFieldsView)
+  const {
+    Component: Owner,
+    callbackMapper: ownerCallbackMapper,
+  } = form.fieldsView('$.owner', PetOwnerFieldsView)
+
+  const onClearOwnerField = useMemo(() => {
+    return ownerCallbackMapper(onClearField)
+  }, [
+    ownerCallbackMapper,
+    onClearField,
+  ])
 
   return (
     <Stack>
@@ -175,7 +189,7 @@ export function PetFieldsView(props: PetFieldsViewProps) {
                     label={OwnerCheckboxLabel()}
                     pb={form.fields['$.owner'].value ? 'md' : undefined}
                   />
-                  {form.fields['$.owner'].value ? <Owner /> : null}
+                  {form.fields['$.owner'].value ? <Owner clearField={onClearOwnerField} /> : null}
                 </>
               )
             }}

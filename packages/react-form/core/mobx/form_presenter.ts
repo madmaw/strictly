@@ -102,7 +102,7 @@ export type ValuePathsToAdaptersOf<
   }
   : never
 
-export class FormPresenter<
+export abstract class FormPresenter<
   T extends Type,
   ValueToTypePaths extends Readonly<Record<string, string>>,
   TypePathsToAdapters extends FlattenedTypePathsToAdaptersOf<
@@ -116,7 +116,7 @@ export class FormPresenter<
 > {
   constructor(
     readonly type: T,
-    private readonly adapters: TypePathsToAdapters,
+    protected readonly adapters: TypePathsToAdapters,
   ) {
   }
 
@@ -361,7 +361,7 @@ export class FormPresenter<
     }
   }
 
-  clearFieldValue<K extends StringKeyOf<ValuePathsToAdapters>>(
+  clearFieldValue<K extends StringKeyOf<ValueToTypePaths>>(
     model: FormModel<T, ValueToTypePaths, TypePathsToAdapters, ValuePathsToAdapters>,
     valuePath: K,
   ) {
@@ -375,8 +375,7 @@ export class FormPresenter<
       convert,
       create,
     } = adapter
-    const accessor = model.accessors[valuePath]
-    const value = accessor == null ? create(valuePath, model.value) : accessor.value
+    const value = create(valuePath, model.value)
     const {
       value: displayValue,
     } = convert(value, valuePath, model.value)
@@ -412,6 +411,7 @@ export class FormPresenter<
   validateField<K extends keyof ValuePathsToAdapters>(
     model: FormModel<T, ValueToTypePaths, TypePathsToAdapters, ValuePathsToAdapters>,
     valuePath: K,
+    ignoreDefaultValue = false,
   ): boolean {
     const {
       convert,
@@ -436,7 +436,14 @@ export class FormPresenter<
       : storedValue
     const dirty = storedValue !== value
     assertExists(revert, 'changing field directly not supported {}', valuePath)
-
+    if (ignoreDefaultValue) {
+      const {
+        value: defaultDisplayValue,
+      } = convert(create(valuePath, model.value), valuePath, model.value)
+      if (defaultDisplayValue === value) {
+        return true
+      }
+    }
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     const conversion = revert(value, valuePath as string, model.value)
     return runInAction(function () {
@@ -521,18 +528,12 @@ export class FormPresenter<
     })
   }
 
-  createModel(value: ValueOfType<ReadonlyTypeOfType<T>>): FormModel<
+  abstract createModel(value: ValueOfType<ReadonlyTypeOfType<T>>): FormModel<
     T,
     ValueToTypePaths,
     TypePathsToAdapters,
     ValuePathsToAdapters
-  > {
-    return new FormModel<T, ValueToTypePaths, TypePathsToAdapters, ValuePathsToAdapters>(
-      this.type,
-      value,
-      this.adapters,
-    )
-  }
+  >
 }
 
 export class FormModel<

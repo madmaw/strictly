@@ -6,10 +6,14 @@ import {
   nullType,
   numberType,
   object,
+  type ReadonlyOfTypeDef,
+  type ReadonlyTypeOfType,
   record,
   stringType,
+  type Type,
   union,
   type ValueOfType,
+  type ValueOfTypeDef,
   type ValueToTypePathsOfType,
 } from '@strictly/define'
 import { type FieldAdapter } from 'core/mobx/field_adapter'
@@ -38,6 +42,21 @@ import {
 } from './fixtures'
 
 const IS_NAN_ERROR = 1
+
+class TestFormPresenter<
+  T extends Type,
+  ValueToTypePaths extends Readonly<Record<string, string>>,
+  TypePathsToAdapters extends FlattenedTypePathsToAdaptersOf<
+    FlattenedValuesOfType<T, '*'>,
+    ValueOfType<ReadonlyTypeOfType<T>>
+  >,
+> extends FormPresenter<T, ValueToTypePaths, TypePathsToAdapters> {
+  override createModel(value: ValueOfTypeDef<ReadonlyOfTypeDef<T['definition']>, {}>): FormModel<T, ValueToTypePaths,
+    TypePathsToAdapters, ValuePathsToAdaptersOf<TypePathsToAdapters, ValueToTypePaths>>
+  {
+    return new FormModel(this.type, value, this.adapters)
+  }
+}
 
 const originalIntegerToStringAdapter = adapterFromTwoWayConverter(
   new IntegerToStringConverter(IS_NAN_ERROR),
@@ -479,7 +498,7 @@ describe('all', function () {
       const adapters = {
         $: integerToStringAdapter,
       } as const
-      const presenter = new FormPresenter<
+      const presenter = new TestFormPresenter<
         typeof typeDef,
         ValueToTypePathsOfType<typeof typeDef>,
         typeof adapters
@@ -600,7 +619,7 @@ describe('all', function () {
       const converters = {
         '$.*': integerToStringAdapter,
       } as const
-      const presenter = new FormPresenter<
+      const presenter = new TestFormPresenter<
         typeof typeDef,
         ValueToTypePathsOfType<typeof typeDef>,
         typeof converters
@@ -927,7 +946,7 @@ describe('all', function () {
           '$.*': integerToStringAdapter,
         } as const
         type ValueToTypePaths = ValueToTypePathsOfType<typeof type>
-        const presenter = new FormPresenter<
+        const presenter = new TestFormPresenter<
           typeof type,
           ValueToTypePaths,
           typeof adapters
@@ -997,7 +1016,7 @@ describe('all', function () {
           '$.x:a': identityAdapter(0).narrow,
           '$.y:b': identityAdapter(false).narrow,
         } as const
-        const presenter = new FormPresenter<
+        const presenter = new TestFormPresenter<
           typeof type,
           ValueToTypePaths,
           typeof adapters
@@ -1068,7 +1087,7 @@ describe('all', function () {
         $: '$',
         '$.fake': '$.fake',
       }
-      const presenter = new FormPresenter<
+      const presenter = new TestFormPresenter<
         typeof typeDef,
         JsonPaths,
         typeof converters

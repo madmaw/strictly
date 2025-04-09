@@ -1,5 +1,6 @@
 import { t } from '@lingui/core/macro'
 import {
+  CloseButton,
   Group,
   Stack,
 } from '@mantine/core'
@@ -32,6 +33,7 @@ import {
   trimmingStringAdapter,
   useMantineFormFields,
 } from '@strictly/react-form'
+import { useCallback } from 'react'
 
 const minimumNameLengthValidator = new MinimumStringLengthValidator(3)
 
@@ -166,14 +168,27 @@ function EmailErrorRenderer({ error }: ErrorRendererProps<PetOwnerFields, '$.ema
   }
 }
 
-export type PetOwnerFieldsViewProps = FieldsViewProps<PetOwnerFields>
+export type PetOwnerFieldsViewProps = FieldsViewProps<PetOwnerFields> & {
+  clearField: (valuePath: PetOwnerValuePaths) => void,
+}
 
-export function PetOwnerFieldsView(props: PetOwnerFieldsViewProps) {
+export function PetOwnerFieldsView({
+  clearField,
+  ...props
+}: PetOwnerFieldsViewProps) {
   const form = useMantineFormFields(props)
   const FirstNameInput = form.textInput('$.firstName')
   const SurnameInput = form.textInput('$.surname')
   const EmailInput = form.textInput('$.email')
   const PhoneNumberInput = form.textInput('$.phoneNumber')
+
+  const onClearPhoneNumber = useCallback(() => {
+    clearField('$.phoneNumber')
+  }, [clearField])
+
+  const ClearPhoneNumberButton = useCallback(() => {
+    return <CloseButton onClick={onClearPhoneNumber} />
+  }, [onClearPhoneNumber])
 
   return (
     <Stack>
@@ -199,6 +214,7 @@ export function PetOwnerFieldsView(props: PetOwnerFieldsViewProps) {
         ErrorRenderer={PhoneNumberErrorRenderer}
         label={PhoneNumberLabel()}
         placeholder={PhoneNumberPlaceholder()}
+        rightSection={<ClearPhoneNumberButton />}
         type='tel'
       />
       <EmailInput

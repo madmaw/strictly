@@ -1,6 +1,7 @@
 import {
-  Button,
+  Paper,
   Stack,
+  Text,
 } from '@mantine/core'
 import { action } from '@storybook/addon-actions'
 import {
@@ -9,50 +10,91 @@ import {
 } from '@storybook/react'
 import { type FieldsViewProps } from 'core/props'
 import { useMantineFormFields } from 'mantine/hooks'
+import {
+  useCallback,
+  useMemo,
+} from 'react'
 import { type Field } from 'types/field'
 
-const onClick = action('some button clicked')
+export function ParentFieldLabel() {
+  return '$'
+}
+
+export function SubFieldLabel() {
+  return '$ (child)'
+}
 
 function ErrorRenderer({ error }: { error: string }) {
   return `error ${error}`
 }
 
-function SubFieldsView(props: FieldsViewProps<{
+function SubFieldsView({
+  onClickField: onClickFieldImpl,
+  ...props
+}: FieldsViewProps<{
   $: Field<string, string>,
 }> & {
-  onClick: () => void,
+  onClickField: (valuePath: '$') => void,
 }) {
   const form = useMantineFormFields(props)
   const TextInput = form.textInput('$')
+  const onClick$ = useCallback(() => {
+    onClickFieldImpl('$')
+  }, [onClickFieldImpl])
   return (
     <Stack>
       <TextInput
         ErrorRenderer={ErrorRenderer}
-        label='sub fields view'
+        label={SubFieldLabel()}
+        onClick={onClick$}
       />
-      <Button onClick={props.onClick}>
-        Bonus Button
-      </Button>
     </Stack>
   )
 }
 
-function Component(props: FieldsViewProps<{
+function Component({
+  onClickField: onClickFieldImpl,
+  ...props
+}: FieldsViewProps<{
   $: Field<string, string>,
   '$.a': Field<string, string>,
-}>) {
+}> & {
+  onClickField: (valuePath: '$' | '$.a') => void,
+}) {
   const form = useMantineFormFields(props)
-  const FieldsView = form.fieldsView('$.a', SubFieldsView)
+  const {
+    Component,
+    callbackMapper,
+  } = form.fieldsView('$.a', SubFieldsView)
   const TextInput = form.textInput('$')
+  const onClick$ = useCallback(() => {
+    onClickFieldImpl('$')
+  }, [onClickFieldImpl])
+
+  const onClickChildField = useMemo(() => {
+    return callbackMapper(onClickFieldImpl)
+  }, [
+    onClickFieldImpl,
+    callbackMapper,
+  ])
   return (
     <Stack>
       <TextInput
         ErrorRenderer={ErrorRenderer}
-        label='fields view'
+        label={ParentFieldLabel()}
+        onClick={onClick$}
       />
-      <FieldsView
-        onClick={onClick}
-      />
+      <Paper
+        p='sm'
+        withBorder={true}
+      >
+        <Text>
+          $.a
+        </Text>
+        <Component
+          onClickField={onClickChildField}
+        />
+      </Paper>
     </Stack>
   )
 }
@@ -64,6 +106,7 @@ const meta: Meta<typeof Component> = {
     onFieldFocus: action('onFieldFocus'),
     onFieldSubmit: action('onFieldSubmit'),
     onFieldValueChange: action('onFieldValueChange'),
+    onClickField: action('onClickField'),
   },
 }
 

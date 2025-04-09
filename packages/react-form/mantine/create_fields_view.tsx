@@ -1,3 +1,4 @@
+import { type StringConcatOf } from '@strictly/base'
 import type { FieldsViewProps } from 'core/props'
 import { observer } from 'mobx-react'
 import type {
@@ -10,6 +11,26 @@ import type { SubFormFields } from 'types/sub_form_fields'
 import type { ValueTypeOfField } from 'types/value_type_of_field'
 import type { MantineFieldComponent } from './types'
 
+export type CallbackMapper<ValuePath extends string> = {
+  <
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    Cb extends (...args: any[]) => any,
+  >(cb: Cb): Parameters<Cb> extends [infer SubFormValuePath extends string, ...(infer Rest)]
+    ? SubFormValuePath extends StringConcatOf<ValuePath, infer Postfix>
+      ? (valuePath: `$${Postfix}`, ...rest: Rest) => ReturnType<Cb>
+    : never
+    : never,
+}
+
+export type FieldsView<
+  ValuePath extends string = string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  C extends ComponentType<any> = ComponentType<any>,
+> = {
+  Component: C,
+  callbackMapper: CallbackMapper<ValuePath>,
+}
+
 export function createFieldsView<
   F extends Fields,
   K extends keyof AllFieldsOfFields<F>,
@@ -18,7 +39,7 @@ export function createFieldsView<
   valuePath: K,
   FieldsView: ComponentType<P>,
   observableProps: FieldsViewProps<F>,
-): MantineFieldComponent<FieldsViewProps<P['fields']>, P, never> {
+): FieldsView<K, MantineFieldComponent<FieldsViewProps<P['fields']>, P, never>> {
   function toKey(subKey: string | number | symbol): string {
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     return (subKey as string).replace('$', valuePath as string)
@@ -49,36 +70,50 @@ export function createFieldsView<
   }
 
   // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-  return observer(function (props: ComponentProps<MantineFieldComponent<FieldsViewProps<P['fields']>, P, never>>) {
-    // convert fields to sub-fields
-    const subFields = Object.entries(observableProps.fields).reduce<Record<string, unknown>>(
-      (acc, [
-        fieldKey,
-        fieldValue,
-      ]) => {
+  const Component = observer(
+    function (props: ComponentProps<MantineFieldComponent<FieldsViewProps<P['fields']>, P, never>>) {
+      // convert fields to sub-fields
+      const subFields = Object.entries(observableProps.fields).reduce<Record<string, unknown>>(
+        (acc, [
+          fieldKey,
+          fieldValue,
+        ]) => {
+          // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+          if (fieldKey.startsWith(valuePath as string)) {
+            acc[toSubKey(fieldKey)] = fieldValue
+          }
+          return acc
+        },
         // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-        if (fieldKey.startsWith(valuePath as string)) {
-          acc[toSubKey(fieldKey)] = fieldValue
-        }
-        return acc
-      },
-      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-      {} as P['fields'],
-    )
+        {} as P['fields'],
+      )
 
-    return (
-      <FieldsView
-        {
-          // maybe we can do this in a more type safe way
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/consistent-type-assertions
-          ...props as any
-        }
-        fields={subFields}
-        onFieldBlur={onFieldBlur}
-        onFieldFocus={onFieldFocus}
-        onFieldSubmit={onFieldSubmit}
-        onFieldValueChange={onFieldValueChange}
-      />
-    )
-  }) as unknown as MantineFieldComponent<FieldsViewProps<P['fields']>, P, never>
+      return (
+        <FieldsView
+          {
+            // maybe we can do this in a more type safe way
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/consistent-type-assertions
+            ...props as any
+          }
+          fields={subFields}
+          onFieldBlur={onFieldBlur}
+          onFieldFocus={onFieldFocus}
+          onFieldSubmit={onFieldSubmit}
+          onFieldValueChange={onFieldValueChange}
+        />
+      )
+    },
+  ) as unknown as MantineFieldComponent<FieldsViewProps<P['fields']>, P, never>
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/consistent-type-assertions
+  const callbackMapper: CallbackMapper<K> = ((callback: (valuePath: string, ...args: any[]) => any) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return (subFormValuePath: string, ...args: any[]) => {
+      const valuePath = toKey(subFormValuePath)
+      return callback(valuePath, ...args)
+    }
+  }) as CallbackMapper<K>
+  return {
+    Component,
+    callbackMapper,
+  }
 }

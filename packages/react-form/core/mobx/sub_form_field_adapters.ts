@@ -1,6 +1,7 @@
 import { type StringConcatOf } from '@strictly/base'
 import {
   flattenValuesOfType,
+  type ReadonlyTypeOfType,
   type Type,
   type ValueOfType,
 } from '@strictly/define'
@@ -47,10 +48,15 @@ export function subFormFieldAdapters<
   subAdapters: SubAdapters,
   parentTypePath: TypePath,
   contextType: ContextType,
-): SubFormFieldAdapters<SubAdapters, TypePath, TypePathsToValuePaths[TypePath], ValueOfType<ContextType>> {
+): SubFormFieldAdapters<
+  SubAdapters,
+  TypePath,
+  TypePathsToValuePaths[TypePath],
+  ValueOfType<ReadonlyTypeOfType<ContextType>>
+> {
   // assume the number of '.' in the type path will correspond to the number of '.' in the value path
   const dotCount = parentTypePath.split('.').length
-  function getSubValuePathAndContext(valuePath: string, context: ValueOfType<ContextType>) {
+  function getSubValuePathAndContext(valuePath: string, context: ValueOfType<ReadonlyTypeOfType<ContextType>>) {
     const parentValuePath = valuePath.split('.').slice(0, dotCount).join('.')
     const subValuePath = valuePath.replace(parentValuePath, '$')
     const subContext = flattenValuesOfType(contextType, context)[parentValuePath]
@@ -80,5 +86,10 @@ export function subFormFieldAdapters<
     }
     acc[typePath] = adaptedAdapter
     return acc
-  }, {}) as SubFormFieldAdapters<SubAdapters, TypePath, TypePathsToValuePaths[TypePath], ValueOfType<ContextType>>
+  }, {}) as SubFormFieldAdapters<
+    SubAdapters,
+    TypePath,
+    TypePathsToValuePaths[TypePath],
+    ValueOfType<ReadonlyTypeOfType<ContextType>>
+  >
 }

@@ -4,6 +4,7 @@ import {
 } from '@strictly/react-form'
 import { petFieldAdapters } from 'features/form/pet/fields'
 import {
+  type Pet,
   petType,
   type PetValueToTypePaths,
   type TagValuePath,
@@ -19,6 +20,10 @@ export class PetFormPresenter extends FormPresenter<
       petType,
       petFieldAdapters,
     )
+  }
+
+  override createModel(value: Pet) {
+    return new PetFormModel(this.type, value, this.adapters)
   }
 
   removeTag(model: PetFormModel, valuePath: TagValuePath) {

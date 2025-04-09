@@ -5,12 +5,13 @@ import {
   type ValuePathsOfPresenter,
 } from '@strictly/react-form'
 import { emulateTab } from 'emulate-tab'
-import { PetFieldsView as PetFormImpl } from 'features/form/pet/pet_fields_view'
+import { PetFieldsView as PetFieldsViewImpl } from 'features/form/pet/pet_fields_view'
 import { PetSpeciesCatFieldsView } from 'features/form/pet/pet_species_cat_fields_view'
 import { PetSpeciesDogFieldsView } from 'features/form/pet/pet_species_dog_fields_view'
 import { PetSpeciesFormFieldsView } from 'features/form/pet/pet_species_fields_view'
 import {
   type Pet,
+  type PetValuePaths,
   type Species,
   type TagValuePath,
 } from 'features/form/pet/types'
@@ -63,6 +64,14 @@ export function PetForm({
     onValidFieldSubmit,
     onValidFormSubmit,
   })
+
+  const onClearField = useCallback(
+    function (valuePath: keyof PetValuePaths) {
+      presenter.clearFieldValue(model, valuePath)
+      presenter.clearFieldError(model, valuePath)
+    },
+    [model],
+  )
 
   const onRemoveTag = useCallback(
     function (valuePath: TagValuePath) {
@@ -153,6 +162,7 @@ export function PetForm({
         onFieldFocus,
         onFieldBlur,
         onRemoveTag,
+        onClearField,
         SpeciesComponent,
       }
     },
@@ -164,9 +174,10 @@ export function PetForm({
       onFieldFocus,
       onFieldBlur,
       onRemoveTag,
+      onClearField,
       SpeciesComponent,
     ],
-    PetFormImpl,
+    PetFieldsViewImpl,
   )
 
   return <PetForm />

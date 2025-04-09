@@ -44,7 +44,10 @@ import {
   createCheckbox,
   type SuppliedCheckboxProps,
 } from './create_checkbox'
-import { createFieldsView } from './create_fields_view'
+import {
+  createFieldsView,
+  type FieldsView,
+} from './create_fields_view'
 import { createForm } from './create_form'
 import {
   createList,
@@ -185,7 +188,7 @@ class MantineFormImpl<
     // the cache cannot reference keys, so we just use any
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     [keyof AllFieldsOfFields<F>, ComponentType<any>, FieldsViewProps<F>],
-    ComponentType
+    FieldsView
   > = new Cache(
     createFieldsView.bind(this),
   )
@@ -392,11 +395,11 @@ class MantineFormImpl<
   fieldsView<
     K extends keyof AllFieldsOfFields<F>,
     P extends FieldsViewProps<Fields> = FieldsViewProps<SubFormFields<F, K>>,
-  >(valuePath: K, FieldsView: ComponentType<P>): MantineFieldComponent<
+  >(valuePath: K, FieldsView: ComponentType<P>): FieldsView<K, MantineFieldComponent<
     FieldsViewProps<P['fields']>,
     P,
     never
-  > {
+  >> {
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     return this.fieldsViewCache.retrieveOrCreate(
       valuePath,
@@ -404,11 +407,11 @@ class MantineFormImpl<
       // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
       FieldsView as ComponentType,
       this,
-    ) as unknown as MantineFieldComponent<
+    ) as unknown as FieldsView<K, MantineFieldComponent<
       FieldsViewProps<P['fields']>,
       P,
       never
-    >
+    >>
   }
 
   form<

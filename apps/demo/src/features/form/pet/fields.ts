@@ -44,17 +44,10 @@ const rawPetFieldAdapters = {
   '$.alive': identityAdapter(false).narrow,
   '$.name': trimmingStringAdapter().narrow,
   '$.newTag': trimmingStringAdapter().narrow,
-  ...subFormFieldAdapters<
-    typeof unvalidatedPetOwnerFieldAdapters,
-    '$.owner',
-    PetTypeToValuePaths,
-    ReadonlyTypeOfType<typeof petType>
-  >(
+  ...subFormFieldAdapters(
     unvalidatedPetOwnerFieldAdapters,
     '$.owner',
-    // TODO this cast is annoying. Is there some way to generate a readonlyPetType instead?
-    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-    petType as ReadonlyTypeOfType<typeof petType>,
+    petType,
   ),
   '$.owner': adapterFromTwoWayConverter(
     new NullableToBooleanConverter(
