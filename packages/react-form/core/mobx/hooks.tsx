@@ -61,6 +61,7 @@ export function useDefaultMobxFormHooks<
   options: {
     onValidFieldSubmit?: <Path extends ValuePathsOfPresenter<P>>(model: ModelOfPresenter<P>, valuePath: Path) => void,
     onValidFormSubmit?: (model: ModelOfPresenter<P>, value: ValueOfPresenter<P>) => void,
+    // TODO the types of C are not working, needs a local implementation to test
     FormFieldsView: C,
   },
 ): {

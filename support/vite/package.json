@@ -11,5 +11,5 @@
     "lint": "cross-env ESLINT_USE_FLAT_CONFIG=false eslint . --max-warnings=0",
     "lint:fix": "cross-env ESLINT_USE_FLAT_CONFIG=false eslint . --fix"
   },
-  "version": "0.0.10"
+  "version": "0.0.11"
 }

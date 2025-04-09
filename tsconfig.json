@@ -33,7 +33,7 @@
     "strictFunctionTypes": true,
     "strictNullChecks": true,
     "strictPropertyInitialization": true,
-    "target": "ESNext",
+    "target": "ES6",
     "types": ["vitest/globals"],
     "useDefineForClassFields": true,
     "useUnknownInCatchVariables": true
