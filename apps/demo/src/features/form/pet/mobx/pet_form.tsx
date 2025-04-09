@@ -80,6 +80,11 @@ export function PetForm({
     [model],
   )
 
+  // TODO move to fieldsView instead of DI!
+  // NOTE it will require the value/type paths for discriminated unions to be of the form
+  // union:discriminator.field instead of union.discriminator:field (or maybe discriminator:union.field), which
+  // I think has previously caused recursion issues, but might be solvable if it all gets fixed instead of only
+  // partly is done
   const SpeciesCatComponent = usePartialObserverComponent(
     function () {
       return {
