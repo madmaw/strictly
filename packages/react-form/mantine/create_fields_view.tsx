@@ -1,4 +1,8 @@
 import { type StringConcatOf } from '@strictly/base'
+import {
+  jsonPathPrefix,
+  jsonPathUnprefix,
+} from '@strictly/define'
 import type { FieldsViewProps } from 'core/props'
 import { observer } from 'mobx-react'
 import type {
@@ -42,12 +46,12 @@ export function createFieldsView<
 ): FieldsView<K, MantineFieldComponent<FieldsViewProps<P['fields']>, P, never>> {
   function toKey(subKey: string | number | symbol): string {
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-    return (subKey as string).replace('$', valuePath as string)
+    return jsonPathPrefix(valuePath, subKey as string)
   }
 
   function toSubKey(key: string | number | symbol): string {
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-    return (key as string).replace(valuePath as string, '$')
+    return jsonPathUnprefix(valuePath, key as string)
   }
 
   function onFieldValueChange<SubK extends keyof P['fields']>(

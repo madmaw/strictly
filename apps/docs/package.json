@@ -29,5 +29,5 @@
     "preview": "astro preview",
     "serve": "http-server dist"
   },
-  "version": "0.0.12"
+  "version": "0.0.13"
 }

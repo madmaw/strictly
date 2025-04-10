@@ -70,5 +70,5 @@
     "test:watch": "vitest"
   },
   "type": "module",
-  "version": "0.0.12"
+  "version": "0.0.13"
 }
