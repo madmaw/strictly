@@ -23,20 +23,6 @@ export default meta
 
 type Story = StoryObj<typeof Component>
 
-export const Empty: Story = {
-  args: {
-    value: {
-      alive: false,
-      name: '',
-      tags: [],
-      species: {
-        type: 'cat',
-        meows: 0,
-      },
-    },
-  },
-}
-
 export const Valid: Story = {
   args: {
     value: {
@@ -50,6 +36,20 @@ export const Valid: Story = {
         breed: 'DSH',
         type: 'cat',
         meows: 2,
+      },
+    },
+  },
+}
+
+export const Unalive: Story = {
+  args: {
+    value: {
+      alive: false,
+      name: '',
+      tags: [],
+      species: {
+        type: 'cat',
+        meows: 0,
       },
     },
   },

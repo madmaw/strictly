@@ -6,14 +6,10 @@ import {
   nullType,
   numberType,
   object,
-  type ReadonlyOfTypeDef,
-  type ReadonlyTypeOfType,
   record,
   stringType,
-  type Type,
   union,
   type ValueOfType,
-  type ValueOfTypeDef,
   type ValueToTypePathsOfType,
 } from '@strictly/define'
 import { type FieldAdapter } from 'core/mobx/field_adapter'
@@ -24,9 +20,8 @@ import {
 import {
   type FlattenedTypePathsToAdaptersOf,
   FormModel,
-  FormPresenter,
   type ValuePathsToAdaptersOf,
-} from 'core/mobx/form_presenter'
+} from 'core/mobx/form_model'
 import { IntegerToStringConverter } from 'field_converters/integer_to_string_converter'
 import { NullableToBooleanConverter } from 'field_converters/nullable_to_boolean_converter'
 import { SelectDiscriminatedUnionConverter } from 'field_converters/select_value_type_converter'
@@ -42,21 +37,6 @@ import {
 } from './fixtures'
 
 const IS_NAN_ERROR = 1
-
-class TestFormPresenter<
-  T extends Type,
-  ValueToTypePaths extends Readonly<Record<string, string>>,
-  TypePathsToAdapters extends FlattenedTypePathsToAdaptersOf<
-    FlattenedValuesOfType<T, '*'>,
-    ValueOfType<ReadonlyTypeOfType<T>>
-  >,
-> extends FormPresenter<T, ValueToTypePaths, TypePathsToAdapters> {
-  override createModel(value: ValueOfTypeDef<ReadonlyOfTypeDef<T['definition']>, {}>): FormModel<T, ValueToTypePaths,
-    TypePathsToAdapters, ValuePathsToAdaptersOf<TypePathsToAdapters, ValueToTypePaths>>
-  {
-    return new FormModel(this.type, value, this.adapters)
-  }
-}
 
 const originalIntegerToStringAdapter = adapterFromTwoWayConverter(
   new IntegerToStringConverter(IS_NAN_ERROR),
@@ -492,20 +472,12 @@ describe('all', function () {
     // TODO union
   })
 
-  describe('FormPresenter', function () {
+  describe('FormModel', function () {
     describe('literal', function () {
       const typeDef = numberType
       const adapters = {
         $: integerToStringAdapter,
       } as const
-      const presenter = new TestFormPresenter<
-        typeof typeDef,
-        ValueToTypePathsOfType<typeof typeDef>,
-        typeof adapters
-      >(
-        typeDef,
-        adapters,
-      )
       const originalValue: ValueOfType<typeof typeDef> = 2
       let model: FormModel<
         typeof typeDef,
@@ -513,13 +485,21 @@ describe('all', function () {
         typeof adapters
       >
       beforeEach(function () {
-        model = presenter.createModel(originalValue)
+        model = new FormModel<
+          typeof typeDef,
+          ValueToTypePathsOfType<typeof typeDef>,
+          typeof adapters
+        >(
+          typeDef,
+          originalValue,
+          adapters,
+        )
       })
 
       describe('setFieldValueAndValidate', function () {
         describe('success', function () {
           beforeEach(function () {
-            presenter.setFieldValueAndValidate<'$'>(model, '$', '1')
+            model.setFieldValueAndValidate<'$'>('$', '1')
           })
 
           it('does set the underlying value', function () {
@@ -539,7 +519,7 @@ describe('all', function () {
         describe('failure', function () {
           describe('conversion fails', function () {
             beforeEach(function () {
-              presenter.setFieldValueAndValidate<'$'>(model, '$', 'x')
+              model.setFieldValueAndValidate<'$'>('$', 'x')
             })
 
             it('does not set the underlying value', function () {
@@ -565,7 +545,7 @@ describe('all', function () {
                 error: errorCode,
                 value: [newValue],
               })
-              presenter.setFieldValueAndValidate<'$'>(model, '$', '-1')
+              model.setFieldValueAndValidate<'$'>('$', '-1')
             })
 
             it('does set the underlying value', function () {
@@ -596,7 +576,7 @@ describe('all', function () {
         ],
       ] as const)('setFieldValue to %s', function (newValue, expectedValue) {
         beforeEach(function () {
-          presenter.setFieldValue<'$'>(model, '$', newValue)
+          model.setFieldValue<'$'>('$', newValue)
         })
 
         it('does set the underlying value', function () {
@@ -619,14 +599,6 @@ describe('all', function () {
       const converters = {
         '$.*': integerToStringAdapter,
       } as const
-      const presenter = new TestFormPresenter<
-        typeof typeDef,
-        ValueToTypePathsOfType<typeof typeDef>,
-        typeof converters
-      >(
-        typeDef,
-        converters,
-      )
       let originalValue: ValueOfType<typeof typeDef>
       let model: FormModel<
         typeof typeDef,
@@ -639,13 +611,21 @@ describe('all', function () {
           3,
           7,
         ]
-        model = presenter.createModel(originalValue)
+        model = new FormModel<
+          typeof typeDef,
+          ValueToTypePathsOfType<typeof typeDef>,
+          typeof converters
+        >(
+          typeDef,
+          originalValue,
+          converters,
+        )
       })
 
       describe('setFieldValueAndValidate', function () {
         describe('success', function () {
           beforeEach(function () {
-            presenter.setFieldValueAndValidate<'$.0'>(model, '$.0', '100')
+            model.setFieldValueAndValidate<'$.0'>('$.0', '100')
           })
 
           it('sets the underlying value', function () {
@@ -668,7 +648,7 @@ describe('all', function () {
 
         describe('failure', function () {
           beforeEach(function () {
-            presenter.setFieldValueAndValidate<'$.0'>(model, '$.0', 'x')
+            model.setFieldValueAndValidate<'$.0'>('$.0', 'x')
           })
 
           it('does not set the underlying value', function () {
@@ -691,7 +671,7 @@ describe('all', function () {
         'x',
       ])('setFieldValue to %s', function (newValue) {
         beforeEach(function () {
-          presenter.setFieldValue(model, '$.0', newValue)
+          model.setFieldValue('$.0', newValue)
         })
 
         it('does not set the underlying value', function () {
@@ -710,10 +690,10 @@ describe('all', function () {
 
       describe('validate', function () {
         beforeEach(function () {
-          presenter.setFieldValue(model, '$.0', 'x')
-          presenter.setFieldValue(model, '$.1', '2')
-          presenter.setFieldValue(model, '$.2', 'z')
-          presenter.validateAll(model)
+          model.setFieldValue('$.0', 'x')
+          model.setFieldValue('$.1', '2')
+          model.setFieldValue('$.2', 'z')
+          model.validateAll()
         })
 
         it('contains errors for all invalid fields', function () {
@@ -756,7 +736,7 @@ describe('all', function () {
         })
 
         it('supplies the full, previous context when converting', function () {
-          presenter.setFieldValueAndValidate(model, '$.2', '4')
+          model.setFieldValueAndValidate('$.2', '4')
 
           expect(integerToStringAdapter.revert).toHaveBeenCalledOnce()
           expect(integerToStringAdapter.revert).toHaveBeenCalledWith(
@@ -782,7 +762,7 @@ describe('all', function () {
             model.errors['$.0'] = 0
             model.errors['$.1'] = 1
             model.errors['$.2'] = 2
-            presenter.addListItem(model, '$', null, 0)
+            model.addListItem('$', null, 0)
           })
 
           it('adds the list item to the underlying value', function () {
@@ -839,7 +819,7 @@ describe('all', function () {
 
         describe('add defined value', function () {
           beforeEach(function () {
-            presenter.addListItem(model, '$', [5])
+            model.addListItem('$', [5])
           })
 
           it('adds the expected value at the end', function () {
@@ -881,7 +861,7 @@ describe('all', function () {
 
         describe('remove first item', function () {
           beforeEach(function () {
-            presenter.removeListItem(model, '$.0')
+            model.removeListItem('$.0')
           })
 
           it('updates the underlying value', function () {
@@ -907,7 +887,7 @@ describe('all', function () {
 
         describe('remove second item', function () {
           beforeEach(function () {
-            presenter.removeListItem(model, '$.1')
+            model.removeListItem('$.1')
           })
 
           it('updates the underlying value', function () {
@@ -930,6 +910,25 @@ describe('all', function () {
             })
           })
         })
+
+        describe('remove two items', function () {
+          beforeEach(function () {
+            model.removeListItem('$.0', '$.1')
+          })
+
+          it('updates the underlying value', function () {
+            expect(model.value).toEqual([7])
+          })
+
+          it('updates the field values and errors', function () {
+            expect(model.fields).toEqual({
+              '$.0': expect.objectContaining({
+                value: '7',
+                error: 2,
+              }),
+            })
+          })
+        })
       })
     })
 
@@ -946,14 +945,6 @@ describe('all', function () {
           '$.*': integerToStringAdapter,
         } as const
         type ValueToTypePaths = ValueToTypePathsOfType<typeof type>
-        const presenter = new TestFormPresenter<
-          typeof type,
-          ValueToTypePaths,
-          typeof adapters
-        >(
-          type,
-          adapters,
-        )
         let originalValue: ValueOfType<typeof type>
         let model: FormModel<
           typeof type,
@@ -962,7 +953,15 @@ describe('all', function () {
         >
         beforeEach(function () {
           originalValue = null
-          model = presenter.createModel(originalValue)
+          model = new FormModel<
+            typeof type,
+            ValueToTypePaths,
+            typeof adapters
+          >(
+            type,
+            originalValue,
+            adapters,
+          )
         })
 
         it('has the expected fields', function () {
@@ -979,7 +978,7 @@ describe('all', function () {
         describe('setFieldValueAndValidate', function () {
           describe('success', function () {
             beforeEach(function () {
-              presenter.setFieldValueAndValidate<'$'>(model, '$', true)
+              model.setFieldValueAndValidate<'$'>('$', true)
             })
 
             it('sets the underlying value', function () {
@@ -1016,21 +1015,21 @@ describe('all', function () {
           '$.x:a': identityAdapter(0).narrow,
           '$.y:b': identityAdapter(false).narrow,
         } as const
-        const presenter = new TestFormPresenter<
-          typeof type,
-          ValueToTypePaths,
-          typeof adapters
-        >(
-          type,
-          adapters,
-        )
 
         describe('isValuePathActive', function () {
           describe('discriminator x', function () {
-            const model = presenter.createModel({
-              d: 'x',
-              a: 1,
-            })
+            const model = new FormModel<
+              typeof type,
+              ValueToTypePaths,
+              typeof adapters
+            >(
+              type,
+              {
+                d: 'x',
+                a: 1,
+              },
+              adapters,
+            )
             it.each([
               [
                 '$',
@@ -1045,16 +1044,24 @@ describe('all', function () {
                 false,
               ],
             ] as const)('value path %s is active %s', function (path, expected) {
-              const isValid = presenter.isValuePathActive(model, path)
+              const isValid = model.isValuePathActive(path)
               expect(isValid).toBe(expected)
             })
           })
 
           describe('discriminator y', function () {
-            const model = presenter.createModel({
-              d: 'y',
-              b: false,
-            })
+            const model = new FormModel<
+              typeof type,
+              ValueToTypePaths,
+              typeof adapters
+            >(
+              type,
+              {
+                d: 'y',
+                b: false,
+              },
+              adapters,
+            )
             it.each([
               [
                 '$',
@@ -1069,7 +1076,7 @@ describe('all', function () {
                 true,
               ],
             ] as const)('value path %s is active %s', function (path, expected) {
-              const isValid = presenter.isValuePathActive(model, path)
+              const isValid = model.isValuePathActive(path)
               expect(isValid).toBe(expected)
             })
           })
@@ -1087,14 +1094,6 @@ describe('all', function () {
         $: '$',
         '$.fake': '$.fake',
       }
-      const presenter = new TestFormPresenter<
-        typeof typeDef,
-        JsonPaths,
-        typeof converters
-      >(
-        typeDef,
-        converters,
-      )
       let originalValue: ValueOfType<typeof typeDef>
       let model: FormModel<
         typeof typeDef,
@@ -1103,7 +1102,15 @@ describe('all', function () {
       >
       beforeEach(function () {
         originalValue = 1
-        model = presenter.createModel(originalValue)
+        model = new FormModel<
+          typeof typeDef,
+          JsonPaths,
+          typeof converters
+        >(
+          typeDef,
+          originalValue,
+          converters,
+        )
       })
 
       it('returns the default value for the fake field', function () {
@@ -1114,7 +1121,7 @@ describe('all', function () {
 
       describe('setting fake field', function () {
         beforeEach(function () {
-          presenter.setFieldValue(model, '$.fake', true)
+          model.setFieldValue('$.fake', true)
         })
 
         it('stores the new value', function () {

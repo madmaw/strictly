@@ -2,7 +2,7 @@ import {
   type FormProps,
   useDefaultMobxFormHooks,
   usePartialObserverComponent,
-  type ValuePathsOfPresenter,
+  type ValuePathsOfModel,
 } from '@strictly/react-form'
 import { emulateTab } from 'emulate-tab'
 import { PetFieldsView as PetFieldsViewImpl } from 'features/form/pet/pet_fields_view'
@@ -21,61 +21,61 @@ import {
   useMemo,
 } from 'react'
 import {
-  type PetFormModel,
-  PetFormPresenter,
-} from './pet_form_presenter'
-
-const presenter = new PetFormPresenter()
+  PetFormModel,
+} from './pet_form_model'
 
 export function PetForm({
   value,
   onValueChange,
 }: FormProps<Pet>) {
+  const model = useMemo(() => {
+    return new PetFormModel(value)
+  }, [value])
+
   const onValidFieldSubmit = useCallback(
-    function<Path extends ValuePathsOfPresenter<typeof presenter>> (model: PetFormModel, valuePath: Path) {
-      const typePath = presenter.typePath(valuePath)
+    function<Path extends ValuePathsOfModel<PetFormModel>> (valuePath: Path) {
+      const typePath = model.typePath(valuePath)
       if (typePath === '$.newTag' && model.fields['$.newTag'].value.trim().length > 0) {
         // get the validated value
         const newValue = model.fields['$.newTag'].value
-        presenter.addListItem(model, '$.tags', [newValue])
-        presenter.clearFieldValue(model, '$.newTag')
+        model.addListItem('$.tags', [newValue])
+        model.clearFieldValue('$.newTag')
       } else {
         emulateTab()
       }
     },
-    [],
+    [model],
   )
 
   const onValidFormSubmit = useCallback(
-    function (_model: PetFormModel, value: Pet) {
+    function (value: Pet) {
       onValueChange(value)
     },
     [onValueChange],
   )
 
   const {
-    model,
     onFieldValueChange,
     onFieldBlur,
     onFieldFocus,
     onFieldSubmit,
     onFormSubmit,
-  } = useDefaultMobxFormHooks(presenter, value, {
+  } = useDefaultMobxFormHooks(model, {
     onValidFieldSubmit,
     onValidFormSubmit,
   })
 
   const onClearField = useCallback(
     function (valuePath: keyof PetValuePaths) {
-      presenter.clearFieldValue(model, valuePath)
-      presenter.clearFieldError(model, valuePath)
+      model.clearFieldValue(valuePath)
+      model.clearFieldError(valuePath)
     },
     [model],
   )
 
   const onRemoveTag = useCallback(
     function (valuePath: TagValuePath) {
-      presenter.removeTag(model, valuePath)
+      model.removeTag(valuePath)
     },
     [model],
   )
