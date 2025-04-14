@@ -60,7 +60,7 @@ export const unvalidatedPetOwnerFieldAdapters = {
   FieldAdaptersOfValues<
     FlattenedValuesOfType<ReadonlyTypeOfType<typeof petOwnerType>, '*'>,
     PetOwnerTypeToValuePaths,
-    PetOwner
+    {}
   >
 >
 

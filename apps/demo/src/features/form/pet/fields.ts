@@ -1,5 +1,8 @@
 import {
   type FlattenedValuesOfType,
+  flattenValidatorsOfValidatingType,
+  mergeValidators,
+  MinimumStringLengthValidator,
   type ReadonlyTypeOfType,
 } from '@strictly/define'
 import {
@@ -31,13 +34,36 @@ import {
   dogBreedType,
   NOT_A_BREED_ERROR,
   NOT_A_NUMBER_ERROR,
-  type Pet,
   petType,
   type PetTypeToValuePaths,
-  petValidators,
   type PetValueToTypePaths,
   speciesType,
 } from './types'
+
+export const TagAlreadyExistsErrorType = 'tag_already_exists'
+export type TagAlreadyExistsError = {
+  type: typeof TagAlreadyExistsErrorType,
+  value: string,
+}
+
+const petTypeValidators = flattenValidatorsOfValidatingType<typeof petType, PetTypeToValuePaths>(
+  petType,
+)
+export const petValidators = {
+  ...petTypeValidators,
+  '$.newTag': mergeValidators(
+    new MinimumStringLengthValidator(2),
+    (value, _path, { tags }: { tags: string[] }): TagAlreadyExistsError | null => {
+      if (tags.indexOf(value) >= 0) {
+        return {
+          type: TagAlreadyExistsErrorType,
+          value,
+        }
+      }
+      return null
+    },
+  ),
+} as const
 
 // TODO move fields into respective views
 const rawPetFieldAdapters = {
@@ -47,7 +73,6 @@ const rawPetFieldAdapters = {
   ...subFormFieldAdapters(
     unvalidatedPetOwnerFieldAdapters,
     '$.owner',
-    petType,
   ),
   '$.owner': adapterFromTwoWayConverter(
     new NullableToBooleanConverter(
@@ -111,15 +136,18 @@ const rawPetFieldAdapters = {
       false,
     ),
   ).narrow,
-  '$.tags': listAdapter<string, '$.tags', Pet>().narrow,
+  '$.tags': listAdapter<string, '$.tags', {}>().narrow,
   '$.tags.*': trimmingStringAdapter().narrow,
 } as const satisfies Partial<
   FieldAdaptersOfValues<
     FlattenedValuesOfType<ReadonlyTypeOfType<typeof petType>, '*'>,
     PetTypeToValuePaths,
-    Pet
+    {}
   > & {
-    '$.newTag': FieldAdapter<string, string, never, '$.newTag', Pet>,
+    // TODO check list of existing tags in context
+    '$.newTag': FieldAdapter<string, string, TagAlreadyExistsError, '$.newTag', {
+      tags: string[],
+    }>,
   }
 >
 

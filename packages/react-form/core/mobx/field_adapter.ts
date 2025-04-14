@@ -38,3 +38,12 @@ export type ValuePathOfFieldAdapter<C extends FieldAdapter> = C extends FieldAda
   infer ValuePath
 > ? ValuePath
   : never
+
+export type ContextOfFieldAdapter<F extends FieldAdapter> = F extends FieldAdapter<
+  infer _From,
+  infer _To,
+  infer _E,
+  infer _P,
+  infer Context
+> ? Context
+  : never

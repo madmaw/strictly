@@ -5,7 +5,6 @@ import {
   type FlattenedAccessorsOfType,
   type FlattenedTypesOfType,
   type FlattenedValuesOfType,
-  flattenValidatorsOfValidatingType,
   list,
   literal,
   MinimumStringLengthValidator,
@@ -86,10 +85,3 @@ export type FlattenedPetValues = FlattenedValuesOfType<typeof petType>
 export type FlattenedPetAccessors = FlattenedAccessorsOfType<typeof petType>
 
 export type PetTypeToValuePaths = Reverse<PetValueToTypePaths>
-
-export const petValidators = {
-  ...flattenValidatorsOfValidatingType<typeof petType, PetTypeToValuePaths>(
-    petType,
-  ),
-  '$.newTag': new MinimumStringLengthValidator(2),
-} as const

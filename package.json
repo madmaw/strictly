@@ -68,7 +68,7 @@
     "test:force": "turbo run test --force",
     "test:update": "turbo run test:update"
   },
-  "version": "0.0.13",
+  "version": "0.0.14",
   "workspaces": {
     "packages": [
       "apps/*",

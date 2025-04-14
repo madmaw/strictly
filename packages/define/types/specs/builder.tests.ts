@@ -21,7 +21,7 @@ describe('builder', function () {
       type C = {
         readonly type: TypeDefType.Literal,
         readonly valuePrototype: [number],
-        readonly rule: Rule<never>,
+        readonly rule: Rule<never, {}>,
         readonly required: boolean,
         readonly readonly: boolean,
       }
@@ -49,19 +49,19 @@ describe('builder', function () {
           readonly [0]: {
             readonly type: TypeDefType.Literal,
             readonly valuePrototype: [number],
-            readonly rule: Rule<never>,
+            readonly rule: Rule<never, {}>,
             readonly required: boolean,
             readonly readonly: boolean,
           },
           readonly [1]: {
             readonly type: TypeDefType.Literal,
             readonly valuePrototype: [null],
-            readonly rule: Rule<never>,
+            readonly rule: Rule<never, {}>,
             readonly required: boolean,
             readonly readonly: boolean,
           },
         },
-        readonly rule: Rule<never>,
+        readonly rule: Rule<never, {}>,
         readonly required: boolean,
         readonly readonly: boolean,
       }
@@ -125,11 +125,11 @@ describe('builder', function () {
             elements: {
               readonly type: TypeDefType.Literal,
               readonly valuePrototype: [number],
-              readonly rule: Rule<never>,
+              readonly rule: Rule<never, {}>,
               readonly required: boolean,
               readonly readonly: boolean,
             },
-            readonly rule: Rule<never>,
+            readonly rule: Rule<never, {}>,
             readonly required: boolean,
             readonly readonly: boolean,
           }
@@ -147,11 +147,11 @@ describe('builder', function () {
           readonly elements: {
             readonly type: TypeDefType.Literal,
             readonly valuePrototype: [number],
-            readonly rule: Rule<never>,
+            readonly rule: Rule<never, {}>,
             readonly required: boolean,
             readonly readonly: boolean,
           },
-          readonly rule: Rule<never>,
+          readonly rule: Rule<never, {}>,
           readonly required: boolean,
           readonly readonly: boolean,
         }
@@ -173,11 +173,11 @@ describe('builder', function () {
             valueTypeDef: {
               readonly type: TypeDefType.Literal,
               readonly valuePrototype: [number],
-              readonly rule: Rule<never>,
+              readonly rule: Rule<never, {}>,
               readonly required: boolean,
               readonly readonly: boolean,
             },
-            readonly rule: Rule<never>,
+            readonly rule: Rule<never, {}>,
             readonly required: boolean,
             readonly readonly: boolean,
           }
@@ -196,11 +196,11 @@ describe('builder', function () {
             readonly valueTypeDef: {
               readonly type: TypeDefType.Literal,
               readonly valuePrototype: [number],
-              readonly rule: Rule<never>,
+              readonly rule: Rule<never, {}>,
               readonly required: boolean,
               readonly readonly: boolean,
             },
-            readonly rule: Rule<never>,
+            readonly rule: Rule<never, {}>,
             readonly required: boolean,
             readonly readonly: boolean,
           }
@@ -218,11 +218,11 @@ describe('builder', function () {
             valueTypeDef: {
               readonly type: TypeDefType.Literal,
               readonly valuePrototype: [number],
-              readonly rule: Rule<never>,
+              readonly rule: Rule<never, {}>,
               readonly required: boolean,
               readonly readonly: boolean,
             } | undefined,
-            readonly rule: Rule<never>,
+            readonly rule: Rule<never, {}>,
             readonly required: boolean,
             readonly readonly: boolean,
           }
@@ -241,11 +241,11 @@ describe('builder', function () {
             readonly valueTypeDef: {
               readonly type: TypeDefType.Literal,
               readonly valuePrototype: [number],
-              readonly rule: Rule<never>,
+              readonly rule: Rule<never, {}>,
               readonly required: boolean,
               readonly readonly: boolean,
             } | undefined,
-            readonly rule: Rule<never>,
+            readonly rule: Rule<never, {}>,
             readonly required: boolean,
             readonly readonly: boolean,
           }
@@ -265,11 +265,11 @@ describe('builder', function () {
             readonly valueTypeDef: {
               readonly type: TypeDefType.Literal,
               readonly valuePrototype: [number],
-              readonly rule: Rule<never>,
+              readonly rule: Rule<never, {}>,
               readonly required: boolean,
               readonly readonly: boolean,
             } | undefined,
-            readonly rule: Rule<never>,
+            readonly rule: Rule<never, {}>,
             readonly required: boolean,
             readonly readonly: boolean,
           }
@@ -295,7 +295,7 @@ describe('builder', function () {
             a: {
               readonly type: TypeDefType.Literal,
               readonly valuePrototype: [number],
-              readonly rule: Rule<never>,
+              readonly rule: Rule<never, {}>,
               readonly required: boolean,
               readonly readonly: boolean,
             },
@@ -304,7 +304,7 @@ describe('builder', function () {
             readonly b: {
               readonly type: TypeDefType.Literal,
               readonly valuePrototype: [boolean],
-              readonly rule: Rule<never>,
+              readonly rule: Rule<never, {}>,
               readonly required: boolean,
               readonly readonly: boolean,
             },
@@ -313,7 +313,7 @@ describe('builder', function () {
             c?: {
               readonly type: TypeDefType.Literal,
               readonly valuePrototype: [string],
-              readonly rule: Rule<never>,
+              readonly rule: Rule<never, {}>,
               readonly required: boolean,
               readonly readonly: boolean,
             },
@@ -322,12 +322,12 @@ describe('builder', function () {
             readonly d?: {
               readonly type: TypeDefType.Literal,
               readonly valuePrototype: [number],
-              readonly rule: Rule<never>,
+              readonly rule: Rule<never, {}>,
               readonly required: boolean,
               readonly readonly: boolean,
             },
           },
-        readonly rule: Rule<never>,
+        readonly rule: Rule<never, {}>,
         readonly required: boolean,
         readonly readonly: boolean,
       }
@@ -359,7 +359,7 @@ describe('builder', function () {
               readonly [1]: {
                 readonly type: TypeDefType.Literal,
                 readonly valuePrototype: [number],
-                readonly rule: Rule<never>,
+                readonly rule: Rule<never, {}>,
                 readonly required: boolean,
                 readonly readonly: boolean,
               },
@@ -368,12 +368,12 @@ describe('builder', function () {
               readonly [2]: {
                 readonly type: TypeDefType.Literal,
                 readonly valuePrototype: [string],
-                readonly rule: Rule<never>,
+                readonly rule: Rule<never, {}>,
                 readonly required: boolean,
                 readonly readonly: boolean,
               },
             },
-          readonly rule: Rule<never>,
+          readonly rule: Rule<never, {}>,
           readonly required: boolean,
           readonly readonly: boolean,
         }
@@ -407,12 +407,12 @@ describe('builder', function () {
                     a: {
                       readonly type: TypeDefType.Literal,
                       readonly valuePrototype: [boolean],
-                      readonly rule: Rule<never>,
+                      readonly rule: Rule<never, {}>,
                       readonly required: boolean,
                       readonly readonly: boolean,
                     },
                   },
-                  readonly rule: Rule<never>,
+                  readonly rule: Rule<never, {}>,
                   readonly required: boolean,
                   readonly readonly: boolean,
                 },
@@ -424,17 +424,17 @@ describe('builder', function () {
                     b: {
                       readonly type: TypeDefType.Literal,
                       readonly valuePrototype: [number],
-                      readonly rule: Rule<never>,
+                      readonly rule: Rule<never, {}>,
                       readonly required: boolean,
                       readonly readonly: boolean,
                     },
                   },
-                  readonly rule: Rule<never>,
+                  readonly rule: Rule<never, {}>,
                   readonly required: boolean,
                   readonly readonly: boolean,
                 },
               },
-            readonly rule: Rule<never>,
+            readonly rule: Rule<never, {}>,
             readonly required: boolean,
             readonly readonly: boolean,
           }

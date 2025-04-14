@@ -18,6 +18,7 @@ import {
 import {
   type ErrorRendererProps,
   type FieldsViewProps,
+  FieldView,
   useMantineFormFields,
 } from '@strictly/react-form'
 import { Observer } from 'mobx-react'
@@ -26,7 +27,10 @@ import {
   useCallback,
   useMemo,
 } from 'react'
-import { type PetFields } from './fields'
+import {
+  type PetFields,
+  TagAlreadyExistsErrorType,
+} from './fields'
 import { PetOwnerFieldsView } from './pet_owner_fields_view'
 import {
   type PetValuePaths,
@@ -115,8 +119,13 @@ function NewTagInputErrorRenderer({ error }: ErrorRendererProps<PetFormFields, '
         message: `New tag must be at least ${error.minimumLength} characters long`,
         comment: 'error that is displayed when the new tag input is too short',
       })
+    case TagAlreadyExistsErrorType:
+      return t({
+        message: `A tag with the value "${error.value}" already exists`,
+        comment: 'error shown when the user tries to add a tag that already exists',
+      })
     default:
-      throw new UnreachableError(error.type)
+      throw new UnreachableError(error)
   }
 }
 
@@ -155,27 +164,42 @@ export function PetFieldsView(props: PetFieldsViewProps) {
         label={NameTextInputLabel()}
       />
       <AliveCheckbox label={AliveCheckboxLabel()} />
-      <PillsInput label={TagsInputLabel()}>
-        <Pill.Group>
-          <Tags>
-            {function (tagValuePath) {
-              const Pill = form.pill(tagValuePath, TagPill)
-              return (
-                <Pill
-                  key={tagValuePath}
-                  onRemoveByValuePath={onRemoveTag}
-                  valuePath={tagValuePath}
-                  withRemoveButton={true}
-                />
-              )
-            }}
-          </Tags>
-          <NewTagInputField
-            ErrorRenderer={NewTagInputErrorRenderer}
-            placeholder={NewTagPlaceholder()}
-          />
-        </Pill.Group>
-      </PillsInput>
+      <FieldView
+        fields={form.fields}
+        valuePath='$.newTag'
+      >
+        {({
+          error,
+          ErrorSink,
+        }) => (
+          <PillsInput
+            error={error && <NewTagInputErrorRenderer error={error} />}
+            label={TagsInputLabel()}
+          >
+            <Pill.Group>
+              <Tags>
+                {function (tagValuePath) {
+                  const Pill = form.pill(tagValuePath, TagPill)
+                  return (
+                    <Pill
+                      key={tagValuePath}
+                      onRemoveByValuePath={onRemoveTag}
+                      valuePath={tagValuePath}
+                      withRemoveButton={true}
+                    />
+                  )
+                }}
+              </Tags>
+              {/* PillsInput.Field does not display errors, so we need to get our container to do it */}
+              <NewTagInputField
+                ErrorRenderer={ErrorSink}
+                placeholder={NewTagPlaceholder()}
+              />
+            </Pill.Group>
+          </PillsInput>
+        )}
+      </FieldView>
+
       <Card withBorder={true}>
         {/* TODO making the child fields disabled might be more interesting */}
         {(

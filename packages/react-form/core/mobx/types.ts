@@ -10,11 +10,12 @@ import {
  */
 export type ValuePathsOfModel<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  Presenter extends FormModel<any, any, any, any>,
-> = Presenter extends FormModel<
+  Model extends FormModel<any, any, any, any, any>,
+> = Model extends FormModel<
   infer _1,
   infer _2,
   infer _3,
+  infer _4,
   infer ValuePathsToAdapters
 > ? keyof ValuePathsToAdapters
   : never
@@ -25,12 +26,13 @@ export type ValuePathsOfModel<
  */
 export type ToValueOfModelValuePath<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  Presenter extends FormModel<any, any, any, any>,
-  K extends ValuePathsOfModel<Presenter>,
-> = Presenter extends FormModel<
+  Model extends FormModel<any, any, any, any, any>,
+  K extends ValuePathsOfModel<Model>,
+> = Model extends FormModel<
   infer _1,
   infer _2,
   infer _3,
+  infer _4,
   infer ValuePathsToAdapters
 > ? ToOfFieldAdapter<ValuePathsToAdapters[K]>
   : never
@@ -44,11 +46,12 @@ export type ToValueOfModelValuePath<
  */
 export type FormFieldsOfModel<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  Presenter extends FormModel<any, any, any, any>,
-> = Presenter extends FormModel<
+  Model extends FormModel<any, any, any, any, any>,
+> = Model extends FormModel<
   infer _1,
   infer _2,
   infer _3,
+  infer _4,
   infer ValuePathsToAdapters
 > ? FlattenedConvertedFieldsOf<ValuePathsToAdapters>
   : never

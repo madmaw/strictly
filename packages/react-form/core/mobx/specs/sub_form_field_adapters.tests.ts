@@ -1,9 +1,3 @@
-import {
-  list,
-  numberType,
-  object,
-  stringType,
-} from '@strictly/define'
 import { type FieldAdapter } from 'core/mobx/field_adapter'
 import {
   subFormFieldAdapters,
@@ -19,7 +13,6 @@ describe('subFormFieldAdapters', () => {
     const adapters = subFormFieldAdapters(
       {},
       '$.a',
-      stringType,
     )
 
     it('equals expected type', () => {
@@ -35,19 +28,16 @@ describe('subFormFieldAdapters', () => {
     const mockedFieldAdapter1 = mockDeep<Required<FieldAdapter<string, boolean, number, '$', string>>>()
     const fieldAdapter1: FieldAdapter<string, boolean, number, '$', string> = mockedFieldAdapter1
 
-    const type = object().field('a', stringType)
     const subAdapters = {
       $: fieldAdapter1,
     } as const
     const adapters = subFormFieldAdapters<
       typeof subAdapters,
       '$.a',
-      { '$.a': '$.a' },
-      typeof type
+      { '$.a': '$.a' }
     >(
       subAdapters,
       '$.a',
-      type,
     )
 
     beforeEach(() => {
@@ -58,9 +48,7 @@ describe('subFormFieldAdapters', () => {
       // TODO toEqualTypeOf (cannot reason about revert optionality, seems to be a TS issue as they
       // are both optional AFAICT)
       expectTypeOf(adapters).toMatchTypeOf<{
-        '$.a': FieldAdapter<string, boolean, number, '$.a', {
-          a: string,
-        }>,
+        '$.a': FieldAdapter<string, boolean, number, '$.a', string>,
       }>()
     })
 
@@ -76,7 +64,7 @@ describe('subFormFieldAdapters', () => {
       }
       mockedFieldAdapter1.convert.mockReturnValue(mockedReturnedValue)
 
-      const returnedValue = adapters['$.a'].convert('x', '$.a', { a: 'y' })
+      const returnedValue = adapters['$.a'].convert('x', '$.a', 'y')
       expect(fieldAdapter1.convert).toHaveBeenCalledWith('x', '$', 'y')
       expect(returnedValue).toEqual(mockedReturnedValue)
     })
@@ -88,7 +76,7 @@ describe('subFormFieldAdapters', () => {
       } as const
       mockedFieldAdapter1.revert.mockReturnValue(mockedReturnedValue)
 
-      const returnedValue = adapters['$.a'].revert?.(true, '$.a', { a: 'y' })
+      const returnedValue = adapters['$.a'].revert?.(true, '$.a', 'y')
       expect(fieldAdapter1.revert).toHaveBeenCalledWith(true, '$', 'y')
       expect(returnedValue).toEqual(mockedReturnedValue)
     })
@@ -97,7 +85,7 @@ describe('subFormFieldAdapters', () => {
       const mockedReturnedValue = 'x'
       mockedFieldAdapter1.create.mockReturnValue(mockedReturnedValue)
 
-      const returnedValue = adapters['$.a'].create('$.a', { a: 'y' })
+      const returnedValue = adapters['$.a'].create('$.a', 'y')
       expect(fieldAdapter1.create).toHaveBeenCalledWith('$', 'y')
       expect(returnedValue).toEqual(mockedReturnedValue)
     })
@@ -109,15 +97,12 @@ describe('subFormFieldAdapters', () => {
     const mockedFieldAdapter2 = mockDeep<FieldAdapter<number, boolean>>()
     const fieldAdapter2: FieldAdapter<number, boolean> = mockedFieldAdapter2
 
-    const type = object()
-      .field('a', object().field('x', stringType).field('y', numberType))
     const adapters = subFormFieldAdapters(
       {
         '$.x': fieldAdapter1,
         '$.y': fieldAdapter2,
       },
       '$.a',
-      type,
     )
 
     beforeEach(() => {
@@ -141,12 +126,11 @@ describe('subFormFieldAdapters', () => {
     })
 
     describe('calls convert with correct paths and values', () => {
-      const subContext = {
-        x: 'a',
-        y: 1,
-      } as const
       const context = {
-        a: subContext,
+        a: {
+          x: 'a',
+          y: 1,
+        },
       }
 
       it('calls $.a.x', () => {
@@ -158,7 +142,7 @@ describe('subFormFieldAdapters', () => {
         mockedFieldAdapter1.convert.mockReturnValue(mockedReturnedValue)
 
         const returnedValue = adapters['$.a.x'].convert('b', '$.a.x', context)
-        expect(fieldAdapter1.convert).toHaveBeenCalledWith('b', '$.x', subContext)
+        expect(fieldAdapter1.convert).toHaveBeenCalledWith('b', '$.x', context)
         expect(returnedValue).toEqual(mockedReturnedValue)
       })
 
@@ -171,7 +155,7 @@ describe('subFormFieldAdapters', () => {
         mockedFieldAdapter2.convert.mockReturnValue(mockedReturnedValue)
 
         const returnedValue = adapters['$.a.y'].convert(2, '$.a.y', context)
-        expect(fieldAdapter2.convert).toHaveBeenCalledWith(2, '$.y', subContext)
+        expect(fieldAdapter2.convert).toHaveBeenCalledWith(2, '$.y', context)
         expect(returnedValue).toEqual(mockedReturnedValue)
       })
     })
@@ -180,7 +164,6 @@ describe('subFormFieldAdapters', () => {
   describe('list adapter', () => {
     const mockedFieldAdapter1 = mockDeep<Required<FieldAdapter<string, boolean, number, '$', string>>>()
     const fieldAdapter1: FieldAdapter<string, boolean, number, '$', string> = mockedFieldAdapter1
-    const type = list(stringType)
     const subAdapters = {
       $: fieldAdapter1,
     }
@@ -189,12 +172,10 @@ describe('subFormFieldAdapters', () => {
       '$.*',
       {
         '$.*': `$.${number}`,
-      },
-      typeof type
+      }
     >(
       subAdapters,
       '$.*',
-      type,
     )
 
     beforeEach(() => {
@@ -204,7 +185,7 @@ describe('subFormFieldAdapters', () => {
     it('equals expected type', () => {
       // TODO toEqualTypeOf (seems to be a TS error)
       expectTypeOf(adapters).toMatchTypeOf<{
-        '$.*': FieldAdapter<string, boolean, number, `$.${number}`, string[]>,
+        '$.*': FieldAdapter<string, boolean, number, `$.${number}`, string>,
       }>()
     })
 
@@ -216,7 +197,6 @@ describe('subFormFieldAdapters', () => {
 
     describe('calls convert with correct paths and values', () => {
       const subContext = 'a'
-      const context = [subContext]
 
       it('calls $.*', () => {
         const mockedReturnedValue = {
@@ -226,7 +206,7 @@ describe('subFormFieldAdapters', () => {
         }
         mockedFieldAdapter1.convert.mockReturnValue(mockedReturnedValue)
 
-        const returnedValue = adapters['$.*'].convert('b', '$.0', context)
+        const returnedValue = adapters['$.*'].convert('b', '$.0', subContext)
         expect(fieldAdapter1.convert).toHaveBeenCalledWith('b', '$', subContext)
         expect(returnedValue).toEqual(mockedReturnedValue)
       })

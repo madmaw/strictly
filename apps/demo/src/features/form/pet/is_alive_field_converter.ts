@@ -6,7 +6,6 @@ import {
   UnreliableFieldConversionType,
 } from '@strictly/react-form'
 import {
-  type Pet,
   petType,
   type PetTypePaths,
 } from './types'
@@ -16,14 +15,14 @@ const ALWAYS_MODIFIABLE = new Set<Extract<PetTypePaths, string>>(['$.alive'])
 export class IsAliveTwoWayConverter<
   V,
   ValuePath extends string,
-> implements TwoWayFieldConverter<V, V, never, ValuePath, Pet> {
+> implements TwoWayFieldConverter<V, V, never, ValuePath, { alive: boolean }> {
   constructor() {
   }
 
-  convert(value: V, valuePath: ValuePath, context: Pet): AnnotatedFieldConversion<V> {
+  convert(value: V, valuePath: ValuePath, { alive }: { alive: boolean }): AnnotatedFieldConversion<V> {
     const typePath = valuePathToTypePath(petType, valuePath, true)
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-    const readonly = !ALWAYS_MODIFIABLE.has(typePath as Extract<PetTypePaths, string>) && !context.alive
+    const readonly = !ALWAYS_MODIFIABLE.has(typePath as Extract<PetTypePaths, string>) && !alive
     return {
       value,
       required: false,

@@ -5,6 +5,7 @@ import {
 } from 'field_converters/chain_field_converter'
 import { type TwoWayFieldConverter } from 'types/field_converters'
 import {
+  type ContextOfFieldAdapter,
   type ErrorOfFieldAdapter,
   type FieldAdapter,
   type FromOfFieldAdapter,
@@ -22,7 +23,7 @@ export type MergedOfFieldAdaptersWithTwoWayConverter<
     ToOfFieldAdapter<FieldAdapters[K]>,
     ErrorOfFieldAdapter<FieldAdapters[K]> | E,
     ValuePathOfFieldAdapter<FieldAdapters[K]>,
-    Context
+    ContextOfFieldAdapter<FieldAdapters[K]> & Context
   >
 }
 

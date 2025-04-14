@@ -8,6 +8,7 @@ import {
   object,
   record,
   stringType,
+  type Type,
   union,
   type ValueOfType,
   type ValueToTypePathsOfType,
@@ -44,6 +45,21 @@ const originalIntegerToStringAdapter = adapterFromTwoWayConverter(
 )
 
 const originalBooleanToBooleanAdapter = identityAdapter(false)
+
+class TestFormModel<
+  T extends Type,
+  ValueToTypePaths extends Readonly<Record<string, string>>,
+  TypePathsToAdapters extends FlattenedTypePathsToAdaptersOf<
+    FlattenedValuesOfType<T, '*'>,
+    {}
+  >,
+> extends FormModel<T, ValueToTypePaths, TypePathsToAdapters, {}> {
+  override toContext() {
+    return {
+      ctx: true,
+    }
+  }
+}
 
 describe('all', function () {
   const integerToStringAdapter = createMockedAdapter(
@@ -171,7 +187,7 @@ describe('all', function () {
         >
         beforeEach(function () {
           originalValue = 5
-          model = new FormModel<
+          model = new TestFormModel<
             typeof typeDef,
             ValueToTypePathsOfType<typeof typeDef>,
             typeof adapters
@@ -231,7 +247,7 @@ describe('all', function () {
             readonly: false,
           })
           originalValue = 5
-          model = new FormModel<
+          model = new TestFormModel<
             typeof typeDef,
             ValueToTypePathsOfType<typeof typeDef>,
             typeof adapters
@@ -272,7 +288,7 @@ describe('all', function () {
           4,
           17,
         ]
-        model = new FormModel<
+        model = new TestFormModel<
           typeof typeDef,
           ValueToTypePathsOfType<typeof typeDef>,
           typeof adapters
@@ -350,7 +366,7 @@ describe('all', function () {
           a: 1,
           b: 2,
         }
-        model = new FormModel<
+        model = new TestFormModel<
           typeof typeDef,
           ValueToTypePathsOfType<typeof typeDef>,
           typeof converters
@@ -420,7 +436,7 @@ describe('all', function () {
           a: 1,
           b: true,
         }
-        model = new FormModel<
+        model = new TestFormModel<
           typeof typeDef,
           ValueToTypePathsOfType<typeof typeDef>,
           typeof converters
@@ -485,7 +501,7 @@ describe('all', function () {
         typeof adapters
       >
       beforeEach(function () {
-        model = new FormModel<
+        model = new TestFormModel<
           typeof typeDef,
           ValueToTypePathsOfType<typeof typeDef>,
           typeof adapters
@@ -611,7 +627,7 @@ describe('all', function () {
           3,
           7,
         ]
-        model = new FormModel<
+        model = new TestFormModel<
           typeof typeDef,
           ValueToTypePathsOfType<typeof typeDef>,
           typeof converters
@@ -727,7 +743,7 @@ describe('all', function () {
         let contextCopy: number[]
         beforeEach(function () {
           integerToStringAdapter.revert.mockImplementationOnce(function (_value, _path, context) {
-            contextCopy = [...context]
+            contextCopy = { ...context }
             return {
               type: UnreliableFieldConversionType.Success,
               value: 1,
@@ -742,17 +758,16 @@ describe('all', function () {
           expect(integerToStringAdapter.revert).toHaveBeenCalledWith(
             '4',
             '$.2',
-            // uses the same pointer
-            model.value,
+            {
+              ctx: true,
+            },
           )
         })
 
-        it('supplies the context as it is at the time call', function () {
-          expect(contextCopy).toEqual([
-            1,
-            3,
-            7,
-          ])
+        it('supplies the context', function () {
+          expect(contextCopy).toEqual({
+            ctx: true,
+          })
         })
       })
 
@@ -953,7 +968,7 @@ describe('all', function () {
         >
         beforeEach(function () {
           originalValue = null
-          model = new FormModel<
+          model = new TestFormModel<
             typeof type,
             ValueToTypePaths,
             typeof adapters
@@ -1018,7 +1033,7 @@ describe('all', function () {
 
         describe('isValuePathActive', function () {
           describe('discriminator x', function () {
-            const model = new FormModel<
+            const model = new TestFormModel<
               typeof type,
               ValueToTypePaths,
               typeof adapters
@@ -1050,7 +1065,7 @@ describe('all', function () {
           })
 
           describe('discriminator y', function () {
-            const model = new FormModel<
+            const model = new TestFormModel<
               typeof type,
               ValueToTypePaths,
               typeof adapters
@@ -1102,7 +1117,7 @@ describe('all', function () {
       >
       beforeEach(function () {
         originalValue = 1
-        model = new FormModel<
+        model = new TestFormModel<
           typeof typeDef,
           JsonPaths,
           typeof converters

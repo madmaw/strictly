@@ -1,4 +1,5 @@
 import { type Simplify } from 'type-fest'
+import { CompositeValidator } from './validators/composite_validator'
 
 export type Annotations = {
   readonly required: boolean,
@@ -87,6 +88,26 @@ export function validate<
   } else {
     return validator(v, valuePath, context)
   }
+}
+
+export function mergeValidators<
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  V = any,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  E1 = any,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  E2 = any,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  ValuePath extends string = any,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  C1 = any,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  C2 = any,
+>(
+  v1: Validator<V, E1, ValuePath, C1>,
+  v2: Validator<V, E2, ValuePath, C2>,
+): Validator<V, E1 | E2, ValuePath, C1 & C2> {
+  return new CompositeValidator<V, E1 | E2, ValuePath, C1 & C2>(v1, v2)
 }
 
 export function annotations<

@@ -13,13 +13,13 @@ import {
 } from './types'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-type ValueOfModel<M extends FormModel<any, any, any, any>> = M extends FormModel<infer T, any, any, any>
+type ValueOfModel<M extends FormModel<any, any, any, any, any>> = M extends FormModel<infer T, any, any, any, any>
   ? ValueOfType<ReadonlyTypeOfType<T>>
   : never
 
 export function useDefaultMobxFormHooks<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  M extends FormModel<any, any, any, any>,
+  M extends FormModel<any, any, any, any, any>,
   F extends FormFieldsOfModel<M> = FormFieldsOfModel<M>,
 >(
   model: M,

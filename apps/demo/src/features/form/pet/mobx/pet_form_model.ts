@@ -12,7 +12,11 @@ import {
 export class PetFormModel extends FormModel<
   typeof petType,
   PetValueToTypePaths,
-  typeof petFieldAdapters
+  typeof petFieldAdapters,
+  {
+    tags: readonly string[],
+    alive: boolean,
+  }
 > {
   constructor(value: Pet) {
     super(
@@ -20,6 +24,14 @@ export class PetFormModel extends FormModel<
       value,
       petFieldAdapters,
     )
+  }
+
+  protected override toContext(value: Pet) {
+    // could also just return value directly
+    return {
+      tags: value.tags,
+      alive: value.alive,
+    }
   }
 
   removeTag(valuePath: TagValuePath) {

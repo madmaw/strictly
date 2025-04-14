@@ -11,6 +11,7 @@ import {
 } from './flattened'
 import { type PathOf } from './path_of'
 import {
+  type ContextOfValidatingTypeDef,
   type ErrorOfValidatingTypeDef,
   type ValidatingListTypeDef,
   type ValidatingLiteralTypeDef,
@@ -93,7 +94,8 @@ type InternalFlattenedTypeDefsOfObjectChildren<
   Path extends string,
   Qualifier extends string,
   Depth extends number,
-> = T extends ValidatingObjectTypeDef<infer _E, infer Fields> ? keyof Fields extends string ? UnionToIntersection<{
+> = T extends ValidatingObjectTypeDef<infer _E, infer _C, infer Fields>
+  ? keyof Fields extends string ? UnionToIntersection<{
       readonly [
         K in keyof Fields
       ]-?: undefined extends Fields[K]
@@ -101,6 +103,7 @@ type InternalFlattenedTypeDefsOfObjectChildren<
         ? InternalFlattenedTypeDefsOf<
           ValidatingUnionTypeDef<
             ErrorOfValidatingTypeDef<Exclude<Fields[K], undefined>>,
+            ContextOfValidatingTypeDef<Exclude<Fields[K], undefined>>,
             null,
             {
               readonly '0': Exclude<Fields[K], undefined>,
@@ -129,7 +132,7 @@ type InternalFlattenedTypeDefsOfUnionChildren<
   Path extends string,
   Qualifier extends string,
   Depth extends number,
-> = T extends ValidatingUnionTypeDef<infer _E, infer D, infer Unions>
+> = T extends ValidatingUnionTypeDef<infer _E, infer _C, infer D, infer Unions>
   ? keyof Unions extends string ? D extends null ? UnionToIntersection<{
         readonly [K in keyof Unions]: InternalFlattenedTypeDefsOfChildren<
           Unions[K],
