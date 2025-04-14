@@ -11,7 +11,7 @@ export type MinimumStringLengthValidationError = {
 }
 
 export class MinimumStringLengthValidator
-  implements AnnotatedValidator<string, MinimumStringLengthValidationError, never, never>
+  implements AnnotatedValidator<string, MinimumStringLengthValidationError, never, unknown>
 {
   constructor(private readonly minimumLength: number) {
   }

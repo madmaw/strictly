@@ -35,6 +35,7 @@ import {
   type ReadonlyDeep,
   type SimplifyDeep,
   type StringKeyOf,
+  type UnionToIntersection,
   type ValueOf,
 } from 'type-fest'
 import {
@@ -45,6 +46,7 @@ import {
   UnreliableFieldConversionType,
 } from 'types/field_converters'
 import {
+  type ContextOfFieldAdapter,
   type ErrorOfFieldAdapter,
   type FieldAdapter,
   type ToOfFieldAdapter,
@@ -102,6 +104,13 @@ export type ValuePathsToAdaptersOf<
   }
   : never
 
+export type ContextOf<TypePathsToAdapters extends Partial<Readonly<Record<string, FieldAdapter>>>> =
+  UnionToIntersection<{
+    readonly [
+      K in keyof TypePathsToAdapters
+    ]: TypePathsToAdapters[K] extends undefined ? undefined : ContextOfFieldAdapter<NonNullable<TypePathsToAdapters[K]>>
+  }[keyof TypePathsToAdapters]>
+
 export abstract class FormModel<
   T extends Type,
   ValueToTypePaths extends Readonly<Record<string, string>>,
@@ -109,7 +118,7 @@ export abstract class FormModel<
     FlattenedValuesOfType<T, '*'>,
     ContextType
   >,
-  ContextType = {},
+  ContextType = ContextOf<TypePathsToAdapters>,
   ValuePathsToAdapters extends ValuePathsToAdaptersOf<TypePathsToAdapters, ValueToTypePaths> = ValuePathsToAdaptersOf<
     TypePathsToAdapters,
     ValueToTypePaths

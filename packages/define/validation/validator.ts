@@ -91,23 +91,18 @@ export function validate<
 }
 
 export function mergeValidators<
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  V = any,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  E1 = any,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  E2 = any,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  ValuePath extends string = any,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  C1 = any,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  C2 = any,
+  V,
+  E1,
+  E2,
+  P1 extends string,
+  P2 extends string,
+  C1,
+  C2,
 >(
-  v1: Validator<V, E1, ValuePath, C1>,
-  v2: Validator<V, E2, ValuePath, C2>,
-): Validator<V, E1 | E2, ValuePath, C1 & C2> {
-  return new CompositeValidator<V, E1 | E2, ValuePath, C1 & C2>(v1, v2)
+  v1: Validator<V, E1, P1, C1>,
+  v2: Validator<V, E2, P2, C2>,
+): Validator<V, E1 | E2, P1 & P2, C1 & C2> {
+  return new CompositeValidator<V, E1 | E2, P1 & P2, C1 & C2>(v1, v2)
 }
 
 export function annotations<

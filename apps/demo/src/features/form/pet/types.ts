@@ -5,6 +5,7 @@ import {
   type FlattenedAccessorsOfType,
   type FlattenedTypesOfType,
   type FlattenedValuesOfType,
+  type FunctionalValidator,
   list,
   literal,
   MinimumStringLengthValidator,
@@ -38,6 +39,26 @@ const definedValidator = new DefinedValidator(REQUIRED_ERROR)
 export type DogBreed = 'Alsatian' | 'Pug' | 'other'
 export type CatBreed = 'Burmese' | 'Siamese' | 'DSH'
 
+export const CatNameMustBeCapitalizedType = 'cat_names_must_be_capitalized'
+export type CatNameMustBeCapitalized = {
+  type: typeof CatNameMustBeCapitalizedType,
+}
+// want to assign it to a type
+// eslint-disable-next-line func-style
+const catNameMustBeCapitalized: FunctionalValidator<string, CatNameMustBeCapitalized, string,
+  { readonly isCat: boolean }> = (
+    value,
+    _path,
+    { isCat },
+  ) => {
+    if (isCat && value[0] !== value[0].toUpperCase()) {
+      return {
+        type: CatNameMustBeCapitalizedType,
+      }
+    }
+    return null
+  }
+
 export const dogBreedType = literal<DogBreed>()
   .required()
   .enforce(definedValidator.validate.bind(definedValidator))
@@ -64,7 +85,7 @@ export const speciesType = union('type')
 export type Species = keyof typeof speciesType['definition']['unions']
 
 export const petType = object()
-  .field('name', stringType.enforce(minimumNameLengthValidator))
+  .field('name', stringType.enforce(minimumNameLengthValidator).enforce(catNameMustBeCapitalized))
   .field('alive', booleanType)
   .field('tags', list(stringType))
   .optionalField('owner', petOwnerType)

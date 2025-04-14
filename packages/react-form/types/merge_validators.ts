@@ -25,8 +25,8 @@ export type MergedOfValidators<
 export type MergedOfValidator<
   Validator1 extends Validator,
   Validator2 extends Validator,
-> = Validator1 extends Validator<infer V, infer E1, infer P, infer C>
-  ? Validator2 extends Validator<V, infer E2, P, C> ? Validator<V, E1 | E2, P, C>
+> = Validator1 extends Validator<infer V, infer E1, infer P, infer C1>
+  ? Validator2 extends Validator<V, infer E2, P, infer C2> ? Validator<V, E1 | E2, P, C1 & C2>
   : never
   : never
 

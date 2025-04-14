@@ -33,6 +33,7 @@ import {
 } from './fields'
 import { PetOwnerFieldsView } from './pet_owner_fields_view'
 import {
+  CatNameMustBeCapitalizedType,
   type PetValuePaths,
   type TagValuePath,
 } from './types'
@@ -107,8 +108,13 @@ function NameInputErrorRenderer({ error }: ErrorRendererProps<PetFormFields, '$.
         message: `Name must be at least ${error.minimumLength} characters long`,
         comment: 'error that is displayed when the name input is too short',
       })
+    case CatNameMustBeCapitalizedType:
+      return t({
+        message: `Cat names must start with a capital letter. Know your place human!`,
+        comment: 'error when the format of cat names is wrong',
+      })
     default:
-      throw new UnreachableError(error.type)
+      throw new UnreachableError(error)
   }
 }
 

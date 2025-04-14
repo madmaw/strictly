@@ -1,6 +1,7 @@
 import {
   type FlattenedValuesOfType,
   flattenValidatorsOfValidatingType,
+  type FunctionalValidator,
   mergeValidators,
   MinimumStringLengthValidator,
   type ReadonlyTypeOfType,
@@ -49,19 +50,29 @@ export type TagAlreadyExistsError = {
 const petTypeValidators = flattenValidatorsOfValidatingType<typeof petType, PetTypeToValuePaths>(
   petType,
 )
+
+// want to assign it to a type
+// eslint-disable-next-line func-style
+const tagAlreadyExistsValidator: FunctionalValidator<string, TagAlreadyExistsError, '$.newTag',
+  { readonly tags: readonly string[] }> = (
+    value,
+    _path,
+    { tags },
+  ) => {
+    if (tags.indexOf(value) >= 0) {
+      return {
+        type: TagAlreadyExistsErrorType,
+        value,
+      }
+    }
+    return null
+  }
+
 export const petValidators = {
   ...petTypeValidators,
   '$.newTag': mergeValidators(
     new MinimumStringLengthValidator(2),
-    (value, _path, { tags }: { tags: string[] }): TagAlreadyExistsError | null => {
-      if (tags.indexOf(value) >= 0) {
-        return {
-          type: TagAlreadyExistsErrorType,
-          value,
-        }
-      }
-      return null
-    },
+    tagAlreadyExistsValidator,
   ),
 } as const
 
@@ -145,17 +156,17 @@ const rawPetFieldAdapters = {
     {}
   > & {
     // TODO check list of existing tags in context
-    '$.newTag': FieldAdapter<string, string, TagAlreadyExistsError, '$.newTag', {
-      tags: string[],
-    }>,
+    '$.newTag': FieldAdapter<string, string, TagAlreadyExistsError, '$.newTag', unknown>,
   }
 >
 
+const validatedPetAdapters = mergeAdaptersWithValidators(
+  rawPetFieldAdapters,
+  petValidators,
+)
+
 export const petFieldAdapters = mergeFieldAdaptersWithTwoWayConverter(
-  mergeAdaptersWithValidators(
-    rawPetFieldAdapters,
-    petValidators,
-  ),
+  validatedPetAdapters,
   new IsAliveTwoWayConverter(),
 )
 
