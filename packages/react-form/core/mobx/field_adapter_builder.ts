@@ -336,8 +336,8 @@ export function trimmingStringAdapter<
 
 export function listAdapter<
   E,
-  ValuePath extends string,
-  Context,
+  ValuePath extends string = string,
+  Context = unknown,
 >() {
   return new FieldAdapterBuilder<readonly E[], readonly E[], never, ValuePath, Context>(
     annotatedIdentityConverter<readonly E[], ValuePath, Context>(false),

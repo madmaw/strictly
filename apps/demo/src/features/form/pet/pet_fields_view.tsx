@@ -18,10 +18,8 @@ import {
 import {
   type ErrorRendererProps,
   type FieldsViewProps,
-  FieldView,
   useMantineFormFields,
 } from '@strictly/react-form'
-import { Observer } from 'mobx-react'
 import {
   type ComponentType,
   useCallback,
@@ -163,6 +161,9 @@ export function PetFieldsView(props: PetFieldsViewProps) {
     onClearField,
   ])
 
+  const NewTagField = form.fieldView('$.newTag')
+  const HasOwnerField = form.fieldView('$.owner')
+
   return (
     <Stack>
       <NameTextInput
@@ -170,10 +171,7 @@ export function PetFieldsView(props: PetFieldsViewProps) {
         label={NameTextInputLabel()}
       />
       <AliveCheckbox label={AliveCheckboxLabel()} />
-      <FieldView
-        fields={form.fields}
-        valuePath='$.newTag'
-      >
+      <NewTagField>
         {({
           error,
           ErrorSink,
@@ -204,26 +202,26 @@ export function PetFieldsView(props: PetFieldsViewProps) {
             </Pill.Group>
           </PillsInput>
         )}
-      </FieldView>
+      </NewTagField>
 
       <Card withBorder={true}>
         {/* TODO making the child fields disabled might be more interesting */}
         {(
-          <Observer>
-            {() => {
+          <HasOwnerField>
+            {({ value: hasOwner }) => {
               // normally the form hides our fields observing the data, but we
               // need to observe it here since we're not using a hook component
               return (
                 <>
                   <OwnerCheckbox
                     label={OwnerCheckboxLabel()}
-                    pb={form.fields['$.owner'].value ? 'md' : undefined}
+                    pb={hasOwner ? 'md' : undefined}
                   />
-                  {form.fields['$.owner'].value ? <Owner clearField={onClearOwnerField} /> : null}
+                  {hasOwner ? <Owner clearField={onClearOwnerField} /> : null}
                 </>
               )
             }}
-          </Observer>
+          </HasOwnerField>
         )}
       </Card>
       <Card withBorder={true}>

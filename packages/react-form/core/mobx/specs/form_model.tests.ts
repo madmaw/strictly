@@ -13,7 +13,9 @@ import {
   type ValueOfType,
   type ValueToTypePathsOfType,
 } from '@strictly/define'
-import { type FieldAdapter } from 'core/mobx/field_adapter'
+import {
+  type FieldAdapter,
+} from 'core/mobx/field_adapter'
 import {
   adapterFromTwoWayConverter,
   identityAdapter,
@@ -27,7 +29,9 @@ import { IntegerToStringConverter } from 'field_converters/integer_to_string_con
 import { NullableToBooleanConverter } from 'field_converters/nullable_to_boolean_converter'
 import { SelectDiscriminatedUnionConverter } from 'field_converters/select_value_type_converter'
 import { prototypingFieldValueFactory } from 'field_value_factories/prototyping_field_value_factory'
-import { type Simplify } from 'type-fest'
+import {
+  type Simplify,
+} from 'type-fest'
 import { type Field } from 'types/field'
 import {
   UnreliableFieldConversionType,
@@ -54,9 +58,13 @@ class TestFormModel<
     {}
   >,
 > extends FormModel<T, ValueToTypePaths, TypePathsToAdapters, {}> {
-  override toContext() {
+  override toContext(
+    value: ValueOfType<T>,
+    valuePath: keyof ValuePathsToAdaptersOf<TypePathsToAdapters, ValueToTypePaths>,
+  ) {
     return {
-      ctx: true,
+      value,
+      valuePath,
     }
   }
 }
@@ -740,10 +748,10 @@ describe('all', function () {
 
       // no longer passes context, but will pass context eventually again
       describe('passes context', function () {
-        let contextCopy: number[]
+        let contextCopy: string
         beforeEach(function () {
           integerToStringAdapter.revert.mockImplementationOnce(function (_value, _path, context) {
-            contextCopy = { ...context }
+            contextCopy = JSON.stringify(context)
             return {
               type: UnreliableFieldConversionType.Success,
               value: 1,
@@ -751,7 +759,7 @@ describe('all', function () {
           })
         })
 
-        it('supplies the full, previous context when converting', function () {
+        it('supplies the context when converting', function () {
           model.setFieldValueAndValidate('$.2', '4')
 
           expect(integerToStringAdapter.revert).toHaveBeenCalledOnce()
@@ -759,14 +767,23 @@ describe('all', function () {
             '4',
             '$.2',
             {
-              ctx: true,
+              // the supplied value isn't a copy, so it will be the model value, even
+              // if the value has since changed
+              value: model.value,
+              valuePath: '$.2',
             },
           )
         })
 
-        it('supplies the context', function () {
-          expect(contextCopy).toEqual({
-            ctx: true,
+        it('supplies the correct context value at the time it is being checked', function () {
+          // the copy will show the supplied value however
+          expect(JSON.parse(contextCopy)).toEqual({
+            value: [
+              1,
+              3,
+              7,
+            ],
+            valuePath: '$.2',
           })
         })
       })

@@ -43,10 +43,11 @@ class TypeDefBuilder<T extends ValidatingTypeDef> implements ValidatingType<T> {
   constructor(readonly definition: T) {
   }
 
-  enforce<E2, C2>(): TypeDefBuilder<ValidatingTypeDefWithError<T, E2, C2>>
+  enforce<E2, C2 = unknown>(): TypeDefBuilder<ValidatingTypeDefWithError<T, E2, C2>>
   enforce<E2,
-    C2>(rule: Validator<ValueOfType<Type<T>>, E2, string, C2>): TypeDefBuilder<ValidatingTypeDefWithError<T, E2, C2>>
-  enforce<E2, C2>(rule?: Validator<ValueOfType<Type<T>>, E2, string, C2>) {
+    C2 = unknown>(rule: Validator<ValueOfType<Type<T>>, E2, string, C2>
+  ): TypeDefBuilder<ValidatingTypeDefWithError<T, E2, C2>>
+  enforce<E2, C2 = unknown>(rule?: Validator<ValueOfType<Type<T>>, E2, string, C2>) {
     return new TypeDefBuilder<ValidatingTypeDefWithError<T, E2, C2>>(
       // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
       {

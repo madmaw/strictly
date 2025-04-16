@@ -105,11 +105,18 @@ export type ValuePathsToAdaptersOf<
   : never
 
 export type ContextOf<TypePathsToAdapters extends Partial<Readonly<Record<string, FieldAdapter>>>> =
-  UnionToIntersection<{
-    readonly [
-      K in keyof TypePathsToAdapters
-    ]: TypePathsToAdapters[K] extends undefined ? undefined : ContextOfFieldAdapter<NonNullable<TypePathsToAdapters[K]>>
-  }[keyof TypePathsToAdapters]>
+  UnionToIntersection<
+    | {
+      readonly [
+        K in keyof TypePathsToAdapters
+      ]: TypePathsToAdapters[K] extends undefined ? undefined
+        // ignore unspecified values
+        : unknown extends ContextOfFieldAdapter<NonNullable<TypePathsToAdapters[K]>> ? never
+        : ContextOfFieldAdapter<NonNullable<TypePathsToAdapters[K]>>
+    }[keyof TypePathsToAdapters]
+    // ensure we have at least one thing to intersect (can end up with a `never` context otherwise)
+    | {}
+  >
 
 export abstract class FormModel<
   T extends Type,
@@ -140,7 +147,6 @@ export abstract class FormModel<
   ) {
     this.value = mobxCopy(type, value)
     this.flattenedTypeDefs = flattenTypesOfType(type)
-    const contextValue = this.toContext(value)
     // pre-populate field overrides for consistent behavior when default information is overwritten
     // then returned to
     const conversions = flattenValueTo(
@@ -149,11 +155,14 @@ export abstract class FormModel<
       () => {},
       (
         _t: StrictTypeDef,
-        value: AnyValueType,
+        fieldValue: AnyValueType,
         _setter,
         typePath,
         valuePath,
       ): AnnotatedFieldConversion<FieldOverride> | undefined => {
+        // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+        const contextValue = this.toContext(value, valuePath as keyof ValuePathsToAdapters)
+
         // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
         const adapter = this.adapters[typePath as keyof TypePathsToAdapters]
         if (adapter == null) {
@@ -168,7 +177,7 @@ export abstract class FormModel<
           return
         }
         // cannot call this.context yet as the "this" pointer has not been fully created
-        return convert(value, valuePath, contextValue)
+        return convert(fieldValue, valuePath, contextValue)
       },
     )
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
@@ -177,12 +186,10 @@ export abstract class FormModel<
     }) as FlattenedFieldOverrides<ValuePathsToAdapters>
   }
 
-  @computed.struct
-  get context() {
-    return this.toContext(this.value)
-  }
-
-  protected abstract toContext(value: ValueOfType<ReadonlyTypeOfType<T>>): ContextType
+  protected abstract toContext(
+    value: ValueOfType<ReadonlyTypeOfType<T>>,
+    valuePath: keyof ValuePathsToAdapters,
+  ): ContextType
 
   @computed
   get fields(): SimplifyDeep<FlattenedConvertedFieldsOf<ValuePathsToAdapters>> {
@@ -256,6 +263,7 @@ export abstract class FormModel<
     const accessor = this.getAccessorForValuePath(valuePath)
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     const fieldTypeDef = this.flattenedTypeDefs[typePath as string]
+    const context = this.toContext(this.value, valuePath)
     const {
       value,
       required,
@@ -267,14 +275,14 @@ export abstract class FormModel<
         ? mobxCopy(
           fieldTypeDef,
           // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-          create(valuePath as string, this.context),
+          create(valuePath as string, context),
         )
         // fake values can't be copied
         // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-        : create(valuePath as string, this.context),
+        : create(valuePath as string, context),
       // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
       valuePath as string,
-      this.context,
+      context,
     )
     const error = this.errors[valuePath]
     return {
@@ -360,7 +368,9 @@ export abstract class FormModel<
       : elementAdapter.create(
         // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
         elementTypePath as string,
-        this.context,
+        // TODO what can we use for the value path here?
+        // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+        this.toContext(this.value, valuePath as unknown as keyof ValuePathsToAdapters),
       )
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const originalList: any[] = accessor.value
@@ -505,7 +515,7 @@ export abstract class FormModel<
     assertExists(revert, 'setting value not supported {}', valuePath)
 
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-explicit-any
-    const conversion = revert(value, valuePath as any, this.context)
+    const conversion = revert(value, valuePath as any, this.toContext(this.value, valuePath))
     const accessor = this.getAccessorForValuePath(valuePath)
     return runInAction(() => {
       this.fieldOverrides[valuePath] = [value]
@@ -548,10 +558,12 @@ export abstract class FormModel<
       convert,
       create,
     } = adapter
-    const value = create(valuePath, this.context)
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+    const context = this.toContext(this.value, valuePath as unknown as keyof ValuePathsToAdapters)
+    const value = create(valuePath, context)
     const {
       value: displayValue,
-    } = convert(value, valuePath, this.context)
+    } = convert(value, valuePath, context)
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     const key = valuePath as unknown as keyof ValuePathsToAdapters
     runInAction(() => {
@@ -586,16 +598,18 @@ export abstract class FormModel<
     } = this.getAdapterForValuePath(valuePath)
     const fieldOverride = this.fieldOverrides[valuePath]
     const accessor = this.getAccessorForValuePath(valuePath)
+    const context = this.toContext(this.value, valuePath)
+
     const {
       value: storedValue,
     } = convert(
       accessor != null
         ? accessor.value
         // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-        : create(valuePath as string, this.context),
+        : create(valuePath as string, context),
       // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
       valuePath as string,
-      this.context,
+      context,
     )
     const value = fieldOverride != null
       ? fieldOverride[0]
@@ -605,13 +619,13 @@ export abstract class FormModel<
     if (ignoreDefaultValue) {
       const {
         value: defaultDisplayValue,
-      } = convert(create(valuePath, this.context), valuePath, this.context)
+      } = convert(create(valuePath, context), valuePath, context)
       if (defaultDisplayValue === value) {
         return true
       }
     }
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-    const conversion = revert(value, valuePath as string, this.context)
+    const conversion = revert(value, valuePath as string, context)
     return runInAction(() => {
       switch (conversion.type) {
         case UnreliableFieldConversionType.Failure:
@@ -662,16 +676,18 @@ export abstract class FormModel<
             return success
           }
           const fieldOverride = this.fieldOverrides[adapterPath]
+          // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+          const context = this.toContext(this.value, valuePath as keyof ValuePathsToAdapters)
           const {
             value: storedValue,
-          } = convert(accessor.value, valuePath, this.context)
+          } = convert(accessor.value, valuePath, context)
           const value = fieldOverride != null
             ? fieldOverride[0]
             : storedValue
           // TODO more nuanced comparison
           const dirty = fieldOverride != null && fieldOverride[0] !== storedValue
 
-          const conversion = revert(value, valuePath, this.context)
+          const conversion = revert(value, valuePath, context)
           switch (conversion.type) {
             case UnreliableFieldConversionType.Failure:
               this.errors[adapterPath] = conversion.error

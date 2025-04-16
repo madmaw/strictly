@@ -1,5 +1,8 @@
 import { type ElementOfArray } from '@strictly/base'
-import { type ComponentType } from 'react'
+import {
+  type ComponentType,
+  Fragment,
+} from 'react'
 import { type Fields } from 'types/field'
 import { type ListFieldsOfFields } from 'types/list_fields_of_fields'
 import { type ValueTypeOfField } from 'types/value_type_of_field'
@@ -54,7 +57,11 @@ export function DefaultList<
     <>
       {values.map(function (value, index) {
         const valuePath: `${ListPath}.${number}` = `${listPath}.${index}`
-        return children(valuePath, value, index)
+        return (
+          <Fragment key={valuePath}>
+            {children(valuePath, value, index)}
+          </Fragment>
+        )
       })}
     </>
   )

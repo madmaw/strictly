@@ -45,6 +45,10 @@ import {
   type SuppliedCheckboxProps,
 } from './create_checkbox'
 import {
+  createFieldView,
+  type FieldViewProps,
+} from './create_field_view'
+import {
   createFieldsView,
   type FieldsView,
 } from './create_fields_view'
@@ -93,7 +97,8 @@ export function useMantineFormFields<
   onFieldFocus,
   onFieldSubmit,
   fields,
-}: FieldsViewProps<F>): MantineFormImpl<F> {
+  // should use FieldView rather than observing fields directly from here
+}: FieldsViewProps<F>): Omit<MantineFormImpl<F>, 'fields'> {
   const form = useMemo(
     function () {
       return new MantineFormImpl(fields)
@@ -183,6 +188,12 @@ class MantineFormImpl<
     MantineFieldComponent<SuppliedListProps, ComponentProps<typeof DefaultList>>
   > = new Cache(
     createList.bind(this),
+  )
+  private readonly fieldViewCache: Cache<
+    [keyof AllFieldsOfFields<F>],
+    ComponentType<FieldViewProps<F, Exclude<keyof AllFieldsOfFields<F>, number | symbol>>>
+  > = new Cache(
+    createFieldView.bind(this),
   )
   private readonly fieldsViewCache: Cache<
     // the cache cannot reference keys, so we just use any
@@ -390,6 +401,12 @@ class MantineFormImpl<
       ComponentProps<typeof DefaultList<ElementOfArray<F[K]['value']>, K>>,
       never
     >
+  }
+
+  fieldView<K extends keyof AllFieldsOfFields<F>>(valuePath: K): ComponentType<FieldViewProps<F, K>> {
+    return this.fieldViewCache.retrieveOrCreate(
+      valuePath,
+    )
   }
 
   fieldsView<
