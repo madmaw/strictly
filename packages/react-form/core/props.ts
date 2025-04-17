@@ -14,12 +14,8 @@ export type FieldsViewProps<F extends Fields> = {
   onFieldSubmit?(this: void, key: keyof F): boolean | void,
 }
 
-export type FormMode = 'edit' | 'create'
-
 export type FormProps<O> = {
   value: O,
 
   onValueChange: (value: O) => void,
-
-  mode: FormMode,
 }

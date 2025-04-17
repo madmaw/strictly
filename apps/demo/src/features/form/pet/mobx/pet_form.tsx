@@ -1,4 +1,5 @@
 import {
+  type FormMode,
   type FormProps,
   useDefaultMobxFormHooks,
   usePartialObserverComponent,
@@ -28,7 +29,9 @@ export function PetForm({
   value,
   onValueChange,
   mode,
-}: FormProps<Pet>) {
+}: FormProps<Pet> & {
+  mode: FormMode,
+}) {
   const model = useMemo(() => {
     return new PetFormModel(value, mode)
   }, [

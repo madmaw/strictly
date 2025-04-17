@@ -26,7 +26,6 @@ import {
   type ValueOfType,
   valuePathToTypePath,
 } from '@strictly/define'
-import { type FormMode } from 'core/props'
 import {
   computed,
   observable,
@@ -118,6 +117,8 @@ export type ContextOf<TypePathsToAdapters extends Partial<Readonly<Record<string
     // ensure we have at least one thing to intersect (can end up with a `never` context otherwise)
     | {}
   >
+
+export type FormMode = 'edit' | 'create'
 
 export abstract class FormModel<
   T extends Type,
