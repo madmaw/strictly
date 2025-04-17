@@ -15,16 +15,7 @@ const Component = PetForm
 const meta: Meta<typeof Component> = {
   component: Component,
   args: {
-    onValueChange: action('onValueChange'),
-  },
-}
-
-export default meta
-
-type Story = StoryObj<typeof Component>
-
-export const Valid: Story = {
-  args: {
+    mode: 'edit',
     value: {
       alive: true,
       name: 'Delta',
@@ -38,7 +29,17 @@ export const Valid: Story = {
         meows: 2,
       },
     },
+
+    onValueChange: action('onValueChange'),
   },
+}
+
+export default meta
+
+type Story = StoryObj<typeof Component>
+
+export const Valid: Story = {
+  args: {},
 }
 
 export const Unalive: Story = {
@@ -55,8 +56,24 @@ export const Unalive: Story = {
   },
 }
 
+export const CreateMode: Story = {
+  args: {
+    mode: 'create',
+    value: {
+      alive: false,
+      name: '',
+      tags: [],
+      species: {
+        type: 'cat',
+        meows: 0,
+      },
+    },
+  },
+}
+
 export const Invalid: Story = {
   args: {
+    mode: 'create',
     value: {
       alive: true,
       name: 'D',

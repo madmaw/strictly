@@ -26,6 +26,7 @@ import {
   type ValueOfType,
   valuePathToTypePath,
 } from '@strictly/define'
+import { type FormMode } from 'core/props'
 import {
   computed,
   observable,
@@ -142,10 +143,11 @@ export abstract class FormModel<
 
   constructor(
     readonly type: T,
-    value: ValueOfType<ReadonlyTypeOfType<T>>,
+    private readonly originalValue: ValueOfType<ReadonlyTypeOfType<T>>,
     protected readonly adapters: TypePathsToAdapters,
+    protected readonly mode: FormMode,
   ) {
-    this.value = mobxCopy(type, value)
+    this.value = mobxCopy(type, originalValue)
     this.flattenedTypeDefs = flattenTypesOfType(type)
     // pre-populate field overrides for consistent behavior when default information is overwritten
     // then returned to
@@ -161,7 +163,7 @@ export abstract class FormModel<
         valuePath,
       ): AnnotatedFieldConversion<FieldOverride> | undefined => {
         // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-        const contextValue = this.toContext(value, valuePath as keyof ValuePathsToAdapters)
+        const contextValue = this.toContext(originalValue, valuePath as keyof ValuePathsToAdapters)
 
         // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
         const adapter = this.adapters[typePath as keyof TypePathsToAdapters]
@@ -190,6 +192,17 @@ export abstract class FormModel<
     value: ValueOfType<ReadonlyTypeOfType<T>>,
     valuePath: keyof ValuePathsToAdapters,
   ): ContextType
+
+  get forceMutableFields() {
+    switch (this.mode) {
+      case 'create':
+        return true
+      case 'edit':
+        return false
+      default:
+        return this.mode satisfies never
+    }
+  }
 
   @computed
   get fields(): SimplifyDeep<FlattenedConvertedFieldsOf<ValuePathsToAdapters>> {
@@ -288,7 +301,7 @@ export abstract class FormModel<
     return {
       value: fieldOverride != null ? fieldOverride[0] : value,
       error,
-      readonly,
+      readonly: readonly && !this.forceMutableFields,
       required,
     }
   }
@@ -646,11 +659,14 @@ export abstract class FormModel<
     })
   }
 
-  validateAll(): boolean {
+  validateAll(force: boolean = this.mode === 'create'): boolean {
     // sort keys shortest to longest so parent changes don't overwrite child changes
     const accessors = toArray(this.accessors).toSorted(function ([a], [b]) {
       return a.length - b.length
     })
+
+    const flattenedOriginalValues = flattenValuesOfType(this.type, this.originalValue)
+
     return runInAction(() => {
       return accessors.reduce(
         (
@@ -684,26 +700,36 @@ export abstract class FormModel<
           const value = fieldOverride != null
             ? fieldOverride[0]
             : storedValue
-          // TODO more nuanced comparison
+          // TODO customizable comparisons
           const dirty = fieldOverride != null && fieldOverride[0] !== storedValue
-
-          const conversion = revert(value, valuePath, context)
-          switch (conversion.type) {
-            case UnreliableFieldConversionType.Failure:
-              this.errors[adapterPath] = conversion.error
-              if (conversion.value != null && dirty) {
-                accessor.set(conversion.value[0])
-              }
-              return false
-            case UnreliableFieldConversionType.Success:
-              if (dirty) {
-                accessor.set(conversion.value)
-              }
-              delete this.errors[adapterPath]
-              return success
-            default:
-              throw new UnreachableError(conversion)
+          const needsValidation = force
+            || !(valuePath in flattenedOriginalValues)
+            || storedValue !== convert(
+                flattenedOriginalValues[valuePath],
+                valuePath,
+                // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+                this.toContext(this.originalValue, valuePath as keyof ValuePathsToAdapters),
+              ).value
+          if (needsValidation) {
+            const conversion = revert(value, valuePath, context)
+            switch (conversion.type) {
+              case UnreliableFieldConversionType.Failure:
+                this.errors[adapterPath] = conversion.error
+                if (conversion.value != null && dirty) {
+                  accessor.set(conversion.value[0])
+                }
+                return false
+              case UnreliableFieldConversionType.Success:
+                if (dirty) {
+                  accessor.set(conversion.value)
+                }
+                delete this.errors[adapterPath]
+                return success
+              default:
+                throw new UnreachableError(conversion)
+            }
           }
+          return success
         },
         true,
       )

@@ -1,4 +1,5 @@
 import {
+  type FormMode,
   FormModel,
 } from '@strictly/react-form'
 import { petFieldAdapters } from 'features/form/pet/fields'
@@ -14,11 +15,12 @@ export class PetFormModel extends FormModel<
   PetValueToTypePaths,
   typeof petFieldAdapters
 > {
-  constructor(value: Pet) {
+  constructor(value: Pet, mode: FormMode) {
     super(
       petType,
       value,
       petFieldAdapters,
+      mode,
     )
   }
 

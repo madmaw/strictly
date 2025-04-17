@@ -6,6 +6,7 @@ import {
 import {
   Button,
   Card,
+  Group,
   Pill,
   type PillProps,
   PillsInput,
@@ -40,6 +41,13 @@ export function SubmitLabel() {
   return t({
     message: 'Submit',
     comment: 'message that appears on the submit button for the pet form',
+  })
+}
+
+export function ForceValidateLabel() {
+  return t({
+    message: 'Force Validation',
+    comment: 'message that appears on a button that forces the form fields to validate',
   })
 }
 
@@ -95,6 +103,7 @@ export type PetFormFields = Pick<
 export type PetFieldsViewProps = FieldsViewProps<PetFormFields> & {
   SpeciesComponent: ComponentType,
   onSubmit: () => void,
+  onForceValidate: () => void,
   onRemoveTag: (valuePath: TagValuePath) => void,
   onClearField: (valuePath: PetValuePaths) => void,
 }
@@ -137,6 +146,7 @@ export function PetFieldsView(props: PetFieldsViewProps) {
   const {
     onSubmit,
     onRemoveTag,
+    onForceValidate,
     SpeciesComponent,
     onClearField,
   } = props
@@ -228,12 +238,22 @@ export function PetFieldsView(props: PetFieldsViewProps) {
         {/* TODO either use a SubForm or add the ability to use an editable form that takes an entire value here */}
         <SpeciesComponent />
       </Card>
-      <Button
-        className={styles.hot}
-        onClick={onSubmit}
-      >
-        <SubmitLabel />
-      </Button>
+      <Group flex={1}>
+        <Button
+          flex={1}
+          onClick={onForceValidate}
+        >
+          <ForceValidateLabel />
+        </Button>
+
+        <Button
+          className={styles.hot}
+          flex={1}
+          onClick={onSubmit}
+        >
+          <SubmitLabel />
+        </Button>
+      </Group>
     </Stack>
   )
 }

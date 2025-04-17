@@ -2,6 +2,7 @@ import { expectDefinedAndReturn } from '@strictly/base'
 import {
   booleanType,
   type FlattenedValuesOfType,
+  flattenValidatorsOfValidatingType,
   list,
   nullType,
   numberType,
@@ -25,6 +26,7 @@ import {
   FormModel,
   type ValuePathsToAdaptersOf,
 } from 'core/mobx/form_model'
+import { mergeAdaptersWithValidators } from 'core/mobx/merge_field_adapters_with_validators'
 import { IntegerToStringConverter } from 'field_converters/integer_to_string_converter'
 import { NullableToBooleanConverter } from 'field_converters/nullable_to_boolean_converter'
 import { SelectDiscriminatedUnionConverter } from 'field_converters/select_value_type_converter'
@@ -203,6 +205,7 @@ describe('all', function () {
             typeDef,
             originalValue,
             adapters,
+            'create',
           )
         })
 
@@ -263,6 +266,7 @@ describe('all', function () {
             typeDef,
             originalValue,
             adapters,
+            'create',
           )
         })
 
@@ -304,6 +308,7 @@ describe('all', function () {
           typeDef,
           value,
           adapters,
+          'create',
         )
       })
 
@@ -382,6 +387,7 @@ describe('all', function () {
           typeDef,
           value,
           converters,
+          'create',
         )
       })
 
@@ -452,6 +458,7 @@ describe('all', function () {
           typeDef,
           value,
           converters,
+          'create',
         )
       })
 
@@ -517,6 +524,7 @@ describe('all', function () {
           typeDef,
           originalValue,
           adapters,
+          'create',
         )
       })
 
@@ -643,6 +651,7 @@ describe('all', function () {
           typeDef,
           originalValue,
           converters,
+          'create',
         )
       })
 
@@ -993,6 +1002,7 @@ describe('all', function () {
             type,
             originalValue,
             adapters,
+            'create',
           )
         })
 
@@ -1061,6 +1071,7 @@ describe('all', function () {
                 a: 1,
               },
               adapters,
+              'create',
             )
             it.each([
               [
@@ -1093,6 +1104,7 @@ describe('all', function () {
                 b: false,
               },
               adapters,
+              'create',
             )
             it.each([
               [
@@ -1142,6 +1154,7 @@ describe('all', function () {
           typeDef,
           originalValue,
           converters,
+          'create',
         )
       })
 
@@ -1164,6 +1177,96 @@ describe('all', function () {
 
         it('does not change the original value', function () {
           expect(model.value).toBe(originalValue)
+        })
+      })
+    })
+
+    describe('interaction with create and edit modes', () => {
+      const typeDef = object().readonlyField('n', numberType.enforce(n => n < 10 ? 'err' : null))
+      const adapters = mergeAdaptersWithValidators(
+        {
+          $: identityAdapter({ n: 0 }),
+          '$.n': integerToStringAdapter,
+        } as const,
+        flattenValidatorsOfValidatingType(typeDef),
+      )
+      type JsonPaths = {
+        $: '$',
+        '$.n': '$.n',
+      }
+      let originalValue: ValueOfType<typeof typeDef>
+      beforeEach(() => {
+        originalValue = {
+          n: 1,
+        }
+      })
+      describe('create mode', () => {
+        let model: FormModel<
+          typeof typeDef,
+          JsonPaths,
+          typeof adapters
+        >
+        beforeEach(() => {
+          model = new TestFormModel<
+            typeof typeDef,
+            JsonPaths,
+            typeof adapters
+          >(
+            typeDef,
+            originalValue,
+            adapters,
+            'create',
+          )
+        })
+
+        it('makes the field editable', () => {
+          expect(model.fields['$.n'].readonly).toBeFalsy()
+        })
+
+        it('fails validation', () => {
+          expect(model.validateAll()).toBeFalsy()
+        })
+
+        it('passes validation with valid data', () => {
+          model.setFieldValue('$.n', '10')
+          expect(model.validateAll()).toBeTruthy()
+        })
+      })
+      describe('edit model', () => {
+        let model: FormModel<
+          typeof typeDef,
+          JsonPaths,
+          typeof adapters
+        >
+        beforeEach(function () {
+          model = new TestFormModel<
+            typeof typeDef,
+            JsonPaths,
+            typeof adapters
+          >(
+            typeDef,
+            originalValue,
+            adapters,
+            'edit',
+          )
+        })
+
+        it('respects the field being readonly', () => {
+          expect(model.fields['$.n'].readonly).toBeTruthy()
+        })
+
+        it('validates successfully with clean, but invalid data', () => {
+          expect(model.validateAll()).toBeTruthy()
+        })
+
+        it('fails validation with invalid, dirty data', () => {
+          model.setFieldValue('$.n', '2')
+          expect(model.validateAll()).toBeFalsy()
+        })
+
+        it('passes validation with valid, dirty data', () => {
+          model.setFieldValue('$.n', '10')
+          expect(model.validateAll()).toBeTruthy()
         })
       })
     })

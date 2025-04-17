@@ -103,7 +103,7 @@ export function useMantineFormFields<
     function () {
       return new MantineFormImpl(fields)
     },
-    // handled separately below
+    // fields handled separately below
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )

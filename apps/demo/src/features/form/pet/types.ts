@@ -89,7 +89,7 @@ export const petType = object()
   .field('alive', booleanType)
   .field('tags', list(stringType))
   .optionalField('owner', petOwnerType)
-  .field('species', speciesType)
+  .readonlyField('species', speciesType)
   .narrow
 
 export type TagValuePath = `$.tags.${number}`

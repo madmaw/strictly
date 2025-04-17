@@ -445,21 +445,41 @@ exports[`PetFieldsView > renders Disabled 1`] = `
         </h1>
       </div>
     </div>
-    <button
-      class="mantine-focus-auto mantine-active _hot_3200d9 m_77c9d27d mantine-Button-root m_87cf2631 mantine-UnstyledButton-root"
-      style="--button-color: var(--mantine-color-white);"
-      type="button"
+    <div
+      class="m_4081bf90 mantine-Group-root"
+      style="--group-gap: var(--mantine-spacing-md); --group-align: center; --group-justify: flex-start; --group-wrap: wrap; flex: 1;"
     >
-      <span
-        class="m_80f1301b mantine-Button-inner"
+      <button
+        class="mantine-focus-auto mantine-active m_77c9d27d mantine-Button-root m_87cf2631 mantine-UnstyledButton-root"
+        style="--button-color: var(--mantine-color-white); flex: 1;"
+        type="button"
       >
         <span
-          class="m_811560b9 mantine-Button-label"
+          class="m_80f1301b mantine-Button-inner"
         >
-          Submit
+          <span
+            class="m_811560b9 mantine-Button-label"
+          >
+            Force Validation
+          </span>
         </span>
-      </span>
-    </button>
+      </button>
+      <button
+        class="mantine-focus-auto mantine-active _hot_3200d9 m_77c9d27d mantine-Button-root m_87cf2631 mantine-UnstyledButton-root"
+        style="--button-color: var(--mantine-color-white); flex: 1;"
+        type="button"
+      >
+        <span
+          class="m_80f1301b mantine-Button-inner"
+        >
+          <span
+            class="m_811560b9 mantine-Button-label"
+          >
+            Submit
+          </span>
+        </span>
+      </button>
+    </div>
   </div>
 </div>
 `;
@@ -650,21 +670,41 @@ exports[`PetFieldsView > renders Empty 1`] = `
         </h1>
       </div>
     </div>
-    <button
-      class="mantine-focus-auto mantine-active _hot_3200d9 m_77c9d27d mantine-Button-root m_87cf2631 mantine-UnstyledButton-root"
-      style="--button-color: var(--mantine-color-white);"
-      type="button"
+    <div
+      class="m_4081bf90 mantine-Group-root"
+      style="--group-gap: var(--mantine-spacing-md); --group-align: center; --group-justify: flex-start; --group-wrap: wrap; flex: 1;"
     >
-      <span
-        class="m_80f1301b mantine-Button-inner"
+      <button
+        class="mantine-focus-auto mantine-active m_77c9d27d mantine-Button-root m_87cf2631 mantine-UnstyledButton-root"
+        style="--button-color: var(--mantine-color-white); flex: 1;"
+        type="button"
       >
         <span
-          class="m_811560b9 mantine-Button-label"
+          class="m_80f1301b mantine-Button-inner"
         >
-          Submit
+          <span
+            class="m_811560b9 mantine-Button-label"
+          >
+            Force Validation
+          </span>
         </span>
-      </span>
-    </button>
+      </button>
+      <button
+        class="mantine-focus-auto mantine-active _hot_3200d9 m_77c9d27d mantine-Button-root m_87cf2631 mantine-UnstyledButton-root"
+        style="--button-color: var(--mantine-color-white); flex: 1;"
+        type="button"
+      >
+        <span
+          class="m_80f1301b mantine-Button-inner"
+        >
+          <span
+            class="m_811560b9 mantine-Button-label"
+          >
+            Submit
+          </span>
+        </span>
+      </button>
+    </div>
   </div>
 </div>
 `;
@@ -1038,21 +1078,41 @@ exports[`PetFieldsView > renders Errors 1`] = `
         </h1>
       </div>
     </div>
-    <button
-      class="mantine-focus-auto mantine-active _hot_3200d9 m_77c9d27d mantine-Button-root m_87cf2631 mantine-UnstyledButton-root"
-      style="--button-color: var(--mantine-color-white);"
-      type="button"
+    <div
+      class="m_4081bf90 mantine-Group-root"
+      style="--group-gap: var(--mantine-spacing-md); --group-align: center; --group-justify: flex-start; --group-wrap: wrap; flex: 1;"
     >
-      <span
-        class="m_80f1301b mantine-Button-inner"
+      <button
+        class="mantine-focus-auto mantine-active m_77c9d27d mantine-Button-root m_87cf2631 mantine-UnstyledButton-root"
+        style="--button-color: var(--mantine-color-white); flex: 1;"
+        type="button"
       >
         <span
-          class="m_811560b9 mantine-Button-label"
+          class="m_80f1301b mantine-Button-inner"
         >
-          Submit
+          <span
+            class="m_811560b9 mantine-Button-label"
+          >
+            Force Validation
+          </span>
         </span>
-      </span>
-    </button>
+      </button>
+      <button
+        class="mantine-focus-auto mantine-active _hot_3200d9 m_77c9d27d mantine-Button-root m_87cf2631 mantine-UnstyledButton-root"
+        style="--button-color: var(--mantine-color-white); flex: 1;"
+        type="button"
+      >
+        <span
+          class="m_80f1301b mantine-Button-inner"
+        >
+          <span
+            class="m_811560b9 mantine-Button-label"
+          >
+            Submit
+          </span>
+        </span>
+      </button>
+    </div>
   </div>
 </div>
 `;
@@ -1479,21 +1539,41 @@ exports[`PetFieldsView > renders Populated 1`] = `
         </h1>
       </div>
     </div>
-    <button
-      class="mantine-focus-auto mantine-active _hot_3200d9 m_77c9d27d mantine-Button-root m_87cf2631 mantine-UnstyledButton-root"
-      style="--button-color: var(--mantine-color-white);"
-      type="button"
+    <div
+      class="m_4081bf90 mantine-Group-root"
+      style="--group-gap: var(--mantine-spacing-md); --group-align: center; --group-justify: flex-start; --group-wrap: wrap; flex: 1;"
     >
-      <span
-        class="m_80f1301b mantine-Button-inner"
+      <button
+        class="mantine-focus-auto mantine-active m_77c9d27d mantine-Button-root m_87cf2631 mantine-UnstyledButton-root"
+        style="--button-color: var(--mantine-color-white); flex: 1;"
+        type="button"
       >
         <span
-          class="m_811560b9 mantine-Button-label"
+          class="m_80f1301b mantine-Button-inner"
         >
-          Submit
+          <span
+            class="m_811560b9 mantine-Button-label"
+          >
+            Force Validation
+          </span>
         </span>
-      </span>
-    </button>
+      </button>
+      <button
+        class="mantine-focus-auto mantine-active _hot_3200d9 m_77c9d27d mantine-Button-root m_87cf2631 mantine-UnstyledButton-root"
+        style="--button-color: var(--mantine-color-white); flex: 1;"
+        type="button"
+      >
+        <span
+          class="m_80f1301b mantine-Button-inner"
+        >
+          <span
+            class="m_811560b9 mantine-Button-label"
+          >
+            Submit
+          </span>
+        </span>
+      </button>
+    </div>
   </div>
 </div>
 `;

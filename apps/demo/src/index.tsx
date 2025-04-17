@@ -55,6 +55,7 @@ window.onload = function () {
           <I18nProvider i18n={i18n}>
             <Box m='md'>
               <PetForm
+                mode='edit'
                 onValueChange={onValueChange}
                 value={value}
               />

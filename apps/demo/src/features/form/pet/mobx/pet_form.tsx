@@ -27,10 +27,14 @@ import {
 export function PetForm({
   value,
   onValueChange,
+  mode,
 }: FormProps<Pet>) {
   const model = useMemo(() => {
-    return new PetFormModel(value)
-  }, [value])
+    return new PetFormModel(value, mode)
+  }, [
+    value,
+    mode,
+  ])
 
   const onValidFieldSubmit = useCallback(
     function<Path extends ValuePathsOfModel<PetFormModel>> (valuePath: Path) {
@@ -53,6 +57,10 @@ export function PetForm({
     },
     [onValueChange],
   )
+
+  const onForceValidate = useCallback(() => {
+    model.validateAll(true)
+  }, [model])
 
   const {
     onFieldValueChange,
@@ -160,15 +168,16 @@ export function PetForm({
   const PetForm = usePartialObserverComponent(
     function () {
       return {
-        fields: model.fields,
-        onFieldValueChange,
-        onSubmit: onFormSubmit,
-        onFieldSubmit,
-        onFieldFocus,
-        onFieldBlur,
-        onRemoveTag,
-        onClearField,
         SpeciesComponent,
+        fields: model.fields,
+        onClearField,
+        onFieldBlur,
+        onFieldFocus,
+        onFieldSubmit,
+        onFieldValueChange,
+        onForceValidate,
+        onRemoveTag,
+        onSubmit: onFormSubmit,
       }
     },
     [
@@ -180,6 +189,7 @@ export function PetForm({
       onFieldBlur,
       onRemoveTag,
       onClearField,
+      onForceValidate,
       SpeciesComponent,
     ],
     PetFieldsViewImpl,
