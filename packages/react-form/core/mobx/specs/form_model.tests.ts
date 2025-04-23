@@ -16,6 +16,7 @@ import {
 } from '@strictly/define'
 import {
   type FieldAdapter,
+  type ToOfFieldAdapter,
 } from 'core/mobx/field_adapter'
 import {
   adapterFromTwoWayConverter,
@@ -24,6 +25,7 @@ import {
 import {
   type FlattenedTypePathsToAdaptersOf,
   FormModel,
+  Validation,
   type ValuePathsToAdaptersOf,
 } from 'core/mobx/form_model'
 import { mergeAdaptersWithValidators } from 'core/mobx/merge_field_adapters_with_validators'
@@ -46,7 +48,7 @@ import {
 const IS_NAN_ERROR = 1
 
 const originalIntegerToStringAdapter = adapterFromTwoWayConverter(
-  new IntegerToStringConverter(IS_NAN_ERROR),
+  new IntegerToStringConverter<typeof IS_NAN_ERROR, string, unknown>(IS_NAN_ERROR),
   prototypingFieldValueFactory(0),
 )
 
@@ -68,6 +70,13 @@ class TestFormModel<
       value,
       valuePath,
     }
+  }
+
+  setFieldValueAndValidate<K extends keyof ValuePathsToAdaptersOf<TypePathsToAdapters, ValueToTypePaths>>(
+    valuePath: K,
+    value: ToOfFieldAdapter<ValuePathsToAdaptersOf<TypePathsToAdapters, ValueToTypePaths>[K]>,
+  ) {
+    this.setFieldValue(valuePath, value, Validation.Always)
   }
 }
 
@@ -510,7 +519,7 @@ describe('all', function () {
         $: integerToStringAdapter,
       } as const
       const originalValue: ValueOfType<typeof typeDef> = 2
-      let model: FormModel<
+      let model: TestFormModel<
         typeof typeDef,
         ValueToTypePathsOfType<typeof typeDef>,
         typeof adapters
@@ -570,9 +579,9 @@ describe('all', function () {
 
           describe('conversion succeeds, but validation fails', function () {
             const newValue = -1
-            const errorCode = 65
+            const errorCode = IS_NAN_ERROR
             beforeEach(function () {
-              integerToStringAdapter.revert?.mockReturnValueOnce({
+              integerToStringAdapter.revert?.mockReturnValue({
                 type: UnreliableFieldConversionType.Failure,
                 error: errorCode,
                 value: [newValue],
@@ -632,7 +641,7 @@ describe('all', function () {
         '$.*': integerToStringAdapter,
       } as const
       let originalValue: ValueOfType<typeof typeDef>
-      let model: FormModel<
+      let model: TestFormModel<
         typeof typeDef,
         ValueToTypePathsOfType<typeof typeDef>,
         typeof converters
@@ -800,9 +809,11 @@ describe('all', function () {
       describe('addListItem', function () {
         describe('adds default to start of the list', function () {
           beforeEach(function () {
-            model.errors['$.0'] = 0
-            model.errors['$.1'] = 1
-            model.errors['$.2'] = 2
+            model.setFieldValue('$.0', 'x')
+            model.setFieldValue('$.1', '3')
+            model.setFieldValue('$.2', 'z')
+            model.validateAll()
+
             model.addListItem('$', null, 0)
           })
 
@@ -822,7 +833,7 @@ describe('all', function () {
             ],
             [
               '$.1',
-              '1',
+              'x',
             ],
             [
               '$.2',
@@ -830,7 +841,7 @@ describe('all', function () {
             ],
             [
               '$.3',
-              '7',
+              'z',
             ],
           ] as const)('it reports the value of field %s as %s', function (path, fieldValue) {
             expect(model.fields[path]?.value).toBe(fieldValue)
@@ -843,15 +854,15 @@ describe('all', function () {
             ],
             [
               '$.1',
-              0,
+              IS_NAN_ERROR,
             ],
             [
               '$.2',
-              1,
+              undefined,
             ],
             [
               '$.3',
-              2,
+              IS_NAN_ERROR,
             ],
           ] as const)('it reports the error of field %s', function (path, error) {
             expect(model.fields[path]?.error).toBe(error)
@@ -895,9 +906,10 @@ describe('all', function () {
 
       describe('removeListItem', function () {
         beforeEach(function () {
-          model.errors['$.0'] = 0
-          model.errors['$.1'] = 1
-          model.errors['$.2'] = 2
+          model.setFieldValue('$.0', 'x')
+          model.setFieldValue('$.1', '3')
+          model.setFieldValue('$.2', 'z')
+          model.validateAll()
         })
 
         describe('remove first item', function () {
@@ -916,11 +928,11 @@ describe('all', function () {
             expect(model.fields).toEqual({
               '$.0': expect.objectContaining({
                 value: '3',
-                error: 1,
+                error: undefined,
               }),
               '$.1': expect.objectContaining({
-                value: '7',
-                error: 2,
+                value: 'z',
+                error: IS_NAN_ERROR,
               }),
             })
           })
@@ -941,12 +953,12 @@ describe('all', function () {
           it('updates the field values and errors', function () {
             expect(model.fields).toEqual({
               '$.0': expect.objectContaining({
-                value: '1',
-                error: 0,
+                value: 'x',
+                error: IS_NAN_ERROR,
               }),
               '$.1': expect.objectContaining({
-                value: '7',
-                error: 2,
+                value: 'z',
+                error: IS_NAN_ERROR,
               }),
             })
           })
@@ -964,8 +976,8 @@ describe('all', function () {
           it('updates the field values and errors', function () {
             expect(model.fields).toEqual({
               '$.0': expect.objectContaining({
-                value: '7',
-                error: 2,
+                value: 'z',
+                error: IS_NAN_ERROR,
               }),
             })
           })
@@ -987,7 +999,7 @@ describe('all', function () {
         } as const
         type ValueToTypePaths = ValueToTypePathsOfType<typeof type>
         let originalValue: ValueOfType<typeof type>
-        let model: FormModel<
+        let model: TestFormModel<
           typeof type,
           ValueToTypePaths,
           typeof adapters
@@ -1201,7 +1213,7 @@ describe('all', function () {
         }
       })
       describe('create mode', () => {
-        let model: FormModel<
+        let model: TestFormModel<
           typeof typeDef,
           JsonPaths,
           typeof adapters

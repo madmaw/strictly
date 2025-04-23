@@ -88,7 +88,7 @@ export function mergeAdaptersWithValidators<
         }
       }
       acc[key] = {
-        ...adapter,
+        create: adapter.create.bind(adapter),
         convert,
         revert: adapter.revert && revert,
       }

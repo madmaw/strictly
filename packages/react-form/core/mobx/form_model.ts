@@ -88,10 +88,15 @@ type FlattenedFieldOverrides<
   >
 }
 
-type FlattenedErrors<
+export enum Validation {
+  Changed = 1,
+  Always = 2,
+}
+
+type FlattenedValidation<
   ValuePathsToAdapters extends Readonly<Record<string, FieldAdapter>>,
 > = {
-  -readonly [K in keyof ValuePathsToAdapters]?: ErrorOfFieldAdapter<ValuePathsToAdapters[K]>
+  -readonly [K in keyof ValuePathsToAdapters]?: Validation
 }
 
 export type ValuePathsToAdaptersOf<
@@ -138,16 +143,21 @@ export abstract class FormModel<
   @observable.shallow
   accessor fieldOverrides: FlattenedFieldOverrides<ValuePathsToAdapters>
   @observable.shallow
-  accessor errors: FlattenedErrors<ValuePathsToAdapters> = {}
+  accessor validation: FlattenedValidation<ValuePathsToAdapters> = {}
 
   private readonly flattenedTypeDefs: Readonly<Record<string, Type>>
 
+  // cannot be type safe
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private readonly originalValues: Record<string, any>
+
   constructor(
     readonly type: T,
-    private readonly originalValue: ValueOfType<ReadonlyTypeOfType<T>>,
+    originalValue: ValueOfType<ReadonlyTypeOfType<T>>,
     protected readonly adapters: TypePathsToAdapters,
     protected readonly mode: FormMode,
   ) {
+    this.originalValues = flattenValuesOfType<ReadonlyTypeOfType<T>>(type, originalValue)
     this.value = mobxCopy(type, originalValue)
     this.flattenedTypeDefs = flattenTypesOfType(type)
     // pre-populate field overrides for consistent behavior when default information is overwritten
@@ -271,6 +281,7 @@ export abstract class FormModel<
     const {
       convert,
       create,
+      revert,
     } = adapter
 
     const fieldOverride = this.fieldOverrides[valuePath]
@@ -278,6 +289,9 @@ export abstract class FormModel<
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     const fieldTypeDef = this.flattenedTypeDefs[typePath as string]
     const context = this.toContext(this.value, valuePath)
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+    const defaultValue = create(valuePath as string, context)
+
     const {
       value,
       required,
@@ -288,17 +302,50 @@ export abstract class FormModel<
         : fieldTypeDef != null
         ? mobxCopy(
           fieldTypeDef,
-          // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-          create(valuePath as string, context),
+          defaultValue,
         )
         // fake values can't be copied
-        // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-        : create(valuePath as string, context),
+        : defaultValue,
       // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
       valuePath as string,
       context,
     )
-    const error = this.errors[valuePath]
+    // const error = this.errors[valuePath]
+    let error: unknown = undefined
+    const displayedValue = fieldOverride != null ? fieldOverride[0] : value
+    const validation = this.validation[valuePath]
+    switch (validation) {
+      case undefined:
+        // skip validation
+        break
+      case Validation.Changed:
+        if (revert != null) {
+          const originalValue = valuePath in this.originalValues
+            // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+            ? this.originalValues[valuePath as string]
+            : defaultValue
+          // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+          const { value: originalDisplayedValue } = convert(originalValue, valuePath as string, context)
+          // TODO better comparisons, displayed values can still be complex
+          if (displayedValue !== originalDisplayedValue) {
+            const revertResult = revert(displayedValue, valuePath, context)
+            if (revertResult?.type === UnreliableFieldConversionType.Failure) {
+              ;({ error } = revertResult)
+            }
+          }
+        }
+        break
+      case Validation.Always:
+        {
+          const revertResult = revert?.(displayedValue, valuePath, context)
+          if (revertResult?.type === UnreliableFieldConversionType.Failure) {
+            ;({ error } = revertResult)
+          }
+        }
+        break
+      default:
+        throw new UnreachableError(validation)
+    }
     return {
       value: fieldOverride != null ? fieldOverride[0] : value,
       error,
@@ -343,18 +390,12 @@ export abstract class FormModel<
     return valuePathToTypePath<ValueToTypePaths, K>(this.type, valuePath, true)
   }
 
-  setFieldValueAndValidate<K extends keyof ValuePathsToAdapters>(
-    valuePath: K,
-    value: ToOfFieldAdapter<ValuePathsToAdapters[K]>,
-  ): boolean {
-    return this.internalSetFieldValue(valuePath, value, true)
-  }
-
   setFieldValue<K extends keyof ValuePathsToAdapters>(
     valuePath: K,
     value: ToOfFieldAdapter<ValuePathsToAdapters[K]>,
+    validation: Validation | undefined | null = this.validation[valuePath],
   ): boolean {
-    return this.internalSetFieldValue(valuePath, value, false)
+    return this.internalSetFieldValue(valuePath, value, validation)
   }
 
   addListItem<K extends keyof FlattenedListTypesOfType<T>>(
@@ -430,9 +471,9 @@ export abstract class FormModel<
         const fieldOverride = this.fieldOverrides[fromJsonPath]
         delete this.fieldOverrides[fromJsonPath]
         this.fieldOverrides[toJsonPath] = fieldOverride
-        const error = this.errors[fromJsonPath]
-        delete this.errors[fromJsonPath]
-        this.errors[toJsonPath] = error
+        const validation = this.validation[fromJsonPath]
+        delete this.validation[fromJsonPath]
+        this.validation[toJsonPath] = validation
       })
       accessor.set(newList)
       // delete any value overrides so the new list isn't shadowed
@@ -507,9 +548,9 @@ export abstract class FormModel<
           const fieldOverride = this.fieldOverrides[fromJsonPath]
           delete this.fieldOverrides[fromJsonPath]
           this.fieldOverrides[toJsonPath] = fieldOverride
-          const error = this.errors[fromJsonPath]
-          delete this.errors[fromJsonPath]
-          this.errors[toJsonPath] = error
+          const validation = this.validation[fromJsonPath]
+          delete this.validation[fromJsonPath]
+          this.validation[toJsonPath] = validation
         })
         accessor.set(newList)
         // delete any value overrides so the new list isn't shadowed
@@ -522,7 +563,7 @@ export abstract class FormModel<
   private internalSetFieldValue<K extends keyof ValuePathsToAdapters>(
     valuePath: K,
     value: ToOfFieldAdapter<ValuePathsToAdapters[K]>,
-    displayValidation: boolean,
+    validation: Validation | undefined | null,
   ): boolean {
     const { revert } = this.getAdapterForValuePath(valuePath)
 
@@ -533,17 +574,18 @@ export abstract class FormModel<
     const accessor = this.getAccessorForValuePath(valuePath)
     return runInAction(() => {
       this.fieldOverrides[valuePath] = [value]
+      if (validation != null) {
+        this.validation[valuePath] = validation
+      } else {
+        delete this.validation[valuePath]
+      }
       switch (conversion.type) {
         case UnreliableFieldConversionType.Failure:
-          if (displayValidation) {
-            this.errors[valuePath] = conversion.error
-          }
           if (conversion.value != null && accessor != null) {
             accessor.set(conversion.value[0])
           }
           return false
         case UnreliableFieldConversionType.Success:
-          delete this.errors[valuePath]
           accessor?.set(conversion.value)
           return true
         default:
@@ -556,7 +598,7 @@ export abstract class FormModel<
     const fieldOverride = this.fieldOverrides[valuePath]
     if (fieldOverride != null) {
       runInAction(() => {
-        delete this.errors[valuePath]
+        delete this.validation[valuePath]
       })
     }
   }
@@ -582,12 +624,13 @@ export abstract class FormModel<
     const key = valuePath as unknown as keyof ValuePathsToAdapters
     runInAction(() => {
       this.fieldOverrides[key] = [displayValue]
+      delete this.validation[key]
     })
   }
 
   clearAll(value: ValueOfType<T>): void {
     runInAction(() => {
-      this.errors = {}
+      this.validation = {}
       // TODO this isn't correct, should reload from value
       this.fieldOverrides = {}
       this.value = mobxCopy(this.type, value)
@@ -603,137 +646,32 @@ export abstract class FormModel<
 
   validateField<K extends keyof ValuePathsToAdapters>(
     valuePath: K,
-    ignoreDefaultValue = false,
+    validation: Validation = Math.max(
+      this.mode === 'create' ? Validation.Always : Validation.Changed,
+      this.validation[valuePath] ?? Validation.Changed,
+    ),
   ): boolean {
-    const {
-      convert,
-      revert,
-      create,
-    } = this.getAdapterForValuePath(valuePath)
-    const fieldOverride = this.fieldOverrides[valuePath]
-    const accessor = this.getAccessorForValuePath(valuePath)
-    const context = this.toContext(this.value, valuePath)
-
-    const {
-      value: storedValue,
-    } = convert(
-      accessor != null
-        ? accessor.value
-        // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-        : create(valuePath as string, context),
-      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-      valuePath as string,
-      context,
-    )
-    const value = fieldOverride != null
-      ? fieldOverride[0]
-      : storedValue
-    const dirty = storedValue !== value
-    assertExists(revert, 'changing field directly not supported {}', valuePath)
-    if (ignoreDefaultValue) {
-      const {
-        value: defaultDisplayValue,
-      } = convert(create(valuePath, context), valuePath, context)
-      if (defaultDisplayValue === value) {
-        return true
-      }
-    }
-    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-    const conversion = revert(value, valuePath as string, context)
-    return runInAction(() => {
-      switch (conversion.type) {
-        case UnreliableFieldConversionType.Failure:
-          this.errors[valuePath] = conversion.error
-          if (conversion.value != null && accessor != null && dirty) {
-            accessor.set(conversion.value[0])
-          }
-          return false
-        case UnreliableFieldConversionType.Success:
-          delete this.errors[valuePath]
-          if (accessor != null && dirty) {
-            accessor.set(conversion.value)
-          }
-          return true
-        default:
-          throw new UnreachableError(conversion)
-      }
+    runInAction(() => {
+      this.validation[valuePath] = validation
     })
+    return this.fields[valuePath].error == null
   }
 
-  validateAll(force: boolean = this.mode === 'create'): boolean {
-    // sort keys shortest to longest so parent changes don't overwrite child changes
-    const accessors = toArray(this.accessors).toSorted(function ([a], [b]) {
-      return a.length - b.length
-    })
+  validateAll(validation: Validation = this.mode === 'create' ? Validation.Always : Validation.Changed): boolean {
+    const accessors = toArray(this.accessors)
 
-    const flattenedOriginalValues = flattenValuesOfType(this.type, this.originalValue)
-
-    return runInAction(() => {
-      return accessors.reduce(
-        (
-          success,
-          [
-            valuePath,
-            accessor,
-          ],
-        ): boolean => {
-          // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-          const adapterPath = valuePath as keyof ValuePathsToAdapters
-          const adapter = this.maybeGetAdapterForValuePath(adapterPath)
-          if (adapter == null) {
-            // no adapter == there should be nothing specified for this field
-            return success
-          }
-          const {
-            convert,
-            revert,
-          } = adapter
-          if (revert == null) {
-            // no convert method means this field is immutable
-            return success
-          }
-          const fieldOverride = this.fieldOverrides[adapterPath]
-          // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-          const context = this.toContext(this.value, valuePath as keyof ValuePathsToAdapters)
-          const {
-            value: storedValue,
-          } = convert(accessor.value, valuePath, context)
-          const value = fieldOverride != null
-            ? fieldOverride[0]
-            : storedValue
-          // TODO customizable comparisons
-          const dirty = fieldOverride != null && fieldOverride[0] !== storedValue
-          const needsValidation = force
-            || !(valuePath in flattenedOriginalValues)
-            || storedValue !== convert(
-                flattenedOriginalValues[valuePath],
-                valuePath,
-                // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-                this.toContext(this.originalValue, valuePath as keyof ValuePathsToAdapters),
-              ).value
-          if (needsValidation) {
-            const conversion = revert(value, valuePath, context)
-            switch (conversion.type) {
-              case UnreliableFieldConversionType.Failure:
-                this.errors[adapterPath] = conversion.error
-                if (conversion.value != null && dirty) {
-                  accessor.set(conversion.value[0])
-                }
-                return false
-              case UnreliableFieldConversionType.Success:
-                if (dirty) {
-                  accessor.set(conversion.value)
-                }
-                delete this.errors[adapterPath]
-                return success
-              default:
-                throw new UnreachableError(conversion)
-            }
-          }
-          return success
-        },
-        true,
-      )
+    runInAction(() => {
+      accessors.forEach(([valuePath]) => {
+        // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+        this.validation[valuePath as keyof ValuePathsToAdapters] = validation
+      })
     })
+    return accessors.every(
+      ([valuePath]): boolean => {
+        // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+        const field = this.fields[valuePath as keyof ValuePathsToAdapters]
+        return field?.error == null
+      },
+    )
   }
 }

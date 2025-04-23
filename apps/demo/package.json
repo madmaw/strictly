@@ -74,5 +74,5 @@
     "test:update": "vitest run -u",
     "test:watch": "vitest"
   },
-  "version": "0.0.18"
+  "version": "0.0.19"
 }

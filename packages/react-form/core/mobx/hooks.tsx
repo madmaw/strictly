@@ -5,7 +5,9 @@ import {
 import {
   useCallback,
 } from 'react'
-import { type FormModel } from './form_model'
+import {
+  type FormModel,
+} from './form_model'
 import {
   type FormFieldsOfModel,
   type ToValueOfModelValuePath,
@@ -42,9 +44,8 @@ export function useDefaultMobxFormHooks<
       path: Path,
       value: ToValueOfModelValuePath<M, Path>,
     ) {
-      // TODO do in one action
-      model.clearFieldError(path)
-      model.setFieldValue<Path>(path, value)
+      // clear any validation
+      model.setFieldValue<Path>(path, value, null)
     },
     [model],
   )
@@ -69,7 +70,7 @@ export function useDefaultMobxFormHooks<
       // TODO debounce?
       setTimeout(function () {
         if (model.isValuePathActive(path)) {
-          model.validateField(path, true)
+          model.validateField(path)
         }
       }, 100)
     },

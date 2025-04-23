@@ -3,6 +3,7 @@ import {
   type FormProps,
   useDefaultMobxFormHooks,
   usePartialObserverComponent,
+  Validation,
   type ValuePathsOfModel,
 } from '@strictly/react-form'
 import { emulateTab } from 'emulate-tab'
@@ -67,7 +68,7 @@ export function PetForm({
   )
 
   const onForceValidate = useCallback(() => {
-    model.validateAll(true)
+    model.validateAll(Validation.Always)
   }, [model])
 
   const {

@@ -13,7 +13,8 @@ function mapper(_t: StrictTypeDef, v: AnyValueType) {
 export function flattenValuesOfType<T extends Type>(
   typeDef: Type,
   value: ValueOfType<T>,
-) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+): Record<string, any> {
   return flattenValueTo(
     typeDef,
     value,
