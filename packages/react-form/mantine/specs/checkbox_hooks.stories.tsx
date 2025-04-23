@@ -5,6 +5,7 @@ import {
 } from '@storybook/react'
 import { type FieldsViewProps } from 'core/props'
 import { useMantineFormFields } from 'mantine/hooks'
+import { type Ref } from 'react'
 import { type Field } from 'types/field'
 import { CHECKBOX_LABEL } from './checkbox_constants'
 
@@ -13,16 +14,20 @@ function ErrorRenderer({ error }: { error: string }) {
 }
 
 function Component({
+  componentRef,
   ...props
 }: FieldsViewProps<{
   $: Field<boolean, string>,
-}>) {
+}> & {
+  componentRef: Ref<HTMLInputElement>,
+}) {
   const inputProps = useMantineFormFields(props)
   const CheckboxComponent = inputProps.checkbox('$')
   return (
     <CheckboxComponent
       ErrorRenderer={ErrorRenderer}
       label={CHECKBOX_LABEL}
+      ref={componentRef}
     />
   )
 }
@@ -34,6 +39,7 @@ const meta: Meta<typeof Component> = {
     onFieldFocus: action('onFieldFocus'),
     onFieldSubmit: action('onFieldSubmit'),
     onFieldValueChange: action('onFieldValueChange'),
+    componentRef: action('componentRef'),
   },
 }
 

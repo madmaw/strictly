@@ -561,7 +561,7 @@ export abstract class FormModel<
     }
   }
 
-  clearFieldValue<K extends StringKeyOf<ValueToTypePaths>>(valuePath: K) {
+  clearFieldValue<K extends StringKeyOf<ValuePathsToAdapters>>(valuePath: K) {
     const typePath = this.typePath(valuePath)
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     const adapter = this.adapters[typePath as keyof TypePathsToAdapters]

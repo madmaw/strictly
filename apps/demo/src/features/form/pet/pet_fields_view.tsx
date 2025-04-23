@@ -23,17 +23,18 @@ import {
 } from '@strictly/react-form'
 import {
   type ComponentType,
+  type Ref,
   useCallback,
   useMemo,
 } from 'react'
 import {
   type PetFields,
+  type PetValuePaths,
   TagAlreadyExistsErrorType,
 } from './fields'
 import { PetOwnerFieldsView } from './pet_owner_fields_view'
 import {
   CatNameMustBeCapitalizedType,
-  type PetValuePaths,
   type TagValuePath,
 } from './types'
 
@@ -106,6 +107,7 @@ export type PetFieldsViewProps = FieldsViewProps<PetFormFields> & {
   onForceValidate: () => void,
   onRemoveTag: (valuePath: TagValuePath) => void,
   onClearField: (valuePath: PetValuePaths) => void,
+  firstInputRef?: Ref<HTMLInputElement>,
 }
 
 function NameInputErrorRenderer({ error }: ErrorRendererProps<PetFormFields, '$.name'>) {
@@ -149,6 +151,7 @@ export function PetFieldsView(props: PetFieldsViewProps) {
     onForceValidate,
     SpeciesComponent,
     onClearField,
+    firstInputRef,
   } = props
   const form = useMantineFormFields(props)
   const NameTextInput = form.textInput('$.name')
@@ -179,6 +182,7 @@ export function PetFieldsView(props: PetFieldsViewProps) {
       <NameTextInput
         ErrorRenderer={NameInputErrorRenderer}
         label={NameTextInputLabel()}
+        ref={firstInputRef}
       />
       <AliveCheckbox label={AliveCheckboxLabel()} />
       <NewTagField>

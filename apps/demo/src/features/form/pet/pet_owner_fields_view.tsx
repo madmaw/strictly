@@ -16,7 +16,6 @@ import {
   MinimumStringLengthValidator,
   object,
   OptionalValidatorProxy,
-  type PathsOfType,
   type ReadonlyTypeOfType,
   RegexpValidationErrorType,
   RegexpValidator,
@@ -45,8 +44,6 @@ export const petOwnerType = object()
   .narrow
 
 export type PetOwner = ValueOfType<typeof petOwnerType>
-export type PetOwnerValuePaths = PathsOfType<typeof petOwnerType>
-export type PetOwnerTypePaths = PathsOfType<typeof petOwnerType, '*'>
 export type FlattenedPetOwnerTypes = FlattenedTypesOfType<typeof petOwnerType, '*'>
 export type PetOwnerValueToTypePaths = ValueToTypePathsOfType<typeof petOwnerType>
 export type PetOwnerTypeToValuePaths = Reverse<PetOwnerValueToTypePaths>
@@ -72,6 +69,9 @@ export const petOwnerFieldAdapters = mergeAdaptersWithValidators(
   unvalidatedPetOwnerFieldAdapters,
   petOwnerValidators,
 )
+
+export type PetOwnerTypePaths = keyof typeof petOwnerFieldAdapters
+export type PetOwnerValuePaths = PetOwnerTypeToValuePaths[PetOwnerTypePaths]
 
 export type PetOwnerFields = FormFieldsOfFieldAdapters<
   PetOwnerValueToTypePaths,

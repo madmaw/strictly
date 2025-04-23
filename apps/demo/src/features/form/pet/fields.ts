@@ -164,6 +164,8 @@ const validatedPetAdapters = mergeAdaptersWithValidators(
   rawPetFieldAdapters,
   petValidators,
 )
+export type PetTypePaths = keyof typeof rawPetFieldAdapters
+export type PetValuePaths = PetTypeToValuePaths[PetTypePaths]
 
 export const petFieldAdapters = mergeFieldAdaptersWithTwoWayConverter(
   validatedPetAdapters,

@@ -8,8 +8,12 @@ import {
   forwardRef,
   type ForwardRefExoticComponent,
   type PropsWithoutRef,
+  type Ref,
+  type RefAttributes,
   useMemo,
 } from 'react'
+
+export type RefOfProps<P, Fallback = unknown> = P extends RefAttributes<infer R> ? R : Fallback
 
 export type PartialComponent<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -27,8 +31,11 @@ export type UnsafePartialComponent<
   Component extends ComponentType<any>,
   CurriedProps,
   AdditionalProps = {},
+  R = RefOfProps<ComponentProps<Component>>,
 > = ForwardRefExoticComponent<
-  PropsWithoutRef<RemainingComponentProps<Component, CurriedProps> & AdditionalProps>
+  PropsWithoutRef<RemainingComponentProps<Component, CurriedProps> & AdditionalProps> & {
+    ref?: Ref<R>,
+  }
 >
 
 export function createSimplePartialComponent<

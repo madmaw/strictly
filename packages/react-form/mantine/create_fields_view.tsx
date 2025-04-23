@@ -15,14 +15,18 @@ import type { SubFormFields } from 'types/sub_form_fields'
 import type { ValueTypeOfField } from 'types/value_type_of_field'
 import type { MantineFieldComponent } from './types'
 
+export type SubPathsOf<ValuePath extends string, SubFormValuePath extends string> = SubFormValuePath extends
+  StringConcatOf<ValuePath, infer Postfix> ? `$${Postfix}`
+  : never
+
 export type CallbackMapper<ValuePath extends string> = {
   <
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     Cb extends (...args: any[]) => any,
-  >(cb: Cb): Parameters<Cb> extends [infer SubFormValuePath extends string, ...(infer Rest)]
-    ? SubFormValuePath extends StringConcatOf<ValuePath, infer Postfix>
-      ? (valuePath: `$${Postfix}`, ...rest: Rest) => ReturnType<Cb>
-    : never
+  >(cb: Cb): Parameters<Cb> extends [infer SubFormValuePath extends string, ...(infer Rest)] ? (
+      valuePath: SubPathsOf<ValuePath, SubFormValuePath>,
+      ...rest: Rest
+    ) => ReturnType<Cb>
     : never,
 }
 

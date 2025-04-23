@@ -11,7 +11,6 @@ import {
   MinimumStringLengthValidator,
   numberType,
   object,
-  type PathsOfType,
   type ReadonlyTypeOfType,
   stringType,
   union,
@@ -96,8 +95,6 @@ export type TagValuePath = `$.tags.${number}`
 
 export type MutablePet = ValueOfType<typeof petType>
 export type Pet = ValueOfType<ReadonlyTypeOfType<typeof petType>>
-export type PetValuePaths = PathsOfType<typeof petType>
-export type PetTypePaths = PathsOfType<typeof petType, '*'>
 export type FlattenedPetTypes = FlattenedTypesOfType<typeof petType, '*'>
 export type PetValueToTypePaths = ValueToTypePathsOfType<typeof petType> & {
   '$.newTag': '$.newTag',

@@ -6,16 +6,17 @@ import {
   type ValuePathsOfModel,
 } from '@strictly/react-form'
 import { emulateTab } from 'emulate-tab'
-import { PetFieldsView as PetFieldsViewImpl } from 'features/form/pet/pet_fields_view'
+import { type PetValuePaths } from 'features/form/pet/fields'
+import { PetFieldsView } from 'features/form/pet/pet_fields_view'
 import { PetSpeciesCatFieldsView } from 'features/form/pet/pet_species_cat_fields_view'
 import { PetSpeciesDogFieldsView } from 'features/form/pet/pet_species_dog_fields_view'
 import { PetSpeciesFormFieldsView } from 'features/form/pet/pet_species_fields_view'
 import {
   type Pet,
-  type PetValuePaths,
   type Species,
   type TagValuePath,
 } from 'features/form/pet/types'
+import { Observer } from 'mobx-react'
 import {
   type ComponentType,
   useCallback,
@@ -38,6 +39,10 @@ export function PetForm({
     value,
     mode,
   ])
+
+  const firstInputRef = useCallback((input: HTMLInputElement | null) => {
+    input?.focus()
+  }, [])
 
   const onValidFieldSubmit = useCallback(
     function<Path extends ValuePathsOfModel<PetFormModel>> (valuePath: Path) {
@@ -77,7 +82,7 @@ export function PetForm({
   })
 
   const onClearField = useCallback(
-    function (valuePath: keyof PetValuePaths) {
+    function (valuePath: PetValuePaths) {
       model.clearFieldValue(valuePath)
       model.clearFieldError(valuePath)
     },
@@ -168,35 +173,23 @@ export function PetForm({
     PetSpeciesFormFieldsView,
   )
 
-  const PetForm = usePartialObserverComponent(
-    function () {
-      return {
-        SpeciesComponent,
-        fields: model.fields,
-        onClearField,
-        onFieldBlur,
-        onFieldFocus,
-        onFieldSubmit,
-        onFieldValueChange,
-        onForceValidate,
-        onRemoveTag,
-        onSubmit: onFormSubmit,
-      }
-    },
-    [
-      model,
-      onFieldValueChange,
-      onFormSubmit,
-      onFieldSubmit,
-      onFieldFocus,
-      onFieldBlur,
-      onRemoveTag,
-      onClearField,
-      onForceValidate,
-      SpeciesComponent,
-    ],
-    PetFieldsViewImpl,
+  return (
+    <Observer>
+      {() => (
+        <PetFieldsView
+          SpeciesComponent={SpeciesComponent}
+          fields={model.fields}
+          firstInputRef={firstInputRef}
+          onClearField={onClearField}
+          onFieldBlur={onFieldBlur}
+          onFieldFocus={onFieldFocus}
+          onFieldSubmit={onFieldSubmit}
+          onFieldValueChange={onFieldValueChange}
+          onForceValidate={onForceValidate}
+          onRemoveTag={onRemoveTag}
+          onSubmit={onFormSubmit}
+        />
+      )}
+    </Observer>
   )
-
-  return <PetForm />
 }

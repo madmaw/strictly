@@ -14,7 +14,10 @@ import {
   type TextInputTarget,
 } from 'mantine/create_text_input'
 import { useMantineFormFields } from 'mantine/hooks'
-import { type ComponentType } from 'react'
+import {
+  type ComponentType,
+  type Ref,
+} from 'react'
 import { type Field } from 'types/field'
 import { TEXT_INPUT_LABEL } from './text_input_constants'
 
@@ -26,10 +29,12 @@ function ErrorRenderer({ error }: { error: string }) {
 
 function Component<T extends TextInputTarget>({
   TextInput,
+  componentRef,
   ...props
 }: FieldsViewProps<{
   $: Field<string, string>,
 }> & {
+  componentRef: Ref<HTMLInputElement>,
   TextInput?: ComponentType<StoryTextInputProps<T>>,
 }) {
   const form = useMantineFormFields(props)
@@ -38,6 +43,7 @@ function Component<T extends TextInputTarget>({
     <TextInputComponent
       ErrorRenderer={ErrorRenderer}
       label={TEXT_INPUT_LABEL}
+      ref={componentRef}
     />
   )
 }
@@ -49,6 +55,7 @@ const meta: Meta<typeof Component> = {
     onFieldFocus: action('onFieldFocus'),
     onFieldSubmit: action('onFieldSubmit'),
     onFieldValueChange: action('onFieldValueChange'),
+    componentRef: action('componentRef'),
   },
 }
 

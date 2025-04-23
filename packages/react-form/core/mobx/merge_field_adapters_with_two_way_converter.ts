@@ -40,13 +40,14 @@ export function mergeFieldAdaptersWithTwoWayConverter<
   FieldAdapters extends Readonly<Record<string, FieldAdapter>>,
   E,
   Context,
+  P extends ValuePathsOfFieldAdapters<FieldAdapters>,
 >(
   fieldAdapters: FieldAdapters,
   converter: TwoWayFieldConverter<
     TosOfFieldAdapters<FieldAdapters>,
     TosOfFieldAdapters<FieldAdapters>,
     E,
-    ValuePathsOfFieldAdapters<FieldAdapters>,
+    P,
     Context
   >,
 ): MergedOfFieldAdaptersWithTwoWayConverter<FieldAdapters, E, Context> {
