@@ -23,5 +23,7 @@ export type MantineFieldComponent<T, P = T, E = any, R = RefOfProps<P>> = Unsafe
   // escape hatch for never comparisons `E extends never` will not work, always returning never
   // https://github.com/microsoft/TypeScript/issues/31751
   [E] extends [never] ? {} : { ErrorRenderer: ErrorRenderer<E> },
+  // mantine types are too complex for us to be able to get a stable type for the ref.
+  // We can, however, do a best guess and allow overriding in the caller
   R
 >
