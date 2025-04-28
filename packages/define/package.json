@@ -1,5 +1,8 @@
 {
   "author": "Chris <chris.glover@gmail.com> (@madmaw)",
+  "dependencies": {
+    "type-fest": "^4.27.0"
+  },
   "devDependencies": {
     "@strictly/support-vite": "*"
   },
@@ -14,8 +17,7 @@
   "packageManager": "yarn@1.22.22",
   "peerDependencies": {
     "@strictly/base": "*",
-    "mobx": "^6.13.5",
-    "type-fest": "^4.27.0"
+    "mobx": "^6.0.0"
   },
   "publishConfig": {
     "access": "public"
@@ -36,5 +38,5 @@
     "test:watch": "vitest"
   },
   "type": "module",
-  "version": "0.0.21"
+  "version": "0.0.22"
 }
