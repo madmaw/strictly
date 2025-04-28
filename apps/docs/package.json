@@ -22,7 +22,7 @@
   "name": "@strictly/docs",
   "scripts": {
     "build": "astro build",
-    "check-types": "tsc",
+    "check-types": "tsc -b",
     "clean": "del-cli dist .out .turbo",
     "dev": "astro dev",
     "lint": "cross-env ESLINT_USE_FLAT_CONFIG=false eslint . --max-warnings=0",

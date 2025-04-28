@@ -57,7 +57,7 @@
   "scripts": {
     "always": "yarn lingui:compile",
     "build": "vite build",
-    "check-types": "tsc",
+    "check-types": "tsc -b",
     "clean": "del-cli dist .out .turbo src/locales/*.ts",
     "dev": "vite",
     "lingui": "yarn lingui:extract && yarn lingui:compile",
