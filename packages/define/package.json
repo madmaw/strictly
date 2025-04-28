@@ -1,9 +1,5 @@
 {
   "author": "Chris <chris.glover@gmail.com> (@madmaw)",
-  "dependencies": {
-    "@strictly/base": "*",
-    "mobx": "^6.13.5"
-  },
   "devDependencies": {
     "@strictly/support-vite": "*"
   },
@@ -16,6 +12,10 @@
   "license": "MIT",
   "name": "@strictly/define",
   "packageManager": "yarn@1.22.22",
+  "peerDependencies": {
+    "@strictly/base": "*",
+    "mobx": "^6.13.5"
+  },
   "publishConfig": {
     "access": "public"
   },
@@ -35,5 +35,5 @@
     "test:watch": "vitest"
   },
   "type": "module",
-  "version": "0.0.19"
+  "version": "0.0.20"
 }

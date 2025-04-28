@@ -1,15 +1,5 @@
 {
   "author": "Chris <chris.glover@gmail.com> (@madmaw)",
-  "dependencies": {
-    "@mantine/core": "^7.13.4",
-    "@mantine/hooks": "^7.13.4",
-    "@strictly/base": "*",
-    "@strictly/define": "*",
-    "mobx": "^6.13.5",
-    "mobx-react": "^9.1.1",
-    "react": "^19.0.0 || ^18.3.1",
-    "react-dom": "^19.0.0 || ^18.3.1"
-  },
   "description": "Types and utilities for creating React forms",
   "devDependencies": {
     "@babel/plugin-proposal-decorators": "^7.25.9",
@@ -46,6 +36,16 @@
   ],
   "license": "MIT",
   "name": "@strictly/react-form",
+  "peerDependencies": {
+    "@mantine/core": "^7.13.4",
+    "@mantine/hooks": "^7.13.4",
+    "@strictly/base": "*",
+    "@strictly/define": "*",
+    "mobx": "^6.13.5",
+    "mobx-react": "^9.1.1",
+    "react": "^19.0.0 || ^18.3.1",
+    "react-dom": "^19.0.0 || ^18.3.1"
+  },
   "publishConfig": {
     "access": "public"
   },
@@ -70,5 +70,5 @@
     "test:watch": "vitest"
   },
   "type": "module",
-  "version": "0.0.19"
+  "version": "0.0.20"
 }
