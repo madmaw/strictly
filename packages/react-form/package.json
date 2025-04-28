@@ -24,7 +24,6 @@
     "jsdom": "^25.0.1",
     "resize-observer-polyfill": "^1.5.1",
     "storybook": "^8.4.5",
-    "type-fest": "^4.26.1",
     "vite": "^6.0.5",
     "vitest-matchmedia-mock": "^1.0.6"
   },
@@ -44,7 +43,8 @@
     "mobx": "^6.13.5",
     "mobx-react": "^9.1.1",
     "react": "^19.0.0 || ^18.3.1",
-    "react-dom": "^19.0.0 || ^18.3.1"
+    "react-dom": "^19.0.0 || ^18.3.1",
+    "type-fest": "^4.27.0"
   },
   "publishConfig": {
     "access": "public"
@@ -70,5 +70,5 @@
     "test:watch": "vitest"
   },
   "type": "module",
-  "version": "0.0.20"
+  "version": "0.0.21"
 }
