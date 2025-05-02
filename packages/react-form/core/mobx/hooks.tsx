@@ -5,14 +5,10 @@ import {
 import {
   useCallback,
 } from 'react'
+import type { ValueTypeOfField } from 'types/value_type_of_field'
 import {
   type FormModel,
 } from './form_model'
-import {
-  type FormFieldsOfModel,
-  type ToValueOfModelValuePath,
-  type ValuePathsOfModel,
-} from './types'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type ValueOfModel<M extends FormModel<any, any, any, any, any>> = M extends FormModel<infer T, any, any, any, any>
@@ -22,14 +18,14 @@ type ValueOfModel<M extends FormModel<any, any, any, any, any>> = M extends Form
 export function useDefaultMobxFormHooks<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   M extends FormModel<any, any, any, any, any>,
-  F extends FormFieldsOfModel<M> = FormFieldsOfModel<M>,
+  F extends M['fields'] = M['fields'],
 >(
   model: M,
   {
     onValidFieldSubmit,
     onValidFormSubmit,
   }: {
-    onValidFieldSubmit?: <Path extends ValuePathsOfModel<M>>(valuePath: Path) => void,
+    onValidFieldSubmit?: <Path extends keyof F>(valuePath: Path) => void,
     onValidFormSubmit?: (value: ValueOfModel<M>) => void,
   } = {},
 ): {
@@ -40,9 +36,9 @@ export function useDefaultMobxFormHooks<
   onFieldSubmit?(this: void, key: keyof F): boolean | void,
 } {
   const onFieldValueChange = useCallback(
-    function<Path extends ValuePathsOfModel<M>> (
+    function<Path extends keyof F> (
       path: Path,
-      value: ToValueOfModelValuePath<M, Path>,
+      value: ValueTypeOfField<F[Path]>,
     ) {
       // clear any validation
       model.setFieldValue<Path>(path, value, null)
@@ -51,7 +47,7 @@ export function useDefaultMobxFormHooks<
   )
 
   const onFieldSubmit = useCallback(
-    function<Path extends ValuePathsOfModel<M>> (valuePath: Path) {
+    function<Path extends keyof F> (valuePath: Path) {
       if (model.validateField(valuePath)) {
         onValidFieldSubmit?.(valuePath)
       }
@@ -64,7 +60,7 @@ export function useDefaultMobxFormHooks<
   )
 
   const onFieldBlur = useCallback(
-    function<Path extends ValuePathsOfModel<M>> (path: Path) {
+    function<Path extends keyof F> (path: Path) {
       // work around potential loss of focus prior to state potentially invalidating change triggering
       // (e.g. changing a discriminator)
       // TODO debounce?

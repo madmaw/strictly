@@ -72,7 +72,7 @@ exports[`PetSpeciesDogFieldsView > renders Disabled 1`] = `
     </div>
     <input
       disabled=""
-      name="$.species.dog:breed"
+      name="$.species:dog.breed"
       type="hidden"
       value="other"
     />
@@ -108,7 +108,7 @@ exports[`PetSpeciesDogFieldsView > renders Disabled 1`] = `
           disabled=""
           id="mantine-1fu8n1fu8"
           inputmode="numeric"
-          name="$.species.dog:barks"
+          name="$.species:dog.barks"
           required=""
           type="text"
           value="3"
@@ -250,7 +250,7 @@ exports[`PetSpeciesDogFieldsView > renders Error 1`] = `
       </p>
     </div>
     <input
-      name="$.species.dog:breed"
+      name="$.species:dog.breed"
       type="hidden"
       value="Fish"
     />
@@ -287,7 +287,7 @@ exports[`PetSpeciesDogFieldsView > renders Error 1`] = `
           data-variant="default"
           id="mantine-1fu8n1fu8"
           inputmode="numeric"
-          name="$.species.dog:barks"
+          name="$.species:dog.barks"
           required=""
           type="text"
           value=""
@@ -422,7 +422,7 @@ exports[`PetSpeciesDogFieldsView > renders Valid 1`] = `
       </div>
     </div>
     <input
-      name="$.species.dog:breed"
+      name="$.species:dog.breed"
       type="hidden"
       value="Alsatian"
     />
@@ -455,7 +455,7 @@ exports[`PetSpeciesDogFieldsView > renders Valid 1`] = `
           data-variant="default"
           id="mantine-1ssssssss"
           inputmode="numeric"
-          name="$.species.dog:barks"
+          name="$.species:dog.barks"
           required=""
           type="text"
           value="1"

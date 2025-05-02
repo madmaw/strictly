@@ -25,12 +25,12 @@ type Story = StoryObj<typeof Component>
 export const Valid: Story = {
   args: {
     fields: {
-      '$.species.cat:meows': {
+      '$.species:cat.meows': {
         readonly: false,
         value: 1,
         required: true,
       },
-      '$.species.cat:breed': {
+      '$.species:cat.breed': {
         readonly: false,
         value: 'Burmese',
         required: true,
@@ -42,12 +42,12 @@ export const Valid: Story = {
 export const Error: Story = {
   args: {
     fields: {
-      '$.species.cat:meows': {
+      '$.species:cat.meows': {
         readonly: false,
         value: 1,
         required: true,
       },
-      '$.species.cat:breed': {
+      '$.species:cat.breed': {
         readonly: false,
         value: 'Fish',
         required: true,
@@ -60,12 +60,12 @@ export const Error: Story = {
 export const Disabled: Story = {
   args: {
     fields: {
-      '$.species.cat:meows': {
+      '$.species:cat.meows': {
         readonly: true,
         value: 4,
         required: true,
       },
-      '$.species.cat:breed': {
+      '$.species:cat.breed': {
         readonly: true,
         value: 'DSH',
         required: true,

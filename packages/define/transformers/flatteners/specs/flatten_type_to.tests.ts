@@ -135,8 +135,8 @@ describe('flattenTypeDefTo', function () {
       it('equals expected type', function () {
         expect(flattened).toEqual({
           $: TypeDefType.Union,
-          '$.a:a': TypeDefType.Literal,
-          '$.b:b': TypeDefType.Literal,
+          '$:a.a': TypeDefType.Literal,
+          '$:b.b': TypeDefType.Literal,
         })
       })
 

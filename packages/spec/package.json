@@ -44,5 +44,5 @@
     "release:exports": "json -f package.json -f package.exports.json --merge > package.release.json"
   },
   "type": "module",
-  "version": "0.0.22"
+  "version": "0.0.23"
 }

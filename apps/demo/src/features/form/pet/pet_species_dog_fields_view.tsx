@@ -22,7 +22,7 @@ import {
 
 export type PetSpeciesDogFields = Pick<
   PetFields,
-  '$.species.dog:barks' | '$.species.dog:breed'
+  '$.species:dog.barks' | '$.species:dog.breed'
 >
 
 export type PetSpeciesDogFieldsViewProps = FieldsViewProps<PetSpeciesDogFields>
@@ -43,7 +43,7 @@ export function BarksLabel() {
 
 function BreedInputErrorRenderer({
   error,
-}: ErrorRendererProps<PetSpeciesDogFields, '$.species.dog:breed'>) {
+}: ErrorRendererProps<PetSpeciesDogFields, '$.species:dog.breed'>) {
   switch (error) {
     case NOT_A_BREED_ERROR:
       return t({
@@ -62,7 +62,7 @@ function BreedInputErrorRenderer({
 
 function BarksInputErrorRenderer({
   error,
-}: ErrorRendererProps<PetSpeciesDogFields, '$.species.dog:barks'>) {
+}: ErrorRendererProps<PetSpeciesDogFields, '$.species:dog.barks'>) {
   switch (error) {
     case NOT_A_NUMBER_ERROR:
       return t({
@@ -95,11 +95,11 @@ const BREED_NAMES: Record<DogBreed, () => string> = {
 export function PetSpeciesDogFieldsView(props: PetSpeciesDogFieldsViewProps) {
   const form = useMantineFormFields(props)
   const BarksNumberInput = form.valueInput(
-    '$.species.dog:barks',
+    '$.species:dog.barks',
     NumberInput,
   )
   const BreedInput = form.select(
-    '$.species.dog:breed',
+    '$.species:dog.breed',
   )
 
   return (

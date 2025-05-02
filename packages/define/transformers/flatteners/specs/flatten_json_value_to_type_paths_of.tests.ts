@@ -106,8 +106,8 @@ describe('flattenJsonValueToTypePathsOf', function () {
       it('equals expected value', function () {
         expect(flattened).toEqual({
           $: '$',
-          '$.x:a': '$.x:a',
-          '$.x:b': '$.x:b',
+          '$:x.a': '$:x.a',
+          '$:x.b': '$:x.b',
         })
       })
     })

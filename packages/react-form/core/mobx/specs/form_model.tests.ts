@@ -93,7 +93,7 @@ describe('all', function () {
     resetMockAdapter(originalBooleanToBooleanAdapter, booleanToBooleanAdapter)
   })
 
-  describe('FlattenedTypePathsToConvertersOf', function () {
+  describe('FlattenedTypePathsToAdaptersOf', function () {
     type ConvenientFieldAdapter<
       From,
       Context,
@@ -1066,8 +1066,8 @@ describe('all', function () {
             'x',
             true,
           )).narrow,
-          '$.x:a': identityAdapter(0).narrow,
-          '$.y:b': identityAdapter(false).narrow,
+          '$:x.a': identityAdapter(0).narrow,
+          '$:y.b': identityAdapter(false).narrow,
         } as const
 
         describe('isValuePathActive', function () {
@@ -1091,11 +1091,11 @@ describe('all', function () {
                 true,
               ],
               [
-                '$.x:a',
+                '$:x.a',
                 true,
               ],
               [
-                '$.y:b',
+                '$:y.b',
                 false,
               ],
             ] as const)('value path %s is active %s', function (path, expected) {
@@ -1124,11 +1124,11 @@ describe('all', function () {
                 true,
               ],
               [
-                '$.x:a',
+                '$:x.a',
                 false,
               ],
               [
-                '$.y:b',
+                '$:y.b',
                 true,
               ],
             ] as const)('value path %s is active %s', function (path, expected) {

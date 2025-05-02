@@ -119,10 +119,10 @@ describe('ValueToTypePathsOfType', function () {
 
       type C = {
         readonly $: '$',
-        readonly ['$.1:a']: '$.1:a',
-        readonly ['$.1:b']: '$.1:b',
-        readonly ['$.2:x']: '$.2:x',
-        readonly ['$.2:y']: '$.2:y',
+        readonly ['$:1.a']: '$:1.a',
+        readonly ['$:1.b']: '$:1.b',
+        readonly ['$:2.x']: '$:2.x',
+        readonly ['$:2.y']: '$:2.y',
       }
       it('equals expected type', function () {
         expectTypeOf<C>().toEqualTypeOf<T>()

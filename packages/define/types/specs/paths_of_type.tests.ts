@@ -263,7 +263,7 @@ describe('PathsOfType', function () {
 
     type T = PathsOfType<typeof builder>
 
-    type P = '$' | '$.1:a' | '$.2:b'
+    type P = '$' | '$:1.a' | '$:2.b'
 
     it('equals expected type', function () {
       expectTypeOf<P>().toEqualTypeOf<T>()
@@ -283,7 +283,7 @@ describe('PathsOfType', function () {
 
     type T = PathsOfType<typeof builder>
 
-    type P = '$' | '$.1:p:a' | '$.2:q:b'
+    type P = '$' | '$:1:p.a' | '$:2:q.b'
 
     it('equals expected type', function () {
       expectTypeOf<P>().toEqualTypeOf<T>()

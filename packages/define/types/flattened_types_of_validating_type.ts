@@ -26,25 +26,23 @@ export type FlattenedTypesOfValidatingType<
   SegmentOverride extends string | null,
   Path extends string = '$',
   Depth extends number = StartingDepth,
-> = InternalFlattenedTypeDefsOf<T['definition'], SegmentOverride, Path, '', Depth>
+> = InternalFlattenedTypeDefsOf<T['definition'], SegmentOverride, Path, Depth>
 
 type InternalFlattenedTypeDefsOf<
   T extends TypeDef,
   SegmentOverride extends string | null,
   Path extends string,
-  Qualifier extends string,
   Depth extends number,
 > =
   & {
     readonly [K in Path]: Type<T>
   }
-  & InternalFlattenedTypeDefsOfChildren<T, SegmentOverride, Path, Qualifier, Depth>
+  & InternalFlattenedTypeDefsOfChildren<T, SegmentOverride, Path, Depth>
 
 type InternalFlattenedTypeDefsOfChildren<
   T extends TypeDef,
   SegmentOverride extends string | null,
   Path extends string,
-  Qualifier extends string,
   Depth extends number,
   NextDepth extends number = Depths[Depth],
 > =
@@ -54,10 +52,8 @@ type InternalFlattenedTypeDefsOfChildren<
     : T extends ValidatingLiteralTypeDef ? InternalFlattenedTypeDefsOfLiteralChildren
     : T extends ValidatingListTypeDef ? InternalFlattenedTypeDefsOfListChildren<T, SegmentOverride, Path, NextDepth>
     : T extends ValidatingRecordTypeDef ? InternalFlattenedTypeDefsOfRecordChildren<T, SegmentOverride, Path, NextDepth>
-    : T extends ValidatingObjectTypeDef
-      ? InternalFlattenedTypeDefsOfObjectChildren<T, SegmentOverride, Path, Qualifier, NextDepth>
-    : T extends ValidatingUnionTypeDef
-      ? InternalFlattenedTypeDefsOfUnionChildren<T, SegmentOverride, Path, Qualifier, NextDepth>
+    : T extends ValidatingObjectTypeDef ? InternalFlattenedTypeDefsOfObjectChildren<T, SegmentOverride, Path, NextDepth>
+    : T extends ValidatingUnionTypeDef ? InternalFlattenedTypeDefsOfUnionChildren<T, SegmentOverride, Path, NextDepth>
     : never
 
 type InternalFlattenedTypeDefsOfLiteralChildren = {}
@@ -71,7 +67,6 @@ type InternalFlattenedTypeDefsOfListChildren<
   T['elements'],
   SegmentOverride,
   PathOf<Path, number, SegmentOverride>,
-  '',
   Depth
 >
 
@@ -84,7 +79,6 @@ type InternalFlattenedTypeDefsOfRecordChildren<
   T['valueTypeDef'],
   SegmentOverride,
   PathOf<Path, T['keyPrototype'], SegmentOverride>,
-  '',
   Depth
 >
 
@@ -92,7 +86,6 @@ type InternalFlattenedTypeDefsOfObjectChildren<
   T extends ValidatingObjectTypeDef,
   SegmentOverride extends string | null,
   Path extends string,
-  Qualifier extends string,
   Depth extends number,
 > = T extends ValidatingObjectTypeDef<infer _E, infer _C, infer Fields>
   ? keyof Fields extends string ? UnionToIntersection<{
@@ -111,15 +104,13 @@ type InternalFlattenedTypeDefsOfObjectChildren<
             }
           >,
           SegmentOverride,
-          PathOf<Path, `${Qualifier}${K}`, null>,
-          '',
+          PathOf<Path, K, null>,
           Depth
         >
         : InternalFlattenedTypeDefsOf<
           Exclude<Fields[K], undefined>,
           SegmentOverride,
-          PathOf<Path, `${Qualifier}${K}`, null>,
-          '',
+          PathOf<Path, K, null>,
           Depth
         >
     }[keyof Fields]>
@@ -130,7 +121,6 @@ type InternalFlattenedTypeDefsOfUnionChildren<
   T extends ValidatingUnionTypeDef,
   SegmentOverride extends string | null,
   Path extends string,
-  Qualifier extends string,
   Depth extends number,
 > = T extends ValidatingUnionTypeDef<infer _E, infer _C, infer D, infer Unions>
   ? keyof Unions extends string ? D extends null ? UnionToIntersection<{
@@ -138,7 +128,6 @@ type InternalFlattenedTypeDefsOfUnionChildren<
           Unions[K],
           SegmentOverride,
           Path,
-          '',
           Depth
         >
       }[keyof Unions]>
@@ -146,8 +135,7 @@ type InternalFlattenedTypeDefsOfUnionChildren<
       readonly [K in keyof Unions]: InternalFlattenedTypeDefsOfChildren<
         Unions[K],
         SegmentOverride,
-        Path,
-        `${Qualifier}${K}:`,
+        `${Path}:${K}`,
         Depth
       >
     }[keyof Unions]>

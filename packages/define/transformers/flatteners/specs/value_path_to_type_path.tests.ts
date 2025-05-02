@@ -194,20 +194,20 @@ describe('valuePathToTypePath', function () {
           '$',
         ],
         [
-          '$.x:a',
-          '$.x:a',
+          '$:x.a',
+          '$:x.a',
         ],
         [
-          '$.x:b',
-          '$.x:b',
+          '$:x.b',
+          '$:x.b',
         ],
         [
-          '$.y:b',
-          '$.y:b',
+          '$:y.b',
+          '$:y.b',
         ],
         [
-          '$.y:c',
-          '$.y:c',
+          '$:y.c',
+          '$:y.c',
         ],
       ] as const)('it maps %s', function (from, to) {
         const typePath = valuePathToTypePath<Paths, typeof from>(typeDef, from)
@@ -235,6 +235,90 @@ describe('valuePathToTypePath', function () {
 
         it('has expected type', function () {
           expectTypeOf(fakeTypePath).toEqualTypeOf<'$.fake'>()
+        })
+      })
+
+      describe('nested discriminated', () => {
+        const nestedTypeDef = object().field('o', typeDef)
+        type Paths = ValueToTypePathsOfType<typeof nestedTypeDef>
+
+        describe.each([
+          [
+            '$',
+            '$',
+          ],
+          [
+            '$.o',
+            '$.o',
+          ],
+          [
+            '$.o:x.a',
+            '$.o:x.a',
+          ],
+          [
+            '$.o:x.b',
+            '$.o:x.b',
+          ],
+          [
+            '$.o:y.b',
+            '$.o:y.b',
+          ],
+          [
+            '$.o:y.c',
+            '$.o:y.c',
+          ],
+        ] as const)('it maps %s', function (from, to) {
+          const typePath = valuePathToTypePath<Paths, typeof from>(nestedTypeDef, from)
+
+          it('maps a value path to the expected type path', function () {
+            expect(typePath).toEqual(to)
+          })
+
+          it('has expected type', function () {
+            expectTypeOf(typePath).toEqualTypeOf(to)
+          })
+        })
+      })
+
+      describe('list discriminated', () => {
+        const listTypeDef = list(typeDef)
+        type Paths = ValueToTypePathsOfType<typeof listTypeDef>
+
+        describe.each([
+          [
+            '$',
+            '$',
+          ],
+          [
+            '$.0',
+            '$.*',
+          ],
+          [
+            '$.0:x.a',
+            '$.*:x.a',
+          ],
+          [
+            '$.0:x.b',
+            '$.*:x.b',
+          ],
+          [
+            '$.99:y.b',
+            '$.*:y.b',
+          ],
+          [
+            '$.1:y.c',
+            '$.*:y.c',
+          ],
+        ] as const)('it maps %s', function (from, to) {
+          const typePath = valuePathToTypePath<Paths, typeof from>(listTypeDef, from)
+
+          it('maps a value path to the expected type path', function () {
+            expect(typePath).toEqual(to)
+          })
+
+          it('has expected type', function () {
+            expectTypeOf(typePath).toEqualTypeOf(to)
+          })
         })
       })
     })

@@ -4,7 +4,6 @@ import {
   useDefaultMobxFormHooks,
   usePartialObserverComponent,
   Validation,
-  type ValuePathsOfModel,
 } from '@strictly/react-form'
 import { emulateTab } from 'emulate-tab'
 import { type PetValuePaths } from 'features/form/pet/fields'
@@ -46,7 +45,7 @@ export function PetForm({
   }, [])
 
   const onValidFieldSubmit = useCallback(
-    function<Path extends ValuePathsOfModel<PetFormModel>> (valuePath: Path) {
+    function<Path extends keyof PetFormModel['fields']> (valuePath: Path) {
       const typePath = model.typePath(valuePath)
       if (typePath === '$.newTag' && model.fields['$.newTag'].value.trim().length > 0) {
         // get the validated value

@@ -116,8 +116,8 @@ function internalFlattenUnionTypeDefChildren(
     unions,
     function (acc, key, typeDef: StrictTypeDef) {
       return internalFlattenTypeDefChildren(
-        path,
-        discriminator != null ? `${qualifier}${key}:` : qualifier,
+        discriminator != null ? `${path}:${qualifier}` : path,
+        key,
         typeDef,
         acc,
       )

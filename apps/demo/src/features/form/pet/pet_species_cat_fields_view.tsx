@@ -21,7 +21,7 @@ import {
 
 export type PetSpeciesCatFields = Pick<
   PetFields,
-  '$.species.cat:meows' | '$.species.cat:breed'
+  '$.species:cat.meows' | '$.species:cat.breed'
 >
 
 export function BreedLabel() {
@@ -61,7 +61,7 @@ export function MeowFrequencyHigh() {
 
 function BreedInputErrorRenderer({
   error,
-}: ErrorRendererProps<PetSpeciesCatFields, '$.species.cat:breed'>) {
+}: ErrorRendererProps<PetSpeciesCatFields, '$.species:cat.breed'>) {
   switch (error) {
     case NOT_A_BREED_ERROR:
       return t({
@@ -100,8 +100,8 @@ export type PetSpeciesCatFormFieldsViewProps = FieldsViewProps<PetSpeciesCatFiel
 
 export function PetSpeciesCatFieldsView(props: PetSpeciesCatFormFieldsViewProps) {
   const form = useMantineFormFields(props)
-  const MeowsSlider = form.valueInput('$.species.cat:meows', Slider)
-  const BreedSelect = form.select('$.species.cat:breed')
+  const MeowsSlider = form.valueInput('$.species:cat.meows', Slider)
+  const BreedSelect = form.select('$.species:cat.breed')
   return (
     <Stack>
       <BreedSelect

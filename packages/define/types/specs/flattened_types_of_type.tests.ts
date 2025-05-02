@@ -192,13 +192,13 @@ describe('union', function () {
 
       type C = {
         readonly $: SimplifyDeep<typeof builder._type>,
-        readonly ['$.1:a']: {
+        readonly ['$:1.a']: {
           readonly definition: {
             readonly type: TypeDefType.Literal,
             readonly valuePrototype: [boolean],
           },
         },
-        readonly ['$.2:a']: {
+        readonly ['$:2.a']: {
           readonly definition: {
             readonly type: TypeDefType.Literal,
             readonly valuePrototype: [number],
@@ -227,25 +227,25 @@ describe('union', function () {
       type T = SimplifyDeep<FlattenedTypesOfType<typeof builder._type, null>>
       type C = {
         readonly $: SimplifyDeep<typeof builder._type>,
-        readonly ['$.1:p:a']: {
+        readonly ['$:1:p.a']: {
           readonly definition: {
             readonly type: TypeDefType.Literal,
             readonly valuePrototype: [boolean],
           },
         },
-        readonly ['$.1:q:a']: {
+        readonly ['$:1:q.a']: {
           readonly definition: {
             readonly type: TypeDefType.Literal,
             readonly valuePrototype: [string],
           },
         },
-        readonly ['$.2:r:b']: {
+        readonly ['$:2:r.b']: {
           readonly definition: {
             readonly type: TypeDefType.Literal,
             readonly valuePrototype: [number],
           },
         },
-        readonly ['$.2:s:c']: {
+        readonly ['$:2:s.c']: {
           readonly definition: {
             readonly type: TypeDefType.Literal,
             readonly valuePrototype: [string],

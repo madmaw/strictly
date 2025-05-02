@@ -28,12 +28,12 @@ type Story = StoryObj<typeof Component>
 export const Valid: Story = {
   args: {
     fields: {
-      '$.species.dog:barks': {
+      '$.species:dog.barks': {
         readonly: false,
         value: '1',
         required: true,
       },
-      '$.species.dog:breed': {
+      '$.species:dog.breed': {
         readonly: false,
         value: 'Alsatian',
         required: true,
@@ -45,13 +45,13 @@ export const Valid: Story = {
 export const Error: Story = {
   args: {
     fields: {
-      '$.species.dog:barks': {
+      '$.species:dog.barks': {
         readonly: false,
         value: '',
         error: NOT_A_NUMBER_ERROR,
         required: true,
       },
-      '$.species.dog:breed': {
+      '$.species:dog.breed': {
         readonly: false,
         value: 'Fish',
         error: NOT_A_BREED_ERROR,
@@ -64,12 +64,12 @@ export const Error: Story = {
 export const Disabled: Story = {
   args: {
     fields: {
-      '$.species.dog:barks': {
+      '$.species:dog.barks': {
         readonly: true,
         value: '3',
         required: true,
       },
-      '$.species.dog:breed': {
+      '$.species:dog.breed': {
         readonly: true,
         value: 'other',
         required: true,

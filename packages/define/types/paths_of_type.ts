@@ -26,24 +26,22 @@ export type InternalJsonPathsOf<
   // TODO maybe depth isn't necessary here?
   Depth extends number,
   NextDepth extends number = Depths[Depth],
-> = InternalJsonPathsOfChildren<F, Prefix, SegmentOverride, '', NextDepth> | Prefix
+> = InternalJsonPathsOfChildren<F, Prefix, SegmentOverride, NextDepth> | Prefix
 
 type InternalJsonPathsOfChildren<
   F extends TypeDef,
   Prefix extends string,
   SegmentOverride extends string | null,
-  Qualifier extends string,
   Depth extends number,
 > = Depth extends -1 ? never
   : F extends LiteralTypeDef ? InternalJsonPathsOfLiteralChildren
   : F extends ListTypeDef ? InternalJsonPathsOfListChildren<F, Prefix, SegmentOverride, Depth>
   : F extends RecordTypeDef ? InternalJsonPathsOfRecordChildren<F, Prefix, SegmentOverride, Depth>
-  : F extends ObjectTypeDef ? InternalJsonPathsOfObjectChildren<F, Prefix, SegmentOverride, Qualifier, Depth>
+  : F extends ObjectTypeDef ? InternalJsonPathsOfObjectChildren<F, Prefix, SegmentOverride, Depth>
   : F extends UnionTypeDef ? InternalJsonPathsOfUnionChildren<
       F,
       Prefix,
       SegmentOverride,
-      Qualifier,
       Depth
     >
   : never
@@ -86,28 +84,25 @@ type InternalJsonPathsOfObjectChildren<
   F extends ObjectTypeDef,
   Prefix extends string,
   SegmentOverride extends string | null,
-  Qualifier extends string,
   Depth extends number,
-> = F extends ObjectTypeDef<infer Fields> ? keyof Fields extends string ? {
-      [K in keyof Fields]: InternalJsonPathsOf<
-        Fields[K],
-        PathOf<
-          Prefix,
-          `${Qualifier}${K}`,
-          null
-        >,
-        SegmentOverride,
-        Depth
-      >
-    }[keyof Fields]
-  : never
+> = F extends ObjectTypeDef<infer Fields> ? {
+    [K in keyof Fields]: InternalJsonPathsOf<
+      Fields[K],
+      PathOf<
+        Prefix,
+        K,
+        null
+      >,
+      SegmentOverride,
+      Depth
+    >
+  }[keyof Fields]
   : never
 
 type InternalJsonPathsOfUnionChildren<
   F extends UnionTypeDef,
   Prefix extends string,
   SegmentOverride extends string | null,
-  Qualifier extends string,
   Depth extends number,
 > // typescript cannot infer the key in unions unless we get the value directly
  = F extends UnionTypeDef<infer D, infer Unions> ? keyof Unions extends string ? {
@@ -117,13 +112,12 @@ type InternalJsonPathsOfUnionChildren<
         // I think what we should do is have a "denormalize of", which you can then
         // get the paths of if you want the unique paths
         // (alt PrefixOf<Prefix, K>,)
-        Prefix,
+        D extends null ? Prefix : `${Prefix}:${K}`,
         SegmentOverride,
-        D extends null ? Qualifier : `${Qualifier}${K}:`,
         Depth
       >
     }[keyof Unions]
     // do not expose the discriminator as we cannot set this value independently
-    //  | (D extends string ? JsonPathOf<Prefix, D, null, Qualifier> : never)
+    //  | (D extends string ? JsonPathOf<Prefix, D, null> : never)
   : never
   : never

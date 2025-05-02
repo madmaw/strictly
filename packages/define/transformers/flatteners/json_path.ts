@@ -12,15 +12,15 @@ export function jsonPath<
   Prefix extends string,
   Segment extends number | string,
   Qualifier extends string,
->(prefix: Prefix, segment: Segment, qualifier: Qualifier): `${Prefix}.${Qualifier}${Segment}`
+>(prefix: Prefix, segment: Segment, qualifier: Qualifier): `${Prefix}${Qualifier}.${Segment}`
 export function jsonPath<
   Prefix extends string,
   Segment extends number | string,
   Qualifier extends string = '',
 >(prefix: Prefix, segment: Segment, qualifier?: Qualifier) {
-  const s = `.${qualifier ?? ''}${segment}`
+  const s = `.${segment}`
   // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-  return `${prefix}${s}` as `${Prefix}.${Qualifier}${Segment}`
+  return `${prefix}${qualifier ?? ''}${s}` as `${Prefix}${Qualifier}.${Segment}`
 }
 
 // TODO type safety

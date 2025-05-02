@@ -31,14 +31,14 @@ describe('json_paths', () => {
     })
 
     describe('qualified', () => {
-      const path = jsonPath('$', 'x', 'y:')
+      const path = jsonPath('$', 'x', ':y')
 
       it('has the expected type', () => {
-        expectTypeOf(path).toEqualTypeOf<'$.y:x'>()
+        expectTypeOf(path).toEqualTypeOf<'$:y.x'>()
       })
 
       it('has the expected value', () => {
-        expect(path).toEqual('$.y:x')
+        expect(path).toEqual('$:y.x')
       })
     })
   })

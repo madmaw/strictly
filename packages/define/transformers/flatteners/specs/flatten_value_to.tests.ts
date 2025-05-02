@@ -329,7 +329,7 @@ describe('flattenValueTo', function () {
         it('equals expected type', function () {
           expect(flattened).toEqual({
             $: '{"d":"1","a":2}',
-            ['$.1:a']: '2',
+            ['$:1.a']: '2',
           })
         })
       })
@@ -357,7 +357,7 @@ describe('flattenValueTo', function () {
         })
 
         it('sets an internal value', function () {
-          flattened['$.1:a'](1)
+          flattened['$:1.a'](1)
 
           expect(u).toEqual({
             d: '1',

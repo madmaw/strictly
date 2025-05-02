@@ -68,7 +68,7 @@ function internalFlattenValue<M>(
   // assume undefined means the field is optional and not populated
   // TODO: actually capture if field is optional in typedef (or in builder for creating validator)
   if (v !== undefined) {
-    return internalFlattenValueChildren(valuePath, typePath, '', typeDef, v, mapper, r)
+    return internalFlattenValueChildren(valuePath, typePath, typeDef, v, mapper, r)
   }
   return r
 }
@@ -76,7 +76,6 @@ function internalFlattenValue<M>(
 function internalFlattenValueChildren<M>(
   valuePath: string,
   typePath: string,
-  qualifier: string,
   typeDef: StrictTypeDef,
   v: AnyValueType,
   mapper: Mapper<M>,
@@ -91,9 +90,9 @@ function internalFlattenValueChildren<M>(
     case TypeDefType.Record:
       return internalFlattenRecordChildren(valuePath, typePath, typeDef, v, mapper, r)
     case TypeDefType.Object:
-      return internalFlattenObjectChildren(valuePath, typePath, qualifier, typeDef, v, mapper, r)
+      return internalFlattenObjectChildren(valuePath, typePath, typeDef, v, mapper, r)
     case TypeDefType.Union:
-      return internalFlattenUnionChildren(valuePath, typePath, qualifier, typeDef, v, mapper, r)
+      return internalFlattenUnionChildren(valuePath, typePath, typeDef, v, mapper, r)
     default:
       throw new UnreachableError(typeDef)
   }
@@ -154,7 +153,6 @@ function internalFlattenRecordChildren<M>(
 function internalFlattenObjectChildren<M>(
   valuePath: string,
   typePath: string,
-  qualifier: string,
   { fields }: StrictObjectTypeDef,
   v: Record<string, AnyValueType>,
   mapper: Mapper<M>,
@@ -165,8 +163,8 @@ function internalFlattenObjectChildren<M>(
     function (r, k, fieldTypeDef) {
       const fieldValue = v[k]
       return internalFlattenValue(
-        jsonPath(valuePath, k, qualifier),
-        jsonPath(typePath, k, qualifier),
+        jsonPath(valuePath, k),
+        jsonPath(typePath, k),
         fieldTypeDef,
         fieldValue,
         (value: AnyValueType) => {
@@ -183,18 +181,16 @@ function internalFlattenObjectChildren<M>(
 function internalFlattenUnionChildren<M>(
   valuePath: string,
   typePath: string,
-  qualifier: string,
   typeDef: StrictUnionTypeDef,
   v: AnyValueType,
   mapper: Mapper<M>,
   r: Record<string, M>,
 ): AnyValueType {
   const childTypeDef = getUnionTypeDef(typeDef, v)
-  const newQualifier = typeDef.discriminator != null ? `${qualifier}${v[typeDef.discriminator]}:` : qualifier
+  const qualifier = typeDef.discriminator != null ? `:${v[typeDef.discriminator]}` : ''
   return internalFlattenValueChildren(
-    valuePath,
-    typePath,
-    newQualifier,
+    `${valuePath}${qualifier}`,
+    `${typePath}${qualifier}`,
     childTypeDef,
     v,
     mapper,

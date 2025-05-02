@@ -72,7 +72,7 @@ exports[`PetSpeciesCatFieldsView > renders Disabled 1`] = `
     </div>
     <input
       disabled=""
-      name="$.species.cat:breed"
+      name="$.species:cat.breed"
       type="hidden"
       value="DSH"
     />
@@ -154,7 +154,7 @@ exports[`PetSpeciesCatFieldsView > renders Disabled 1`] = `
         </div>
       </div>
       <input
-        name="$.species.cat:meows"
+        name="$.species:cat.meows"
         type="hidden"
         value="4"
       />
@@ -242,7 +242,7 @@ exports[`PetSpeciesCatFieldsView > renders Error 1`] = `
       </p>
     </div>
     <input
-      name="$.species.cat:breed"
+      name="$.species:cat.breed"
       type="hidden"
       value="Fish"
     />
@@ -317,7 +317,7 @@ exports[`PetSpeciesCatFieldsView > renders Error 1`] = `
         </div>
       </div>
       <input
-        name="$.species.cat:meows"
+        name="$.species:cat.meows"
         type="hidden"
         value="1"
       />
@@ -394,7 +394,7 @@ exports[`PetSpeciesCatFieldsView > renders Valid 1`] = `
       </div>
     </div>
     <input
-      name="$.species.cat:breed"
+      name="$.species:cat.breed"
       type="hidden"
       value="Burmese"
     />
@@ -469,7 +469,7 @@ exports[`PetSpeciesCatFieldsView > renders Valid 1`] = `
         </div>
       </div>
       <input
-        name="$.species.cat:meows"
+        name="$.species:cat.meows"
         type="hidden"
         value="1"
       />

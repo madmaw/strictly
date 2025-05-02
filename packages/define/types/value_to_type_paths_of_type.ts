@@ -40,14 +40,13 @@ type InternalFlattenedTypePathsOf<
   & {
     readonly [K in ValuePath]: TypePath
   }
-  & InternalFlattenedTypePathsOfChildren<T, SegmentOverride, ValuePath, TypePath, '', Depth>
+  & InternalFlattenedTypePathsOfChildren<T, SegmentOverride, ValuePath, TypePath, Depth>
 
 type InternalFlattenedTypePathsOfChildren<
   T extends TypeDef,
   SegmentOverride extends string,
   ValuePath extends string,
   TypePath extends string,
-  Qualifier extends string,
   Depth extends number,
   NextDepth extends number = Depths[Depth],
 > = NextDepth extends -1 ? never
@@ -71,7 +70,6 @@ type InternalFlattenedTypePathsOfChildren<
       SegmentOverride,
       ValuePath,
       TypePath,
-      Qualifier,
       NextDepth
     >
   : T extends UnionTypeDef ? InternalFlattenedTypePathsOfUnionChildren<
@@ -79,7 +77,6 @@ type InternalFlattenedTypePathsOfChildren<
       SegmentOverride,
       ValuePath,
       TypePath,
-      Qualifier,
       NextDepth
     >
   : never
@@ -119,15 +116,14 @@ type InternalFlattenedTypePathsOfObjectChildren<
   SegmentOverride extends string,
   ValuePath extends string,
   TypePath extends string,
-  Qualifier extends string,
   Depth extends number,
 > = T extends ObjectTypeDef<infer Fields> ? keyof Fields extends string ? UnionToIntersection<
       {
         readonly [K in keyof Fields]-?: InternalFlattenedTypePathsOf<
           Exclude<Fields[K], undefined>,
           SegmentOverride,
-          PathOf<ValuePath, `${Qualifier}${K}`>,
-          PathOf<TypePath, `${Qualifier}${K}`>,
+          PathOf<ValuePath, K>,
+          PathOf<TypePath, K>,
           Depth
         >
       }[keyof Fields]
@@ -159,7 +155,6 @@ type InternalFlattenedTypePathsOfUnionChildren<
   SegmentOverride extends string,
   ValuePath extends string,
   TypePath extends string,
-  Qualifier extends string,
   Depth extends number,
 > = T extends UnionTypeDef<infer D, infer Unions> ? keyof Unions extends string ? D extends null ? UnionToIntersection<{
         readonly [K in keyof Unions]: InternalFlattenedTypePathsOfChildren<
@@ -167,7 +162,6 @@ type InternalFlattenedTypePathsOfUnionChildren<
           SegmentOverride,
           ValuePath,
           TypePath,
-          '',
           Depth
         >
       }[keyof Unions]>
@@ -175,9 +169,8 @@ type InternalFlattenedTypePathsOfUnionChildren<
       readonly [K in keyof Unions]: InternalFlattenedTypePathsOfChildren<
         Unions[K],
         SegmentOverride,
-        ValuePath,
-        TypePath,
-        `${Qualifier}${K}:`,
+        `${ValuePath}:${K}`,
+        `${TypePath}:${K}`,
         Depth
       >
     }[keyof Unions]>

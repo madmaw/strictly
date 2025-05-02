@@ -114,7 +114,7 @@ const rawPetFieldAdapters = {
       true,
     ),
   ).narrow,
-  '$.species.cat:breed': adapterFromTwoWayConverter(
+  '$.species:cat.breed': adapterFromTwoWayConverter(
     new SelectStringConverter(
       catBreedType,
       [
@@ -126,14 +126,14 @@ const rawPetFieldAdapters = {
       NOT_A_BREED_ERROR,
     ),
   ).narrow,
-  '$.species.cat:meows': identityAdapter(0).narrow,
-  '$.species.dog:barks': adapterFromPrototype(
+  '$.species:cat.meows': identityAdapter(0).narrow,
+  '$.species:dog.barks': adapterFromPrototype(
     new IntegerToStringConverter(NOT_A_NUMBER_ERROR),
     0,
   ).withIdentity(
     v => typeof v === 'number',
   ).narrow,
-  '$.species.dog:breed': adapterFromTwoWayConverter(
+  '$.species:dog.breed': adapterFromTwoWayConverter(
     new SelectLiteralConverter(
       dogBreedType,
       {
