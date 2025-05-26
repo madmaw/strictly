@@ -41,8 +41,8 @@ export function useDefaultMobxFormHooks<
       path: Path,
       value: ValueTypeOfField<F[Path]>,
     ) {
-      // clear validation once there are no errors for the field
-      model.setFieldValue<Path>(path, value)
+      const validation = Math.min(model.getValidation(path), Validation.Changed)
+      model.setFieldValue<Path>(path, value, validation)
     },
     [model],
   )
@@ -66,7 +66,8 @@ export function useDefaultMobxFormHooks<
       // (e.g. changing a discriminator)
       // TODO debounce?
       setTimeout(function () {
-        if (model.isValuePathActive(path)) {
+        // only start validation if the user has changed the field
+        if (model.isValuePathActive(path) && model.isDirty(path)) {
           // further workaround to make sure we don't downgrade the existing validation
           model.validateField(path, Math.max(Validation.Changed, model.getValidation(path)))
         }

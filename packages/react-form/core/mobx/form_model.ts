@@ -273,7 +273,7 @@ export abstract class FormModel<
     return this.synthesizeFieldByPaths(valuePath, typePath)
   }
 
-  private synthesizeFieldByPaths(valuePath: keyof ValuePathsToAdapters, typePath: keyof TypePathsToAdapters) {
+  private getField(valuePath: keyof ValuePathsToAdapters, typePath: keyof TypePathsToAdapters) {
     const adapter = this.adapters[typePath]
     if (adapter == null) {
       // invalid path, which can happen
@@ -311,9 +311,37 @@ export abstract class FormModel<
       valuePath as string,
       context,
     )
-    let error: unknown = undefined
     const displayedValue = fieldOverride != null ? fieldOverride[0] : value
+
+    return {
+      context,
+      convert,
+      create,
+      revert,
+      displayedValue,
+      // value,
+      required,
+      readonly,
+      defaultValue,
+    }
+  }
+
+  private synthesizeFieldByPaths(valuePath: keyof ValuePathsToAdapters, typePath: keyof TypePathsToAdapters) {
+    const field = this.getField(valuePath, typePath)
+    if (field == null) {
+      return
+    }
+    const {
+      context,
+      convert,
+      revert,
+      displayedValue,
+      required,
+      readonly,
+      defaultValue,
+    } = field
     const validation = this.validation[valuePath] ?? Validation.None
+    let error: unknown
     switch (validation) {
       case Validation.None:
         // skip validation
@@ -347,7 +375,7 @@ export abstract class FormModel<
         throw new UnreachableError(validation)
     }
     return {
-      value: fieldOverride != null ? fieldOverride[0] : value,
+      value: displayedValue,
       error,
       readonly: readonly && !this.forceMutableFields,
       required,
@@ -644,6 +672,37 @@ export abstract class FormModel<
 
   getValidation<K extends keyof ValuePathsToAdapters>(valuePath: K): Validation {
     return this.validation[valuePath] ?? Validation.None
+  }
+
+  isDirty<K extends keyof ValuePathsToAdapters>(valuePath: K): boolean {
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+    const typePath = valuePathToTypePath<ValueToTypePaths, keyof ValueToTypePaths>(
+      this.type,
+      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+      valuePath as keyof ValueToTypePaths,
+      true,
+    ) as keyof TypePathsToAdapters
+    const field = this.getField(valuePath, typePath)
+
+    if (field == null) {
+      return false
+    }
+
+    const {
+      displayedValue,
+      convert,
+      context,
+      defaultValue,
+    } = field
+
+    const originalValue = valuePath in this.originalValues
+      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+      ? this.originalValues[valuePath as string]
+      : defaultValue
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+    const { value: originalDisplayedValue } = convert(originalValue, valuePath as string, context)
+    // TODO better comparisons, displayed values can still be complex
+    return (displayedValue !== originalDisplayedValue)
   }
 
   validateField<K extends keyof ValuePathsToAdapters>(
