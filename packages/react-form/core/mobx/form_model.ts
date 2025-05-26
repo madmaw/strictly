@@ -89,6 +89,7 @@ type FlattenedFieldOverrides<
 }
 
 export enum Validation {
+  None = 0,
   Changed = 1,
   Always = 2,
 }
@@ -211,7 +212,7 @@ export abstract class FormModel<
       case 'edit':
         return false
       default:
-        return this.mode satisfies never
+        throw new UnreachableError(this.mode)
     }
   }
 
@@ -310,12 +311,11 @@ export abstract class FormModel<
       valuePath as string,
       context,
     )
-    // const error = this.errors[valuePath]
     let error: unknown = undefined
     const displayedValue = fieldOverride != null ? fieldOverride[0] : value
-    const validation = this.validation[valuePath]
+    const validation = this.validation[valuePath] ?? Validation.None
     switch (validation) {
-      case undefined:
+      case Validation.None:
         // skip validation
         break
       case Validation.Changed:
@@ -393,7 +393,7 @@ export abstract class FormModel<
   setFieldValue<K extends keyof ValuePathsToAdapters>(
     valuePath: K,
     value: ToOfFieldAdapter<ValuePathsToAdapters[K]>,
-    validation: Validation | undefined | null = this.validation[valuePath],
+    validation?: Validation,
   ): boolean {
     return this.internalSetFieldValue(valuePath, value, validation)
   }
@@ -563,7 +563,7 @@ export abstract class FormModel<
   private internalSetFieldValue<K extends keyof ValuePathsToAdapters>(
     valuePath: K,
     value: ToOfFieldAdapter<ValuePathsToAdapters[K]>,
-    validation: Validation | undefined | null,
+    validation: Validation | undefined,
   ): boolean {
     const { revert } = this.getAdapterForValuePath(valuePath)
 
@@ -576,8 +576,6 @@ export abstract class FormModel<
       this.fieldOverrides[valuePath] = [value]
       if (validation != null) {
         this.validation[valuePath] = validation
-      } else {
-        delete this.validation[valuePath]
       }
       switch (conversion.type) {
         case UnreliableFieldConversionType.Failure:
@@ -644,12 +642,13 @@ export abstract class FormModel<
     return keys.has(valuePath as string)
   }
 
+  getValidation<K extends keyof ValuePathsToAdapters>(valuePath: K): Validation {
+    return this.validation[valuePath] ?? Validation.None
+  }
+
   validateField<K extends keyof ValuePathsToAdapters>(
     valuePath: K,
-    validation: Validation = Math.max(
-      this.mode === 'create' ? Validation.Always : Validation.Changed,
-      this.validation[valuePath] ?? Validation.Changed,
-    ),
+    validation: Validation = Validation.Always,
   ): boolean {
     runInAction(() => {
       this.validation[valuePath] = validation
@@ -657,7 +656,7 @@ export abstract class FormModel<
     return this.fields[valuePath].error == null
   }
 
-  validateAll(validation: Validation = this.mode === 'create' ? Validation.Always : Validation.Changed): boolean {
+  validateAll(validation: Validation = Validation.Always): boolean {
     const accessors = toArray(this.accessors)
 
     runInAction(() => {

@@ -1267,8 +1267,8 @@ describe('all', function () {
           expect(model.fields['$.n'].readonly).toBeTruthy()
         })
 
-        it('validates successfully with clean, but invalid data', () => {
-          expect(model.validateAll()).toBeTruthy()
+        it('fails validation with invalid, clean data', () => {
+          expect(model.validateAll()).toBeFalsy()
         })
 
         it('fails validation with invalid, dirty data', () => {

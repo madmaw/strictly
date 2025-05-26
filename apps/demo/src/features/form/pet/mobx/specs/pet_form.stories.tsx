@@ -7,6 +7,7 @@ import {
   userEvent,
   within,
 } from '@storybook/test'
+import { delay } from '@strictly/base'
 import { PetForm } from 'features/form/pet/mobx/pet_form'
 import { SubmitLabel } from 'features/form/pet/pet_fields_view'
 
@@ -76,7 +77,7 @@ export const Invalid: Story = {
     mode: 'create',
     value: {
       alive: true,
-      name: 'D',
+      name: 'delta',
       tags: ['white'],
       owner: {
         firstName: '',
@@ -91,6 +92,8 @@ export const Invalid: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement)
+    // can't consistently find the submit button!
+    await delay(100)
     const submitButton = canvas.getByText(SubmitLabel())
     await userEvent.click(submitButton)
   },

@@ -8,6 +8,7 @@ import {
 import type { ValueTypeOfField } from 'types/value_type_of_field'
 import {
   type FormModel,
+  Validation,
 } from './form_model'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -40,8 +41,8 @@ export function useDefaultMobxFormHooks<
       path: Path,
       value: ValueTypeOfField<F[Path]>,
     ) {
-      // clear any validation
-      model.setFieldValue<Path>(path, value, null)
+      // clear validation once there are no errors for the field
+      model.setFieldValue<Path>(path, value)
     },
     [model],
   )
@@ -66,7 +67,8 @@ export function useDefaultMobxFormHooks<
       // TODO debounce?
       setTimeout(function () {
         if (model.isValuePathActive(path)) {
-          model.validateField(path)
+          // further workaround to make sure we don't downgrade the existing validation
+          model.validateField(path, Math.max(Validation.Changed, model.getValidation(path)))
         }
       }, 100)
     },
