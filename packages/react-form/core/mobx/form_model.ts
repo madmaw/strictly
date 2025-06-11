@@ -12,6 +12,7 @@ import {
 import {
   type Accessor,
   type AnyValueType,
+  equals,
   flattenAccessorsOfType,
   type FlattenedValuesOfType,
   flattenTypesOfType,
@@ -88,6 +89,12 @@ type FlattenedFieldOverrides<
   >
 }
 
+type FlattenedErrorOverrides<
+  ValuePathsToAdapters extends Readonly<Record<string, FieldAdapter>>,
+> = {
+  -readonly [K in keyof ValuePathsToAdapters]?: ErrorOfFieldAdapter<ValuePathsToAdapters[K]>
+}
+
 export enum Validation {
   None = 0,
   Changed = 1,
@@ -143,6 +150,8 @@ export abstract class FormModel<
   accessor value: MobxValueOfType<T>
   @observable.shallow
   accessor fieldOverrides: FlattenedFieldOverrides<ValuePathsToAdapters>
+  @observable.shallow
+  accessor errorOverrides: FlattenedErrorOverrides<ValuePathsToAdapters> = {}
   @observable.shallow
   accessor validation: FlattenedValidation<ValuePathsToAdapters> = {}
 
@@ -341,39 +350,42 @@ export abstract class FormModel<
       defaultValue,
     } = field
     const validation = this.validation[valuePath] ?? Validation.None
-    let error: unknown
-    switch (validation) {
-      case Validation.None:
-        // skip validation
-        break
-      case Validation.Changed:
-        if (revert != null) {
-          const originalValue = valuePath in this.originalValues
+    let error: unknown = this.errorOverrides[valuePath]
+    if (error == null) {
+      switch (validation) {
+        case Validation.None:
+          // skip validation
+          break
+        case Validation.Changed:
+          if (revert != null) {
+            const originalValue = valuePath in this.originalValues
+              // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+              ? this.originalValues[valuePath as string]
+              : defaultValue
             // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-            ? this.originalValues[valuePath as string]
-            : defaultValue
-          // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-          const { value: originalDisplayedValue } = convert(originalValue, valuePath as string, context)
-          // TODO better comparisons, displayed values can still be complex
-          if (displayedValue !== originalDisplayedValue) {
-            const revertResult = revert(displayedValue, valuePath, context)
+            const { value: originalDisplayedValue } = convert(originalValue, valuePath as string, context)
+            // TODO better comparisons, displayed values can still be complex
+            if (displayedValue !== originalDisplayedValue) {
+              const revertResult = revert(displayedValue, valuePath, context)
+              if (revertResult?.type === UnreliableFieldConversionType.Failure) {
+                ;({ error } = revertResult)
+              }
+            }
+          }
+          break
+        case Validation.Always:
+          {
+            const revertResult = revert?.(displayedValue, valuePath, context)
             if (revertResult?.type === UnreliableFieldConversionType.Failure) {
               ;({ error } = revertResult)
             }
           }
-        }
-        break
-      case Validation.Always:
-        {
-          const revertResult = revert?.(displayedValue, valuePath, context)
-          if (revertResult?.type === UnreliableFieldConversionType.Failure) {
-            ;({ error } = revertResult)
-          }
-        }
-        break
-      default:
-        throw new UnreachableError(validation)
+          break
+        default:
+          throw new UnreachableError(validation)
+      }
     }
+
     return {
       value: displayedValue,
       error,
@@ -412,6 +424,14 @@ export abstract class FormModel<
       'expected adapter to be defined {}',
       valuePath,
     )
+  }
+
+  @computed
+  get dirty() {
+    return Object.keys(this.accessors).some((valuePath) => {
+      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+      return this.isFieldDirty(valuePath as keyof ValuePathsToAdapters)
+    })
   }
 
   typePath<K extends keyof ValueToTypePaths>(valuePath: K): ValueToTypePaths[K] {
@@ -602,6 +622,7 @@ export abstract class FormModel<
     const accessor = this.getAccessorForValuePath(valuePath)
     return runInAction(() => {
       this.fieldOverrides[valuePath] = [value]
+      delete this.errorOverrides[valuePath]
       if (validation != null) {
         this.validation[valuePath] = validation
       }
@@ -620,11 +641,30 @@ export abstract class FormModel<
     })
   }
 
+  /**
+   * Forces an error onto a field. Error will be removed if the field value changes
+   * @param valuePath the field to display an error for
+   * @param error the error to display
+   */
+  overrideFieldError<K extends keyof ValuePathsToAdapters>(
+    valuePath: K,
+    error?: ErrorOfFieldAdapter<ValuePathsToAdapters[K]>,
+  ) {
+    runInAction(() => {
+      if (error) {
+        this.errorOverrides[valuePath] = error
+      } else {
+        delete this.errorOverrides[valuePath]
+      }
+    })
+  }
+
   clearFieldError<K extends keyof ValuePathsToAdapters>(valuePath: K) {
     const fieldOverride = this.fieldOverrides[valuePath]
     if (fieldOverride != null) {
       runInAction(() => {
         delete this.validation[valuePath]
+        delete this.errorOverrides[valuePath]
       })
     }
   }
@@ -651,6 +691,7 @@ export abstract class FormModel<
     runInAction(() => {
       this.fieldOverrides[key] = [displayValue]
       delete this.validation[key]
+      delete this.errorOverrides[key]
     })
   }
 
@@ -659,6 +700,7 @@ export abstract class FormModel<
       this.validation = {}
       // TODO this isn't correct, should reload from value
       this.fieldOverrides = {}
+      this.errorOverrides = {}
       this.value = mobxCopy(this.type, value)
     })
   }
@@ -674,7 +716,7 @@ export abstract class FormModel<
     return this.validation[valuePath] ?? Validation.None
   }
 
-  isDirty<K extends keyof ValuePathsToAdapters>(valuePath: K): boolean {
+  isFieldDirty<K extends keyof ValuePathsToAdapters>(valuePath: K): boolean {
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     const typePath = valuePathToTypePath<ValueToTypePaths, keyof ValueToTypePaths>(
       this.type,
@@ -691,18 +733,33 @@ export abstract class FormModel<
     const {
       displayedValue,
       convert,
+      revert,
       context,
       defaultValue,
     } = field
 
+    // if either the display value, or the stored value, match the original, then assume it's not dirty
     const originalValue = valuePath in this.originalValues
       // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
       ? this.originalValues[valuePath as string]
       : defaultValue
+    if (revert != null) {
+      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+      const typeDef = this.flattenedTypeDefs[typePath as string]
+      const {
+        value,
+        type,
+      } = revert(displayedValue, valuePath, context)
+      if (type === UnreliableFieldConversionType.Success) {
+        if (equals(typeDef, originalValue, value)) {
+          return false
+        }
+      }
+    }
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     const { value: originalDisplayedValue } = convert(originalValue, valuePath as string, context)
-    // TODO better comparisons, displayed values can still be complex
-    return (displayedValue !== originalDisplayedValue)
+    // try to compare the displayed values directly if we can't revert the displayed value
+    return displayedValue !== originalDisplayedValue
   }
 
   validateField<K extends keyof ValuePathsToAdapters>(
@@ -711,6 +768,7 @@ export abstract class FormModel<
   ): boolean {
     runInAction(() => {
       this.validation[valuePath] = validation
+      delete this.errorOverrides[valuePath]
     })
     return this.fields[valuePath].error == null
   }
@@ -731,5 +789,9 @@ export abstract class FormModel<
         return field?.error == null
       },
     )
+  }
+
+  validateSubmit() {
+    return this.validateAll()
   }
 }

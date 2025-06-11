@@ -68,11 +68,27 @@ const tagAlreadyExistsValidator: FunctionalValidator<string, TagAlreadyExistsErr
     return null
   }
 
+export const TagNotEmptyErrorType = 'tag_not_empty'
+export type TagNotEmptyError = {
+  type: typeof TagNotEmptyErrorType,
+  value: string,
+}
+
+// want to assign it to a type
+// eslint-disable-next-line func-style
+const tagNotEmptyErrorValidator: FunctionalValidator<string, TagNotEmptyError, '$.newTag'> = () => {
+  // placeholder error so we can inject an error of this type manually
+  return null
+}
+
 export const petValidators = {
   ...petTypeValidators,
   '$.newTag': mergeValidators(
-    new MinimumStringLengthValidator(2),
-    tagAlreadyExistsValidator,
+    mergeValidators(
+      new MinimumStringLengthValidator(2),
+      tagAlreadyExistsValidator,
+    ),
+    tagNotEmptyErrorValidator,
   ),
 } as const
 

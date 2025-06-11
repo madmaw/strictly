@@ -31,6 +31,7 @@ import {
   type PetFields,
   type PetValuePaths,
   TagAlreadyExistsErrorType,
+  TagNotEmptyErrorType,
 } from './fields'
 import { PetOwnerFieldsView } from './pet_owner_fields_view'
 import {
@@ -107,6 +108,7 @@ export type PetFieldsViewProps = FieldsViewProps<PetFormFields> & {
   onForceValidate: () => void,
   onRemoveTag: (valuePath: TagValuePath) => void,
   onClearField: (valuePath: PetValuePaths) => void,
+  submitDisabled: boolean,
   firstInputRef?: Ref<HTMLInputElement>,
 }
 
@@ -139,6 +141,11 @@ function NewTagInputErrorRenderer({ error }: ErrorRendererProps<PetFormFields, '
         message: `A tag with the value "${error.value}" already exists`,
         comment: 'error shown when the user tries to add a tag that already exists',
       })
+    case TagNotEmptyErrorType:
+      return t({
+        message: `Unsaved tag value "${error.value}"`,
+        comment: 'error shown when the user attempts to save the form when there is an uncommitted tag',
+      })
     default:
       throw new UnreachableError(error)
   }
@@ -149,6 +156,7 @@ export function PetFieldsView(props: PetFieldsViewProps) {
     onSubmit,
     onRemoveTag,
     onForceValidate,
+    submitDisabled,
     SpeciesComponent,
     onClearField,
     firstInputRef,
@@ -252,6 +260,7 @@ export function PetFieldsView(props: PetFieldsViewProps) {
 
         <Button
           className={styles.hot}
+          disabled={submitDisabled}
           flex={1}
           onClick={onSubmit}
         >

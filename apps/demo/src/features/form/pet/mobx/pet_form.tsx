@@ -188,6 +188,7 @@ export function PetForm({
           onForceValidate={onForceValidate}
           onRemoveTag={onRemoveTag}
           onSubmit={onFormSubmit}
+          submitDisabled={model.submitDisabled}
         />
       )}
     </Observer>

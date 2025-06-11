@@ -2,7 +2,10 @@ import {
   type FormMode,
   FormModel,
 } from '@strictly/react-form'
-import { petFieldAdapters } from 'features/form/pet/fields'
+import {
+  petFieldAdapters,
+  TagNotEmptyErrorType,
+} from 'features/form/pet/fields'
 import {
   type Pet,
   petType,
@@ -24,6 +27,10 @@ export class PetFormModel extends FormModel<
     )
   }
 
+  get submitDisabled() {
+    return !this.dirty
+  }
+
   protected override toContext(value: Pet) {
     return {
       tags: value.tags,
@@ -34,5 +41,19 @@ export class PetFormModel extends FormModel<
 
   removeTag(valuePath: TagValuePath) {
     this.removeListItem(valuePath)
+  }
+
+  override validateSubmit() {
+    const allResult = super.validateSubmit()
+    // check if the new tag is non-empty and block submission if it is
+    const newTag = this.fields['$.newTag'].value.trim()
+    const newTagPopulated = newTag.length > 0
+    if (newTagPopulated) {
+      this.overrideFieldError('$.newTag', {
+        type: TagNotEmptyErrorType,
+        value: newTag,
+      })
+    }
+    return allResult && !newTagPopulated
   }
 }

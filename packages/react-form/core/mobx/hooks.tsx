@@ -67,7 +67,7 @@ export function useDefaultMobxFormHooks<
       // TODO debounce?
       setTimeout(function () {
         // only start validation if the user has changed the field
-        if (model.isValuePathActive(path) && model.isDirty(path)) {
+        if (model.isValuePathActive(path) && model.isFieldDirty(path)) {
           // further workaround to make sure we don't downgrade the existing validation
           model.validateField(path, Math.max(Validation.Changed, model.getValidation(path)))
         }
@@ -78,7 +78,7 @@ export function useDefaultMobxFormHooks<
 
   const onFormSubmit = useCallback(
     function () {
-      if (model.validateAll()) {
+      if (model.validateSubmit()) {
         onValidFormSubmit?.(model.value)
       }
     },

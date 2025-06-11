@@ -1,5 +1,6 @@
 export * from './transformers/copies/copy'
 export * from './transformers/copies/mobx_copy'
+export * from './transformers/equals'
 export * from './transformers/flatteners/flatten_accessors_of_type'
 export * from './transformers/flatteners/flatten_json_value_to_type_paths_of'
 export * from './transformers/flatteners/flatten_types_of_type'
