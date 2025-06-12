@@ -2,6 +2,8 @@ import mdx from '@astrojs/mdx'
 import react from '@astrojs/react'
 import { defineConfig } from 'astro/config'
 import { loadEnv } from 'vite'
+import tsconfigPaths from 'vite-tsconfig-paths'
+import tsconfig from './tsconfig.json'
 
 const {
   PUBLIC_BASE,
@@ -27,6 +29,20 @@ const x: ReturnType<typeof defineConfig<['en']>> = defineConfig({
   ],
   build: {
     format: 'preserve',
+  },
+  vite: {
+    plugins: [
+      tsconfigPaths({
+        // must specify projects otherwise we get configuration errors for unrelated projects
+        // NOTE we should use the packages rather than rely on project references
+        projects: [
+          '.',
+          ...tsconfig.references.map(function ({ path }) {
+            return path
+          }),
+        ],
+      }),
+    ],
   },
 })
 export default x

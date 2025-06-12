@@ -66,8 +66,8 @@ export function useDefaultMobxFormHooks<
       // (e.g. changing a discriminator)
       // TODO debounce?
       setTimeout(function () {
-        // only start validation if the user has changed the field
-        if (model.isValuePathActive(path) && model.isFieldDirty(path)) {
+        // only start validation if the user has changed the field and there isn't already an error visible
+        if (model.isValuePathActive(path) && model.isFieldDirty(path) && model.fields[path].error == null) {
           // further workaround to make sure we don't downgrade the existing validation
           model.validateField(path, Math.max(Validation.Changed, model.getValidation(path)))
         }

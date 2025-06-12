@@ -599,6 +599,8 @@ export abstract class FormModel<
           const validation = this.validation[fromJsonPath]
           delete this.validation[fromJsonPath]
           this.validation[toJsonPath] = validation
+          // eslint-disable-next-line @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-explicit-any
+          this.moveListItem(fromJsonPath as any, toJsonPath as any)
         })
         accessor.set(newList)
         // delete any value overrides so the new list isn't shadowed
@@ -606,6 +608,13 @@ export abstract class FormModel<
         delete this.fieldOverrides[listValuePath as keyof ValuePathsToAdapters]
       })
     })
+  }
+
+  protected moveListItem<K extends keyof FlattenedListTypesOfType<T>>(fromValuePath: K, toValuePath: K) {
+    // do nothing, this is for subclasses to override
+    // put in some nonsense so TS doesn't complain about the parameters not being used
+    fromValuePath satisfies K
+    toValuePath satisfies K
   }
 
   private internalSetFieldValue<K extends keyof ValuePathsToAdapters>(
