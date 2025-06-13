@@ -398,8 +398,9 @@ export abstract class FormModel<
       error,
       readonly: readonly && !this.forceMutableFields,
       required,
+      // make a copy of the index mapping and remove the final value (next id)
       // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-      listIndexToKey: this.listIndicesToKeys[valuePath as string],
+      listIndexToKey: this.listIndicesToKeys[valuePath as string]?.slice(0, -1),
     }
   }
 
