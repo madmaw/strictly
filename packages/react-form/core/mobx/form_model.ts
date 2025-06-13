@@ -1,7 +1,6 @@
 import {
   assertExists,
   assertExistsAndReturn,
-  assertState,
   checkValidNumber,
   type ElementOfArray,
   map,
@@ -161,13 +160,16 @@ export abstract class FormModel<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private readonly originalValues: Record<string, any>
 
+  // maintains the value paths of lists when the original order is destroyed by deletes or reordering
+  private readonly listIndicesToKeys: Record<string, number[]> = {}
+
   constructor(
     readonly type: T,
-    originalValue: ValueOfType<ReadonlyTypeOfType<T>>,
+    private readonly originalValue: ValueOfType<ReadonlyTypeOfType<T>>,
     protected readonly adapters: TypePathsToAdapters,
     protected readonly mode: FormMode,
   ) {
-    this.originalValues = flattenValuesOfType<ReadonlyTypeOfType<T>>(type, originalValue)
+    this.originalValues = flattenValuesOfType<ReadonlyTypeOfType<T>>(type, originalValue, this.listIndicesToKeys)
     this.value = mobxCopy(type, originalValue)
     this.flattenedTypeDefs = flattenTypesOfType(type)
     // pre-populate field overrides for consistent behavior when default information is overwritten
@@ -202,6 +204,7 @@ export abstract class FormModel<
         // cannot call this.context yet as the "this" pointer has not been fully created
         return convert(fieldValue, valuePath, contextValue)
       },
+      this.listIndicesToKeys,
     )
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     this.fieldOverrides = map(conversions, function (_k, v) {
@@ -260,6 +263,7 @@ export abstract class FormModel<
           typePath as keyof TypePathsToAdapters,
         )
       },
+      this.listIndicesToKeys,
     )
   }
 
@@ -335,7 +339,10 @@ export abstract class FormModel<
     }
   }
 
-  private synthesizeFieldByPaths(valuePath: keyof ValuePathsToAdapters, typePath: keyof TypePathsToAdapters) {
+  private synthesizeFieldByPaths(
+    valuePath: keyof ValuePathsToAdapters,
+    typePath: keyof TypePathsToAdapters,
+  ): Field | undefined {
     const field = this.getField(valuePath, typePath)
     if (field == null) {
       return
@@ -391,6 +398,8 @@ export abstract class FormModel<
       error,
       readonly: readonly && !this.forceMutableFields,
       required,
+      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+      listIndexToKey: this.listIndicesToKeys[valuePath as string],
     }
   }
 
@@ -408,6 +417,7 @@ export abstract class FormModel<
       (value: ValueOfType<T>): void => {
         this.value = mobxCopy(this.type, value)
       },
+      this.listIndicesToKeys,
     )
   }
 
@@ -432,6 +442,12 @@ export abstract class FormModel<
       // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
       return this.isFieldDirty(valuePath as keyof ValuePathsToAdapters)
     })
+  }
+
+  @computed
+  get valueChanged() {
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+    return !equals(this.type, this.value, this.originalValue as ValueOfType<T>)
   }
 
   typePath<K extends keyof ValueToTypePaths>(valuePath: K): ValueToTypePaths[K] {
@@ -482,139 +498,55 @@ export abstract class FormModel<
       element,
       ...originalList.slice(definedIndex),
     ]
-    // shuffle the overrides around to account for new indices
-    // to so this we need to sort the array indices in descending order
-    const targetPaths = Object.keys(this.fieldOverrides).filter(function (v) {
-      return v.startsWith(`${listValuePath}.`)
-    }).map(function (v) {
-      const parts = v.substring(listValuePath.length + 1).split('.')
-      const index = parseInt(parts[0])
-      return [
-        index,
-        parts.slice(1),
-      ] as const
-    }).filter(function ([index]) {
-      return index >= definedIndex
-    }).sort(function ([a], [b]) {
-      // descending
-      return b - a
-    })
     runInAction(() => {
-      targetPaths.forEach(([
-        index,
-        postfix,
-      ]) => {
-        // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-        const fromJsonPath = [
-          listValuePath,
-          `${index}`,
-          ...postfix,
-        ].join('.') as keyof ValuePathsToAdapters
-        // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-        const toJsonPath = [
-          listValuePath,
-          `${index + 1}`,
-          ...postfix,
-        ].join('.') as keyof ValuePathsToAdapters
-        const fieldOverride = this.fieldOverrides[fromJsonPath]
-        delete this.fieldOverrides[fromJsonPath]
-        this.fieldOverrides[toJsonPath] = fieldOverride
-        const validation = this.validation[fromJsonPath]
-        delete this.validation[fromJsonPath]
-        this.validation[toJsonPath] = validation
-      })
       accessor.set(newList)
       // delete any value overrides so the new list isn't shadowed
       // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
       delete this.fieldOverrides[listValuePath as keyof ValuePathsToAdapters]
+      const indicesToKeys = assertExistsAndReturn(
+        this.listIndicesToKeys[listValuePath],
+        'no index to key mapping for list {}',
+        listValuePath,
+      )
+      const nextKey = indicesToKeys[indicesToKeys.length - 1]
+      // insert the next key
+      indicesToKeys.splice(definedIndex, 0, nextKey)
+      // create the new next key
+      indicesToKeys[indicesToKeys.length - 1] = nextKey + 1
     })
   }
 
   removeListItem<K extends keyof FlattenedListTypesOfType<T>>(...elementValuePaths: readonly `${K}.${number}`[]) {
-    // sort and reverse so we delete last to first so indices of sequential deletions are preserved
-    const orderedElementValuePaths = elementValuePaths.toSorted().reverse()
     runInAction(() => {
-      orderedElementValuePaths.forEach(elementValuePath => {
+      elementValuePaths.forEach(elementValuePath => {
         const [
           listValuePath,
-          elementIndexString,
+          elementKeyString,
         ] = assertExistsAndReturn(
           jsonPathPop(elementValuePath),
           'expected a path with two or more segments {}',
           elementValuePath,
         )
         const accessor = this.accessors[listValuePath]
-        const elementIndex = checkValidNumber(
-          parseInt(elementIndexString),
-          'unexpected index {} ({})',
-          elementIndexString,
+        const elementKey = checkValidNumber(
+          parseInt(elementKeyString),
+          'unexpected id {} ({})',
+          elementKeyString,
           elementValuePath,
         )
-        const newList = [...accessor.value]
-        assertState(
-          elementIndex >= 0 && elementIndex < newList.length,
-          'invalid index from path {} ({})',
-          elementIndex,
-          elementValuePath,
-        )
-        newList.splice(elementIndex, 1)
-
-        // shuffle the overrides around to account for new indices
-        // to so this we need to sort the array indices in descending order
-        const targetPaths = Object.keys(this.fieldOverrides).filter(function (v) {
-          return v.startsWith(`${listValuePath}.`)
-        }).map(function (v) {
-          const parts = v.substring(listValuePath.length + 1).split('.')
-          const index = parseInt(parts[0])
-          return [
-            index,
-            parts.slice(1),
-          ] as const
-        }).filter(function ([index]) {
-          return index > elementIndex
-        }).sort(function ([a], [b]) {
-          // descending
-          return a - b
-        })
-
-        targetPaths.forEach(([
-          index,
-          postfix,
-        ]) => {
+        const indicesToKeys = this.listIndicesToKeys[listValuePath]
+        const elementIndex = indicesToKeys?.indexOf(elementKey) ?? -1
+        if (elementIndex >= 0) {
+          const newList = [...accessor.value]
+          newList.splice(elementIndex, 1)
+          accessor.set(newList)
+          // delete any value overrides so the new list isn't shadowed
           // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-          const fromJsonPath = [
-            listValuePath,
-            `${index}`,
-            ...postfix,
-          ].join('.') as keyof ValuePathsToAdapters
-          // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-          const toJsonPath = [
-            listValuePath,
-            `${index - 1}`,
-            ...postfix,
-          ].join('.') as keyof ValuePathsToAdapters
-          const fieldOverride = this.fieldOverrides[fromJsonPath]
-          delete this.fieldOverrides[fromJsonPath]
-          this.fieldOverrides[toJsonPath] = fieldOverride
-          const validation = this.validation[fromJsonPath]
-          delete this.validation[fromJsonPath]
-          this.validation[toJsonPath] = validation
-          // eslint-disable-next-line @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-explicit-any
-          this.moveListItem(fromJsonPath as any, toJsonPath as any)
-        })
-        accessor.set(newList)
-        // delete any value overrides so the new list isn't shadowed
-        // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-        delete this.fieldOverrides[listValuePath as keyof ValuePathsToAdapters]
+          delete this.fieldOverrides[listValuePath as keyof ValuePathsToAdapters]
+          indicesToKeys.splice(elementIndex, 1)
+        }
       })
     })
-  }
-
-  protected moveListItem<K extends keyof FlattenedListTypesOfType<T>>(fromValuePath: K, toValuePath: K) {
-    // do nothing, this is for subclasses to override
-    // put in some nonsense so TS doesn't complain about the parameters not being used
-    fromValuePath satisfies K
-    toValuePath satisfies K
   }
 
   private internalSetFieldValue<K extends keyof ValuePathsToAdapters>(
@@ -715,7 +647,7 @@ export abstract class FormModel<
   }
 
   isValuePathActive<K extends keyof ValuePathsToAdapters>(valuePath: K): boolean {
-    const values = flattenValuesOfType(this.type, this.value)
+    const values = flattenValuesOfType(this.type, this.value, this.listIndicesToKeys)
     const keys = new Set(Object.keys(values))
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     return keys.has(valuePath as string)

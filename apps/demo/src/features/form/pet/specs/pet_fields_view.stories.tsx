@@ -89,6 +89,12 @@ export const Populated: Story = {
           '$.tags.1',
           '$.tags.2',
         ],
+        listIndexToKey: [
+          0,
+          1,
+          2,
+          3,
+        ],
       },
       '$.tags.0': {
         readonly: false,
@@ -151,6 +157,7 @@ export const Empty: Story = {
         readonly: false,
         required: false,
         value: [],
+        listIndexToKey: [0],
       },
       '$.newTag': {
         readonly: false,
@@ -213,6 +220,10 @@ export const Errors: Story = {
         readonly: false,
         required: false,
         value: ['$.tags.0'],
+        listIndexToKey: [
+          0,
+          1000,
+        ],
       },
       '$.tags.0': {
         readonly: false,
@@ -273,6 +284,12 @@ export const Disabled: Story = {
           '$.tags.0',
           '$.tags.1',
           '$.tags.2',
+        ],
+        listIndexToKey: [
+          0,
+          1,
+          2,
+          4,
         ],
       },
       '$.tags.0': {

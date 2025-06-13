@@ -1,4 +1,7 @@
-import { type ElementOfArray } from '@strictly/base'
+import {
+  assertExistsAndReturn,
+  type ElementOfArray,
+} from '@strictly/base'
 import {
   type ComponentType,
   Fragment,
@@ -15,6 +18,7 @@ import {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type SuppliedListProps<Value = any, ListPath extends string = string> = {
   values: readonly Value[],
+  indexKeys: number[],
   listPath: ListPath,
 }
 
@@ -34,10 +38,12 @@ export function createList<
   List: ComponentType<Props>,
 ): MantineFieldComponent<SuppliedListProps<ElementOfArray<ValueTypeOfField<F[K]>>>, Props, never> {
   const propSource = () => {
-    const values = [...this.fields[valuePath].value]
+    const field = this.fields[valuePath]
+    const values = [...field.value]
     return {
       values,
       listPath: valuePath,
+      indexKeys: assertExistsAndReturn(field.listIndexToKey, 'list index to key mapping missing in {}', valuePath),
     }
   }
   return createUnsafePartialObserverComponent(List, propSource)
@@ -48,6 +54,7 @@ export function DefaultList<
   ListPath extends string,
 >({
   values,
+  indexKeys,
   listPath,
   children,
 }: SuppliedListProps<Value, ListPath> & {
@@ -56,7 +63,24 @@ export function DefaultList<
   return (
     <>
       {values.map(function (value, index) {
-        const valuePath: `${ListPath}.${number}` = `${listPath}.${index}`
+        return [
+          value,
+          index,
+          indexKeys[index],
+        ] as const
+      }).filter(function ([
+        _value,
+        _index,
+        key,
+      ]) {
+        // omit entries without keys
+        return key != null
+      }).map(function ([
+        value,
+        index,
+        key,
+      ]) {
+        const valuePath: `${ListPath}.${number}` = `${listPath}.${key}`
         return (
           <Fragment key={valuePath}>
             {children(valuePath, value, index)}

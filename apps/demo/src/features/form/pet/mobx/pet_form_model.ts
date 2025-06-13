@@ -28,7 +28,7 @@ export class PetFormModel extends FormModel<
   }
 
   get submitDisabled() {
-    return !this.dirty
+    return !this.valueChanged
   }
 
   protected override toContext(value: Pet) {

@@ -828,19 +828,20 @@ describe('all', function () {
 
           it.each([
             [
-              '$.0',
+              // new
+              '$.3',
               '0',
             ],
             [
-              '$.1',
+              '$.0',
               'x',
             ],
             [
-              '$.2',
+              '$.1',
               '3',
             ],
             [
-              '$.3',
+              '$.2',
               'z',
             ],
           ] as const)('it reports the value of field %s as %s', function (path, fieldValue) {
@@ -849,19 +850,20 @@ describe('all', function () {
 
           it.each([
             [
-              '$.0',
+              // new
+              '$.3',
               undefined,
             ],
             [
-              '$.1',
+              '$.0',
               IS_NAN_ERROR,
             ],
             [
-              '$.2',
+              '$.1',
               undefined,
             ],
             [
-              '$.3',
+              '$.2',
               IS_NAN_ERROR,
             ],
           ] as const)('it reports the error of field %s', function (path, error) {
@@ -926,11 +928,11 @@ describe('all', function () {
 
           it('updates the field values and errors', function () {
             expect(model.fields).toEqual({
-              '$.0': expect.objectContaining({
+              '$.1': expect.objectContaining({
                 value: '3',
                 error: undefined,
               }),
-              '$.1': expect.objectContaining({
+              '$.2': expect.objectContaining({
                 value: 'z',
                 error: IS_NAN_ERROR,
               }),
@@ -956,7 +958,7 @@ describe('all', function () {
                 value: 'x',
                 error: IS_NAN_ERROR,
               }),
-              '$.1': expect.objectContaining({
+              '$.2': expect.objectContaining({
                 value: 'z',
                 error: IS_NAN_ERROR,
               }),
@@ -975,7 +977,7 @@ describe('all', function () {
 
           it('updates the field values and errors', function () {
             expect(model.fields).toEqual({
-              '$.0': expect.objectContaining({
+              '$.2': expect.objectContaining({
                 value: 'z',
                 error: IS_NAN_ERROR,
               }),

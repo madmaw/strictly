@@ -72,6 +72,7 @@ export function flattenValidationErrorsOfType<
   type: T,
   value: ValueOfType<T>,
   validators: TypePathsToValidators,
+  listIndicesToKeys?: Record<string, number[]>,
 ): ErrorsOfFlattenedValidators<ValuePathsToValidators> {
   return flattenValueTo(
     type,
@@ -89,5 +90,6 @@ export function flattenValidationErrorsOfType<
       // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
       return validator != null ? validate(validator as Validator, v, valuePath, value) : null
     },
+    listIndicesToKeys,
   )
 }

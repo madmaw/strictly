@@ -40,7 +40,7 @@ exports[`mantine list hooks > renders Populated 1`] = `
       >
         <span>
           ValuePath: 
-          $.0
+          $.100
         </span>
         <br />
         <span>
@@ -78,7 +78,7 @@ exports[`mantine list hooks > renders Populated 1`] = `
       >
         <span>
           ValuePath: 
-          $.2
+          $.33
         </span>
         <br />
         <span>
@@ -97,7 +97,7 @@ exports[`mantine list hooks > renders Populated 1`] = `
       >
         <span>
           ValuePath: 
-          $.3
+          $.5
         </span>
         <br />
         <span>

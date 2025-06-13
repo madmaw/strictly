@@ -26,6 +26,7 @@ export function flattenJsonValueToTypePathsOf<
   value: ValueOfType<T>,
   // TODO
   // : FlattenedJsonValueToTypePathsOf<T>
+  listIndicesToKeys?: Record<string, number[]>,
 ): R {
   // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
   return flattenValueTo(
@@ -35,5 +36,6 @@ export function flattenJsonValueToTypePathsOf<
       // do nothing
     },
     mapTypePaths,
+    listIndicesToKeys,
   ) as R
 }

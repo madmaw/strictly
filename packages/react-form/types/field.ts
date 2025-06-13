@@ -4,6 +4,7 @@ export type Field<V = any, E = any> = {
   readonly error?: E | undefined,
   readonly readonly: boolean,
   readonly required: boolean,
+  readonly listIndexToKey?: number[],
 }
 
 export type Fields = Readonly<Record<string, Field>>

@@ -32,6 +32,7 @@ export function flattenAccessorsOfType<
   t: T,
   value: ValueOfType<T>,
   setValue: Setter<ValueOfType<T>>,
+  listIndicesToKeys?: Record<string, number[]>,
 ): R {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return flattenValueTo<T, Accessor<any>, R>(
@@ -39,5 +40,6 @@ export function flattenAccessorsOfType<
     value,
     setValue,
     mapAccessor,
+    listIndicesToKeys,
   )
 }
