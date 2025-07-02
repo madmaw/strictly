@@ -2,8 +2,8 @@
   "dependencies": {
     "@lingui/core": "^5.1.2",
     "@lingui/react": "^5.1.2",
-    "@mantine/core": "^7.13.4",
-    "@mantine/hooks": "^7.13.4",
+    "@mantine/core": "^8.1.2",
+    "@mantine/hooks": "^8.1.2",
     "@strictly/base": "*",
     "@strictly/define": "*",
     "@strictly/react-form": "*",
@@ -73,5 +73,5 @@
     "test:update": "vitest run -u",
     "test:watch": "vitest"
   },
-  "version": "0.0.29"
+  "version": "0.0.30"
 }

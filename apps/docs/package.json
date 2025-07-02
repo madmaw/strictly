@@ -2,8 +2,8 @@
   "dependencies": {
     "@astrojs/mdx": "^4.0.2",
     "@astrojs/react": "^4.1.1",
-    "@mantine/core": "^7.13.4",
-    "@mantine/hooks": "^7.13.4",
+    "@mantine/core": "^8.1.2",
+    "@mantine/hooks": "^8.1.2",
     "@strictly/base": "*",
     "@strictly/define": "*",
     "@strictly/react-form": "*",
@@ -33,5 +33,5 @@
     "preview": "astro preview",
     "serve": "http-server dist"
   },
-  "version": "0.0.29"
+  "version": "0.0.30"
 }

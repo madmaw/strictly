@@ -98,30 +98,40 @@ exports[`PetFieldsView > renders Disabled 1`] = `
     </div>
     <div
       class="m_46b77525 mantine-InputWrapper-root mantine-PillsInput-root"
+      data-size="sm"
     >
       <label
         class="m_8fdc1311 mantine-InputWrapper-label mantine-PillsInput-label"
+        data-size="sm"
         for="mantine-12voha2vo"
         id="mantine-12voha2vo-label"
+        style="--input-label-size: var(--mantine-font-size-sm);"
       >
         Tags
       </label>
       <div
         class="m_6c018570 mantine-Input-wrapper mantine-PillsInput-wrapper"
         data-multiline="true"
+        data-size="sm"
         data-variant="default"
+        style="--input-height: var(--input-height-sm); --input-fz: var(--mantine-font-size-sm); --input-padding-y: var(--input-padding-y-sm);"
       >
         <div
           class="m_8fb7ebe7 mantine-Input-input mantine-PillsInput-input"
+          data-no-overflow="true"
           data-variant="default"
         >
           <div
             class="m_1dcfd90b mantine-PillGroup-group"
+            data-size="sm"
+            style="--pg-gap: var(--pg-gap-sm);"
           >
             <span
               class="m_44da308b m_7cda1cd6 mantine-Pill-root"
               data-disabled="true"
+              data-size="sm"
               data-variant="default"
+              style="--pill-fz: var(--pill-fz-sm); --pill-height: var(--pill-height-sm);"
             >
               <span
                 class="m_1e0e6180 mantine-Pill-label"
@@ -152,7 +162,9 @@ exports[`PetFieldsView > renders Disabled 1`] = `
             <span
               class="m_44da308b m_7cda1cd6 mantine-Pill-root"
               data-disabled="true"
+              data-size="sm"
               data-variant="default"
+              style="--pill-fz: var(--pill-fz-sm); --pill-height: var(--pill-height-sm);"
             >
               <span
                 class="m_1e0e6180 mantine-Pill-label"
@@ -183,7 +195,9 @@ exports[`PetFieldsView > renders Disabled 1`] = `
             <span
               class="m_44da308b m_7cda1cd6 mantine-Pill-root"
               data-disabled="true"
+              data-size="sm"
               data-variant="default"
+              style="--pill-fz: var(--pill-fz-sm); --pill-height: var(--pill-height-sm);"
             >
               <span
                 class="m_1e0e6180 mantine-Pill-label"
@@ -574,25 +588,33 @@ exports[`PetFieldsView > renders Empty 1`] = `
     </div>
     <div
       class="m_46b77525 mantine-InputWrapper-root mantine-PillsInput-root"
+      data-size="sm"
     >
       <label
         class="m_8fdc1311 mantine-InputWrapper-label mantine-PillsInput-label"
+        data-size="sm"
         for="mantine-12voha2vo"
         id="mantine-12voha2vo-label"
+        style="--input-label-size: var(--mantine-font-size-sm);"
       >
         Tags
       </label>
       <div
         class="m_6c018570 mantine-Input-wrapper mantine-PillsInput-wrapper"
         data-multiline="true"
+        data-size="sm"
         data-variant="default"
+        style="--input-height: var(--input-height-sm); --input-fz: var(--mantine-font-size-sm); --input-padding-y: var(--input-padding-y-sm);"
       >
         <div
           class="m_8fb7ebe7 mantine-Input-input mantine-PillsInput-input"
+          data-no-overflow="true"
           data-variant="default"
         >
           <div
             class="m_1dcfd90b mantine-PillGroup-group"
+            data-size="sm"
+            style="--pg-gap: var(--pg-gap-sm);"
           >
             <input
               aria-invalid="false"
@@ -810,30 +832,40 @@ exports[`PetFieldsView > renders Errors 1`] = `
     </div>
     <div
       class="m_46b77525 mantine-InputWrapper-root mantine-PillsInput-root"
+      data-size="sm"
     >
       <label
         class="m_8fdc1311 mantine-InputWrapper-label mantine-PillsInput-label"
+        data-size="sm"
         for="mantine-12voha2vo"
         id="mantine-12voha2vo-label"
+        style="--input-label-size: var(--mantine-font-size-sm);"
       >
         Tags
       </label>
       <div
         class="m_6c018570 mantine-Input-wrapper mantine-PillsInput-wrapper"
         data-multiline="true"
+        data-size="sm"
         data-variant="default"
+        style="--input-height: var(--input-height-sm); --input-fz: var(--mantine-font-size-sm); --input-padding-y: var(--input-padding-y-sm);"
       >
         <div
           class="m_8fb7ebe7 mantine-Input-input mantine-PillsInput-input"
+          data-no-overflow="true"
           data-variant="default"
         >
           <div
             class="m_1dcfd90b mantine-PillGroup-group"
+            data-size="sm"
+            style="--pg-gap: var(--pg-gap-sm);"
           >
             <span
               class="m_44da308b m_7cda1cd6 mantine-Pill-root"
+              data-size="sm"
               data-variant="default"
               data-with-remove="true"
+              style="--pill-fz: var(--pill-fz-sm); --pill-height: var(--pill-height-sm);"
             >
               <span
                 class="m_1e0e6180 mantine-Pill-label"
@@ -1209,30 +1241,40 @@ exports[`PetFieldsView > renders Populated 1`] = `
     </div>
     <div
       class="m_46b77525 mantine-InputWrapper-root mantine-PillsInput-root"
+      data-size="sm"
     >
       <label
         class="m_8fdc1311 mantine-InputWrapper-label mantine-PillsInput-label"
+        data-size="sm"
         for="mantine-1fu8n1fu8"
         id="mantine-1fu8n1fu8-label"
+        style="--input-label-size: var(--mantine-font-size-sm);"
       >
         Tags
       </label>
       <div
         class="m_6c018570 mantine-Input-wrapper mantine-PillsInput-wrapper"
         data-multiline="true"
+        data-size="sm"
         data-variant="default"
+        style="--input-height: var(--input-height-sm); --input-fz: var(--mantine-font-size-sm); --input-padding-y: var(--input-padding-y-sm);"
       >
         <div
           class="m_8fb7ebe7 mantine-Input-input mantine-PillsInput-input"
+          data-no-overflow="true"
           data-variant="default"
         >
           <div
             class="m_1dcfd90b mantine-PillGroup-group"
+            data-size="sm"
+            style="--pg-gap: var(--pg-gap-sm);"
           >
             <span
               class="m_44da308b m_7cda1cd6 mantine-Pill-root"
+              data-size="sm"
               data-variant="default"
               data-with-remove="true"
+              style="--pill-fz: var(--pill-fz-sm); --pill-height: var(--pill-height-sm);"
             >
               <span
                 class="m_1e0e6180 mantine-Pill-label"
@@ -1262,8 +1304,10 @@ exports[`PetFieldsView > renders Populated 1`] = `
             </span>
             <span
               class="m_44da308b m_7cda1cd6 mantine-Pill-root"
+              data-size="sm"
               data-variant="default"
               data-with-remove="true"
+              style="--pill-fz: var(--pill-fz-sm); --pill-height: var(--pill-height-sm);"
             >
               <span
                 class="m_1e0e6180 mantine-Pill-label"
@@ -1293,8 +1337,10 @@ exports[`PetFieldsView > renders Populated 1`] = `
             </span>
             <span
               class="m_44da308b m_7cda1cd6 mantine-Pill-root"
+              data-size="sm"
               data-variant="default"
               data-with-remove="true"
+              style="--pill-fz: var(--pill-fz-sm); --pill-height: var(--pill-height-sm);"
             >
               <span
                 class="m_1e0e6180 mantine-Pill-label"

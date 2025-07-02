@@ -39,8 +39,8 @@
   "license": "MIT",
   "name": "@strictly/react-form",
   "peerDependencies": {
-    "@mantine/core": "^7.0.0",
-    "@mantine/hooks": "^7.0.0",
+    "@mantine/core": "^7.0.0 || ^8.0.0",
+    "@mantine/hooks": "^7.0.0 || ^8.0.0",
     "@strictly/base": "*",
     "@strictly/define": "*",
     "mobx": "^6.0.0",
@@ -72,5 +72,5 @@
     "test:watch": "vitest"
   },
   "type": "module",
-  "version": "0.0.29"
+  "version": "0.0.30"
 }
