@@ -1,4 +1,4 @@
-import { type Maybe } from 'types/maybe'
+import { type Maybe } from 'types/Maybe'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type CacheValueFactory<A extends any[], V> = {

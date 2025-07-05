@@ -1,4 +1,4 @@
-import { type Fields } from 'types/field'
+import { type Fields } from 'types/Field'
 
 export type FieldsViewProps<F extends Fields> = {
   fields: F,

@@ -5,11 +5,11 @@ import {
 import {
   useCallback,
 } from 'react'
-import type { ValueTypeOfField } from 'types/value_type_of_field'
+import type { ValueTypeOfField } from 'types/ValueTypeOfField'
 import {
   type FormModel,
   Validation,
-} from './form_model'
+} from './FormModel'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type ValueOfModel<M extends FormModel<any, any, any, any, any>> = M extends FormModel<infer T, any, any, any, any>

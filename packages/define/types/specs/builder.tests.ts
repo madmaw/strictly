@@ -10,8 +10,8 @@ import {
 } from 'types/builders'
 import {
   TypeDefType,
-} from 'types/definitions'
-import { type Rule } from 'types/validating_definitions'
+} from 'types/Definitions'
+import { type Rule } from 'types/ValidatingDefinitions'
 
 describe('builder', function () {
   describe('literal', function () {

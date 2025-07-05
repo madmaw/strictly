@@ -1,5 +1,5 @@
-import { type FieldAdapter } from 'core/mobx/field_adapter'
-import { type TwoWayFieldConverter } from 'types/field_converters'
+import { type FieldAdapter } from 'core/mobx/FieldAdapter'
+import { type TwoWayFieldConverter } from 'types/FieldConverters'
 import { type Mocked } from 'vitest'
 import {
   mock,

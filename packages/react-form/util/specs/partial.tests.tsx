@@ -8,7 +8,7 @@ import {
 } from 'react'
 import {
   type UnsafePartialComponent,
-} from 'util/partial'
+} from 'util/Partial'
 
 describe('partial', () => {
   describe('UnsafePartialComponent', () => {

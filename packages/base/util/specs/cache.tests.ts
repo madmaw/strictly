@@ -1,7 +1,7 @@
 import {
   Cache,
   type CacheValueFactory,
-} from 'util/cache'
+} from 'util/Cache'
 import {
   type Mock,
   vi,
