@@ -1,5 +1,5 @@
 import { type Simplify } from 'type-fest'
-import { CompositeValidator } from './validators/composite_validator'
+import { CompositeValidator } from './validators/CompositeValidator'
 
 export type Annotations = {
   readonly required: boolean,

@@ -1,6 +1,6 @@
 import {
   type Maybe,
-} from 'types/maybe'
+} from 'types/Maybe'
 import { delay } from './delay'
 
 export function constantPollInterval(delay: number) {

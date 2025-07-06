@@ -1,10 +1,10 @@
-import { type ReadonlyTypeOfType } from 'types/readonly_type_of_type'
-import { type StrictType } from 'types/strict_definitions'
-import { type ValueOfType } from 'types/value_of_type'
+import { type ReadonlyTypeOfType } from 'types/ReadonlyTypeOfType'
+import { type StrictType } from 'types/StrictType'
+import { type ValueOfType } from 'types/ValueOfType'
 import {
   type AnyValueType,
   copyTo,
-} from './copy_to'
+} from './copyTo'
 
 function identity(v: AnyValueType): AnyValueType {
   return v

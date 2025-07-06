@@ -1,12 +1,12 @@
 import {
   type ComponentType,
 } from 'react'
-import { type Fields } from 'types/field'
+import { type Fields } from 'types/Field'
 import {
   type RefOfProps,
   type UnsafePartialComponent,
-} from 'util/partial'
-import { type ErrorRenderer } from './error_renderer'
+} from 'util/Partial'
+import { type ErrorRenderer } from './ErrorRenderer'
 
 export type MantineForm<F extends Fields> = {
   fields: F,

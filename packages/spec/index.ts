@@ -1,2 +1,2 @@
-export * from './storybook/lingui_provider'
+export * from './storybook/LinguiProvider'
 export * from './storybook/types'

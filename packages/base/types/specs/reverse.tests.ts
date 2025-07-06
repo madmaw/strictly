@@ -1,4 +1,4 @@
-import { type Reverse } from 'types/reverse'
+import { type Reverse } from 'types/Reverse'
 
 describe('Reverse', function () {
   it('reverses empty', function () {

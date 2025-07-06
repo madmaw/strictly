@@ -14,11 +14,11 @@ import {
   type TypeDef,
   TypeDefType,
   type UnionKey,
-} from './definitions'
+} from './Type'
 import {
   type TypeOfType,
   typeOfType,
-} from './type_of_type'
+} from './typeOfType'
 import {
   type Rule,
   type ValidatingListTypeDef,
@@ -28,12 +28,12 @@ import {
   type ValidatingType,
   type ValidatingTypeDef,
   type ValidatingUnionTypeDef,
-} from './validating_definitions'
-import { type ValidatingTypeDefWithError } from './validating_type_def_with_error'
+} from './ValidatingType'
+import { type ValidatingTypeDefWithError } from './ValidatingTypeDefWithError'
 import {
   type ValueOfType,
   type ValueOfTypeDef,
-} from './value_of_type'
+} from './ValueOfType'
 
 function emptyRule() {
   return null

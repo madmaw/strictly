@@ -24,11 +24,11 @@ import {
   subFormFieldAdapters,
   trimmingStringAdapter,
 } from '@strictly/react-form'
-import { IsAliveTwoWayConverter } from './is_alive_field_converter'
+import { IsAliveTwoWayConverter } from './IsAliveFieldConverter'
 import {
   petOwnerType,
   unvalidatedPetOwnerFieldAdapters,
-} from './pet_owner_fields_view'
+} from './PetOwnerFieldsView'
 import {
   catBreedType,
   type DogBreed,
