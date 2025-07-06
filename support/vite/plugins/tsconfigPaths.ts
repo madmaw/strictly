@@ -1,6 +1,4 @@
-// special case
-// eslint-disable-next-line no-restricted-imports
-import { type TsconfigJson } from '../types'
+import { type TsconfigJson } from 'types'
 import tsconfigPaths from 'vite-tsconfig-paths'
 
 export function createTsconfigPathsPlugin({
