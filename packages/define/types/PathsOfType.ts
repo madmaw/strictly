@@ -1,7 +1,7 @@
 import {
   type Depths,
   type StartingDepth,
-} from './Flattened'
+} from './flattened'
 import { type PathOf } from './PathOf'
 import {
   type ListTypeDef,
