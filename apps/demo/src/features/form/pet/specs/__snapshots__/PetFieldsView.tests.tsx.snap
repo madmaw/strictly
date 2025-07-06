@@ -479,7 +479,7 @@ exports[`PetFieldsView > renders Disabled 1`] = `
         </span>
       </button>
       <button
-        class="mantine-focus-auto mantine-active _hot_3200d9 m_77c9d27d mantine-Button-root m_87cf2631 mantine-UnstyledButton-root"
+        class="mantine-focus-auto mantine-active _hot_0ff292 m_77c9d27d mantine-Button-root m_87cf2631 mantine-UnstyledButton-root"
         style="--button-color: var(--mantine-color-white); flex: 1;"
         type="button"
       >
@@ -712,7 +712,7 @@ exports[`PetFieldsView > renders Empty 1`] = `
         </span>
       </button>
       <button
-        class="mantine-focus-auto mantine-active _hot_3200d9 m_77c9d27d mantine-Button-root m_87cf2631 mantine-UnstyledButton-root"
+        class="mantine-focus-auto mantine-active _hot_0ff292 m_77c9d27d mantine-Button-root m_87cf2631 mantine-UnstyledButton-root"
         style="--button-color: var(--mantine-color-white); flex: 1;"
         type="button"
       >
@@ -1130,7 +1130,7 @@ exports[`PetFieldsView > renders Errors 1`] = `
         </span>
       </button>
       <button
-        class="mantine-focus-auto mantine-active _hot_3200d9 m_77c9d27d mantine-Button-root m_87cf2631 mantine-UnstyledButton-root"
+        class="mantine-focus-auto mantine-active _hot_0ff292 m_77c9d27d mantine-Button-root m_87cf2631 mantine-UnstyledButton-root"
         style="--button-color: var(--mantine-color-white); flex: 1;"
         type="button"
       >
@@ -1605,7 +1605,7 @@ exports[`PetFieldsView > renders Populated 1`] = `
         </span>
       </button>
       <button
-        class="mantine-focus-auto mantine-active _hot_3200d9 m_77c9d27d mantine-Button-root m_87cf2631 mantine-UnstyledButton-root"
+        class="mantine-focus-auto mantine-active _hot_0ff292 m_77c9d27d mantine-Button-root m_87cf2631 mantine-UnstyledButton-root"
         style="--button-color: var(--mantine-color-white); flex: 1;"
         type="button"
       >

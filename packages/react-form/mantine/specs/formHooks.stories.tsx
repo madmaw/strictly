@@ -11,7 +11,7 @@ import {
 import {
   type FieldsViewProps,
   type FormProps,
-} from 'core/Props'
+} from 'core/props'
 import { useMantineFormFields } from 'mantine/hooks'
 import { useCallback } from 'react'
 import { type Field } from 'types/Field'

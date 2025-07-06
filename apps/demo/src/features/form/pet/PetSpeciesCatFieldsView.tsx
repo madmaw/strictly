@@ -12,12 +12,12 @@ import {
   type FieldsViewProps,
   useMantineFormFields,
 } from '@strictly/react-form'
-import { type PetFields } from './Fields'
+import { type PetFields } from './fields'
 import {
   type CatBreed,
   NOT_A_BREED_ERROR,
   REQUIRED_ERROR,
-} from './Types'
+} from './types'
 
 export type PetSpeciesCatFields = Pick<
   PetFields,

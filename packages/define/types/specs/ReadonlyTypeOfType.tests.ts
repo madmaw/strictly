@@ -6,8 +6,8 @@ import {
   stringType,
   union,
 } from 'types/builders'
-import { type TypeDefType } from 'types/Definitions'
 import { type ReadonlyTypeOfType } from 'types/ReadonlyTypeOfType'
+import { type TypeDefType } from 'types/Type'
 
 describe('ReadonlyTypeDefOf', function () {
   describe('literal', function () {

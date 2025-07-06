@@ -7,7 +7,7 @@ import {
   type RecordKeyType,
   type TypeDefType,
   type UnionKey,
-} from './Definitions'
+} from './Type'
 
 // TODO rename to something more descriptive (e.g. introspectable definitions, deterministic
 // definitions, discriminated definitions). Maybe should just replace definitions since most

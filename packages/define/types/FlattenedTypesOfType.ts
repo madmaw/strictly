@@ -2,6 +2,11 @@ import {
   type UnionToIntersection,
 } from 'type-fest'
 import {
+  type Depths,
+  type StartingDepth,
+} from './Flattened'
+import { type PathOf } from './PathOf'
+import {
   type ListTypeDef,
   type LiteralTypeDef,
   type ObjectTypeDef,
@@ -9,12 +14,7 @@ import {
   type Type,
   type TypeDef,
   type UnionTypeDef,
-} from './Definitions'
-import {
-  type Depths,
-  type StartingDepth,
-} from './Flattened'
-import { type PathOf } from './PathOf'
+} from './Type'
 
 // NOTE removing any ternary from this file improves the performance and the depth of data structure we can go to
 

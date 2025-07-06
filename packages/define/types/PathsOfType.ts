@@ -1,4 +1,9 @@
 import {
+  type Depths,
+  type StartingDepth,
+} from './Flattened'
+import { type PathOf } from './PathOf'
+import {
   type ListTypeDef,
   type LiteralTypeDef,
   type ObjectTypeDef,
@@ -6,12 +11,7 @@ import {
   type Type,
   type TypeDef,
   type UnionTypeDef,
-} from './Definitions'
-import {
-  type Depths,
-  type StartingDepth,
-} from './Flattened'
-import { type PathOf } from './PathOf'
+} from './Type'
 
 export type PathsOfType<
   T extends Type,

@@ -8,16 +8,16 @@ import {
   observable,
 } from 'mobx'
 import { getUnionTypeDef } from 'transformers/flatteners/flattenValueTo'
-import {
-  type ObjectFieldKey,
-  TypeDefType,
-} from 'types/Definitions'
 import { type MobxValueOfType } from 'types/MobxValueOfType'
 import { type ReadonlyTypeOfType } from 'types/ReadonlyTypeOfType'
 import {
   type StrictType,
   type StrictTypeDef,
-} from 'types/StrictDefinitions'
+} from 'types/StrictType'
+import {
+  type ObjectFieldKey,
+  TypeDefType,
+} from 'types/Type'
 import { type ValueOfType } from 'types/ValueOfType'
 import {
   type AnyValueType,

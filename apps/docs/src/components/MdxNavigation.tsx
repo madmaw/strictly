@@ -1,7 +1,7 @@
 import { type MarkdownHeading } from 'astro'
 import { useMemo } from 'react'
 import styles from './mdxNavigation.module.css'
-import { type ToAbsoluteUrl } from './ToAbsoluteUrl'
+import { type ToAbsoluteUrl } from './toAbsoluteUrl'
 
 export type PageId = 'home' | 'base' | 'define' | 'react-form' | 'why'
 

@@ -3,7 +3,7 @@ import {
   type Meta,
   type StoryObj,
 } from '@storybook/react'
-import { type FieldsViewProps } from 'core/Props'
+import { type FieldsViewProps } from 'core/props'
 import { useMantineFormFields } from 'mantine/hooks'
 import { type Ref } from 'react'
 import { type Field } from 'types/Field'

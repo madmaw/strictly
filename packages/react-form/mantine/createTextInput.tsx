@@ -9,7 +9,7 @@ import {
 import {
   type MantineFieldComponent,
   type MantineForm,
-} from './Types'
+} from './types'
 
 export type TextInputTarget = Element & {
   value: string,

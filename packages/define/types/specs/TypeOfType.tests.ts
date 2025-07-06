@@ -2,7 +2,7 @@ import {
   list,
   numberType,
 } from 'types/builders'
-import { type TypeDefType } from 'types/Definitions'
+import { type TypeDefType } from 'types/Type'
 import { type TypeOfType } from 'types/typeOfType'
 
 describe('TypeOfType', function () {

@@ -5,13 +5,13 @@ import {
 import {
   petFieldAdapters,
   TagNotEmptyErrorType,
-} from 'features/form/pet/Fields'
+} from 'features/form/pet/fields'
 import {
   type Pet,
   petType,
   type PetValueToTypePaths,
   type TagValuePath,
-} from 'features/form/pet/Types'
+} from 'features/form/pet/types'
 
 export class PetFormModel extends FormModel<
   typeof petType,

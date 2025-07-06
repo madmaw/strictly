@@ -4,7 +4,7 @@ import {
   type RecordKeyType,
   type TypeDefType,
   type UnionKey,
-} from './Definitions'
+} from './Type'
 
 // type defs with error types, lets us attach validation to types
 

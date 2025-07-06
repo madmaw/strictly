@@ -8,7 +8,7 @@ import { createUnsafePartialObserverComponent } from 'util/Partial'
 import {
   type MantineFieldComponent,
   type MantineForm,
-} from './Types'
+} from './types'
 
 // TODO should probably supply everything
 export type SuppliedPillProps = Pick<

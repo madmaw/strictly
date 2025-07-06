@@ -7,7 +7,7 @@ import {
   type TypeDef,
   type TypeDefType,
   type UnionTypeDef,
-} from './Definitions'
+} from './Type'
 
 // TODO rename to PartialOfType
 

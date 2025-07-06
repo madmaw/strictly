@@ -1,11 +1,11 @@
 import {
-  type TypeDefType,
-  type UnionTypeDef,
-} from 'types/Definitions'
-import {
   type IsStrictUnion,
   type StrictUnionTypeDef,
-} from 'types/StrictDefinitions'
+} from 'types/StrictType'
+import {
+  type TypeDefType,
+  type UnionTypeDef,
+} from 'types/Type'
 
 describe('Strict Definitions', function () {
   describe('IsStrictUnion', function () {

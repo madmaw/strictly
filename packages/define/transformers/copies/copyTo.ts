@@ -4,12 +4,6 @@ import {
   UnexpectedImplementationError,
   UnreachableError,
 } from '@strictly/base'
-import {
-  type ObjectFieldKey,
-  type TypeDef,
-  TypeDefType,
-  type UnionKey,
-} from 'types/Definitions'
 import { type ReadonlyTypeOfType } from 'types/ReadonlyTypeOfType'
 import {
   type StrictListTypeDef,
@@ -20,7 +14,13 @@ import {
   type StrictType,
   type StrictTypeDef,
   type StrictUnionTypeDef,
-} from 'types/StrictDefinitions'
+} from 'types/StrictType'
+import {
+  type ObjectFieldKey,
+  type TypeDef,
+  TypeDefType,
+  type UnionKey,
+} from 'types/Type'
 import { type ValueOfType } from 'types/ValueOfType'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -13,7 +13,7 @@ import {
   type TypeDef,
   TypeDefType,
   type UnionTypeDef,
-} from 'types/Definitions'
+} from './Type'
 
 // useful for turning annotated type to type (e.g. Removing validation from ValidatingDefinition)
 export type TypeOfType<T extends Type> = T extends Type<infer D> ? {

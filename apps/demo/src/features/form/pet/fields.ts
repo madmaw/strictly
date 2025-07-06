@@ -39,7 +39,7 @@ import {
   type PetTypeToValuePaths,
   type PetValueToTypePaths,
   speciesType,
-} from './Types'
+} from './types'
 
 export const TagAlreadyExistsErrorType = 'tag_already_exists'
 export type TagAlreadyExistsError = {

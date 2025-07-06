@@ -8,7 +8,7 @@ import { type ErrorOfField } from 'types/ErrorOfField'
 import { type Fields } from 'types/Field'
 import { type ValueTypeOfField } from 'types/ValueTypeOfField'
 import { Empty } from 'util/Empty'
-import { type MantineForm } from './Types'
+import { type MantineForm } from './types'
 
 export type FieldViewProps<F extends Fields, K extends keyof F> = {
   children: (props: {

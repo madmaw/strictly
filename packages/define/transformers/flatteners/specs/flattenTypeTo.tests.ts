@@ -11,7 +11,7 @@ import {
 import {
   type TypeDef,
   TypeDefType,
-} from 'types/Definitions'
+} from 'types/Type'
 import {
   type Mock,
   vi,

@@ -4,7 +4,7 @@ import {
   type StoryObj,
 } from '@storybook/react'
 import { PetSpeciesCatFieldsView } from 'features/form/pet/PetSpeciesCatFieldsView'
-import { NOT_A_BREED_ERROR } from 'features/form/pet/Types'
+import { NOT_A_BREED_ERROR } from 'features/form/pet/types'
 
 const Component = PetSpeciesCatFieldsView
 

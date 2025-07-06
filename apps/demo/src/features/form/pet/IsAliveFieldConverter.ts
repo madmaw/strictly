@@ -8,11 +8,11 @@ import {
 import {
   type PetTypePaths,
   type PetValuePaths,
-} from './Fields'
+} from './fields'
 import {
   petType,
   type PetValueToTypePaths,
-} from './Types'
+} from './types'
 
 const ALWAYS_MODIFIABLE = new Set<PetTypePaths>(['$.alive'])
 

@@ -3,7 +3,7 @@ import { type FlattenedValidatorsOfValidatingType } from 'types/FlattenedValidat
 import {
   type ValidatingType,
   type ValidatingTypeDef,
-} from 'types/ValidatingDefinitions'
+} from 'types/ValidatingType'
 import { type Validator } from 'validation/validator'
 import { flattenTypeTo } from './flattenTypeTo'
 

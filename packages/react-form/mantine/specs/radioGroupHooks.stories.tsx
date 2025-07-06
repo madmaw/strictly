@@ -6,7 +6,7 @@ import {
   type Meta,
   type StoryObj,
 } from '@storybook/react'
-import { type FieldsViewProps } from 'core/Props'
+import { type FieldsViewProps } from 'core/props'
 import {
   type ErrorRenderer,
 } from 'mantine/ErrorRenderer'

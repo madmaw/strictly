@@ -9,7 +9,7 @@ import {
   type TypeDef,
   TypeDefType,
   type UnionTypeDef,
-} from 'types/Definitions'
+} from 'types/Type'
 import { type ValueOfType } from 'types/ValueOfType'
 
 export function equals<T extends Type>({ definition }: T, o1: ValueOfType<T>, o2: ValueOfType<T>): boolean {

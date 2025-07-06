@@ -16,11 +16,11 @@ export default defineWorkspace([
       ...(config.test || {}),
       environment: 'jsdom',
       setupFiles: [
-        './.vitest/install_deterministic_random.ts',
+        './.vitest/installDeterministicRandom.ts',
         // install storybook setup for unit tests that import stories directly
-        './.vitest/install_storybook_preview.ts',
-        './.vitest/match_media.ts',
-        './.vitest/resize_observer.ts',
+        './.vitest/installStorybookPreview.ts',
+        './.vitest/matchMedia.ts',
+        './.vitest/resizeObserver.ts',
       ],
     },
   },

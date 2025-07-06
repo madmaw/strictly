@@ -9,10 +9,10 @@ import {
   useMantineFormFields,
 } from '@strictly/react-form'
 import { type ComponentType } from 'react'
-import { type PetFields } from './Fields'
+import { type PetFields } from './fields'
 import {
   type Species,
-} from './Types'
+} from './types'
 
 export function SpeciesLabel() {
   return t({

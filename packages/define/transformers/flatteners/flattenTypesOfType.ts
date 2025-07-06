@@ -1,8 +1,8 @@
+import { type StrictType } from 'types/StrictType'
 import {
   type Type,
   type TypeDef,
-} from 'types/Definitions'
-import { type StrictType } from 'types/StrictDefinitions'
+} from 'types/Type'
 import { flattenTypeTo } from './flattenTypeTo'
 
 export function flattenTypesOfType<T extends StrictType>(t: T) {

@@ -9,7 +9,7 @@ import {
   type Type,
   type TypeDef,
   type UnionTypeDef,
-} from './Definitions'
+} from './Type'
 
 export type ValueOfType<
   T,

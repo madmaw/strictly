@@ -1,7 +1,7 @@
 import {
   type Type,
   type TypeDef,
-} from 'types/Definitions'
+} from 'types/Type'
 import { type ValueOfType } from 'types/ValueOfType'
 import {
   type AnyValueType,

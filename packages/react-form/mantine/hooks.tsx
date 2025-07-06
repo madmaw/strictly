@@ -18,7 +18,7 @@ import {
 import {
   type FieldsViewProps,
   type FormProps,
-} from 'core/Props'
+} from 'core/props'
 import {
   observable,
   runInAction,
@@ -82,7 +82,7 @@ import {
 import {
   type MantineFieldComponent,
   type MantineForm,
-} from './Types'
+} from './types'
 
 function SimpleSelect(props: SelectProps & {
   onChange?: (value: string | null) => void,

@@ -15,11 +15,11 @@ import {
   record,
   union,
 } from 'types/builders'
+import { type FlattenedTypesOfType } from 'types/FlattenedTypesOfType'
 import {
   type Type,
   type TypeDef,
-} from 'types/Definitions'
-import { type FlattenedTypesOfType } from 'types/FlattenedTypesOfType'
+} from 'types/Type'
 import { type ValueOfType } from 'types/ValueOfType'
 import {
   type Mock,

@@ -14,7 +14,7 @@ import {
   type TypeDef,
   TypeDefType,
   type UnionKey,
-} from './Definitions'
+} from './Type'
 import {
   type TypeOfType,
   typeOfType,
@@ -28,7 +28,7 @@ import {
   type ValidatingType,
   type ValidatingTypeDef,
   type ValidatingUnionTypeDef,
-} from './ValidatingDefinitions'
+} from './ValidatingType'
 import { type ValidatingTypeDefWithError } from './ValidatingTypeDefWithError'
 import {
   type ValueOfType,

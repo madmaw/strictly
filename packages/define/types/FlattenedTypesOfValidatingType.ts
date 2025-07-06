@@ -2,14 +2,14 @@ import {
   type UnionToIntersection,
 } from 'type-fest'
 import {
-  type Type,
-  type TypeDef,
-} from './Definitions'
-import {
   type Depths,
   type StartingDepth,
 } from './Flattened'
 import { type PathOf } from './PathOf'
+import {
+  type Type,
+  type TypeDef,
+} from './Type'
 import {
   type ContextOfValidatingTypeDef,
   type ErrorOfValidatingTypeDef,
@@ -18,7 +18,7 @@ import {
   type ValidatingObjectTypeDef,
   type ValidatingRecordTypeDef,
   type ValidatingUnionTypeDef,
-} from './ValidatingDefinitions'
+} from './ValidatingType'
 
 // TODO rename to FlattenedValidatingTypesOfValidatingType
 export type FlattenedTypesOfValidatingType<

@@ -3,19 +3,19 @@ import {
   type UnionToIntersection,
 } from 'type-fest'
 import {
+  type Depths,
+  type StartingDepth,
+} from './Flattened'
+import { type PathOf } from './PathOf'
+import { type StrictType } from './StrictType'
+import {
   type ListTypeDef,
   type LiteralTypeDef,
   type ObjectTypeDef,
   type RecordTypeDef,
   type TypeDef,
   type UnionTypeDef,
-} from './Definitions'
-import {
-  type Depths,
-  type StartingDepth,
-} from './Flattened'
-import { type PathOf } from './PathOf'
-import { type StrictType } from './StrictDefinitions'
+} from './Type'
 
 export type ValueToTypePathsOfType<
   T extends StrictType,

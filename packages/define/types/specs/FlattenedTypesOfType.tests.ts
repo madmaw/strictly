@@ -8,8 +8,8 @@ import {
   stringType,
   union,
 } from 'types/builders'
-import { type TypeDefType } from 'types/Definitions'
 import { type FlattenedTypesOfType } from 'types/FlattenedTypesOfType'
+import { type TypeDefType } from 'types/Type'
 
 describe('FlattenedTypesOfType', function () {
   describe('literal', function () {

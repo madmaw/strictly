@@ -1,7 +1,7 @@
 import { type SimplifyDeep } from 'type-fest'
 import {
   type TypeDefType,
-} from 'types/Definitions'
+} from 'types/Type'
 import { type ValueOfType } from 'types/ValueOfType'
 
 describe('ValueOfType', function () {

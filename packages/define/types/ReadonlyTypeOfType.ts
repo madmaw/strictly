@@ -6,7 +6,7 @@ import {
   type Type,
   type TypeDef,
   type UnionTypeDef,
-} from './Definitions'
+} from './Type'
 
 // TODO rename to ReadonlyOfType
 export type ReadonlyTypeOfType<T extends Type> = {

@@ -3,16 +3,14 @@ import {
   UnreachableError,
 } from '@strictly/base'
 import {
-  TypeDefType,
-} from 'types/Definitions'
-import {
   type StrictListTypeDef,
   type StrictObjectTypeDef,
   type StrictRecordTypeDef,
   type StrictType,
   type StrictTypeDef,
   type StrictUnionTypeDef,
-} from 'types/StrictDefinitions'
+} from 'types/StrictType'
+import { TypeDefType } from 'types/Type'
 import { jsonPath } from './jsonPath'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

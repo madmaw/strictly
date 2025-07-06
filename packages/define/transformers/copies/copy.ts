@@ -1,5 +1,5 @@
 import { type ReadonlyTypeOfType } from 'types/ReadonlyTypeOfType'
-import { type StrictType } from 'types/StrictDefinitions'
+import { type StrictType } from 'types/StrictType'
 import { type ValueOfType } from 'types/ValueOfType'
 import {
   type AnyValueType,

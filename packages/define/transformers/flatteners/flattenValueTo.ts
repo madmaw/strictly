@@ -2,11 +2,6 @@ import {
   reduce,
   UnreachableError,
 } from '@strictly/base'
-import {
-  type TypeDef,
-  TypeDefType,
-  type UnionTypeDef,
-} from 'types/Definitions'
 import { type ReadonlyTypeOfType } from 'types/ReadonlyTypeOfType'
 import {
   type StrictListTypeDef,
@@ -15,7 +10,12 @@ import {
   type StrictType,
   type StrictTypeDef,
   type StrictUnionTypeDef,
-} from 'types/StrictDefinitions'
+} from 'types/StrictType'
+import {
+  type TypeDef,
+  TypeDefType,
+  type UnionTypeDef,
+} from 'types/Type'
 import { type ValueOfType } from 'types/ValueOfType'
 import { jsonPath } from './jsonPath'
 

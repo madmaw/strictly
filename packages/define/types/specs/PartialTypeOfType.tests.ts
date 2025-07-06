@@ -7,8 +7,8 @@ import {
   stringType,
   union,
 } from 'types/builders'
-import { type TypeDefType } from 'types/Definitions'
 import { type PartialTypeOfType } from 'types/PartialTypeOfType'
+import { type TypeDefType } from 'types/Type'
 
 describe('PartialTypeDefOf', function () {
   describe('literal', function () {

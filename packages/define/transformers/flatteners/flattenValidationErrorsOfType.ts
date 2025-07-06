@@ -7,11 +7,11 @@ import {
   type ReadonlyDeep,
   type ValueOf,
 } from 'type-fest'
-import { type Type } from 'types/Definitions'
 import { type FlattenedTypesOfType } from 'types/FlattenedTypesOfType'
 import { type FlattenedValuesOfType } from 'types/FlattenedValuesOfType'
 import { type ReadonlyTypeOfType } from 'types/ReadonlyTypeOfType'
-import { type StrictTypeDef } from 'types/StrictDefinitions'
+import { type StrictTypeDef } from 'types/StrictType'
+import { type Type } from 'types/Type'
 import { type ValueOfType } from 'types/ValueOfType'
 import {
   validate,

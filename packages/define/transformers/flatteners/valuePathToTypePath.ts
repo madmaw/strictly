@@ -10,7 +10,7 @@ import {
   type Type,
   type TypeDef,
   TypeDefType,
-} from 'types/Definitions'
+} from 'types/Type'
 
 export function valuePathToTypePath<
   ValuePathsToTypePaths extends Record<string, string>,

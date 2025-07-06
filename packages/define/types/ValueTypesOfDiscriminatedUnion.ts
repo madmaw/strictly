@@ -1,5 +1,5 @@
-import { type UnionTypeDef } from './Definitions'
 import { type ReadonlyTypeOfType } from './ReadonlyTypeOfType'
+import { type UnionTypeDef } from './Type'
 import { type ValueOfType } from './ValueOfType'
 
 // gets a record of the values types for a discriminated union mapped according to

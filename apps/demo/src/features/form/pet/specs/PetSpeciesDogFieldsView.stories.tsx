@@ -7,7 +7,7 @@ import { PetSpeciesDogFieldsView } from 'features/form/pet/PetSpeciesDogFieldsVi
 import {
   NOT_A_BREED_ERROR,
   NOT_A_NUMBER_ERROR,
-} from 'features/form/pet/Types'
+} from 'features/form/pet/types'
 
 const Component = PetSpeciesDogFieldsView
 

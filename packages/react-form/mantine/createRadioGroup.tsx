@@ -17,7 +17,7 @@ import {
 import {
   type MantineFieldComponent,
   type MantineForm,
-} from './Types'
+} from './types'
 
 export type SuppliedRadioGroupProps = Pick<
   RadioGroupProps,

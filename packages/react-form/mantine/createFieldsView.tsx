@@ -3,7 +3,7 @@ import {
   jsonPathPrefix,
   jsonPathUnprefix,
 } from '@strictly/define'
-import type { FieldsViewProps } from 'core/Props'
+import type { FieldsViewProps } from 'core/props'
 import { observer } from 'mobx-react'
 import type {
   ComponentProps,
@@ -13,7 +13,7 @@ import type { AllFieldsOfFields } from 'types/AllFieldsOfFields'
 import type { Fields } from 'types/Field'
 import type { SubFormFields } from 'types/SubFormFields'
 import type { ValueTypeOfField } from 'types/ValueTypeOfField'
-import type { MantineFieldComponent } from './Types'
+import type { MantineFieldComponent } from './types'
 
 export type SubPathsOf<ValuePath extends string, SubFormValuePath extends string> = SubFormValuePath extends
   StringConcatOf<ValuePath, infer Postfix> ? `$${Postfix}`

@@ -1,5 +1,5 @@
-import { type Type } from 'types/Definitions'
-import { type StrictTypeDef } from 'types/StrictDefinitions'
+import { type StrictTypeDef } from 'types/StrictType'
+import { type Type } from 'types/Type'
 import { type ValueOfType } from 'types/ValueOfType'
 import {
   type AnyValueType,

@@ -1,5 +1,5 @@
-import { type Type } from './Definitions'
 import { type FlattenedTypesOfType } from './FlattenedTypesOfType'
+import { type Type } from './Type'
 import { type ValueOfType } from './ValueOfType'
 
 export type FlattenedValuesOfType<

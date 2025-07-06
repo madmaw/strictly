@@ -10,7 +10,7 @@ import {
 import {
   type MantineFieldComponent,
   type MantineForm,
-} from './Types'
+} from './types'
 
 export type SuppliedValueInputProps<
   V,

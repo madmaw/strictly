@@ -8,7 +8,7 @@ import {
   type ErrorOfValidatingTypeDef,
   type ValidatingType,
   type ValidatingTypeDef,
-} from './ValidatingDefinitions'
+} from './ValidatingType'
 import {
   type ValueOfTypeDef,
 } from './ValueOfType'

@@ -1,4 +1,4 @@
-import styles from './petFieldsView.module.css'
+import styles from './PetFieldsView.module.css'
 
 import {
   t,
@@ -32,12 +32,12 @@ import {
   type PetValuePaths,
   TagAlreadyExistsErrorType,
   TagNotEmptyErrorType,
-} from './Fields'
+} from './fields'
 import { PetOwnerFieldsView } from './PetOwnerFieldsView'
 import {
   CatNameMustBeCapitalizedType,
   type TagValuePath,
-} from './Types'
+} from './types'
 
 export function SubmitLabel() {
   return t({

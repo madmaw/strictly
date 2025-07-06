@@ -1,7 +1,7 @@
 import { type IsFieldReadonly } from '@strictly/base'
 import {
   type TypeDefType,
-} from 'types/Definitions'
+} from './Type'
 import {
   type Rule,
   type ValidatingListTypeDef,
@@ -10,7 +10,7 @@ import {
   type ValidatingRecordTypeDef,
   type ValidatingTypeDef,
   type ValidatingUnionTypeDef,
-} from './ValidatingDefinitions'
+} from './ValidatingType'
 
 // doesn't work, loses
 // export type ValidatingTypeDefWithError2<T extends ValidatingTypeDef, E2> = T extends ValidatingTypeDef<infer E1>

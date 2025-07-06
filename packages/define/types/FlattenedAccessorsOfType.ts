@@ -1,5 +1,5 @@
-import { type Type } from './Definitions'
 import { type FlattenedValuesOfType } from './FlattenedValuesOfType'
+import { type Type } from './Type'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type Accessor<T = any> = {

@@ -1,6 +1,6 @@
 import {
   type Type,
-} from './Definitions'
+} from './Type'
 import { type ValueOfType } from './ValueOfType'
 
 const MOBX_OBSERVABLE_KEY = '___mobx_observable'

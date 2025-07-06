@@ -12,8 +12,8 @@ import {
   stringType,
   union,
 } from 'types/builders'
-import { TypeDefType } from 'types/Definitions'
-import { type StrictTypeDef } from 'types/StrictDefinitions'
+import { type StrictTypeDef } from 'types/StrictType'
+import { TypeDefType } from 'types/Type'
 
 describe('copyTo', function () {
   function toString(v: AnyValueType, t: StrictTypeDef) {

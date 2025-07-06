@@ -1,11 +1,11 @@
 import {
-  type Type,
-  type TypeDef,
-} from 'types/Definitions'
-import {
   type Accessor,
   type FlattenedAccessorsOfType,
 } from 'types/FlattenedAccessorsOfType'
+import {
+  type Type,
+  type TypeDef,
+} from 'types/Type'
 import { type ValueOfType } from 'types/ValueOfType'
 import {
   type AnyValueType,

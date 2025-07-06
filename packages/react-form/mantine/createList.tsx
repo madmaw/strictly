@@ -13,7 +13,7 @@ import { createUnsafePartialObserverComponent } from 'util/Partial'
 import {
   type MantineFieldComponent,
   type MantineForm,
-} from './Types'
+} from './types'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type SuppliedListProps<Value = any, ListPath extends string = string> = {

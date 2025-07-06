@@ -6,7 +6,7 @@ import {
   Validation,
 } from '@strictly/react-form'
 import { emulateTab } from 'emulate-tab'
-import { type PetValuePaths } from 'features/form/pet/Fields'
+import { type PetValuePaths } from 'features/form/pet/fields'
 import { PetFieldsView } from 'features/form/pet/PetFieldsView'
 import { PetSpeciesCatFieldsView } from 'features/form/pet/PetSpeciesCatFieldsView'
 import { PetSpeciesDogFieldsView } from 'features/form/pet/PetSpeciesDogFieldsView'
@@ -15,7 +15,7 @@ import {
   type Pet,
   type Species,
   type TagValuePath,
-} from 'features/form/pet/Types'
+} from 'features/form/pet/types'
 import { Observer } from 'mobx-react'
 import {
   type ComponentType,
