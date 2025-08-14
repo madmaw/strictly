@@ -17,7 +17,7 @@ import {
   type ValueOfType,
   type ValueToTypePathsOfType,
 } from '@strictly/define'
-import { petOwnerType } from './pet_owner_fields_view'
+import { petOwnerType } from './PetOwnerFieldsView'
 
 // TODO move definitions into respective views
 

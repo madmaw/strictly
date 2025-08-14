@@ -8,7 +8,7 @@ import {
   MantineProvider,
 } from '@mantine/core'
 import { assertExistsAndReturn } from '@strictly/base'
-import { PetForm } from 'features/form/pet/mobx/pet_form'
+import { PetForm } from 'features/form/pet/mobx/PetForm'
 import { type Pet } from 'features/form/pet/types'
 import { messages as en } from 'locales/en'
 import { StrictMode } from 'react'
