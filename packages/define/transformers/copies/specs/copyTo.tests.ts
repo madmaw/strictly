@@ -134,7 +134,7 @@ describe('copyTo', function () {
         )
 
         expect(c).toEqual({
-          d: 'a',
+          d: '"a"',
           x: '1',
         })
       })

@@ -11,9 +11,10 @@ import {
   type MetaArgsOf,
   StorybookLinguiProvider,
 } from '@strictly/spec'
+import { configure } from 'mobx'
 import { StrictMode } from 'react'
 // convince VSCode that this file is OK
-// eslint-disable-next-line no-restricted-imports
+
 import * as React from 'react'
 
 const testMessages = {
@@ -42,6 +43,13 @@ export const testArgTypes = {
 export const testArgs: MetaArgsOf<typeof testArgTypes> = {
   locale: 'English',
 }
+
+// turn on all useful mobx warnings in storybook to try to catch bad behavior
+configure({
+  enforceActions: 'observed',
+  observableRequiresReaction: true,
+  reactionRequiresObservable: true,
+})
 
 const preview: Preview = {
   parameters: {

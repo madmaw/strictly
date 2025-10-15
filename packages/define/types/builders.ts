@@ -1,5 +1,7 @@
 import {
   type IsFieldReadonly,
+  map,
+  UnreachableError,
 } from '@strictly/base'
 import {
   isAnnotatedValidator,
@@ -343,17 +345,53 @@ class UnionTypeDefBuilder<
   ): UnionTypeDefBuilder<E, C, D, Readonly<Record<K, T>> & U> {
     const {
       unions,
+      discriminator,
     } = this.definition
+    // add the discriminator as a field to the underlying union type
+    const enhancedTypeDef = maybeAddDiscriminatorField(typeDef, discriminator, k)
     return new UnionTypeDefBuilder<E, C, D, Readonly<Record<K, T>> & U>(
       {
         ...this.definition,
         // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
         unions: {
           ...unions,
-          [k]: typeDef,
+          [k]: enhancedTypeDef,
         } as Readonly<Record<K, T>> & U,
       },
     )
+  }
+}
+
+function maybeAddDiscriminatorField<T extends TypeDef, K extends UnionKey>(
+  t: T,
+  discriminatorKey: string | null,
+  discriminatorLiteral: K,
+): T {
+  if (discriminatorKey == null) {
+    return t
+  }
+  switch (t.type) {
+    case TypeDefType.List:
+    case TypeDefType.Literal:
+    case TypeDefType.Record:
+      return t
+    case TypeDefType.Object:
+      return {
+        ...t,
+        fields: {
+          ...t.fields,
+          [discriminatorKey]: literal([discriminatorLiteral]).readonly().required().narrow.definition,
+        },
+      }
+    case TypeDefType.Union:
+      return {
+        ...t,
+        unions: map(t.unions, (_k, v) => {
+          return maybeAddDiscriminatorField(v, discriminatorKey, discriminatorLiteral)
+        }),
+      }
+    default:
+      throw new UnreachableError(t)
   }
 }
 

@@ -37,7 +37,7 @@ export function flattenValueTo<
   R extends Readonly<Record<string, M>>,
 >(
   { definition }: T,
-  v: ValueOfType<T>,
+  v: ValueOfType<ReadonlyTypeOfType<T>>,
   setter: Setter<ValueOfType<T>>,
   mapper: Mapper<M>,
   // used to maintain keys when changing lists, note that the format for a list of three elements is

@@ -4,7 +4,6 @@ import {
 } from '@strictly/base'
 import {
   type IObservableFactory,
-  makeObservable,
   observable,
 } from 'mobx'
 import { getUnionTypeDef } from 'transformers/flatteners/flattenValueTo'
@@ -49,7 +48,7 @@ function observeValue(
       )
     case TypeDefType.Object:
       // `makeObservable` only observes the specified props
-      return makeObservable(
+      return observable(
         v,
         reduce(
           def.fields,

@@ -27,6 +27,9 @@
     "lint": {
       "dependsOn": ["check-types"]
     },
+    "lint:fix": {
+      "dependsOn": ["check-types"]
+    },
     "release:exports": {
     },
     "storybook": {

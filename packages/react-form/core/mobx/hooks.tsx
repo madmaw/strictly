@@ -10,6 +10,7 @@ import {
   type FormModel,
   Validation,
 } from './FormModel'
+import { peek } from './peek'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type ValueOfModel<M extends FormModel<any, any, any, any, any>> = M extends FormModel<infer T, any, any, any, any>
@@ -41,7 +42,8 @@ export function useDefaultMobxFormHooks<
       path: Path,
       value: ValueTypeOfField<F[Path]>,
     ) {
-      const validation = Math.min(model.getValidation(path), Validation.Changed)
+      const activeValidation = peek(() => model.getValidation(path))
+      const validation = Math.min(activeValidation, Validation.Changed)
       model.setFieldValue<Path>(path, value, validation)
     },
     [model],
@@ -66,10 +68,18 @@ export function useDefaultMobxFormHooks<
       // (e.g. changing a discriminator)
       // TODO debounce?
       setTimeout(function () {
+        const [
+          validate,
+          activeValidation,
+        ] = peek(() => [
+          model.isValuePathActive(path) && model.isFieldDirty(path) && model.fields[path].error == null,
+          model.getValidation(path),
+        ])
         // only start validation if the user has changed the field and there isn't already an error visible
-        if (model.isValuePathActive(path) && model.isFieldDirty(path) && model.fields[path].error == null) {
+        if (validate) {
+          const validation = Math.max(Validation.Changed, activeValidation)
           // further workaround to make sure we don't downgrade the existing validation
-          model.validateField(path, Math.max(Validation.Changed, model.getValidation(path)))
+          model.validateField(path, validation)
         }
       }, 100)
     },
@@ -78,8 +88,10 @@ export function useDefaultMobxFormHooks<
 
   const onFormSubmit = useCallback(
     function () {
-      if (model.validateSubmit()) {
-        onValidFormSubmit?.(model.value)
+      const valid = peek(() => model.validateSubmit())
+      if (valid && onValidFormSubmit) {
+        const value = peek(() => model.value)
+        onValidFormSubmit(value)
       }
     },
     [

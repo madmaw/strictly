@@ -136,12 +136,14 @@ describe('flattenTypeDefTo', function () {
         expect(flattened).toEqual({
           $: TypeDefType.Union,
           '$:a.a': TypeDefType.Literal,
+          '$:a.d': TypeDefType.Literal,
           '$:b.b': TypeDefType.Literal,
+          '$:b.d': TypeDefType.Literal,
         })
       })
 
       it('calls the mapper function', function () {
-        expect(toTypeDefType).toHaveBeenCalledTimes(3)
+        expect(toTypeDefType).toHaveBeenCalledTimes(5)
       })
     })
   })

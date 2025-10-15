@@ -108,6 +108,7 @@ describe('flattenJsonValueToTypePathsOf', function () {
           $: '$',
           '$:x.a': '$:x.a',
           '$:x.b': '$:x.b',
+          '$:x.d': '$:x.d',
         })
       })
     })

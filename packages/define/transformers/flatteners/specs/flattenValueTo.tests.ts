@@ -330,6 +330,7 @@ describe('flattenValueTo', function () {
           expect(flattened).toEqual({
             $: '{"d":"1","a":2}',
             ['$:1.a']: '2',
+            ['$:1.d']: '"1"',
           })
         })
       })
