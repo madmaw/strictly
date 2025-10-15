@@ -13,8 +13,7 @@ import {
 } from '@strictly/spec'
 import { configure } from 'mobx'
 import { StrictMode } from 'react'
-// convince VSCode that this file is OK
-
+// eslint-disable-next-line no-restricted-imports
 import * as React from 'react'
 
 const testMessages = {
