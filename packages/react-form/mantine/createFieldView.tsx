@@ -1,5 +1,6 @@
 import { Observer } from 'mobx-react'
 import {
+  type ComponentProps,
   type ComponentType,
   useCallback,
 } from 'react'
@@ -19,7 +20,7 @@ export type FieldViewProps<F extends Fields, K extends keyof F> = {
     onBlur: () => void,
     onValueChange: (v: ValueTypeOfField<F[K]>) => void,
     onSubmit: () => void,
-  }) => JSX.Element,
+  }) => ReturnType<NonNullable<ComponentProps<typeof Observer>['render']>>,
 }
 
 /**

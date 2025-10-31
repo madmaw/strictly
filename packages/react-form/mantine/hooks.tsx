@@ -457,5 +457,5 @@ class MantineFormImpl<
     ) as unknown as MantineFieldComponent<FormProps<ValueTypeOfField<F[K]>>, P, never>
   }
 
-  // TODO have an option to bind to a Text/(value: T) => JSX.Element for viewing form fields
+  // TODO have an option to bind to a Text/(value: T) => ReactNode for viewing form fields
 }

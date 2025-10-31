@@ -273,65 +273,66 @@ export function createUnsafePartialObserverComponent<
   curriedPropsSource: (additionalProps?: AdditionalProps) => CurriedProps,
   additionalPropKeys: readonly (keyof AdditionalProps)[] = [],
 ): UnsafePartialComponent<Component, CurriedProps, AdditionalProps> {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
   return forwardRef(
-      function (
-        props: PropsWithoutRef<RemainingComponentProps<Component, CurriedProps> & AdditionalProps>,
-        ref: ForwardedRef<typeof Component>,
-      ) {
-        // forward ref types are really difficult to work with
-        // still needs a cast as `extends ComponentType<any>` != `ComponentType<any>`
-        // eslint-disable-next-line @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-explicit-any, @typescript-eslint/no-unnecessary-type-assertion
-        const C = Component as ComponentType<any>
-        // remove the additional props from the exposed props that get passed in to the component
-        // as this generates react warnings
-        const [
-          additionalProps,
-          exposedProps,
-        ] = additionalPropKeys.reduce<[AdditionalProps, RemainingComponentProps<Component, CurriedProps>]>(
-          function (
-            [
-              additionalProps,
-              exposedProps,
-            ],
-            key,
-          ) {
-            const value = props[
-              // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-              key as keyof PropsWithoutRef<RemainingComponentProps<Component, CurriedProps> & AdditionalProps>
-            ]
-            // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-            delete exposedProps[key as keyof RemainingComponentProps<Component, CurriedProps>]
-            // eslint-disable-next-line @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-explicit-any
-            additionalProps[key] = value as any
-            return [
-              additionalProps,
-              exposedProps,
-            ]
-          },
+    function (
+      props: PropsWithoutRef<RemainingComponentProps<Component, CurriedProps> & AdditionalProps>,
+      ref: ForwardedRef<typeof Component>,
+    ) {
+      // forward ref types are really difficult to work with
+      // still needs a cast as `extends ComponentType<any>` != `ComponentType<any>`
+      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-explicit-any, @typescript-eslint/no-unnecessary-type-assertion
+      const C = Component as ComponentType<any>
+      // remove the additional props from the exposed props that get passed in to the component
+      // as this generates react warnings
+      const [
+        additionalProps,
+        exposedProps,
+      ] = additionalPropKeys.reduce<[AdditionalProps, RemainingComponentProps<Component, CurriedProps>]>(
+        function (
           [
-            // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-            {} as AdditionalProps,
-            // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-            { ...props } as RemainingComponentProps<Component, CurriedProps>,
+            additionalProps,
+            exposedProps,
           ],
-        )
-        return (
-          <Observer>
-            {() => {
-              // TODO is there any way we can memoize this transformation?
-              const curriedProps = curriedPropsSource(additionalProps)
+          key,
+        ) {
+          const value = props[
+            // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+            key as keyof PropsWithoutRef<RemainingComponentProps<Component, CurriedProps> & AdditionalProps>
+          ]
+          // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+          delete exposedProps[key as keyof RemainingComponentProps<Component, CurriedProps>]
+          // eslint-disable-next-line @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-explicit-any
+          additionalProps[key] = value as any
+          return [
+            additionalProps,
+            exposedProps,
+          ]
+        },
+        [
+          // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+          {} as AdditionalProps,
+          // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+          { ...props } as RemainingComponentProps<Component, CurriedProps>,
+        ],
+      )
+      return (
+        <Observer>
+          {() => {
+            // TODO is there any way we can memoize this transformation?
+            const curriedProps = curriedPropsSource(additionalProps)
 
-              return (
-                <C
-                  ref={ref}
-                  {...curriedProps}
-                  {...exposedProps}
-                />
-              )
-            }}
-          </Observer>
-        )
-      },
+            return (
+              <C
+                ref={ref}
+                {...curriedProps}
+                {...exposedProps}
+              />
+            )
+          }}
+        </Observer>
+      )
+    },
   ) as UnsafePartialComponent<Component, CurriedProps, AdditionalProps>
 }
 
