@@ -1,10 +1,10 @@
 {
   "author": "Chris <chris.glover@gmail.com> (@madmaw)",
   "dependencies": {
-    "type-fest": "^4.27.0"
   },
   "devDependencies": {
-    "@strictly/support-vite": "*"
+    "@strictly/support-vite": "*",
+    "type-fest": "^4.27.0"
   },
   "homepage": "https://madmaw.github.io/strictly/define",
   "keywords": [
@@ -17,7 +17,8 @@
   "packageManager": "yarn@1.22.22",
   "peerDependencies": {
     "@strictly/base": "*",
-    "mobx": "^6.0.0"
+    "mobx": "^6.0.0",
+    "type-fest": "^4.27.0"
   },
   "publishConfig": {
     "access": "public"
@@ -38,5 +39,5 @@
     "test:watch": "vitest"
   },
   "type": "module",
-  "version": "0.0.32"
+  "version": "0.0.33"
 }

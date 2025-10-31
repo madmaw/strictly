@@ -1,5 +1,5 @@
 import { type FriendlyExhaustiveArrayOfUnion } from '@strictly/base'
-import { observer } from 'mobx-react'
+import { Observer } from 'mobx-react'
 import {
   type ComponentProps,
   type ComponentType,
@@ -273,9 +273,7 @@ export function createUnsafePartialObserverComponent<
   curriedPropsSource: (additionalProps?: AdditionalProps) => CurriedProps,
   additionalPropKeys: readonly (keyof AdditionalProps)[] = [],
 ): UnsafePartialComponent<Component, CurriedProps, AdditionalProps> {
-  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-  return observer(
-    forwardRef(
+  return forwardRef(
       function (
         props: PropsWithoutRef<RemainingComponentProps<Component, CurriedProps> & AdditionalProps>,
         ref: ForwardedRef<typeof Component>,
@@ -317,19 +315,23 @@ export function createUnsafePartialObserverComponent<
             { ...props } as RemainingComponentProps<Component, CurriedProps>,
           ],
         )
-
-        // TODO is there any way we can memoize this transformation?
-        const curriedProps = curriedPropsSource(additionalProps)
-
         return (
-          <C
-            ref={ref}
-            {...curriedProps}
-            {...exposedProps}
-          />
+          <Observer>
+            {() => {
+              // TODO is there any way we can memoize this transformation?
+              const curriedProps = curriedPropsSource(additionalProps)
+
+              return (
+                <C
+                  ref={ref}
+                  {...curriedProps}
+                  {...exposedProps}
+                />
+              )
+            }}
+          </Observer>
         )
       },
-    ),
   ) as UnsafePartialComponent<Component, CurriedProps, AdditionalProps>
 }
 
