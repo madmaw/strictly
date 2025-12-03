@@ -1,5 +1,6 @@
 import {
   type ReadonlyTypeOfType,
+  type Type,
   type ValueOfType,
 } from '@strictly/define'
 import {
@@ -13,13 +14,25 @@ import {
 import { peek } from './peek'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-type ValueOfModel<M extends FormModel<any, any, any, any, any>> = M extends FormModel<infer T, any, any, any, any>
+type FormModelInterface<T extends Type = any> = Pick<
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  FormModel<T, any, any, any, any>,
+  | 'fields'
+  | 'value'
+  | 'getValidation'
+  | 'validateField'
+  | 'setFieldValue'
+  | 'validateSubmit'
+  | 'isFieldDirty'
+  | 'isValuePathActive'
+>
+
+type ValueOfModel<M extends FormModelInterface> = M extends FormModelInterface<infer T>
   ? ValueOfType<ReadonlyTypeOfType<T>>
   : never
 
 export function useDefaultMobxFormHooks<
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  M extends FormModel<any, any, any, any, any>,
+  M extends FormModelInterface,
   F extends M['fields'] = M['fields'],
 >(
   model: M,
