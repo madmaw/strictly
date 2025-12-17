@@ -21,6 +21,7 @@ jobs:
         uses: actions/setup-node@v5
         with:
           node-version: '24'
+          registry-url: 'https://registry.npmjs.org'
       - name: Cache Node.js modules
         id: cache
         uses: actions/cache@v5
@@ -53,25 +54,26 @@ jobs:
         with:
           cmd: check-types
 
-      - run: npm publish --provenance-file ./packages/base
-
       - name: Deploy @@strictly/base
         uses: JS-DevTools/npm-publish@v4
         id: base
         with:
           package: ./packages/base
+          provenance: true
 
       - name: Deploy @strictly/define
         uses: JS-DevTools/npm-publish@v4
         id: define
         with:
           package: ./packages/define
+          provenance: true
 
       - name: Deploy @strictly/react-form
         uses: JS-DevTools/npm-publish@v4
         id: react_form
         with:
           package: ./packages/react-form
+          provenance: true
 
       - name: Deploy Status
         run: |
