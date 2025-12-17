@@ -19,8 +19,8 @@
     "@strictly/support-vite": "*",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/react": "^16.0.1",
-    "@types/react": "^18.3.12",
-    "@types/react-dom": "^18.3.1",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
     "@vitejs/plugin-react": "^4.3.3",
     "concurrently": "^9.1.2",
     "jsdom": "^25.0.1",
@@ -74,5 +74,5 @@
     "test:watch": "vitest"
   },
   "type": "module",
-  "version": "0.0.34"
+  "version": "0.0.35"
 }

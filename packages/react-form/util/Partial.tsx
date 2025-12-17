@@ -7,6 +7,7 @@ import {
   type ForwardedRef,
   forwardRef,
   type ForwardRefExoticComponent,
+  type JSX,
   type PropsWithoutRef,
   type Ref,
   type RefAttributes,
