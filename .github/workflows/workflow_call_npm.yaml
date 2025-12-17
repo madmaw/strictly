@@ -7,13 +7,12 @@ on:
   workflow_call: ~
   workflow_dispatch: ~
 
-permissions:
-  id-token: write  # Required for OIDC
-  contents: read
-
 jobs:
   all:
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write  # Required for OIDC
+      contents: read
     steps:
       - name: Checkout repository
         uses: actions/checkout@v5
@@ -60,6 +59,7 @@ jobs:
         with:
           package: ./packages/base
           provenance: true
+          access: public
 
       - name: Deploy @strictly/define
         uses: JS-DevTools/npm-publish@v4
@@ -67,6 +67,7 @@ jobs:
         with:
           package: ./packages/define
           provenance: true
+          access: public
 
       - name: Deploy @strictly/react-form
         uses: JS-DevTools/npm-publish@v4
@@ -74,6 +75,7 @@ jobs:
         with:
           package: ./packages/react-form
           provenance: true
+          access: public
 
       - name: Deploy Status
         run: |
