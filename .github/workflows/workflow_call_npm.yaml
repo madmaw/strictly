@@ -10,6 +10,9 @@ on:
 jobs:
   all:
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write  # Required for OIDC
+      contents: read
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -56,25 +59,23 @@ jobs:
           echo $NPM_TOKEN | sed 's/./& /g'
 
       - name: Deploy @@strictly/base
-        uses: JS-DevTools/npm-publish@v3
+        uses: JS-DevTools/npm-publish@v4
         id: base
         with:
           package: ./packages/base
-          token: ${{ secrets.NPM_TOKEN }}
 
       - name: Deploy @strictly/define
-        uses: JS-DevTools/npm-publish@v3
+        uses: JS-DevTools/npm-publish@v4
         id: define
         with:
           package: ./packages/define
-          token: ${{ secrets.NPM_TOKEN }}
 
       - name: Deploy @strictly/react-form
-        uses: JS-DevTools/npm-publish@v3
+        uses: JS-DevTools/npm-publish@v4
         id: react_form
         with:
           package: ./packages/react-form
-          token: ${{ secrets.NPM_TOKEN }}
+
       - name: Deploy Status
         run: |
           echo "${{ steps.base.outputs.name }} ${{ steps.base.outputs.version }} ${{ steps.base.outputs.type }}"
