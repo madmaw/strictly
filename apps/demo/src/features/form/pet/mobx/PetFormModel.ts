@@ -34,7 +34,8 @@ export class PetFormModel extends FormModel<
   typeof petType,
   PetValueToTypePaths,
   typeof petFieldAdapters,
-  PetFormModelContext
+  PetFormModelContext,
+  PetFormModelContextSource
 > {
   constructor(value: Pet, mode: FormMode) {
     super(

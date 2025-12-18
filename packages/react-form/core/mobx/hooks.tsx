@@ -16,7 +16,7 @@ import { peek } from './peek'
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type FormModelInterface<T extends Type = any> = Pick<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  FormModel<T, any, any, any, any>,
+  FormModel<T, any, any, any, any, any>,
   | 'fields'
   | 'value'
   | 'getValidation'

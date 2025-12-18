@@ -146,6 +146,9 @@ export abstract class FormModel<
     ContextType
   >,
   ContextType = ContextOf<TypePathsToAdapters>,
+  ContextSource extends FormModelContextSource<ContextType, ValueOfType<ReadonlyTypeOfType<T>>,
+    keyof ValuePathsToAdapters> = FormModelContextSource<ContextType, ValueOfType<ReadonlyTypeOfType<T>>,
+      string | number | symbol>,
   ValuePathsToAdapters extends ValuePathsToAdaptersOf<TypePathsToAdapters, ValueToTypePaths> = ValuePathsToAdaptersOf<
     TypePathsToAdapters,
     ValueToTypePaths
@@ -173,11 +176,7 @@ export abstract class FormModel<
     readonly type: T,
     private readonly originalValue: ValueOfType<ReadonlyTypeOfType<T>>,
     protected readonly adapters: TypePathsToAdapters,
-    protected readonly contextSource: FormModelContextSource<
-      ContextType,
-      ValueOfType<ReadonlyTypeOfType<T>>,
-      keyof ValuePathsToAdapters
-    >,
+    protected readonly contextSource: ContextSource,
     protected readonly mode: FormMode,
   ) {
     this.originalValues = flattenValuesOfType<ReadonlyTypeOfType<T>>(type, originalValue, this.listIndicesToKeys)
