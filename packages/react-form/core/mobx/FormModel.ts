@@ -134,6 +134,10 @@ export type ContextOf<TypePathsToAdapters extends Partial<Readonly<Record<string
 
 export type FormMode = 'edit' | 'create'
 
+export type FormModelContextSource<ContextType, V, ValuePath extends string | number | symbol> = {
+  forPath(value: V, valuePath: ValuePath): ContextType,
+}
+
 export abstract class FormModel<
   T extends Type,
   ValueToTypePaths extends Readonly<Record<string, string>>,
@@ -169,6 +173,11 @@ export abstract class FormModel<
     readonly type: T,
     private readonly originalValue: ValueOfType<ReadonlyTypeOfType<T>>,
     protected readonly adapters: TypePathsToAdapters,
+    protected readonly contextSource: FormModelContextSource<
+      ContextType,
+      ValueOfType<ReadonlyTypeOfType<T>>,
+      keyof ValuePathsToAdapters
+    >,
     protected readonly mode: FormMode,
   ) {
     this.originalValues = flattenValuesOfType<ReadonlyTypeOfType<T>>(type, originalValue, this.listIndicesToKeys)
@@ -188,7 +197,7 @@ export abstract class FormModel<
         valuePath,
       ): AnnotatedFieldConversion<FieldOverride> | undefined => {
         // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-        const contextValue = this.toContext(originalValue, valuePath as keyof ValuePathsToAdapters)
+        const contextValue = contextSource.forPath(originalValue, valuePath as keyof ValuePathsToAdapters)
 
         // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
         const adapter = this.adapters[typePath as keyof TypePathsToAdapters]
@@ -213,11 +222,6 @@ export abstract class FormModel<
       return v && [v.value]
     }) as FlattenedFieldOverrides<ValuePathsToAdapters>
   }
-
-  protected abstract toContext(
-    value: ValueOfType<ReadonlyTypeOfType<T>>,
-    valuePath: keyof ValuePathsToAdapters,
-  ): ContextType
 
   get forceMutableFields() {
     switch (this.mode) {
@@ -310,7 +314,7 @@ export abstract class FormModel<
     const accessor = this.getAccessorForValuePath(valuePath)
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     const fieldTypeDef = this.flattenedTypeDefs[typePath as string]
-    const context = this.toContext(this.observableValue, valuePath)
+    const context = this.contextSource.forPath(this.observableValue, valuePath)
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     const defaultValue = create(valuePath as string, context)
 
@@ -499,7 +503,7 @@ export abstract class FormModel<
         elementTypePath as string,
         // TODO what can we use for the value path here?
         // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-        this.toContext(this.observableValue, valuePath as unknown as keyof ValuePathsToAdapters),
+        this.contextSource.forPath(this.observableValue, valuePath as unknown as keyof ValuePathsToAdapters),
       )
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const originalList: any[] = accessor.value
@@ -569,7 +573,7 @@ export abstract class FormModel<
     assertExists(revert, 'setting value not supported {}', valuePath)
 
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-explicit-any
-    const conversion = revert(value, valuePath as any, this.toContext(this.observableValue, valuePath))
+    const conversion = revert(value, valuePath as any, this.contextSource.forPath(this.observableValue, valuePath))
     const accessor = this.getAccessorForValuePath(valuePath)
     return runInAction(() => {
       this.fieldOverrides[valuePath] = [value]
@@ -631,8 +635,9 @@ export abstract class FormModel<
       convert,
       create,
     } = adapter
-    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-    const context = this.toContext(this.observableValue, valuePath as unknown as keyof ValuePathsToAdapters)
+
+    const context = this.contextSource.forPath(this.observableValue, // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+      valuePath as unknown as keyof ValuePathsToAdapters)
     const value = create(valuePath, context)
     const {
       value: displayValue,

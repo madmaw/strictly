@@ -7,6 +7,7 @@ import {
   nullType,
   numberType,
   object,
+  type ReadonlyTypeOfType,
   record,
   stringType,
   type Type,
@@ -24,7 +25,9 @@ import {
 } from 'core/mobx/fieldAdapterBuilder'
 import {
   type FlattenedTypePathsToAdaptersOf,
+  type FormMode,
   FormModel,
+  type FormModelContextSource,
   Validation,
   type ValuePathsToAdaptersOf,
 } from 'core/mobx/FormModel'
@@ -54,6 +57,19 @@ const originalIntegerToStringAdapter = adapterFromTwoWayConverter(
 
 const originalBooleanToBooleanAdapter = identityAdapter(false)
 
+class TestFormContextSource<V, ValuePath extends string | number | symbol> implements FormModelContextSource<
+  {},
+  V,
+  ValuePath
+> {
+  forPath(value: V, valuePath: ValuePath): {} {
+    return {
+      value,
+      valuePath,
+    }
+  }
+}
+
 class TestFormModel<
   T extends Type,
   ValueToTypePaths extends Readonly<Record<string, string>>,
@@ -62,14 +78,13 @@ class TestFormModel<
     {}
   >,
 > extends FormModel<T, ValueToTypePaths, TypePathsToAdapters, {}> {
-  override toContext(
-    value: ValueOfType<T>,
-    valuePath: keyof ValuePathsToAdaptersOf<TypePathsToAdapters, ValueToTypePaths>,
+  constructor(
+    type: T,
+    originalValue: ValueOfType<ReadonlyTypeOfType<T>>,
+    adapters: TypePathsToAdapters,
+    mode: FormMode,
   ) {
-    return {
-      value,
-      valuePath,
-    }
+    super(type, originalValue, adapters, new TestFormContextSource(), mode)
   }
 
   setFieldValueAndValidate<K extends keyof ValuePathsToAdaptersOf<TypePathsToAdapters, ValueToTypePaths>>(

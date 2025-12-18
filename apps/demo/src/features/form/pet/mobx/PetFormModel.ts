@@ -1,6 +1,7 @@
 import {
   type FormMode,
   FormModel,
+  type FormModelContextSource,
 } from '@strictly/react-form'
 import {
   petFieldAdapters,
@@ -12,31 +13,42 @@ import {
   type PetValueToTypePaths,
   type TagValuePath,
 } from 'features/form/pet/types'
+import { computed } from 'mobx'
+
+type PetFormModelContext = {
+  readonly tags: readonly string[],
+  readonly alive: boolean,
+  readonly isCat: boolean,
+}
+class PetFormModelContextSource implements FormModelContextSource<PetFormModelContext, Pet, TagValuePath> {
+  forPath(value: Pet) {
+    return {
+      tags: value.tags,
+      alive: value.alive,
+      isCat: value.species.type === 'cat',
+    }
+  }
+}
 
 export class PetFormModel extends FormModel<
   typeof petType,
   PetValueToTypePaths,
-  typeof petFieldAdapters
+  typeof petFieldAdapters,
+  PetFormModelContext
 > {
   constructor(value: Pet, mode: FormMode) {
     super(
       petType,
       value,
       petFieldAdapters,
+      new PetFormModelContextSource(),
       mode,
     )
   }
 
+  @computed
   get submitDisabled() {
     return !this.valueChanged
-  }
-
-  protected override toContext(value: Pet) {
-    return {
-      tags: value.tags,
-      alive: value.alive,
-      isCat: value.species.type === 'cat',
-    }
   }
 
   removeTag(valuePath: TagValuePath) {
