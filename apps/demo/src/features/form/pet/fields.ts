@@ -1,6 +1,6 @@
 import {
   type FlattenedValuesOfType,
-  flattenValidatorsOfValidatingType,
+  flattenValidatorsOfValidatingTypeWithMutability,
   type FunctionalValidator,
   mergeValidators,
   MinimumStringLengthValidator,
@@ -47,7 +47,7 @@ export type TagAlreadyExistsError = {
   value: string,
 }
 
-const petTypeValidators = flattenValidatorsOfValidatingType<typeof petType, PetTypeToValuePaths>(
+const petTypeValidators = flattenValidatorsOfValidatingTypeWithMutability<typeof petType, PetTypeToValuePaths>(
   petType,
 )
 

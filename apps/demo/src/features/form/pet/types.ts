@@ -72,13 +72,15 @@ export const speciesType = union('type')
     'dog',
     object()
       .field('barks', numberType.required())
-      .optionalField('breed', dogBreedType),
+      .optionalField('breed', dogBreedType)
+      .readonly(),
   )
   .or(
     'cat',
     object()
       .field('meows', numberType.required())
-      .optionalField('breed', catBreedType),
+      .optionalField('breed', catBreedType)
+      .readonly(),
   ).narrow
 
 export type Species = keyof typeof speciesType['definition']['unions']

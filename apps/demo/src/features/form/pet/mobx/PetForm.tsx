@@ -1,5 +1,4 @@
 import {
-  type FormMode,
   type FormProps,
   useDefaultMobxFormHooks,
   usePartialObserverComponent,
@@ -29,15 +28,15 @@ import {
 export function PetForm({
   value,
   onValueChange,
-  mode,
+  forceMutable,
 }: FormProps<Pet> & {
-  mode: FormMode,
+  forceMutable: boolean,
 }) {
   const model = useMemo(() => {
-    return new PetFormModel(value, mode)
+    return new PetFormModel(value, forceMutable)
   }, [
     value,
-    mode,
+    forceMutable,
   ])
 
   const firstInputRef = useCallback((input: HTMLInputElement | null) => {

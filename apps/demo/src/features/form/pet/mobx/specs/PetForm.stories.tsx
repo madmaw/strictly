@@ -16,7 +16,7 @@ const Component = PetForm
 const meta: Meta<typeof Component> = {
   component: Component,
   args: {
-    mode: 'edit',
+    forceMutable: false,
     value: {
       alive: true,
       name: 'Delta',
@@ -59,9 +59,9 @@ export const Unalive: Story = {
 
 export const CreateMode: Story = {
   args: {
-    mode: 'create',
+    forceMutable: true,
     value: {
-      alive: false,
+      alive: true,
       name: '',
       tags: [],
       species: {
@@ -74,7 +74,7 @@ export const CreateMode: Story = {
 
 export const Invalid: Story = {
   args: {
-    mode: 'create',
+    forceMutable: true,
     value: {
       alive: true,
       name: 'delta',

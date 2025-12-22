@@ -2,7 +2,7 @@ import { expectDefinedAndReturn } from '@strictly/base'
 import {
   booleanType,
   type FlattenedValuesOfType,
-  flattenValidatorsOfValidatingType,
+  flattenValidatorsOfValidatingTypeWithMutability,
   list,
   nullType,
   numberType,
@@ -25,7 +25,6 @@ import {
 } from 'core/mobx/fieldAdapterBuilder'
 import {
   type FlattenedTypePathsToAdaptersOf,
-  type FormMode,
   FormModel,
   type FormModelContextSource,
   Validation,
@@ -57,13 +56,23 @@ const originalIntegerToStringAdapter = adapterFromTwoWayConverter(
 
 const originalBooleanToBooleanAdapter = identityAdapter(false)
 
+type TextFormContext = {
+  forceMutable: boolean,
+  value: unknown,
+  valuePath: unknown,
+}
+
 class TestFormContextSource<V, ValuePath extends string | number | symbol> implements FormModelContextSource<
-  {},
+  TextFormContext,
   V,
   ValuePath
 > {
-  forPath(value: V, valuePath: ValuePath): {} {
+  constructor(private readonly forceMutable: boolean) {
+  }
+
+  forPath(value: V, valuePath: ValuePath): TextFormContext {
     return {
+      forceMutable: this.forceMutable,
       value,
       valuePath,
     }
@@ -82,9 +91,9 @@ class TestFormModel<
     type: T,
     originalValue: ValueOfType<ReadonlyTypeOfType<T>>,
     adapters: TypePathsToAdapters,
-    mode: FormMode,
+    forceMutable = false,
   ) {
-    super(type, originalValue, adapters, new TestFormContextSource(), mode)
+    super(type, originalValue, adapters, new TestFormContextSource(forceMutable))
   }
 
   setFieldValueAndValidate<K extends keyof ValuePathsToAdaptersOf<TypePathsToAdapters, ValueToTypePaths>>(
@@ -229,7 +238,6 @@ describe('all', function () {
             typeDef,
             originalValue,
             adapters,
-            'create',
           )
         })
 
@@ -290,7 +298,6 @@ describe('all', function () {
             typeDef,
             originalValue,
             adapters,
-            'create',
           )
         })
 
@@ -332,7 +339,6 @@ describe('all', function () {
           typeDef,
           value,
           adapters,
-          'create',
         )
       })
 
@@ -411,7 +417,6 @@ describe('all', function () {
           typeDef,
           value,
           converters,
-          'create',
         )
       })
 
@@ -482,7 +487,6 @@ describe('all', function () {
           typeDef,
           value,
           converters,
-          'create',
         )
       })
 
@@ -548,7 +552,6 @@ describe('all', function () {
           typeDef,
           originalValue,
           adapters,
-          'create',
         )
       })
 
@@ -675,7 +678,6 @@ describe('all', function () {
           typeDef,
           originalValue,
           converters,
-          'create',
         )
       })
 
@@ -804,6 +806,7 @@ describe('all', function () {
               // if the value has since changed
               value: model.value,
               valuePath: '$.2',
+              forceMutable: false,
             },
           )
         })
@@ -817,6 +820,7 @@ describe('all', function () {
               7,
             ],
             valuePath: '$.2',
+            forceMutable: false,
           })
         })
       })
@@ -1031,7 +1035,6 @@ describe('all', function () {
             type,
             originalValue,
             adapters,
-            'create',
           )
         })
 
@@ -1100,7 +1103,6 @@ describe('all', function () {
                 a: 1,
               },
               adapters,
-              'create',
             )
             it.each([
               [
@@ -1133,7 +1135,6 @@ describe('all', function () {
                 b: false,
               },
               adapters,
-              'create',
             )
             it.each([
               [
@@ -1183,7 +1184,6 @@ describe('all', function () {
           typeDef,
           originalValue,
           converters,
-          'create',
         )
       })
 
@@ -1210,14 +1210,14 @@ describe('all', function () {
       })
     })
 
-    describe('interaction with create and edit modes', () => {
+    describe('interaction with mutability', () => {
       const typeDef = object().readonlyField('n', numberType.enforce(n => n < 10 ? 'err' : null))
       const adapters = mergeAdaptersWithValidators(
         {
           $: identityAdapter({ n: 0 }),
           '$.n': integerToStringAdapter,
         } as const,
-        flattenValidatorsOfValidatingType(typeDef),
+        flattenValidatorsOfValidatingTypeWithMutability(typeDef),
       )
       type JsonPaths = {
         $: '$',
@@ -1244,7 +1244,7 @@ describe('all', function () {
             typeDef,
             originalValue,
             adapters,
-            'create',
+            true,
           )
         })
 
@@ -1257,43 +1257,6 @@ describe('all', function () {
         })
 
         it('passes validation with valid data', () => {
-          model.setFieldValue('$.n', '10')
-          expect(model.validateAll()).toBeTruthy()
-        })
-      })
-      describe('edit model', () => {
-        let model: FormModel<
-          typeof typeDef,
-          JsonPaths,
-          typeof adapters
-        >
-        beforeEach(function () {
-          model = new TestFormModel<
-            typeof typeDef,
-            JsonPaths,
-            typeof adapters
-          >(
-            typeDef,
-            originalValue,
-            adapters,
-            'edit',
-          )
-        })
-
-        it('respects the field being readonly', () => {
-          expect(model.fields['$.n'].readonly).toBeTruthy()
-        })
-
-        it('fails validation with invalid, clean data', () => {
-          expect(model.validateAll()).toBeFalsy()
-        })
-
-        it('fails validation with invalid, dirty data', () => {
-          model.setFieldValue('$.n', '2')
-          expect(model.validateAll()).toBeFalsy()
-        })
-
-        it('passes validation with valid, dirty data', () => {
           model.setFieldValue('$.n', '10')
           expect(model.validateAll()).toBeTruthy()
         })

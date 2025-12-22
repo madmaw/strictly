@@ -132,8 +132,6 @@ export type ContextOf<TypePathsToAdapters extends Partial<Readonly<Record<string
     | {}
   >
 
-export type FormMode = 'edit' | 'create'
-
 export type FormModelContextSource<ContextType, V, ValuePath extends string | number | symbol> = {
   forPath(value: V, valuePath: ValuePath): ContextType,
 }
@@ -177,7 +175,6 @@ export abstract class FormModel<
     private readonly originalValue: ValueOfType<ReadonlyTypeOfType<T>>,
     protected readonly adapters: TypePathsToAdapters,
     protected readonly contextSource: ContextSource,
-    protected readonly mode: FormMode,
   ) {
     this.originalValues = flattenValuesOfType<ReadonlyTypeOfType<T>>(type, originalValue, this.listIndicesToKeys)
     this.observableValue = mobxCopy(type, originalValue)
@@ -220,17 +217,6 @@ export abstract class FormModel<
     this.fieldOverrides = map(conversions, function (_k, v) {
       return v && [v.value]
     }) as FlattenedFieldOverrides<ValuePathsToAdapters>
-  }
-
-  get forceMutableFields() {
-    switch (this.mode) {
-      case 'create':
-        return true
-      case 'edit':
-        return false
-      default:
-        throw new UnreachableError(this.mode)
-    }
   }
 
   @computed
@@ -407,7 +393,7 @@ export abstract class FormModel<
     return {
       value: displayedValue,
       error,
-      readonly: readonly && !this.forceMutableFields,
+      readonly,
       required,
       // make a copy of the index mapping and remove the final value (next id)
       // eslint-disable-next-line @typescript-eslint/consistent-type-assertions

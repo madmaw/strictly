@@ -1,5 +1,5 @@
 import {
-  type FormMode,
+  type ContextOf,
   FormModel,
   type FormModelContextSource,
 } from '@strictly/react-form'
@@ -15,17 +15,23 @@ import {
 } from 'features/form/pet/types'
 import { computed } from 'mobx'
 
+// TODO tags isn't being picked up correctly from
+// petFieldAdapters because of the spread operation (which is wrong because the newTag field
+// should be in a separate form)
 type PetFormModelContext = {
   readonly tags: readonly string[],
-  readonly alive: boolean,
-  readonly isCat: boolean,
-}
+} & ContextOf<typeof petFieldAdapters>
+
 class PetFormModelContextSource implements FormModelContextSource<PetFormModelContext, Pet, TagValuePath> {
+  constructor(private readonly forceMutable: boolean) {
+  }
+
   forPath(value: Pet) {
     return {
       tags: value.tags,
       alive: value.alive,
       isCat: value.species.type === 'cat',
+      forceMutable: this.forceMutable,
     }
   }
 }
@@ -37,13 +43,12 @@ export class PetFormModel extends FormModel<
   PetFormModelContext,
   PetFormModelContextSource
 > {
-  constructor(value: Pet, mode: FormMode) {
+  constructor(value: Pet, forceMutable: boolean) {
     super(
       petType,
       value,
       petFieldAdapters,
-      new PetFormModelContextSource(),
-      mode,
+      new PetFormModelContextSource(forceMutable),
     )
   }
 
