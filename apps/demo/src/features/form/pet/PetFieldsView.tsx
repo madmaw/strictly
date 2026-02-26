@@ -201,9 +201,9 @@ export function PetFieldsView(props: PetFieldsViewProps) {
           required,
         }) => (
           <PillsInput
+            disabled={disabled}
             error={error && <NewTagInputErrorRenderer error={error} />}
             label={TagsInputLabel()}
-            disabled={disabled}
             required={required}
           >
             <Pill.Group>
