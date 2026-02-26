@@ -111,6 +111,7 @@ exports[`PetFieldsView > renders Disabled 1`] = `
       </label>
       <div
         class="m_6c018570 mantine-Input-wrapper mantine-PillsInput-wrapper"
+        data-disabled="true"
         data-multiline="true"
         data-size="sm"
         data-variant="default"
@@ -118,6 +119,7 @@ exports[`PetFieldsView > renders Disabled 1`] = `
       >
         <div
           class="m_8fb7ebe7 mantine-Input-input mantine-PillsInput-input"
+          data-disabled="true"
           data-no-overflow="true"
           data-variant="default"
         >
