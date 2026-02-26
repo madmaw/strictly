@@ -13,6 +13,8 @@ import { type MantineForm } from './types'
 
 export type FieldViewProps<F extends Fields, K extends keyof F> = {
   children: (props: {
+    disabled: boolean,
+    required: boolean,
     value: ValueTypeOfField<F[K]>,
     error: ErrorOfField<F[K]> | undefined,
     ErrorSink: ComponentType<{ error: ErrorOfField<F[K]> }>,
@@ -64,8 +66,12 @@ function FieldView<F extends Fields, K extends keyof F>({
         const {
           value,
           error,
+          readonly,
+          required,
         } = form.fields[valuePath]
         return children({
+          disabled: readonly,
+          required,
           value,
           error,
           ErrorSink: Empty,

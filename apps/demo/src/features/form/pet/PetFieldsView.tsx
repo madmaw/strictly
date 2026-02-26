@@ -197,10 +197,14 @@ export function PetFieldsView(props: PetFieldsViewProps) {
         {({
           error,
           ErrorSink,
+          disabled,
+          required,
         }) => (
           <PillsInput
             error={error && <NewTagInputErrorRenderer error={error} />}
             label={TagsInputLabel()}
+            disabled={disabled}
+            required={required}
           >
             <Pill.Group>
               <Tags>
