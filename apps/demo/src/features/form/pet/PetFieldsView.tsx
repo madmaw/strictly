@@ -199,35 +199,37 @@ export function PetFieldsView(props: PetFieldsViewProps) {
           ErrorSink,
           disabled,
           required,
-        }) => (
-          <PillsInput
-            disabled={disabled}
-            error={error && <NewTagInputErrorRenderer error={error} />}
-            label={TagsInputLabel()}
-            required={required}
-          >
-            <Pill.Group>
-              <Tags>
-                {function (tagValuePath) {
-                  const Pill = form.pill(tagValuePath, TagPill)
-                  return (
-                    <Pill
-                      key={tagValuePath}
-                      onRemoveByValuePath={onRemoveTag}
-                      valuePath={tagValuePath}
-                      withRemoveButton={true}
-                    />
-                  )
-                }}
-              </Tags>
-              {/* PillsInput.Field does not display errors, so we need to get our container to do it */}
-              <NewTagInputField
-                ErrorRenderer={ErrorSink}
-                placeholder={NewTagPlaceholder()}
-              />
-            </Pill.Group>
-          </PillsInput>
-        )}
+        }) => {
+          return (
+            <PillsInput
+              disabled={disabled}
+              error={error && <NewTagInputErrorRenderer error={error} />}
+              label={TagsInputLabel()}
+              required={required}
+            >
+              <Pill.Group>
+                <Tags>
+                  {function (tagValuePath) {
+                    const Pill = form.pill(tagValuePath, TagPill)
+                    return (
+                      <Pill
+                        key={tagValuePath}
+                        onRemoveByValuePath={onRemoveTag}
+                        valuePath={tagValuePath}
+                        withRemoveButton={true}
+                      />
+                    )
+                  }}
+                </Tags>
+                {/* PillsInput.Field does not display errors, so we need to get our container to do it */}
+                <NewTagInputField
+                  ErrorRenderer={ErrorSink}
+                  placeholder={NewTagPlaceholder()}
+                />
+              </Pill.Group>
+            </PillsInput>
+          )
+        }}
       </NewTagField>
 
       <Card withBorder={true}>

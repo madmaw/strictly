@@ -461,6 +461,20 @@ export abstract class FormModel<
     return this.internalSetFieldValue(valuePath, value, validation)
   }
 
+  listValuePaths<K extends keyof FlattenedListTypesOfType<T>>(valuePath: K): readonly `${K}.${number}`[] {
+    const {
+      value,
+      listIndexToKey,
+      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+    } = this.fields[valuePath as unknown as keyof ValuePathsToAdapters]
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+    return (value as unknown[]).map((_, i) => {
+      const key = listIndexToKey?.[i]
+      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+      return `${valuePath as string}.${key}` as `${K}.${number}`
+    })
+  }
+
   addListItem<K extends keyof FlattenedListTypesOfType<T>>(
     valuePath: K,
     // TODO can this type be simplified?
