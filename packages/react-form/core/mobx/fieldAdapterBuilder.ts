@@ -19,7 +19,7 @@ import {
 } from 'types/FieldConverters'
 import { type FieldAdapter } from './FieldAdapter'
 
-class FieldAdapterBuilder<
+export class FieldAdapterBuilder<
   From,
   To,
   E,
