@@ -1,4 +1,7 @@
 import { createViteLibraryConfig } from '@strictly/vite/config'
 import packageJson from './package.json'
 
-export default createViteLibraryConfig(packageJson, { react: true })
+export default createViteLibraryConfig(packageJson, {
+  react: true,
+  root: import.meta.dirname,
+})

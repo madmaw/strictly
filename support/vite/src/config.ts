@@ -1,6 +1,8 @@
 // This file must only have bare package imports. Storybook loads vite configurations without the runner config
 // loader, so this package gets handed to node directly rather than bundled, and node cannot resolve extensionless
 // relative imports.
+import { type PluginItem } from '@babel/core'
+import { getConfig as getLinguiConfig } from '@lingui/conf'
 import { lingui } from '@lingui/vite-plugin'
 import babel from '@rolldown/plugin-babel'
 // oxlint-disable-next-line no-restricted-imports -- this package configures the storybook test runner
@@ -9,6 +11,7 @@ import reactSupport from '@vitejs/plugin-react'
 import { playwright } from '@vitest/browser-playwright'
 import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { createRequire } from 'node:module'
+import { join } from 'node:path'
 import { type PluginOption } from 'vite'
 import dts from 'vite-plugin-dts'
 import {
@@ -46,25 +49,32 @@ const require = createRequire(import.meta.url)
  */
 export function createReactPlugin({
   lingui: withLingui = false,
+  root = process.cwd(),
 }: {
   readonly lingui?: boolean
+  readonly root?: string
 } = {}): PluginOption[] {
+  const plugins: PluginItem[] = [
+    [
+      require.resolve('@babel/plugin-proposal-decorators'),
+      {
+        version: '2023-11',
+      },
+    ],
+    require.resolve('@babel/plugin-transform-class-static-block'),
+    require.resolve('@babel/plugin-transform-class-properties'),
+  ]
+  if (withLingui) {
+    plugins.push([
+      require.resolve('@lingui/babel-plugin-lingui-macro'),
+      // the macro plugin otherwise searches the working directory for the lingui config
+      { linguiConfig: getLinguiConfig({ cwd: root }) },
+    ])
+  }
   return [
     reactSupport(),
     babel({
-      plugins: [
-        [
-          require.resolve('@babel/plugin-proposal-decorators'),
-          {
-            version: '2023-11',
-          },
-        ],
-        require.resolve('@babel/plugin-transform-class-static-block'),
-        require.resolve('@babel/plugin-transform-class-properties'),
-        ...(withLingui
-          ? [require.resolve('@lingui/babel-plugin-lingui-macro')]
-          : []),
-      ],
+      plugins,
       assumptions: {
         setPublicClassFields: false,
       },
@@ -75,26 +85,33 @@ export function createReactPlugin({
 /**
  * Configuration for react applications, storybooks and their tests. Storybook should point at the vitest
  * configuration created by this so the stories and the tests share one vite configuration.
+ *
+ * Pass `import.meta.dirname` as the root so the configuration also works when loaded from another directory, e.g.
+ * by a workspace task runner, as lingui otherwise looks for its config in the current working directory
  */
 export function createReactViteConfig({
   base,
   lingui: withLingui = false,
+  root = process.cwd(),
   unitTest = false,
   storybook = false,
 }: {
   readonly base?: string
   readonly lingui?: boolean
+  readonly root?: string
   readonly unitTest?: TestParameters
   readonly storybook?: TestParameters
 } = {}) {
   return defineConfig({
     base,
     plugins: [
-      ...createReactPlugin({ lingui: withLingui }),
-      ...(withLingui ? [lingui()] : []),
+      ...createReactPlugin({ lingui: withLingui, root }),
+      ...(withLingui ? [lingui({ cwd: root })] : []),
     ],
     resolve: RESOLVE,
+    root,
     test: createTestConfig({
+      root,
       unitTest,
       storybook,
     }),
@@ -109,15 +126,17 @@ export function createViteLibraryConfig(
   packageJson: LibraryPackageJson,
   {
     react = false,
+    root = process.cwd(),
   }: {
     readonly react?: boolean
+    readonly root?: string
   } = {},
 ) {
   const externals = Object.keys({
     ...packageJson.dependencies,
     ...packageJson.peerDependencies,
   })
-  const plugins: PluginOption[] = react ? createReactPlugin() : []
+  const plugins: PluginOption[] = react ? createReactPlugin({ root }) : []
   return defineConfig({
     build: {
       lib: {
@@ -152,6 +171,7 @@ export function createViteLibraryConfig(
       }),
     ],
     resolve: RESOLVE,
+    root,
   })
 }
 
@@ -159,13 +179,17 @@ export function createViteLibraryConfig(
  * Test only configuration for packages without a react entry point
  */
 export function createVitestConfig({
+  root = process.cwd(),
   unitTest = true,
 }: {
+  readonly root?: string
   readonly unitTest?: TestParameters
 } = {}) {
   return defineConfig({
     resolve: RESOLVE,
+    root,
     test: createTestConfig({
+      root,
       unitTest,
       storybook: false,
     }),
@@ -173,9 +197,11 @@ export function createVitestConfig({
 }
 
 function createTestConfig({
+  root,
   unitTest,
   storybook,
 }: {
+  readonly root: string
   readonly unitTest: TestParameters
   readonly storybook: TestParameters
 }): ViteUserConfig['test'] {
@@ -187,8 +213,8 @@ function createTestConfig({
     exclude: EXCLUDE,
     passWithNoTests: true,
     projects: [
-      ...computeUnitTests(unitTest),
-      ...computeTests(createStorybookConfigurationBase, storybook),
+      ...computeUnitTests(root, unitTest),
+      ...computeTests(() => createStorybookConfigurationBase(root), storybook),
     ],
   }
 }
@@ -201,9 +227,9 @@ const EXCLUDE = [
 ]
 
 // installs the shared test plugins, if the package has one
-const INSTALL_FILE = './.vitest/install.ts'
+const INSTALL_FILE = '.vitest/install.ts'
 // installs the storybook preview annotations so stories can be composed in tests
-const INSTALL_STORYBOOK_FILE = './.vitest/installStorybook.ts'
+const INSTALL_STORYBOOK_FILE = '.vitest/installStorybook.ts'
 
 // matches the file names selected by the unit test include pattern
 // **/specs/(*.)+(tests).[jt]s?(x)
@@ -232,12 +258,16 @@ function findStorybookTestFiles(directory: string): string[] {
 // Unit tests that reference Storybook (e.g. via composeStories) need the Storybook project annotations installed,
 // which is slow to import. Split them into a separate project so the remaining unit tests do not pay the Storybook
 // setup cost.
-function computeUnitTests(unitTest: TestParameters) {
-  const projects = computeTests(createUnitTestConfigurationBase, unitTest)
-  if (projects.length === 0 || !existsSync(INSTALL_STORYBOOK_FILE)) {
+function computeUnitTests(root: string, unitTest: TestParameters) {
+  const projects = computeTests(
+    () => createUnitTestConfigurationBase(root),
+    unitTest,
+  )
+  const installStorybookFile = join(root, INSTALL_STORYBOOK_FILE)
+  if (projects.length === 0 || !existsSync(installStorybookFile)) {
     return projects
   }
-  const storybookTestFiles = findStorybookTestFiles('src')
+  const storybookTestFiles = findStorybookTestFiles(join(root, 'src'))
   if (storybookTestFiles.length === 0) {
     return projects
   }
@@ -257,7 +287,7 @@ function computeUnitTests(unitTest: TestParameters) {
         name: `${project.test.name}/storybook`,
         setupFiles: [
           ...setupFilesOf(project.test.setupFiles),
-          INSTALL_STORYBOOK_FILE,
+          installStorybookFile,
         ],
       },
     },
@@ -295,7 +325,10 @@ function computeTests(
   }))
 }
 
-function createUnitTestConfigurationBase(): TestProjectInlineConfiguration {
+function createUnitTestConfigurationBase(
+  root: string,
+): TestProjectInlineConfiguration {
+  const installFile = join(root, INSTALL_FILE)
   return {
     extends: true,
     test: {
@@ -303,17 +336,19 @@ function createUnitTestConfigurationBase(): TestProjectInlineConfiguration {
       globals: true,
       include: ['**/specs/(*.)+(tests).[jt]s?(x)'],
       name: 'unit',
-      setupFiles: existsSync(INSTALL_FILE) ? [INSTALL_FILE] : [],
+      setupFiles: existsSync(installFile) ? [installFile] : [],
     },
   }
 }
 
 // renders every story in a headless browser and runs its play function, so the stories double as tests. Must be
 // created lazily as the storybook plugin loads the storybook configuration as soon as it is constructed
-function createStorybookConfigurationBase(): TestProjectInlineConfiguration {
+function createStorybookConfigurationBase(
+  root: string,
+): TestProjectInlineConfiguration {
   return {
     extends: true,
-    plugins: [storybookTest({})],
+    plugins: [storybookTest({ configDir: join(root, '.storybook') })],
     test: {
       browser: {
         enabled: true,
@@ -324,7 +359,10 @@ function createStorybookConfigurationBase(): TestProjectInlineConfiguration {
       exclude: EXCLUDE,
       globals: true,
       name: 'storybook',
-      setupFiles: [INSTALL_FILE, INSTALL_STORYBOOK_FILE],
+      setupFiles: [
+        join(root, INSTALL_FILE),
+        join(root, INSTALL_STORYBOOK_FILE),
+      ],
       testTimeout: 30000,
     },
   }
