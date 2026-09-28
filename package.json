@@ -57,7 +57,7 @@
     "lint:root:fix": "cross-env ESLINT_USE_FLAT_CONFIG=false eslint --fix *.cjs *.json .github",
     "react-form:storybook": "pnpm -r --filter @strictly/react-form storybook",
     "storybook:build": "pnpm -r storybook:build",
-    "storybook:test": "pnpm -r --workspace-concurrency=1 storybook:test",
+    "test:storybook": "pnpm -r --workspace-concurrency=1 test:storybook",
     "test": "pnpm -r test",
     "test:update": "pnpm -r test:update"
   },

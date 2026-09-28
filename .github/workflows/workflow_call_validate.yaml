@@ -34,6 +34,6 @@ jobs:
       - name: Run tests
         run: pnpm test
       - name: Run storybook tests
-        run: pnpm storybook:test
+        run: pnpm test:storybook
       - name: Run build
         run: pnpm build

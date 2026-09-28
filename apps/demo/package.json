@@ -53,7 +53,7 @@
     "preview": "vite preview",
     "storybook": "pnpm lingui:compile && storybook dev",
     "storybook:build": "pnpm lingui:compile && storybook build",
-    "storybook:test": "pnpm exec playwright install chromium && pnpm lingui:compile && pnpm vitest:run --project=storybook/test",
+    "test:storybook": "pnpm exec playwright install chromium && pnpm lingui:compile && pnpm vitest:run --project=storybook/test",
     "test": "pnpm lingui:compile && pnpm vitest:run --project=unit/*",
     "test:update": "pnpm lingui:compile && pnpm vitest:run -u --project=unit/*",
     "test:watch": "pnpm vitest:run --watch --project=unit/*",

@@ -73,7 +73,7 @@
     "lint:fix": "cross-env ESLINT_USE_FLAT_CONFIG=false eslint . --fix",
     "storybook": "storybook dev",
     "storybook:build": "storybook build",
-    "storybook:test": "pnpm exec playwright install chromium && pnpm vitest:run --project=storybook/test",
+    "test:storybook": "pnpm exec playwright install chromium && pnpm vitest:run --project=storybook/test",
     "test": "pnpm vitest:run --project=unit/*",
     "test:update": "pnpm vitest:run -u --project=unit/*",
     "test:watch": "pnpm vitest:run --watch --project=unit/*",
