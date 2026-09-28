@@ -3,7 +3,7 @@
     "vite": "catalog:"
   },
   "license": "MIT",
-  "main": "index.ts",
+  "main": "src/index.ts",
   "name": "@strictly/support-vite",
   "scripts": {
     "check-types": "tsc -b",

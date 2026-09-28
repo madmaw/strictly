@@ -26,6 +26,7 @@
     "types"
   ],
   "license": "MIT",
+  "main": "src/index.ts",
   "name": "@strictly/spec",
   "publishConfig": {
     "access": "public"

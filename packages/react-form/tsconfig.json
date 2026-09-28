@@ -1,16 +1,15 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
+    "baseUrl": "./src",
     "outDir": "./.out"
   },
   "extends": "../../tsconfig.json",
   "include": [
-    "**/*.ts",
-    "**/*.tsx",
     ".storybook/**/*.ts",
     ".storybook/**/*.tsx",
     ".vitest/**/*.ts",
     "babel.config.cjs",
+    "src",
     "tsconfig.json"
 
   ],

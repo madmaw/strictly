@@ -4,7 +4,7 @@ import {
 } from 'tsup'
 
 export default defineConfig((options: Options) => ({
-  entry: ['index.ts'],
+  entry: ['src/index.ts'],
   tsconfig: './tsconfig.build.json',
   clean: false,
   dts: true,

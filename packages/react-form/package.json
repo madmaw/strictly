@@ -39,6 +39,7 @@
     "types"
   ],
   "license": "MIT",
+  "main": "src/index.ts",
   "name": "@strictly/react-form",
   "peerDependencies": {
     "@mantine/core": "^7.0.0 || ^8.0.0",
