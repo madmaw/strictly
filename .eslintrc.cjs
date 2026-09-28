@@ -446,7 +446,11 @@ module.exports = {
           {
             patterns: [
               {
-                group: ['@strictly/*/*'],
+                group: [
+                  '@strictly/*/*',
+                  // the lingui cli config cannot be exported from the package index as storybook would bundle the cli
+                  '!@strictly/lingui/config',
+                ],
                 message: 'you can\'t import subfolders from workspace packages, export the file in the package instead',
               },
             ],
@@ -497,7 +501,11 @@ module.exports = {
           {
             patterns: [
               {
-                group: ['@strictly/*/*'],
+                group: [
+                  '@strictly/*/*',
+                  // the lingui cli config cannot be exported from the package index as storybook would bundle the cli
+                  '!@strictly/lingui/config',
+                ],
                 message: 'you can\'t import subfolders from workspace packages, export the file in the package instead',
               },
             ],

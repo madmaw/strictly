@@ -18,6 +18,9 @@
   ],
   "references": [
     {
+      "path": "../../support/lingui"
+    },
+    {
       "path": "../../support/vite"
     },
     {
