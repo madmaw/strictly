@@ -1,8 +1,5 @@
 import { Card } from '@mantine/core'
-import {
-  type Meta,
-  type StoryObj,
-} from '@storybook/react-vite'
+import { type Meta, type StoryObj } from '@storybook/react-vite'
 import { MinimumStringLengthValidationErrorType } from '@strictly/define'
 import { PetFieldsView } from 'features/form/pet/PetFieldsView'
 import { action } from 'storybook/actions'
@@ -13,9 +10,7 @@ const Component = PetFieldsView
 function SpeciesComponent() {
   return (
     <Card>
-      <h1>
-        Species
-      </h1>
+      <h1>Species</h1>
     </Card>
   )
 }
@@ -84,17 +79,8 @@ export const Populated: Story = {
       '$.tags': {
         readonly: false,
         required: false,
-        value: [
-          '$.tags.0',
-          '$.tags.1',
-          '$.tags.2',
-        ],
-        listIndexToKey: [
-          0,
-          1,
-          2,
-          3,
-        ],
+        value: ['$.tags.0', '$.tags.1', '$.tags.2'],
+        listIndexToKey: [0, 1, 2, 3],
       },
       '$.tags.0': {
         readonly: false,
@@ -220,10 +206,7 @@ export const Errors: Story = {
         readonly: false,
         required: false,
         value: ['$.tags.0'],
-        listIndexToKey: [
-          0,
-          1000,
-        ],
+        listIndexToKey: [0, 1000],
       },
       '$.tags.0': {
         readonly: false,
@@ -280,17 +263,8 @@ export const Disabled: Story = {
       '$.tags': {
         readonly: true,
         required: false,
-        value: [
-          '$.tags.0',
-          '$.tags.1',
-          '$.tags.2',
-        ],
-        listIndexToKey: [
-          0,
-          1,
-          2,
-          4,
-        ],
+        value: ['$.tags.0', '$.tags.1', '$.tags.2'],
+        listIndexToKey: [0, 1, 2, 4],
       },
       '$.tags.0': {
         readonly: true,

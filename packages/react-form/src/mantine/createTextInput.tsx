@@ -1,31 +1,24 @@
+import { lookup } from '@strictly/base'
 import { type ErrorOfField } from 'types/ErrorOfField'
-import { type Fields } from 'types/Field'
+import { type Field, type Fields } from 'types/Field'
 import { type StringFieldsOfFields } from 'types/StringFieldsOfFields'
 import { createUnsafePartialObserverComponent } from 'util/Partial'
-import {
-  DefaultErrorRenderer,
-  type ErrorRenderer,
-} from './ErrorRenderer'
-import {
-  type MantineFieldComponent,
-  type MantineForm,
-} from './types'
+import { DefaultErrorRenderer, type ErrorRenderer } from './ErrorRenderer'
+import { type MantineFieldComponent, type MantineForm } from './types'
 
 export type TextInputTarget = Element & {
-  value: string,
+  value: string
 }
 
-export type SuppliedTextInputProps<
-  T extends TextInputTarget = TextInputTarget,
-> = Partial<{
-  name: string,
-  value: string | number | readonly string[] | undefined,
-  disabled: boolean,
-  required: boolean,
-  onChange: (e: React.ChangeEvent<T>) => void,
-  onFocus: (e: React.FocusEvent<T>) => void,
-  onBlur: (e: React.FocusEvent<T>) => void,
-  onKeyUp: (e: React.KeyboardEvent<T>) => void,
+export type SuppliedTextInputProps<T extends TextInputTarget = TextInputTarget> = Partial<{
+  name: string
+  value: string | number | readonly string[] | undefined
+  disabled: boolean
+  required: boolean
+  onChange: (e: React.ChangeEvent<T>) => void
+  onFocus: (e: React.FocusEvent<T>) => void
+  onBlur: (e: React.FocusEvent<T>) => void
+  onKeyUp: (e: React.KeyboardEvent<T>) => void
 }>
 
 export function createTextInput<
@@ -57,42 +50,33 @@ export function createTextInput<
   const propSource = ({
     ErrorRenderer = DefaultErrorRenderer,
   }: {
-    ErrorRenderer?: ErrorRenderer<ErrorOfField<F[K]>>,
+    ErrorRenderer?: ErrorRenderer<ErrorOfField<F[K]>>
   }) => {
-    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-    const field = this.fields[valuePath as string]
+    const field = lookup<string, Field>(this.fields, valuePath as string)
     if (field == null) {
-      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
       throw new Error(`invalid field ${valuePath as string}`)
     }
-    const {
-      readonly,
-      required,
-      value,
-      error,
-    } = field
+    const { readonly, required, value, error } = field
     return {
-      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
       name: valuePath as string,
       value,
       disabled: readonly,
       required,
-      error: error && <ErrorRenderer error={error} />,
+      error: error != null && <ErrorRenderer error={error} />,
       onChange,
       onFocus,
       onBlur,
       onKeyUp,
     }
   }
-  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
   return createUnsafePartialObserverComponent<
     typeof TextInput,
     SuppliedTextInputProps,
     { ErrorRenderer?: ErrorRenderer<ErrorOfField<F[K]>> },
     ['ErrorRenderer']
-  >(
-    TextInput,
-    propSource,
-    ['ErrorRenderer'],
-  ) as MantineFieldComponent<SuppliedTextInputProps, Props, ErrorOfField<F[K]>>
+  >(TextInput, propSource, ['ErrorRenderer']) as MantineFieldComponent<
+    SuppliedTextInputProps,
+    Props,
+    ErrorOfField<F[K]>
+  >
 }

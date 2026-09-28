@@ -5,11 +5,17 @@ import {
   UnreliableFieldConversionType,
 } from 'types/FieldConverters'
 
-export class IntegerToStringConverter<E, ValuePath extends string, Context>
-  implements TwoWayFieldConverter<number, string, E, ValuePath, Context>
-{
-  constructor(private readonly isNanError: E, private readonly base = 10) {
-  }
+export class IntegerToStringConverter<E, ValuePath extends string, Context> implements TwoWayFieldConverter<
+  number,
+  string,
+  E,
+  ValuePath,
+  Context
+> {
+  constructor(
+    private readonly isNanError: E,
+    private readonly base = 10,
+  ) {}
 
   convert(from: number): AnnotatedFieldConversion<string> {
     const value = Math.floor(from).toString()
@@ -21,18 +27,17 @@ export class IntegerToStringConverter<E, ValuePath extends string, Context>
   }
 
   revert(from: string): UnreliableFieldConversion<number, E> {
-    const value = parseInt(from, this.base)
+    const value = Number.parseInt(from, this.base)
     if (Number.isNaN(value)) {
       return {
         type: UnreliableFieldConversionType.Failure,
         error: this.isNanError,
         value: null,
       }
-    } else {
-      return {
-        type: UnreliableFieldConversionType.Success,
-        value,
-      }
+    }
+    return {
+      type: UnreliableFieldConversionType.Success,
+      value,
     }
   }
 }

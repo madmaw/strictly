@@ -1,21 +1,12 @@
 import { composeStories } from '@storybook/react-vite'
 import { toArray } from '@strictly/base'
-import {
-  fireEvent,
-  render,
-  type RenderResult,
-} from '@testing-library/react'
-import {
-  type Mock,
-  vi,
-} from 'vitest'
+import { fireEvent, render, type RenderResult } from '@testing-library/react'
+import { type Mock, vi } from 'vitest'
 import { TEXT_INPUT_LABEL } from './textInputConstants'
 import * as stories from './textInputHooks.stories'
 
 const composedStories = composeStories(stories)
-const {
-  Populated,
-} = composedStories
+const { Populated } = composedStories
 
 describe('mantine checkbox hooks', function () {
   it.each(toArray(composedStories))('renders %s', function (_name, Story) {
@@ -36,14 +27,14 @@ describe('mantine checkbox hooks', function () {
       onFieldFocus = vi.fn()
       onFieldBlur = vi.fn()
       onFieldSubmit = vi.fn()
-      wrapper = render((
+      wrapper = render(
         <Populated
           onFieldBlur={onFieldBlur}
           onFieldFocus={onFieldFocus}
           onFieldSubmit={onFieldSubmit}
           onFieldValueChange={onFieldValueChange}
-        />
-      ))
+        />,
+      )
       textInput = await wrapper.findByLabelText(TEXT_INPUT_LABEL)
     })
 
@@ -66,11 +57,7 @@ describe('mantine checkbox hooks', function () {
       expect(onFieldSubmit).toHaveBeenLastCalledWith('$')
     })
 
-    it.each([
-      'Tab',
-      'Space',
-      'x',
-    ])('does not fire submit event on %s', function (key) {
+    it.each(['Tab', 'Space', 'x'])('does not fire submit event on %s', function (key) {
       fireEvent.keyUp(textInput, {
         key,
       })

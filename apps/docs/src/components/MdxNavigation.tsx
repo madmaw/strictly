@@ -6,8 +6,8 @@ import { type ToAbsoluteUrl } from './toAbsoluteUrl'
 export type PageId = 'home' | 'base' | 'define' | 'react-form' | 'why'
 
 type PageMetadata = {
-  title: string,
-  path: string,
+  title: string
+  path: string
 }
 
 export const pagePaths: Record<PageId, PageMetadata> = {
@@ -34,9 +34,9 @@ export const pagePaths: Record<PageId, PageMetadata> = {
 }
 
 type NavigationBranch = {
-  slug: string,
-  text: string,
-  children: NavigationBranch[],
+  slug: string
+  text: string
+  children: NavigationBranch[]
 }
 
 export function MdxNavigation({
@@ -44,65 +44,45 @@ export function MdxNavigation({
   page,
   toAbsoluteUrl,
 }: {
-  headings: readonly MarkdownHeading[],
-  page: string,
-  toAbsoluteUrl: ToAbsoluteUrl,
+  headings: readonly MarkdownHeading[]
+  page: string
+  toAbsoluteUrl: ToAbsoluteUrl
 }) {
-  const branches = useMemo<readonly NavigationBranch[]>(function () {
-    return headings.reduce<NavigationBranch[]>(function (
-      acc,
-      {
-        depth,
-        slug,
-        text,
-      },
-    ) {
-      let branches = acc
-      while (depth > 1) {
-        const branch = branches[branches.length - 1]
-        if (branch != null) {
-          branches = branch.children
+  const branches = useMemo<readonly NavigationBranch[]>(
+    function () {
+      return headings.reduce<NavigationBranch[]>(function (acc, { depth, slug, text }) {
+        let branches = acc
+        while (depth > 1) {
+          const branch = branches.at(-1)
+          if (branch != null) {
+            branches = branch.children
+          }
+          depth--
         }
-        depth--
-      }
-      if (text !== 'Footnotes' && text !== '') {
-        ;(branches ?? acc).push({
-          slug,
-          text,
-          children: [],
-        })
-      }
-      return acc
-    }, [])
-  }, [headings])
+        if (text !== 'Footnotes' && text !== '') {
+          branches.push({
+            slug,
+            text,
+            children: [],
+          })
+        }
+        return acc
+      }, [])
+    },
+    [headings],
+  )
   return (
     <ul className={styles.root}>
-      {Object.entries(pagePaths).map(function ([
-        pageId,
-        {
-          title,
-          path: navPath,
-        },
-      ]) {
+      {Object.entries(pagePaths).map(function ([pageId, { title, path: navPath }]) {
         return (
-          <li
-            className={styles.root}
-            key={pageId}
-          >
-            {page === pageId
-              ? (
-                <span className={styles.current}>
-                  {title}
-                </span>
-              )
-              : (
-                <a
-                  className={styles.navItem}
-                  href={toAbsoluteUrl(navPath)}
-                >
-                  {title}
-                </a>
-              )}
+          <li className={styles.root} key={pageId}>
+            {page === pageId ? (
+              <span className={styles.current}>{title}</span>
+            ) : (
+              <a className={styles.navItem} href={toAbsoluteUrl(navPath)}>
+                {title}
+              </a>
+            )}
             {page === pageId && <MdxNavigationLayer branches={branches} />}
           </li>
         )
@@ -111,29 +91,16 @@ export function MdxNavigation({
   )
 }
 
-function MdxNavigationLayer({
-  branches,
-}: {
-  branches: readonly NavigationBranch[],
-}) {
+function MdxNavigationLayer({ branches }: { branches: readonly NavigationBranch[] }) {
   if (branches.length === 0) {
     return null
   }
   return (
-    <ul
-      className={styles.branch}
-    >
-      {branches.map(function ({
-        children,
-        slug,
-        text,
-      }) {
+    <ul className={styles.branch}>
+      {branches.map(function ({ children, slug, text }) {
         return (
           <li key={slug}>
-            <a
-              className={styles.navItem}
-              href={`#${slug}`}
-            >
+            <a className={styles.navItem} href={`#${slug}`}>
               {text}
             </a>
             <MdxNavigationLayer branches={children} />

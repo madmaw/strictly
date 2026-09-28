@@ -4,14 +4,8 @@ import {
   type MergedOfFieldAdaptersWithTwoWayConverter,
   mergeFieldAdaptersWithTwoWayConverter,
 } from 'core/mobx/mergeFieldAdaptersWithTwoWayConverter'
-import {
-  annotatedIdentityConverter,
-  unreliableIdentityConverter,
-} from 'field_converters/identityConverter'
-import {
-  type TwoWayFieldConverter,
-  UnreliableFieldConversionType,
-} from 'types/FieldConverters'
+import { annotatedIdentityConverter, unreliableIdentityConverter } from 'field-converters/identityConverter'
+import { type TwoWayFieldConverter, UnreliableFieldConversionType } from 'types/FieldConverters'
 import {
   createMockedAdapter,
   createMockTwoWayFieldConverter,
@@ -27,16 +21,16 @@ const context = Symbol()
 
 describe('MergedOfFieldAdapterWithTwoWayConverter', function () {
   type T = {
-    readonly x: FieldAdapter<boolean, string, typeof error1, 'x', typeof context>,
-    readonly y: FieldAdapter<number, boolean, typeof error2, 'y', typeof context>,
-    readonly z: FieldAdapter<string, number, typeof error3, 'z', typeof context>,
+    readonly x: FieldAdapter<boolean, string, typeof error1, 'x', typeof context>
+    readonly y: FieldAdapter<number, boolean, typeof error2, 'y', typeof context>
+    readonly z: FieldAdapter<string, number, typeof error3, 'z', typeof context>
   }
   type M = MergedOfFieldAdaptersWithTwoWayConverter<T, typeof error4, typeof context>
 
   type C = {
-    readonly x: FieldAdapter<boolean, string, typeof error1 | typeof error4, 'x', typeof context>,
-    readonly y: FieldAdapter<number, boolean, typeof error2 | typeof error4, 'y', typeof context>,
-    readonly z: FieldAdapter<string, number, typeof error3 | typeof error4, 'z', typeof context>,
+    readonly x: FieldAdapter<boolean, string, typeof error1 | typeof error4, 'x', typeof context>
+    readonly y: FieldAdapter<number, boolean, typeof error2 | typeof error4, 'y', typeof context>
+    readonly z: FieldAdapter<string, number, typeof error3 | typeof error4, 'z', typeof context>
   }
 
   it('merges the errors', function () {
@@ -54,12 +48,8 @@ const originalConverter: TwoWayFieldConverter<any, any, typeof error4, string, t
 }
 
 describe('mergeFieldAdaptersWithTwoWayConverter', function () {
-  const integerAdapter = createMockedAdapter(
-    originalIntegerAdapter,
-  )
-  const booleanAdapter = createMockedAdapter(
-    originalBooleanAdapter,
-  )
+  const integerAdapter = createMockedAdapter(originalIntegerAdapter)
+  const booleanAdapter = createMockedAdapter(originalBooleanAdapter)
 
   beforeEach(function () {
     resetMockAdapter(originalIntegerAdapter, integerAdapter)
@@ -91,9 +81,11 @@ describe('mergeFieldAdaptersWithTwoWayConverter', function () {
         })
 
         it('returns the same value on convert', function () {
-          expect(result).toEqual(expect.objectContaining({
-            value: true,
-          }))
+          expect(result).toEqual(
+            expect.objectContaining({
+              value: true,
+            }),
+          )
         })
 
         it('calls the mocked converter', function () {
@@ -119,10 +111,12 @@ describe('mergeFieldAdaptersWithTwoWayConverter', function () {
         })
 
         it('returns the same value on revert', function () {
-          expect(result).toEqual(expect.objectContaining({
-            value: true,
-            type: UnreliableFieldConversionType.Success,
-          }))
+          expect(result).toEqual(
+            expect.objectContaining({
+              value: true,
+              type: UnreliableFieldConversionType.Success,
+            }),
+          )
         })
 
         it('calls the mocked converter', function () {

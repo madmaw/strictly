@@ -10,11 +10,7 @@ describe('flattenValidationsOfType', function () {
         $: () => 'error',
       }
 
-      const errors = flattenValidationErrorsOfType<
-        typeof type,
-        ValueToTypePathsOfType<typeof type>,
-        typeof validators
-      >(
+      const errors = flattenValidationErrorsOfType<typeof type, ValueToTypePathsOfType<typeof type>, typeof validators>(
         type,
         'a',
         validators,
@@ -30,11 +26,7 @@ describe('flattenValidationsOfType', function () {
         $: () => null,
       }
 
-      const errors = flattenValidationErrorsOfType<
-        typeof type,
-        ValueToTypePathsOfType<typeof type>,
-        typeof validators
-      >(
+      const errors = flattenValidationErrorsOfType<typeof type, ValueToTypePathsOfType<typeof type>, typeof validators>(
         type,
         'a',
         validators,

@@ -18,22 +18,17 @@
 // defining types
 
 export type Type<T extends TypeDef = TypeDef> = {
-  readonly definition: T,
+  readonly definition: T
 }
 
-export type TypeDef =
-  | LiteralTypeDef
-  | ListTypeDef
-  | RecordTypeDef
-  | ObjectTypeDef
-  | UnionTypeDef
+export type TypeDef = LiteralTypeDef | ListTypeDef | RecordTypeDef | ObjectTypeDef | UnionTypeDef
 
 export enum TypeDefType {
   Literal = 1,
-  List,
-  Record,
-  Object,
-  Union,
+  List = 2,
+  Record = 3,
+  Object = 4,
+  Union = 5,
 }
 
 // used to avoid TS complaining about circular references
@@ -43,17 +38,15 @@ type AnyTypeDef = any
 // literal
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type LiteralTypeDef<V = any> = {
-  readonly type: TypeDefType.Literal,
-  readonly valuePrototype: [V],
+  readonly type: TypeDefType.Literal
+  readonly valuePrototype: [V]
 }
 
 // list
-export type ListTypeDef<
-  E extends TypeDef = AnyTypeDef,
-> = {
-  readonly type: TypeDefType.List,
+export type ListTypeDef<E extends TypeDef = AnyTypeDef> = {
+  readonly type: TypeDefType.List
   // readonly is inherited by the output
-  readonly elements: E,
+  readonly elements: E
 }
 
 // map
@@ -66,11 +59,11 @@ export type RecordTypeDef<
   // if `V` includes `undefined` the map is partial
   V extends TypeDef | undefined = AnyTypeDef,
 > = {
-  readonly type: TypeDefType.Record,
+  readonly type: TypeDefType.Record
   // never actually populate
-  readonly keyPrototype: K,
+  readonly keyPrototype: K
   // readonly is inherited by the output
-  readonly valueTypeDef: V,
+  readonly valueTypeDef: V
 }
 
 // object type
@@ -80,18 +73,16 @@ export type ObjectFieldKey = string
 // NOTE we use the `readonly` and `?` (partial) status of these field definitions
 // to describe the same attributes of the fields
 export type ObjectTypeDefFields = {
-  [Key: ObjectFieldKey]: AnyTypeDef,
+  [Key: ObjectFieldKey]: AnyTypeDef
 }
 
 // NOTE: we cannot collapse this type to
 // `StructuredTypeDef = StructuredTypeDefFields`
 // as we rely on the `fields` field being unique to discriminate between different
 // TypeDefs
-export type ObjectTypeDef<
-  Fields extends ObjectTypeDefFields = ObjectTypeDefFields,
-> = {
-  readonly type: TypeDefType.Object,
-  readonly fields: Fields,
+export type ObjectTypeDef<Fields extends ObjectTypeDefFields = ObjectTypeDefFields> = {
+  readonly type: TypeDefType.Object
+  readonly fields: Fields
 }
 
 export type UnionKey = string
@@ -100,7 +91,7 @@ export type UnionTypeDef<
   D extends string | null = string | null,
   U extends Readonly<Record<UnionKey, AnyTypeDef>> = Readonly<Record<UnionKey, AnyTypeDef>>,
 > = {
-  readonly discriminator: D,
-  readonly type: TypeDefType.Union,
-  readonly unions: U,
+  readonly discriminator: D
+  readonly type: TypeDefType.Union
+  readonly unions: U
 }

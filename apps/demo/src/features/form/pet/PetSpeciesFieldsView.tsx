@@ -1,33 +1,22 @@
 import { t } from '@lingui/core/macro'
-import {
-  Group,
-  Stack,
-} from '@mantine/core'
+import { Group, Stack } from '@mantine/core'
 import { toArray } from '@strictly/base'
-import {
-  type FieldsViewProps,
-  useMantineFormFields,
-} from '@strictly/react-form'
+import { type FieldsViewProps, useMantineFormFields } from '@strictly/react-form'
 import { type ComponentType } from 'react'
 import { type PetFields } from './fields'
-import {
-  type Species,
-} from './types'
+import { type Species } from './types'
 
-export function SpeciesLabel() {
+export function speciesLabel() {
   return t({
     message: 'Species',
     comment: 'label for species field',
   })
 }
 
-export type PetSpeciesFormFields = Pick<
-  PetFields,
-  '$.species'
->
+export type PetSpeciesFormFields = Pick<PetFields, '$.species'>
 
 export type PetSpeciesFieldsViewProps = FieldsViewProps<PetSpeciesFormFields> & {
-  speciesComponents: Record<Species, ComponentType>,
+  speciesComponents: Record<Species, ComponentType>
 }
 
 const SPECIES_NAMES: Record<Species, () => string> = {
@@ -44,34 +33,19 @@ const SPECIES_NAMES: Record<Species, () => string> = {
 }
 
 export function PetSpeciesFormFieldsView(props: PetSpeciesFieldsViewProps) {
-  const {
-    speciesComponents,
-    fields,
-  } = props
+  const { speciesComponents, fields } = props
   const form = useMantineFormFields(props)
   const SpeciesRadioGroup = form.radioGroup('$.species')
   const speciesValue = fields['$.species'].value
   const SpeciesComponent = speciesValue && speciesComponents[speciesValue]
   return (
     <Stack>
-      <SpeciesRadioGroup label={SpeciesLabel()}>
+      <SpeciesRadioGroup label={speciesLabel()}>
         <Group>
-          {toArray(
-            SPECIES_NAMES,
-          ).map(
-            function ([
-              value,
-              displayName,
-            ]) {
-              const SpeciesRadio = form.radio('$.species', value)
-              return (
-                <SpeciesRadio
-                  key={value}
-                  label={displayName()}
-                />
-              )
-            },
-          )}
+          {toArray(SPECIES_NAMES).map(function ([value, displayName]) {
+            const SpeciesRadio = form.radio('$.species', value)
+            return <SpeciesRadio key={value} label={displayName()} />
+          })}
         </Group>
       </SpeciesRadioGroup>
       {SpeciesComponent && <SpeciesComponent />}

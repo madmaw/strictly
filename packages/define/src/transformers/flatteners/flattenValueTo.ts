@@ -1,7 +1,4 @@
-import {
-  reduce,
-  UnreachableError,
-} from '@strictly/base'
+import { lookup, reduce, UnreachableError } from '@strictly/base'
 import { type ReadonlyTypeOfType } from 'types/ReadonlyTypeOfType'
 import {
   type StrictListTypeDef,
@@ -11,12 +8,9 @@ import {
   type StrictTypeDef,
   type StrictUnionTypeDef,
 } from 'types/StrictType'
-import {
-  type TypeDef,
-  TypeDefType,
-  type UnionTypeDef,
-} from 'types/Type'
+import { type TypeDef, TypeDefType, type UnionTypeDef } from 'types/Type'
 import { type ValueOfType } from 'types/ValueOfType'
+import { valuePrototypeOf } from 'types/valuePrototypeOf'
 import { jsonPath } from './jsonPath'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -31,11 +25,13 @@ export type Mapper<R> = (
   valuePath: string,
 ) => R
 
-export function flattenValueTo<
-  T extends StrictType,
-  M,
-  R extends Readonly<Record<string, M>>,
->(
+type FlattenContext<M> = {
+  readonly mapper: Mapper<M>
+  readonly r: Record<string, M>
+  readonly listIndicesToKeys: Record<string, number[]>
+}
+
+export function flattenValueTo<T extends StrictType, M, R extends Readonly<Record<string, M>>>(
   { definition }: T,
   v: ValueOfType<ReadonlyTypeOfType<T>>,
   setter: Setter<ValueOfType<T>>,
@@ -46,17 +42,11 @@ export function flattenValueTo<
   listIndicesToKeys: Record<string, number[]> = {},
 ): R {
   const r: Record<string, AnyValueType> = {}
-  internalFlattenValue(
-    '$',
-    '$',
-    definition,
-    v,
-    setter,
+  internalFlattenValue('$', '$', definition, v, setter, {
     mapper,
     r,
     listIndicesToKeys,
-  )
-  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+  })
   return r as R
 }
 
@@ -66,17 +56,14 @@ function internalFlattenValue<M>(
   typeDef: StrictTypeDef,
   v: AnyValueType,
   setter: Setter<AnyValueType>,
-  mapper: Mapper<M>,
-  r: Record<string, M>,
-  listIndicesToKeys: Record<string, number[]>,
+  context: FlattenContext<M>,
 ) {
-  r[valuePath] = mapper(typeDef, v, setter, typePath, valuePath)
+  context.r[valuePath] = context.mapper(typeDef, v, setter, typePath, valuePath)
   // assume undefined means the field is optional and not populated
   // TODO: actually capture if field is optional in typedef (or in builder for creating validator)
-  if (v !== undefined) {
-    return internalFlattenValueChildren(valuePath, typePath, typeDef, v, mapper, r, listIndicesToKeys)
+  if (v != null) {
+    internalFlattenValueChildren(valuePath, typePath, typeDef, v, context)
   }
-  return r
 }
 
 function internalFlattenValueChildren<M>(
@@ -84,22 +71,24 @@ function internalFlattenValueChildren<M>(
   typePath: string,
   typeDef: StrictTypeDef,
   v: AnyValueType,
-  mapper: Mapper<M>,
-  r: Record<string, M>,
-  listIndicesToKeys: Record<string, number[]>,
+  context: FlattenContext<M>,
 ) {
   switch (typeDef.type) {
     case TypeDefType.Literal:
       // no children
-      return r
+      break
     case TypeDefType.List:
-      return internalFlattenListChildren(valuePath, typePath, typeDef, v, mapper, r, listIndicesToKeys)
+      internalFlattenListChildren(valuePath, typePath, typeDef, v, context)
+      break
     case TypeDefType.Record:
-      return internalFlattenRecordChildren(valuePath, typePath, typeDef, v, mapper, r, listIndicesToKeys)
+      internalFlattenRecordChildren(valuePath, typePath, typeDef, v, context)
+      break
     case TypeDefType.Object:
-      return internalFlattenObjectChildren(valuePath, typePath, typeDef, v, mapper, r, listIndicesToKeys)
+      internalFlattenObjectChildren(valuePath, typePath, typeDef, v, context)
+      break
     case TypeDefType.Union:
-      return internalFlattenUnionChildren(valuePath, typePath, typeDef, v, mapper, r, listIndicesToKeys)
+      internalFlattenUnionChildren(valuePath, typePath, typeDef, v, context)
+      break
     default:
       throw new UnreachableError(typeDef)
   }
@@ -110,25 +99,25 @@ function internalFlattenListChildren<M>(
   typePath: string,
   { elements }: StrictListTypeDef,
   v: AnyValueType[],
-  mapper: Mapper<M>,
-  r: Record<string, M>,
-  listIndicesToKeys: Record<string, number[]>,
+  context: FlattenContext<M>,
 ) {
-  let indicesToKeys = listIndicesToKeys[valuePath]
+  const { listIndicesToKeys } = context
+  let indicesToKeys = lookup(listIndicesToKeys, valuePath)
   if (indicesToKeys == null) {
     indicesToKeys = [0]
     listIndicesToKeys[valuePath] = indicesToKeys
   }
+  const keys = indicesToKeys
 
   const newTypePath = jsonPath(typePath, '*')
-  return v.reduce(function (r, e, index) {
-    const key = indicesToKeys[index]
+  v.forEach(function (e, index) {
+    const key = keys[index]
     // we have consumed the next id passively
-    if (index === indicesToKeys.length - 1) {
+    if (index === keys.length - 1) {
       // we have consumed the next key, so we need to add a new one
-      indicesToKeys.push(key + 1)
+      keys.push(key + 1)
     }
-    return internalFlattenValue(
+    internalFlattenValue(
       jsonPath(valuePath, key),
       newTypePath,
       elements,
@@ -136,11 +125,9 @@ function internalFlattenListChildren<M>(
       (e: AnyValueType) => {
         v[index] = e
       },
-      mapper,
-      r,
-      listIndicesToKeys,
+      context,
     )
-  }, r)
+  })
 }
 
 function internalFlattenRecordChildren<M>(
@@ -148,29 +135,21 @@ function internalFlattenRecordChildren<M>(
   typePath: string,
   { valueTypeDef }: StrictRecordTypeDef,
   v: Record<string, AnyValueType>,
-  mapper: Mapper<M>,
-  r: Record<string, M>,
-  listIndicesToKeys: Record<string, number[]>,
-): Record<string, M> {
+  context: FlattenContext<M>,
+) {
   const newTypePath = jsonPath(typePath, '*')
-  return reduce(
-    v,
-    function (r, k, value) {
-      return internalFlattenValue(
-        jsonPath(valuePath, k),
-        newTypePath,
-        valueTypeDef,
-        value,
-        (value: AnyValueType) => {
-          v[k] = value
-        },
-        mapper,
-        r,
-        listIndicesToKeys,
-      )
-    },
-    r,
-  )
+  Object.keys(v).forEach(function (k) {
+    internalFlattenValue(
+      jsonPath(valuePath, k),
+      newTypePath,
+      valueTypeDef,
+      v[k],
+      (value: AnyValueType) => {
+        v[k] = value
+      },
+      context,
+    )
+  })
 }
 
 function internalFlattenObjectChildren<M>(
@@ -178,29 +157,22 @@ function internalFlattenObjectChildren<M>(
   typePath: string,
   { fields }: StrictObjectTypeDef,
   v: Record<string, AnyValueType>,
-  mapper: Mapper<M>,
-  r: Record<string, M>,
-  listIndicesToKeys: Record<string, number[]>,
-): Record<string, M> {
-  return reduce(
-    fields,
-    function (r, k, fieldTypeDef) {
-      const fieldValue = v[k]
-      return internalFlattenValue(
-        jsonPath(valuePath, k),
-        jsonPath(typePath, k),
-        fieldTypeDef,
-        fieldValue,
-        (value: AnyValueType) => {
-          v[k] = value
-        },
-        mapper,
-        r,
-        listIndicesToKeys,
-      )
-    },
-    r,
-  )
+  context: FlattenContext<M>,
+) {
+  Object.keys(fields).forEach(function (k) {
+    const fieldTypeDef = fields[k]
+    const fieldValue = v[k]
+    internalFlattenValue(
+      jsonPath(valuePath, k),
+      jsonPath(typePath, k),
+      fieldTypeDef,
+      fieldValue,
+      (value: AnyValueType) => {
+        v[k] = value
+      },
+      context,
+    )
+  })
 }
 
 function internalFlattenUnionChildren<M>(
@@ -208,28 +180,20 @@ function internalFlattenUnionChildren<M>(
   typePath: string,
   typeDef: StrictUnionTypeDef,
   v: AnyValueType,
-  mapper: Mapper<M>,
-  r: Record<string, M>,
-  listIndicesToKeys: Record<string, number[]>,
-): AnyValueType {
+  context: FlattenContext<M>,
+) {
   const childTypeDef = getUnionTypeDef(typeDef, v)
-  const qualifier = typeDef.discriminator != null ? `:${v[typeDef.discriminator]}` : ''
-  return internalFlattenValueChildren(
-    `${valuePath}${qualifier}`,
-    `${typePath}${qualifier}`,
-    childTypeDef,
-    v,
-    mapper,
-    r,
-    listIndicesToKeys,
-  )
+  const qualifier = typeDef.discriminator == null ? '' : `:${v[typeDef.discriminator]}`
+  internalFlattenValueChildren(`${valuePath}${qualifier}`, `${typePath}${qualifier}`, childTypeDef, v, context)
 }
 
 export function getUnionTypeDef<T extends UnionTypeDef>(
   typeDef: T,
-  v: ValueOfType<ReadonlyTypeOfType<{
-    definition: T,
-  }>>,
+  v: ValueOfType<
+    ReadonlyTypeOfType<{
+      definition: T
+    }>
+  >,
 ) {
   if (typeDef.discriminator == null) {
     // find either a literal who's prototype we match, or assume that
@@ -237,14 +201,13 @@ export function getUnionTypeDef<T extends UnionTypeDef>(
     return reduce<string, TypeDef, null | TypeDef>(
       typeDef.unions,
       function (acc, _k, t) {
-        if (t.type === TypeDefType.Literal && t.valuePrototype) {
-          if (t.valuePrototype.indexOf(v) >= 0) {
-            return t
-          }
-        } else {
+        const valuePrototype = t.type === TypeDefType.Literal ? valuePrototypeOf(t) : null
+        if (valuePrototype == null) {
           if (acc == null) {
             return t
           }
+        } else if (valuePrototype.includes(v)) {
+          return t
         }
         return acc
       },

@@ -1,32 +1,14 @@
-import {
-  reduce,
-  UnreachableError,
-} from '@strictly/base'
-import {
-  type IObservableFactory,
-  observable,
-} from 'mobx'
+import { reduce, UnreachableError } from '@strictly/base'
+import { type IObservableFactory, observable } from 'mobx'
 import { getUnionTypeDef } from 'transformers/flatteners/flattenValueTo'
 import { type MobxValueOfType } from 'types/MobxValueOfType'
 import { type ReadonlyTypeOfType } from 'types/ReadonlyTypeOfType'
-import {
-  type StrictType,
-  type StrictTypeDef,
-} from 'types/StrictType'
-import {
-  type ObjectFieldKey,
-  TypeDefType,
-} from 'types/Type'
+import { type StrictType, type StrictTypeDef } from 'types/StrictType'
+import { type ObjectFieldKey, TypeDefType } from 'types/Type'
 import { type ValueOfType } from 'types/ValueOfType'
-import {
-  type AnyValueType,
-  copyTo,
-} from './copyTo'
+import { type AnyValueType, copyTo } from './copyTo'
 
-function observeValue(
-  v: AnyValueType,
-  def: StrictTypeDef,
-): AnyValueType {
+function observeValue(v: AnyValueType, def: StrictTypeDef): AnyValueType {
   if (v == null) {
     return v
   }
@@ -35,7 +17,7 @@ function observeValue(
       return v
     case TypeDefType.List:
       // can't work out that an observable array is an array
-      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-explicit-any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return observable.array(v as any[], { deep: false }) as any
     case TypeDefType.Record:
       // observable observes all fields
@@ -53,11 +35,9 @@ function observeValue(
         reduce(
           def.fields,
           function (acc, k) {
-            // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-            acc[k as ObjectFieldKey] = observable
+            acc[k] = observable
             return acc
           },
-          // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
           {} as Record<ObjectFieldKey, IObservableFactory>,
         ),
         {
@@ -72,9 +52,6 @@ function observeValue(
   }
 }
 
-export function mobxCopy<T extends StrictType>(
-  t: T,
-  proto: ValueOfType<ReadonlyTypeOfType<T>>,
-): MobxValueOfType<T> {
+export function mobxCopy<T extends StrictType>(t: T, proto: ValueOfType<ReadonlyTypeOfType<T>>): MobxValueOfType<T> {
   return copyTo(t, proto, observeValue)
 }

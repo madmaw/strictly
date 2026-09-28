@@ -1,8 +1,5 @@
 import { type Reverse } from '@strictly/base'
-import {
-  list,
-  numberType,
-} from 'types/builders'
+import { list, numberType } from 'types/builders'
 import { type FlattenedValidatorsOfValidatingType } from 'types/FlattenedValidatorsOfValidatingType'
 import { type ValueToTypePathsOfType } from 'types/ValueToTypePathsOfType'
 import { type Validator } from 'validation/validator'
@@ -18,7 +15,7 @@ describe('FlattenedValidatorsOfValidatingType', function () {
     >
 
     type C = {
-      readonly $: Validator<number, 'a', '$', number>,
+      readonly $: Validator<number, 'a', '$', number>
     }
 
     it('equals expected type', function () {
@@ -36,8 +33,8 @@ describe('FlattenedValidatorsOfValidatingType', function () {
     type T = FlattenedValidatorsOfValidatingType<typeof listType, Reverse<ValueToTypePathsOfType<typeof listType>>>
 
     type C = {
-      readonly $: Validator<readonly number[], 'X', '$', { a: number }>,
-      readonly '$.*': Validator<number, 'Y', `$.${number}`, { b: boolean }>,
+      readonly $: Validator<readonly number[], 'X', '$', { a: number }>
+      readonly '$.*': Validator<number, 'Y', `$.${number}`, { b: boolean }>
     }
 
     it('equals expected type', function () {

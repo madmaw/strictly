@@ -11,7 +11,6 @@ export type FieldAdaptersOfValues<
   Context = any,
 > = {
   readonly [
-    K in keyof FlattenedValues
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    K in keyof FlattenedValues // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ]: FieldAdapter<FlattenedValues[K], any, any, TypePathsToValuePaths[K], Context>
 }

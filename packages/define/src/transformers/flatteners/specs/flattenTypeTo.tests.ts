@@ -1,21 +1,7 @@
 import { flattenTypeTo } from 'transformers/flatteners/flattenTypeTo'
-import {
-  booleanType,
-  list,
-  nullType,
-  numberType,
-  object,
-  record,
-  union,
-} from 'types/builders'
-import {
-  type TypeDef,
-  TypeDefType,
-} from 'types/Type'
-import {
-  type Mock,
-  vi,
-} from 'vitest'
+import { booleanType, list, nullType, numberType, object, record, union } from 'types/builders'
+import { type TypeDef, TypeDefType } from 'types/Type'
+import { type Mock, vi } from 'vitest'
 
 describe('flattenTypeDefTo', function () {
   let toTypeDefType: Mock<(typeDef: TypeDef) => number>
@@ -68,9 +54,7 @@ describe('flattenTypeDefTo', function () {
     })
 
     it('equals expected type', function () {
-      expect(
-        flattened,
-      ).toEqual({
+      expect(flattened).toEqual({
         $: TypeDefType.Record,
         '$.*': TypeDefType.Literal,
       })
@@ -82,9 +66,7 @@ describe('flattenTypeDefTo', function () {
   })
 
   describe('object', function () {
-    const type = object()
-      .field('a', numberType)
-      .field('b', list(booleanType))
+    const type = object().field('a', numberType).field('b', list(booleanType))
     beforeEach(function () {
       flattened = flattenTypeTo(type, toTypeDefType)
     })
@@ -105,10 +87,7 @@ describe('flattenTypeDefTo', function () {
 
   describe('union', function () {
     describe('non-discriminated', function () {
-      const type = union()
-        .or('a', nullType)
-        .or('b', booleanType)
-        .or('c', numberType)
+      const type = union().or('a', nullType).or('b', booleanType).or('c', numberType)
       beforeEach(function () {
         flattened = flattenTypeTo(type, toTypeDefType)
       })
@@ -125,9 +104,7 @@ describe('flattenTypeDefTo', function () {
     })
 
     describe('discriminated', function () {
-      const type = union('d')
-        .or('a', object().field('a', booleanType))
-        .or('b', object().field('b', numberType))
+      const type = union('d').or('a', object().field('a', booleanType)).or('b', object().field('b', numberType))
       beforeEach(function () {
         flattened = flattenTypeTo(type, toTypeDefType)
       })

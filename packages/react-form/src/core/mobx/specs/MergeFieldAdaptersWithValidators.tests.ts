@@ -1,25 +1,13 @@
-import {
-  expectDefined,
-  expectEquals,
-} from '@strictly/base'
-import {
-  type AnnotatedValidator,
-  type FunctionalValidator,
-  type Validator,
-} from '@strictly/define'
+import { expectDefined, expectEquals } from '@strictly/base'
+import { type AnnotatedValidator, type FunctionalValidator, type Validator } from '@strictly/define'
 import { type FieldAdapter } from 'core/mobx/FieldAdapter'
-import {
-  identityAdapter,
-} from 'core/mobx/fieldAdapterBuilder'
+import { identityAdapter } from 'core/mobx/fieldAdapterBuilder'
 import {
   mergeAdaptersWithValidators,
   type MergedOfFieldAdaptersWithValidators,
 } from 'core/mobx/mergeFieldAdaptersWithValidators'
 import { UnreliableFieldConversionType } from 'types/FieldConverters'
-import {
-  createMockedAdapter,
-  resetMockAdapter,
-} from './fixtures'
+import { createMockedAdapter, resetMockAdapter } from './fixtures'
 
 const error1 = 'error 1'
 const error2 = 'error 2'
@@ -28,7 +16,7 @@ const context = 'context 1'
 describe('MergedOfFieldAdaptersWithValidators', function () {
   describe('empty validators', function () {
     type Adapters = {
-      readonly a: FieldAdapter<number, string, typeof error1, 'a', typeof context>,
+      readonly a: FieldAdapter<number, string, typeof error1, 'a', typeof context>
     }
     type Validators = {}
 
@@ -41,51 +29,51 @@ describe('MergedOfFieldAdaptersWithValidators', function () {
 
   describe('different errors', function () {
     type Adapters = {
-      readonly a: FieldAdapter<number, string, typeof error1, 'a', typeof context>,
+      readonly a: FieldAdapter<number, string, typeof error1, 'a', typeof context>
     }
     type Validators = {
-      readonly a: Validator<number, typeof error2, 'a', typeof context>,
+      readonly a: Validator<number, typeof error2, 'a', typeof context>
     }
 
     type Merged = MergedOfFieldAdaptersWithValidators<Adapters, Validators>
 
     it('merges the error types', function () {
       expectTypeOf<Merged>().toEqualTypeOf<{
-        readonly a: FieldAdapter<number, string, typeof error1 | typeof error2, 'a', typeof context>,
+        readonly a: FieldAdapter<number, string, typeof error1 | typeof error2, 'a', typeof context>
       }>()
     })
   })
 
   describe('different paths', function () {
     type Adapters = {
-      readonly a: FieldAdapter<number, string, typeof error1, string, typeof context>,
+      readonly a: FieldAdapter<number, string, typeof error1, string, typeof context>
     }
     type Validators = {
-      readonly a: Validator<number, typeof error2, 'a', typeof context>,
+      readonly a: Validator<number, typeof error2, 'a', typeof context>
     }
 
     type Merged = MergedOfFieldAdaptersWithValidators<Adapters, Validators>
 
     it('merges the error types', function () {
       expectTypeOf<Merged>().toEqualTypeOf<{
-        readonly a: FieldAdapter<number, string, typeof error1 | typeof error2, string, typeof context>,
+        readonly a: FieldAdapter<number, string, typeof error1 | typeof error2, string, typeof context>
       }>()
     })
   })
 
   describe('different values', function () {
     type Adapters = {
-      readonly a: FieldAdapter<number, string, typeof error1, 'a', typeof context>,
+      readonly a: FieldAdapter<number, string, typeof error1, 'a', typeof context>
     }
     type Validators = {
-      readonly a: Validator<boolean, typeof error2, 'a', typeof context>,
+      readonly a: Validator<boolean, typeof error2, 'a', typeof context>
     }
 
     type Merged = MergedOfFieldAdaptersWithValidators<Adapters, Validators>
 
     it('removes mismatched values', function () {
       expectTypeOf<Merged>().toEqualTypeOf<{
-        readonly a: never,
+        readonly a: never
       }>()
     })
   })
@@ -95,12 +83,8 @@ const originalIntegerToIntegerAdapter = identityAdapter(0)
 const originalBooleanToBooleanAdapter = identityAdapter(false, true)
 
 describe('mergeFieldAdaptersWithValidators', function () {
-  const integerToIntegerAdapter = createMockedAdapter(
-    originalIntegerToIntegerAdapter,
-  )
-  const booleanToBooleanAdapter = createMockedAdapter(
-    originalBooleanToBooleanAdapter,
-  )
+  const integerToIntegerAdapter = createMockedAdapter(originalIntegerToIntegerAdapter)
+  const booleanToBooleanAdapter = createMockedAdapter(originalBooleanToBooleanAdapter)
 
   const failingValidator1 = vi.fn<FunctionalValidator>(function () {
     return 'fail 1'
@@ -165,27 +149,14 @@ describe('mergeFieldAdaptersWithValidators', function () {
 
       describe('matching validators', function () {
         it('has the same keys', function () {
-          expect([...Object.keys(adapters)]).toEqual([
-            'a',
-            'b',
-            'c',
-            'd',
-          ])
+          expect(Object.keys(adapters)).toEqual(['a', 'b', 'c', 'd'])
         })
       })
 
       describe('revert', function () {
         it.each([
-          [
-            'a',
-            'fail 1',
-            1,
-          ],
-          [
-            'b',
-            'fail 2',
-            true,
-          ],
+          ['a', 'fail 1', 1],
+          ['b', 'fail 2', true],
         ] as const)('field %s fails with validation %s', function (key, error, value) {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           const mergedAdapter: FieldAdapter<any, any, string, any> = merged[key]
@@ -196,14 +167,8 @@ describe('mergeFieldAdaptersWithValidators', function () {
         })
 
         it.each([
-          [
-            'c',
-            1,
-          ],
-          [
-            'd',
-            true,
-          ],
+          ['c', 1],
+          ['d', true],
         ] as const)('field %s succeeds with value %s', function (key, value) {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           const mergedAdapter: FieldAdapter<any, any, string, any> = merged[key]
@@ -216,39 +181,16 @@ describe('mergeFieldAdaptersWithValidators', function () {
 
       describe('convert', function () {
         it.each([
-          [
-            'a',
-            false,
-            false,
-            1,
-          ],
-          [
-            'b',
-            true,
-            false,
-            true,
-          ],
-          [
-            'c',
-            true,
-            false,
-            2,
-          ],
-          [
-            'd',
-            false,
-            true,
-            3,
-          ],
+          ['a', false, false, 1],
+          ['b', true, false, true],
+          ['c', true, false, 2],
+          ['d', false, true, 3],
         ] as const)(
           'field %s is required %s and readonly %s',
           function (key, expectedRequired, expectedReadonly, value) {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const adapter: FieldAdapter<any, any, string, any> = merged[key]
-            const {
-              required,
-              readonly,
-            } = adapter.convert(value, key, null)
+            const { required, readonly } = adapter.convert(value, key, null)
             expect(required).toEqual(expectedRequired)
             expect(readonly).toEqual(expectedReadonly)
           },

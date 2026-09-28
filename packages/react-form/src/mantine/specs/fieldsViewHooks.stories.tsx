@@ -1,26 +1,16 @@
-import {
-  Paper,
-  Stack,
-  Text,
-} from '@mantine/core'
-import {
-  type Meta,
-  type StoryObj,
-} from '@storybook/react-vite'
+import { Paper, Stack, Text } from '@mantine/core'
+import { type Meta, type StoryObj } from '@storybook/react-vite'
 import { type FieldsViewProps } from 'core/props'
 import { useMantineFormFields } from 'mantine/hooks'
-import {
-  useCallback,
-  useMemo,
-} from 'react'
+import { useCallback, useMemo } from 'react'
 import { action } from 'storybook/actions'
 import { type Field } from 'types/Field'
 
-export function ParentFieldLabel() {
+export function parentFieldLabel() {
   return '$'
 }
 
-export function SubFieldLabel() {
+export function subFieldLabel() {
   return '$ (child)'
 }
 
@@ -32,9 +22,9 @@ function SubFieldsView({
   onClickField: onClickFieldImpl,
   ...props
 }: FieldsViewProps<{
-  $: Field<string, string>,
+  $: Field<string, string>
 }> & {
-  onClickField: (valuePath: '$') => void,
+  onClickField: (valuePath: '$') => void
 }) {
   const form = useMantineFormFields(props)
   const TextInput = form.textInput('$')
@@ -43,11 +33,7 @@ function SubFieldsView({
   }, [onClickFieldImpl])
   return (
     <Stack>
-      <TextInput
-        ErrorRenderer={ErrorRenderer}
-        label={SubFieldLabel()}
-        onClick={onClick$}
-      />
+      <TextInput ErrorRenderer={ErrorRenderer} label={subFieldLabel()} onClick={onClick$} />
     </Stack>
   )
 }
@@ -56,44 +42,25 @@ function Component({
   onClickField: onClickFieldImpl,
   ...props
 }: FieldsViewProps<{
-  $: Field<string, string>,
-  '$.a': Field<string, string>,
+  $: Field<string, string>
+  '$.a': Field<string, string>
 }> & {
-  onClickField: (valuePath: '$' | '$.a') => void,
+  onClickField: (valuePath: '$' | '$.a') => void
 }) {
   const form = useMantineFormFields(props)
-  const {
-    Component,
-    callbackMapper,
-  } = form.fieldsView('$.a', SubFieldsView)
+  const { Component, callbackMapper } = form.fieldsView('$.a', SubFieldsView)
   const TextInput = form.textInput('$')
   const onClick$ = useCallback(() => {
     onClickFieldImpl('$')
   }, [onClickFieldImpl])
 
-  const onClickChildField = useMemo(() => {
-    return callbackMapper(onClickFieldImpl)
-  }, [
-    onClickFieldImpl,
-    callbackMapper,
-  ])
+  const onClickChildField = useMemo(() => callbackMapper(onClickFieldImpl), [onClickFieldImpl, callbackMapper])
   return (
     <Stack>
-      <TextInput
-        ErrorRenderer={ErrorRenderer}
-        label={ParentFieldLabel()}
-        onClick={onClick$}
-      />
-      <Paper
-        p='sm'
-        withBorder={true}
-      >
-        <Text>
-          $.a
-        </Text>
-        <Component
-          onClickField={onClickChildField}
-        />
+      <TextInput ErrorRenderer={ErrorRenderer} label={parentFieldLabel()} onClick={onClick$} />
+      <Paper p='sm' withBorder>
+        <Text>$.a</Text>
+        <Component onClickField={onClickChildField} />
       </Paper>
     </Stack>
   )

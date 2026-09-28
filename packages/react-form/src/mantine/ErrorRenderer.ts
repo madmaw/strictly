@@ -3,13 +3,10 @@ import { type ErrorOfField } from 'types/ErrorOfField'
 import { type Fields } from 'types/Field'
 
 type InternalErrorRendererProps<E> = {
-  error: E,
+  error: E
 }
 
-export type ErrorRendererProps<
-  F extends Fields,
-  K extends keyof Fields,
-> = InternalErrorRendererProps<
+export type ErrorRendererProps<F extends Fields, K extends keyof Fields> = InternalErrorRendererProps<
   ErrorOfField<F[K]>
 >
 

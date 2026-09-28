@@ -1,23 +1,11 @@
-import {
-  Stack,
-} from '@mantine/core'
-import {
-  type Meta,
-  type StoryObj,
-} from '@storybook/react-vite'
+import { Stack } from '@mantine/core'
+import { type Meta, type StoryObj } from '@storybook/react-vite'
 import { type FieldsViewProps } from 'core/props'
-import {
-  type ErrorRenderer,
-} from 'mantine/ErrorRenderer'
+import { type ErrorRenderer } from 'mantine/ErrorRenderer'
 import { useMantineFormFields } from 'mantine/hooks'
 import { action } from 'storybook/actions'
 import { type Field } from 'types/Field'
-import {
-  RADIO_GROUP_LABEL,
-  RADIO_LABELS,
-  RADIO_VALUES,
-  type RadioValue,
-} from './radioGroupConstants'
+import { RADIO_GROUP_LABEL, RADIO_LABELS, RADIO_VALUES, type RadioValue } from './radioGroupConstants'
 
 function ErrorRenderer({ error }: { error: string }) {
   return `custom error ${error}`
@@ -26,27 +14,18 @@ function ErrorRenderer({ error }: { error: string }) {
 function Component({
   ...props
 }: FieldsViewProps<{
-  $: Field<RadioValue | null, string>,
+  $: Field<RadioValue | null, string>
 }>) {
   const form = useMantineFormFields(props)
   const RadioGroupComponent = form.radioGroup('$')
 
   return (
-    <RadioGroupComponent
-      ErrorRenderer={ErrorRenderer}
-      label={RADIO_GROUP_LABEL}
-    >
+    <RadioGroupComponent ErrorRenderer={ErrorRenderer} label={RADIO_GROUP_LABEL}>
       <Stack>
         {RADIO_VALUES.map(function (value: RadioValue) {
           const label = RADIO_LABELS[value]
           const RadioComponent = form.radio('$', value)
-          return (
-            <RadioComponent
-              ErrorRenderer={ErrorRenderer}
-              key={label}
-              label={label}
-            />
-          )
+          return <RadioComponent ErrorRenderer={ErrorRenderer} key={label} label={label} />
         })}
       </Stack>
     </RadioGroupComponent>

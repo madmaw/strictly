@@ -1,9 +1,5 @@
 import { defineConfig } from '@lingui/cli'
-import {
-  ALL_SUPPORTED_LOCALES,
-  LOCALE_EN,
-  LOCALE_PSEUDO_EN,
-} from './src/locales'
+import { ALL_SUPPORTED_LOCALES, LOCALE_EN, LOCALE_PSEUDO_EN } from './src/locales'
 
 export * from './src/locales'
 

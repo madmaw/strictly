@@ -1,25 +1,16 @@
-import {
-  assertExistsAndReturn,
-  type ElementOfArray,
-} from '@strictly/base'
-import {
-  type ComponentType,
-  Fragment,
-} from 'react'
+import { assertExistsAndReturn, type ElementOfArray } from '@strictly/base'
+import { type ComponentType, Fragment } from 'react'
 import { type Fields } from 'types/Field'
 import { type ListFieldsOfFields } from 'types/ListFieldsOfFields'
 import { type ValueTypeOfField } from 'types/ValueTypeOfField'
 import { createUnsafePartialObserverComponent } from 'util/Partial'
-import {
-  type MantineFieldComponent,
-  type MantineForm,
-} from './types'
+import { type MantineFieldComponent, type MantineForm } from './types'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type SuppliedListProps<Value = any, ListPath extends string = string> = {
-  values: readonly Value[],
-  indexKeys: number[],
-  listPath: ListPath,
+  values: readonly Value[]
+  indexKeys: number[]
+  listPath: ListPath
 }
 
 export function createList<
@@ -30,7 +21,7 @@ export function createList<
       valuePath: `${K}.${number}`,
       value: ElementOfArray<ValueTypeOfField<F[K]>>,
       index: number,
-    ) => React.ReactNode,
+    ) => React.ReactNode
   },
 >(
   this: MantineForm<F>,
@@ -49,44 +40,29 @@ export function createList<
   return createUnsafePartialObserverComponent(List, propSource)
 }
 
-export function DefaultList<
-  Value,
-  ListPath extends string,
->({
+export function DefaultList<Value, ListPath extends string>({
   values,
   indexKeys,
   listPath,
   children,
 }: SuppliedListProps<Value, ListPath> & {
-  children: (valuePath: `${ListPath}.${number}`, value: Value, index: number) => React.ReactNode,
+  children: (valuePath: `${ListPath}.${number}`, value: Value, index: number) => React.ReactNode
 }) {
   return (
     <>
-      {values.map(function (value, index) {
-        return [
-          value,
-          index,
-          indexKeys[index],
-        ] as const
-      }).filter(function ([
-        _value,
-        _index,
-        key,
-      ]) {
-        // omit entries without keys
-        return key != null
-      }).map(function ([
-        value,
-        index,
-        key,
-      ]) {
-        const valuePath: `${ListPath}.${number}` = `${listPath}.${key}`
-        return (
-          <Fragment key={valuePath}>
-            {children(valuePath, value, index)}
-          </Fragment>
-        )
-      })}
+      {values
+        .map(function (value, index) {
+          const key = indexKeys.at(index)
+          return [value, index, key] as const
+        })
+        .filter(function (entry): entry is readonly [Value, number, number] {
+          // omit entries without keys
+          return entry[2] != null
+        })
+        .map(function ([value, index, key]) {
+          const valuePath: `${ListPath}.${number}` = `${listPath}.${key}`
+          return <Fragment key={valuePath}>{children(valuePath, value, index)}</Fragment>
+        })}
     </>
   )
 }

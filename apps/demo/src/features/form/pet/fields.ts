@@ -25,10 +25,7 @@ import {
   trimmingStringAdapter,
 } from '@strictly/react-form'
 import { IsAliveTwoWayConverter } from './IsAliveFieldConverter'
-import {
-  petOwnerType,
-  unvalidatedPetOwnerFieldAdapters,
-} from './PetOwnerFieldsView'
+import { petOwnerType, unvalidatedPetOwnerFieldAdapters } from './PetOwnerFieldsView'
 import {
   catBreedType,
   type DogBreed,
@@ -43,51 +40,43 @@ import {
 
 export const TagAlreadyExistsErrorType = 'tag_already_exists'
 export type TagAlreadyExistsError = {
-  type: typeof TagAlreadyExistsErrorType,
-  value: string,
+  type: typeof TagAlreadyExistsErrorType
+  value: string
 }
 
-const petTypeValidators = flattenValidatorsOfValidatingTypeWithMutability<typeof petType, PetTypeToValuePaths>(
-  petType,
-)
+const petTypeValidators = flattenValidatorsOfValidatingTypeWithMutability<typeof petType, PetTypeToValuePaths>(petType)
 
 // want to assign it to a type
-// eslint-disable-next-line func-style
-const tagAlreadyExistsValidator: FunctionalValidator<string, TagAlreadyExistsError, '$.newTag',
-  { readonly tags: readonly string[] }> = (
-    value,
-    _path,
-    { tags },
-  ) => {
-    if (tags.indexOf(value) >= 0) {
-      return {
-        type: TagAlreadyExistsErrorType,
-        value,
-      }
+const tagAlreadyExistsValidator: FunctionalValidator<
+  string,
+  TagAlreadyExistsError,
+  '$.newTag',
+  { readonly tags: readonly string[] }
+> = (value, _path, { tags }) => {
+  if (tags.includes(value)) {
+    return {
+      type: TagAlreadyExistsErrorType,
+      value,
     }
-    return null
   }
+  return null
+}
 
 export const TagNotEmptyErrorType = 'tag_not_empty'
 export type TagNotEmptyError = {
-  type: typeof TagNotEmptyErrorType,
-  value: string,
+  type: typeof TagNotEmptyErrorType
+  value: string
 }
 
 // want to assign it to a type
-// eslint-disable-next-line func-style
-const tagNotEmptyErrorValidator: FunctionalValidator<string, TagNotEmptyError, '$.newTag'> = () => {
+const tagNotEmptyErrorValidator: FunctionalValidator<string, TagNotEmptyError, '$.newTag'> = () =>
   // placeholder error so we can inject an error of this type manually
-  return null
-}
+  null
 
 export const petValidators = {
   ...petTypeValidators,
   '$.newTag': mergeValidators(
-    mergeValidators(
-      new MinimumStringLengthValidator(2),
-      tagAlreadyExistsValidator,
-    ),
+    mergeValidators(new MinimumStringLengthValidator(2), tagAlreadyExistsValidator),
     tagNotEmptyErrorValidator,
   ),
 } as const
@@ -97,10 +86,7 @@ const rawPetFieldAdapters = {
   '$.alive': identityAdapter(false).narrow,
   '$.name': trimmingStringAdapter().narrow,
   '$.newTag': trimmingStringAdapter().narrow,
-  ...subFormFieldAdapters(
-    unvalidatedPetOwnerFieldAdapters,
-    '$.owner',
-  ),
+  ...subFormFieldAdapters(unvalidatedPetOwnerFieldAdapters, '$.owner'),
   '$.owner': adapterFromTwoWayConverter(
     new NullableToBooleanConverter(
       petOwnerType,
@@ -110,6 +96,7 @@ const rawPetFieldAdapters = {
         phoneNumber: '',
         email: '',
       },
+      // oxlint-disable-next-line no-undefined -- explicit undefined is the "no prototype" value
       undefined,
     ),
   ).narrow,
@@ -133,21 +120,15 @@ const rawPetFieldAdapters = {
   '$.species:cat.breed': adapterFromTwoWayConverter(
     new SelectStringConverter(
       catBreedType,
-      [
-        'Burmese',
-        'Siamese',
-        'DSH',
-      ] as const,
+      ['Burmese', 'Siamese', 'DSH'] as const,
+      // oxlint-disable-next-line no-undefined -- explicit undefined is the "no prototype" value
       undefined,
       NOT_A_BREED_ERROR,
     ),
   ).narrow,
   '$.species:cat.meows': identityAdapter(0).narrow,
-  '$.species:dog.barks': adapterFromPrototype(
-    new IntegerToStringConverter(NOT_A_NUMBER_ERROR),
-    0,
-  ).withIdentity(
-    v => typeof v === 'number',
+  '$.species:dog.barks': adapterFromPrototype(new IntegerToStringConverter(NOT_A_NUMBER_ERROR), 0).withIdentity(
+    (v) => typeof v === 'number',
   ).narrow,
   '$.species:dog.breed': adapterFromTwoWayConverter(
     new SelectLiteralConverter(
@@ -157,7 +138,7 @@ const rawPetFieldAdapters = {
         Pug: 'Pug',
         other: 'Other',
       },
-      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+      // oxlint-disable-next-line no-undefined -- explicit undefined is the "no prototype" value
       undefined as undefined | DogBreed,
       NOT_A_BREED_ERROR,
       false,
@@ -166,20 +147,13 @@ const rawPetFieldAdapters = {
   '$.tags': listAdapter<string, '$.tags', {}>().narrow,
   '$.tags.*': trimmingStringAdapter().narrow,
 } as const satisfies Partial<
-  FieldAdaptersOfValues<
-    FlattenedValuesOfType<ReadonlyTypeOfType<typeof petType>, '*'>,
-    PetTypeToValuePaths,
-    {}
-  > & {
+  FieldAdaptersOfValues<FlattenedValuesOfType<ReadonlyTypeOfType<typeof petType>, '*'>, PetTypeToValuePaths, {}> & {
     // TODO check list of existing tags in context
-    '$.newTag': FieldAdapter<string, string, TagAlreadyExistsError, '$.newTag', unknown>,
+    '$.newTag': FieldAdapter<string, string, TagAlreadyExistsError, '$.newTag', unknown>
   }
 >
 
-const validatedPetAdapters = mergeAdaptersWithValidators(
-  rawPetFieldAdapters,
-  petValidators,
-)
+const validatedPetAdapters = mergeAdaptersWithValidators(rawPetFieldAdapters, petValidators)
 export type PetTypePaths = keyof typeof rawPetFieldAdapters
 export type PetValuePaths = PetTypeToValuePaths[PetTypePaths]
 

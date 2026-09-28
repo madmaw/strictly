@@ -34,58 +34,43 @@ export type CatBreed = 'Burmese' | 'Siamese' | 'DSH'
 
 export const CatNameMustBeCapitalizedType = 'cat_names_must_be_capitalized'
 export type CatNameMustBeCapitalized = {
-  type: typeof CatNameMustBeCapitalizedType,
+  type: typeof CatNameMustBeCapitalizedType
 }
 // want to assign it to a type
-// eslint-disable-next-line func-style
-const catNameMustBeCapitalized: FunctionalValidator<string, CatNameMustBeCapitalized, string,
-  { readonly isCat: boolean }> = (
-    value,
-    _path,
-    { isCat },
-  ) => {
-    if (isCat && value[0] !== value[0].toUpperCase()) {
-      return {
-        type: CatNameMustBeCapitalizedType,
-      }
+const catNameMustBeCapitalized: FunctionalValidator<
+  string,
+  CatNameMustBeCapitalized,
+  string,
+  { readonly isCat: boolean }
+> = (value, _path, { isCat }) => {
+  const firstCharacter = value.charAt(0)
+  if (isCat && firstCharacter !== firstCharacter.toUpperCase()) {
+    return {
+      type: CatNameMustBeCapitalizedType,
     }
-    return null
   }
+  return null
+}
 
 export const dogBreedType = literal<DogBreed>()
   .required()
-  .enforce(definedValidator.validate.bind(definedValidator))
-  .narrow
+  .enforce(definedValidator.validate.bind(definedValidator)).narrow
 export const catBreedType = literal<CatBreed>()
   .required()
-  .enforce(definedValidator.validate.bind(definedValidator))
-  .narrow
+  .enforce(definedValidator.validate.bind(definedValidator)).narrow
 
 export const speciesType = union('type')
-  .or(
-    'dog',
-    object()
-      .field('barks', numberType.required())
-      .optionalField('breed', dogBreedType)
-      .readonly(),
-  )
-  .or(
-    'cat',
-    object()
-      .field('meows', numberType.required())
-      .optionalField('breed', catBreedType)
-      .readonly(),
-  ).narrow
+  .or('dog', object().field('barks', numberType.required()).optionalField('breed', dogBreedType).readonly())
+  .or('cat', object().field('meows', numberType.required()).optionalField('breed', catBreedType).readonly()).narrow
 
-export type Species = keyof typeof speciesType['definition']['unions']
+export type Species = keyof (typeof speciesType)['definition']['unions']
 
 export const petType = object()
   .field('name', stringType.enforce(minimumNameLengthValidator).enforce(catNameMustBeCapitalized))
   .field('alive', booleanType)
   .field('tags', list(stringType))
   .optionalField('owner', petOwnerType)
-  .readonlyField('species', speciesType)
-  .narrow
+  .readonlyField('species', speciesType).narrow
 
 export type TagValuePath = `$.tags.${number}`
 
@@ -93,7 +78,7 @@ export type MutablePet = ValueOfType<typeof petType>
 export type Pet = ValueOfType<ReadonlyTypeOfType<typeof petType>>
 export type FlattenedPetTypes = FlattenedTypesOfType<typeof petType, '*'>
 export type PetValueToTypePaths = ValueToTypePathsOfType<typeof petType> & {
-  '$.newTag': '$.newTag',
+  '$.newTag': '$.newTag'
 }
 export type FlattenedPetValues = FlattenedValuesOfType<typeof petType>
 export type FlattenedPetAccessors = FlattenedAccessorsOfType<typeof petType>

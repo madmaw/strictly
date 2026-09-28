@@ -1,9 +1,4 @@
-import {
-  copy,
-  type ReadonlyTypeOfType,
-  type Type,
-  type ValueOfType,
-} from '@strictly/define'
+import { copy, type ReadonlyTypeOfType, type Type, type ValueOfType } from '@strictly/define'
 import {
   type AnnotatedFieldConversion,
   type TwoWayFieldConverterWithValueFactory,

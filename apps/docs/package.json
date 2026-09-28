@@ -14,10 +14,9 @@
     "react": "catalog:"
   },
   "devDependencies": {
+    "@strictly/oxlint": "workspace:*",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
-    "eslint-plugin-astro": "^1.3.1",
-    "eslint-plugin-mdx": "^3.1.5",
     "http-server": "^14.1.1",
     "vite": "catalog:"
   },
@@ -29,9 +28,11 @@
     "check-types": "tsc -b",
     "clean": "del-cli dist .out",
     "dev": "astro dev",
-    "lint": "cross-env ESLINT_USE_FLAT_CONFIG=false eslint . --max-warnings=0",
+    "lint": "oxlint --type-aware",
+    "lint:fix": "oxlint --type-aware --fix",
     "preview": "astro preview",
     "serve": "http-server dist"
   },
+  "type": "module",
   "version": "0.0.41"
 }

@@ -1,78 +1,56 @@
 import { t } from '@lingui/core/macro'
-import {
-  Slider,
-  Stack,
-} from '@mantine/core'
-import {
-  toArray,
-  UnreachableError,
-} from '@strictly/base'
-import {
-  type ErrorRendererProps,
-  type FieldsViewProps,
-  useMantineFormFields,
-} from '@strictly/react-form'
+import { Trans } from '@lingui/react/macro'
+import { Slider, Stack } from '@mantine/core'
+import { toArray, UnreachableError } from '@strictly/base'
+import { type ErrorRendererProps, type FieldsViewProps, useMantineFormFields } from '@strictly/react-form'
 import { type PetFields } from './fields'
-import {
-  type CatBreed,
-  NOT_A_BREED_ERROR,
-  REQUIRED_ERROR,
-} from './types'
+import { type CatBreed, NOT_A_BREED_ERROR, REQUIRED_ERROR } from './types'
 
-export type PetSpeciesCatFields = Pick<
-  PetFields,
-  '$.species:cat.meows' | '$.species:cat.breed'
->
+export type PetSpeciesCatFields = Pick<PetFields, '$.species:cat.meows' | '$.species:cat.breed'>
 
-export function BreedLabel() {
+export function breedLabel() {
   return t({
     message: 'Breed',
     comment: 'Input for choosing cat breed',
   })
 }
 
-export function MeowsLabel() {
+export function meowsLabel() {
   return t({
     message: 'Meows',
     comment: 'Input capturing the number of times a given cat has meowed',
   })
 }
 
-export function MeowFrequencyLow() {
+export function meowFrequencyLow() {
   return t({
     message: 'Quiet',
     comment: 'cat meows infrequently',
   })
 }
 
-export function MeowFrequencyModerate() {
+export function meowFrequencyModerate() {
   return t({
     message: 'Normal',
     comment: 'meow frequency moderate',
   })
 }
 
-export function MeowFrequencyHigh() {
+export function meowFrequencyHigh() {
   return t({
     message: 'Noisy',
     comment: 'cat meows often',
   })
 }
 
-function BreedInputErrorRenderer({
-  error,
-}: ErrorRendererProps<PetSpeciesCatFields, '$.species:cat.breed'>) {
+function BreedInputErrorRenderer({ error }: ErrorRendererProps<PetSpeciesCatFields, '$.species:cat.breed'>) {
   switch (error) {
     case NOT_A_BREED_ERROR:
-      return t({
-        message: 'Not a recognized cat breed',
-        comment: 'error that is displayed when an invalid breed is selected',
-      })
+      return (
+        <Trans comment='error that is displayed when an invalid breed is selected'>Not a recognized cat breed</Trans>
+      )
     case REQUIRED_ERROR:
-      return t({
-        message: 'Must specify a breed',
-        comment: 'error that is displayed when no breed is selected',
-      })
+      return <Trans comment='error that is displayed when no breed is selected'>Must specify a breed</Trans>
     default:
       throw new UnreachableError(error)
   }
@@ -106,31 +84,28 @@ export function PetSpeciesCatFieldsView(props: PetSpeciesCatFormFieldsViewProps)
     <Stack>
       <BreedSelect
         ErrorRenderer={BreedInputErrorRenderer}
-        data={toArray(BREED_NAMES).map(function ([
-          value,
-          label,
-        ]) {
+        data={toArray(BREED_NAMES).map(function ([value, label]) {
           return {
             value,
             label: label(),
           }
         })}
-        label={BreedLabel()}
+        label={breedLabel()}
       />
 
       <MeowsSlider
-        label={MeowsLabel()}
+        label={meowsLabel()}
         marks={[
           {
-            label: MeowFrequencyLow(),
+            label: meowFrequencyLow(),
             value: 0,
           },
           {
-            label: MeowFrequencyModerate(),
+            label: meowFrequencyModerate(),
             value: 5,
           },
           {
-            label: MeowFrequencyHigh(),
+            label: meowFrequencyHigh(),
             value: 10,
           },
         ]}

@@ -1,11 +1,5 @@
-import {
-  Cache,
-  type CacheValueFactory,
-} from 'util/Cache'
-import {
-  type Mock,
-  vi,
-} from 'vitest'
+import { Cache, type CacheValueFactory } from 'util/Cache'
+import { type Mock, vi } from 'vitest'
 
 describe('cache', function () {
   type Args = [string, number, boolean]
@@ -15,18 +9,12 @@ describe('cache', function () {
   beforeEach(function () {
     valueFactory = vi.fn()
     valueFactory.mockReturnValue(true)
-    cache = new Cache(
-      valueFactory,
-    )
+    cache = new Cache(valueFactory)
   })
 
   describe('creates value that does not exist', function () {
     let value: boolean
-    const params: Args = [
-      'a',
-      1,
-      false,
-    ]
+    const params: Args = ['a', 1, false]
     beforeEach(function () {
       value = cache.retrieveOrCreate(...params)
     })

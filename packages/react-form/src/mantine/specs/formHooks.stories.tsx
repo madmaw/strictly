@@ -1,16 +1,6 @@
-import {
-  Button,
-  NumberInput,
-  Stack,
-} from '@mantine/core'
-import {
-  type Meta,
-  type StoryObj,
-} from '@storybook/react-vite'
-import {
-  type FieldsViewProps,
-  type FormProps,
-} from 'core/props'
+import { Button, NumberInput, Stack } from '@mantine/core'
+import { type Meta, type StoryObj } from '@storybook/react-vite'
+import { type FieldsViewProps, type FormProps } from 'core/props'
 import { useMantineFormFields } from 'mantine/hooks'
 import { useCallback } from 'react'
 import { action } from 'storybook/actions'
@@ -27,39 +17,34 @@ function SubForm({
   onValueChange,
   onCancel,
 }: FormProps<number> & {
-  onCancel: () => void,
+  onCancel: () => void
 }) {
-  const onChange = useCallback((v: number | string) => {
-    onValueChange(Number.parseInt(`${v}`))
-  }, [onValueChange])
+  const onChange = useCallback(
+    (v: number | string) => {
+      onValueChange(Number.parseInt(`${v}`))
+    },
+    [onValueChange],
+  )
   return (
     <Stack>
-      <NumberInput
-        allowDecimal={false}
-        label='sub form'
-        onChange={onChange}
-        value={value}
-      />
-      <Button onClick={onCancel}>
-        Cancel
-      </Button>
+      <NumberInput allowDecimal={false} label='sub form' onChange={onChange} value={value} />
+      <Button onClick={onCancel}>Cancel</Button>
     </Stack>
   )
 }
 
-function Component(props: FieldsViewProps<{
-  $: Field<string, string>,
-  '$.a': Field<number, string>,
-}>) {
+function Component(
+  props: FieldsViewProps<{
+    $: Field<string, string>
+    '$.a': Field<number, string>
+  }>,
+) {
   const form = useMantineFormFields(props)
   const Form = form.form('$.a', SubForm)
   const TextInput = form.textInput('$')
   return (
     <Stack>
-      <TextInput
-        ErrorRenderer={ErrorRenderer}
-        label='fields view'
-      />
+      <TextInput ErrorRenderer={ErrorRenderer} label='fields view' />
       <Form onCancel={onCancel} />
     </Stack>
   )

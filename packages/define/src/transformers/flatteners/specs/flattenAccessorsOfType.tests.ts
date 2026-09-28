@@ -1,23 +1,13 @@
 import { expectDefinedAndReturn } from '@strictly/base'
 import { flattenAccessorsOfType } from 'transformers/flatteners/flattenAccessorsOfType'
-import {
-  booleanType,
-  list,
-  numberType,
-  object,
-} from 'types/builders'
+import { booleanType, list, numberType, object } from 'types/builders'
 import { type FlattenedAccessorsOfType } from 'types/FlattenedAccessorsOfType'
 import { type ValueOfType } from 'types/ValueOfType'
-import {
-  type Mock,
-  vi,
-} from 'vitest'
+import { type Mock, vi } from 'vitest'
 
 describe('flattenAccessorsOfType', function () {
   let setter: Mock
-  const builder = object()
-    .field('a', list(numberType))
-    .field('b', booleanType)
+  const builder = object().field('a', list(numberType)).field('b', booleanType)
 
   let flattened: FlattenedAccessorsOfType<typeof builder>
   let value: ValueOfType<typeof builder>
@@ -25,18 +15,10 @@ describe('flattenAccessorsOfType', function () {
   beforeEach(function () {
     setter = vi.fn()
     value = {
-      a: [
-        1,
-        2,
-        4,
-      ],
+      a: [1, 2, 4],
       b: false,
     }
-    flattened = flattenAccessorsOfType<typeof builder>(
-      builder,
-      value,
-      setter,
-    )
+    flattened = flattenAccessorsOfType<typeof builder>(builder, value, setter)
   })
 
   // note that we already have tests for the type and the function that this calls, so
@@ -45,21 +27,13 @@ describe('flattenAccessorsOfType', function () {
     expect(flattened).toEqual({
       $: {
         value: {
-          a: [
-            1,
-            2,
-            4,
-          ],
+          a: [1, 2, 4],
           b: false,
         },
         set: setter,
       },
       '$.a': expect.objectContaining({
-        value: [
-          1,
-          2,
-          4,
-        ],
+        value: [1, 2, 4],
       }),
       '$.a.0': expect.objectContaining({
         value: 1,
@@ -89,21 +63,14 @@ describe('flattenAccessorsOfType', function () {
     expectDefinedAndReturn(flattened['$.a.1']).set(99)
 
     expect(value).toEqual({
-      a: [
-        1,
-        99,
-        4,
-      ],
+      a: [1, 99, 4],
       b: false,
     })
   })
 
   it('sets the top level value', function () {
     const newValue: ValueOfType<typeof builder> = {
-      a: [
-        -1,
-        5,
-      ],
+      a: [-1, 5],
       b: true,
     }
     expectDefinedAndReturn(flattened.$).set(newValue)

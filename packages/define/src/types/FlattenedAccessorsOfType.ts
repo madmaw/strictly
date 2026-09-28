@@ -3,8 +3,8 @@ import { type Type } from './Type'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type Accessor<T = any> = {
-  readonly value: T,
-  set(v: T): void,
+  readonly value: T
+  set(v: T): void
 }
 
 export type FlattenedAccessorsOfType<

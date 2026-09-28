@@ -1,50 +1,30 @@
-import {
-  type FormProps,
-  useDefaultMobxFormHooks,
-  usePartialObserverComponent,
-  Validation,
-} from '@strictly/react-form'
+import { type FormProps, useDefaultMobxFormHooks, usePartialObserverComponent, Validation } from '@strictly/react-form'
 import { emulateTab } from 'emulate-tab'
 import { type PetValuePaths } from 'features/form/pet/fields'
 import { PetFieldsView } from 'features/form/pet/PetFieldsView'
 import { PetSpeciesCatFieldsView } from 'features/form/pet/PetSpeciesCatFieldsView'
 import { PetSpeciesDogFieldsView } from 'features/form/pet/PetSpeciesDogFieldsView'
 import { PetSpeciesFormFieldsView } from 'features/form/pet/PetSpeciesFieldsView'
-import {
-  type Pet,
-  type Species,
-  type TagValuePath,
-} from 'features/form/pet/types'
+import { type Pet, type Species, type TagValuePath } from 'features/form/pet/types'
 import { Observer } from 'mobx-react'
-import {
-  type ComponentType,
-  useCallback,
-  useMemo,
-} from 'react'
-import {
-  PetFormModel,
-} from './PetFormModel'
+import { type ComponentType, useCallback, useMemo } from 'react'
+import { PetFormModel } from './PetFormModel'
+
+function focusInput(input: HTMLInputElement | null) {
+  input?.focus()
+}
 
 export function PetForm({
   value,
   onValueChange,
   forceMutable,
 }: FormProps<Pet> & {
-  forceMutable: boolean,
+  forceMutable: boolean
 }) {
-  const model = useMemo(() => {
-    return new PetFormModel(value, forceMutable)
-  }, [
-    value,
-    forceMutable,
-  ])
-
-  const firstInputRef = useCallback((input: HTMLInputElement | null) => {
-    input?.focus()
-  }, [])
+  const model = useMemo(() => new PetFormModel(value, forceMutable), [value, forceMutable])
 
   const onValidFieldSubmit = useCallback(
-    function<Path extends keyof PetFormModel['fields']> (valuePath: Path) {
+    function <Path extends keyof PetFormModel['fields']>(valuePath: Path) {
       const typePath = model.typePath(valuePath)
       if (typePath === '$.newTag' && model.fields['$.newTag'].value.trim().length > 0) {
         // get the validated value
@@ -69,16 +49,13 @@ export function PetForm({
     model.validateAll(Validation.Always)
   }, [model])
 
-  const {
-    onFieldValueChange,
-    onFieldBlur,
-    onFieldFocus,
-    onFieldSubmit,
-    onFormSubmit,
-  } = useDefaultMobxFormHooks(model, {
-    onValidFieldSubmit,
-    onValidFormSubmit,
-  })
+  const { onFieldValueChange, onFieldBlur, onFieldFocus, onFieldSubmit, onFormSubmit } = useDefaultMobxFormHooks(
+    model,
+    {
+      onValidFieldSubmit,
+      onValidFormSubmit,
+    },
+  )
 
   const onClearField = useCallback(
     function (valuePath: PetValuePaths) {
@@ -110,13 +87,7 @@ export function PetForm({
         onFieldBlur,
       }
     },
-    [
-      model,
-      onFieldValueChange,
-      onFieldSubmit,
-      onFieldFocus,
-      onFieldBlur,
-    ],
+    [model, onFieldValueChange, onFieldSubmit, onFieldFocus, onFieldBlur],
     PetSpeciesCatFieldsView,
   )
 
@@ -130,25 +101,19 @@ export function PetForm({
         onFieldBlur,
       }
     },
-    [
-      model,
-      onFieldValueChange,
-      onFieldSubmit,
-      onFieldFocus,
-      onFieldBlur,
-    ],
+    [model, onFieldValueChange, onFieldSubmit, onFieldFocus, onFieldBlur],
     PetSpeciesDogFieldsView,
   )
 
-  const speciesComponents = useMemo<Record<Species, ComponentType>>(function () {
-    return {
-      cat: SpeciesCatComponent,
-      dog: SpeciesDogComponent,
-    }
-  }, [
-    SpeciesCatComponent,
-    SpeciesDogComponent,
-  ])
+  const speciesComponents = useMemo<Record<Species, ComponentType>>(
+    function () {
+      return {
+        cat: SpeciesCatComponent,
+        dog: SpeciesDogComponent,
+      }
+    },
+    [SpeciesCatComponent, SpeciesDogComponent],
+  )
 
   const SpeciesComponent = usePartialObserverComponent(
     function () {
@@ -161,14 +126,7 @@ export function PetForm({
         speciesComponents,
       }
     },
-    [
-      model,
-      onFieldValueChange,
-      onFieldSubmit,
-      onFieldFocus,
-      onFieldBlur,
-      speciesComponents,
-    ],
+    [model, onFieldValueChange, onFieldSubmit, onFieldFocus, onFieldBlur, speciesComponents],
     PetSpeciesFormFieldsView,
   )
 
@@ -178,7 +136,7 @@ export function PetForm({
         <PetFieldsView
           SpeciesComponent={SpeciesComponent}
           fields={model.fields}
-          firstInputRef={firstInputRef}
+          firstInputRef={focusInput}
           onClearField={onClearField}
           onFieldBlur={onFieldBlur}
           onFieldFocus={onFieldFocus}

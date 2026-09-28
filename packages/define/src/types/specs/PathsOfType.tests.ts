@@ -1,13 +1,4 @@
-import {
-  booleanType,
-  list,
-  nullable,
-  numberType,
-  object,
-  record,
-  stringType,
-  union,
-} from 'types/builders'
+import { booleanType, list, nullable, numberType, object, record, stringType, union } from 'types/builders'
 import { type PathsOfType } from 'types/PathsOfType'
 
 describe('PathsOfType', function () {
@@ -145,10 +136,7 @@ describe('PathsOfType', function () {
 
   describe('object', function () {
     describe('simple', function () {
-      const builder = object()
-        .field('n', numberType)
-        .field('b', booleanType)
-        .field('s', stringType)
+      const builder = object().field('n', numberType).field('b', booleanType).field('s', stringType)
       type T = PathsOfType<typeof builder>
 
       type P = '$' | '$.n' | '$.b' | '$.s'
@@ -188,8 +176,7 @@ describe('PathsOfType', function () {
     })
 
     describe('object of list', function () {
-      const builder = object()
-        .field('l', list(numberType))
+      const builder = object().field('l', list(numberType))
 
       describe('no override', function () {
         type T = PathsOfType<typeof builder>
@@ -213,9 +200,7 @@ describe('PathsOfType', function () {
 
   describe('union', function () {
     describe('with primitives', function () {
-      const builder = union()
-        .or('1', numberType)
-        .or('2', stringType)
+      const builder = union().or('1', numberType).or('2', stringType)
       type T = PathsOfType<typeof builder>
 
       type P = '$'
@@ -239,14 +224,8 @@ describe('PathsOfType', function () {
 
     describe('nested', function () {
       const builder = union()
-        .or('1', object().field(
-          'a',
-          union().or('x', object().field('aa', stringType)),
-        ))
-        .or('2', object().field(
-          'b',
-          union().or('y', object().field('bb', stringType)),
-        ))
+        .or('1', object().field('a', union().or('x', object().field('aa', stringType))))
+        .or('2', object().field('b', union().or('y', object().field('bb', stringType))))
       type T = PathsOfType<typeof builder>
 
       type P = '$' | '$.a' | '$.a.aa' | '$.b' | '$.b.bb'
@@ -257,9 +236,7 @@ describe('PathsOfType', function () {
   })
 
   describe('with discriminator', function () {
-    const builder = union('x')
-      .or('1', object().field('a', booleanType))
-      .or('2', object().field('b', numberType))
+    const builder = union('x').or('1', object().field('a', booleanType)).or('2', object().field('b', numberType))
 
     type T = PathsOfType<typeof builder>
 
@@ -272,14 +249,8 @@ describe('PathsOfType', function () {
 
   describe('with nested discriminator', function () {
     const builder = union('x')
-      .or(
-        '1',
-        union('y').or('p', object().field('a', booleanType)),
-      )
-      .or(
-        '2',
-        union('z').or('q', object().field('b', numberType)),
-      )
+      .or('1', union('y').or('p', object().field('a', booleanType)))
+      .or('2', union('z').or('q', object().field('b', numberType)))
 
     type T = PathsOfType<typeof builder>
 

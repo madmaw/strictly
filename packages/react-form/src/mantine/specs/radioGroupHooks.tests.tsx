@@ -1,26 +1,12 @@
 import { composeStories } from '@storybook/react-vite'
 import { toArray } from '@strictly/base'
-import {
-  fireEvent,
-  render,
-  type RenderResult,
-} from '@testing-library/react'
-import {
-  type Mock,
-  vi,
-} from 'vitest'
-import {
-  RADIO_GROUP_LABEL,
-  RADIO_LABELS,
-  RADIO_VALUES,
-  type RadioValue,
-} from './radioGroupConstants'
+import { fireEvent, render, type RenderResult } from '@testing-library/react'
+import { type Mock, vi } from 'vitest'
+import { RADIO_GROUP_LABEL, RADIO_LABELS, RADIO_VALUES, type RadioValue } from './radioGroupConstants'
 import * as stories from './radioGroupHooks.stories'
 
 const composedStories = composeStories(stories)
-const {
-  Empty,
-} = composedStories
+const { Empty } = composedStories
 
 describe('mantine radio group hooks', function () {
   it.each(toArray(composedStories))('renders %s', function (_name, Story) {
@@ -39,13 +25,9 @@ describe('mantine radio group hooks', function () {
       onFieldValueChange = vi.fn()
       onFieldFocus = vi.fn()
       onFieldBlur = vi.fn()
-      wrapper = render((
-        <Empty
-          onFieldBlur={onFieldBlur}
-          onFieldFocus={onFieldFocus}
-          onFieldValueChange={onFieldValueChange}
-        />
-      ))
+      wrapper = render(
+        <Empty onFieldBlur={onFieldBlur} onFieldFocus={onFieldFocus} onFieldValueChange={onFieldValueChange} />,
+      )
       radioGroup = await wrapper.findByLabelText(RADIO_GROUP_LABEL)
     })
 

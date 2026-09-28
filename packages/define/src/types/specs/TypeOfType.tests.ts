@@ -1,7 +1,4 @@
-import {
-  list,
-  numberType,
-} from 'types/builders'
+import { list, numberType } from 'types/builders'
 import { type TypeDefType } from 'types/Type'
 import { type TypeOfType } from 'types/typeOfType'
 
@@ -11,9 +8,9 @@ describe('TypeOfType', function () {
     type T = TypeOfType<typeof literalType>
     type C = {
       readonly definition: {
-        readonly type: TypeDefType.Literal,
-        readonly valuePrototype: [number],
-      },
+        readonly type: TypeDefType.Literal
+        readonly valuePrototype: [number]
+      }
     }
 
     it('equals expected type', function () {
@@ -27,12 +24,12 @@ describe('TypeOfType', function () {
       type T = TypeOfType<typeof listType>
       type C = {
         readonly definition: {
-          readonly type: TypeDefType.List,
+          readonly type: TypeDefType.List
           elements: {
-            readonly type: TypeDefType.Literal,
-            readonly valuePrototype: [number],
-          },
-        },
+            readonly type: TypeDefType.Literal
+            readonly valuePrototype: [number]
+          }
+        }
       }
       it('equals expected type', function () {
         expectTypeOf<T>().toEqualTypeOf<C>()
@@ -43,12 +40,12 @@ describe('TypeOfType', function () {
       type T = TypeOfType<typeof listType>
       type C = {
         readonly definition: {
-          readonly type: TypeDefType.List,
+          readonly type: TypeDefType.List
           readonly elements: {
-            readonly type: TypeDefType.Literal,
-            readonly valuePrototype: [number],
-          },
-        },
+            readonly type: TypeDefType.Literal
+            readonly valuePrototype: [number]
+          }
+        }
       }
       it('equals expected type', function () {
         expectTypeOf<T>().toEqualTypeOf<C>()

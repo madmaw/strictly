@@ -1,15 +1,11 @@
-import { useCallback } from 'react'
+function onClick() {
+  console.warn('click')
+}
 
-export default function Button() {
-  const onClick = useCallback(function () {
-    // eslint-disable-next-line no-console
-    console.log('click')
-  }, [])
+export function Button() {
   return (
     <div>
-      <button onClick={onClick}>
-        Click
-      </button>
+      <button onClick={onClick}>Click</button>
     </div>
   )
 }

@@ -9,6 +9,7 @@
   },
   "description": "Helper utilities for testing",
   "devDependencies": {
+    "@strictly/oxlint": "workspace:*",
     "@strictly/vite": "workspace:*",
     "@testing-library/dom": "catalog:",
     "@testing-library/react": "catalog:",
@@ -35,12 +36,10 @@
       ".": {
         "import": {
           "types": "./dist/index.d.ts",
-
           "default": "./dist/index.js"
         },
         "require": {
           "types": "./dist/index.d.cts",
-
           "default": "./dist/index.cjs"
         }
       }
@@ -57,8 +56,8 @@
     "build": "vite build --configLoader runner",
     "check-types": "tsc -b",
     "clean": "del-cli dist .out",
-    "lint": "cross-env ESLINT_USE_FLAT_CONFIG=false eslint . --max-warnings=0",
-    "lint:fix": "cross-env ESLINT_USE_FLAT_CONFIG=false eslint . --fix"
+    "lint": "oxlint --type-aware",
+    "lint:fix": "oxlint --type-aware --fix"
   },
   "type": "module",
   "version": "0.0.41"

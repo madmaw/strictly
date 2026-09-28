@@ -1,7 +1,4 @@
-import {
-  chainAnnotatedFieldConverter,
-  chainUnreliableFieldConverter,
-} from 'field_converters/chainFieldConverter'
+import { chainAnnotatedFieldConverter, chainUnreliableFieldConverter } from 'field-converters/chainFieldConverter'
 import {
   type AnnotatedFieldConversion,
   type AnnotatedFieldConverter,
@@ -213,90 +210,52 @@ describe('chainAnnotatedFieldConverter', function () {
   })
 
   describe.each([
-    [
-      true,
-      true,
-      true,
-    ],
-    [
-      true,
-      false,
-      true,
-    ],
-    [
-      false,
-      true,
-      true,
-    ],
-    [
-      false,
-      false,
-      false,
-    ],
-  ] as const)(
-    'from required %s to required %s result %s',
-    function (fromRequired, toRequired, required) {
-      beforeEach(function () {
-        from.mockReturnValue({
-          value: true,
-          readonly: false,
-          required: fromRequired,
-        })
-        to.mockReturnValue({
-          value: 1,
-          readonly: false,
-          required: toRequired,
-        })
-        result = chained('z', 'x', CONTEXT)
+    [true, true, true],
+    [true, false, true],
+    [false, true, true],
+    [false, false, false],
+  ] as const)('from required %s to required %s result %s', function (fromRequired, toRequired, required) {
+    beforeEach(function () {
+      from.mockReturnValue({
+        value: true,
+        readonly: false,
+        required: fromRequired,
       })
+      to.mockReturnValue({
+        value: 1,
+        readonly: false,
+        required: toRequired,
+      })
+      result = chained('z', 'x', CONTEXT)
+    })
 
-      it('required matches expected', function () {
-        expect(result.required).toEqual(required)
-      })
-    },
-  )
+    it('required matches expected', function () {
+      expect(result.required).toEqual(required)
+    })
+  })
 
   describe.each([
-    [
-      true,
-      true,
-      true,
-    ],
-    [
-      true,
-      false,
-      true,
-    ],
-    [
-      false,
-      true,
-      true,
-    ],
-    [
-      false,
-      false,
-      false,
-    ],
-  ] as const)(
-    'from disabled %s to disabled %s result %s',
-    function (fromDisabled, toDisabled, disabled) {
-      beforeEach(function () {
-        from.mockReturnValue({
-          value: true,
-          readonly: fromDisabled,
-          required: false,
-        })
-        to.mockReturnValue({
-          value: 1,
-          readonly: toDisabled,
-          required: false,
-        })
-        result = chained('z', 'x', CONTEXT)
+    [true, true, true],
+    [true, false, true],
+    [false, true, true],
+    [false, false, false],
+  ] as const)('from disabled %s to disabled %s result %s', function (fromDisabled, toDisabled, disabled) {
+    beforeEach(function () {
+      from.mockReturnValue({
+        value: true,
+        readonly: fromDisabled,
+        required: false,
       })
+      to.mockReturnValue({
+        value: 1,
+        readonly: toDisabled,
+        required: false,
+      })
+      result = chained('z', 'x', CONTEXT)
+    })
 
-      it('required matches expected', function () {
-        expect(result.readonly).toEqual(disabled)
-      })
-    },
-  )
+    it('required matches expected', function () {
+      expect(result.readonly).toEqual(disabled)
+    })
+  })
 })

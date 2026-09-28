@@ -23,4 +23,3 @@ jobs:
     needs: workflow-call-validate
     uses: ./.github/workflows/workflow_call_npm.yaml
     secrets: inherit
-

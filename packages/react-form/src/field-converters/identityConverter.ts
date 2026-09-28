@@ -4,16 +4,9 @@ import {
   type UnreliableFieldConverter,
 } from 'types/FieldConverters'
 
-export function annotatedIdentityConverter<
-  V,
-  ValuePath extends string,
-  Context,
->(required: boolean = false): AnnotatedFieldConverter<
-  V,
-  V,
-  ValuePath,
-  Context
-> {
+export function annotatedIdentityConverter<V, ValuePath extends string, Context>(
+  required = false,
+): AnnotatedFieldConverter<V, V, ValuePath, Context> {
   return function (value: V) {
     return {
       value,
@@ -23,11 +16,7 @@ export function annotatedIdentityConverter<
   }
 }
 
-export function unreliableIdentityConverter<
-  V,
-  ValuePath extends string,
-  Context,
->(): UnreliableFieldConverter<
+export function unreliableIdentityConverter<V, ValuePath extends string, Context>(): UnreliableFieldConverter<
   V,
   V,
   never,

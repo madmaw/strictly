@@ -6,11 +6,11 @@ describe('RequiredOfRecord', function () {
   })
 
   it('removes all optional types', function () {
-    expectTypeOf<RequiredOfRecord<{ a?: 1, b?: true, c?: 'a' }>>().toEqualTypeOf<{}>()
+    expectTypeOf<RequiredOfRecord<{ a?: 1; b?: true; c?: 'a' }>>().toEqualTypeOf<{}>()
   })
 
   it('leaves all mandatory types alone', function () {
-    type T = { a: 1, b: true, c: 'a' }
+    type T = { a: 1; b: true; c: 'a' }
     expectTypeOf<RequiredOfRecord<T>>().toEqualTypeOf<T>()
   })
 })

@@ -5,10 +5,5 @@
     }
   },
   "extends": "../../tsconfig.build.json",
-  "include": [
-    ".eslintrc.cjs",
-    ".storybook/vite.config.mts",
-    "vite.config.mts",
-    "vitest.workspace.ts"
-  ]
+  "include": [".storybook/vite.config.mts", "oxlint.config.ts", "vite.config.mts", "vitest.workspace.ts"]
 }

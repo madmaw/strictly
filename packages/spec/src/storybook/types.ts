@@ -1,12 +1,11 @@
+// oxlint-disable-next-line no-restricted-imports -- this package exists to support storybook
 import { type InputType } from 'storybook/internal/types'
 
 type MetaArgType<T> = InputType & {
-  t?: T,
+  t?: T
 }
 
-export type MetaArgTypesOf<
-  P,
-> = {
+export type MetaArgTypesOf<P> = {
   [k in keyof P]: MetaArgType<P[k]>
 }
 
@@ -24,17 +23,15 @@ export type MetaArgsAndArgTypes<
   ArgTypes extends MetaArgTypesOf<P>,
   Args extends MetaArgsOf<ArgTypes> = MetaArgsOf<ArgTypes>,
 > = {
-  args: Partial<Args>,
-  argTypes: Partial<ArgTypes>,
+  args: Partial<Args>
+  argTypes: Partial<ArgTypes>
 }
 
 // Unfortunately the storybook typedefs are wrong and will complain if you supply a label as a value (although the implementation
 // only picks up labels for args, not the referenced values), so we have to cast back to this. Additionally Storybook blows up if
 // we provide a utility method to do this
 // https://github.com/storybookjs/storybook/issues/16598
-export type MetaPropsAndArgTypes<
-  P,
-> = {
-  args: Partial<P>,
-  argTypes: Partial<MetaArgTypesOf<P>>,
+export type MetaPropsAndArgTypes<P> = {
+  args: Partial<P>
+  argTypes: Partial<MetaArgTypesOf<P>>
 }

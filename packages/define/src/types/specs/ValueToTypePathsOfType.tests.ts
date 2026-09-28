@@ -1,17 +1,5 @@
-import {
-  type SimplifyDeep,
-  type ValueOf,
-} from 'type-fest'
-import {
-  booleanType,
-  list,
-  nullable,
-  numberType,
-  object,
-  record,
-  stringType,
-  union,
-} from 'types/builders'
+import { type SimplifyDeep, type ValueOf } from 'type-fest'
+import { booleanType, list, nullable, numberType, object, record, stringType, union } from 'types/builders'
 import { type FlattenedTypesOfType } from 'types/FlattenedTypesOfType'
 import { type ValueToTypePathsOfType } from 'types/ValueToTypePathsOfType'
 
@@ -20,7 +8,7 @@ describe('ValueToTypePathsOfType', function () {
     type T = ValueToTypePathsOfType<typeof numberType.narrow>
 
     type C = {
-      readonly $: '$',
+      readonly $: '$'
     }
     it('equals expected type', function () {
       expectTypeOf<C>().toEqualTypeOf<T>()
@@ -32,9 +20,9 @@ describe('ValueToTypePathsOfType', function () {
     type T = SimplifyDeep<ValueToTypePathsOfType<typeof builder.narrow>>
 
     type C = {
-      readonly $: '$',
-      readonly [_: `$.${number}`]: '$.*',
-      readonly [_: `$.${number}.${number}`]: '$.*.*',
+      readonly $: '$'
+      readonly [_: `$.${number}`]: '$.*'
+      readonly [_: `$.${number}.${number}`]: '$.*.*'
     }
     it('equals expected type', function () {
       expectTypeOf<C>().toEqualTypeOf<T>()
@@ -47,11 +35,11 @@ describe('ValueToTypePathsOfType', function () {
     type T = SimplifyDeep<ValueToTypePathsOfType<typeof builder>>
 
     type C = {
-      readonly $: '$',
-      readonly [`$.a`]: '$.*',
-      readonly [`$.b`]: '$.*',
-      readonly [_: `$.a.${number}`]: '$.*.*',
-      readonly [_: `$.b.${number}`]: '$.*.*',
+      readonly $: '$'
+      readonly [`$.a`]: '$.*'
+      readonly [`$.b`]: '$.*'
+      readonly [_: `$.a.${number}`]: '$.*.*'
+      readonly [_: `$.b.${number}`]: '$.*.*'
     }
     it('equals expected type', function () {
       expectTypeOf<C>().toEqualTypeOf<T>()
@@ -72,12 +60,12 @@ describe('ValueToTypePathsOfType', function () {
     type T = SimplifyDeep<ValueToTypePathsOfType<typeof builder>>
 
     type C = {
-      readonly $: '$',
-      readonly [`$.a`]: '$.a',
-      readonly [`$.b`]: '$.b',
-      readonly [`$.c`]: '$.c',
-      readonly [`$.d`]: '$.d',
-      readonly [_: `$.a.${number}`]: '$.a.*',
+      readonly $: '$'
+      readonly [`$.a`]: '$.a'
+      readonly [`$.b`]: '$.b'
+      readonly [`$.c`]: '$.c'
+      readonly [`$.d`]: '$.d'
+      readonly [_: `$.a.${number}`]: '$.a.*'
     }
     it('equals expected type', function () {
       expectTypeOf<C>().toEqualTypeOf<T>()
@@ -96,14 +84,12 @@ describe('ValueToTypePathsOfType', function () {
 
   describe('union', function () {
     describe('non-discriminated', function () {
-      const builder = union()
-        .or('1', list(numberType))
-        .or('2', stringType)
+      const builder = union().or('1', list(numberType)).or('2', stringType)
       type T = SimplifyDeep<ValueToTypePathsOfType<typeof builder>>
 
       type C = {
-        readonly $: '$',
-        readonly [_: `$.${number}`]: '$.*',
+        readonly $: '$'
+        readonly [_: `$.${number}`]: '$.*'
       }
 
       it('equals expected type', function () {
@@ -118,11 +104,11 @@ describe('ValueToTypePathsOfType', function () {
       type T = SimplifyDeep<ValueToTypePathsOfType<typeof builder>>
 
       type C = {
-        readonly $: '$',
-        readonly ['$:1.a']: '$:1.a',
-        readonly ['$:1.b']: '$:1.b',
-        readonly ['$:2.x']: '$:2.x',
-        readonly ['$:2.y']: '$:2.y',
+        readonly $: '$'
+        readonly ['$:1.a']: '$:1.a'
+        readonly ['$:1.b']: '$:1.b'
+        readonly ['$:2.x']: '$:2.x'
+        readonly ['$:2.y']: '$:2.y'
       }
       it('equals expected type', function () {
         expectTypeOf<C>().toEqualTypeOf<T>()
@@ -146,9 +132,9 @@ describe('ValueToTypePathsOfType', function () {
     type T = SimplifyDeep<ValueToTypePathsOfType<typeof builder>>
 
     type C = {
-      readonly $: '$',
-      readonly [_: `$.${number}`]: '$.*',
-      readonly [_: `$.${number}.${number}`]: '$.*.*',
+      readonly $: '$'
+      readonly [_: `$.${number}`]: '$.*'
+      readonly [_: `$.${number}.${number}`]: '$.*.*'
     }
     it('equals expected type', function () {
       expectTypeOf<C>().toEqualTypeOf<T>()
@@ -161,9 +147,9 @@ describe('ValueToTypePathsOfType', function () {
     type T = SimplifyDeep<ValueToTypePathsOfType<typeof builder>>
 
     type C = {
-      readonly $: '$',
-      readonly [_: `$.${number}`]: '$.*',
-      readonly [_: `$.${number}.${number}`]: '$.*.*',
+      readonly $: '$'
+      readonly [_: `$.${number}`]: '$.*'
+      readonly [_: `$.${number}.${number}`]: '$.*.*'
     }
     it('equals expected type', function () {
       expectTypeOf<C>().toEqualTypeOf<T>()

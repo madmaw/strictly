@@ -1,6 +1,7 @@
 {
   "devDependencies": {
-    "@lingui/cli": "catalog:"
+    "@lingui/cli": "catalog:",
+    "@strictly/oxlint": "workspace:*"
   },
   "license": "MIT",
   "main": "src/index.ts",
@@ -8,8 +9,8 @@
   "scripts": {
     "check-types": "tsc -b",
     "clean": "del-cli dist .out",
-    "lint": "cross-env ESLINT_USE_FLAT_CONFIG=false eslint . --max-warnings=0",
-    "lint:fix": "cross-env ESLINT_USE_FLAT_CONFIG=false eslint . --fix"
+    "lint": "oxlint --type-aware",
+    "lint:fix": "oxlint --type-aware --fix"
   },
   "type": "module",
   "version": "0.0.41"

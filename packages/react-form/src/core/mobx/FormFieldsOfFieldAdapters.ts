@@ -11,6 +11,5 @@ export type FormFieldsOfFieldAdapters<
   ]: FormFieldOfFieldAdapter<FieldAdapters[ValuePathsToTypePaths[K]]>
 }
 
-type FormFieldOfFieldAdapter<
-  F extends FieldAdapter | undefined,
-> = F extends FieldAdapter<infer _From, infer To, infer E> ? Field<To, E> : never
+type FormFieldOfFieldAdapter<F extends FieldAdapter | undefined> =
+  F extends FieldAdapter<infer _From, infer To, infer E> ? Field<To, E> : never

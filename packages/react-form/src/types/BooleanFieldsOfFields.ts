@@ -1,6 +1,4 @@
-import {
-  type Fields,
-} from './Field'
+import { type Fields } from './Field'
 import { type ValueTypeOfField } from './ValueTypeOfField'
 
 export type BooleanFieldsOfFields<F extends Fields> = {

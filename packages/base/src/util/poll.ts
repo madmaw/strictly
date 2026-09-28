@@ -1,6 +1,4 @@
-import {
-  type Maybe,
-} from 'types/Maybe'
+import { type Maybe } from 'types/Maybe'
 import { delay } from './delay'
 
 export function constantPollInterval(delay: number) {
@@ -10,16 +8,13 @@ export function constantPollInterval(delay: number) {
 }
 
 type PollOptions = {
-  pollInterval?: (retries: number) => number,
-  retries?: number,
+  pollInterval?: (retries: number) => number
+  retries?: number
 }
 
 export async function poll<T>(
   f: () => Promise<Maybe<T>>,
-  {
-    pollInterval = constantPollInterval(200),
-    retries = 3,
-  }: PollOptions = {},
+  { pollInterval = constantPollInterval(200), retries = 3 }: PollOptions = {},
 ): Promise<Maybe<T>> {
   let retriesRemaining = retries
   while (retriesRemaining > 0) {

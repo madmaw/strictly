@@ -1,11 +1,4 @@
-import {
-  list,
-  numberType,
-  object,
-  record,
-  stringType,
-  union,
-} from 'types/builders'
+import { list, numberType, object, record, stringType, union } from 'types/builders'
 import { type ReadonlyTypeOfType } from 'types/ReadonlyTypeOfType'
 import { type TypeDefType } from 'types/Type'
 
@@ -15,9 +8,9 @@ describe('ReadonlyTypeDefOf', function () {
 
     type C = {
       readonly definition: {
-        readonly type: TypeDefType.Literal,
-        readonly valuePrototype: [number],
-      },
+        readonly type: TypeDefType.Literal
+        readonly valuePrototype: [number]
+      }
     }
     it('equals expected type', function () {
       expectTypeOf<C>().toEqualTypeOf<T>()
@@ -30,12 +23,12 @@ describe('ReadonlyTypeDefOf', function () {
 
     type C = {
       readonly definition: {
-        readonly type: TypeDefType.List,
+        readonly type: TypeDefType.List
         readonly elements: {
-          readonly type: TypeDefType.Literal,
-          readonly valuePrototype: [number],
-        },
-      },
+          readonly type: TypeDefType.Literal
+          readonly valuePrototype: [number]
+        }
+      }
     }
     it('equals expected type', function () {
       expectTypeOf<C>().toEqualTypeOf<T>()
@@ -48,13 +41,13 @@ describe('ReadonlyTypeDefOf', function () {
 
     type C = {
       readonly definition: {
-        readonly type: TypeDefType.Record,
-        readonly keyPrototype: 'a' | 'b',
+        readonly type: TypeDefType.Record
+        readonly keyPrototype: 'a' | 'b'
         readonly valueTypeDef: {
-          readonly type: TypeDefType.Literal,
-          readonly valuePrototype: [number],
-        },
-      },
+          readonly type: TypeDefType.Literal
+          readonly valuePrototype: [number]
+        }
+      }
     }
     it('equals expected type', function () {
       expectTypeOf<C>().toEqualTypeOf<T>()
@@ -62,25 +55,23 @@ describe('ReadonlyTypeDefOf', function () {
   })
 
   describe('object', function () {
-    const builder = object()
-      .field('a', numberType)
-      .optionalField('b', stringType)
+    const builder = object().field('a', numberType).optionalField('b', stringType)
     type T = ReadonlyTypeOfType<typeof builder._type>
 
     type C = {
       readonly definition: {
-        readonly type: TypeDefType.Object,
+        readonly type: TypeDefType.Object
         readonly fields: {
           readonly a: {
-            readonly type: TypeDefType.Literal,
-            readonly valuePrototype: [number],
-          },
+            readonly type: TypeDefType.Literal
+            readonly valuePrototype: [number]
+          }
           readonly b?: {
-            readonly type: TypeDefType.Literal,
-            readonly valuePrototype: [string],
-          },
-        },
-      },
+            readonly type: TypeDefType.Literal
+            readonly valuePrototype: [string]
+          }
+        }
+      }
     }
     it('equals expected type', function () {
       expectTypeOf<C>().toEqualTypeOf<T>()
@@ -88,30 +79,28 @@ describe('ReadonlyTypeDefOf', function () {
   })
 
   describe('union', function () {
-    const builder = union()
-      .or('1', record<typeof numberType, 'a'>(numberType))
-      .or('2', stringType)
+    const builder = union().or('1', record<typeof numberType, 'a'>(numberType)).or('2', stringType)
     type T = ReadonlyTypeOfType<typeof builder._type>
 
     type C = {
       readonly definition: {
-        readonly type: TypeDefType.Union,
-        readonly discriminator: null,
+        readonly type: TypeDefType.Union
+        readonly discriminator: null
         readonly unions: {
           readonly [1]: {
-            readonly type: TypeDefType.Record,
-            readonly keyPrototype: 'a',
+            readonly type: TypeDefType.Record
+            readonly keyPrototype: 'a'
             readonly valueTypeDef: {
-              readonly type: TypeDefType.Literal,
-              readonly valuePrototype: [number],
-            },
-          },
+              readonly type: TypeDefType.Literal
+              readonly valuePrototype: [number]
+            }
+          }
           readonly [2]: {
-            readonly type: TypeDefType.Literal,
-            readonly valuePrototype: [string],
-          },
-        },
-      },
+            readonly type: TypeDefType.Literal
+            readonly valuePrototype: [string]
+          }
+        }
+      }
     }
     it('equals expected type', function () {
       expectTypeOf<C>().toEqualTypeOf<T>()
@@ -124,13 +113,15 @@ describe('ReadonlyTypeDefOf', function () {
 
     type C = {
       readonly definition: {
-        readonly type: TypeDefType.Record,
-        readonly keyPrototype: 'a',
-        readonly valueTypeDef: {
-          readonly type: TypeDefType.Literal,
-          readonly valuePrototype: [number],
-        } | undefined,
-      },
+        readonly type: TypeDefType.Record
+        readonly keyPrototype: 'a'
+        readonly valueTypeDef:
+          | {
+              readonly type: TypeDefType.Literal
+              readonly valuePrototype: [number]
+            }
+          | undefined
+      }
     }
     it('equals expected type', function () {
       expectTypeOf<C>().toEqualTypeOf<T>()
@@ -143,13 +134,13 @@ describe('ReadonlyTypeDefOf', function () {
 
     type C = {
       readonly definition: {
-        readonly type: TypeDefType.Record,
-        readonly keyPrototype: 'a',
+        readonly type: TypeDefType.Record
+        readonly keyPrototype: 'a'
         readonly valueTypeDef: {
-          readonly type: TypeDefType.Literal,
-          readonly valuePrototype: [number],
-        },
-      },
+          readonly type: TypeDefType.Literal
+          readonly valuePrototype: [number]
+        }
+      }
     }
     it('equals expected type', function () {
       expectTypeOf<C>().toEqualTypeOf<T>()

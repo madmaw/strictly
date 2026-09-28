@@ -1,23 +1,15 @@
 import { t } from '@lingui/core/macro'
-import {
-  CloseButton,
-  Group,
-  Stack,
-} from '@mantine/core'
-import {
-  type Reverse,
-  UnreachableError,
-} from '@strictly/base'
+import { Trans } from '@lingui/react/macro'
+import { CloseButton, Group, Stack } from '@mantine/core'
+import { type Reverse } from '@strictly/base'
 import {
   type FlattenedTypesOfType,
   type FlattenedValuesOfType,
   flattenValidatorsOfValidatingType,
-  MinimumStringLengthValidationErrorType,
   MinimumStringLengthValidator,
   object,
   OptionalValidatorProxy,
   type ReadonlyTypeOfType,
-  RegexpValidationErrorType,
   RegexpValidator,
   stringType,
   type ValueOfType,
@@ -40,8 +32,10 @@ export const petOwnerType = object()
   .field('firstName', stringType.enforce(minimumNameLengthValidator))
   .field('surname', stringType.enforce(minimumNameLengthValidator))
   .field('phoneNumber', stringType.required().enforce(RegexpValidator.phone))
-  .optionalField('email', stringType.enforce(OptionalValidatorProxy.createNullableOrEmptyString(RegexpValidator.email)))
-  .narrow
+  .optionalField(
+    'email',
+    stringType.enforce(OptionalValidatorProxy.createNullableOrEmptyString(RegexpValidator.email)),
+  ).narrow
 
 export type PetOwner = ValueOfType<typeof petOwnerType>
 export type FlattenedPetOwnerTypes = FlattenedTypesOfType<typeof petOwnerType, '*'>
@@ -65,55 +59,49 @@ const petOwnerValidators = flattenValidatorsOfValidatingType<typeof petOwnerType
   petOwnerType,
 )
 
-export const petOwnerFieldAdapters = mergeAdaptersWithValidators(
-  unvalidatedPetOwnerFieldAdapters,
-  petOwnerValidators,
-)
+export const petOwnerFieldAdapters = mergeAdaptersWithValidators(unvalidatedPetOwnerFieldAdapters, petOwnerValidators)
 
 export type PetOwnerTypePaths = keyof typeof petOwnerFieldAdapters
 export type PetOwnerValuePaths = PetOwnerTypeToValuePaths[PetOwnerTypePaths]
 
-export type PetOwnerFields = FormFieldsOfFieldAdapters<
-  PetOwnerValueToTypePaths,
-  typeof petOwnerFieldAdapters
->
+export type PetOwnerFields = FormFieldsOfFieldAdapters<PetOwnerValueToTypePaths, typeof petOwnerFieldAdapters>
 
-export function FirstNameLabel() {
+export function firstNameLabel() {
   return t({
     message: 'First Name',
     comment: 'Text input for first name',
   })
 }
 
-export function SurnameLabel() {
+export function surnameLabel() {
   return t({
     message: 'Surname',
     comment: 'Text input for second name',
   })
 }
 
-export function PhoneNumberLabel() {
+export function phoneNumberLabel() {
   return t({
     message: 'Phone number',
     comment: 'Text input for contact phone number',
   })
 }
 
-export function PhoneNumberPlaceholder() {
+export function phoneNumberPlaceholder() {
   return t({
     message: '04xxxxxxxx',
     comment: 'Placeholder for the contact phone number',
   })
 }
 
-export function EmailLabel() {
+export function emailLabel() {
   return t({
     message: 'Email',
     comment: 'Text input for email address',
   })
 }
 
-export function EmailPlaceholder() {
+export function emailPlaceholder() {
   return t({
     message: 'me@somewhere.org',
     comment: 'Placeholder for the email address text input',
@@ -121,61 +109,34 @@ export function EmailPlaceholder() {
 }
 
 function FirstNameInputErrorRenderer({ error }: ErrorRendererProps<PetOwnerFields, '$.firstName'>) {
-  switch (error.type) {
-    case MinimumStringLengthValidationErrorType:
-      return t({
-        message: `First name must be at least ${error.minimumLength} characters long`,
-        comment: 'error that is displayed when the first name input is too short',
-      })
-    default:
-      throw new UnreachableError(error.type)
-  }
+  return (
+    <Trans comment='error that is displayed when the first name input is too short'>
+      First name must be at least {error.minimumLength} characters long
+    </Trans>
+  )
 }
 
 function SurnameInputErrorRenderer({ error }: ErrorRendererProps<PetOwnerFields, '$.firstName'>) {
-  switch (error.type) {
-    case MinimumStringLengthValidationErrorType:
-      return t({
-        message: `Surname must be at least ${error.minimumLength} characters long`,
-        comment: 'error that is displayed when the last name input is too short',
-      })
-    default:
-      throw new UnreachableError(error.type)
-  }
+  return (
+    <Trans comment='error that is displayed when the last name input is too short'>
+      Surname must be at least {error.minimumLength} characters long
+    </Trans>
+  )
 }
 
-function PhoneNumberErrorRenderer({ error }: ErrorRendererProps<PetOwnerFields, '$.phoneNumber'>) {
-  switch (error.type) {
-    case RegexpValidationErrorType:
-      return t({
-        message: 'Must be a valid phone number',
-        comment: 'error shown when the user puts in a weird phone number',
-      })
-    default:
-      throw new UnreachableError(error.type)
-  }
+function PhoneNumberErrorRenderer() {
+  return <Trans comment='error shown when the user puts in a weird phone number'>Must be a valid phone number</Trans>
 }
 
-function EmailErrorRenderer({ error }: ErrorRendererProps<PetOwnerFields, '$.email'>) {
-  switch (error.type) {
-    case RegexpValidationErrorType:
-      return t({
-        message: 'Must be a valid email',
-        comment: 'error shown when the user puts in a weird email address',
-      })
-    default:
-      throw new UnreachableError(error.type)
-  }
+function EmailErrorRenderer() {
+  return <Trans comment='error shown when the user puts in a weird email address'>Must be a valid email</Trans>
 }
 
 export type PetOwnerFieldsViewProps = FieldsViewProps<PetOwnerFields> & {
-  clearField: (valuePath: PetOwnerValuePaths) => void,
+  clearField: (valuePath: PetOwnerValuePaths) => void
 }
 
-export function PetOwnerFieldsView({
-  clearField,
-  ...props
-}: PetOwnerFieldsViewProps) {
+export function PetOwnerFieldsView({ clearField, ...props }: PetOwnerFieldsViewProps) {
   const form = useMantineFormFields(props)
   const FirstNameInput = form.textInput('$.firstName')
   const SurnameInput = form.textInput('$.surname')
@@ -186,41 +147,35 @@ export function PetOwnerFieldsView({
     clearField('$.phoneNumber')
   }, [clearField])
 
-  const ClearPhoneNumberButton = useCallback(() => {
-    return <CloseButton onClick={onClearPhoneNumber} />
-  }, [onClearPhoneNumber])
+  const ClearPhoneNumberButton = useCallback(() => <CloseButton onClick={onClearPhoneNumber} />, [onClearPhoneNumber])
 
   return (
     <Stack>
-      <Group
-        align='start'
-        grow={true}
-        preventGrowOverflow={true}
-      >
+      <Group align='start' grow preventGrowOverflow>
         <FirstNameInput
           ErrorRenderer={FirstNameInputErrorRenderer}
           autoCapitalize='words'
-          label={FirstNameLabel()}
+          label={firstNameLabel()}
           type='text'
         />
         <SurnameInput
           ErrorRenderer={SurnameInputErrorRenderer}
           autoCapitalize='words'
-          label={SurnameLabel()}
+          label={surnameLabel()}
           type='text'
         />
       </Group>
       <PhoneNumberInput
         ErrorRenderer={PhoneNumberErrorRenderer}
-        label={PhoneNumberLabel()}
-        placeholder={PhoneNumberPlaceholder()}
+        label={phoneNumberLabel()}
+        placeholder={phoneNumberPlaceholder()}
         rightSection={<ClearPhoneNumberButton />}
         type='tel'
       />
       <EmailInput
         ErrorRenderer={EmailErrorRenderer}
-        label={EmailLabel()}
-        placeholder={EmailPlaceholder()}
+        label={emailLabel()}
+        placeholder={emailPlaceholder()}
         type='email'
       />
     </Stack>

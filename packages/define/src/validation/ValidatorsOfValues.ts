@@ -11,7 +11,6 @@ export type ValidatorsOfValues<
   Context = any,
 > = {
   readonly [
-    K in keyof FlattenedValues
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    K in keyof FlattenedValues // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ]: Validator<FlattenedValues[K], any, TypePathsToValuePaths[K], Context>
 }

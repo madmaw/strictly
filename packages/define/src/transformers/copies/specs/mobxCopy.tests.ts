@@ -1,8 +1,5 @@
 import { mobxCopy } from 'transformers/copies/mobxCopy'
-import {
-  numberType,
-  object,
-} from 'types/builders'
+import { numberType, object } from 'types/builders'
 import { type ValueOfType } from 'types/ValueOfType'
 
 describe('mobxCopy', function () {

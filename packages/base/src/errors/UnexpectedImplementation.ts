@@ -1,5 +1,1 @@
-export class UnexpectedImplementationError extends Error {
-  constructor(impl: string) {
-    super(impl)
-  }
-}
+export class UnexpectedImplementationError extends Error {}

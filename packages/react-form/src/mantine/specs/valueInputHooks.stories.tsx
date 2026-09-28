@@ -8,22 +8,14 @@ import {
   Slider,
   type SliderProps,
 } from '@mantine/core'
-import {
-  type Meta,
-  type StoryObj,
-} from '@storybook/react-vite'
+import { type Meta, type StoryObj } from '@storybook/react-vite'
 import { type FieldsViewProps } from 'core/props'
 import { type SuppliedValueInputProps } from 'mantine/createValueInput'
 import { useMantineFormFields } from 'mantine/hooks'
-import {
-  type ComponentType,
-} from 'react'
+import { type ComponentType } from 'react'
 import { action } from 'storybook/actions'
 import { type Field } from 'types/Field'
-import {
-  NUMBER_INPUT_LABEL,
-  SLIDER_LABEL,
-} from './valueInputConstants'
+import { NUMBER_INPUT_LABEL, SLIDER_LABEL } from './valueInputConstants'
 
 function ErrorRenderer({ error }: { error: string }) {
   return `error ${error}`
@@ -32,27 +24,24 @@ function ErrorRenderer({ error }: { error: string }) {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type StoryValueInputProps<V> = SuppliedValueInputProps<V, any>
 
-function Component<
-  V,
-  P extends StoryValueInputProps<V>,
->({
+function Component<V, P extends StoryValueInputProps<V>>({
   ValueInput,
   inputProps,
   ...props
 }: FieldsViewProps<{
-  $: Field<V, string>,
+  $: Field<V, string>
 }> & {
-  ValueInput: ComponentType<P>,
+  ValueInput: ComponentType<P>
 } & {
-  inputProps: P,
+  inputProps: P
 }) {
   const form = useMantineFormFields(props)
   const ValueInputComponent = form.valueInput<'$', P>('$', ValueInput)
   return (
     <ValueInputComponent
       {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/consistent-type-assertions
-        ...inputProps as any
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        ...(inputProps as any)
       }
       ErrorRenderer={ErrorRenderer}
     />
@@ -71,10 +60,7 @@ const meta: Meta<typeof Component> = {
 
 export default meta
 
-type Story<
-  V,
-  P extends StoryValueInputProps<V>,
-> = StoryObj<typeof Component<V, P>>
+type Story<V, P extends StoryValueInputProps<V>> = StoryObj<typeof Component<V, P>>
 
 export const EmptyNumberInput: Story<number | string, NumberInputProps> = {
   args: {

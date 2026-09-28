@@ -1,14 +1,5 @@
 import { flattenJsonValueToTypePathsOf } from 'transformers/flatteners/flattenJsonValueToTypePathsOf'
-import {
-  booleanType,
-  list,
-  nullType,
-  numberType,
-  object,
-  record,
-  stringType,
-  union,
-} from 'types/builders'
+import { booleanType, list, nullType, numberType, object, record, stringType, union } from 'types/builders'
 
 describe('flattenJsonValueToTypePathsOf', function () {
   describe('literal', function () {
@@ -24,10 +15,7 @@ describe('flattenJsonValueToTypePathsOf', function () {
 
   describe('list', function () {
     const typeDef = list(numberType)
-    const flattened = flattenJsonValueToTypePathsOf(typeDef, [
-      1,
-      2,
-    ])
+    const flattened = flattenJsonValueToTypePathsOf(typeDef, [1, 2])
 
     it('equals expected value', function () {
       expect(flattened).toEqual({
@@ -55,9 +43,7 @@ describe('flattenJsonValueToTypePathsOf', function () {
   })
 
   describe('object', function () {
-    const typeDef = object()
-      .field('a', numberType)
-      .field('b', booleanType)
+    const typeDef = object().field('a', numberType).field('b', booleanType)
     const flattened = flattenJsonValueToTypePathsOf(typeDef, {
       a: 1,
       b: true,
@@ -74,14 +60,8 @@ describe('flattenJsonValueToTypePathsOf', function () {
 
   describe('union', function () {
     describe('non-discriminated', function () {
-      const typeDef = union()
-        .or('a', list(numberType))
-        .or('b', nullType)
-      const flattened = flattenJsonValueToTypePathsOf(typeDef, [
-        1,
-        2,
-        3,
-      ])
+      const typeDef = union().or('a', list(numberType)).or('b', nullType)
+      const flattened = flattenJsonValueToTypePathsOf(typeDef, [1, 2, 3])
 
       it('equals expected value', function () {
         expect(flattened).toEqual({

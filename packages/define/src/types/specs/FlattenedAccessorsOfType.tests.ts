@@ -1,7 +1,4 @@
-import {
-  numberType,
-  record,
-} from 'types/builders'
+import { numberType, record } from 'types/builders'
 import { type FlattenedAccessorsOfType } from 'types/FlattenedAccessorsOfType'
 
 describe('FlattenedAccessorsOfType', function () {
@@ -12,13 +9,13 @@ describe('FlattenedAccessorsOfType', function () {
 
     type C = {
       readonly $: {
-        readonly value: Record<string, number>,
-        set: (v: Record<string, number>) => void,
-      },
+        readonly value: Record<string, number>
+        set: (v: Record<string, number>) => void
+      }
       readonly [_: `$.${string}`]: {
-        readonly value: number,
-        set: (v: number) => void,
-      },
+        readonly value: number
+        set: (v: number) => void
+      }
     }
     it('equals expected type', function () {
       expectTypeOf<C>().toEqualTypeOf<V>()

@@ -1,12 +1,5 @@
-import {
-  Code,
-  Paper,
-  Stack,
-} from '@mantine/core'
-import {
-  type Meta,
-  type StoryObj,
-} from '@storybook/react-vite'
+import { Code, Paper, Stack } from '@mantine/core'
+import { type Meta, type StoryObj } from '@storybook/react-vite'
 import { type FieldsViewProps } from 'core/props'
 import { useMantineFormFields } from 'mantine/hooks'
 import { action } from 'storybook/actions'
@@ -14,32 +7,25 @@ import { type Field } from 'types/Field'
 
 type ListPath = `$.${number}`
 
-function Component(props: FieldsViewProps<{
-  $: Field<string[], string>,
-}>) {
+function Component(
+  props: FieldsViewProps<{
+    $: Field<string[], string>
+  }>,
+) {
   const form = useMantineFormFields(props)
   const List = form.list('$')
   return (
-    <Paper
-      p='sm'
-      withBorder={true}
-    >
+    <Paper p='sm' withBorder>
       <Stack>
         <List>
           {function (valuePath: ListPath, value: string, index: number) {
             return (
               <Code key={valuePath}>
-                <span>
-                  ValuePath: {valuePath}
-                </span>
+                <span>ValuePath: {valuePath}</span>
                 <br />
-                <span>
-                  Value: {value}
-                </span>
+                <span>Value: {value}</span>
                 <br />
-                <span>
-                  Index: {index}
-                </span>
+                <span>Index: {index}</span>
               </Code>
             )
           }}
@@ -82,19 +68,8 @@ export const Populated: Story = {
       $: {
         readonly: false,
         required: false,
-        value: [
-          'A',
-          'B',
-          'C',
-          'D',
-        ],
-        listIndexToKey: [
-          100,
-          1,
-          33,
-          5,
-          101,
-        ],
+        value: ['A', 'B', 'C', 'D'],
+        listIndexToKey: [100, 1, 33, 5, 101],
       },
     },
   },

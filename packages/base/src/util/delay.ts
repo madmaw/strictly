@@ -16,14 +16,13 @@ export function createDelay(millis: number): Delay {
 export function createWarmupDelay(coldMillis: number, warmMillis: number) {
   let warmup: Promise<void> | undefined
   return function () {
-    if (warmup != null) {
-      return warmup.then(function () {
-        return delay(warmMillis)
-      })
-    } else {
+    if (warmup == null) {
       warmup = delay(coldMillis)
       return warmup
     }
+    return warmup.then(function () {
+      return delay(warmMillis)
+    })
   }
 }
 

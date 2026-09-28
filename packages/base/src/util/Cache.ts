@@ -1,17 +1,14 @@
 import { type Maybe } from 'types/Maybe'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type CacheValueFactory<A extends any[], V> = {
-  (...args: A): V,
-}
+export type CacheValueFactory<A extends any[], V> = (...args: A) => V
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export class Cache<A extends any[], V> {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private readonly cache: Map<any, V> = new Map()
+  private readonly cache = new Map<any, V>()
 
-  constructor(private readonly valueFactory: CacheValueFactory<A, V>) {
-  }
+  constructor(private readonly valueFactory: CacheValueFactory<A, V>) {}
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private retrieveFinalMap(...args: A): Map<any, V> {
@@ -37,7 +34,7 @@ export class Cache<A extends any[], V> {
   retrieveOrCreate(...args: A): V {
     const finalKey = args[args.length - 1]
     const finalMap = this.retrieveFinalMap(...args)
-    if (finalMap == null || !finalMap.has(finalKey)) {
+    if (!finalMap.has(finalKey)) {
       const value = this.valueFactory(...args)
       finalMap.set(finalKey, value)
     }

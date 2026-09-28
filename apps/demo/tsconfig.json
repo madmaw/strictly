@@ -11,11 +11,7 @@
     ]
   },
   "extends": "../../tsconfig.json",
-  "include": [
-    "**/*.module.css",
-    "src",
-    "tsconfig.json"
-  ],
+  "include": ["**/*.module.css", "src", "tsconfig.json"],
   "references": [
     {
       "path": "../../support/lingui"

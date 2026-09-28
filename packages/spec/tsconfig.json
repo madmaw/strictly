@@ -6,13 +6,7 @@
     }
   },
   "extends": "../../tsconfig.json",
-  "include": [
-    ".storybook/**/*.ts",
-    ".storybook/**/*.tsx",
-    ".vitest/**/*.ts",
-    "src",
-    "tsconfig.json"
-  ],
+  "include": [".storybook/**/*.ts", ".storybook/**/*.tsx", ".vitest/**/*.ts", "src", "tsconfig.json"],
   "references": [
     {
       "path": "../../support/vite"

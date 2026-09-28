@@ -19,8 +19,7 @@
   box-sizing: border-box;
   flex: 1;
   max-width: calc(grid-baseline * 40);
-  padding: calc(grid-baseline * 2) grid-baseline calc(grid-baseline * 2)
-    calc(grid-baseline * 2);
+  padding: calc(grid-baseline * 2) grid-baseline calc(grid-baseline * 2) calc(grid-baseline * 2);
 }
 
 .scroll {

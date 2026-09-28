@@ -5,24 +5,15 @@ import {
   validate,
   type Validator,
 } from '@strictly/define'
-import {
-  type MergedOfValidators,
-  mergeValidators,
-} from 'types/mergeValidators'
-import {
-  type Mock,
-  type Mocked,
-} from 'vitest'
-import {
-  mock,
-  mockReset,
-} from 'vitest-mock-extended'
+import { type MergedOfValidators, mergeValidators } from 'types/mergeValidators'
+import { type Mock, type Mocked } from 'vitest'
+import { mock, mockReset } from 'vitest-mock-extended'
 
 describe('MergedOfValidators', function () {
   describe('empty validators 1', function () {
     type Validators1 = {
-      readonly a: Validator<string, 'error a', 'a', null>,
-      readonly b: Validator<number, 'error b', 'b', null>,
+      readonly a: Validator<string, 'error a', 'a', null>
+      readonly b: Validator<number, 'error b', 'b', null>
     }
     type Validators2 = {}
 
@@ -36,8 +27,8 @@ describe('MergedOfValidators', function () {
   describe('empty validators 2', function () {
     type Validators1 = {}
     type Validators2 = {
-      readonly a: Validator<string, 'error a', 'a', null>,
-      readonly b: Validator<number, 'error b', 'b', null>,
+      readonly a: Validator<string, 'error a', 'a', null>
+      readonly b: Validator<number, 'error b', 'b', null>
     }
 
     type Validators = MergedOfValidators<Validators1, Validators2>
@@ -49,35 +40,35 @@ describe('MergedOfValidators', function () {
 
   describe('merged validators with different keys', function () {
     type Validators1 = {
-      a: Validator<string, 'error a', 'a', null>,
+      a: Validator<string, 'error a', 'a', null>
     }
     type Validators2 = {
-      b: Validator<number, 'error b', 'b', null>,
+      b: Validator<number, 'error b', 'b', null>
     }
 
     type Validators = MergedOfValidators<Validators1, Validators2>
 
     it('equals the expected type', function () {
       expectTypeOf<Validators>().toEqualTypeOf<{
-        readonly a: Validator<string, 'error a', 'a', null>,
-        readonly b: Validator<number, 'error b', 'b', null>,
+        readonly a: Validator<string, 'error a', 'a', null>
+        readonly b: Validator<number, 'error b', 'b', null>
       }>()
     })
   })
 
   describe('merged validators with same key', function () {
     type Validators1 = {
-      a: Validator<string, 'error a', 'a', null>,
+      a: Validator<string, 'error a', 'a', null>
     }
     type Validators2 = {
-      a: Validator<string, 'error b', 'a', null>,
+      a: Validator<string, 'error b', 'a', null>
     }
 
     type Validators = MergedOfValidators<Validators1, Validators2>
 
     it('equals the expected type', function () {
       expectTypeOf<Validators>().toEqualTypeOf<{
-        readonly a: Validator<string, 'error a' | 'error b', 'a', null>,
+        readonly a: Validator<string, 'error a' | 'error b', 'a', null>
       }>()
     })
   })
@@ -181,26 +172,10 @@ describe('mergeValidators', function () {
     const validators = mergeValidators(validators1, validators2)
 
     describe.each([
-      [
-        false,
-        false,
-        false,
-      ],
-      [
-        false,
-        true,
-        true,
-      ],
-      [
-        true,
-        false,
-        true,
-      ],
-      [
-        true,
-        true,
-        true,
-      ],
+      [false, false, false],
+      [false, true, true],
+      [true, false, true],
+      [true, true, true],
     ] as const)('required', function (required1, required2, required) {
       beforeEach(function () {
         validatorA1.validate.mockReturnValue('error a1')
@@ -223,26 +198,10 @@ describe('mergeValidators', function () {
     })
 
     describe.each([
-      [
-        false,
-        false,
-        false,
-      ],
-      [
-        false,
-        true,
-        true,
-      ],
-      [
-        true,
-        false,
-        true,
-      ],
-      [
-        true,
-        true,
-        true,
-      ],
+      [false, false, false],
+      [false, true, true],
+      [true, false, true],
+      [true, true, true],
     ] as const)('required', function (readonly1, readonly2, readonly) {
       beforeEach(function () {
         validatorA1.validate.mockReturnValue('error a1')

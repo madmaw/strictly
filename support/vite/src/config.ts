@@ -22,12 +22,12 @@ import {
 } from 'vitest/config'
 
 export type TsconfigJson = {
-  readonly references: readonly { path: string }[],
+  readonly references: readonly { path: string }[]
 }
 
 export type LibraryPackageJson = {
-  readonly dependencies?: Readonly<Record<string, string>>,
-  readonly peerDependencies?: Readonly<Record<string, string>>,
+  readonly dependencies?: Readonly<Record<string, string>>
+  readonly peerDependencies?: Readonly<Record<string, string>>
 }
 
 type TestProjectConfig = NonNullable<TestProjectInlineConfiguration['test']>
@@ -42,9 +42,7 @@ const DIST = 'dist'
 // babel resolves plugin names relative to the package being built, where these are not installed
 const require = createRequire(import.meta.url)
 
-export function createTsconfigPathsPlugin({
-  references,
-}: TsconfigJson) {
+export function createTsconfigPathsPlugin({ references }: TsconfigJson) {
   return tsconfigPaths({
     // must specify projects otherwise we get configuration errors for unrelated projects
     projects: [
@@ -62,7 +60,7 @@ export function createTsconfigPathsPlugin({
 export function createReactPlugin({
   lingui: withLingui = false,
 }: {
-  readonly lingui?: boolean,
+  readonly lingui?: boolean
 } = {}) {
   return reactSupport({
     babel: {
@@ -117,11 +115,15 @@ export function createReactViteConfig(tsconfig: TsconfigJson, {
  * Bundles a publishable package from `src/index.ts` into ESM and CJS outputs with rolled up type declarations.
  * Anything listed in dependencies or peerDependencies is left external.
  */
-export function createViteLibraryConfig(tsconfig: TsconfigJson, packageJson: LibraryPackageJson, {
-  react = false,
-}: {
-  readonly react?: boolean,
-} = {}) {
+export function createViteLibraryConfig(
+  tsconfig: TsconfigJson,
+  packageJson: LibraryPackageJson,
+  {
+    react = false,
+  }: {
+    readonly react?: boolean
+  } = {},
+) {
   const externals = Object.keys({
     ...packageJson.dependencies,
     ...packageJson.peerDependencies,
@@ -132,15 +134,12 @@ export function createViteLibraryConfig(tsconfig: TsconfigJson, packageJson: Lib
       lib: {
         entry: 'src/index.ts',
         fileName: 'index',
-        formats: [
-          'es',
-          'cjs',
-        ],
+        formats: ['es', 'cjs'],
       },
       minify: false,
       outDir: DIST,
       rollupOptions: {
-        external: function (id) {
+        external(id) {
           return externals.some(function (external) {
             return id === external || id.startsWith(`${external}/`)
           })
@@ -151,7 +150,7 @@ export function createViteLibraryConfig(tsconfig: TsconfigJson, packageJson: Lib
       ...plugins,
       createTsconfigPathsPlugin(tsconfig),
       dts({
-        afterBuild: async function () {
+        async afterBuild() {
           // the CJS entry point needs its own declaration file
           await copyFile(join(DIST, 'index.d.ts'), join(DIST, 'index.d.cts'))
         },
@@ -159,6 +158,7 @@ export function createViteLibraryConfig(tsconfig: TsconfigJson, packageJson: Lib
         // api extractor looks for lib.*.d.ts in the project typescript folder, but typescript 6 no longer ships
         // them there, so let it fall back to the compiler it bundles
         rollupOptions: {
+          // oxlint-disable-next-line no-undefined -- undefined disables the folder lookup
           typescriptCompilerFolder: undefined,
         },
         rollupTypes: true,

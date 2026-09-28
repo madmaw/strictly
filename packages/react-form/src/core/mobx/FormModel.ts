@@ -3,6 +3,7 @@ import {
   assertExistsAndReturn,
   checkValidNumber,
   type ElementOfArray,
+  lookup,
   map,
   type Maybe,
   toArray,
@@ -27,12 +28,7 @@ import {
   type ValueOfType,
   valuePathToTypePath,
 } from '@strictly/define'
-import {
-  action,
-  computed,
-  observable,
-  runInAction,
-} from 'mobx'
+import { action, computed, observable, runInAction } from 'mobx'
 import {
   type ReadonlyDeep,
   type SimplifyDeep,
@@ -40,26 +36,17 @@ import {
   type UnionToIntersection,
   type ValueOf,
 } from 'type-fest'
-import {
-  type Field,
-} from 'types/Field'
-import {
-  type AnnotatedFieldConversion,
-  UnreliableFieldConversionType,
-} from 'types/FieldConverters'
+import { type Field } from 'types/Field'
+import { type AnnotatedFieldConversion, UnreliableFieldConversionType } from 'types/FieldConverters'
 import {
   type ContextOfFieldAdapter,
   type ErrorOfFieldAdapter,
   type FieldAdapter,
   type ToOfFieldAdapter,
 } from './FieldAdapter'
-import {
-  type FlattenedListTypesOfType,
-} from './FlattenedListTypesOfType'
+import { type FlattenedListTypesOfType } from './FlattenedListTypesOfType'
 
-export type FlattenedConvertedFieldsOf<
-  ValuePathsToAdapters extends Readonly<Record<string, FieldAdapter>>,
-> = {
+export type FlattenedConvertedFieldsOf<ValuePathsToAdapters extends Readonly<Record<string, FieldAdapter>>> = {
   readonly [K in keyof ValuePathsToAdapters]: Field<
     ToOfFieldAdapter<ValuePathsToAdapters[K]>,
     ErrorOfFieldAdapter<ValuePathsToAdapters[K]>
@@ -72,27 +59,20 @@ export type FlattenedTypePathsToAdaptersOf<
   Context,
 > = {
   readonly [
-    K in keyof FlattenedValues
-    // TODO would be better to use the equivalent readonly typedef, but it causes typescript to
-    // infinitely recurse
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  ]?: FieldAdapter<ReadonlyDeep<FlattenedValues[K]>, any, any, any, Context>
+    K in keyof FlattenedValues // TODO would be better to use the equivalent readonly typedef, but it causes typescript to
+  ]?: // infinitely recurse
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  FieldAdapter<ReadonlyDeep<FlattenedValues[K]>, any, any, any, Context>
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type FieldOverride<V = any> = Maybe<V>
 
-type FlattenedFieldOverrides<
-  ValuePathsToAdapters extends Readonly<Record<string, FieldAdapter>>,
-> = {
-  -readonly [K in keyof ValuePathsToAdapters]?: FieldOverride<
-    ToOfFieldAdapter<ValuePathsToAdapters[K]>
-  >
+type FlattenedFieldOverrides<ValuePathsToAdapters extends Readonly<Record<string, FieldAdapter>>> = {
+  -readonly [K in keyof ValuePathsToAdapters]?: FieldOverride<ToOfFieldAdapter<ValuePathsToAdapters[K]>>
 }
 
-type FlattenedErrorOverrides<
-  ValuePathsToAdapters extends Readonly<Record<string, FieldAdapter>>,
-> = {
+type FlattenedErrorOverrides<ValuePathsToAdapters extends Readonly<Record<string, FieldAdapter>>> = {
   -readonly [K in keyof ValuePathsToAdapters]?: ErrorOfFieldAdapter<ValuePathsToAdapters[K]>
 }
 
@@ -102,51 +82,50 @@ export enum Validation {
   Always = 2,
 }
 
-type FlattenedValidation<
-  ValuePathsToAdapters extends Readonly<Record<string, FieldAdapter>>,
-> = {
+type FlattenedValidation<ValuePathsToAdapters extends Readonly<Record<string, FieldAdapter>>> = {
   -readonly [K in keyof ValuePathsToAdapters]?: Validation
 }
 
 export type ValuePathsToAdaptersOf<
   TypePathsToAdapters extends Partial<Readonly<Record<string, FieldAdapter>>>,
   ValuePathsToTypePaths extends Readonly<Record<string, string>>,
-> = keyof TypePathsToAdapters extends ValueOf<ValuePathsToTypePaths> ? {
-    readonly [
-      K in keyof ValuePathsToTypePaths as unknown extends TypePathsToAdapters[ValuePathsToTypePaths[K]] ? never : K
-    ]: NonNullable<TypePathsToAdapters[ValuePathsToTypePaths[K]]>
-  }
-  : never
+> =
+  keyof TypePathsToAdapters extends ValueOf<ValuePathsToTypePaths>
+    ? {
+        readonly [
+          K in keyof ValuePathsToTypePaths as unknown extends TypePathsToAdapters[ValuePathsToTypePaths[K]] ? never : K
+        ]: NonNullable<TypePathsToAdapters[ValuePathsToTypePaths[K]]>
+      }
+    : never
 
 export type ContextOf<TypePathsToAdapters extends Partial<Readonly<Record<string, FieldAdapter>>>> =
   UnionToIntersection<
     | {
-      readonly [
-        K in keyof TypePathsToAdapters
-      ]: TypePathsToAdapters[K] extends undefined ? undefined
-        // ignore unspecified values
-        : unknown extends ContextOfFieldAdapter<NonNullable<TypePathsToAdapters[K]>> ? never
-        : ContextOfFieldAdapter<NonNullable<TypePathsToAdapters[K]>>
-    }[keyof TypePathsToAdapters]
+        readonly [K in keyof TypePathsToAdapters]: TypePathsToAdapters[K] extends undefined
+          ? undefined
+          : // ignore unspecified values
+            unknown extends ContextOfFieldAdapter<NonNullable<TypePathsToAdapters[K]>>
+            ? never
+            : ContextOfFieldAdapter<NonNullable<TypePathsToAdapters[K]>>
+      }[keyof TypePathsToAdapters]
     // ensure we have at least one thing to intersect (can end up with a `never` context otherwise)
     | {}
   >
 
 export type FormModelContextSource<ContextType, V, ValuePath extends string | number | symbol> = {
-  forPath(value: V, valuePath: ValuePath): ContextType,
+  forPath(value: V, valuePath: ValuePath): ContextType
 }
 
 export abstract class FormModel<
   T extends Type,
   ValueToTypePaths extends Readonly<Record<string, string>>,
-  TypePathsToAdapters extends FlattenedTypePathsToAdaptersOf<
-    FlattenedValuesOfType<T, '*'>,
-    ContextType
-  >,
+  TypePathsToAdapters extends FlattenedTypePathsToAdaptersOf<FlattenedValuesOfType<T, '*'>, ContextType>,
   ContextType = ContextOf<TypePathsToAdapters>,
-  ContextSource extends FormModelContextSource<ContextType, ValueOfType<ReadonlyTypeOfType<T>>,
-    keyof ValuePathsToAdapters> = FormModelContextSource<ContextType, ValueOfType<ReadonlyTypeOfType<T>>,
-      string | number | symbol>,
+  ContextSource extends FormModelContextSource<
+    ContextType,
+    ValueOfType<ReadonlyTypeOfType<T>>,
+    keyof ValuePathsToAdapters
+  > = FormModelContextSource<ContextType, ValueOfType<ReadonlyTypeOfType<T>>, string | number | symbol>,
   ValuePathsToAdapters extends ValuePathsToAdaptersOf<TypePathsToAdapters, ValueToTypePaths> = ValuePathsToAdaptersOf<
     TypePathsToAdapters,
     ValueToTypePaths
@@ -192,18 +171,13 @@ export abstract class FormModel<
         typePath,
         valuePath,
       ): AnnotatedFieldConversion<FieldOverride> | undefined => {
-        // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
         const contextValue = contextSource.forPath(originalValue, valuePath as keyof ValuePathsToAdapters)
 
-        // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
         const adapter = this.adapters[typePath as keyof TypePathsToAdapters]
         if (adapter == null) {
           return
         }
-        const {
-          convert,
-          revert,
-        } = adapter
+        const { convert, revert } = adapter
         if (revert == null) {
           // no need to store a temporary value if the value cannot be written back
           return
@@ -213,7 +187,6 @@ export abstract class FormModel<
       },
       this.listIndicesToKeys,
     )
-    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     this.fieldOverrides = map(conversions, function (_k, v) {
       return v && [v.value]
     }) as FlattenedFieldOverrides<ValuePathsToAdapters>
@@ -227,22 +200,18 @@ export abstract class FormModel<
 
   @computed
   get fields(): SimplifyDeep<FlattenedConvertedFieldsOf<ValuePathsToAdapters>> {
-    return new Proxy<SimplifyDeep<FlattenedConvertedFieldsOf<ValuePathsToAdapters>>>(
-      this.knownFields,
-      {
-        get: (target, prop) => {
-          // eslint-disable-next-line @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-explicit-any
-          const field = (target as any)[prop]
-          if (field != null) {
-            return field
-          }
-          if (typeof prop === 'string') {
-            // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-            return this.maybeSynthesizeFieldByValuePath(prop as keyof ValuePathsToAdapters)
-          }
-        },
+    return new Proxy<SimplifyDeep<FlattenedConvertedFieldsOf<ValuePathsToAdapters>>>(this.knownFields, {
+      get: (target, prop) => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const field = (target as any)[prop]
+        if (field != null) {
+          return field
+        }
+        if (typeof prop === 'string') {
+          return this.maybeSynthesizeFieldByValuePath(prop as keyof ValuePathsToAdapters)
+        }
       },
-    )
+    })
   }
 
   @computed
@@ -252,14 +221,8 @@ export abstract class FormModel<
       this.observableValue,
       () => {},
       // TODO swap these to valuePath, typePath in flatten
-      (_t: StrictTypeDef, _v: AnyValueType, _setter, typePath, valuePath): Field | undefined => {
-        return this.synthesizeFieldByPaths(
-          // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-          valuePath as keyof ValuePathsToAdapters,
-          // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-          typePath as keyof TypePathsToAdapters,
-        )
-      },
+      (_t: StrictTypeDef, _v: AnyValueType, _setter, typePath, valuePath): Field | undefined =>
+        this.synthesizeFieldByPaths(valuePath as keyof ValuePathsToAdapters, typePath as keyof TypePathsToAdapters),
       this.listIndicesToKeys,
     )
   }
@@ -267,10 +230,8 @@ export abstract class FormModel<
   private maybeSynthesizeFieldByValuePath(valuePath: keyof ValuePathsToAdapters): Field | undefined {
     let typePath: keyof TypePathsToAdapters
     try {
-      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
       typePath = valuePathToTypePath<ValueToTypePaths, keyof ValueToTypePaths>(
         this.type,
-        // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
         valuePath as keyof ValueToTypePaths,
         true,
       ) as keyof TypePathsToAdapters
@@ -289,37 +250,25 @@ export abstract class FormModel<
       // invalid path, which can happen
       return
     }
-    const {
-      convert,
-      create,
-      revert,
-    } = adapter
+    const { convert, create, revert } = adapter
 
     const fieldOverride = this.fieldOverrides[valuePath]
     const accessor = this.getAccessorForValuePath(valuePath)
-    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-    const fieldTypeDef = this.flattenedTypeDefs[typePath as string]
+    const fieldTypeDef = lookup(this.flattenedTypeDefs, typePath as string)
     const context = this.contextSource.forPath(this.observableValue, valuePath)
     const defaultValue = create(valuePath, context)
 
-    const {
-      value,
-      required,
-      readonly,
-    } = convert(
-      accessor != null
-        ? accessor.value
-        : fieldTypeDef != null
-        ? mobxCopy(
-          fieldTypeDef,
-          defaultValue,
-        )
-        // fake values can't be copied
-        : defaultValue,
+    const { value, required, readonly } = convert(
+      accessor == null
+        ? fieldTypeDef == null
+          ? // fake values can't be copied
+            defaultValue
+          : mobxCopy(fieldTypeDef, defaultValue)
+        : accessor.value,
       valuePath,
       context,
     )
-    const displayedValue = fieldOverride != null ? fieldOverride[0] : value
+    const displayedValue = fieldOverride == null ? value : fieldOverride[0]
 
     return {
       context,
@@ -342,15 +291,7 @@ export abstract class FormModel<
     if (field == null) {
       return
     }
-    const {
-      context,
-      convert,
-      revert,
-      displayedValue,
-      required,
-      readonly,
-      defaultValue,
-    } = field
+    const { context, convert, revert, displayedValue, required, readonly, defaultValue } = field
     const validation = this.validation[valuePath] ?? Validation.None
     let error: unknown = this.errorOverrides[valuePath]
     if (error == null) {
@@ -360,15 +301,13 @@ export abstract class FormModel<
           break
         case Validation.Changed:
           if (revert != null) {
-            const originalValue = valuePath in this.originalValues
-              // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-              ? this.originalValues[valuePath as string]
-              : defaultValue
+            const originalValue =
+              valuePath in this.originalValues ? this.originalValues[valuePath as string] : defaultValue
             const { value: originalDisplayedValue } = convert(originalValue, valuePath, context)
             // TODO better comparisons, displayed values can still be complex
             if (displayedValue !== originalDisplayedValue) {
               const revertResult = revert(displayedValue, valuePath, context)
-              if (revertResult?.type === UnreliableFieldConversionType.Failure) {
+              if (revertResult.type === UnreliableFieldConversionType.Failure) {
                 ;({ error } = revertResult)
               }
             }
@@ -393,13 +332,11 @@ export abstract class FormModel<
       readonly,
       required,
       // make a copy of the index mapping and remove the final value (next id)
-      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
       listIndexToKey: this.listIndicesToKeys[valuePath as string]?.slice(0, -1),
     }
   }
 
   getAccessorForValuePath(valuePath: keyof ValuePathsToAdapters): Accessor | undefined {
-    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     return this.accessors[valuePath as string]
   }
 
@@ -417,9 +354,7 @@ export abstract class FormModel<
   }
 
   private maybeGetAdapterForValuePath(valuePath: keyof ValuePathsToAdapters) {
-    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     const typePath = valuePathToTypePath(this.type, valuePath as string, true)
-    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     return this.adapters[typePath as keyof TypePathsToAdapters]
   }
 
@@ -433,15 +368,11 @@ export abstract class FormModel<
 
   @computed
   get dirty() {
-    return Object.keys(this.accessors).some((valuePath) => {
-      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-      return this.isFieldDirty(valuePath as keyof ValuePathsToAdapters)
-    })
+    return Object.keys(this.accessors).some((valuePath) => this.isFieldDirty(valuePath as keyof ValuePathsToAdapters))
   }
 
   @computed
   get valueChanged() {
-    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     return !equals(this.type, this.observableValue, this.originalValue as ValueOfType<T>)
   }
 
@@ -459,15 +390,9 @@ export abstract class FormModel<
   }
 
   listValuePaths<K extends keyof FlattenedListTypesOfType<T>>(valuePath: K): readonly `${K}.${number}`[] {
-    const {
-      value,
-      listIndexToKey,
-      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-    } = this.fields[valuePath as unknown as keyof ValuePathsToAdapters]
-    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+    const { value, listIndexToKey } = this.fields[valuePath as unknown as keyof ValuePathsToAdapters]
     return (value as unknown[]).map((_, i) => {
       const key = listIndexToKey?.[i]
-      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
       return `${valuePath as string}.${key}` as `${K}.${number}`
     })
   }
@@ -478,12 +403,10 @@ export abstract class FormModel<
     elementValue: Maybe<ElementOfArray<FlattenedValuesOfType<T>[K]>> = null,
     index?: number,
   ) {
-    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     const listValuePath = valuePath as string
     const accessor = this.accessors[valuePath]
     const listTypePath = this.typePath(valuePath)
     const definedIndex = index ?? accessor.value.length
-    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     const elementTypePath = `${listTypePath}.*` as keyof TypePathsToAdapters
     const elementAdapter = assertExistsAndReturn(
       this.adapters[elementTypePath],
@@ -492,25 +415,20 @@ export abstract class FormModel<
       valuePath,
     )
     // TODO validation on new elements
-    const element = elementValue != null
-      ? elementValue[0]
-      : elementAdapter.create(
-        elementTypePath,
-        // TODO what can we use for the value path here?
-        // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-        this.contextSource.forPath(this.observableValue, valuePath as unknown as keyof ValuePathsToAdapters),
-      )
+    const element =
+      elementValue == null
+        ? elementAdapter.create(
+            elementTypePath,
+            // TODO what can we use for the value path here?
+            this.contextSource.forPath(this.observableValue, valuePath as unknown as keyof ValuePathsToAdapters),
+          )
+        : elementValue[0]
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const originalList: any[] = accessor.value
-    const newList = [
-      ...originalList.slice(0, definedIndex),
-      element,
-      ...originalList.slice(definedIndex),
-    ]
+    const newList = [...originalList.slice(0, definedIndex), element, ...originalList.slice(definedIndex)]
     runInAction(() => {
       accessor.set(newList)
       // delete any value overrides so the new list isn't shadowed
-      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
       delete this.fieldOverrides[listValuePath as keyof ValuePathsToAdapters]
       const indicesToKeys = assertExistsAndReturn(
         this.listIndicesToKeys[listValuePath],
@@ -527,30 +445,29 @@ export abstract class FormModel<
 
   removeListItem<K extends keyof FlattenedListTypesOfType<T>>(...elementValuePaths: readonly `${K}.${number}`[]) {
     runInAction(() => {
-      elementValuePaths.forEach(elementValuePath => {
-        const [
-          listValuePath,
-          elementKeyString,
-        ] = assertExistsAndReturn(
+      elementValuePaths.forEach((elementValuePath) => {
+        const [listValuePath, elementKeyString] = assertExistsAndReturn(
           jsonPathPop(elementValuePath),
           'expected a path with two or more segments {}',
           elementValuePath,
         )
         const accessor = this.accessors[listValuePath]
         const elementKey = checkValidNumber(
-          parseInt(elementKeyString),
+          Number.parseInt(elementKeyString),
           'unexpected id {} ({})',
           elementKeyString,
           elementValuePath,
         )
-        const indicesToKeys = this.listIndicesToKeys[listValuePath]
-        const elementIndex = indicesToKeys?.indexOf(elementKey) ?? -1
+        const indicesToKeys = lookup(this.listIndicesToKeys, listValuePath)
+        if (indicesToKeys == null) {
+          return
+        }
+        const elementIndex = indicesToKeys.indexOf(elementKey)
         if (elementIndex >= 0) {
           const newList = [...accessor.value]
           newList.splice(elementIndex, 1)
           accessor.set(newList)
           // delete any value overrides so the new list isn't shadowed
-          // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
           delete this.fieldOverrides[listValuePath as keyof ValuePathsToAdapters]
           indicesToKeys.splice(elementIndex, 1)
         }
@@ -567,7 +484,7 @@ export abstract class FormModel<
 
     assertExists(revert, 'setting value not supported {}', valuePath)
 
-    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const conversion = revert(value, valuePath as any, this.contextSource.forPath(this.observableValue, valuePath))
     const accessor = this.getAccessorForValuePath(valuePath)
     return runInAction(() => {
@@ -601,10 +518,10 @@ export abstract class FormModel<
     error?: ErrorOfFieldAdapter<ValuePathsToAdapters[K]>,
   ) {
     runInAction(() => {
-      if (error) {
-        this.errorOverrides[valuePath] = error
-      } else {
+      if (error == null) {
         delete this.errorOverrides[valuePath]
+      } else {
+        this.errorOverrides[valuePath] = error
       }
     })
   }
@@ -621,23 +538,15 @@ export abstract class FormModel<
 
   clearFieldValue<K extends StringKeyOf<ValuePathsToAdapters>>(valuePath: K) {
     const typePath = this.typePath(valuePath)
-    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     const adapter = this.adapters[typePath as keyof TypePathsToAdapters]
     if (adapter == null) {
       return
     }
-    const {
-      convert,
-      create,
-    } = adapter
+    const { convert, create } = adapter
 
-    const context = this.contextSource.forPath(this.observableValue, // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-      valuePath as unknown as keyof ValuePathsToAdapters)
+    const context = this.contextSource.forPath(this.observableValue, valuePath as unknown as keyof ValuePathsToAdapters)
     const value = create(valuePath, context)
-    const {
-      value: displayValue,
-    } = convert(value, valuePath, context)
-    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+    const { value: displayValue } = convert(value, valuePath, context)
     const key = valuePath as unknown as keyof ValuePathsToAdapters
     runInAction(() => {
       this.fieldOverrides[key] = [displayValue]
@@ -659,7 +568,6 @@ export abstract class FormModel<
   isValuePathActive<K extends keyof ValuePathsToAdapters>(valuePath: K): boolean {
     const values = flattenValuesOfType(this.type, this.observableValue, this.listIndicesToKeys)
     const keys = new Set(Object.keys(values))
-    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     return keys.has(valuePath as string)
   }
 
@@ -668,10 +576,8 @@ export abstract class FormModel<
   }
 
   isFieldDirty<K extends keyof ValuePathsToAdapters>(valuePath: K): boolean {
-    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     const typePath = valuePathToTypePath<ValueToTypePaths, keyof ValueToTypePaths>(
       this.type,
-      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
       valuePath as keyof ValueToTypePaths,
       true,
     ) as keyof TypePathsToAdapters
@@ -681,26 +587,13 @@ export abstract class FormModel<
       return false
     }
 
-    const {
-      displayedValue,
-      convert,
-      revert,
-      context,
-      defaultValue,
-    } = field
+    const { displayedValue, convert, revert, context, defaultValue } = field
 
     // if either the display value, or the stored value, match the original, then assume it's not dirty
-    const originalValue = valuePath in this.originalValues
-      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-      ? this.originalValues[valuePath as string]
-      : defaultValue
+    const originalValue = valuePath in this.originalValues ? this.originalValues[valuePath as string] : defaultValue
     if (revert != null) {
-      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
       const typeDef = this.flattenedTypeDefs[typePath as string]
-      const {
-        value,
-        type,
-      } = revert(displayedValue, valuePath, context)
+      const { value, type } = revert(displayedValue, valuePath, context)
       if (type === UnreliableFieldConversionType.Success) {
         if (equals(typeDef, originalValue, value)) {
           return false
@@ -727,16 +620,13 @@ export abstract class FormModel<
     const accessors = toArray(this.accessors)
 
     accessors.forEach(([valuePath]) => {
-      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
       this.validation[valuePath as keyof ValuePathsToAdapters] = validation
     })
-    return accessors.every(
-      ([valuePath]): boolean => {
-        // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-        const field = this.fields[valuePath as keyof ValuePathsToAdapters]
-        return field?.error == null
-      },
-    )
+    return accessors.every(([valuePath]): boolean => {
+      // the proxy can return undefined for unknown paths even though the type says otherwise
+      const field = lookup<string, Field>(this.fields, valuePath)
+      return field?.error == null
+    })
   }
 
   validateSubmit() {

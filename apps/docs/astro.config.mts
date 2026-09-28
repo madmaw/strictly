@@ -5,10 +5,7 @@ import { loadEnv } from 'vite'
 import tsconfigPaths from 'vite-tsconfig-paths'
 import tsconfig from './tsconfig.json'
 
-const {
-  PUBLIC_BASE,
-  PUBLIC_SITE,
-} = loadEnv(process.env.NODE_ENV!, process.cwd(), '')
+const { PUBLIC_BASE, PUBLIC_SITE } = loadEnv(process.env.NODE_ENV!, process.cwd(), '')
 // https://astro.build/config
 const x: ReturnType<typeof defineConfig<['en']>> = defineConfig({
   site: PUBLIC_SITE,

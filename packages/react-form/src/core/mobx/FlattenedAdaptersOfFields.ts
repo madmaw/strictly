@@ -1,13 +1,6 @@
-import {
-  type ReadonlyTypeOfType,
-  type Type,
-  type ValueOfType,
-} from '@strictly/define'
+import { type ReadonlyTypeOfType, type Type, type ValueOfType } from '@strictly/define'
 import { type FieldAdapter } from 'core/mobx/FieldAdapter'
-import {
-  type SimplifyDeep,
-  type ValueOf,
-} from 'type-fest'
+import { type SimplifyDeep, type ValueOf } from 'type-fest'
 import { type Field } from 'types/Field'
 
 export type FlattenedAdaptersOfFields<
@@ -17,11 +10,7 @@ export type FlattenedAdaptersOfFields<
 > = SimplifyDeep<{
   readonly [
     K in keyof ValuePathsToTypePaths as FormFields[K] extends Field ? ValuePathsToTypePaths[K] : never
-  ]: AdapterOfField<
-    NonNullable<FormFields[K]>,
-    FlattenedTypeDefs[ValuePathsToTypePaths[K]],
-    K
-  >
+  ]: AdapterOfField<NonNullable<FormFields[K]>, FlattenedTypeDefs[ValuePathsToTypePaths[K]], K>
 }>
 
 type AdapterOfField<
@@ -29,7 +18,9 @@ type AdapterOfField<
   T extends Type | undefined,
   ValuePath extends string | number | symbol,
 > = ValuePath extends string
-  ? F extends Field<infer V, infer E> ? undefined extends T ? FieldAdapter<V, V, E, ValuePath>
-    : FieldAdapter<ValueOfType<ReadonlyTypeOfType<NonNullable<T>>>, V, E, ValuePath>
-  : never
+  ? F extends Field<infer V, infer E>
+    ? undefined extends T
+      ? FieldAdapter<V, V, E, ValuePath>
+      : FieldAdapter<ValueOfType<ReadonlyTypeOfType<NonNullable<T>>>, V, E, ValuePath>
+    : never
   : never

@@ -1,10 +1,6 @@
 export type ToAbsoluteUrl = (path: string) => string
 
-export function createToAbsoluteUrl(
-  site: string,
-  base: string,
-  currentPath: string,
-): ToAbsoluteUrl {
+export function createToAbsoluteUrl(site: string, base: string, currentPath: string): ToAbsoluteUrl {
   const baseUrl = new URL(base.endsWith('/') ? base : base + '/', site)
   const pageUrl = new URL(currentPath, baseUrl)
   return function (path: string) {

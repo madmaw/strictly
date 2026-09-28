@@ -1,8 +1,4 @@
-import {
-  type FlattenedTypesOfType,
-  type ListTypeDef,
-  type Type,
-} from '@strictly/define'
+import { type FlattenedTypesOfType, type ListTypeDef, type Type } from '@strictly/define'
 import { type SimplifyDeep } from 'type-fest'
 
 export type ListValuePathsOfType<T extends Type> = keyof FlattenedListTypesOfType<T>

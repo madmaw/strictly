@@ -1,10 +1,7 @@
 /* eslint-env node */
 import { type StorybookConfig } from '@storybook/react-vite'
 import { createRequire } from 'module'
-import {
-  dirname,
-  join,
-} from 'node:path'
+import { dirname, join } from 'node:path'
 
 const require = createRequire(import.meta.url)
 /**

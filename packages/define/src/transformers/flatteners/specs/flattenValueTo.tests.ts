@@ -1,30 +1,10 @@
-import {
-  type AnyValueType,
-  flattenValueTo,
-  type Mapper,
-  type Setter,
-} from 'transformers/flatteners/flattenValueTo'
+import { type AnyValueType, flattenValueTo, type Mapper, type Setter } from 'transformers/flatteners/flattenValueTo'
 import { type SimplifyDeep } from 'type-fest'
-import {
-  booleanType,
-  list,
-  literal,
-  nullType,
-  numberType,
-  object,
-  record,
-  union,
-} from 'types/builders'
+import { booleanType, list, literal, nullType, numberType, object, record, union } from 'types/builders'
 import { type FlattenedTypesOfType } from 'types/FlattenedTypesOfType'
-import {
-  type Type,
-  type TypeDef,
-} from 'types/Type'
+import { type Type, type TypeDef } from 'types/Type'
 import { type ValueOfType } from 'types/ValueOfType'
-import {
-  type Mock,
-  vi,
-} from 'vitest'
+import { type Mock, vi } from 'vitest'
 
 type FlattenedSetters<R extends Record<string, Type>> = {
   [K in keyof R]: Setter<ValueOfType<R[K]>>
@@ -54,12 +34,7 @@ describe('flattenValueTo', function () {
     describe('toString', function () {
       let flattened: FlattenedToStrings<F>
       beforeEach(function () {
-        flattened = flattenValueTo(
-          type,
-          1,
-          setter,
-          toStringMapper,
-        )
+        flattened = flattenValueTo(type, 1, setter, toStringMapper)
       })
 
       it('equals expected type', function () {
@@ -76,12 +51,7 @@ describe('flattenValueTo', function () {
     describe('setter', function () {
       let flattened: FlattenedSetters<F>
       beforeEach(function () {
-        flattened = flattenValueTo(
-          type,
-          1,
-          setter,
-          setMapper,
-        )
+        flattened = flattenValueTo(type, 1, setter, setMapper)
       })
 
       it('calls the top level setter', function () {
@@ -98,22 +68,13 @@ describe('flattenValueTo', function () {
     type F = FlattenedTypesOfType<typeof typeDef, null>
     let l: ValueOfType<typeof typeDef>
     beforeEach(function () {
-      l = [
-        1,
-        2,
-        3,
-      ]
+      l = [1, 2, 3]
     })
 
     describe('toString', function () {
       let flattened: FlattenedToStrings<F>
       beforeEach(function () {
-        flattened = flattenValueTo(
-          typeDef,
-          l,
-          setter,
-          toStringMapper,
-        )
+        flattened = flattenValueTo(typeDef, l, setter, toStringMapper)
       })
 
       it('equals expected type', function () {
@@ -133,21 +94,12 @@ describe('flattenValueTo', function () {
     describe('setter', function () {
       let flattened: FlattenedSetters<F>
       beforeEach(function () {
-        flattened = flattenValueTo(
-          typeDef,
-          l,
-          setter,
-          setMapper,
-        )
+        flattened = flattenValueTo(typeDef, l, setter, setMapper)
       })
 
       it('sets a value in the list', function () {
         flattened['$.1'](4)
-        expect(l).toEqual([
-          1,
-          4,
-          3,
-        ])
+        expect(l).toEqual([1, 4, 3])
       })
     })
   })
@@ -167,12 +119,7 @@ describe('flattenValueTo', function () {
     describe('toString', function () {
       let flattened: FlattenedToStrings<F>
       beforeEach(function () {
-        flattened = flattenValueTo(
-          typeDef,
-          m,
-          setter,
-          toStringMapper,
-        )
+        flattened = flattenValueTo(typeDef, m, setter, toStringMapper)
       })
 
       it('equals expected type', function () {
@@ -187,12 +134,7 @@ describe('flattenValueTo', function () {
     describe('setter', function () {
       let flattened: FlattenedSetters<F>
       beforeEach(function () {
-        flattened = flattenValueTo(
-          typeDef,
-          m,
-          setter,
-          setMapper,
-        )
+        flattened = flattenValueTo(typeDef, m, setter, setMapper)
       })
 
       it('sets a value in the record', function () {
@@ -207,9 +149,7 @@ describe('flattenValueTo', function () {
 
   describe('object', function () {
     describe('mandatory fields', function () {
-      const type = object()
-        .field('a', numberType)
-        .field('b', booleanType)
+      const type = object().field('a', numberType).field('b', booleanType)
       type F = FlattenedTypesOfType<typeof type, null>
 
       let s: ValueOfType<typeof type>
@@ -223,12 +163,7 @@ describe('flattenValueTo', function () {
       describe('toString', function () {
         let flattened: FlattenedToStrings<F>
         beforeEach(function () {
-          flattened = flattenValueTo(
-            type,
-            s,
-            setter,
-            toStringMapper,
-          )
+          flattened = flattenValueTo(type, s, setter, toStringMapper)
         })
 
         it('equals expected type', function () {
@@ -243,12 +178,7 @@ describe('flattenValueTo', function () {
       describe('setter', function () {
         let flattened: FlattenedSetters<F>
         beforeEach(function () {
-          flattened = flattenValueTo(
-            type,
-            s,
-            setter,
-            setMapper,
-          )
+          flattened = flattenValueTo(type, s, setter, setMapper)
         })
 
         it('sets "a" in the object', function () {
@@ -270,8 +200,7 @@ describe('flattenValueTo', function () {
     })
 
     describe('nested optional field', function () {
-      const type = object()
-        .optionalField('a', object().optionalField('b', numberType))
+      const type = object().optionalField('a', object().optionalField('b', numberType))
       type F = FlattenedTypesOfType<typeof type, null>
 
       describe('empty', function () {
@@ -283,12 +212,7 @@ describe('flattenValueTo', function () {
         describe('toString', function () {
           let flattened: FlattenedToStrings<F>
           beforeEach(function () {
-            flattened = flattenValueTo(
-              type,
-              s,
-              setter,
-              toStringMapper,
-            )
+            flattened = flattenValueTo(type, s, setter, toStringMapper)
           })
 
           it('equals expected type', function () {
@@ -303,9 +227,7 @@ describe('flattenValueTo', function () {
 
   describe('union', function () {
     describe('discriminated', function () {
-      const typeDef = union('d')
-        .or('1', object().field('a', numberType))
-        .or('2', object().field('b', booleanType))
+      const typeDef = union('d').or('1', object().field('a', numberType)).or('2', object().field('b', booleanType))
       type F = SimplifyDeep<FlattenedTypesOfType<typeof typeDef, null>>
       let u: ValueOfType<typeof typeDef>
       beforeEach(function () {
@@ -318,12 +240,7 @@ describe('flattenValueTo', function () {
       describe('toString', function () {
         let flattened: FlattenedToStrings<F>
         beforeEach(function () {
-          flattened = flattenValueTo(
-            typeDef,
-            u,
-            setter,
-            toStringMapper,
-          )
+          flattened = flattenValueTo(typeDef, u, setter, toStringMapper)
         })
 
         it('equals expected type', function () {
@@ -339,12 +256,7 @@ describe('flattenValueTo', function () {
         type G = SimplifyDeep<FlattenedSetters<F>>
         let flattened: G
         beforeEach(function () {
-          flattened = flattenValueTo(
-            typeDef,
-            u,
-            setter,
-            setMapper,
-          )
+          flattened = flattenValueTo(typeDef, u, setter, setMapper)
         })
 
         it('sets a value', function () {
@@ -368,9 +280,7 @@ describe('flattenValueTo', function () {
       })
     })
     describe('non-discriminated', function () {
-      const type = union()
-        .or('0', numberType)
-        .or('1', nullType)
+      const type = union().or('0', numberType).or('1', nullType)
       type F = FlattenedTypesOfType<typeof type, null>
       let u: ValueOfType<typeof type>
 
@@ -381,12 +291,7 @@ describe('flattenValueTo', function () {
       describe('toString', function () {
         let flattened: FlattenedToStrings<F>
         beforeEach(function () {
-          flattened = flattenValueTo(
-            type,
-            u,
-            setter,
-            toStringMapper,
-          )
+          flattened = flattenValueTo(type, u, setter, toStringMapper)
         })
 
         it('equals expected type', function () {
@@ -399,12 +304,7 @@ describe('flattenValueTo', function () {
       describe('setter', function () {
         let flattened: FlattenedSetters<F>
         beforeEach(function () {
-          flattened = flattenValueTo(
-            type,
-            u,
-            setter,
-            setMapper,
-          )
+          flattened = flattenValueTo(type, u, setter, setMapper)
         })
 
         it('sets a value', function () {
@@ -425,22 +325,13 @@ describe('flattenValueTo', function () {
 
       let u: ValueOfType<typeof type>
       beforeEach(function () {
-        u = [
-          1,
-          2,
-          3,
-        ]
+        u = [1, 2, 3]
       })
 
       describe('toString', function () {
         let flattened: FlattenedToStrings<F>
         beforeEach(function () {
-          flattened = flattenValueTo(
-            type,
-            u,
-            setter,
-            toStringMapper,
-          )
+          flattened = flattenValueTo(type, u, setter, toStringMapper)
         })
 
         it('equals expected type', function () {
@@ -456,12 +347,7 @@ describe('flattenValueTo', function () {
       describe('setter', function () {
         let flattened: FlattenedSetters<F>
         beforeEach(function () {
-          flattened = flattenValueTo(
-            type,
-            u,
-            setter,
-            setMapper,
-          )
+          flattened = flattenValueTo(type, u, setter, setMapper)
         })
 
         it('sets the top level value', function () {
@@ -472,13 +358,9 @@ describe('flattenValueTo', function () {
 
         it('sets a subordinate value', function () {
           // need to cast to any as TS cannot guarantee that '$.a' is present
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/consistent-type-assertions
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           ;(flattened as any)['$.1'](4)
-          expect(u).toEqual([
-            1,
-            4,
-            3,
-          ])
+          expect(u).toEqual([1, 4, 3])
         })
       })
     })

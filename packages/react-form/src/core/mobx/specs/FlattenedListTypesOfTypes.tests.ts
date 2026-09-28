@@ -1,15 +1,5 @@
-import {
-  list,
-  nullType,
-  numberType,
-  object,
-  record,
-  stringType,
-  union,
-} from '@strictly/define'
-import {
-  type FlattenedListTypesOfType,
-} from 'core/mobx/FlattenedListTypesOfType'
+import { list, nullType, numberType, object, record, stringType, union } from '@strictly/define'
+import { type FlattenedListTypesOfType } from 'core/mobx/FlattenedListTypesOfType'
 
 describe('FlattenedListTypesOfType', function () {
   it('filters lists types', function () {
@@ -27,7 +17,7 @@ describe('FlattenedListTypesOfType', function () {
     type F = FlattenedListTypesOfType<typeof typeDef._type>
 
     type E = {
-      readonly '$.list': typeof listTypeDef._type,
+      readonly '$.list': typeof listTypeDef._type
     }
 
     expectTypeOf<F>().toEqualTypeOf<E>()

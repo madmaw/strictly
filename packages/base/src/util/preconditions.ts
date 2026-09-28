@@ -1,7 +1,4 @@
-import {
-  format,
-  type FormatArg,
-} from './format'
+import { format, type FormatArg } from './format'
 
 export class PreconditionFailedError extends Error {
   constructor(message: string, ...args: readonly FormatArg[]) {
@@ -10,11 +7,7 @@ export class PreconditionFailedError extends Error {
   }
 }
 
-export function assertExistsAndReturn<T>(
-  t: T,
-  message: string,
-  ...args: readonly FormatArg[]
-): NonNullable<T> {
+export function assertExistsAndReturn<T>(t: T, message: string, ...args: readonly FormatArg[]): NonNullable<T> {
   assertExists(t, message, ...args)
   return t
 }
@@ -28,18 +21,13 @@ export function assertExists<V>(v: V, message: string, ...args: readonly FormatA
 export function assertEqual<T extends FormatArg>(
   a: T,
   b: T,
-  message: string = '{} != {}',
+  message = '{} != {}',
   arg1: FormatArg = a,
   arg2: FormatArg = b,
   ...args: readonly FormatArg[]
 ) {
   if (a !== b) {
-    throw new PreconditionFailedError(
-      message,
-      arg1,
-      arg2,
-      ...args,
-    )
+    throw new PreconditionFailedError(message, arg1, arg2, ...args)
   }
 }
 
@@ -64,11 +52,7 @@ export function assertIs<V, T extends V>(
   }
 }
 
-export function checkUnary<T>(
-  t: readonly T[],
-  message: string,
-  ...args: readonly FormatArg[]
-): T {
+export function checkUnary<T>(t: readonly T[], message: string, ...args: readonly FormatArg[]): T {
   if (t.length !== 1) {
     throw new PreconditionFailedError(message, ...args)
   }
@@ -76,7 +60,7 @@ export function checkUnary<T>(
 }
 
 export function checkValidNumber(n: number, message: string, ...args: readonly FormatArg[]): number {
-  if (isNaN(n) || !isFinite(n)) {
+  if (Number.isNaN(n) || !Number.isFinite(n)) {
     throw new PreconditionFailedError(message, ...args)
   }
   return n

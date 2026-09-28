@@ -1,6 +1,4 @@
-import {
-  UnreachableError,
-} from '@strictly/base'
+import { UnreachableError } from '@strictly/base'
 import {
   type ListTypeDef,
   type ObjectTypeDef,
@@ -11,6 +9,7 @@ import {
   type UnionTypeDef,
 } from 'types/Type'
 import { type ValueOfType } from 'types/ValueOfType'
+import { valuePrototypeOf } from 'types/valuePrototypeOf'
 
 export function equals<T extends Type>({ definition }: T, o1: ValueOfType<T>, o2: ValueOfType<T>): boolean {
   return internalEquals(definition, o1, o2)
@@ -22,7 +21,7 @@ function internalEquals(typeDef: TypeDef, o1: any, o2: any): boolean {
   if (o1 === o2) {
     return true
   }
-  if (o1 == null && o2 != null || o1 != null && o2 == null) {
+  if ((o1 == null && o2 != null) || (o1 != null && o2 == null)) {
     return false
   }
   switch (typeDef.type) {
@@ -47,9 +46,7 @@ function internalListEquals({ elements }: ListTypeDef, o1: any[], o2: any[]) {
 }
 
 function internalRecordEquals(
-  {
-    valueTypeDef,
-  }: RecordTypeDef,
+  { valueTypeDef }: RecordTypeDef,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   o1: Record<string, any>,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -57,34 +54,27 @@ function internalRecordEquals(
 ) {
   const k1s = Object.keys(o1).sort()
   const k2s = Object.keys(o2).sort()
-  return k1s.length === k2s.length && k1s.every((k1, i) => {
-    const k2 = k2s[i]
-    return k1 === k2 && internalEquals(valueTypeDef, o1[k1], o2[k2])
-  })
+  return (
+    k1s.length === k2s.length &&
+    k1s.every((k1, i) => {
+      const k2 = k2s[i]
+      return k1 === k2 && internalEquals(valueTypeDef, o1[k1], o2[k2])
+    })
+  )
 }
 
 function internalObjectEquals(
-  {
-    fields,
-  }: ObjectTypeDef,
+  { fields }: ObjectTypeDef,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   o1: Record<string, any>,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   o2: Record<string, any>,
 ) {
-  return Object.entries(fields).every(([
-    key,
-    typeDef,
-  ]) => {
-    return internalEquals(typeDef, o1[key], o2[key])
-  })
+  return Object.entries(fields).every(([key, typeDef]) => internalEquals(typeDef, o1[key], o2[key]))
 }
 
 function internalUnionEquals(
-  {
-    discriminator,
-    unions,
-  }: UnionTypeDef,
+  { discriminator, unions }: UnionTypeDef,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   o1: any,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -95,7 +85,7 @@ function internalUnionEquals(
   }
   const allTypeDefs = Object.values<TypeDef>(unions)
   const variableTypeDefs = allTypeDefs.filter(function (typeDef: TypeDef) {
-    return typeDef.type !== TypeDefType.Literal || typeDef.valuePrototype == null
+    return typeDef.type !== TypeDefType.Literal || valuePrototypeOf(typeDef) == null
   })
-  return o1 === o2 || variableTypeDefs.length === 1 && internalEquals(variableTypeDefs[0], o1, o2)
+  return o1 === o2 || (variableTypeDefs.length === 1 && internalEquals(variableTypeDefs[0], o1, o2))
 }

@@ -1,22 +1,12 @@
 import { composeStories } from '@storybook/react-vite'
 import { toArray } from '@strictly/base'
-import {
-  fireEvent,
-  render,
-  type RenderResult,
-} from '@testing-library/react'
-import {
-  type Mock,
-  vi,
-} from 'vitest'
+import { fireEvent, render, type RenderResult } from '@testing-library/react'
+import { type Mock, vi } from 'vitest'
 import { CHECKBOX_LABEL } from './checkboxConstants'
 import * as stories from './checkboxHooks.stories'
 
 const composedStories = composeStories(stories)
-const {
-  Off,
-  On,
-} = composedStories
+const { Off, On } = composedStories
 
 describe('mantine checkbox hooks', function () {
   it.each(toArray(composedStories))('renders %s', function (_name, Story) {
@@ -25,16 +15,8 @@ describe('mantine checkbox hooks', function () {
   })
 
   describe.each([
-    [
-      'Off',
-      Off,
-      true,
-    ],
-    [
-      'On',
-      On,
-      false,
-    ],
+    ['Off', Off, true],
+    ['On', On, false],
   ] as const)('value change %s', function (_name, Component, expectedValue) {
     let onFieldValueChange: Mock<(path: '$', value: boolean) => void>
     let wrapper: RenderResult
@@ -62,12 +44,7 @@ describe('mantine checkbox hooks', function () {
     beforeEach(async function () {
       onFieldFocus = vi.fn()
       onFieldBlur = vi.fn()
-      wrapper = render((
-        <Off
-          onFieldBlur={onFieldBlur}
-          onFieldFocus={onFieldFocus}
-        />
-      ))
+      wrapper = render(<Off onFieldBlur={onFieldBlur} onFieldFocus={onFieldFocus} />)
       checkbox = await wrapper.findByLabelText(CHECKBOX_LABEL)
     })
 
