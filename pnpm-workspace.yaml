@@ -53,4 +53,5 @@ catalog:
   storybook: ^8.4.5
   type-fest: ^4.27.0
   vite: ^6.0.5
+  vite-plugin-dts: ^4.5.4
   vitest-matchmedia-mock: ^1.0.6

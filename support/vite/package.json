@@ -1,6 +1,7 @@
 {
   "devDependencies": {
-    "vite": "catalog:"
+    "vite": "catalog:",
+    "vite-plugin-dts": "catalog:"
   },
   "license": "MIT",
   "main": "src/index.ts",

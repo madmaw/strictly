@@ -5,7 +5,7 @@
   "extends": "../../tsconfig.build.json",
   "include": [
     ".eslintrc.cjs",
-    "tsup.config.ts",
+    "vite.config.mts",
     "vitest.workspace.ts"
   ]
 }

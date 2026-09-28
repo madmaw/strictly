@@ -4,6 +4,7 @@
   },
   "description": "Types and utilities for creating React forms",
   "devDependencies": {
+    "@babel/core": "catalog:",
     "@babel/plugin-proposal-decorators": "catalog:",
     "@babel/plugin-transform-class-static-block": "catalog:",
     "@storybook/addon-actions": "catalog:",
@@ -62,7 +63,7 @@
     "url": "git+https://github.com/madmaw/strictly.git"
   },
   "scripts": {
-    "build": "tsup",
+    "build": "vite build",
     "check-types": "tsc -b",
     "clean": "del-cli dist .out",
     "lint": "cross-env ESLINT_USE_FLAT_CONFIG=false eslint . --max-warnings=0",

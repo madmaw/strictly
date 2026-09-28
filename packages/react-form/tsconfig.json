@@ -8,7 +8,6 @@
     ".storybook/**/*.ts",
     ".storybook/**/*.tsx",
     ".vitest/**/*.ts",
-    "babel.config.cjs",
     "src",
     "tsconfig.json"
 
