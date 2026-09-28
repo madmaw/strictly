@@ -59,6 +59,7 @@ export function mergeAdaptersWithValidators<
         to: any,
         ...params: [any, any]
       ): UnreliableFieldConversion {
+        // oxlint-disable-next-line typescript/no-non-null-assertion -- only installed when the adapter can revert
         const result = adapter.revert!(to, ...params)
         if (result.type === UnreliableFieldConversionType.Failure) {
           return result

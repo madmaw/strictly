@@ -145,19 +145,21 @@ function internalJsonValuePathToTypePath(
           valueStep,
         )
       }
-      const [qualifier, ...remainingQualifiers] = qualifiers
-      const union = assertExistsAndReturn(
-        typeDef.unions[qualifier],
-        'missing union {}',
-        qualifier,
-      )
-      return internalJsonValuePathToTypePath(
-        union,
-        remainingQualifiers,
-        valueSteps,
-        allowMissingPaths,
-        originalValuePath,
-      )
+      {
+        const [qualifier, ...remainingQualifiers] = qualifiers
+        const union = assertExistsAndReturn(
+          typeDef.unions[qualifier],
+          'missing union {}',
+          qualifier,
+        )
+        return internalJsonValuePathToTypePath(
+          union,
+          remainingQualifiers,
+          valueSteps,
+          allowMissingPaths,
+          originalValuePath,
+        )
+      }
 
     default:
       throw new UnreachableError(typeDef)

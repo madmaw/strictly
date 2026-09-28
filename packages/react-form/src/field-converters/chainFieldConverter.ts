@@ -28,7 +28,7 @@ export function chainUnreliableFieldConverter<
     switch (fromConversion.type) {
       case UnreliableFieldConversionType.Success:
         return to(fromConversion.value, valuePath, context)
-      case UnreliableFieldConversionType.Failure:
+      case UnreliableFieldConversionType.Failure: {
         if (fromConversion.value == null) {
           return {
             type: UnreliableFieldConversionType.Failure,
@@ -53,6 +53,7 @@ export function chainUnreliableFieldConverter<
           default:
             throw new UnreachableError(toConversion)
         }
+      }
       default:
         throw new UnreachableError(fromConversion)
     }

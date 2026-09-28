@@ -5,7 +5,12 @@ function onClick() {
 export function Button() {
   return (
     <div>
-      <button onClick={onClick}>Click</button>
+      <button
+        onClick={onClick}
+        type='button'
+      >
+        Click
+      </button>
     </div>
   )
 }

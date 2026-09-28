@@ -1,3 +1,4 @@
+/* oxlint-disable typescript/no-non-null-assertion -- whether null is allowed is encoded in the generic parameters */
 import {
   type ExhaustiveArrayOfUnion,
   reverse,

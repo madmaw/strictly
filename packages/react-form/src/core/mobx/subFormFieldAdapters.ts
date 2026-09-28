@@ -60,6 +60,7 @@ export function subFormFieldAdapters<
   return Object.entries(subAdapters).reduce<Record<string, FieldAdapter>>(
     (acc, [subTypePath, subAdapter]) => {
       const typePath = subTypePath.replace('$', parentTypePath)
+      const { revert } = subAdapter
       // adapt field adapter with new path and context
       const adaptedAdapter: FieldAdapter = {
         convert: (from, valuePath, context) =>
@@ -67,9 +68,9 @@ export function subFormFieldAdapters<
         create: (valuePath, context) =>
           subAdapter.create(getSubValuePath(valuePath), context),
         revert:
-          subAdapter.revert &&
+          revert &&
           ((from, valuePath, context) =>
-            subAdapter.revert!(from, getSubValuePath(valuePath), context)),
+            revert(from, getSubValuePath(valuePath), context)),
       }
       acc[typePath] = adaptedAdapter
       return acc

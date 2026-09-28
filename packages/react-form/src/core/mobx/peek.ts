@@ -12,6 +12,6 @@ export function peek<T>(operation: () => T): T {
     result = operation()
     return true
   })
-  // biome-ignore lint/style/noNonNullAssertion: the result is always there
+  // oxlint-disable-next-line typescript/no-non-null-assertion -- the result is always there
   return result!
 }

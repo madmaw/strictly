@@ -1,4 +1,9 @@
-import { assertEqual, assertState, type StringConcatOf } from '@strictly/base'
+import {
+  assertEqual,
+  assertExistsAndReturn,
+  assertState,
+  type StringConcatOf,
+} from '@strictly/base'
 
 export function jsonPath<
   Prefix extends string,
@@ -30,7 +35,10 @@ export function jsonPathPop<Path extends string>(
   if (parts.length <= 1) {
     return null
   }
-  return [parts.slice(0, -1).join('.'), parts.pop()!]
+  return [
+    parts.slice(0, -1).join('.'),
+    assertExistsAndReturn(parts.pop(), 'empty path'),
+  ]
 }
 
 export function jsonPathPrefix<Prefix extends string, Path extends string>(

@@ -53,7 +53,7 @@ function internalCopyTo<R>(
 ): R {
   if (typeof value === 'undefined') {
     // don't copy things that don't exist
-    // oxlint-disable-next-line no-undefined -- propagate the missing value
+    // oxlint-disable-next-line no-undefined, typescript/no-non-null-assertion -- propagate the missing value
     return undefined!
   }
   switch (definition.type) {

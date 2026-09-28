@@ -46,7 +46,8 @@ class TypeDefBuilder<T extends ValidatingTypeDef> implements ValidatingType<T> {
     return new TypeDefBuilder<ValidatingTypeDefWithError<T, E2, C2>>({
       ...this.definition,
       ...(rule != null && isAnnotatedValidator(rule)
-        ? mergeAnnotations(rule.annotations(null!, null!), this.definition)
+        ? // oxlint-disable-next-line typescript/no-non-null-assertion -- the annotations do not depend on the value
+          mergeAnnotations(rule.annotations(null!, null!), this.definition)
         : {}),
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       rule: (value: any, valuePath: string, context: any) =>
@@ -333,6 +334,7 @@ export function literal<T>(
 ): TypeDefBuilder<ValidatingLiteralTypeDef<never, {}, T>> {
   return new TypeDefBuilder({
     type: TypeDefType.Literal,
+    // oxlint-disable-next-line typescript/no-non-null-assertion -- literals without a prototype have none
     valuePrototype: value!,
     rule: emptyRule,
     readonly: false,
@@ -403,7 +405,7 @@ export function record<
     readonly required: boolean
   }>({
     type: TypeDefType.Record,
-    // oxlint-disable-next-line no-undefined -- records have no key prototype
+    // oxlint-disable-next-line no-undefined, typescript/no-non-null-assertion -- records have no key prototype
     keyPrototype: undefined!,
     valueTypeDef,
     rule: emptyRule,

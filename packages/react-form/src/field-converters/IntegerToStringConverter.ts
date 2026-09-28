@@ -25,6 +25,7 @@ export class IntegerToStringConverter<
   }
 
   revert(from: string): UnreliableFieldConversion<number, E> {
+    // oxlint-disable-next-line radix -- the base is supplied by the caller
     const value = Number.parseInt(from, this.base)
     if (Number.isNaN(value)) {
       return {

@@ -119,7 +119,7 @@ export class FieldAdapterBuilder<
     >(
       {
         convert: this.convert,
-        // should never get called if null
+        // oxlint-disable-next-line typescript/no-non-null-assertion -- should never get called if null
         revert: this.revert!,
       },
       isFrom,

@@ -1,3 +1,4 @@
+import { expectDefinedAndReturn } from '@strictly/base'
 /* oxlint-disable typescript/no-explicit-any -- the adapters are intentionally untyped here */
 import { type FieldAdapter } from 'core/mobx/FieldAdapter'
 import { identityAdapter } from 'core/mobx/fieldAdapterBuilder'
@@ -167,7 +168,7 @@ describe('mergeFieldAdaptersWithTwoWayConverter', () => {
         // note don't really need to exercise this too extensively since most of
         // the work is done in chainXFieldAdapter
         beforeEach(() => {
-          result = merged.booleanAdapter.revert!(
+          result = expectDefinedAndReturn(merged.booleanAdapter.revert)(
             true,
             'booleanAdapter',
             context,

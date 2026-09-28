@@ -1,3 +1,4 @@
+/* oxlint-disable typescript/no-non-null-assertion -- these are type-level tests that never call the mapper */
 import { type CallbackMapper } from 'mantine/createFieldsView'
 
 describe('createFieldsView', () => {

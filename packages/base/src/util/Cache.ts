@@ -1,4 +1,5 @@
 import { type Maybe } from 'types/Maybe'
+import { assertExistsAndReturn } from 'util/preconditions'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type CacheValueFactory<A extends any[], V> = (...args: A) => V
@@ -28,7 +29,9 @@ export class Cache<A extends any[], V> {
     if (!finalMap.has(finalKey)) {
       return null
     }
-    return [finalMap.get(finalKey)!]
+    return [
+      assertExistsAndReturn(finalMap.get(finalKey), 'cache entry missing'),
+    ]
   }
 
   retrieveOrCreate(...args: A): V {
@@ -38,7 +41,7 @@ export class Cache<A extends any[], V> {
       const value = this.valueFactory(...args)
       finalMap.set(finalKey, value)
     }
-    return finalMap.get(finalKey)!
+    return assertExistsAndReturn(finalMap.get(finalKey), 'cache entry missing')
   }
 
   clear(...args: A) {

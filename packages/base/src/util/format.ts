@@ -12,7 +12,7 @@ export function format(message: string, ...args: readonly FormatArg[]): string {
   return message.replaceAll(
     /{(\d*)}/g,
     (_substring: string, indexString: string) => {
-      let argIndex = Number.parseInt(indexString)
+      let argIndex = Number.parseInt(indexString, 10)
       if (Number.isNaN(argIndex)) {
         argIndex = index
         index++

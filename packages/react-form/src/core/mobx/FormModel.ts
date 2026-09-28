@@ -550,7 +550,7 @@ export abstract class FormModel<
         )
         const accessor = this.accessors[listValuePath]
         const elementKey = checkValidNumber(
-          Number.parseInt(elementKeyString),
+          Number.parseInt(elementKeyString, 10),
           'unexpected id {} ({})',
           elementKeyString,
           elementValuePath,

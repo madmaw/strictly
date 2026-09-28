@@ -6,6 +6,7 @@ import tsconfigPaths from 'vite-tsconfig-paths'
 import tsconfig from './tsconfig.json'
 
 const { PUBLIC_BASE, PUBLIC_SITE } = loadEnv(
+  // oxlint-disable-next-line typescript/no-non-null-assertion -- astro always sets the mode
   process.env.NODE_ENV!,
   process.cwd(),
   '',

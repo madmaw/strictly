@@ -21,7 +21,7 @@ function SubForm({
 }) {
   const onChange = useCallback(
     (v: number | string) => {
-      onValueChange(Number.parseInt(`${v}`))
+      onValueChange(Number.parseInt(`${v}`, 10))
     },
     [onValueChange],
   )

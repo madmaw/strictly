@@ -1,2 +1,2 @@
 export * from './test/installPlugins'
-export * from './test/VitestPlugin'
+export type * from './test/VitestPlugin'

@@ -1,3 +1,4 @@
+import { assertExistsAndReturn } from '@strictly/base'
 import { annotations, validate, type Validator } from '@strictly/define'
 import { type Simplify } from 'type-fest'
 
@@ -47,22 +48,31 @@ export function mergeValidators<
   const keys1 = new Set(Object.keys(validators1))
   const keys2 = new Set(Object.keys(validators2))
   return Array.from(keys1.intersection(keys2)).reduce((validators, key) => {
-    const validator1 = validators1[key as keyof Validators1]
-    const validator2 = validators2[key as keyof Validators2]
+    // the keys are the intersection, so both validators exist
+    const validator1 = assertExistsAndReturn(
+      validators1[key as keyof Validators1],
+      'missing validator {}',
+      key,
+    )
+    const validator2 = assertExistsAndReturn(
+      validators2[key as keyof Validators2],
+      'missing validator {}',
+      key,
+    )
 
     validators[key as Keys] = {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       validate(value: any, valuePath: string, context: any) {
-        const error = validate(validator1!, value, valuePath, context)
+        const error = validate(validator1, value, valuePath, context)
         if (error != null) {
           return error
         }
-        return validate(validator2!, value, valuePath, context)
+        return validate(validator2, value, valuePath, context)
       },
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       annotations(valuePath: string, context: any) {
-        const annotations1 = annotations(validator1!, valuePath, context)
-        const annotations2 = annotations(validator2!, valuePath, context)
+        const annotations1 = annotations(validator1, valuePath, context)
+        const annotations2 = annotations(validator2, valuePath, context)
         return {
           readonly: annotations1.readonly || annotations2.readonly,
           required: annotations1.required || annotations2.required,
