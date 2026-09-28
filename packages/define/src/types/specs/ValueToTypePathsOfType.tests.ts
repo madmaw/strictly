@@ -45,8 +45,8 @@ describe('ValueToTypePathsOfType', () => {
 
     type C = {
       readonly $: '$'
-      readonly [`$.a`]: '$.*'
-      readonly [`$.b`]: '$.*'
+      readonly ['$.a']: '$.*'
+      readonly ['$.b']: '$.*'
       readonly [_: `$.a.${number}`]: '$.*.*'
       readonly [_: `$.b.${number}`]: '$.*.*'
     }
@@ -70,10 +70,10 @@ describe('ValueToTypePathsOfType', () => {
 
     type C = {
       readonly $: '$'
-      readonly [`$.a`]: '$.a'
-      readonly [`$.b`]: '$.b'
-      readonly [`$.c`]: '$.c'
-      readonly [`$.d`]: '$.d'
+      readonly ['$.a']: '$.a'
+      readonly ['$.b']: '$.b'
+      readonly ['$.c']: '$.c'
+      readonly ['$.d']: '$.d'
       readonly [_: `$.a.${number}`]: '$.a.*'
     }
     it('equals expected type', () => {

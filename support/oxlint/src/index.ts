@@ -63,12 +63,6 @@ const NO_RESTRICTED_SYNTAX_RULES: readonly Restriction[] = [
     selector: "CallExpression[callee.name='useEffect'][arguments.length!=2]",
   },
   {
-    message:
-      'calling Array operations with a second parameter will overwrite the `this` arg creating subtle, hard to track down, bugs. Are you should you want to do that?',
-    selector:
-      'CallExpression[callee.property.name=/^((map)|(filter)|(every)|(some)|(flatMap)|(index)|(find)|(findIndex)|(forEach))$/][arguments.length>1]',
-  },
-  {
     message: 'useEffect must always return, consider adding a destructor',
     selector:
       "CallExpression[callee.name='useEffect'] > ArrowFunctionExpression:first-child > BlockStatement > *:last-child[type!=ReturnStatement]",
@@ -101,11 +95,6 @@ const NO_RESTRICTED_SYNTAX_RULES: readonly Restriction[] = [
     message: 'just use a boolean expression',
     selector: 'CallExpression[callee.name="Boolean"]',
   },
-  // ban new Boolean
-  {
-    message: 'use a lower-case boolean value instead',
-    selector: 'NewExpression[callee.name="Boolean"]',
-  },
   // force switch default to always throw an unreachable error
   {
     message: 'always throw new UnreachableError in default case',
@@ -117,13 +106,6 @@ const NO_RESTRICTED_SYNTAX_RULES: readonly Restriction[] = [
     message: 'conditional hook, this breaks rules of hooks',
     selector:
       '[type=/(IfStatement|SwitchStatement)/]:has(ReturnStatement,ThrowStatement) ~ * CallExpression[callee.name=/^use[A-Z].*/],[type=/(FunctionDeclaration|FunctionExpression)/]:not(:has(* [type=/(FunctionDeclaration|FunctionExpression)/])) [type=/(IfStatement|SwitchStatement|LogicalExpression)/] CallExpression[callee.name=/^use[A-Z].*/]',
-  },
-  // disallow calling capitalized functions directly
-  {
-    message:
-      'Calling a React Component as a function is potentially dangerous. Call via JSX instead.',
-    selector:
-      'CallExpression[callee.name=/^(?!Symbol|Number|BigInt|String)[A-Z].*/]',
   },
   // Every `<Trans>` must carry a `comment` to give translators context
   {
@@ -556,6 +538,10 @@ export function createOxlintConfig({
         name: 'strictly',
         specifier: PLUGIN_PATH,
       },
+      {
+        name: 'stylistic',
+        specifier: '@stylistic/eslint-plugin',
+      },
     ],
     plugins: [
       'import',
@@ -775,8 +761,7 @@ export function createOxlintConfig({
       // creating new objects in map callbacks is intentional in this repository
       'oxc/no-map-spread': 'off',
       'oxc/no-this-in-exported-function': 'off',
-      // covered by the capitalized function call restricted syntax
-      'react/capitalized-calls': 'off',
+      'react/capitalized-calls': 'error',
       // dependency injection requires us to be able to do nested component definitions
       'react/static-components': 'off',
       'typescript/consistent-return': 'off',
@@ -836,6 +821,17 @@ export function createOxlintConfig({
       'unicorn/prefer-array-index-of': 'error',
       'unicorn/prefer-date-now': 'error',
       'unicorn/prefer-node-protocol': 'error',
+      'no-new-wrappers': 'error',
+      'unicorn/no-array-method-this-argument': 'error',
+      // template literals without expressions should be plain strings
+      'stylistic/quotes': [
+        'error',
+        'single',
+        {
+          allowTemplateLiterals: 'never',
+          avoidEscape: true,
+        },
+      ],
       // -- import --
       'import/no-duplicates': 'error',
       'import/no-self-import': 'error',

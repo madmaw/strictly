@@ -66,7 +66,7 @@ describe('PathsOfType', () => {
       const builder = list(stringType)
       type T = PathsOfType<typeof builder, 'o'>
 
-      type P = '$' | `$.o`
+      type P = '$' | '$.o'
       it('equals expected type', () => {
         expectTypeOf<P>().toEqualTypeOf<T>()
       })
