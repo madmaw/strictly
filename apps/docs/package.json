@@ -1,13 +1,13 @@
 {
   "dependencies": {
-    "@astrojs/mdx": "^4.0.2",
-    "@astrojs/react": "^4.1.1",
+    "@astrojs/mdx": "catalog:",
+    "@astrojs/react": "catalog:",
     "@mantine/core": "catalog:",
     "@mantine/hooks": "catalog:",
     "@strictly/base": "workspace:*",
     "@strictly/define": "workspace:*",
     "@strictly/react-form": "workspace:*",
-    "astro": "^5.0.9",
+    "astro": "catalog:",
     "marked": "^15.0.4",
     "mobx": "catalog:",
     "mobx-react": "catalog:",

@@ -20,6 +20,8 @@ overrides:
   'vitest-matchmedia-mock>vitest': $vitest
 
 catalog:
+  '@astrojs/mdx': ^4.3.14
+  '@astrojs/react': ^4.4.2
   '@babel/core': ^7.26.0
   '@babel/plugin-proposal-class-properties': ^7.18.6
   '@babel/plugin-proposal-decorators': ^7.25.9
@@ -46,7 +48,11 @@ catalog:
   '@testing-library/user-event': ^14.5.2
   '@types/react': ^19.0.0
   '@types/react-dom': ^19.0.0
+  # typescript 7 ships the native compiler without a javascript api, so typescript-eslint and vite-plugin-dts still
+  # need the typescript 6 api under the typescript package name
+  '@typescript/native': npm:typescript@^7.0.2
   '@vitejs/plugin-react': ^4.3.3
+  astro: ^5.18.2
   jsdom: ^25.0.1
   mobx: ^6.13.5
   mobx-react: ^9.1.1
@@ -55,6 +61,7 @@ catalog:
   resize-observer-polyfill: ^1.5.1
   storybook: ^8.4.5
   type-fest: ^4.27.0
+  typescript: npm:@typescript/typescript6@^6.0.2
   vite: ^6.4.3
   vite-plugin-dts: ^4.5.4
   vite-tsconfig-paths: ^5.0.1

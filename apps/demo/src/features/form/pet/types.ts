@@ -21,14 +21,8 @@ import { petOwnerType } from './PetOwnerFieldsView'
 
 // TODO move definitions into respective views
 
-// eslint false negative
-// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
 export const NOT_A_NUMBER_ERROR = 'not a number' as const
-// eslint false negative
-// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
 export const NOT_A_BREED_ERROR = 'not a breed' as const
-// eslint false negative
-// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
 export const REQUIRED_ERROR = 'is required' as const
 
 const minimumNameLengthValidator = new MinimumStringLengthValidator(3)

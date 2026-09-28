@@ -1,7 +1,9 @@
 {
   "compilerOptions": {
-    "baseUrl": "./src",
-    "outDir": "./.out"
+    "outDir": "./.out",
+    "paths": {
+      "*": ["./src/*"]
+    }
   },
   "extends": "../../tsconfig.json",
   "include": [
@@ -9,7 +11,11 @@
     "tsconfig.json"
   ],
   "references": [
-    {"path": "../base"},
-    {"path": "../../support/vite"}
+    {
+      "path": "../base"
+    },
+    {
+      "path": "../../support/vite"
+    }
   ]
 }

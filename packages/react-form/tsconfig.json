@@ -1,7 +1,9 @@
 {
   "compilerOptions": {
-    "baseUrl": "./src",
-    "outDir": "./.out"
+    "outDir": "./.out",
+    "paths": {
+      "*": ["./src/*"]
+    }
   },
   "extends": "../../tsconfig.json",
   "include": [
@@ -10,7 +12,6 @@
     ".vitest/**/*.ts",
     "src",
     "tsconfig.json"
-
   ],
   "references": [
     {

@@ -12,7 +12,7 @@
     "vite-tsconfig-paths": "catalog:"
   },
   "license": "MIT",
-  "main": "config.ts",
+  "main": "src/config.ts",
   "name": "@strictly/vite",
   "scripts": {
     "check-types": "tsc -b",

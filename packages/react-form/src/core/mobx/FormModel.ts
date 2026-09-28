@@ -300,8 +300,7 @@ export abstract class FormModel<
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     const fieldTypeDef = this.flattenedTypeDefs[typePath as string]
     const context = this.contextSource.forPath(this.observableValue, valuePath)
-    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-    const defaultValue = create(valuePath as string, context)
+    const defaultValue = create(valuePath, context)
 
     const {
       value,
@@ -317,8 +316,7 @@ export abstract class FormModel<
         )
         // fake values can't be copied
         : defaultValue,
-      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-      valuePath as string,
+      valuePath,
       context,
     )
     const displayedValue = fieldOverride != null ? fieldOverride[0] : value
@@ -366,8 +364,7 @@ export abstract class FormModel<
               // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
               ? this.originalValues[valuePath as string]
               : defaultValue
-            // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-            const { value: originalDisplayedValue } = convert(originalValue, valuePath as string, context)
+            const { value: originalDisplayedValue } = convert(originalValue, valuePath, context)
             // TODO better comparisons, displayed values can still be complex
             if (displayedValue !== originalDisplayedValue) {
               const revertResult = revert(displayedValue, valuePath, context)
@@ -498,8 +495,7 @@ export abstract class FormModel<
     const element = elementValue != null
       ? elementValue[0]
       : elementAdapter.create(
-        // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-        elementTypePath as string,
+        elementTypePath,
         // TODO what can we use for the value path here?
         // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
         this.contextSource.forPath(this.observableValue, valuePath as unknown as keyof ValuePathsToAdapters),
@@ -711,8 +707,7 @@ export abstract class FormModel<
         }
       }
     }
-    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-    const { value: originalDisplayedValue } = convert(originalValue, valuePath as string, context)
+    const { value: originalDisplayedValue } = convert(originalValue, valuePath, context)
     // try to compare the displayed values directly if we can't revert the displayed value
     return displayedValue !== originalDisplayedValue
   }

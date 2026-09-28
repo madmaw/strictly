@@ -1,11 +1,13 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
-    "outDir": "./.out"
+    "outDir": "./.out",
+    "paths": {
+      "*": ["./src/*"]
+    }
   },
   "extends": "../../tsconfig.json",
   "include": [
-    "config.ts",
+    "src",
     "tsconfig.json"
   ],
   "references": []
