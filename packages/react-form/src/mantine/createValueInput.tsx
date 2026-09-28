@@ -59,7 +59,8 @@ export function createValueInput<
       value,
       disabled: readonly,
       required,
-      error: error != null && <ErrorRenderer error={error} />,
+      // null rather than false so components without an error prop do not receive a boolean DOM attribute
+      error: error == null ? null : <ErrorRenderer error={error} />,
       onChange,
       onFocus,
       onBlur,

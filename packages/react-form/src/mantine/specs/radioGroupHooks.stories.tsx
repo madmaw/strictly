@@ -33,9 +33,9 @@ function Component({
         {RADIO_VALUES.map((value: RadioValue) => {
           const label = RADIO_LABELS[value]
           const RadioComponent = form.radio('$', value)
+          // individual radios cannot display an error, so they take no error renderer
           return (
             <RadioComponent
-              ErrorRenderer={ErrorRenderer}
               key={label}
               label={label}
             />
