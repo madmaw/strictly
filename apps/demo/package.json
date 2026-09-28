@@ -21,6 +21,7 @@
     "@storybook/addon-links": "catalog:",
     "@storybook/react-vite": "catalog:",
     "@storybook/test-runner": "catalog:",
+    "@strictly/lingui": "workspace:*",
     "@strictly/spec": "workspace:*",
     "@strictly/vite": "workspace:*",
     "@testing-library/dom": "catalog:",

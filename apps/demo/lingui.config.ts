@@ -1,16 +1,6 @@
-import { defineConfig } from '@lingui/cli'
+import { createLinguiConfig } from '@strictly/lingui/config'
 
-const config = defineConfig({
-  locales: [
-    'en',
-    'pseudo_en',
-  ],
-  pseudoLocale: 'pseudo_en',
-  sourceLocale: 'en',
-  fallbackLocales: {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    pseudo_en: 'en',
-  },
+const config = createLinguiConfig({
   catalogs: [
     {
       path: '<rootDir>/src/locales/{locale}',

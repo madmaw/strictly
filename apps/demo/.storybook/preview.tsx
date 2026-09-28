@@ -2,6 +2,10 @@ import '@mantine/core/styles.css'
 import { MantineProvider } from '@mantine/core'
 import { type Preview } from '@storybook/react-vite'
 import {
+  LOCALE_EN,
+  LOCALE_PSEUDO_EN,
+} from '@strictly/lingui'
+import {
   type MetaArgsOf,
   StorybookLinguiProvider,
 } from '@strictly/spec'
@@ -14,14 +18,13 @@ import { messages as pseudo_en } from '../src/locales/pseudo_en'
 import * as React from 'react'
 
 const testMessages = {
-  en,
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  pseudo_en,
+  [LOCALE_EN]: en,
+  [LOCALE_PSEUDO_EN]: pseudo_en,
 }
 
 const labelsToLocales = {
-  English: 'en',
-  Pseudo: 'pseudo_en',
+  English: LOCALE_EN,
+  Pseudo: LOCALE_PSEUDO_EN,
 } as const
 
 const localeLabels = [...Object.keys(labelsToLocales)]

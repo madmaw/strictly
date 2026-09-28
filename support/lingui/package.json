@@ -1,0 +1,16 @@
+{
+  "devDependencies": {
+    "@lingui/cli": "catalog:"
+  },
+  "license": "MIT",
+  "main": "src/index.ts",
+  "name": "@strictly/lingui",
+  "scripts": {
+    "check-types": "tsc -b",
+    "clean": "del-cli dist .out",
+    "lint": "cross-env ESLINT_USE_FLAT_CONFIG=false eslint . --max-warnings=0",
+    "lint:fix": "cross-env ESLINT_USE_FLAT_CONFIG=false eslint . --fix"
+  },
+  "type": "module",
+  "version": "0.0.41"
+}
