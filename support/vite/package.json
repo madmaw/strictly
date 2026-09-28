@@ -1,13 +1,14 @@
 {
   "devDependencies": {
-    "vite": "^6.0.5"
+    "vite": "catalog:",
+    "vite-plugin-dts": "catalog:"
   },
   "license": "MIT",
-  "main": "index.ts",
-  "name": "@strictly/support-vite",
+  "main": "src/index.ts",
+  "name": "@strictly/vite",
   "scripts": {
     "check-types": "tsc -b",
-    "clean": "del-cli dist .out .turbo",
+    "clean": "del-cli dist .out",
     "lint": "cross-env ESLINT_USE_FLAT_CONFIG=false eslint . --max-warnings=0",
     "lint:fix": "cross-env ESLINT_USE_FLAT_CONFIG=false eslint . --fix"
   },

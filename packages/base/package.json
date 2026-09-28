@@ -3,9 +3,8 @@
   "dependencies": {
   },
   "devDependencies": {
-    "@strictly/support-vite": "*",
-    "json": "^11.0.0",
-    "type-fest": "^4.27.0"
+    "@strictly/vite": "workspace:*",
+    "type-fest": "catalog:"
   },
   "homepage": "https://madmaw.github.io/strictly/base",
   "keywords": [
@@ -14,13 +13,29 @@
     "types"
   ],
   "license": "MIT",
+  "main": "src/index.ts",
   "name": "@strictly/base",
-  "packageManager": "yarn@1.22.22",
   "peerDependencies": {
     "type-fest": "^4.27.0"
   },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "exports": {
+      ".": {
+        "import": {
+          "types": "./dist/index.d.ts",
+
+          "default": "./dist/index.js"
+        },
+        "require": {
+          "types": "./dist/index.d.cts",
+
+          "default": "./dist/index.cjs"
+        }
+      }
+    },
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts"
   },
   "repository": {
     "directory": "packages/base",
@@ -28,14 +43,13 @@
     "url": "git+https://github.com/madmaw/strictly.git"
   },
   "scripts": {
-    "build": "tsup",
+    "build": "vite build --configLoader runner",
     "check-types": "tsc -b",
-    "clean": "del-cli dist .out .turbo",
+    "clean": "del-cli dist .out",
     "lint": "cross-env ESLINT_USE_FLAT_CONFIG=false eslint . --max-warnings=0",
     "lint:fix": "cross-env ESLINT_USE_FLAT_CONFIG=false eslint . --fix",
-    "release:exports": "json -f package.json -f package.exports.json --merge > package.release.json",
-    "test": "vitest run",
-    "test:watch": "vitest"
+    "test": "vitest run --configLoader runner",
+    "test:watch": "vitest --configLoader runner"
   },
   "type": "module",
   "version": "0.0.41"

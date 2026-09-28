@@ -1,23 +1,24 @@
 {
   "author": "Chris <chris.glover@gmail.com> (@madmaw)",
   "dependencies": {
-    "@lingui/core": "^5.1.2",
-    "@lingui/react": "^5.1.2",
-    "@strictly/base": "*",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "@lingui/core": "catalog:",
+    "@lingui/react": "catalog:",
+    "@strictly/base": "workspace:*",
+    "react": "catalog:",
+    "react-dom": "catalog:"
   },
   "description": "Helper utilities for testing",
   "devDependencies": {
-    "@testing-library/dom": "^10.4.0",
-    "@testing-library/react": "^16.0.1",
-    "@types/react": "^19.0.0",
-    "@types/react-dom": "^19.0.0",
-    "jsdom": "^25.0.1",
-    "resize-observer-polyfill": "^1.5.1",
-    "storybook": "^8.4.5",
-    "vite": "^6.0.5",
-    "vitest-matchmedia-mock": "^1.0.6"
+    "@strictly/vite": "workspace:*",
+    "@testing-library/dom": "catalog:",
+    "@testing-library/react": "catalog:",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "jsdom": "catalog:",
+    "resize-observer-polyfill": "catalog:",
+    "storybook": "catalog:",
+    "vite": "catalog:",
+    "vitest-matchmedia-mock": "catalog:"
   },
   "homepage": "https://madmaw.github.io/strictly/spec",
   "keywords": [
@@ -26,9 +27,26 @@
     "types"
   ],
   "license": "MIT",
+  "main": "src/index.ts",
   "name": "@strictly/spec",
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "exports": {
+      ".": {
+        "import": {
+          "types": "./dist/index.d.ts",
+
+          "default": "./dist/index.js"
+        },
+        "require": {
+          "types": "./dist/index.d.cts",
+
+          "default": "./dist/index.cjs"
+        }
+      }
+    },
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts"
   },
   "repository": {
     "directory": "packages/spec",
@@ -36,12 +54,11 @@
     "url": "git+https://github.com/madmaw/strictly.git"
   },
   "scripts": {
-    "build": "tsup",
+    "build": "vite build --configLoader runner",
     "check-types": "tsc -b",
-    "clean": "del-cli dist .out .turbo",
+    "clean": "del-cli dist .out",
     "lint": "cross-env ESLINT_USE_FLAT_CONFIG=false eslint . --max-warnings=0",
-    "lint:fix": "cross-env ESLINT_USE_FLAT_CONFIG=false eslint . --fix",
-    "release:exports": "json -f package.json -f package.exports.json --merge > package.release.json"
+    "lint:fix": "cross-env ESLINT_USE_FLAT_CONFIG=false eslint . --fix"
   },
   "type": "module",
   "version": "0.0.41"
