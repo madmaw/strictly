@@ -48,7 +48,7 @@ catalog:
   # need the typescript 6 api under the typescript package name
   '@typescript/native': npm:typescript@^7.0.2
   '@vitejs/plugin-react': ^4.3.3
-  astro: ^5.18.2
+  astro: ^7.2.8
   jsdom: ^25.0.1
   mobx: ^6.13.5
   mobx-react: ^9.1.1
