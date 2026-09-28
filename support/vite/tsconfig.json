@@ -1,9 +1,6 @@
 {
   "compilerOptions": {
-    "outDir": "./.out",
-    "paths": {
-      "*": ["./*"]
-    }
+    "outDir": "./.out"
   },
   "extends": "../../tsconfig.json",
   "include": [

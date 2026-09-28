@@ -6,6 +6,12 @@ settings:
 
 catalogs:
   default:
+    '@astrojs/mdx':
+      specifier: ^4.3.14
+      version: 4.3.14
+    '@astrojs/react':
+      specifier: ^4.4.2
+      version: 4.4.2
     '@babel/core':
       specifier: ^7.26.0
       version: 7.26.0
@@ -84,9 +90,15 @@ catalogs:
     '@types/react-dom':
       specifier: ^19.0.0
       version: 19.2.3
+    '@typescript/native':
+      specifier: npm:typescript@^7.0.2
+      version: 7.0.2
     '@vitejs/plugin-react':
       specifier: ^4.3.3
       version: 4.3.4
+    astro:
+      specifier: ^5.18.2
+      version: 5.18.2
     jsdom:
       specifier: ^25.0.1
       version: 25.0.1
@@ -105,6 +117,9 @@ catalogs:
     type-fest:
       specifier: ^4.27.0
       version: 4.31.0
+    typescript:
+      specifier: npm:@typescript/typescript6@^6.0.2
+      version: 6.0.2
     vite-plugin-dts:
       specifier: ^4.5.4
       version: 4.5.4
@@ -135,7 +150,7 @@ importers:
         specifier: ^8.70.1
         version: 8.70.1(@typescript/typescript6@6.0.2)(eslint@9.17.0(jiti@1.21.7))
       '@typescript/native':
-        specifier: npm:typescript@^7.0.2
+        specifier: 'catalog:'
         version: typescript@7.0.2
       any-eslint-parser:
         specifier: ^1.0.1
@@ -192,7 +207,7 @@ importers:
         specifier: ^1.15.0
         version: 1.16.0(eslint@9.17.0(jiti@1.21.7))
       typescript:
-        specifier: npm:@typescript/typescript6@^6.0.2
+        specifier: 'catalog:'
         version: '@typescript/typescript6@6.0.2'
       vite-tsconfig-paths:
         specifier: 'catalog:'
@@ -331,10 +346,10 @@ importers:
   apps/docs:
     dependencies:
       '@astrojs/mdx':
-        specifier: ^4.3.14
+        specifier: 'catalog:'
         version: 4.3.14(astro@5.18.2(@types/node@22.20.4)(jiti@1.21.7)(less@4.9.1)(rollup@4.63.5)(sass@1.105.0)(stylus@0.62.0)(sugarss@4.0.1(postcss@8.5.28))(typescript@7.0.2)(yaml@2.9.1))
       '@astrojs/react':
-        specifier: ^4.4.2
+        specifier: 'catalog:'
         version: 4.4.2(@types/node@22.20.4)(@types/react-dom@19.2.3(@types/react@19.2.7))(@types/react@19.2.7)(jiti@1.21.7)(less@4.9.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.105.0)(stylus@0.62.0)(sugarss@4.0.1(postcss@8.5.28))(yaml@2.9.1)
       '@mantine/core':
         specifier: 'catalog:'
@@ -352,7 +367,7 @@ importers:
         specifier: workspace:*
         version: link:../../packages/react-form
       astro:
-        specifier: ^5.18.2
+        specifier: 'catalog:'
         version: 5.18.2(@types/node@22.20.4)(jiti@1.21.7)(less@4.9.1)(rollup@4.63.5)(sass@1.105.0)(stylus@0.62.0)(sugarss@4.0.1(postcss@8.5.28))(typescript@7.0.2)(yaml@2.9.1)
       marked:
         specifier: ^15.0.4
