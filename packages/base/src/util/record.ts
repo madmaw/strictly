@@ -1,6 +1,7 @@
-export function reverse<Key extends string | number | symbol, Value extends string | number | symbol>(
-  obj: Record<Key, Value>,
-): Record<Value, Key> {
+export function reverse<
+  Key extends string | number | symbol,
+  Value extends string | number | symbol,
+>(obj: Record<Key, Value>): Record<Value, Key> {
   return Object.keys(obj).reduce(
     (acc, stringKey) => {
       const key = stringKey as Key
@@ -13,9 +14,11 @@ export function reverse<Key extends string | number | symbol, Value extends stri
 }
 
 // TODO simplify the generics
-export function rollup<R extends Record<K, V>, K extends string | number | symbol = keyof R, V = R[K]>(
-  ...records: Partial<R>[]
-): R {
+export function rollup<
+  R extends Record<K, V>,
+  K extends string | number | symbol = keyof R,
+  V = R[K],
+>(...records: Partial<R>[]): R {
   return records.slice(1).reduce<Partial<R>>((acc, record) => {
     Object.keys(record).forEach((key) => {
       const k = key as K
@@ -47,7 +50,7 @@ export function map<K extends string | number | symbol, V, R = V>(
 ): Record<K, R> {
   // TODO can use reduce to implement map
   return Object.entries<V>(r).reduce(
-    function (acc, [k, v]) {
+    (acc, [k, v]) => {
       const typedKey = k as K
       acc[typedKey] = f(typedKey, v)
       return acc
@@ -62,7 +65,7 @@ export function reduce<K extends string | number | symbol, V, A>(
   f: (acc: A, k: K, v: V) => A,
   a: A,
 ): A {
-  return Object.entries<V>(r).reduce(function (acc, [k, v]) {
+  return Object.entries<V>(r).reduce((acc, [k, v]) => {
     const typedKey = k as K
     return f(acc, typedKey, v)
   }, a)
@@ -70,12 +73,14 @@ export function reduce<K extends string | number | symbol, V, A>(
 
 export function forEach<
   R extends Readonly<Record<K, V>>,
-  K extends string | number | symbol = R extends Readonly<Record<infer Kk, infer _Vv>> ? Kk : never,
+  K extends string | number | symbol = R extends Readonly<
+    Record<infer Kk, infer _Vv>
+  >
+    ? Kk
+    : never,
   V = R extends Readonly<Record<infer _Kk, infer Vv>> ? Vv : never,
 >(r: R, f: (k: K, v: R[K]) => void) {
-  return Object.entries<V>(r).forEach(function ([k, v]) {
-    return f(k as K, v as R[K])
-  })
+  return Object.entries<V>(r).forEach(([k, v]) => f(k as K, v as R[K]))
 }
 
 export function toArray<K extends string | number | symbol, V>(
@@ -83,7 +88,7 @@ export function toArray<K extends string | number | symbol, V>(
 ): readonly (readonly [K, V])[] {
   return reduce<K, V, [K, V][]>(
     r,
-    function (acc, k, v) {
+    (acc, k, v) => {
       acc.push([k, v])
       return acc
     },

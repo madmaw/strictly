@@ -77,7 +77,10 @@ type CallerFriendlyAbstractionProps = {
 // nice for implementors
 type StatelessFormProps<Fields extends FormFieldsOf<DomainObject>> = {
   fields: Fields
-  onFieldChange: <K extends keyof Fields>(fieldKey: K, value: Fields[K]['value']) => void
+  onFieldChange: <K extends keyof Fields>(
+    fieldKey: K,
+    value: Fields[K]['value'],
+  ) => void
   onSubmit: () => void
 }
 ```

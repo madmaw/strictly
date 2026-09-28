@@ -5,8 +5,8 @@ import * as stories from './PetSpeciesFieldsView.stories'
 
 const composedStories = composeStories(stories)
 
-describe('PetSpeciesFieldsView', function () {
-  it.each(toArray(composedStories))('renders %s', function (_name, Story) {
+describe('PetSpeciesFieldsView', () => {
+  it.each(toArray(composedStories))('renders %s', (_name, Story) => {
     const wrapper = render(<Story />)
     expect(wrapper.container).toMatchSnapshot()
   })

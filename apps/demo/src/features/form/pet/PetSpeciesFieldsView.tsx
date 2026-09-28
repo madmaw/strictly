@@ -1,23 +1,25 @@
 import { t } from '@lingui/core/macro'
+import { Trans } from '@lingui/react/macro'
 import { Group, Stack } from '@mantine/core'
 import { toArray } from '@strictly/base'
-import { type FieldsViewProps, useMantineFormFields } from '@strictly/react-form'
+import {
+  type FieldsViewProps,
+  useMantineFormFields,
+} from '@strictly/react-form'
 import { type ComponentType } from 'react'
 import { type PetFields } from './fields'
 import { type Species } from './types'
 
-export function speciesLabel() {
-  return t({
-    message: 'Species',
-    comment: 'label for species field',
-  })
+export function SpeciesLabel() {
+  return <Trans comment='label for species field'>Species</Trans>
 }
 
 export type PetSpeciesFormFields = Pick<PetFields, '$.species'>
 
-export type PetSpeciesFieldsViewProps = FieldsViewProps<PetSpeciesFormFields> & {
-  speciesComponents: Record<Species, ComponentType>
-}
+export type PetSpeciesFieldsViewProps =
+  FieldsViewProps<PetSpeciesFormFields> & {
+    speciesComponents: Record<Species, ComponentType>
+  }
 
 const SPECIES_NAMES: Record<Species, () => string> = {
   cat: () =>
@@ -40,11 +42,16 @@ export function PetSpeciesFormFieldsView(props: PetSpeciesFieldsViewProps) {
   const SpeciesComponent = speciesValue && speciesComponents[speciesValue]
   return (
     <Stack>
-      <SpeciesRadioGroup label={speciesLabel()}>
+      <SpeciesRadioGroup label=<SpeciesLabel />>
         <Group>
-          {toArray(SPECIES_NAMES).map(function ([value, displayName]) {
+          {toArray(SPECIES_NAMES).map(([value, displayName]) => {
             const SpeciesRadio = form.radio('$.species', value)
-            return <SpeciesRadio key={value} label={displayName()} />
+            return (
+              <SpeciesRadio
+                key={value}
+                label={displayName()}
+              />
+            )
           })}
         </Group>
       </SpeciesRadioGroup>

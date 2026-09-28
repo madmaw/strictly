@@ -5,10 +5,13 @@ import {
 
 describe('MinimumStringLengthValidator', () => {
   describe('required', () => {
-    it.each([1, 2, 100])('is required when the string length is %s', (minimumLength) => {
-      const validator = new MinimumStringLengthValidator(minimumLength)
-      expect(validator.annotations().required).toBeTruthy()
-    })
+    it.each([1, 2, 100])(
+      'is required when the string length is %s',
+      (minimumLength) => {
+        const validator = new MinimumStringLengthValidator(minimumLength)
+        expect(validator.annotations().required).toBeTruthy()
+      },
+    )
 
     it('is not required when the string length is zero', () => {
       const validator = new MinimumStringLengthValidator(0)
@@ -22,23 +25,29 @@ describe('MinimumStringLengthValidator', () => {
       [2, 'asdf'],
       [0, ''],
       [20, '12345678901234567890'],
-    ])('passes validation with minimum length %s and value "%s"', (minimumLength, value) => {
-      const validator = new MinimumStringLengthValidator(minimumLength)
-      expect(validator.validate(value)).toBeNull()
-    })
+    ])(
+      'passes validation with minimum length %s and value "%s"',
+      (minimumLength, value) => {
+        const validator = new MinimumStringLengthValidator(minimumLength)
+        expect(validator.validate(value)).toBeNull()
+      },
+    )
 
     it.each([
       [1, '', 0],
       [2, 'a', 1],
       [20, '1234567890123456789', 19],
       [100, '', 0],
-    ])('fails validation with minimum length %s and value "%s', (minimumLength, value, receivedLength) => {
-      const validator = new MinimumStringLengthValidator(minimumLength)
-      expect(validator.validate(value)).toEqual({
-        type: MinimumStringLengthValidationErrorType,
-        minimumLength,
-        receivedLength,
-      })
-    })
+    ])(
+      'fails validation with minimum length %s and value "%s',
+      (minimumLength, value, receivedLength) => {
+        const validator = new MinimumStringLengthValidator(minimumLength)
+        expect(validator.validate(value)).toEqual({
+          type: MinimumStringLengthValidationErrorType,
+          minimumLength,
+          receivedLength,
+        })
+      },
+    )
   })
 })

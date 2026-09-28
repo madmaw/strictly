@@ -24,8 +24,18 @@ function Component(
           [onValueChange],
         )
         return (
-          <Group align='start' flex={1}>
-            <TextInput error={error} flex={1} onBlur={onBlur} onChange={onChange} onFocus={onFocus} value={value} />
+          <Group
+            align='start'
+            flex={1}
+          >
+            <TextInput
+              error={error}
+              flex={1}
+              onBlur={onBlur}
+              onChange={onChange}
+              onFocus={onFocus}
+              value={value}
+            />
             {/* normally this would be done on enter, but with a field view you can implement it however you want */}
             <Button onClick={onSubmit}>Submit Field</Button>
           </Group>

@@ -15,7 +15,11 @@ import {
 //   ? T & { rule: Rule<E1 | E2> }
 //   : never
 
-export type ValidatingTypeDefWithError<T extends ValidatingTypeDef, E, C> = T extends ValidatingLiteralTypeDef
+export type ValidatingTypeDefWithError<
+  T extends ValidatingTypeDef,
+  E,
+  C,
+> = T extends ValidatingLiteralTypeDef
   ? ValidatingLiteralTypeDefWithError<T, E, C>
   : T extends ValidatingListTypeDef
     ? ValidatingListTypeDefWithError<T, E, C>
@@ -27,7 +31,11 @@ export type ValidatingTypeDefWithError<T extends ValidatingTypeDef, E, C> = T ex
           ? ValidatingUnionTypeDefWithError<T, E, C>
           : never
 
-type ValidatingLiteralTypeDefWithError<T extends ValidatingLiteralTypeDef, E2, C2> =
+type ValidatingLiteralTypeDefWithError<
+  T extends ValidatingLiteralTypeDef,
+  E2,
+  C2,
+> =
   T extends ValidatingLiteralTypeDef<infer E1, infer C1, infer V>
     ? {
         readonly type: TypeDefType.Literal
@@ -57,7 +65,11 @@ type ValidatingListTypeDefWithError<T extends ValidatingListTypeDef, E2, C2> =
         }
     : never
 
-type ValidatingRecordTypeDefWithError<T extends ValidatingRecordTypeDef, E2, C2> =
+type ValidatingRecordTypeDefWithError<
+  T extends ValidatingRecordTypeDef,
+  E2,
+  C2,
+> =
   T extends ValidatingRecordTypeDef<infer E1, infer C1, infer K, infer V>
     ? IsFieldReadonly<T, 'valueTypeDef'> extends true
       ? {
@@ -78,7 +90,11 @@ type ValidatingRecordTypeDefWithError<T extends ValidatingRecordTypeDef, E2, C2>
         }
     : never
 
-type ValidatingObjectTypeDefWithError<T extends ValidatingObjectTypeDef, E2, C2> =
+type ValidatingObjectTypeDefWithError<
+  T extends ValidatingObjectTypeDef,
+  E2,
+  C2,
+> =
   T extends ValidatingObjectTypeDef<infer E1, infer C1, infer Fields>
     ? {
         readonly type: TypeDefType.Object

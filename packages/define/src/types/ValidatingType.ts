@@ -1,5 +1,10 @@
 import { type FunctionalValidator } from 'validation/validator'
-import { type ObjectFieldKey, type RecordKeyType, type TypeDefType, type UnionKey } from './Type'
+import {
+  type ObjectFieldKey,
+  type RecordKeyType,
+  type TypeDefType,
+  type UnionKey,
+} from './Type'
 
 // type defs with error types, lets us attach validation to types
 
@@ -7,7 +12,8 @@ export type ValidatingType<T extends ValidatingTypeDef = ValidatingTypeDef> = {
   readonly definition: T
 }
 
-export type ErrorOfValidatingTypeDef<T extends ValidatingTypeDef> = T extends ValidatingTypeDef<infer E> ? E : never
+export type ErrorOfValidatingTypeDef<T extends ValidatingTypeDef> =
+  T extends ValidatingTypeDef<infer E> ? E : never
 
 export type ContextOfValidatingTypeDef<T extends ValidatingTypeDef> =
   T extends ValidatingTypeDef<infer _E, infer C> ? C : never
@@ -105,7 +111,9 @@ export type ValidatingUnionTypeDef<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   C = any,
   D extends string | null = string | null,
-  U extends Readonly<Record<UnionKey, AnyTypeDef>> = Readonly<Record<UnionKey, AnyTypeDef>>,
+  U extends Readonly<Record<UnionKey, AnyTypeDef>> = Readonly<
+    Record<UnionKey, AnyTypeDef>
+  >,
 > = {
   readonly discriminator: D
   readonly type: TypeDefType.Union

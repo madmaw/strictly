@@ -15,7 +15,10 @@ function Component(
   const form = useMantineFormFields(props)
   const List = form.list('$')
   return (
-    <Paper p='sm' withBorder>
+    <Paper
+      p='sm'
+      withBorder
+    >
       <Stack>
         <List>
           {function (valuePath: ListPath, value: string, index: number) {

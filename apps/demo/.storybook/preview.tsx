@@ -58,7 +58,11 @@ const preview: Preview = {
     function (Story: React.ComponentType, { args }) {
       return (
         <MantineProvider>
-          <StorybookLinguiProvider labelsToLocales={labelsToLocales} locale={args.locale} localeMessages={testMessages}>
+          <StorybookLinguiProvider
+            labelsToLocales={labelsToLocales}
+            locale={args.locale}
+            localeMessages={testMessages}
+          >
             <StrictMode>
               <Story />
             </StrictMode>

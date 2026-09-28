@@ -9,8 +9,9 @@
     "pnpm-lock.yaml"
   ],
   "jsxSingleQuote": true,
-  "printWidth": 120,
+  "printWidth": 80,
   "semi": false,
+  "singleAttributePerLine": true,
   "singleQuote": true,
   "sortImports": {
     "groups": [

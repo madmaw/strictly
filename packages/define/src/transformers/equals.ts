@@ -11,7 +11,11 @@ import {
 import { type ValueOfType } from 'types/ValueOfType'
 import { valuePrototypeOf } from 'types/valuePrototypeOf'
 
-export function equals<T extends Type>({ definition }: T, o1: ValueOfType<T>, o2: ValueOfType<T>): boolean {
+export function equals<T extends Type>(
+  { definition }: T,
+  o1: ValueOfType<T>,
+  o2: ValueOfType<T>,
+): boolean {
   return internalEquals(definition, o1, o2)
 }
 
@@ -42,7 +46,10 @@ function internalEquals(typeDef: TypeDef, o1: any, o2: any): boolean {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function internalListEquals({ elements }: ListTypeDef, o1: any[], o2: any[]) {
-  return o1.length === o2.length && o1.every((v, i) => internalEquals(elements, v, o2[i]))
+  return (
+    o1.length === o2.length &&
+    o1.every((v, i) => internalEquals(elements, v, o2[i]))
+  )
 }
 
 function internalRecordEquals(
@@ -70,7 +77,9 @@ function internalObjectEquals(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   o2: Record<string, any>,
 ) {
-  return Object.entries(fields).every(([key, typeDef]) => internalEquals(typeDef, o1[key], o2[key]))
+  return Object.entries(fields).every(([key, typeDef]) =>
+    internalEquals(typeDef, o1[key], o2[key]),
+  )
 }
 
 function internalUnionEquals(
@@ -81,11 +90,19 @@ function internalUnionEquals(
   o2: any,
 ) {
   if (discriminator != null) {
-    return o1[discriminator] === o2[discriminator] && internalEquals(unions[o1[discriminator]], o1, o2)
+    return (
+      o1[discriminator] === o2[discriminator] &&
+      internalEquals(unions[o1[discriminator]], o1, o2)
+    )
   }
   const allTypeDefs = Object.values<TypeDef>(unions)
-  const variableTypeDefs = allTypeDefs.filter(function (typeDef: TypeDef) {
-    return typeDef.type !== TypeDefType.Literal || valuePrototypeOf(typeDef) == null
-  })
-  return o1 === o2 || (variableTypeDefs.length === 1 && internalEquals(variableTypeDefs[0], o1, o2))
+  const variableTypeDefs = allTypeDefs.filter(
+    (typeDef: TypeDef) =>
+      typeDef.type !== TypeDefType.Literal || valuePrototypeOf(typeDef) == null,
+  )
+  return (
+    o1 === o2 ||
+    (variableTypeDefs.length === 1 &&
+      internalEquals(variableTypeDefs[0], o1, o2))
+  )
 }

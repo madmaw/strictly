@@ -43,13 +43,33 @@ type InternalFlattenedTypeDefsOfChildren<
     : T extends ValidatingLiteralTypeDef
       ? InternalFlattenedTypeDefsOfLiteralChildren
       : T extends ValidatingListTypeDef
-        ? InternalFlattenedTypeDefsOfListChildren<T, SegmentOverride, Path, NextDepth>
+        ? InternalFlattenedTypeDefsOfListChildren<
+            T,
+            SegmentOverride,
+            Path,
+            NextDepth
+          >
         : T extends ValidatingRecordTypeDef
-          ? InternalFlattenedTypeDefsOfRecordChildren<T, SegmentOverride, Path, NextDepth>
+          ? InternalFlattenedTypeDefsOfRecordChildren<
+              T,
+              SegmentOverride,
+              Path,
+              NextDepth
+            >
           : T extends ValidatingObjectTypeDef
-            ? InternalFlattenedTypeDefsOfObjectChildren<T, SegmentOverride, Path, NextDepth>
+            ? InternalFlattenedTypeDefsOfObjectChildren<
+                T,
+                SegmentOverride,
+                Path,
+                NextDepth
+              >
             : T extends ValidatingUnionTypeDef
-              ? InternalFlattenedTypeDefsOfUnionChildren<T, SegmentOverride, Path, NextDepth>
+              ? InternalFlattenedTypeDefsOfUnionChildren<
+                  T,
+                  SegmentOverride,
+                  Path,
+                  NextDepth
+                >
               : never
 
 type InternalFlattenedTypeDefsOfLiteralChildren = {}
@@ -59,7 +79,12 @@ type InternalFlattenedTypeDefsOfListChildren<
   SegmentOverride extends string | null,
   Path extends string,
   Depth extends number,
-> = InternalFlattenedTypeDefsOf<T['elements'], SegmentOverride, PathOf<Path, number, SegmentOverride>, Depth>
+> = InternalFlattenedTypeDefsOf<
+  T['elements'],
+  SegmentOverride,
+  PathOf<Path, number, SegmentOverride>,
+  Depth
+>
 
 type InternalFlattenedTypeDefsOfRecordChildren<
   T extends ValidatingRecordTypeDef,
@@ -121,7 +146,12 @@ type InternalFlattenedTypeDefsOfUnionChildren<
       ? D extends null
         ? UnionToIntersection<
             {
-              readonly [K in keyof Unions]: InternalFlattenedTypeDefsOfChildren<Unions[K], SegmentOverride, Path, Depth>
+              readonly [K in keyof Unions]: InternalFlattenedTypeDefsOfChildren<
+                Unions[K],
+                SegmentOverride,
+                Path,
+                Depth
+              >
             }[keyof Unions]
           >
         : UnionToIntersection<

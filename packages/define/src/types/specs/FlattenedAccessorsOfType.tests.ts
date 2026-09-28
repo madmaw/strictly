@@ -1,9 +1,9 @@
 import { numberType, record } from 'types/builders'
 import { type FlattenedAccessorsOfType } from 'types/FlattenedAccessorsOfType'
 
-describe('FlattenedAccessorsOfType', function () {
+describe('FlattenedAccessorsOfType', () => {
   // note we only test a small example since most of the work is done in flatten
-  describe('record', function () {
+  describe('record', () => {
     const builder = record<typeof numberType, string>(numberType)
     type V = FlattenedAccessorsOfType<typeof builder>
 
@@ -17,7 +17,7 @@ describe('FlattenedAccessorsOfType', function () {
         set: (v: number) => void
       }
     }
-    it('equals expected type', function () {
+    it('equals expected type', () => {
       expectTypeOf<C>().toEqualTypeOf<V>()
     })
   })

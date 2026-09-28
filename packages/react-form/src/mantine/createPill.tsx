@@ -8,7 +8,11 @@ import { type MantineFieldComponent, type MantineForm } from './types'
 // TODO should probably supply everything
 export type SuppliedPillProps = Pick<PillProps, 'children' | 'disabled'>
 
-export function createPill<F extends Fields, K extends keyof AllFieldsOfFields<F>, Props extends SuppliedPillProps>(
+export function createPill<
+  F extends Fields,
+  K extends keyof AllFieldsOfFields<F>,
+  Props extends SuppliedPillProps,
+>(
   this: MantineForm<F>,
   valuePath: K,
   Pill: ComponentType<Props>,
@@ -25,5 +29,8 @@ export function createPill<F extends Fields, K extends keyof AllFieldsOfFields<F
       disabled: readonly,
     }
   }
-  return createUnsafePartialObserverComponent<typeof Pill, SuppliedPillProps>(Pill, propSource)
+  return createUnsafePartialObserverComponent<typeof Pill, SuppliedPillProps>(
+    Pill,
+    propSource,
+  )
 }

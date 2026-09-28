@@ -9,16 +9,27 @@ import type { SubFormFields } from 'types/SubFormFields'
 import type { ValueTypeOfField } from 'types/ValueTypeOfField'
 import type { MantineFieldComponent } from './types'
 
-export type SubPathsOf<ValuePath extends string, SubFormValuePath extends string> =
-  SubFormValuePath extends StringConcatOf<ValuePath, infer Postfix> ? `$${Postfix}` : never
+export type SubPathsOf<
+  ValuePath extends string,
+  SubFormValuePath extends string,
+> =
+  SubFormValuePath extends StringConcatOf<ValuePath, infer Postfix>
+    ? `$${Postfix}`
+    : never
 
 export type CallbackMapper<ValuePath extends string> = <
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   Cb extends (...args: any[]) => any,
 >(
   cb: Cb,
-) => Parameters<Cb> extends [infer SubFormValuePath extends string, ...infer Rest]
-  ? (valuePath: SubPathsOf<ValuePath, SubFormValuePath>, ...rest: Rest) => ReturnType<Cb>
+) => Parameters<Cb> extends [
+  infer SubFormValuePath extends string,
+  ...infer Rest,
+]
+  ? (
+      valuePath: SubPathsOf<ValuePath, SubFormValuePath>,
+      ...rest: Rest
+    ) => ReturnType<Cb>
   : never
 
 export type FieldsView<
@@ -38,7 +49,10 @@ export function createFieldsView<
   valuePath: K,
   FieldsView: ComponentType<P>,
   observableProps: FieldsViewProps<F>,
-): FieldsView<K, MantineFieldComponent<FieldsViewProps<P['fields']>, P, never>> {
+): FieldsView<
+  K,
+  MantineFieldComponent<FieldsViewProps<P['fields']>, P, never>
+> {
   function toKey(subKey: string | number | symbol): string {
     return jsonPathPrefix(valuePath, subKey as string)
   }
@@ -66,37 +80,44 @@ export function createFieldsView<
     observableProps.onFieldSubmit?.(toKey(subKey))
   }
 
-  const Component = observer(function (
-    props: ComponentProps<MantineFieldComponent<FieldsViewProps<P['fields']>, P, never>>,
-  ) {
-    // convert fields to sub-fields
-    const subFields = Object.entries(observableProps.fields).reduce<Record<string, unknown>>(
-      (acc, [fieldKey, fieldValue]) => {
-        if (fieldKey.startsWith(valuePath as string)) {
-          acc[toSubKey(fieldKey)] = fieldValue
-        }
-        return acc
-      },
-      {} as P['fields'],
-    )
+  const Component = observer(
+    (
+      props: ComponentProps<
+        MantineFieldComponent<FieldsViewProps<P['fields']>, P, never>
+      >,
+    ) => {
+      // convert fields to sub-fields
+      const subFields = Object.entries(observableProps.fields).reduce<
+        Record<string, unknown>
+      >(
+        (acc, [fieldKey, fieldValue]) => {
+          if (fieldKey.startsWith(valuePath as string)) {
+            acc[toSubKey(fieldKey)] = fieldValue
+          }
+          return acc
+        },
+        {} as P['fields'],
+      )
 
-    return (
-      <FieldsView
-        {
-          // maybe we can do this in a more type safe way
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          ...(props as any)
-        }
-        fields={subFields}
-        onFieldBlur={onFieldBlur}
-        onFieldFocus={onFieldFocus}
-        onFieldSubmit={onFieldSubmit}
-        onFieldValueChange={onFieldValueChange}
-      />
-    )
-  }) as unknown as MantineFieldComponent<FieldsViewProps<P['fields']>, P, never>
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const callbackMapper: CallbackMapper<K> = ((callback: (valuePath: string, ...args: any[]) => any) =>
+      return (
+        <FieldsView
+          {
+            // maybe we can do this in a more type safe way
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            ...(props as any)
+          }
+          fields={subFields}
+          onFieldBlur={onFieldBlur}
+          onFieldFocus={onFieldFocus}
+          onFieldSubmit={onFieldSubmit}
+          onFieldValueChange={onFieldValueChange}
+        />
+      )
+    },
+  ) as unknown as MantineFieldComponent<FieldsViewProps<P['fields']>, P, never>
+  const callbackMapper: CallbackMapper<K> = ((
+    callback: (valuePath: string, ...args: any[]) => any, // oxlint-disable-line typescript/no-explicit-any
+  ) =>
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (subFormValuePath: string, ...args: any[]) => {
       const valuePath = toKey(subFormValuePath)

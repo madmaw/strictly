@@ -1,8 +1,8 @@
 import { type BooleanFieldsOfFields } from 'types/BooleanFieldsOfFields'
 import { type Field } from 'types/Field'
 
-describe('BooleanFieldsOfFields', function () {
-  describe('filtering', function () {
+describe('BooleanFieldsOfFields', () => {
+  describe('filtering', () => {
     const e1 = Symbol()
     const e2 = Symbol()
     const e3 = Symbol()
@@ -14,7 +14,7 @@ describe('BooleanFieldsOfFields', function () {
       s: Field<string, E2>
       n: Field<number, E3>
     }
-    it('equals expected type', function () {
+    it('equals expected type', () => {
       expectTypeOf<BooleanFieldsOfFields<F>>().toEqualTypeOf<{
         b: Field<boolean, E1>
       }>()

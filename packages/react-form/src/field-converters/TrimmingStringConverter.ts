@@ -5,13 +5,10 @@ import {
   UnreliableFieldConversionType,
 } from 'types/FieldConverters'
 
-export class TrimmingStringConverter<ValuePath extends string, Context> implements TwoWayFieldConverter<
-  string,
-  string,
-  never,
-  ValuePath,
-  Context
-> {
+export class TrimmingStringConverter<
+  ValuePath extends string,
+  Context,
+> implements TwoWayFieldConverter<string, string, never, ValuePath, Context> {
   convert(to: string): AnnotatedFieldConversion<string> {
     return {
       value: to.trim(),

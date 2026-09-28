@@ -1,5 +1,10 @@
 import { type IsEqual, type Simplify } from 'type-fest'
-import { type ObjectFieldKey, type RecordKeyType, type TypeDefType, type UnionKey } from './Type'
+import {
+  type ObjectFieldKey,
+  type RecordKeyType,
+  type TypeDefType,
+  type UnionKey,
+} from './Type'
 
 // TODO rename to something more descriptive (e.g. introspectable definitions, deterministic
 // definitions, discriminated definitions). Maybe should just replace definitions since most
@@ -61,14 +66,18 @@ export type StrictObjectTypeDefFields = {
 // `ObjectTypeDef = ObjectTypeDefFields`
 // as we rely on the `fields` field being unique to discriminate between different
 // TypeDefs
-export type StrictObjectTypeDef<Fields extends StrictObjectTypeDefFields = StrictObjectTypeDefFields> = {
+export type StrictObjectTypeDef<
+  Fields extends StrictObjectTypeDefFields = StrictObjectTypeDefFields,
+> = {
   readonly type: TypeDefType.Object
   readonly fields: Fields
 }
 
 export type StrictUnionTypeDef<
   D extends string | null = string | null,
-  U extends Readonly<Record<UnionKey, AnyTypeDef>> = Readonly<Record<UnionKey, AnyTypeDef>>,
+  U extends Readonly<Record<UnionKey, AnyTypeDef>> = Readonly<
+    Record<UnionKey, AnyTypeDef>
+  >,
 > = D extends null
   ? IsStrictUnion<U> extends true
     ? {
@@ -86,15 +95,20 @@ export type StrictUnionTypeDef<
 
 // tests whether the union is composed of one non-constant value (at ['0']) and the rest
 // constants
-export type IsStrictUnion<U extends Readonly<Record<UnionKey, AnyTypeDef>>> = IsEqual<
-  U,
-  Simplify<
-    {
-      readonly [K in keyof Omit<U, '0'> as U[K] extends StrictLiteralTypeDef ? K : never]: U[K]
-    } & (U extends { readonly ['0']: AnyTypeDef }
-      ? {
-          readonly ['0']: U['0']
-        }
-      : {})
+export type IsStrictUnion<U extends Readonly<Record<UnionKey, AnyTypeDef>>> =
+  IsEqual<
+    U,
+    Simplify<
+      {
+        readonly [
+          K in keyof Omit<U, '0'> as U[K] extends StrictLiteralTypeDef
+            ? K
+            : never
+        ]: U[K]
+      } & (U extends { readonly ['0']: AnyTypeDef }
+        ? {
+            readonly ['0']: U['0']
+          }
+        : {})
+    >
   >
->

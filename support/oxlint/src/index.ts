@@ -42,7 +42,16 @@ type RestrictedImports = {
 
 const PLUGIN_PATH = fileURLToPath(new URL('./plugin.ts', import.meta.url))
 
-const TEST_GLOBALS = ['afterAll', 'afterEach', 'beforeAll', 'beforeEach', 'describe', 'expect', 'it', 'test']
+const TEST_GLOBALS = [
+  'afterAll',
+  'afterEach',
+  'beforeAll',
+  'beforeEach',
+  'describe',
+  'expect',
+  'it',
+  'test',
+]
 
 // https://eslint.org/docs/latest/rules/no-restricted-syntax
 // https://eslint.org/docs/latest/extend/selectors
@@ -65,23 +74,27 @@ const NO_RESTRICTED_SYNTAX_RULES: readonly Restriction[] = [
       "CallExpression[callee.name='useEffect'] > ArrowFunctionExpression:first-child > BlockStatement > *:last-child[type!=ReturnStatement]",
   },
   {
-    message: 'Use inline export instead. If you are re-exporting a value then use the `export from` syntax instead',
+    message:
+      'Use inline export instead. If you are re-exporting a value then use the `export from` syntax instead',
     selector: 'ExportNamedDeclaration[source=null][declaration=null]',
   },
   // === null
   {
     message: 'use == null instead',
-    selector: 'BinaryExpression[operator="==="][right.value=null][right.type=Literal]',
+    selector:
+      'BinaryExpression[operator="==="][right.value=null][right.type=Literal]',
   },
   // == undefined (note that undefined values have no attributes in the AST)
   {
     message: 'use == null instead',
-    selector: 'BinaryExpression[operator="=="][right.value=undefined][right.name=undefined][right.type=Identifier]',
+    selector:
+      'BinaryExpression[operator="=="][right.value=undefined][right.name=undefined][right.type=Identifier]',
   },
   // === undefined (note that undefined values have no attributes in the AST)
   {
     message: 'use == null instead',
-    selector: 'BinaryExpression[operator="==="][right.value=undefined][right.name=undefined][right.type=Identifier]',
+    selector:
+      'BinaryExpression[operator="==="][right.value=undefined][right.name=undefined][right.type=Identifier]',
   },
   // ban Boolean
   {
@@ -96,7 +109,8 @@ const NO_RESTRICTED_SYNTAX_RULES: readonly Restriction[] = [
   // force switch default to always throw an unreachable error
   {
     message: 'always throw new UnreachableError in default case',
-    selector: 'SwitchCase[test=null][consequent.0.argument.callee.name!=UnreachableError]',
+    selector:
+      'SwitchCase[test=null][consequent.0.argument.callee.name!=UnreachableError]',
   },
   // disallow conditional hooks
   {
@@ -106,28 +120,36 @@ const NO_RESTRICTED_SYNTAX_RULES: readonly Restriction[] = [
   },
   // disallow calling capitalized functions directly
   {
-    message: 'Calling a React Component as a function is potentially dangerous. Call via JSX instead.',
-    selector: 'CallExpression[callee.name=/^(?!Symbol|Number|BigInt|String)[A-Z].*/]',
+    message:
+      'Calling a React Component as a function is potentially dangerous. Call via JSX instead.',
+    selector:
+      'CallExpression[callee.name=/^(?!Symbol|Number|BigInt|String)[A-Z].*/]',
   },
   // Every `<Trans>` must carry a `comment` to give translators context
   {
-    message: '`<Trans>` must have a `comment` describing the string for translators',
-    selector: "JSXOpeningElement[name.name='Trans']:not(:has(JSXAttribute[name.name='comment']))",
+    message:
+      '`<Trans>` must have a `comment` describing the string for translators',
+    selector:
+      "JSXOpeningElement[name.name='Trans']:not(:has(JSXAttribute[name.name='comment']))",
   },
   // Every `t({...})` macro call must carry a `comment` for translators
   {
-    message: '`t({...})` must include a `comment` describing the string for translators',
-    selector: "CallExpression[callee.name='t'] > ObjectExpression:not(:has(> Property[key.name='comment']))",
+    message:
+      '`t({...})` must include a `comment` describing the string for translators',
+    selector:
+      "CallExpression[callee.name='t'] > ObjectExpression:not(:has(> Property[key.name='comment']))",
   },
   // The `t\`...\`` tagged-template form cannot carry a comment; use `t({ message, comment })` instead
   {
-    message: 'Use `t({ message, comment })` instead of the `t` tagged template so translators get a `comment`',
+    message:
+      'Use `t({ message, comment })` instead of the `t` tagged template so translators get a `comment`',
     selector: "TaggedTemplateExpression[tag.name='t']",
   },
   // `plural` on its own has no way to carry a `comment`; it must be enclosed in a
   // `t({...})` so translators get context
   {
-    message: '`plural(...)` must be enclosed in `t({ comment, message: plural(...) })` so it has a `comment`',
+    message:
+      '`plural(...)` must be enclosed in `t({ comment, message: plural(...) })` so it has a `comment`',
     selector:
       "CallExpression[callee.name='plural']:not(CallExpression[callee.name='t'] CallExpression[callee.name='plural']):not(JSXElement[openingElement.name.name='Trans'] CallExpression[callee.name='plural'])",
   },
@@ -142,7 +164,8 @@ const NO_RESTRICTED_SYNTAX_RULES: readonly Restriction[] = [
   },
   // React compiler will eagerly resolve translations if they are returned directly by a Component
   {
-    message: 'Components (functions starting with a capital) should use `<Trans>` rather than `t` or `msg`',
+    message:
+      'Components (functions starting with a capital) should use `<Trans>` rather than `t` or `msg`',
     selector:
       'FunctionDeclaration[id.name=/^[A-Z].*/]:not(:has(* [type=/(FunctionDeclaration|FunctionExpression)/])) > BlockStatement *[type=ReturnStatement] > *[type=CallExpression] > Identifier[name=/^(t)$/],FunctionDeclaration[id.name=/^[A-Z].*/]:not(:has(* [type=/(FunctionDeclaration|FunctionExpression)/])) > BlockStatement *[type=ReturnStatement] > *[type=TaggedTemplateExpression] > Identifier[name=/^(msg|t)$/]',
   },
@@ -154,13 +177,15 @@ const NO_RESTRICTED_SYNTAX_RULES: readonly Restriction[] = [
   },
   // alert import.meta.env destructuring
   {
-    message: 'destructuring import.meta.env will make your constants always have a value of undefined!',
+    message:
+      'destructuring import.meta.env will make your constants always have a value of undefined!',
     selector:
       "VariableDeclaration > VariableDeclarator[id.type='ObjectPattern'][init.property.name='env'][init.object.property.name='meta'][init.object.meta.name='import']",
   },
   // no dependency useCallbacks are suspicious
   {
-    message: 'useCallback without dependencies: can you move this function out of the render function?',
+    message:
+      'useCallback without dependencies: can you move this function out of the render function?',
     selector:
       'CallExpression[callee.name=/^(useCallback)$/][arguments.1.elements.length=0]:not(CallExpression[callee.name=/^(useCallback|useMemo)$/] *):not(:has(Identifier[name=/^ref$|Ref$/]))',
   },
@@ -175,7 +200,8 @@ const NO_RESTRICTED_IMPORTS: RestrictedImports = {
     },
     {
       importNames: ['Plural'],
-      message: "Plural doesn't appear to work, use `plural` within a `Trans` instead",
+      message:
+        "Plural doesn't appear to work, use `plural` within a `Trans` instead",
       name: '@lingui/react/macro',
     },
     {
@@ -202,18 +228,26 @@ const NO_RESTRICTED_IMPORTS: RestrictedImports = {
       regex: '^((build)|(dist)|(node_modules)|(storybook-static))\\/.*$',
     },
     {
-      message: "you can't import subfolders from workspace packages, export the file in the package instead",
-      regex: '^(?!@strictly/[^\\/]*/((config)|(preview)))(@strictly)\\/[^\\/]*\\/.*$',
+      message:
+        "you can't import subfolders from workspace packages, export the file in the package instead",
+      regex:
+        '^(?!@strictly/[^\\/]*/((config)|(preview)))(@strictly)\\/[^\\/]*\\/.*$',
     },
     {
-      message: 'Underscores in path or package names are inconsistent with NPM naming standards. Use a hyphen.',
+      message:
+        'Underscores in path or package names are inconsistent with NPM naming standards. Use a hyphen.',
       regex: '^[^./].*_.*$',
     },
   ],
 }
 
 // helpers that only make sense in tests and stories
-const TEST_HELPER_IMPORT_NAMES = ['expectDefined', 'expectDefinedAndReturn', 'expectEquals', 'expectTruthy']
+const TEST_HELPER_IMPORT_NAMES = [
+  'expectDefined',
+  'expectDefinedAndReturn',
+  'expectEquals',
+  'expectTruthy',
+]
 
 const PATH_REGEX = /^\.\/(.*)\/\*$/
 function extractSrcFolder(project: TSConfigProject | undefined) {
@@ -236,9 +270,20 @@ function toGlobs(includes: readonly string[]) {
         return [f]
       }
       const dir = f.endsWith('/') ? f : `${f}/`
-      return [`${dir}**/*.ts`, `${dir}**/*.tsx`, `${dir}**/*.mts`, `${dir}**/*.astro`]
+      return [
+        `${dir}**/*.ts`,
+        `${dir}**/*.tsx`,
+        `${dir}**/*.mts`,
+        `${dir}**/*.astro`,
+      ]
     })
-    .filter((f) => f.endsWith('.ts') || f.endsWith('.mts') || f.endsWith('.tsx') || f.endsWith('.astro'))
+    .filter(
+      (f) =>
+        f.endsWith('.ts') ||
+        f.endsWith('.mts') ||
+        f.endsWith('.tsx') ||
+        f.endsWith('.astro'),
+    )
 }
 
 export type CreateOxlintConfigOptions = {
@@ -258,7 +303,10 @@ export function createOxlintConfig({
   otherProjects = [],
   additionalHooks = '(usePartialComponent|usePartialObserverComponent|useWhen|useReaction|useAutorun|useObserverComponent|useConstant|useDeferredConstant)',
 }: CreateOxlintConfigOptions): OxlintConfig {
-  const allProjects = [...(mainProject == null ? [] : [mainProject]), ...otherProjects]
+  const allProjects = [
+    ...(mainProject == null ? [] : [mainProject]),
+    ...otherProjects,
+  ]
 
   const ignorePatterns = [
     ...allProjects.flatMap(({ exclude }) => exclude ?? []),
@@ -272,10 +320,19 @@ export function createOxlintConfig({
   ]
 
   const mainFiles = toGlobs(mainProject?.include ?? [])
-  const sourceFiles = srcFolder === '.' ? mainFiles : mainFiles.filter((f) => f.startsWith(srcFolder))
-  const specsFiles = [`${srcFolder}/**/specs/*.ts`, `${srcFolder}/**/specs/*.tsx`]
+  const sourceFiles =
+    srcFolder === '.'
+      ? mainFiles
+      : mainFiles.filter((f) => f.startsWith(srcFolder))
+  const specsFiles = [
+    `${srcFolder}/**/specs/*.ts`,
+    `${srcFolder}/**/specs/*.tsx`,
+  ]
   const storybookFiles = [`${srcFolder}/**/specs/*.stories.tsx`]
-  const testFiles = [`${srcFolder}/**/specs/*.tests.ts`, `${srcFolder}/**/specs/*.tests.tsx`]
+  const testFiles = [
+    `${srcFolder}/**/specs/*.tests.ts`,
+    `${srcFolder}/**/specs/*.tests.tsx`,
+  ]
   const absoluteSrcFolder = path.resolve(rootDir, srcFolder)
 
   function noRestrictedImports(
@@ -291,7 +348,9 @@ export function createOxlintConfig({
     ]
   }
 
-  const testGlobals = Object.fromEntries(TEST_GLOBALS.map((name) => [name, 'readonly'] as const))
+  const testGlobals = Object.fromEntries(
+    TEST_GLOBALS.map((name) => [name, 'readonly'] as const),
+  )
 
   const overrides: OxlintOverride[] = [
     // lint source files
@@ -320,11 +379,13 @@ export function createOxlintConfig({
               name: 'storybook',
             },
             {
-              message: "Don't use test imports in production code. Importing this here will break Vite!",
+              message:
+                "Don't use test imports in production code. Importing this here will break Vite!",
               name: 'vitest',
             },
             {
-              message: "Don't use test imports in production code. Importing this here will break Vite!",
+              message:
+                "Don't use test imports in production code. Importing this here will break Vite!",
               name: 'vitest-mock-extended',
             },
           ],
@@ -342,7 +403,8 @@ export function createOxlintConfig({
         'no-restricted-properties': [
           'error',
           {
-            message: 'Avoid using toFixed(). Use an appropriately typed label instead.',
+            message:
+              'Avoid using toFixed(). Use an appropriately typed label instead.',
             property: 'toFixed',
           },
         ],
@@ -354,7 +416,8 @@ export function createOxlintConfig({
             {
               message:
                 'JSX should only appear in hooks (functions starting with "use") or Components (functions starting with a capital) or factories (functions starting with "create" or "install")',
-              selector: 'FunctionDeclaration[id.name=/^(?!use.*|create.*|install.*)[a-z].*/] * JSXElement',
+              selector:
+                'FunctionDeclaration[id.name=/^(?!use.*|create.*|install.*)[a-z].*/] * JSXElement',
             },
           ],
         ],
@@ -382,7 +445,15 @@ export function createOxlintConfig({
           [
             ...NO_RESTRICTED_SYNTAX_RULES,
             // ban synchronous test functions (always use asynchronous)
-            ...['Text', 'PlaceholderText', 'LabelText', 'AltText', 'DisplayValue', 'Role', 'Title'].flatMap((by) => [
+            ...[
+              'Text',
+              'PlaceholderText',
+              'LabelText',
+              'AltText',
+              'DisplayValue',
+              'Role',
+              'Title',
+            ].flatMap((by) => [
               {
                 message: `Asynchronous stories and unit tests are safer. Use findBy${by} instead.`,
                 selector: `CallExpression[callee.property.name='getBy${by}']`,
@@ -486,7 +557,15 @@ export function createOxlintConfig({
         specifier: PLUGIN_PATH,
       },
     ],
-    plugins: ['import', 'jsx-a11y', 'oxc', 'react', 'typescript', 'unicorn', 'vitest'],
+    plugins: [
+      'import',
+      'jsx-a11y',
+      'oxc',
+      'react',
+      'typescript',
+      'unicorn',
+      'vitest',
+    ],
     env: {
       browser: true,
       es2024: true,
@@ -651,6 +730,7 @@ export function createOxlintConfig({
       'object-shorthand': ['error', 'always'],
       'one-var': ['error', 'never'],
       'prefer-const': 'error',
+      'prefer-arrow-callback': 'error',
       'require-await': 'error',
       // oxfmt orders the import declarations, this orders the members within them
       'sort-imports': [

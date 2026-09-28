@@ -19,15 +19,15 @@ type StaticPath = {
 export async function getStaticPaths() {
   const packagesFolder = '../../packages'
   const packages = await fs.readdir(packagesFolder)
-  const promises = packages.map(async function (folder) {
+  const promises = packages.map(async (folder) => {
     const promises = (await fs.readdir(`${packagesFolder}/${folder}`))
       .filter(
-        function (file) {
-          return file.endsWith('.md')
-        }
+        (file) => 
+          file.endsWith('.md')
+        
       )
       .map(
-        async function (file): Promise<readonly StaticPath[] | undefined> {
+        async (file): Promise<readonly StaticPath[] | undefined> => {
           const path = `${packagesFolder}/${folder}/${file}`
           try {
             const buffer = await fs.readFile(path)

@@ -23,7 +23,9 @@ describe('createFieldsView', () => {
       const callbackMapper: Cm = null!
       type Callback = (valuePath: `$.${number}.x.${number}.y`) => void
       type MappedCallback = ReturnType<typeof callbackMapper<Callback>>
-      expectTypeOf<MappedCallback>().toEqualTypeOf<(valuePath: `$.${number}.y`) => void>()
+      expectTypeOf<MappedCallback>().toEqualTypeOf<
+        (valuePath: `$.${number}.y`) => void
+      >()
     })
   })
 })

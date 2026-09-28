@@ -1,3 +1,4 @@
+/* oxlint-disable typescript/no-explicit-any -- the adapters are intentionally untyped here */
 import { lookup, reduce } from '@strictly/base'
 import { annotations, validate, type Validator } from '@strictly/define'
 import { type Simplify } from 'type-fest'
@@ -15,13 +16,19 @@ export type MergedOfFieldAdaptersWithValidators<
   Key extends keyof Validators = keyof Validators,
 > = Simplify<
   {
-    readonly [K in Key]: MergedOfFieldAdapterWithValidator<FieldAdapters[K], Validators[K]>
+    readonly [K in Key]: MergedOfFieldAdapterWithValidator<
+      FieldAdapters[K],
+      Validators[K]
+    >
   } & {
     readonly [K in Exclude<keyof FieldAdapters, Key>]: FieldAdapters[K]
   }
 >
 
-type MergedOfFieldAdapterWithValidator<A extends FieldAdapter, V extends Validator | undefined> = undefined extends V
+type MergedOfFieldAdapterWithValidator<
+  A extends FieldAdapter,
+  V extends Validator | undefined,
+> = undefined extends V
   ? A
   : A extends FieldAdapter<infer From, infer To, infer E1, infer P1, infer C1>
     ? V extends Validator<From, infer E2, infer P2, infer C2>
@@ -40,7 +47,7 @@ export function mergeAdaptersWithValidators<
 ): MergedOfFieldAdaptersWithValidators<FieldAdapters, Validators, Key> {
   return reduce<Key, FieldAdapter, Partial<Record<Key, FieldAdapter>>>(
     adapters,
-    function (acc, key, adapter) {
+    (acc, key, adapter) => {
       const maybeValidator = lookup(validators, key)
       if (maybeValidator == null) {
         acc[key] = adapter
@@ -48,8 +55,10 @@ export function mergeAdaptersWithValidators<
       }
       // the nested functions are hoisted, so they don't see the narrowed type
       const validator: Validator = maybeValidator
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      function revert(to: any, ...params: [any, any]): UnreliableFieldConversion {
+      function revert(
+        to: any,
+        ...params: [any, any]
+      ): UnreliableFieldConversion {
         const result = adapter.revert!(to, ...params)
         if (result.type === UnreliableFieldConversionType.Failure) {
           return result
@@ -64,10 +73,19 @@ export function mergeAdaptersWithValidators<
           error: validationError,
         }
       }
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      function convert(from: any, ...params: [any, any]): AnnotatedFieldConversion {
-        const { required: required1, readonly: readonly1, value } = adapter.convert(from, ...params)
-        const { required: required2, readonly: readonly2 } = annotations(validator, ...params)
+      function convert(
+        from: any,
+        ...params: [any, any]
+      ): AnnotatedFieldConversion {
+        const {
+          required: required1,
+          readonly: readonly1,
+          value,
+        } = adapter.convert(from, ...params)
+        const { required: required2, readonly: readonly2 } = annotations(
+          validator,
+          ...params,
+        )
         return {
           value,
           required: required1 || required2,

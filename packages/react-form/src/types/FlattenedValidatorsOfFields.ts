@@ -1,15 +1,30 @@
-import { type ReadonlyTypeOfType, type Type, type Validator, type ValueOfType } from '@strictly/define'
+import {
+  type ReadonlyTypeOfType,
+  type Type,
+  type Validator,
+  type ValueOfType,
+} from '@strictly/define'
 import { type SimplifyDeep, type ValueOf } from 'type-fest'
 import { type Field } from 'types/Field'
 
 export type FlattenedValidatorsOfFields<
   ValuePathsToTypePaths extends Readonly<Record<string, string>>,
-  FlattenedTypeDefs extends Partial<Readonly<Record<ValueOf<ValuePathsToTypePaths>, Type>>>,
-  FormFields extends Partial<Readonly<Record<keyof ValuePathsToTypePaths, Field>>>,
+  FlattenedTypeDefs extends Partial<
+    Readonly<Record<ValueOf<ValuePathsToTypePaths>, Type>>
+  >,
+  FormFields extends Partial<
+    Readonly<Record<keyof ValuePathsToTypePaths, Field>>
+  >,
 > = SimplifyDeep<{
   readonly [
-    K in keyof ValuePathsToTypePaths as FormFields[K] extends Field ? ValuePathsToTypePaths[K] : never
-  ]: ValidatorOfField<NonNullable<FormFields[K]>, FlattenedTypeDefs[ValuePathsToTypePaths[K]], K>
+    K in keyof ValuePathsToTypePaths as FormFields[K] extends Field
+      ? ValuePathsToTypePaths[K]
+      : never
+  ]: ValidatorOfField<
+    NonNullable<FormFields[K]>,
+    FlattenedTypeDefs[ValuePathsToTypePaths[K]],
+    K
+  >
 }>
 
 type ValidatorOfField<

@@ -9,7 +9,14 @@ import { type MantineFieldComponent, type MantineForm } from './types'
 
 export type SuppliedRadioGroupProps = Pick<
   RadioGroupProps,
-  'name' | 'value' | 'required' | 'error' | 'onChange' | 'onFocus' | 'onBlur' | 'onKeyUp'
+  | 'name'
+  | 'value'
+  | 'required'
+  | 'error'
+  | 'onChange'
+  | 'onFocus'
+  | 'onBlur'
+  | 'onKeyUp'
 >
 
 export function createRadioGroup<
@@ -22,7 +29,7 @@ export function createRadioGroup<
   RadioGroup: ComponentType<Props>,
 ): MantineFieldComponent<SuppliedRadioGroupProps, Props, ErrorOfField<F[K]>> {
   const onChange = (value: string) => {
-    this.onFieldValueChange?.(valuePath, value)
+    this.onFieldValueChange(valuePath, value)
   }
   const onFocus = () => {
     this.onFieldFocus?.(valuePath)
@@ -38,7 +45,11 @@ export function createRadioGroup<
     }
   }
 
-  const propSource = ({ ErrorRenderer = DefaultErrorRenderer }: { ErrorRenderer?: ErrorRenderer }) => {
+  const propSource = ({
+    ErrorRenderer = DefaultErrorRenderer,
+  }: {
+    ErrorRenderer?: ErrorRenderer
+  }) => {
     const { required, value, error } = this.fields[valuePath]
 
     return {
@@ -52,7 +63,9 @@ export function createRadioGroup<
       onKeyUp,
     }
   }
-  return createUnsafePartialObserverComponent(RadioGroup, propSource, ['ErrorRenderer']) as MantineFieldComponent<
+  return createUnsafePartialObserverComponent(RadioGroup, propSource, [
+    'ErrorRenderer',
+  ]) as MantineFieldComponent<
     SuppliedRadioGroupProps,
     Props,
     ErrorOfField<F[K]>

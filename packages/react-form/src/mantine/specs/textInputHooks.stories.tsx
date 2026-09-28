@@ -1,14 +1,18 @@
 import { PillsInputField, Textarea, type TextInputProps } from '@mantine/core'
 import { type Meta, type StoryObj } from '@storybook/react-vite'
 import { type FieldsViewProps } from 'core/props'
-import { type SuppliedTextInputProps, type TextInputTarget } from 'mantine/createTextInput'
+import {
+  type SuppliedTextInputProps,
+  type TextInputTarget,
+} from 'mantine/createTextInput'
 import { useMantineFormFields } from 'mantine/hooks'
 import { type ComponentType, type Ref } from 'react'
 import { action } from 'storybook/actions'
 import { type Field } from 'types/Field'
 import { TEXT_INPUT_LABEL } from './textInputConstants'
 
-type StoryTextInputProps<T extends TextInputTarget> = SuppliedTextInputProps<T> & Pick<TextInputProps, 'label'>
+type StoryTextInputProps<T extends TextInputTarget> =
+  SuppliedTextInputProps<T> & Pick<TextInputProps, 'label'>
 
 function ErrorRenderer({ error }: { error: string }) {
   return `error ${error}`
@@ -25,8 +29,17 @@ function Component<T extends TextInputTarget>({
   TextInput?: ComponentType<StoryTextInputProps<T>>
 }) {
   const form = useMantineFormFields(props)
-  const TextInputComponent = form.textInput<'$', StoryTextInputProps<T>>('$', TextInput)
-  return <TextInputComponent ErrorRenderer={ErrorRenderer} label={TEXT_INPUT_LABEL} ref={componentRef} />
+  const TextInputComponent = form.textInput<'$', StoryTextInputProps<T>>(
+    '$',
+    TextInput,
+  )
+  return (
+    <TextInputComponent
+      ErrorRenderer={ErrorRenderer}
+      label={TEXT_INPUT_LABEL}
+      ref={componentRef}
+    />
+  )
 }
 
 const meta: Meta<typeof Component> = {
@@ -42,7 +55,9 @@ const meta: Meta<typeof Component> = {
 
 export default meta
 
-type Story<T extends TextInputTarget = HTMLInputElement> = StoryObj<typeof Component<T>>
+type Story<T extends TextInputTarget = HTMLInputElement> = StoryObj<
+  typeof Component<T>
+>
 
 export const Empty: Story = {
   args: {

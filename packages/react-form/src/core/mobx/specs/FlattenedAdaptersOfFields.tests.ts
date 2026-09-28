@@ -6,8 +6,8 @@ import { type Field } from 'types/Field'
 const error = Symbol()
 type Error = typeof error
 
-describe('FlattenedAdaptersOfFields', function () {
-  it('maps the converter types', function () {
+describe('FlattenedAdaptersOfFields', () => {
+  it('maps the converter types', () => {
     type Fields = {
       a: Field<string, Error>
     }
@@ -25,7 +25,7 @@ describe('FlattenedAdaptersOfFields', function () {
     }>()
   })
 
-  it('ignores extraneous types not listed in the fields', function () {
+  it('ignores extraneous types not listed in the fields', () => {
     type FormFields = {
       a: Field<string, Error>
     }
@@ -45,7 +45,7 @@ describe('FlattenedAdaptersOfFields', function () {
     }>()
   })
 
-  it('handles multiple fields', function () {
+  it('handles multiple fields', () => {
     type FormFields = {
       a: Field<string, Error>
       c: Field<boolean, never>
@@ -67,7 +67,7 @@ describe('FlattenedAdaptersOfFields', function () {
     }>()
   })
 
-  it('allows synthesized fields', function () {
+  it('allows synthesized fields', () => {
     type FormFields = {
       a: Field<string, Error>
       c: Field<boolean, never>

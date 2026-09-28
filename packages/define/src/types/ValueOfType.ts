@@ -9,9 +9,14 @@ import {
   type UnionTypeDef,
 } from './Type'
 
-export type ValueOfType<T, Extra = {}> = T extends Type ? ValueOfTypeDef<T['definition'], Extra> : never
+export type ValueOfType<T, Extra = {}> = T extends Type
+  ? ValueOfTypeDef<T['definition'], Extra>
+  : never
 
-export type ValueOfTypeDef<F extends TypeDef, Extra = {}> = F extends LiteralTypeDef
+export type ValueOfTypeDef<
+  F extends TypeDef,
+  Extra = {},
+> = F extends LiteralTypeDef
   ? ValueOfLiteralTypeDef<F>
   : F extends ListTypeDef
     ? ValueOfListTypeDef<F, Extra>
@@ -23,19 +28,26 @@ export type ValueOfTypeDef<F extends TypeDef, Extra = {}> = F extends LiteralTyp
           ? ValueOfUnionTypeDef<F, Extra>
           : never
 
-type ValueOfLiteralTypeDef<F extends LiteralTypeDef> = F['valuePrototype'][number]
+type ValueOfLiteralTypeDef<F extends LiteralTypeDef> =
+  F['valuePrototype'][number]
 
 type ValueOfListTypeDef<F extends ListTypeDef, Extra> =
   IsFieldReadonly<F, 'elements'> extends true
     ? readonly ValueOfTypeDef<F['elements'], Extra>[] & Extra
     : ValueOfTypeDef<F['elements'], Extra>[] & Extra
 
-type ValueOfRecordTypeDef<F extends RecordTypeDef, Extra> = undefined extends F['valueTypeDef']
+type ValueOfRecordTypeDef<
+  F extends RecordTypeDef,
+  Extra,
+> = undefined extends F['valueTypeDef']
   ? // partial
     IsFieldReadonly<F, 'valueTypeDef'> extends true
     ? // readonly
       {
-        readonly [k in F['keyPrototype']]?: ValueOfTypeDef<F['valueTypeDef'], Extra>
+        readonly [k in F['keyPrototype']]?: ValueOfTypeDef<
+          F['valueTypeDef'],
+          Extra
+        >
       }
     : {
         [k in F['keyPrototype']]?: ValueOfTypeDef<F['valueTypeDef'], Extra>
@@ -44,7 +56,10 @@ type ValueOfRecordTypeDef<F extends RecordTypeDef, Extra> = undefined extends F[
     IsFieldReadonly<F, 'valueTypeDef'> extends true
     ? // readonly
       {
-        readonly [k in F['keyPrototype']]: ValueOfTypeDef<F['valueTypeDef'], Extra>
+        readonly [k in F['keyPrototype']]: ValueOfTypeDef<
+          F['valueTypeDef'],
+          Extra
+        >
       }
     : {
         [k in F['keyPrototype']]: ValueOfTypeDef<F['valueTypeDef'], Extra>

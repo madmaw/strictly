@@ -1,12 +1,24 @@
 import { type Type, type TypeDef } from 'types/Type'
 import { type ValueOfType } from 'types/ValueOfType'
-import { type AnyValueType, flattenValueTo, type Setter } from './flattenValueTo'
+import {
+  type AnyValueType,
+  flattenValueTo,
+  type Setter,
+} from './flattenValueTo'
 
-function mapTypePaths(_t: TypeDef, _value: AnyValueType, _set: Setter<AnyValueType>, typePath: string) {
+function mapTypePaths(
+  _t: TypeDef,
+  _value: AnyValueType,
+  _set: Setter<AnyValueType>,
+  typePath: string,
+) {
   return typePath
 }
 
-export function flattenJsonValueToTypePathsOf<T extends Type, R extends Record<string, string | number | symbol>>(
+export function flattenJsonValueToTypePathsOf<
+  T extends Type,
+  R extends Record<string, string | number | symbol>,
+>(
   t: T,
   value: ValueOfType<T>,
   // TODO
@@ -16,7 +28,7 @@ export function flattenJsonValueToTypePathsOf<T extends Type, R extends Record<s
   return flattenValueTo(
     t,
     value,
-    function () {
+    () => {
       // do nothing
     },
     mapTypePaths,

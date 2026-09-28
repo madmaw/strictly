@@ -8,7 +8,9 @@ export type ValueTypesOfDiscriminatedUnion<U extends UnionTypeDef> =
   U extends UnionTypeDef<infer D, infer Unions>
     ? D extends string
       ? {
-          [K in keyof Unions]: ValueOfType<ReadonlyTypeOfType<{ definition: Unions[K] }>> & {
+          [K in keyof Unions]: ValueOfType<
+            ReadonlyTypeOfType<{ definition: Unions[K] }>
+          > & {
             readonly [KD in D]: K
           }
         }

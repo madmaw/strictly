@@ -34,7 +34,7 @@ function observeValue(v: AnyValueType, def: StrictTypeDef): AnyValueType {
         v,
         reduce(
           def.fields,
-          function (acc, k) {
+          (acc, k) => {
             acc[k] = observable
             return acc
           },
@@ -52,6 +52,9 @@ function observeValue(v: AnyValueType, def: StrictTypeDef): AnyValueType {
   }
 }
 
-export function mobxCopy<T extends StrictType>(t: T, proto: ValueOfType<ReadonlyTypeOfType<T>>): MobxValueOfType<T> {
+export function mobxCopy<T extends StrictType>(
+  t: T,
+  proto: ValueOfType<ReadonlyTypeOfType<T>>,
+): MobxValueOfType<T> {
   return copyTo(t, proto, observeValue)
 }

@@ -5,13 +5,11 @@ import {
   UnreliableFieldConversionType,
 } from 'types/FieldConverters'
 
-export class IntegerToStringConverter<E, ValuePath extends string, Context> implements TwoWayFieldConverter<
-  number,
-  string,
+export class IntegerToStringConverter<
   E,
-  ValuePath,
-  Context
-> {
+  ValuePath extends string,
+  Context,
+> implements TwoWayFieldConverter<number, string, E, ValuePath, Context> {
   constructor(
     private readonly isNanError: E,
     private readonly base = 10,

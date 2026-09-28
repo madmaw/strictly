@@ -1,4 +1,8 @@
-import { type ExhaustiveArrayOfUnion, reverse, type StringKeyOf } from '@strictly/base'
+import {
+  type ExhaustiveArrayOfUnion,
+  reverse,
+  type StringKeyOf,
+} from '@strictly/base'
 import {
   copy,
   type LiteralTypeDef,
@@ -23,7 +27,13 @@ export abstract class AbstractSelectValueTypeConverter<
   NoSuchValueError,
   ValuePath extends string,
   Context,
-> implements TwoWayFieldConverterWithValueFactory<From, To, NoSuchValueError, ValuePath, Context> {
+> implements TwoWayFieldConverterWithValueFactory<
+  From,
+  To,
+  NoSuchValueError,
+  ValuePath,
+  Context
+> {
   constructor(
     protected readonly typeDef: T,
     protected readonly values: Values,
@@ -62,13 +72,17 @@ export abstract class AbstractSelectValueTypeConverter<
   protected abstract doConvert(from: NonNullable<ValueOfType<T>>): To
 
   create(): From {
-    return this.defaultValueKey == null ? null! : this.values[this.defaultValueKey]
+    return this.defaultValueKey == null
+      ? null!
+      : this.values[this.defaultValueKey]
   }
 }
 
 export class SelectDiscriminatedUnionConverter<
   U extends UnionTypeDef,
-  From extends ValueOfType<ReadonlyTypeOfType<Type<U>>> | (Required extends true ? never : undefined),
+  From extends
+    | ValueOfType<ReadonlyTypeOfType<Type<U>>>
+    | (Required extends true ? never : undefined),
   To extends StringKeyOf<U['unions']> | null,
   ValuePath extends string,
   Context,
@@ -120,15 +134,14 @@ export class SelectLiteralConverter<
   constructor(
     typeDef: Type<LiteralTypeDef<L>>,
     private readonly valuesToStrings: Values,
-    defaultValue: From,
+    defaultValue: From | null,
     noSuchValueError: NoSuchValueError | null,
     required: Required,
   ) {
     super(
       typeDef,
       reverse(valuesToStrings),
-      // oxlint-disable-next-line typescript/no-unnecessary-type-assertion -- tsc does not narrow the generic here
-      defaultValue == null ? (defaultValue as null | undefined) : valuesToStrings[defaultValue],
+      defaultValue == null ? null : valuesToStrings[defaultValue],
       noSuchValueError,
       required,
     )
@@ -158,13 +171,13 @@ export class SelectStringConverter<
   constructor(
     typeDef: Type<LiteralTypeDef<L>>,
     allowedValues: ExhaustiveArrayOfUnion<NonNullable<From>, A>,
-    defaultValue: L | undefined,
+    defaultValue: L | null,
     noSuchValueError: NoSuchValueError | null,
     required = false,
   ) {
     super(
       typeDef,
-      allowedValues.reduce<Record<string, From>>(function (acc, value) {
+      allowedValues.reduce<Record<string, From>>((acc, value) => {
         acc[value] = value
         return acc
       }, {}),

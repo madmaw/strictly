@@ -8,13 +8,13 @@ import * as stories from './textInputHooks.stories'
 const composedStories = composeStories(stories)
 const { Populated } = composedStories
 
-describe('mantine checkbox hooks', function () {
-  it.each(toArray(composedStories))('renders %s', function (_name, Story) {
+describe('mantine checkbox hooks', () => {
+  it.each(toArray(composedStories))('renders %s', (_name, Story) => {
     const wrapper = render(<Story />)
     expect(wrapper.container).toMatchSnapshot()
   })
 
-  describe('events', function () {
+  describe('events', () => {
     let onFieldValueChange: Mock<(path: '$', value: string) => void>
     let onFieldFocus: Mock<(path: '$') => void>
     let onFieldBlur: Mock<(path: '$') => void>
@@ -22,7 +22,7 @@ describe('mantine checkbox hooks', function () {
     let wrapper: RenderResult
     let textInput: HTMLElement
 
-    beforeEach(async function () {
+    beforeEach(async () => {
       onFieldValueChange = vi.fn()
       onFieldFocus = vi.fn()
       onFieldBlur = vi.fn()
@@ -38,7 +38,7 @@ describe('mantine checkbox hooks', function () {
       textInput = await wrapper.findByLabelText(TEXT_INPUT_LABEL)
     })
 
-    it('fires change event', function () {
+    it('fires change event', () => {
       const value = 'new value'
       fireEvent.change(textInput, {
         target: {
@@ -49,7 +49,7 @@ describe('mantine checkbox hooks', function () {
       expect(onFieldValueChange).toHaveBeenCalledWith('$', value)
     })
 
-    it('fires submit event on enter', function () {
+    it('fires submit event on enter', () => {
       fireEvent.keyUp(textInput, {
         key: 'Enter',
       })
@@ -57,34 +57,37 @@ describe('mantine checkbox hooks', function () {
       expect(onFieldSubmit).toHaveBeenLastCalledWith('$')
     })
 
-    it.each(['Tab', 'Space', 'x'])('does not fire submit event on %s', function (key) {
-      fireEvent.keyUp(textInput, {
-        key,
-      })
-      expect(onFieldSubmit).not.toHaveBeenCalled()
-    })
+    it.each(['Tab', 'Space', 'x'])(
+      'does not fire submit event on %s',
+      (key) => {
+        fireEvent.keyUp(textInput, {
+          key,
+        })
+        expect(onFieldSubmit).not.toHaveBeenCalled()
+      },
+    )
 
-    describe('focus', function () {
-      beforeEach(function () {
+    describe('focus', () => {
+      beforeEach(() => {
         fireEvent.focus(textInput)
       })
 
-      it('fires focus event', function () {
+      it('fires focus event', () => {
         expect(onFieldFocus).toHaveBeenCalledOnce()
         expect(onFieldFocus).toHaveBeenCalledWith('$')
       })
 
-      describe('blur', function () {
-        beforeEach(function () {
+      describe('blur', () => {
+        beforeEach(() => {
           fireEvent.blur(textInput)
         })
 
-        it('fires blur event', function () {
+        it('fires blur event', () => {
           expect(onFieldBlur).toHaveBeenCalledOnce()
           expect(onFieldBlur).toHaveBeenCalledWith('$')
         })
 
-        it('does not refire focus event', function () {
+        it('does not refire focus event', () => {
           expect(onFieldFocus).toHaveBeenCalledOnce()
         })
       })

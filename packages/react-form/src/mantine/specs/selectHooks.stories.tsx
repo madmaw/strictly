@@ -16,7 +16,13 @@ function Component({
 }>) {
   const form = useMantineFormFields(props)
   const SelectComponent = form.select('$')
-  return <SelectComponent ErrorRenderer={ErrorRenderer} data={['a', 'b', 'c']} label={SELECT_LABEL} />
+  return (
+    <SelectComponent
+      ErrorRenderer={ErrorRenderer}
+      data={['a', 'b', 'c']}
+      label={SELECT_LABEL}
+    />
+  )
 }
 
 const meta: Meta<typeof Component> = {

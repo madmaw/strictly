@@ -27,14 +27,22 @@ export function createList<
   this: MantineForm<F>,
   valuePath: K,
   List: ComponentType<Props>,
-): MantineFieldComponent<SuppliedListProps<ElementOfArray<ValueTypeOfField<F[K]>>>, Props, never> {
+): MantineFieldComponent<
+  SuppliedListProps<ElementOfArray<ValueTypeOfField<F[K]>>>,
+  Props,
+  never
+> {
   const propSource = () => {
     const field = this.fields[valuePath]
     const values = [...field.value]
     return {
       values,
       listPath: valuePath,
-      indexKeys: assertExistsAndReturn(field.listIndexToKey, 'list index to key mapping missing in {}', valuePath),
+      indexKeys: assertExistsAndReturn(
+        field.listIndexToKey,
+        'list index to key mapping missing in {}',
+        valuePath,
+      ),
     }
   }
   return createUnsafePartialObserverComponent(List, propSource)
@@ -46,22 +54,31 @@ export function DefaultList<Value, ListPath extends string>({
   listPath,
   children,
 }: SuppliedListProps<Value, ListPath> & {
-  children: (valuePath: `${ListPath}.${number}`, value: Value, index: number) => React.ReactNode
+  children: (
+    valuePath: `${ListPath}.${number}`,
+    value: Value,
+    index: number,
+  ) => React.ReactNode
 }) {
   return (
     <>
       {values
-        .map(function (value, index) {
+        .map((value, index) => {
           const key = indexKeys.at(index)
           return [value, index, key] as const
         })
-        .filter(function (entry): entry is readonly [Value, number, number] {
-          // omit entries without keys
-          return entry[2] != null
-        })
-        .map(function ([value, index, key]) {
+        .filter(
+          (entry): entry is readonly [Value, number, number] =>
+            // omit entries without keys
+            entry[2] != null,
+        )
+        .map(([value, index, key]) => {
           const valuePath: `${ListPath}.${number}` = `${listPath}.${key}`
-          return <Fragment key={valuePath}>{children(valuePath, value, index)}</Fragment>
+          return (
+            <Fragment key={valuePath}>
+              {children(valuePath, value, index)}
+            </Fragment>
+          )
         })}
     </>
   )

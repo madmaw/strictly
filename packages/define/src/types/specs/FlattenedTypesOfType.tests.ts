@@ -1,10 +1,18 @@
 import { type SimplifyDeep } from 'type-fest'
-import { booleanType, list, numberType, object, record, stringType, union } from 'types/builders'
+import {
+  booleanType,
+  list,
+  numberType,
+  object,
+  record,
+  stringType,
+  union,
+} from 'types/builders'
 import { type FlattenedTypesOfType } from 'types/FlattenedTypesOfType'
 import { type TypeDefType } from 'types/Type'
 
-describe('FlattenedTypesOfType', function () {
-  describe('literal', function () {
+describe('FlattenedTypesOfType', () => {
+  describe('literal', () => {
     type T = FlattenedTypesOfType<typeof numberType._type, null>
 
     type C = {
@@ -15,12 +23,12 @@ describe('FlattenedTypesOfType', function () {
         }
       }
     }
-    it('equals expected type', function () {
+    it('equals expected type', () => {
       expectTypeOf<C>().toEqualTypeOf<T>()
     })
   })
 
-  describe('list', function () {
+  describe('list', () => {
     const builder = list(numberType)
     type T = SimplifyDeep<FlattenedTypesOfType<typeof builder._type, '*'>>
 
@@ -33,12 +41,12 @@ describe('FlattenedTypesOfType', function () {
         }
       }
     }
-    it('equals expected type', function () {
+    it('equals expected type', () => {
       expectTypeOf<C>().toEqualTypeOf<T>()
     })
   })
 
-  describe('record', function () {
+  describe('record', () => {
     const builder = record<typeof numberType, 'a' | 'b'>(numberType)
     type T = SimplifyDeep<FlattenedTypesOfType<typeof builder._type, '*'>>
 
@@ -51,13 +59,13 @@ describe('FlattenedTypesOfType', function () {
         }
       }
     }
-    it('equals expected type', function () {
+    it('equals expected type', () => {
       expectTypeOf<C>().toEqualTypeOf<T>()
     })
   })
 
-  describe('object', function () {
-    describe('simple', function () {
+  describe('object', () => {
+    describe('simple', () => {
       const builder = object()
         .field('a', numberType)
         .optionalField('b', stringType)
@@ -111,12 +119,12 @@ describe('FlattenedTypesOfType', function () {
           }
         }
       }
-      it('equals expected type', function () {
+      it('equals expected type', () => {
         expectTypeOf<C>().toEqualTypeOf<T>()
       })
     })
 
-    describe('optional', function () {
+    describe('optional', () => {
       const builder = object().optionalField('a', stringType)
       type T = SimplifyDeep<FlattenedTypesOfType<typeof builder._type, null>>
 
@@ -140,17 +148,19 @@ describe('FlattenedTypesOfType', function () {
         }
       }
 
-      it('equals expected type', function () {
+      it('equals expected type', () => {
         expectTypeOf<C>().toEqualTypeOf<T>()
       })
     })
   })
 })
 
-describe('union', function () {
-  describe('overlapping', function () {
-    describe('non-discriminated', function () {
-      const builder = union().or('x', object().field('a', booleanType)).or('y', object().field('b', numberType))
+describe('union', () => {
+  describe('overlapping', () => {
+    describe('non-discriminated', () => {
+      const builder = union()
+        .or('x', object().field('a', booleanType))
+        .or('y', object().field('b', numberType))
       type T = SimplifyDeep<FlattenedTypesOfType<typeof builder._type, null>>
 
       type C = {
@@ -169,13 +179,15 @@ describe('union', function () {
         }
       }
 
-      it('equals expected type', function () {
+      it('equals expected type', () => {
         expectTypeOf<C>().toEqualTypeOf<T>()
       })
     })
 
-    describe('discriminated', function () {
-      const builder = union('x').or('1', object().field('a', booleanType)).or('2', object().field('a', numberType))
+    describe('discriminated', () => {
+      const builder = union('x')
+        .or('1', object().field('a', booleanType))
+        .or('2', object().field('a', numberType))
       type T = SimplifyDeep<FlattenedTypesOfType<typeof builder._type, null>>
 
       type C = {
@@ -193,15 +205,25 @@ describe('union', function () {
           }
         }
       }
-      it('equals expected type', function () {
+      it('equals expected type', () => {
         expectTypeOf<C>().toEqualTypeOf<T>()
       })
     })
 
-    describe('nested discriminated', function () {
+    describe('nested discriminated', () => {
       const builder = union('x')
-        .or('1', union('y').or('p', object().field('a', booleanType)).or('q', object().field('a', stringType)))
-        .or('2', union('z').or('r', object().field('b', numberType)).or('s', object().field('c', stringType)))
+        .or(
+          '1',
+          union('y')
+            .or('p', object().field('a', booleanType))
+            .or('q', object().field('a', stringType)),
+        )
+        .or(
+          '2',
+          union('z')
+            .or('r', object().field('b', numberType))
+            .or('s', object().field('c', stringType)),
+        )
       type T = SimplifyDeep<FlattenedTypesOfType<typeof builder._type, null>>
       type C = {
         readonly $: SimplifyDeep<typeof builder._type>
@@ -230,7 +252,7 @@ describe('union', function () {
           }
         }
       }
-      it('equals expected type', function () {
+      it('equals expected type', () => {
         expectTypeOf<C>().toEqualTypeOf<T>()
       })
     })

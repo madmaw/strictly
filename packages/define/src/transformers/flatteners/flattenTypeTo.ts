@@ -22,7 +22,7 @@ export function flattenTypeTo<M, R extends Readonly<Record<string, M>>>(
   const typeDefs = internalFlattenTypeDef('$', definition, {})
   return reduce<string, StrictTypeDef, Record<string, M>>(
     typeDefs,
-    function (acc, key, typeDef) {
+    (acc, key, typeDef) => {
       acc[key] = mapper(typeDef, key)
       return acc
     },
@@ -85,9 +85,12 @@ function internalFlattenObjectTypeDefChildren(
 ): Record<string, StrictTypeDef> {
   return reduce(
     fields,
-    function (acc, fieldName, fieldTypeDef) {
-      return internalFlattenTypeDef(jsonPath(path, fieldName, qualifier), fieldTypeDef, acc)
-    },
+    (acc, fieldName, fieldTypeDef) =>
+      internalFlattenTypeDef(
+        jsonPath(path, fieldName, qualifier),
+        fieldTypeDef,
+        acc,
+      ),
     r,
   )
 }
@@ -100,9 +103,13 @@ function internalFlattenUnionTypeDefChildren(
 ): Record<string, StrictTypeDef> {
   return reduce(
     unions,
-    function (acc, key, typeDef: StrictTypeDef) {
-      return internalFlattenTypeDefChildren(discriminator == null ? path : `${path}:${qualifier}`, key, typeDef, acc)
-    },
+    (acc, key, typeDef: StrictTypeDef) =>
+      internalFlattenTypeDefChildren(
+        discriminator == null ? path : `${path}:${qualifier}`,
+        key,
+        typeDef,
+        acc,
+      ),
     r,
   )
 }

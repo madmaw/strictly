@@ -7,12 +7,20 @@ export class PreconditionFailedError extends Error {
   }
 }
 
-export function assertExistsAndReturn<T>(t: T, message: string, ...args: readonly FormatArg[]): NonNullable<T> {
+export function assertExistsAndReturn<T>(
+  t: T,
+  message: string,
+  ...args: readonly FormatArg[]
+): NonNullable<T> {
   assertExists(t, message, ...args)
   return t
 }
 
-export function assertExists<V>(v: V, message: string, ...args: readonly FormatArg[]): asserts v is NonNullable<V> {
+export function assertExists<V>(
+  v: V,
+  message: string,
+  ...args: readonly FormatArg[]
+): asserts v is NonNullable<V> {
   if (v == null) {
     throw new PreconditionFailedError(message, ...args)
   }
@@ -52,14 +60,22 @@ export function assertIs<V, T extends V>(
   }
 }
 
-export function checkUnary<T>(t: readonly T[], message: string, ...args: readonly FormatArg[]): T {
+export function checkUnary<T>(
+  t: readonly T[],
+  message: string,
+  ...args: readonly FormatArg[]
+): T {
   if (t.length !== 1) {
     throw new PreconditionFailedError(message, ...args)
   }
   return t[0]
 }
 
-export function checkValidNumber(n: number, message: string, ...args: readonly FormatArg[]): number {
+export function checkValidNumber(
+  n: number,
+  message: string,
+  ...args: readonly FormatArg[]
+): number {
   if (Number.isNaN(n) || !Number.isFinite(n)) {
     throw new PreconditionFailedError(message, ...args)
   }

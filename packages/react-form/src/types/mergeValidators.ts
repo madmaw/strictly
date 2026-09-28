@@ -16,10 +16,16 @@ export type MergedOfValidators<
       ? // validator 2 is undefined
         Validators1[K]
       : // validator 2 and validator 2 are defined
-        MergedOfValidator<NonNullable<Validators1[K]>, NonNullable<Validators2[K]>>
+        MergedOfValidator<
+          NonNullable<Validators1[K]>,
+          NonNullable<Validators2[K]>
+        >
 }>
 
-export type MergedOfValidator<Validator1 extends Validator, Validator2 extends Validator> =
+export type MergedOfValidator<
+  Validator1 extends Validator,
+  Validator2 extends Validator,
+> =
   Validator1 extends Validator<infer V, infer E1, infer P, infer C1>
     ? Validator2 extends Validator<V, infer E2, P, infer C2>
       ? Validator<V, E1 | E2, P, C1 & C2>
@@ -30,14 +36,17 @@ export function mergeValidators<
   Validators1 extends Partial<Readonly<Record<Keys, Validator>>>,
   Validators2 extends Partial<Readonly<Record<Keys, Validator>>>,
   Keys extends string = Extract<keyof Validators1 | keyof Validators2, string>,
->(validators1: Validators1, validators2: Validators2): MergedOfValidators<Validators1, Validators2, Keys> {
+>(
+  validators1: Validators1,
+  validators2: Validators2,
+): MergedOfValidators<Validators1, Validators2, Keys> {
   const validators = {
     ...validators1,
     ...validators2,
   }
   const keys1 = new Set(Object.keys(validators1))
   const keys2 = new Set(Object.keys(validators2))
-  return Array.from(keys1.intersection(keys2)).reduce(function (validators, key) {
+  return Array.from(keys1.intersection(keys2)).reduce((validators, key) => {
     const validator1 = validators1[key as keyof Validators1]
     const validator2 = validators2[key as keyof Validators2]
 
@@ -62,5 +71,9 @@ export function mergeValidators<
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } as any
     return validators
-  }, validators) as unknown as MergedOfValidators<Validators1, Validators2, Keys>
+  }, validators) as unknown as MergedOfValidators<
+    Validators1,
+    Validators2,
+    Keys
+  >
 }

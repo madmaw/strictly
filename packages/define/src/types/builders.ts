@@ -1,6 +1,18 @@
 import { type IsFieldReadonly, map, UnreachableError } from '@strictly/base'
-import { isAnnotatedValidator, mergeAnnotations, validate, type Validator } from 'validation/validator'
-import { type ObjectFieldKey, type RecordKeyType, type Type, type TypeDef, TypeDefType, type UnionKey } from './Type'
+import {
+  isAnnotatedValidator,
+  mergeAnnotations,
+  validate,
+  type Validator,
+} from 'validation/validator'
+import {
+  type ObjectFieldKey,
+  type RecordKeyType,
+  type Type,
+  type TypeDef,
+  TypeDefType,
+  type UnionKey,
+} from './Type'
 import { type TypeOfType, typeOfType } from './typeOfType'
 import {
   type Rule,
@@ -22,11 +34,15 @@ function emptyRule() {
 class TypeDefBuilder<T extends ValidatingTypeDef> implements ValidatingType<T> {
   constructor(readonly definition: T) {}
 
-  enforce<E2, C2 = unknown>(): TypeDefBuilder<ValidatingTypeDefWithError<T, E2, C2>>
+  enforce<E2, C2 = unknown>(): TypeDefBuilder<
+    ValidatingTypeDefWithError<T, E2, C2>
+  >
   enforce<E2, C2 = unknown>(
     rule: Validator<ValueOfType<Type<T>>, E2, string, C2>,
   ): TypeDefBuilder<ValidatingTypeDefWithError<T, E2, C2>>
-  enforce<E2, C2 = unknown>(rule?: Validator<ValueOfType<Type<T>>, E2, string, C2>) {
+  enforce<E2, C2 = unknown>(
+    rule?: Validator<ValueOfType<Type<T>>, E2, string, C2>,
+  ) {
     return new TypeDefBuilder<ValidatingTypeDefWithError<T, E2, C2>>({
       ...this.definition,
       ...(rule != null && isAnnotatedValidator(rule)
@@ -34,7 +50,8 @@ class TypeDefBuilder<T extends ValidatingTypeDef> implements ValidatingType<T> {
         : {}),
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       rule: (value: any, valuePath: string, context: any) =>
-        this.definition.rule(value, valuePath, context) ?? (rule && validate(rule, value, valuePath, context)),
+        this.definition.rule(value, valuePath, context) ??
+        (rule && validate(rule, value, valuePath, context)),
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } as any)
   }
@@ -67,7 +84,9 @@ class TypeDefBuilder<T extends ValidatingTypeDef> implements ValidatingType<T> {
   }
 }
 
-class ListTypeDefBuilder<T extends ValidatingListTypeDef> extends TypeDefBuilder<T> {
+class ListTypeDefBuilder<
+  T extends ValidatingListTypeDef,
+> extends TypeDefBuilder<T> {
   readonlyElements(): ListTypeDefBuilder<{
     readonly type: TypeDefType.List
     readonly elements: T['elements']
@@ -85,7 +104,9 @@ class ListTypeDefBuilder<T extends ValidatingListTypeDef> extends TypeDefBuilder
   }
 }
 
-class RecordTypeDefBuilder<T extends ValidatingRecordTypeDef> extends TypeDefBuilder<T> {
+class RecordTypeDefBuilder<
+  T extends ValidatingRecordTypeDef,
+> extends TypeDefBuilder<T> {
   partialKeys(): IsFieldReadonly<T, 'valueTypeDef'> extends true
     ? RecordTypeDefBuilder<{
         readonly type: TypeDefType.Record
@@ -136,29 +157,48 @@ class ObjectTypeDefBuilder<
     name: Name,
     { definition }: Type<T>,
     rule: Rule<RequiredError, ValueOfTypeDef<T>>,
-  ): ObjectTypeDefBuilder<E, C & C2, Fields & Record<Name, ValidatingTypeDefWithError<T, RequiredError, C & C2>>>
-  field<Name extends string, T extends ValidatingTypeDef, RequiredError = never, C2 = {}>(
+  ): ObjectTypeDefBuilder<
+    E,
+    C & C2,
+    Fields & Record<Name, ValidatingTypeDefWithError<T, RequiredError, C & C2>>
+  >
+  field<
+    Name extends string,
+    T extends ValidatingTypeDef,
+    RequiredError = never,
+    C2 = {},
+  >(
     name: Name,
     { definition }: Type<T>,
     rule?: Rule<RequiredError, C2, ValueOfTypeDef<T>>,
-  ): ObjectTypeDefBuilder<E, C & C2, Fields & Record<Name, ValidatingTypeDefWithError<T, RequiredError, C2>>> {
+  ): ObjectTypeDefBuilder<
+    E,
+    C & C2,
+    Fields & Record<Name, ValidatingTypeDefWithError<T, RequiredError, C2>>
+  > {
     // have to explicitly supply types as TS will infinitely recurse trying to infer them!
-    return new ObjectTypeDefBuilder<E, C & C2, Fields & Record<Name, ValidatingTypeDefWithError<T, RequiredError, C2>>>(
-      {
-        ...this.definition,
-        // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-        fields: {
-          ...this.definition.fields,
-          [name]: {
-            ...definition,
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            rule(v: any, valuePath: string, context: C2) {
-              return definition.rule(v, valuePath, context) ?? (rule && validate(rule, v, valuePath, context))
-            },
+    return new ObjectTypeDefBuilder<
+      E,
+      C & C2,
+      Fields & Record<Name, ValidatingTypeDefWithError<T, RequiredError, C2>>
+    >({
+      ...this.definition,
+      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+      fields: {
+        ...this.definition.fields,
+        [name]: {
+          ...definition,
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          rule(v: any, valuePath: string, context: C2) {
+            return (
+              definition.rule(v, valuePath, context) ??
+              (rule && validate(rule, v, valuePath, context))
+            )
           },
-        } as Fields & Record<Name, ValidatingTypeDefWithError<T, RequiredError, C2>>,
-      },
-    )
+        },
+      } as Fields &
+        Record<Name, ValidatingTypeDefWithError<T, RequiredError, C2>>,
+    })
   }
 
   readonlyField<Name extends string, T extends ValidatingTypeDef>(
@@ -211,7 +251,11 @@ class ObjectTypeDefBuilder<
       },
     }
     // have to explicitly supply types as TS will infinitely recurse trying to infer them!
-    return new ObjectTypeDefBuilder<E, C, Fields & Partial<Readonly<Record<Name, T>>>>({
+    return new ObjectTypeDefBuilder<
+      E,
+      C,
+      Fields & Partial<Readonly<Record<Name, T>>>
+    >({
       ...this.definition,
       fields: {
         ...this.definition.fields,
@@ -221,16 +265,23 @@ class ObjectTypeDefBuilder<
   }
 }
 
-class UnionTypeDefBuilder<E, C, D extends string | null, U extends Record<UnionKey, TypeDef>> extends TypeDefBuilder<
-  ValidatingUnionTypeDef<E, C, D, U>
-> {
+class UnionTypeDefBuilder<
+  E,
+  C,
+  D extends string | null,
+  U extends Record<UnionKey, TypeDef>,
+> extends TypeDefBuilder<ValidatingUnionTypeDef<E, C, D, U>> {
   or<K extends Exclude<UnionKey, keyof U>, T extends TypeDef>(
     k: K,
     { definition: typeDef }: Type<T>,
   ): UnionTypeDefBuilder<E, C, D, Readonly<Record<K, T>> & U> {
     const { unions, discriminator } = this.definition
     // add the discriminator as a field to the underlying union type
-    const enhancedTypeDef = maybeAddDiscriminatorField(typeDef, discriminator, k)
+    const enhancedTypeDef = maybeAddDiscriminatorField(
+      typeDef,
+      discriminator,
+      k,
+    )
     return new UnionTypeDefBuilder<E, C, D, Readonly<Record<K, T>> & U>({
       ...this.definition,
       // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
@@ -260,20 +311,26 @@ function maybeAddDiscriminatorField<T extends TypeDef, K extends UnionKey>(
         ...t,
         fields: {
           ...t.fields,
-          [discriminatorKey]: literal([discriminatorLiteral]).readonly().required().narrow.definition,
+          [discriminatorKey]: literal([discriminatorLiteral])
+            .readonly()
+            .required().narrow.definition,
         },
       }
     case TypeDefType.Union:
       return {
         ...t,
-        unions: map(t.unions, (_k, v) => maybeAddDiscriminatorField(v, discriminatorKey, discriminatorLiteral)),
+        unions: map(t.unions, (_k, v) =>
+          maybeAddDiscriminatorField(v, discriminatorKey, discriminatorLiteral),
+        ),
       }
     default:
       throw new UnreachableError(t)
   }
 }
 
-export function literal<T>(value?: [T]): TypeDefBuilder<ValidatingLiteralTypeDef<never, {}, T>> {
+export function literal<T>(
+  value?: [T],
+): TypeDefBuilder<ValidatingLiteralTypeDef<never, {}, T>> {
   return new TypeDefBuilder({
     type: TypeDefType.Literal,
     valuePrototype: value!,
@@ -367,8 +424,12 @@ export function object(): ObjectTypeDefBuilder<never, {}> {
 }
 
 export function union<D extends null>(): UnionTypeDefBuilder<never, {}, D, {}>
-export function union<D extends string>(discriminator: D): UnionTypeDefBuilder<never, {}, D, {}>
-export function union<D extends string | null>(discriminator?: D): UnionTypeDefBuilder<never, {}, D, {}> {
+export function union<D extends string>(
+  discriminator: D,
+): UnionTypeDefBuilder<never, {}, D, {}>
+export function union<D extends string | null>(
+  discriminator?: D,
+): UnionTypeDefBuilder<never, {}, D, {}> {
   // have to explicitly supply types as TS will infinitely recurse trying to infer them!
   return new UnionTypeDefBuilder<never, {}, D, {}>({
     type: TypeDefType.Union,

@@ -41,7 +41,12 @@ type InternalJsonPathsOfChildren<
         : F extends ObjectTypeDef
           ? InternalJsonPathsOfObjectChildren<F, Prefix, SegmentOverride, Depth>
           : F extends UnionTypeDef
-            ? InternalJsonPathsOfUnionChildren<F, Prefix, SegmentOverride, Depth>
+            ? InternalJsonPathsOfUnionChildren<
+                F,
+                Prefix,
+                SegmentOverride,
+                Depth
+              >
             : never
 
 type InternalJsonPathsOfLiteralChildren = never
@@ -51,14 +56,24 @@ type InternalJsonPathsOfListChildren<
   Prefix extends string,
   SegmentOverride extends string | null,
   Depth extends number,
-> = InternalJsonPathsOf<F['elements'], PathOf<Prefix, number, SegmentOverride>, SegmentOverride, Depth>
+> = InternalJsonPathsOf<
+  F['elements'],
+  PathOf<Prefix, number, SegmentOverride>,
+  SegmentOverride,
+  Depth
+>
 
 type InternalJsonPathsOfRecordChildren<
   F extends RecordTypeDef,
   Prefix extends string,
   SegmentOverride extends string | null,
   Depth extends number,
-> = InternalJsonPathsOf<F['valueTypeDef'], PathOf<Prefix, F['keyPrototype'], SegmentOverride>, SegmentOverride, Depth>
+> = InternalJsonPathsOf<
+  F['valueTypeDef'],
+  PathOf<Prefix, F['keyPrototype'], SegmentOverride>,
+  SegmentOverride,
+  Depth
+>
 
 type InternalJsonPathsOfObjectChildren<
   F extends ObjectTypeDef,
@@ -68,7 +83,12 @@ type InternalJsonPathsOfObjectChildren<
 > =
   F extends ObjectTypeDef<infer Fields>
     ? {
-        [K in keyof Fields]: InternalJsonPathsOf<Fields[K], PathOf<Prefix, K, null>, SegmentOverride, Depth>
+        [K in keyof Fields]: InternalJsonPathsOf<
+          Fields[K],
+          PathOf<Prefix, K, null>,
+          SegmentOverride,
+          Depth
+        >
       }[keyof Fields]
     : never
 

@@ -4,8 +4,8 @@ import { render } from '@testing-library/react'
 import * as stories from './valueInputHooks.stories'
 
 const composedStories = composeStories(stories)
-describe('mantine value input hooks', function () {
-  it.each(toArray(composedStories))('renders %s', function (_name, Story) {
+describe('mantine value input hooks', () => {
+  it.each(toArray(composedStories))('renders %s', (_name, Story) => {
     const wrapper = render(<Story />)
     expect(wrapper.container).toMatchSnapshot()
   })

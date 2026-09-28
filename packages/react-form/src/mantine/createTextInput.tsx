@@ -10,7 +10,9 @@ export type TextInputTarget = Element & {
   value: string
 }
 
-export type SuppliedTextInputProps<T extends TextInputTarget = TextInputTarget> = Partial<{
+export type SuppliedTextInputProps<
+  T extends TextInputTarget = TextInputTarget,
+> = Partial<{
   name: string
   value: string | number | readonly string[] | undefined
   disabled: boolean
@@ -31,7 +33,7 @@ export function createTextInput<
   TextInput: React.ComponentType<Props>,
 ): MantineFieldComponent<SuppliedTextInputProps, Props, ErrorOfField<F[K]>> {
   const onChange = (e: React.ChangeEvent<TextInputTarget>) => {
-    this.onFieldValueChange?.(valuePath, e.target.value)
+    this.onFieldValueChange(valuePath, e.target.value)
   }
   const onFocus = () => {
     this.onFieldFocus?.(valuePath)

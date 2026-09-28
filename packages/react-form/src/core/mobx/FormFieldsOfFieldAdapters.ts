@@ -4,10 +4,14 @@ import { type FieldAdapter } from './FieldAdapter'
 
 export type FormFieldsOfFieldAdapters<
   ValuePathsToTypePaths extends Readonly<Record<string, string>>,
-  FieldAdapters extends Partial<Readonly<Record<ValueOf<ValuePathsToTypePaths>, FieldAdapter>>>,
+  FieldAdapters extends Partial<
+    Readonly<Record<ValueOf<ValuePathsToTypePaths>, FieldAdapter>>
+  >,
 > = {
   [
-    K in keyof ValuePathsToTypePaths as undefined extends FieldAdapters[ValuePathsToTypePaths[K]] ? never : K
+    K in keyof ValuePathsToTypePaths as undefined extends FieldAdapters[ValuePathsToTypePaths[K]]
+      ? never
+      : K
   ]: FormFieldOfFieldAdapter<FieldAdapters[ValuePathsToTypePaths[K]]>
 }
 

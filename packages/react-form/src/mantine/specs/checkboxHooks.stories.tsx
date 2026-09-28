@@ -20,7 +20,13 @@ function Component({
 }) {
   const inputProps = useMantineFormFields(props)
   const CheckboxComponent = inputProps.checkbox('$')
-  return <CheckboxComponent ErrorRenderer={ErrorRenderer} label={CHECKBOX_LABEL} ref={componentRef} />
+  return (
+    <CheckboxComponent
+      ErrorRenderer={ErrorRenderer}
+      label={CHECKBOX_LABEL}
+      ref={componentRef}
+    />
+  )
 }
 
 const meta: Meta<typeof Component> = {

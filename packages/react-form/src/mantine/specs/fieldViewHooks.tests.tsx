@@ -5,8 +5,8 @@ import * as stories from './fieldViewHooks.stories'
 
 const composedStories = composeStories(stories)
 
-describe('field view hooks', function () {
-  it.each(toArray(composedStories))('renders %s', function (_name, Story) {
+describe('field view hooks', () => {
+  it.each(toArray(composedStories))('renders %s', (_name, Story) => {
     const wrapper = render(<Story />)
     expect(wrapper.container).toMatchSnapshot()
   })

@@ -60,7 +60,9 @@ const meta: Meta<typeof Component> = {
 
 export default meta
 
-type Story<V, P extends StoryValueInputProps<V>> = StoryObj<typeof Component<V, P>>
+type Story<V, P extends StoryValueInputProps<V>> = StoryObj<
+  typeof Component<V, P>
+>
 
 export const EmptyNumberInput: Story<number | string, NumberInputProps> = {
   args: {

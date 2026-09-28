@@ -1,7 +1,8 @@
 import { type Meta, type StoryObj } from '@storybook/react-vite'
 import { delay } from '@strictly/base'
+import { textContentOf } from '@strictly/spec'
 import { PetForm } from 'features/form/pet/mobx/PetForm'
-import { submitLabel } from 'features/form/pet/PetFieldsView'
+import { SubmitLabel } from 'features/form/pet/PetFieldsView'
 import { action } from 'storybook/actions'
 import { userEvent, within } from 'storybook/test'
 
@@ -14,6 +15,7 @@ const meta: Meta<typeof Component> = {
     value: {
       alive: true,
       name: 'Delta',
+      owner: null,
       tags: ['black', 'nervous'],
       species: {
         breed: 'DSH',
@@ -39,6 +41,7 @@ export const Unalive: Story = {
     value: {
       alive: false,
       name: '',
+      owner: null,
       tags: [],
       species: {
         type: 'cat',
@@ -54,6 +57,7 @@ export const CreateMode: Story = {
     value: {
       alive: true,
       name: '',
+      owner: null,
       tags: [],
       species: {
         type: 'cat',
@@ -85,7 +89,7 @@ export const Invalid: Story = {
     const canvas = within(canvasElement)
     // can't consistently find the submit button!
     await delay(100)
-    const submitButton = await canvas.findByText(submitLabel())
+    const submitButton = await canvas.findByText(textContentOf(<SubmitLabel />))
     await userEvent.click(submitButton)
   },
 }

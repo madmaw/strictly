@@ -3,7 +3,11 @@ import { type Fields } from 'types/Field'
 export type FieldsViewProps<F extends Fields> = {
   fields: F
 
-  onFieldValueChange<K extends keyof F>(this: void, key: K, value: F[K]['value']): void
+  onFieldValueChange<K extends keyof F>(
+    this: void,
+    key: K,
+    value: F[K]['value'],
+  ): void
 
   onFieldFocus?(this: void, key: keyof F): void
 

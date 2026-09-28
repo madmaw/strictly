@@ -20,14 +20,12 @@ export function createWarmupDelay(coldMillis: number, warmMillis: number) {
       warmup = delay(coldMillis)
       return warmup
     }
-    return warmup.then(function () {
-      return delay(warmMillis)
-    })
+    return warmup.then(() => delay(warmMillis))
   }
 }
 
 export function delay(millis: number): Promise<void> {
-  return new Promise(function (resolve) {
+  return new Promise((resolve) => {
     setTimeout(resolve, millis)
   })
 }

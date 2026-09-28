@@ -84,7 +84,9 @@ type TypeDefOfObjectTypeDef<T extends ObjectTypeDef> =
     ? {
         readonly type: TypeDefType.Object
         readonly fields: {
-          [K in keyof Fields as K extends ObjectFieldKey ? K : never]: TypeDefOfTypeDef<NonNullable<Fields[K]>>
+          [
+            K in keyof Fields as K extends ObjectFieldKey ? K : never
+          ]: TypeDefOfTypeDef<NonNullable<Fields[K]>>
         }
       }
     : never
@@ -124,7 +126,10 @@ function typeDefOfTypeDef<T extends TypeDef>(t: T): TypeDefOfTypeDef<T> {
   }
 }
 
-function typeDefOfLiteralTypeDef<T extends LiteralTypeDef>({ type, valuePrototype }: T): TypeDefOfLiteralTypeDef<T> {
+function typeDefOfLiteralTypeDef<T extends LiteralTypeDef>({
+  type,
+  valuePrototype,
+}: T): TypeDefOfLiteralTypeDef<T> {
   // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
   return {
     type,
@@ -132,7 +137,10 @@ function typeDefOfLiteralTypeDef<T extends LiteralTypeDef>({ type, valuePrototyp
   } as TypeDefOfLiteralTypeDef<T>
 }
 
-function typeDefOfListTypeDef<T extends ListTypeDef>({ type, elements }: T): TypeDefOfListTypeDef<T> {
+function typeDefOfListTypeDef<T extends ListTypeDef>({
+  type,
+  elements,
+}: T): TypeDefOfListTypeDef<T> {
   // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
   return {
     type,
@@ -153,23 +161,26 @@ function typeDefOfRecordTypeDef<T extends RecordTypeDef>({
   } as TypeDefOfRecordTypeDef<T>
 }
 
-function typeDefOfObjectTypeDef<T extends ObjectTypeDef>({ type, fields }: T): TypeDefOfObjectTypeDef<T> {
+function typeDefOfObjectTypeDef<T extends ObjectTypeDef>({
+  type,
+  fields,
+}: T): TypeDefOfObjectTypeDef<T> {
   // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
   return {
     type,
-    fields: map(fields, function (_k, v) {
-      return typeDefOfTypeDef(v)
-    }),
+    fields: map(fields, (_k, v) => typeDefOfTypeDef(v)),
   } as TypeDefOfObjectTypeDef<T>
 }
 
-function typeDefOfUnionTypeDef<T extends UnionTypeDef>({ type, discriminator, unions }: T): TypeDefOfUnionTypeDef<T> {
+function typeDefOfUnionTypeDef<T extends UnionTypeDef>({
+  type,
+  discriminator,
+  unions,
+}: T): TypeDefOfUnionTypeDef<T> {
   // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
   return {
     type,
     discriminator,
-    unions: map(unions, function (_k, v) {
-      return typeDefOfTypeDef(v)
-    }),
+    unions: map(unions, (_k, v) => typeDefOfTypeDef(v)),
   } as TypeDefOfUnionTypeDef<T>
 }

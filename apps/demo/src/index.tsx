@@ -9,14 +9,19 @@ import { messages as en } from 'locales/en'
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 
-window.addEventListener('load', function () {
+window.addEventListener('load', () => {
   const elementId = 'root'
-  const e = assertExistsAndReturn(document.getElementById(elementId), 'unable to find element id {}', elementId)
+  const e = assertExistsAndReturn(
+    document.getElementById(elementId),
+    'unable to find element id {}',
+    elementId,
+  )
   const theme = createTheme({/** Put your mantine theme override here */})
 
   const value: Pet = {
     name: 'Delta',
     alive: true,
+    owner: null,
     tags: ['cute', 'black', 'nervous', 'clever'],
     species: {
       type: 'cat',
@@ -37,7 +42,11 @@ window.addEventListener('load', function () {
       <MantineProvider theme={theme}>
         <I18nProvider i18n={i18n}>
           <Box m='md'>
-            <PetForm forceMutable={false} onValueChange={onValueChange} value={value} />
+            <PetForm
+              forceMutable={false}
+              onValueChange={onValueChange}
+              value={value}
+            />
           </Box>
         </I18nProvider>
       </MantineProvider>

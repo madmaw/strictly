@@ -40,7 +40,7 @@ function FieldView<F extends Fields, K extends keyof F>({
   }, [form, valuePath])
   const onValueChange = useCallback(
     (value: ValueTypeOfField<F[K]>) => {
-      form.onFieldValueChange?.(valuePath, value)
+      form.onFieldValueChange(valuePath, value)
     },
     [form, valuePath],
   )
@@ -67,9 +67,15 @@ function FieldView<F extends Fields, K extends keyof F>({
   )
 }
 
-export function createFieldView<F extends Fields, K extends keyof AllFieldsOfFields<F>>(
-  this: MantineForm<F>,
-  valuePath: K,
-): ComponentType<FieldViewProps<F, K>> {
-  return (props: FieldViewProps<F, K>) => <FieldView form={this} valuePath={valuePath} {...props} />
+export function createFieldView<
+  F extends Fields,
+  K extends keyof AllFieldsOfFields<F>,
+>(this: MantineForm<F>, valuePath: K): ComponentType<FieldViewProps<F, K>> {
+  return (props: FieldViewProps<F, K>) => (
+    <FieldView
+      form={this}
+      valuePath={valuePath}
+      {...props}
+    />
+  )
 }

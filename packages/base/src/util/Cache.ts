@@ -12,7 +12,7 @@ export class Cache<A extends any[], V> {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private retrieveFinalMap(...args: A): Map<any, V> {
-    return args.slice(0, -1).reduce(function (cache, key) {
+    return args.slice(0, -1).reduce((cache, key) => {
       let map = cache.get(key)
       if (map == null) {
         map = new Map()

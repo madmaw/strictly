@@ -1,8 +1,16 @@
-import { list, nullType, numberType, object, record, stringType, union } from '@strictly/define'
+import {
+  list,
+  nullType,
+  numberType,
+  object,
+  record,
+  stringType,
+  union,
+} from '@strictly/define'
 import { type FlattenedListTypesOfType } from 'core/mobx/FlattenedListTypesOfType'
 
-describe('FlattenedListTypesOfType', function () {
-  it('filters lists types', function () {
+describe('FlattenedListTypesOfType', () => {
+  it('filters lists types', () => {
     const listTypeDef = list(numberType)
     const recordTypeDef = record<typeof stringType, string>(stringType)
     const objectTypeDef = object()

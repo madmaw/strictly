@@ -25,9 +25,13 @@ export function createValueInput<
   this: MantineForm<F>,
   valuePath: K,
   ValueInput: React.ComponentType<Props>,
-): MantineFieldComponent<SuppliedValueInputProps<ValueTypeOfField<F[K]>>, Props, ErrorOfField<F[K]>> {
+): MantineFieldComponent<
+  SuppliedValueInputProps<ValueTypeOfField<F[K]>>,
+  Props,
+  ErrorOfField<F[K]>
+> {
   const onChange = (value: ValueTypeOfField<F[K]>) => {
-    this.onFieldValueChange?.(valuePath, value)
+    this.onFieldValueChange(valuePath, value)
   }
   const onFocus = () => {
     this.onFieldFocus?.(valuePath)
@@ -48,7 +52,8 @@ export function createValueInput<
   }: {
     ErrorRenderer?: ErrorRenderer<ErrorOfField<F[K]>>
   }) => {
-    const { readonly, required, value, error } = this.fields[valuePath as string]
+    const { readonly, required, value, error } =
+      this.fields[valuePath as string]
     return {
       name: valuePath as string,
       value,

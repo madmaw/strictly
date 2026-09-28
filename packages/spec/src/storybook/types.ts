@@ -14,7 +14,9 @@ export type MetaArgsOf<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   Types extends MetaArgTypesOf<any>,
 > = {
-  [k in keyof Types]: Types[k]['mapping'] extends undefined ? Required<Types[k]['t']> : keyof Types[k]['mapping']
+  [k in keyof Types]: Types[k]['mapping'] extends undefined
+    ? Required<Types[k]['t']>
+    : keyof Types[k]['mapping']
 }
 
 // package up the args and the arg types

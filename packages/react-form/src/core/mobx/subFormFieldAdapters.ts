@@ -8,7 +8,10 @@ import {
   type ValuePathOfFieldAdapter,
 } from './FieldAdapter'
 
-type SubFormFieldAdapter<F extends FieldAdapter, ValuePath extends string> = FieldAdapter<
+type SubFormFieldAdapter<
+  F extends FieldAdapter,
+  ValuePath extends string,
+> = FieldAdapter<
   FromOfFieldAdapter<F>,
   ToOfFieldAdapter<F>,
   ErrorOfFieldAdapter<F>,
@@ -25,7 +28,10 @@ type SubFormFieldAdapters<
   ValuePath extends string,
 > = {
   [
-    K in keyof SubAdapters as K extends StringConcatOf<'$', infer TypePathSuffix>
+    K in keyof SubAdapters as K extends StringConcatOf<
+      '$',
+      infer TypePathSuffix
+    >
       ? `${TypePath}${TypePathSuffix}`
       : never
   ]: SubFormFieldAdapter<SubAdapters[K], ValuePath>
@@ -38,7 +44,11 @@ export function subFormFieldAdapters<
 >(
   subAdapters: SubAdapters,
   parentTypePath: TypePath,
-): SubFormFieldAdapters<SubAdapters, TypePath, TypePathsToValuePaths[TypePath]> {
+): SubFormFieldAdapters<
+  SubAdapters,
+  TypePath,
+  TypePathsToValuePaths[TypePath]
+> {
   // assume the number of '.' in the type path will correspond to the number of '.' in the value path
   const dotCount = parentTypePath.split('.').length
   function getSubValuePath(valuePath: string) {
@@ -47,17 +57,27 @@ export function subFormFieldAdapters<
     return subValuePath
   }
 
-  return Object.entries(subAdapters).reduce<Record<string, FieldAdapter>>((acc, [subTypePath, subAdapter]) => {
-    const typePath = subTypePath.replace('$', parentTypePath)
-    // adapt field adapter with new path and context
-    const adaptedAdapter: FieldAdapter = {
-      convert: (from, valuePath, context) => subAdapter.convert(from, getSubValuePath(valuePath), context),
-      create: (valuePath, context) => subAdapter.create(getSubValuePath(valuePath), context),
-      revert:
-        subAdapter.revert &&
-        ((from, valuePath, context) => subAdapter.revert!(from, getSubValuePath(valuePath), context)),
-    }
-    acc[typePath] = adaptedAdapter
-    return acc
-  }, {}) as SubFormFieldAdapters<SubAdapters, TypePath, TypePathsToValuePaths[TypePath]>
+  return Object.entries(subAdapters).reduce<Record<string, FieldAdapter>>(
+    (acc, [subTypePath, subAdapter]) => {
+      const typePath = subTypePath.replace('$', parentTypePath)
+      // adapt field adapter with new path and context
+      const adaptedAdapter: FieldAdapter = {
+        convert: (from, valuePath, context) =>
+          subAdapter.convert(from, getSubValuePath(valuePath), context),
+        create: (valuePath, context) =>
+          subAdapter.create(getSubValuePath(valuePath), context),
+        revert:
+          subAdapter.revert &&
+          ((from, valuePath, context) =>
+            subAdapter.revert!(from, getSubValuePath(valuePath), context)),
+      }
+      acc[typePath] = adaptedAdapter
+      return acc
+    },
+    {},
+  ) as SubFormFieldAdapters<
+    SubAdapters,
+    TypePath,
+    TypePathsToValuePaths[TypePath]
+  >
 }

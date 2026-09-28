@@ -3,7 +3,9 @@ import { type Validator } from 'validation/validator'
 export type ValidatorsOfValues<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   FlattenedValues extends Readonly<Record<string, any>>,
-  TypePathsToValuePaths extends Readonly<Record<keyof FlattenedValues, string>> = Readonly<
+  TypePathsToValuePaths extends Readonly<
+    Record<keyof FlattenedValues, string>
+  > = Readonly<
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     Record<keyof FlattenedValues, any>
   >,

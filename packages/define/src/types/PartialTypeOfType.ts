@@ -50,7 +50,9 @@ type InternalPartialOfList<T extends ListTypeDef> = {
 type InternalPartialOfRecord<T extends RecordTypeDef> = {
   readonly type: T['type']
   readonly keyPrototype: T['keyPrototype']
-  readonly valueTypeDef: InternalPartialAndNullableOf<T['valueTypeDef']> | undefined
+  readonly valueTypeDef:
+    | InternalPartialAndNullableOf<T['valueTypeDef']>
+    | undefined
 }
 
 type InternalPartialOfObject<T extends ObjectTypeDef> =

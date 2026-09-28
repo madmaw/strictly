@@ -1,9 +1,9 @@
 import { type IsStrictUnion, type StrictUnionTypeDef } from 'types/StrictType'
 import { type TypeDefType, type UnionTypeDef } from 'types/Type'
 
-describe('Strict Definitions', function () {
-  describe('IsStrictUnion', function () {
-    it('detects a non-discriminated strict union', function () {
+describe('Strict Definitions', () => {
+  describe('IsStrictUnion', () => {
+    it('detects a non-discriminated strict union', () => {
       type U = {
         readonly [1]: {
           type: TypeDefType.Literal
@@ -14,7 +14,7 @@ describe('Strict Definitions', function () {
       expectTypeOf<C>().toEqualTypeOf<true>()
     })
 
-    it('detects a union with a non-literal type', function () {
+    it('detects a union with a non-literal type', () => {
       type U = {
         readonly [1]: {
           type: TypeDefType.List
@@ -28,7 +28,7 @@ describe('Strict Definitions', function () {
       expectTypeOf<C>().toEqualTypeOf<false>()
     })
 
-    it('detects a union with a non-literal type in position 0', function () {
+    it('detects a union with a non-literal type in position 0', () => {
       type U = {
         readonly [0]: {
           type: TypeDefType.List
@@ -42,7 +42,7 @@ describe('Strict Definitions', function () {
       expectTypeOf<C>().toEqualTypeOf<true>()
     })
 
-    it('detects a non-discriminated strict union with multiple options and a non-literal type', function () {
+    it('detects a non-discriminated strict union with multiple options and a non-literal type', () => {
       type U = {
         readonly [1]: {
           type: TypeDefType.Literal
@@ -65,8 +65,8 @@ describe('Strict Definitions', function () {
     })
   })
 
-  describe('StrictUnion', function () {
-    it('enforces non-strict unions are of type never', function () {
+  describe('StrictUnion', () => {
+    it('enforces non-strict unions are of type never', () => {
       type U = {
         readonly [1]: {
           type: TypeDefType.List
@@ -80,7 +80,7 @@ describe('Strict Definitions', function () {
       expectTypeOf<C>().toEqualTypeOf<never>()
     })
 
-    it('allows unions of multiple literal options', function () {
+    it('allows unions of multiple literal options', () => {
       type U = {
         readonly [1]: {
           readonly type: TypeDefType.Literal
@@ -99,7 +99,7 @@ describe('Strict Definitions', function () {
       }>()
     })
 
-    it('allows unions of multiple literal options and one complex type', function () {
+    it('allows unions of multiple literal options and one complex type', () => {
       type U = {
         readonly [1]: {
           readonly type: TypeDefType.Literal
@@ -126,8 +126,8 @@ describe('Strict Definitions', function () {
     })
   })
 
-  describe('assignment', function () {
-    describe('can be assigned to a non-strict equivalent type', function () {
+  describe('assignment', () => {
+    describe('can be assigned to a non-strict equivalent type', () => {
       type U = {
         readonly [1]: {
           readonly type: TypeDefType.Literal
@@ -148,13 +148,13 @@ describe('Strict Definitions', function () {
       type S = StrictUnionTypeDef<null, U>
 
       type C = UnionTypeDef<null, U>
-      it('equals type', function () {
+      it('equals type', () => {
         expectTypeOf<S>().toEqualTypeOf<C>()
       })
     })
   })
 
-  describe('cannot be assigned to an invalid non-strict equivalent type', function () {
+  describe('cannot be assigned to an invalid non-strict equivalent type', () => {
     type U = {
       readonly [2]: {
         readonly type: TypeDefType.Literal
@@ -171,7 +171,7 @@ describe('Strict Definitions', function () {
     type S = StrictUnionTypeDef<null, U>
 
     type C = UnionTypeDef<null, U>
-    it('equals type', function () {
+    it('equals type', () => {
       expectTypeOf<C>().not.toMatchTypeOf<S>()
     })
   })

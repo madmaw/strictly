@@ -13,10 +13,16 @@ export class OptionalValidatorProxy<
     return new OptionalValidatorProxy(proxied, (v: V) => v != null)
   }
 
-  static createNullableOrEmptyString<V extends string | null | undefined, E, ValuePath extends string, Context>(
-    proxied: AnnotatedValidator<NonNullable<V>, E, ValuePath, Context>,
-  ) {
-    return new OptionalValidatorProxy(proxied, (v: V): v is NonNullable<V> => v != null && v !== '')
+  static createNullableOrEmptyString<
+    V extends string | null | undefined,
+    E,
+    ValuePath extends string,
+    Context,
+  >(proxied: AnnotatedValidator<NonNullable<V>, E, ValuePath, Context>) {
+    return new OptionalValidatorProxy(
+      proxied,
+      (v: V): v is NonNullable<V> => v != null && v !== '',
+    )
   }
 
   constructor(

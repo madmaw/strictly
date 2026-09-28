@@ -33,7 +33,11 @@ function SubFieldsView({
   }, [onClickFieldImpl])
   return (
     <Stack>
-      <TextInput ErrorRenderer={ErrorRenderer} label={subFieldLabel()} onClick={onClick$} />
+      <TextInput
+        ErrorRenderer={ErrorRenderer}
+        label={subFieldLabel()}
+        onClick={onClick$}
+      />
     </Stack>
   )
 }
@@ -54,11 +58,21 @@ function Component({
     onClickFieldImpl('$')
   }, [onClickFieldImpl])
 
-  const onClickChildField = useMemo(() => callbackMapper(onClickFieldImpl), [onClickFieldImpl, callbackMapper])
+  const onClickChildField = useMemo(
+    () => callbackMapper(onClickFieldImpl),
+    [onClickFieldImpl, callbackMapper],
+  )
   return (
     <Stack>
-      <TextInput ErrorRenderer={ErrorRenderer} label={parentFieldLabel()} onClick={onClick$} />
-      <Paper p='sm' withBorder>
+      <TextInput
+        ErrorRenderer={ErrorRenderer}
+        label={parentFieldLabel()}
+        onClick={onClick$}
+      />
+      <Paper
+        p='sm'
+        withBorder
+      >
         <Text>$.a</Text>
         <Component onClickField={onClickChildField} />
       </Paper>

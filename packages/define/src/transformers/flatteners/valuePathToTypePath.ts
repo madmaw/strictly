@@ -13,7 +13,11 @@ import { valuePrototypeOf } from 'types/valuePrototypeOf'
 export function valuePathToTypePath<
   ValuePathsToTypePaths extends Record<string, string>,
   ValuePath extends keyof ValuePathsToTypePaths,
->({ definition: typeDef }: Type, valuePath: ValuePath, allowMissingPaths = false): ValuePathsToTypePaths[ValuePath] {
+>(
+  { definition: typeDef }: Type,
+  valuePath: ValuePath,
+  allowMissingPaths = false,
+): ValuePathsToTypePaths[ValuePath] {
   const valueSteps = (valuePath as string).split(/\.|\[/g)
   const parts = valueSteps[0].split(':')
   const [first, ...qualifiers] = parts
@@ -108,8 +112,11 @@ function internalJsonValuePathToTypePath(
           // find the non-literal typedef
           const union = reduce<string, TypeDef, null | TypeDef>(
             typeDef.unions,
-            function (acc, _k, v) {
-              if (v.type !== TypeDefType.Literal || valuePrototypeOf(v) == null) {
+            (acc, _k, v) => {
+              if (
+                v.type !== TypeDefType.Literal ||
+                valuePrototypeOf(v) == null
+              ) {
                 return v
               }
               return acc
@@ -132,10 +139,18 @@ function internalJsonValuePathToTypePath(
         if (allowMissingPaths) {
           return valueSteps
         }
-        throw new PreconditionFailedError('mismatched qualifiers in {} (at {})', originalValuePath, valueStep)
+        throw new PreconditionFailedError(
+          'mismatched qualifiers in {} (at {})',
+          originalValuePath,
+          valueStep,
+        )
       }
       const [qualifier, ...remainingQualifiers] = qualifiers
-      const union = assertExistsAndReturn(typeDef.unions[qualifier], 'missing union {}', qualifier)
+      const union = assertExistsAndReturn(
+        typeDef.unions[qualifier],
+        'missing union {}',
+        qualifier,
+      )
       return internalJsonValuePathToTypePath(
         union,
         remainingQualifiers,

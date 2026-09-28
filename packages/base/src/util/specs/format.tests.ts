@@ -1,6 +1,6 @@
 import { format } from 'util/format'
 
-describe('format', function () {
+describe('format', () => {
   it.each([
     ['no args', 'message', 'message'],
     ['one anonymous arg', 'arg {}', 'arg 1', 1],
@@ -11,7 +11,7 @@ describe('format', function () {
     ['null', 'null? {}', 'null? null', null],
     ['mixed argument types', '{} {} {} {}', '1 "2" true -5', 1, '2', true, -5],
     ['object', '{}', '{"b":true}', { b: true }],
-  ] as const)('formats %s', function (_name, message, expectedResult, ...args) {
+  ] as const)('formats %s', (_name, message, expectedResult, ...args) => {
     const result = format(message, ...args)
     expect(result).toEqual(expectedResult)
   })

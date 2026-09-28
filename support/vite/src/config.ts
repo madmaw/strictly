@@ -45,12 +45,7 @@ const require = createRequire(import.meta.url)
 export function createTsconfigPathsPlugin({ references }: TsconfigJson) {
   return tsconfigPaths({
     // must specify projects otherwise we get configuration errors for unrelated projects
-    projects: [
-      '.',
-      ...references.map(function ({ path }) {
-        return path
-      }),
-    ],
+    projects: ['.', ...references.map(({ path }) => path)],
   })
 }
 
@@ -73,7 +68,9 @@ export function createReactPlugin({
         ],
         [require.resolve('@babel/plugin-transform-class-static-block')],
         [require.resolve('@babel/plugin-proposal-class-properties')],
-        ...(withLingui ? [[require.resolve('@lingui/babel-plugin-lingui-macro')]] : []),
+        ...(withLingui
+          ? [[require.resolve('@lingui/babel-plugin-lingui-macro')]]
+          : []),
       ],
       assumptions: {
         setPublicClassFields: false,
@@ -140,9 +137,9 @@ export function createViteLibraryConfig(
       outDir: DIST,
       rollupOptions: {
         external(id) {
-          return externals.some(function (external) {
-            return id === external || id.startsWith(`${external}/`)
-          })
+          return externals.some(
+            (external) => id === external || id.startsWith(`${external}/`),
+          )
         },
       },
     },

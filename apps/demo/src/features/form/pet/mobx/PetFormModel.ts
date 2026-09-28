@@ -1,6 +1,18 @@
-import { type ContextOf, FormModel, type FormModelContextSource } from '@strictly/react-form'
-import { petFieldAdapters, TagNotEmptyErrorType } from 'features/form/pet/fields'
-import { type Pet, petType, type PetValueToTypePaths, type TagValuePath } from 'features/form/pet/types'
+import {
+  type ContextOf,
+  FormModel,
+  type FormModelContextSource,
+} from '@strictly/react-form'
+import {
+  petFieldAdapters,
+  TagNotEmptyErrorType,
+} from 'features/form/pet/fields'
+import {
+  type Pet,
+  petType,
+  type PetValueToTypePaths,
+  type TagValuePath,
+} from 'features/form/pet/types'
 import { computed } from 'mobx'
 
 // TODO tags isn't being picked up correctly from
@@ -10,7 +22,11 @@ type PetFormModelContext = {
   readonly tags: readonly string[]
 } & ContextOf<typeof petFieldAdapters>
 
-class PetFormModelContextSource implements FormModelContextSource<PetFormModelContext, Pet, TagValuePath> {
+class PetFormModelContextSource implements FormModelContextSource<
+  PetFormModelContext,
+  Pet,
+  TagValuePath
+> {
   constructor(private readonly forceMutable: boolean) {}
 
   forPath(value: Pet) {
@@ -31,7 +47,12 @@ export class PetFormModel extends FormModel<
   PetFormModelContextSource
 > {
   constructor(value: Pet, forceMutable: boolean) {
-    super(petType, value, petFieldAdapters, new PetFormModelContextSource(forceMutable))
+    super(
+      petType,
+      value,
+      petFieldAdapters,
+      new PetFormModelContextSource(forceMutable),
+    )
   }
 
   @computed

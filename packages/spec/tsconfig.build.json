@@ -5,5 +5,10 @@
     }
   },
   "extends": "../../tsconfig.build.json",
-  "include": [".storybook/vite.config.mts", "oxlint.config.ts", "vite.config.mts", "vitest.workspace.ts"]
+  "include": [
+    ".storybook/vite.config.mts",
+    "oxlint.config.ts",
+    "vite.config.mts",
+    "vitest.workspace.ts"
+  ]
 }

@@ -64,7 +64,11 @@ const noRelativeImportPaths = {
     ],
   },
   create(context: any) {
-    const { allowSameFolder = false, allowedDepth, rootDir }: NoRelativeImportPathsOptions = context.options[0]
+    const {
+      allowSameFolder = false,
+      allowedDepth,
+      rootDir,
+    }: NoRelativeImportPathsOptions = context.options[0]
     const filename: string = context.filename ?? context.getFilename()
     const fileDir = path.dirname(filename)
     const rootPrefix = rootDir.endsWith(path.sep) ? rootDir : rootDir + path.sep
@@ -80,17 +84,26 @@ const noRelativeImportPaths = {
         return
       }
       const absoluteImportPath = path.resolve(fileDir, importPath)
-      const withinRoot = filename.startsWith(rootPrefix) && absoluteImportPath.startsWith(rootPrefix)
+      const withinRoot =
+        filename.startsWith(rootPrefix) &&
+        absoluteImportPath.startsWith(rootPrefix)
       if (!withinRoot) {
         return
       }
       if (isSameFolder && allowSameFolder) {
         return
       }
-      if (isParentFolder && allowedDepth != null && getRelativePathDepth(importPath) <= allowedDepth) {
+      if (
+        isParentFolder &&
+        allowedDepth != null &&
+        getRelativePathDepth(importPath) <= allowedDepth
+      ) {
         return
       }
-      const absoluteImport = path.relative(rootDir, absoluteImportPath).split(path.sep).join('/')
+      const absoluteImport = path
+        .relative(rootDir, absoluteImportPath)
+        .split(path.sep)
+        .join('/')
       context.report({
         message: 'import statements should have an absolute path',
         node,

@@ -40,9 +40,12 @@ export type Validator<
   ValuePath extends string = any,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   Context = any,
-> = FunctionalValidator<V, E, ValuePath, Context> | AnnotatedValidator<V, E, ValuePath, Context>
+> =
+  | FunctionalValidator<V, E, ValuePath, Context>
+  | AnnotatedValidator<V, E, ValuePath, Context>
 
-export type ErrorOfValidator<V extends Validator> = V extends Validator<infer _V, infer E> ? E : never
+export type ErrorOfValidator<V extends Validator> =
+  V extends Validator<infer _V, infer E> ? E : never
 
 export type ValidationError<Type extends string, Data = {}> = Simplify<
   {
@@ -71,14 +74,27 @@ export function validate<
   ValuePath extends string = any,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   Context = any,
->(validator: Validator<V, E, ValuePath, Context>, v: V, valuePath: ValuePath, context: Context): E | null {
+>(
+  validator: Validator<V, E, ValuePath, Context>,
+  v: V,
+  valuePath: ValuePath,
+  context: Context,
+): E | null {
   if (isAnnotatedValidator(validator)) {
     return validator.validate(v, valuePath, context)
   }
   return validator(v, valuePath, context)
 }
 
-export function mergeValidators<V, E1, E2, P1 extends string, P2 extends string, C1, C2>(
+export function mergeValidators<
+  V,
+  E1,
+  E2,
+  P1 extends string,
+  P2 extends string,
+  C1,
+  C2,
+>(
   v1: Validator<V, E1, P1, C1>,
   v2: Validator<V, E2, P2, C2>,
 ): Validator<V, E1 | E2, P1 & P2, C1 & C2> {
@@ -94,7 +110,11 @@ export function annotations<
   ValuePath extends string = any,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   Context = any,
->(validator: Validator<V, E, ValuePath, Context>, valuePath: ValuePath, context: Context) {
+>(
+  validator: Validator<V, E, ValuePath, Context>,
+  valuePath: ValuePath,
+  context: Context,
+) {
   if (isAnnotatedValidator(validator)) {
     return validator.annotations(valuePath, context)
   }

@@ -21,7 +21,12 @@ export type Type<T extends TypeDef = TypeDef> = {
   readonly definition: T
 }
 
-export type TypeDef = LiteralTypeDef | ListTypeDef | RecordTypeDef | ObjectTypeDef | UnionTypeDef
+export type TypeDef =
+  | LiteralTypeDef
+  | ListTypeDef
+  | RecordTypeDef
+  | ObjectTypeDef
+  | UnionTypeDef
 
 export enum TypeDefType {
   Literal = 1,
@@ -80,7 +85,9 @@ export type ObjectTypeDefFields = {
 // `StructuredTypeDef = StructuredTypeDefFields`
 // as we rely on the `fields` field being unique to discriminate between different
 // TypeDefs
-export type ObjectTypeDef<Fields extends ObjectTypeDefFields = ObjectTypeDefFields> = {
+export type ObjectTypeDef<
+  Fields extends ObjectTypeDefFields = ObjectTypeDefFields,
+> = {
   readonly type: TypeDefType.Object
   readonly fields: Fields
 }
@@ -89,7 +96,9 @@ export type UnionKey = string
 
 export type UnionTypeDef<
   D extends string | null = string | null,
-  U extends Readonly<Record<UnionKey, AnyTypeDef>> = Readonly<Record<UnionKey, AnyTypeDef>>,
+  U extends Readonly<Record<UnionKey, AnyTypeDef>> = Readonly<
+    Record<UnionKey, AnyTypeDef>
+  >,
 > = {
   readonly discriminator: D
   readonly type: TypeDefType.Union

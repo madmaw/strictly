@@ -9,8 +9,8 @@ import { type MergedOfValidators, mergeValidators } from 'types/mergeValidators'
 import { type Mock, type Mocked } from 'vitest'
 import { mock, mockReset } from 'vitest-mock-extended'
 
-describe('MergedOfValidators', function () {
-  describe('empty validators 1', function () {
+describe('MergedOfValidators', () => {
+  describe('empty validators 1', () => {
     type Validators1 = {
       readonly a: Validator<string, 'error a', 'a', null>
       readonly b: Validator<number, 'error b', 'b', null>
@@ -19,12 +19,12 @@ describe('MergedOfValidators', function () {
 
     type Validators = MergedOfValidators<Validators1, Validators2>
 
-    it('equals the expected type', function () {
+    it('equals the expected type', () => {
       expectTypeOf<Validators>().toEqualTypeOf<Validators1>()
     })
   })
 
-  describe('empty validators 2', function () {
+  describe('empty validators 2', () => {
     type Validators1 = {}
     type Validators2 = {
       readonly a: Validator<string, 'error a', 'a', null>
@@ -33,12 +33,12 @@ describe('MergedOfValidators', function () {
 
     type Validators = MergedOfValidators<Validators1, Validators2>
 
-    it('equals the expected type', function () {
+    it('equals the expected type', () => {
       expectTypeOf<Validators>().toEqualTypeOf<Validators2>()
     })
   })
 
-  describe('merged validators with different keys', function () {
+  describe('merged validators with different keys', () => {
     type Validators1 = {
       a: Validator<string, 'error a', 'a', null>
     }
@@ -48,7 +48,7 @@ describe('MergedOfValidators', function () {
 
     type Validators = MergedOfValidators<Validators1, Validators2>
 
-    it('equals the expected type', function () {
+    it('equals the expected type', () => {
       expectTypeOf<Validators>().toEqualTypeOf<{
         readonly a: Validator<string, 'error a', 'a', null>
         readonly b: Validator<number, 'error b', 'b', null>
@@ -56,7 +56,7 @@ describe('MergedOfValidators', function () {
     })
   })
 
-  describe('merged validators with same key', function () {
+  describe('merged validators with same key', () => {
     type Validators1 = {
       a: Validator<string, 'error a', 'a', null>
     }
@@ -66,7 +66,7 @@ describe('MergedOfValidators', function () {
 
     type Validators = MergedOfValidators<Validators1, Validators2>
 
-    it('equals the expected type', function () {
+    it('equals the expected type', () => {
       expectTypeOf<Validators>().toEqualTypeOf<{
         readonly a: Validator<string, 'error a' | 'error b', 'a', null>
       }>()
@@ -74,37 +74,42 @@ describe('MergedOfValidators', function () {
   })
 })
 
-describe('mergeValidators', function () {
-  describe('functional validators', function () {
-    const validatorA1: Mock<FunctionalValidator<string, 'error a1', 'a', null>> = vi.fn()
-    const validatorA2: Mock<FunctionalValidator<string, 'error a2', 'a', null>> = vi.fn()
-    const validatorB: Mock<FunctionalValidator<boolean, 'error b', 'b', null>> = vi.fn()
-    describe('produces expected type', function () {
-      describe('empty validators 1', function () {
+describe('mergeValidators', () => {
+  describe('functional validators', () => {
+    const validatorA1: Mock<
+      FunctionalValidator<string, 'error a1', 'a', null>
+    > = vi.fn()
+    const validatorA2: Mock<
+      FunctionalValidator<string, 'error a2', 'a', null>
+    > = vi.fn()
+    const validatorB: Mock<FunctionalValidator<boolean, 'error b', 'b', null>> =
+      vi.fn()
+    describe('produces expected type', () => {
+      describe('empty validators 1', () => {
         const validators1 = {
           a: validatorA1,
           b: validatorB,
         } as const
         const validators2 = {} as const
         const validators = mergeValidators(validators1, validators2)
-        it('equals expected value', function () {
+        it('equals expected value', () => {
           expect(validators).toEqual(validators1)
         })
       })
 
-      describe('empty validators 2', function () {
+      describe('empty validators 2', () => {
         const validators1 = {} as const
         const validators2 = {
           a: validatorA1,
           b: validatorB,
         } as const
         const validators = mergeValidators(validators1, validators2)
-        it('equals expected value', function () {
+        it('equals expected value', () => {
           expect(validators).toEqual(validators2)
         })
       })
 
-      describe('merged validators with different keys', function () {
+      describe('merged validators with different keys', () => {
         const validators1 = {
           a: validatorA1,
         } as const
@@ -112,7 +117,7 @@ describe('mergeValidators', function () {
           b: validatorB,
         } as const
         const validators = mergeValidators(validators1, validators2)
-        it('equals expected value', function () {
+        it('equals expected value', () => {
           expect(validators).toEqual({
             a: validatorA1,
             b: validatorB,
@@ -120,7 +125,7 @@ describe('mergeValidators', function () {
         })
       })
 
-      describe('merged validators with same key', function () {
+      describe('merged validators with same key', () => {
         const validators1 = {
           a: validatorA1,
         } as const
@@ -128,23 +133,23 @@ describe('mergeValidators', function () {
           a: validatorA2,
         } as const
         const validators = mergeValidators(validators1, validators2)
-        it('has the expected keys', function () {
+        it('has the expected keys', () => {
           expect(Array.from(Object.keys(validators))).toEqual(['a'])
         })
 
-        it('reports no error when validators report no error', function () {
+        it('reports no error when validators report no error', () => {
           const result = validate(validators.a, 'x', 'a', null)
           expect(result).toBeUndefined()
         })
 
-        it('reports an error from first validator', function () {
+        it('reports an error from first validator', () => {
           validatorA1.mockReturnValueOnce('error a1')
 
           const result = validate(validators.a, 'x', 'a', null)
           expect(result).toEqual('error a1')
         })
 
-        it('reports an error from second validator', function () {
+        it('reports an error from second validator', () => {
           validatorA2.mockReturnValueOnce('error a2')
 
           const result = validate(validators.a, 'x', 'a', null)
@@ -154,11 +159,15 @@ describe('mergeValidators', function () {
     })
   })
 
-  describe('annotated validators', function () {
-    const validatorA1: Mocked<AnnotatedValidator<string, 'error a1', 'a', null>> = mock()
-    const validatorA2: Mocked<AnnotatedValidator<string, 'error a2', 'a', null>> = mock()
+  describe('annotated validators', () => {
+    const validatorA1: Mocked<
+      AnnotatedValidator<string, 'error a1', 'a', null>
+    > = mock()
+    const validatorA2: Mocked<
+      AnnotatedValidator<string, 'error a2', 'a', null>
+    > = mock()
 
-    beforeEach(function () {
+    beforeEach(() => {
       mockReset(validatorA1)
       mockReset(validatorA2)
     })
@@ -176,8 +185,8 @@ describe('mergeValidators', function () {
       [false, true, true],
       [true, false, true],
       [true, true, true],
-    ] as const)('required', function (required1, required2, required) {
-      beforeEach(function () {
+    ] as const)('required', (required1, required2, required) => {
+      beforeEach(() => {
         validatorA1.validate.mockReturnValue('error a1')
         validatorA1.annotations.mockReturnValue({
           required: required1,
@@ -189,7 +198,7 @@ describe('mergeValidators', function () {
         })
       })
 
-      it('has the expected required value', function () {
+      it('has the expected required value', () => {
         expect(annotations(validators.a, 'a', null)).toEqual({
           required,
           readonly: false,
@@ -202,8 +211,8 @@ describe('mergeValidators', function () {
       [false, true, true],
       [true, false, true],
       [true, true, true],
-    ] as const)('required', function (readonly1, readonly2, readonly) {
-      beforeEach(function () {
+    ] as const)('required', (readonly1, readonly2, readonly) => {
+      beforeEach(() => {
         validatorA1.validate.mockReturnValue('error a1')
         validatorA1.annotations.mockReturnValue({
           required: false,
@@ -215,7 +224,7 @@ describe('mergeValidators', function () {
         })
       })
 
-      it('has the expected required value', function () {
+      it('has the expected required value', () => {
         expect(annotations(validators.a, 'a', null)).toEqual({
           required: false,
           readonly,

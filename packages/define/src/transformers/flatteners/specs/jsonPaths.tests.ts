@@ -1,4 +1,8 @@
-import { jsonPath, jsonPathPrefix, jsonPathUnprefix } from 'transformers/flatteners/jsonPath'
+import {
+  jsonPath,
+  jsonPathPrefix,
+  jsonPathUnprefix,
+} from 'transformers/flatteners/jsonPath'
 
 describe('json_paths', () => {
   describe('jsonPath', () => {

@@ -1,5 +1,8 @@
 import { type Meta, type StoryObj } from '@storybook/react-vite'
-import { MinimumStringLengthValidationErrorType, RegexpValidationErrorType } from '@strictly/define'
+import {
+  MinimumStringLengthValidationErrorType,
+  RegexpValidationErrorType,
+} from '@strictly/define'
 import { PetOwnerFieldsView } from 'features/form/pet/PetOwnerFieldsView'
 import { action } from 'storybook/actions'
 

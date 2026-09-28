@@ -27,7 +27,12 @@ function SubForm({
   )
   return (
     <Stack>
-      <NumberInput allowDecimal={false} label='sub form' onChange={onChange} value={value} />
+      <NumberInput
+        allowDecimal={false}
+        label='sub form'
+        onChange={onChange}
+        value={value}
+      />
       <Button onClick={onCancel}>Cancel</Button>
     </Stack>
   )
@@ -44,7 +49,10 @@ function Component(
   const TextInput = form.textInput('$')
   return (
     <Stack>
-      <TextInput ErrorRenderer={ErrorRenderer} label='fields view' />
+      <TextInput
+        ErrorRenderer={ErrorRenderer}
+        label='fields view'
+      />
       <Form onCancel={onCancel} />
     </Stack>
   )

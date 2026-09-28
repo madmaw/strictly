@@ -2,36 +2,49 @@ import { t } from '@lingui/core/macro'
 import { Trans } from '@lingui/react/macro'
 import { NumberInput, Stack } from '@mantine/core'
 import { toArray, UnreachableError } from '@strictly/base'
-import { type ErrorRendererProps, type FieldsViewProps, useMantineFormFields } from '@strictly/react-form'
+import {
+  type ErrorRendererProps,
+  type FieldsViewProps,
+  useMantineFormFields,
+} from '@strictly/react-form'
 import { type PetFields } from './fields'
 import { type DogBreed, NOT_A_BREED_ERROR, REQUIRED_ERROR } from './types'
 
-export type PetSpeciesDogFields = Pick<PetFields, '$.species:dog.barks' | '$.species:dog.breed'>
+export type PetSpeciesDogFields = Pick<
+  PetFields,
+  '$.species:dog.barks' | '$.species:dog.breed'
+>
 
 export type PetSpeciesDogFieldsViewProps = FieldsViewProps<PetSpeciesDogFields>
 
-export function breedLabel() {
-  return t({
-    message: 'Breed',
-    comment: 'Dog breed',
-  })
+export function BreedLabel() {
+  return <Trans comment='Dog breed'>Breed</Trans>
 }
 
-export function barksLabel() {
-  return t({
-    message: 'Barks',
-    comment: 'label for an input that captures the number of barks a dog has made',
-  })
+export function BarksLabel() {
+  return (
+    <Trans comment='label for an input that captures the number of barks a dog has made'>
+      Barks
+    </Trans>
+  )
 }
 
-function BreedInputErrorRenderer({ error }: ErrorRendererProps<PetSpeciesDogFields, '$.species:dog.breed'>) {
+function BreedInputErrorRenderer({
+  error,
+}: ErrorRendererProps<PetSpeciesDogFields, '$.species:dog.breed'>) {
   switch (error) {
     case NOT_A_BREED_ERROR:
       return (
-        <Trans comment='error that is displayed when an invalid breed is selected'>Not a recognized dog breed</Trans>
+        <Trans comment='error that is displayed when an invalid breed is selected'>
+          Not a recognized dog breed
+        </Trans>
       )
     case REQUIRED_ERROR:
-      return <Trans comment='error that is displayed when no breed is selected'>Must specify a breed</Trans>
+      return (
+        <Trans comment='error that is displayed when no breed is selected'>
+          Must specify a breed
+        </Trans>
+      )
     default:
       throw new UnreachableError(error)
   }
@@ -72,15 +85,16 @@ export function PetSpeciesDogFieldsView(props: PetSpeciesDogFieldsViewProps) {
     <Stack>
       <BreedInput
         ErrorRenderer={BreedInputErrorRenderer}
-        data={toArray(BREED_NAMES).map(function ([value, label]) {
-          return {
-            value,
-            label: label(),
-          }
-        })}
-        label={breedLabel()}
+        data={toArray(BREED_NAMES).map(([value, label]) => ({
+          value,
+          label: label(),
+        }))}
+        label=<BreedLabel />
       />
-      <BarksNumberInput ErrorRenderer={BarksInputErrorRenderer} label={barksLabel()} />
+      <BarksNumberInput
+        ErrorRenderer={BarksInputErrorRenderer}
+        label=<BarksLabel />
+      />
     </Stack>
   )
 }

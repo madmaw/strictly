@@ -21,15 +21,29 @@ export type FieldAdapter<
   readonly revert?: UnreliableFieldConverter<To, From, E, ValuePath, Context>
 }
 
-export type FromOfFieldAdapter<C extends FieldAdapter> = C extends FieldAdapter<infer From> ? From : never
+export type FromOfFieldAdapter<C extends FieldAdapter> =
+  C extends FieldAdapter<infer From> ? From : never
 
-export type ToOfFieldAdapter<C extends FieldAdapter> = C extends FieldAdapter<infer _F, infer To> ? To : never
+export type ToOfFieldAdapter<C extends FieldAdapter> =
+  C extends FieldAdapter<infer _F, infer To> ? To : never
 
 export type ErrorOfFieldAdapter<C extends FieldAdapter> =
-  C extends FieldAdapter<infer _From, infer _To, infer E> ? NonNullable<E> : never
+  C extends FieldAdapter<infer _From, infer _To, infer E>
+    ? NonNullable<E>
+    : never
 
 export type ValuePathOfFieldAdapter<C extends FieldAdapter> =
-  C extends FieldAdapter<infer _From, infer _To, infer _E, infer ValuePath> ? ValuePath : never
+  C extends FieldAdapter<infer _From, infer _To, infer _E, infer ValuePath>
+    ? ValuePath
+    : never
 
 export type ContextOfFieldAdapter<F extends FieldAdapter> =
-  F extends FieldAdapter<infer _From, infer _To, infer _E, infer _P, infer Context> ? Context : never
+  F extends FieldAdapter<
+    infer _From,
+    infer _To,
+    infer _E,
+    infer _P,
+    infer Context
+  >
+    ? Context
+    : never

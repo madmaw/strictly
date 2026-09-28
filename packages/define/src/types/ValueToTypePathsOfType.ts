@@ -15,7 +15,15 @@ export type ValueToTypePathsOfType<
   T extends StrictType,
   SegmentOverride extends string = '*',
   Path extends string = '$',
-> = SimplifyDeep<InternalFlattenedTypePathsOf<T['definition'], SegmentOverride, Path, Path, StartingDepth>>
+> = SimplifyDeep<
+  InternalFlattenedTypePathsOf<
+    T['definition'],
+    SegmentOverride,
+    Path,
+    Path,
+    StartingDepth
+  >
+>
 
 // TODO rename to FlattenTypePathsOfTypeDef and apply pattern to subsequent types
 type InternalFlattenedTypePathsOf<
@@ -26,7 +34,13 @@ type InternalFlattenedTypePathsOf<
   Depth extends number,
 > = {
   readonly [K in ValuePath]: TypePath
-} & InternalFlattenedTypePathsOfChildren<T, SegmentOverride, ValuePath, TypePath, Depth>
+} & InternalFlattenedTypePathsOfChildren<
+  T,
+  SegmentOverride,
+  ValuePath,
+  TypePath,
+  Depth
+>
 
 type InternalFlattenedTypePathsOfChildren<
   T extends TypeDef,
@@ -40,13 +54,37 @@ type InternalFlattenedTypePathsOfChildren<
   : T extends LiteralTypeDef
     ? InternalFlattenedTypePathsOfLiteralChildren
     : T extends ListTypeDef
-      ? InternalFlattenedTypePathsOfListChildren<T, SegmentOverride, ValuePath, TypePath, NextDepth>
+      ? InternalFlattenedTypePathsOfListChildren<
+          T,
+          SegmentOverride,
+          ValuePath,
+          TypePath,
+          NextDepth
+        >
       : T extends RecordTypeDef
-        ? InternalFlattenedTypePathsOfRecordChildren<T, SegmentOverride, ValuePath, TypePath, NextDepth>
+        ? InternalFlattenedTypePathsOfRecordChildren<
+            T,
+            SegmentOverride,
+            ValuePath,
+            TypePath,
+            NextDepth
+          >
         : T extends ObjectTypeDef
-          ? InternalFlattenedTypePathsOfObjectChildren<T, SegmentOverride, ValuePath, TypePath, NextDepth>
+          ? InternalFlattenedTypePathsOfObjectChildren<
+              T,
+              SegmentOverride,
+              ValuePath,
+              TypePath,
+              NextDepth
+            >
           : T extends UnionTypeDef
-            ? InternalFlattenedTypePathsOfUnionChildren<T, SegmentOverride, ValuePath, TypePath, NextDepth>
+            ? InternalFlattenedTypePathsOfUnionChildren<
+                T,
+                SegmentOverride,
+                ValuePath,
+                TypePath,
+                NextDepth
+              >
             : never
 
 type InternalFlattenedTypePathsOfLiteralChildren = {}
@@ -133,7 +171,9 @@ type InternalFlattenedTypePathsOfUnionChildren<
       ? D extends null
         ? UnionToIntersection<
             {
-              readonly [K in keyof Unions]: InternalFlattenedTypePathsOfChildren<
+              readonly [
+                K in keyof Unions
+              ]: InternalFlattenedTypePathsOfChildren<
                 Unions[K],
                 SegmentOverride,
                 ValuePath,
@@ -144,7 +184,9 @@ type InternalFlattenedTypePathsOfUnionChildren<
           >
         : UnionToIntersection<
             {
-              readonly [K in keyof Unions]: InternalFlattenedTypePathsOfChildren<
+              readonly [
+                K in keyof Unions
+              ]: InternalFlattenedTypePathsOfChildren<
                 Unions[K],
                 SegmentOverride,
                 `${ValuePath}:${K}`,

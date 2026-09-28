@@ -2,15 +2,15 @@ import { type Maybe } from 'types/Maybe'
 import { constantPollInterval, poll } from 'util/poll'
 import { type Mock, vi } from 'vitest'
 
-describe('poll', function () {
+describe('poll', () => {
   const pollInterval = constantPollInterval(1)
   let callee: Mock<() => Promise<Maybe<number>>>
 
-  beforeEach(function () {
+  beforeEach(() => {
     callee = vi.fn()
   })
 
-  it('returns the success value', async function () {
+  it('returns the success value', async () => {
     const value = 1
     callee.mockResolvedValueOnce([value])
     const result = await poll(callee, {
@@ -20,7 +20,7 @@ describe('poll', function () {
     expect(callee).toHaveBeenCalledTimes(1)
   })
 
-  it('returns the success value after a retry', async function () {
+  it('returns the success value after a retry', async () => {
     const value = 1
     callee.mockResolvedValueOnce(null)
     callee.mockResolvedValueOnce([value])
@@ -32,7 +32,7 @@ describe('poll', function () {
     expect(callee).toHaveBeenCalledTimes(2)
   })
 
-  it('returns null when polling result not available after retries', async function () {
+  it('returns null when polling result not available after retries', async () => {
     callee.mockResolvedValue(null)
     const retries = 4
     const result = await poll(callee, {
@@ -43,7 +43,7 @@ describe('poll', function () {
     expect(callee).toHaveBeenCalledTimes(retries)
   })
 
-  it('reports errors immediately', async function () {
+  it('reports errors immediately', async () => {
     const error = new Error()
     callee.mockRejectedValue(error)
 

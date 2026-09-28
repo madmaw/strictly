@@ -17,13 +17,19 @@ describe('subFormFieldAdapters', () => {
   })
 
   describe('single adapter', () => {
-    const mockedFieldAdapter1 = mockDeep<Required<FieldAdapter<string, boolean, number, '$', string>>>()
-    const fieldAdapter1: FieldAdapter<string, boolean, number, '$', string> = mockedFieldAdapter1
+    const mockedFieldAdapter1 =
+      mockDeep<Required<FieldAdapter<string, boolean, number, '$', string>>>()
+    const fieldAdapter1: FieldAdapter<string, boolean, number, '$', string> =
+      mockedFieldAdapter1
 
     const subAdapters = {
       $: fieldAdapter1,
     } as const
-    const adapters = subFormFieldAdapters<typeof subAdapters, '$.a', { '$.a': '$.a' }>(subAdapters, '$.a')
+    const adapters = subFormFieldAdapters<
+      typeof subAdapters,
+      '$.a',
+      { '$.a': '$.a' }
+    >(subAdapters, '$.a')
 
     beforeEach(() => {
       mockReset(mockedFieldAdapter1)
@@ -77,8 +83,10 @@ describe('subFormFieldAdapters', () => {
   })
 
   describe('multiple adapters', () => {
-    const mockedFieldAdapter1 = mockDeep<Required<FieldAdapter<string, boolean>>>()
-    const fieldAdapter1: FieldAdapter<string, boolean, number> = mockedFieldAdapter1
+    const mockedFieldAdapter1 =
+      mockDeep<Required<FieldAdapter<string, boolean>>>()
+    const fieldAdapter1: FieldAdapter<string, boolean, number> =
+      mockedFieldAdapter1
     const mockedFieldAdapter2 = mockDeep<FieldAdapter<number, boolean>>()
     const fieldAdapter2: FieldAdapter<number, boolean> = mockedFieldAdapter2
 
@@ -147,8 +155,10 @@ describe('subFormFieldAdapters', () => {
   })
 
   describe('list adapter', () => {
-    const mockedFieldAdapter1 = mockDeep<Required<FieldAdapter<string, boolean, number, '$', string>>>()
-    const fieldAdapter1: FieldAdapter<string, boolean, number, '$', string> = mockedFieldAdapter1
+    const mockedFieldAdapter1 =
+      mockDeep<Required<FieldAdapter<string, boolean, number, '$', string>>>()
+    const fieldAdapter1: FieldAdapter<string, boolean, number, '$', string> =
+      mockedFieldAdapter1
     const subAdapters = {
       $: fieldAdapter1,
     }

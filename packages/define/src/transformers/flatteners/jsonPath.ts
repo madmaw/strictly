@@ -1,25 +1,31 @@
 import { assertEqual, assertState, type StringConcatOf } from '@strictly/base'
 
-export function jsonPath<Prefix extends string, Segment extends number | string>(
-  prefix: Prefix,
-  segment: Segment,
-): `${Prefix}.${Segment}`
-export function jsonPath<Prefix extends string, Segment extends number | string, Qualifier extends string>(
+export function jsonPath<
+  Prefix extends string,
+  Segment extends number | string,
+>(prefix: Prefix, segment: Segment): `${Prefix}.${Segment}`
+export function jsonPath<
+  Prefix extends string,
+  Segment extends number | string,
+  Qualifier extends string,
+>(
   prefix: Prefix,
   segment: Segment,
   qualifier: Qualifier,
 ): `${Prefix}${Qualifier}.${Segment}`
-export function jsonPath<Prefix extends string, Segment extends number | string, Qualifier extends string = ''>(
-  prefix: Prefix,
-  segment: Segment,
-  qualifier?: Qualifier,
-) {
+export function jsonPath<
+  Prefix extends string,
+  Segment extends number | string,
+  Qualifier extends string = '',
+>(prefix: Prefix, segment: Segment, qualifier?: Qualifier) {
   const s = `.${segment}`
   return `${prefix}${qualifier ?? ''}${s}` as `${Prefix}${Qualifier}.${Segment}`
 }
 
 // TODO type safety
-export function jsonPathPop<Path extends string>(path: Path): [string, string] | null {
+export function jsonPathPop<Path extends string>(
+  path: Path,
+): [string, string] | null {
   const parts = path.split('.')
   if (parts.length <= 1) {
     return null
@@ -30,17 +36,29 @@ export function jsonPathPop<Path extends string>(path: Path): [string, string] |
 export function jsonPathPrefix<Prefix extends string, Path extends string>(
   prefix: Prefix,
   path: Path,
-): Path extends StringConcatOf<'$', infer ToMount> ? `${Prefix}${ToMount}` : never {
+): Path extends StringConcatOf<'$', infer ToMount>
+  ? `${Prefix}${ToMount}`
+  : never {
   assertEqual(path[0], '$', '{} should start with $', path)
-  return `${prefix}${path.slice(1)}` as Path extends StringConcatOf<'$', infer ToMount> ? `${Prefix}${ToMount}` : never
+  return `${prefix}${path.slice(1)}` as Path extends StringConcatOf<
+    '$',
+    infer ToMount
+  >
+    ? `${Prefix}${ToMount}`
+    : never
 }
 
 export function jsonPathUnprefix<Prefix extends string, Path extends string>(
   prefix: Prefix,
   path: Path,
-): Path extends StringConcatOf<Prefix, infer ToUnmount> ? `$${ToUnmount}` : never {
+): Path extends StringConcatOf<Prefix, infer ToUnmount>
+  ? `$${ToUnmount}`
+  : never {
   assertState(path.startsWith(prefix), '{} should start with {}', path, prefix)
-  return `$${path.slice(prefix.length)}` as Path extends StringConcatOf<Prefix, infer ToUnmount>
+  return `$${path.slice(prefix.length)}` as Path extends StringConcatOf<
+    Prefix,
+    infer ToUnmount
+  >
     ? `$${ToUnmount}`
     : never
 }

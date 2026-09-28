@@ -7,11 +7,23 @@ import {
   type UnreliableFieldConverter,
 } from 'types/FieldConverters'
 
-export function chainUnreliableFieldConverter<From, Intermediate, To, E1, E2, ValuePath extends string, Context>(
+export function chainUnreliableFieldConverter<
+  From,
+  Intermediate,
+  To,
+  E1,
+  E2,
+  ValuePath extends string,
+  Context,
+>(
   from: UnreliableFieldConverter<From, Intermediate, E1, ValuePath, Context>,
   to: UnreliableFieldConverter<Intermediate, To, E2, ValuePath, Context>,
 ): UnreliableFieldConverter<From, To, E1 | E2, ValuePath, Context> {
-  return function (value: From, valuePath: ValuePath, context: Context): UnreliableFieldConversion<To, E1 | E2> {
+  return function (
+    value: From,
+    valuePath: ValuePath,
+    context: Context,
+  ): UnreliableFieldConversion<To, E1 | E2> {
     const fromConversion = from(value, valuePath, context)
     switch (fromConversion.type) {
       case UnreliableFieldConversionType.Success:
@@ -47,11 +59,21 @@ export function chainUnreliableFieldConverter<From, Intermediate, To, E1, E2, Va
   }
 }
 
-export function chainAnnotatedFieldConverter<From, Intermediate, To, ValuePath extends string, Context>(
+export function chainAnnotatedFieldConverter<
+  From,
+  Intermediate,
+  To,
+  ValuePath extends string,
+  Context,
+>(
   from: AnnotatedFieldConverter<From, Intermediate, ValuePath, Context>,
   to: AnnotatedFieldConverter<Intermediate, To, ValuePath, Context>,
 ): AnnotatedFieldConverter<From, To, ValuePath, Context> {
-  return function (value: From, valuePath: ValuePath, context: Context): AnnotatedFieldConversion {
+  return function (
+    value: From,
+    valuePath: ValuePath,
+    context: Context,
+  ): AnnotatedFieldConversion {
     const {
       required: intermediateRequired,
       readonly: intermediateReadonly,

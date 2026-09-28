@@ -9,7 +9,15 @@ import { type MantineFieldComponent, type MantineForm } from './types'
 
 export type SuppliedCheckboxProps = Pick<
   CheckboxProps,
-  'name' | 'checked' | 'disabled' | 'required' | 'error' | 'onChange' | 'onFocus' | 'onBlur' | 'onKeyUp'
+  | 'name'
+  | 'checked'
+  | 'disabled'
+  | 'required'
+  | 'error'
+  | 'onChange'
+  | 'onFocus'
+  | 'onBlur'
+  | 'onKeyUp'
 >
 
 export function createCheckbox<
@@ -22,7 +30,7 @@ export function createCheckbox<
   Checkbox: ComponentType<Props>,
 ): MantineFieldComponent<SuppliedCheckboxProps, Props, ErrorOfField<F[K]>> {
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    this.onFieldValueChange?.(valuePath, e.target.checked)
+    this.onFieldValueChange(valuePath, e.target.checked)
   }
   const onFocus = () => {
     this.onFieldFocus?.(valuePath)
@@ -43,7 +51,8 @@ export function createCheckbox<
   }: {
     ErrorRenderer?: ErrorRenderer<ErrorOfField<F[K]>>
   }) => {
-    const { readonly, required, value, error } = this.fields[valuePath as string]
+    const { readonly, required, value, error } =
+      this.fields[valuePath as string]
     return {
       name: valuePath,
       checked: value,
@@ -56,9 +65,7 @@ export function createCheckbox<
       onKeyUp,
     }
   }
-  return createUnsafePartialObserverComponent(Checkbox, propSource, ['ErrorRenderer']) as MantineFieldComponent<
-    SuppliedCheckboxProps,
-    Props,
-    ErrorOfField<F[K]>
-  >
+  return createUnsafePartialObserverComponent(Checkbox, propSource, [
+    'ErrorRenderer',
+  ]) as MantineFieldComponent<SuppliedCheckboxProps, Props, ErrorOfField<F[K]>>
 }

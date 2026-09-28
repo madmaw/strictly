@@ -1,4 +1,9 @@
-import { copy, type ReadonlyTypeOfType, type Type, type ValueOfType } from '@strictly/define'
+import {
+  copy,
+  type ReadonlyTypeOfType,
+  type Type,
+  type ValueOfType,
+} from '@strictly/define'
 import {
   type AnnotatedFieldConversion,
   type TwoWayFieldConverterWithValueFactory,
@@ -29,7 +34,9 @@ export class NullableToBooleanConverter<
     this.defaultValue = defaultToNull ? this.nullType : prototype
   }
 
-  convert(from: ValueOfType<ReadonlyTypeOfType<T>> | NullType): AnnotatedFieldConversion<boolean> {
+  convert(
+    from: ValueOfType<ReadonlyTypeOfType<T>> | NullType,
+  ): AnnotatedFieldConversion<boolean> {
     return {
       value: from !== this.nullType,
       required: false,
@@ -37,7 +44,12 @@ export class NullableToBooleanConverter<
     }
   }
 
-  revert(from: boolean): UnreliableFieldConversion<ValueOfType<ReadonlyTypeOfType<T>> | NullType, never> {
+  revert(
+    from: boolean,
+  ): UnreliableFieldConversion<
+    ValueOfType<ReadonlyTypeOfType<T>> | NullType,
+    never
+  > {
     if (from) {
       const value: ValueOfType<T> = copy(this.typeDef, this.prototype)
       return {

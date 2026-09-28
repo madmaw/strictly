@@ -5,8 +5,8 @@ import * as stories from './listHooks.stories'
 
 const composedStories = composeStories(stories)
 
-describe('mantine list hooks', function () {
-  it.each(toArray(composedStories))('renders %s', function (_name, Story) {
+describe('mantine list hooks', () => {
+  it.each(toArray(composedStories))('renders %s', (_name, Story) => {
     const wrapper = render(<Story />)
     expect(wrapper.container).toMatchSnapshot()
   })

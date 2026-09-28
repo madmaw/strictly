@@ -7,6 +7,9 @@ function identity(v: AnyValueType): AnyValueType {
   return v
 }
 
-export function copy<T extends StrictType>(t: T, proto: ValueOfType<ReadonlyTypeOfType<T>>): ValueOfType<T> {
+export function copy<T extends StrictType>(
+  t: T,
+  proto: ValueOfType<ReadonlyTypeOfType<T>>,
+): ValueOfType<T> {
   return copyTo(t, proto, identity)
 }

@@ -7,7 +7,9 @@ export type RegexpValidationError<Intent extends string> = {
   intent: Intent
 }
 
-export class RegexpValidator<Intent extends string> implements AnnotatedValidator<
+export class RegexpValidator<
+  Intent extends string,
+> implements AnnotatedValidator<
   string,
   RegexpValidationError<Intent>,
   never,
@@ -16,7 +18,10 @@ export class RegexpValidator<Intent extends string> implements AnnotatedValidato
   /**
    * Extremely permissive email validator
    */
-  static readonly email = new RegexpValidator(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'email')
+  static readonly email = new RegexpValidator(
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+    'email',
+  )
 
   /**
    * Extremely permissive phone number validator

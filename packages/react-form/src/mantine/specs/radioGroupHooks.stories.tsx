@@ -5,7 +5,12 @@ import { type ErrorRenderer } from 'mantine/ErrorRenderer'
 import { useMantineFormFields } from 'mantine/hooks'
 import { action } from 'storybook/actions'
 import { type Field } from 'types/Field'
-import { RADIO_GROUP_LABEL, RADIO_LABELS, RADIO_VALUES, type RadioValue } from './radioGroupConstants'
+import {
+  RADIO_GROUP_LABEL,
+  RADIO_LABELS,
+  RADIO_VALUES,
+  type RadioValue,
+} from './radioGroupConstants'
 
 function ErrorRenderer({ error }: { error: string }) {
   return `custom error ${error}`
@@ -20,12 +25,21 @@ function Component({
   const RadioGroupComponent = form.radioGroup('$')
 
   return (
-    <RadioGroupComponent ErrorRenderer={ErrorRenderer} label={RADIO_GROUP_LABEL}>
+    <RadioGroupComponent
+      ErrorRenderer={ErrorRenderer}
+      label={RADIO_GROUP_LABEL}
+    >
       <Stack>
-        {RADIO_VALUES.map(function (value: RadioValue) {
+        {RADIO_VALUES.map((value: RadioValue) => {
           const label = RADIO_LABELS[value]
           const RadioComponent = form.radio('$', value)
-          return <RadioComponent ErrorRenderer={ErrorRenderer} key={label} label={label} />
+          return (
+            <RadioComponent
+              ErrorRenderer={ErrorRenderer}
+              key={label}
+              label={label}
+            />
+          )
         })}
       </Stack>
     </RadioGroupComponent>

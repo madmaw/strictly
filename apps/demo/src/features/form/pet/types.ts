@@ -9,6 +9,7 @@ import {
   list,
   literal,
   MinimumStringLengthValidator,
+  nullable,
   numberType,
   object,
   type ReadonlyTypeOfType,
@@ -60,16 +61,33 @@ export const catBreedType = literal<CatBreed>()
   .enforce(definedValidator.validate.bind(definedValidator)).narrow
 
 export const speciesType = union('type')
-  .or('dog', object().field('barks', numberType.required()).optionalField('breed', dogBreedType).readonly())
-  .or('cat', object().field('meows', numberType.required()).optionalField('breed', catBreedType).readonly()).narrow
+  .or(
+    'dog',
+    object()
+      .field('barks', numberType.required())
+      .optionalField('breed', dogBreedType)
+      .readonly(),
+  )
+  .or(
+    'cat',
+    object()
+      .field('meows', numberType.required())
+      .optionalField('breed', catBreedType)
+      .readonly(),
+  ).narrow
 
 export type Species = keyof (typeof speciesType)['definition']['unions']
 
 export const petType = object()
-  .field('name', stringType.enforce(minimumNameLengthValidator).enforce(catNameMustBeCapitalized))
+  .field(
+    'name',
+    stringType
+      .enforce(minimumNameLengthValidator)
+      .enforce(catNameMustBeCapitalized),
+  )
   .field('alive', booleanType)
   .field('tags', list(stringType))
-  .optionalField('owner', petOwnerType)
+  .field('owner', nullable(petOwnerType))
   .readonlyField('species', speciesType).narrow
 
 export type TagValuePath = `$.tags.${number}`

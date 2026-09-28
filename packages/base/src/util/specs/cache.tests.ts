@@ -1,54 +1,54 @@
 import { Cache, type CacheValueFactory } from 'util/Cache'
 import { type Mock, vi } from 'vitest'
 
-describe('cache', function () {
+describe('cache', () => {
   type Args = [string, number, boolean]
   let cache: Cache<Args, boolean>
   let valueFactory: Mock<CacheValueFactory<Args, boolean>>
 
-  beforeEach(function () {
+  beforeEach(() => {
     valueFactory = vi.fn()
     valueFactory.mockReturnValue(true)
     cache = new Cache(valueFactory)
   })
 
-  describe('creates value that does not exist', function () {
+  describe('creates value that does not exist', () => {
     let value: boolean
     const params: Args = ['a', 1, false]
-    beforeEach(function () {
+    beforeEach(() => {
       value = cache.retrieveOrCreate(...params)
     })
 
-    it('calls the value factory with the transformed key', function () {
+    it('calls the value factory with the transformed key', () => {
       expect(valueFactory).toHaveBeenCalledOnce()
       expect(valueFactory).toHaveBeenCalledWith(...params)
     })
 
-    it('returns the expected value', function () {
+    it('returns the expected value', () => {
       expect(value).toBeTruthy()
     })
 
-    describe('retrieveByKey', function () {
-      it('retrieves value by key', function () {
+    describe('retrieveByKey', () => {
+      it('retrieves value by key', () => {
         expect(cache.retrieve(...params)).toEqual([true])
       })
 
-      it('returns nothing when a non-existent key is supplied', function () {
+      it('returns nothing when a non-existent key is supplied', () => {
         expect(cache.retrieve('a', 1, true)).toBeNull()
       })
     })
 
-    describe('looking up previously created value', function () {
+    describe('looking up previously created value', () => {
       let cachedValue: boolean
-      beforeEach(function () {
+      beforeEach(() => {
         cachedValue = cache.retrieveOrCreate(...params)
       })
 
-      it('does not create the value again', function () {
+      it('does not create the value again', () => {
         expect(valueFactory).toHaveBeenCalledOnce()
       })
 
-      it('returns the expected value', function () {
+      it('returns the expected value', () => {
         expect(cachedValue).toBeTruthy()
       })
     })

@@ -37,7 +37,10 @@ import {
   type ValueOf,
 } from 'type-fest'
 import { type Field } from 'types/Field'
-import { type AnnotatedFieldConversion, UnreliableFieldConversionType } from 'types/FieldConverters'
+import {
+  type AnnotatedFieldConversion,
+  UnreliableFieldConversionType,
+} from 'types/FieldConverters'
 import {
   type ContextOfFieldAdapter,
   type ErrorOfFieldAdapter,
@@ -46,7 +49,9 @@ import {
 } from './FieldAdapter'
 import { type FlattenedListTypesOfType } from './FlattenedListTypesOfType'
 
-export type FlattenedConvertedFieldsOf<ValuePathsToAdapters extends Readonly<Record<string, FieldAdapter>>> = {
+export type FlattenedConvertedFieldsOf<
+  ValuePathsToAdapters extends Readonly<Record<string, FieldAdapter>>,
+> = {
   readonly [K in keyof ValuePathsToAdapters]: Field<
     ToOfFieldAdapter<ValuePathsToAdapters[K]>,
     ErrorOfFieldAdapter<ValuePathsToAdapters[K]>
@@ -68,12 +73,20 @@ export type FlattenedTypePathsToAdaptersOf<
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type FieldOverride<V = any> = Maybe<V>
 
-type FlattenedFieldOverrides<ValuePathsToAdapters extends Readonly<Record<string, FieldAdapter>>> = {
-  -readonly [K in keyof ValuePathsToAdapters]?: FieldOverride<ToOfFieldAdapter<ValuePathsToAdapters[K]>>
+type FlattenedFieldOverrides<
+  ValuePathsToAdapters extends Readonly<Record<string, FieldAdapter>>,
+> = {
+  -readonly [K in keyof ValuePathsToAdapters]?: FieldOverride<
+    ToOfFieldAdapter<ValuePathsToAdapters[K]>
+  >
 }
 
-type FlattenedErrorOverrides<ValuePathsToAdapters extends Readonly<Record<string, FieldAdapter>>> = {
-  -readonly [K in keyof ValuePathsToAdapters]?: ErrorOfFieldAdapter<ValuePathsToAdapters[K]>
+type FlattenedErrorOverrides<
+  ValuePathsToAdapters extends Readonly<Record<string, FieldAdapter>>,
+> = {
+  -readonly [K in keyof ValuePathsToAdapters]?: ErrorOfFieldAdapter<
+    ValuePathsToAdapters[K]
+  >
 }
 
 export enum Validation {
@@ -82,7 +95,9 @@ export enum Validation {
   Always = 2,
 }
 
-type FlattenedValidation<ValuePathsToAdapters extends Readonly<Record<string, FieldAdapter>>> = {
+type FlattenedValidation<
+  ValuePathsToAdapters extends Readonly<Record<string, FieldAdapter>>,
+> = {
   -readonly [K in keyof ValuePathsToAdapters]?: Validation
 }
 
@@ -93,43 +108,61 @@ export type ValuePathsToAdaptersOf<
   keyof TypePathsToAdapters extends ValueOf<ValuePathsToTypePaths>
     ? {
         readonly [
-          K in keyof ValuePathsToTypePaths as unknown extends TypePathsToAdapters[ValuePathsToTypePaths[K]] ? never : K
+          K in keyof ValuePathsToTypePaths as unknown extends TypePathsToAdapters[ValuePathsToTypePaths[K]]
+            ? never
+            : K
         ]: NonNullable<TypePathsToAdapters[ValuePathsToTypePaths[K]]>
       }
     : never
 
-export type ContextOf<TypePathsToAdapters extends Partial<Readonly<Record<string, FieldAdapter>>>> =
-  UnionToIntersection<
-    | {
-        readonly [K in keyof TypePathsToAdapters]: TypePathsToAdapters[K] extends undefined
-          ? undefined
-          : // ignore unspecified values
-            unknown extends ContextOfFieldAdapter<NonNullable<TypePathsToAdapters[K]>>
-            ? never
-            : ContextOfFieldAdapter<NonNullable<TypePathsToAdapters[K]>>
-      }[keyof TypePathsToAdapters]
-    // ensure we have at least one thing to intersect (can end up with a `never` context otherwise)
-    | {}
-  >
+export type ContextOf<
+  TypePathsToAdapters extends Partial<Readonly<Record<string, FieldAdapter>>>,
+> = UnionToIntersection<
+  | {
+      readonly [
+        K in keyof TypePathsToAdapters
+      ]: TypePathsToAdapters[K] extends undefined
+        ? undefined
+        : // ignore unspecified values
+          unknown extends ContextOfFieldAdapter<
+              NonNullable<TypePathsToAdapters[K]>
+            >
+          ? never
+          : ContextOfFieldAdapter<NonNullable<TypePathsToAdapters[K]>>
+    }[keyof TypePathsToAdapters]
+  // ensure we have at least one thing to intersect (can end up with a `never` context otherwise)
+  | {}
+>
 
-export type FormModelContextSource<ContextType, V, ValuePath extends string | number | symbol> = {
+export type FormModelContextSource<
+  ContextType,
+  V,
+  ValuePath extends string | number | symbol,
+> = {
   forPath(value: V, valuePath: ValuePath): ContextType
 }
 
 export abstract class FormModel<
   T extends Type,
   ValueToTypePaths extends Readonly<Record<string, string>>,
-  TypePathsToAdapters extends FlattenedTypePathsToAdaptersOf<FlattenedValuesOfType<T, '*'>, ContextType>,
+  TypePathsToAdapters extends FlattenedTypePathsToAdaptersOf<
+    FlattenedValuesOfType<T, '*'>,
+    ContextType
+  >,
   ContextType = ContextOf<TypePathsToAdapters>,
   ContextSource extends FormModelContextSource<
     ContextType,
     ValueOfType<ReadonlyTypeOfType<T>>,
     keyof ValuePathsToAdapters
-  > = FormModelContextSource<ContextType, ValueOfType<ReadonlyTypeOfType<T>>, string | number | symbol>,
-  ValuePathsToAdapters extends ValuePathsToAdaptersOf<TypePathsToAdapters, ValueToTypePaths> = ValuePathsToAdaptersOf<
+  > = FormModelContextSource<
+    ContextType,
+    ValueOfType<ReadonlyTypeOfType<T>>,
+    string | number | symbol
+  >,
+  ValuePathsToAdapters extends ValuePathsToAdaptersOf<
     TypePathsToAdapters,
     ValueToTypePaths
-  >,
+  > = ValuePathsToAdaptersOf<TypePathsToAdapters, ValueToTypePaths>,
 > {
   @observable.ref
   private accessor observableValue: MobxValueOfType<T>
@@ -155,7 +188,11 @@ export abstract class FormModel<
     protected readonly adapters: TypePathsToAdapters,
     protected readonly contextSource: ContextSource,
   ) {
-    this.originalValues = flattenValuesOfType<ReadonlyTypeOfType<T>>(type, originalValue, this.listIndicesToKeys)
+    this.originalValues = flattenValuesOfType<ReadonlyTypeOfType<T>>(
+      type,
+      originalValue,
+      this.listIndicesToKeys,
+    )
     this.observableValue = mobxCopy(type, originalValue)
     this.flattenedTypeDefs = flattenTypesOfType(type)
     // pre-populate field overrides for consistent behavior when default information is overwritten
@@ -171,7 +208,10 @@ export abstract class FormModel<
         typePath,
         valuePath,
       ): AnnotatedFieldConversion<FieldOverride> | undefined => {
-        const contextValue = contextSource.forPath(originalValue, valuePath as keyof ValuePathsToAdapters)
+        const contextValue = contextSource.forPath(
+          originalValue,
+          valuePath as keyof ValuePathsToAdapters,
+        )
 
         const adapter = this.adapters[typePath as keyof TypePathsToAdapters]
         if (adapter == null) {
@@ -187,9 +227,10 @@ export abstract class FormModel<
       },
       this.listIndicesToKeys,
     )
-    this.fieldOverrides = map(conversions, function (_k, v) {
-      return v && [v.value]
-    }) as FlattenedFieldOverrides<ValuePathsToAdapters>
+    this.fieldOverrides = map(
+      conversions,
+      (_k, v) => v && [v.value],
+    ) as FlattenedFieldOverrides<ValuePathsToAdapters>
   }
 
   @computed
@@ -200,7 +241,9 @@ export abstract class FormModel<
 
   @computed
   get fields(): SimplifyDeep<FlattenedConvertedFieldsOf<ValuePathsToAdapters>> {
-    return new Proxy<SimplifyDeep<FlattenedConvertedFieldsOf<ValuePathsToAdapters>>>(this.knownFields, {
+    return new Proxy<
+      SimplifyDeep<FlattenedConvertedFieldsOf<ValuePathsToAdapters>>
+    >(this.knownFields, {
       get: (target, prop) => {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const field = (target as any)[prop]
@@ -208,26 +251,41 @@ export abstract class FormModel<
           return field
         }
         if (typeof prop === 'string') {
-          return this.maybeSynthesizeFieldByValuePath(prop as keyof ValuePathsToAdapters)
+          return this.maybeSynthesizeFieldByValuePath(
+            prop as keyof ValuePathsToAdapters,
+          )
         }
       },
     })
   }
 
   @computed
-  private get knownFields(): SimplifyDeep<FlattenedConvertedFieldsOf<ValuePathsToAdapters>> {
+  private get knownFields(): SimplifyDeep<
+    FlattenedConvertedFieldsOf<ValuePathsToAdapters>
+  > {
     return flattenValueTo(
       this.type,
       this.observableValue,
       () => {},
       // TODO swap these to valuePath, typePath in flatten
-      (_t: StrictTypeDef, _v: AnyValueType, _setter, typePath, valuePath): Field | undefined =>
-        this.synthesizeFieldByPaths(valuePath as keyof ValuePathsToAdapters, typePath as keyof TypePathsToAdapters),
+      (
+        _t: StrictTypeDef,
+        _v: AnyValueType,
+        _setter,
+        typePath,
+        valuePath,
+      ): Field | undefined =>
+        this.synthesizeFieldByPaths(
+          valuePath as keyof ValuePathsToAdapters,
+          typePath as keyof TypePathsToAdapters,
+        ),
       this.listIndicesToKeys,
     )
   }
 
-  private maybeSynthesizeFieldByValuePath(valuePath: keyof ValuePathsToAdapters): Field | undefined {
+  private maybeSynthesizeFieldByValuePath(
+    valuePath: keyof ValuePathsToAdapters,
+  ): Field | undefined {
     let typePath: keyof TypePathsToAdapters
     try {
       typePath = valuePathToTypePath<ValueToTypePaths, keyof ValueToTypePaths>(
@@ -244,7 +302,10 @@ export abstract class FormModel<
     return this.synthesizeFieldByPaths(valuePath, typePath)
   }
 
-  private getField(valuePath: keyof ValuePathsToAdapters, typePath: keyof TypePathsToAdapters) {
+  private getField(
+    valuePath: keyof ValuePathsToAdapters,
+    typePath: keyof TypePathsToAdapters,
+  ) {
     const adapter = this.adapters[typePath]
     if (adapter == null) {
       // invalid path, which can happen
@@ -291,7 +352,15 @@ export abstract class FormModel<
     if (field == null) {
       return
     }
-    const { context, convert, revert, displayedValue, required, readonly, defaultValue } = field
+    const {
+      context,
+      convert,
+      revert,
+      displayedValue,
+      required,
+      readonly,
+      defaultValue,
+    } = field
     const validation = this.validation[valuePath] ?? Validation.None
     let error: unknown = this.errorOverrides[valuePath]
     if (error == null) {
@@ -302,8 +371,14 @@ export abstract class FormModel<
         case Validation.Changed:
           if (revert != null) {
             const originalValue =
-              valuePath in this.originalValues ? this.originalValues[valuePath as string] : defaultValue
-            const { value: originalDisplayedValue } = convert(originalValue, valuePath, context)
+              valuePath in this.originalValues
+                ? this.originalValues[valuePath as string]
+                : defaultValue
+            const { value: originalDisplayedValue } = convert(
+              originalValue,
+              valuePath,
+              context,
+            )
             // TODO better comparisons, displayed values can still be complex
             if (displayedValue !== originalDisplayedValue) {
               const revertResult = revert(displayedValue, valuePath, context)
@@ -336,7 +411,9 @@ export abstract class FormModel<
     }
   }
 
-  getAccessorForValuePath(valuePath: keyof ValuePathsToAdapters): Accessor | undefined {
+  getAccessorForValuePath(
+    valuePath: keyof ValuePathsToAdapters,
+  ): Accessor | undefined {
     return this.accessors[valuePath as string]
   }
 
@@ -368,15 +445,23 @@ export abstract class FormModel<
 
   @computed
   get dirty() {
-    return Object.keys(this.accessors).some((valuePath) => this.isFieldDirty(valuePath as keyof ValuePathsToAdapters))
+    return Object.keys(this.accessors).some((valuePath) =>
+      this.isFieldDirty(valuePath as keyof ValuePathsToAdapters),
+    )
   }
 
   @computed
   get valueChanged() {
-    return !equals(this.type, this.observableValue, this.originalValue as ValueOfType<T>)
+    return !equals(
+      this.type,
+      this.observableValue,
+      this.originalValue as ValueOfType<T>,
+    )
   }
 
-  typePath<K extends keyof ValueToTypePaths>(valuePath: K): ValueToTypePaths[K] {
+  typePath<K extends keyof ValueToTypePaths>(
+    valuePath: K,
+  ): ValueToTypePaths[K] {
     return valuePathToTypePath<ValueToTypePaths, K>(this.type, valuePath, true)
   }
 
@@ -389,8 +474,11 @@ export abstract class FormModel<
     return this.internalSetFieldValue(valuePath, value, validation)
   }
 
-  listValuePaths<K extends keyof FlattenedListTypesOfType<T>>(valuePath: K): readonly `${K}.${number}`[] {
-    const { value, listIndexToKey } = this.fields[valuePath as unknown as keyof ValuePathsToAdapters]
+  listValuePaths<K extends keyof FlattenedListTypesOfType<T>>(
+    valuePath: K,
+  ): readonly `${K}.${number}`[] {
+    const { value, listIndexToKey } =
+      this.fields[valuePath as unknown as keyof ValuePathsToAdapters]
     return (value as unknown[]).map((_, i) => {
       const key = listIndexToKey?.[i]
       return `${valuePath as string}.${key}` as `${K}.${number}`
@@ -420,12 +508,19 @@ export abstract class FormModel<
         ? elementAdapter.create(
             elementTypePath,
             // TODO what can we use for the value path here?
-            this.contextSource.forPath(this.observableValue, valuePath as unknown as keyof ValuePathsToAdapters),
+            this.contextSource.forPath(
+              this.observableValue,
+              valuePath as unknown as keyof ValuePathsToAdapters,
+            ),
           )
         : elementValue[0]
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const originalList: any[] = accessor.value
-    const newList = [...originalList.slice(0, definedIndex), element, ...originalList.slice(definedIndex)]
+    const newList = [
+      ...originalList.slice(0, definedIndex),
+      element,
+      ...originalList.slice(definedIndex),
+    ]
     runInAction(() => {
       accessor.set(newList)
       // delete any value overrides so the new list isn't shadowed
@@ -443,7 +538,9 @@ export abstract class FormModel<
     })
   }
 
-  removeListItem<K extends keyof FlattenedListTypesOfType<T>>(...elementValuePaths: readonly `${K}.${number}`[]) {
+  removeListItem<K extends keyof FlattenedListTypesOfType<T>>(
+    ...elementValuePaths: readonly `${K}.${number}`[]
+  ) {
     runInAction(() => {
       elementValuePaths.forEach((elementValuePath) => {
         const [listValuePath, elementKeyString] = assertExistsAndReturn(
@@ -468,7 +565,9 @@ export abstract class FormModel<
           newList.splice(elementIndex, 1)
           accessor.set(newList)
           // delete any value overrides so the new list isn't shadowed
-          delete this.fieldOverrides[listValuePath as keyof ValuePathsToAdapters]
+          delete this.fieldOverrides[
+            listValuePath as keyof ValuePathsToAdapters
+          ]
           indicesToKeys.splice(elementIndex, 1)
         }
       })
@@ -484,8 +583,11 @@ export abstract class FormModel<
 
     assertExists(revert, 'setting value not supported {}', valuePath)
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const conversion = revert(value, valuePath as any, this.contextSource.forPath(this.observableValue, valuePath))
+    const conversion = revert(
+      value,
+      valuePath as any, // oxlint-disable-line typescript/no-explicit-any
+      this.contextSource.forPath(this.observableValue, valuePath),
+    )
     const accessor = this.getAccessorForValuePath(valuePath)
     return runInAction(() => {
       this.fieldOverrides[valuePath] = [value]
@@ -544,7 +646,10 @@ export abstract class FormModel<
     }
     const { convert, create } = adapter
 
-    const context = this.contextSource.forPath(this.observableValue, valuePath as unknown as keyof ValuePathsToAdapters)
+    const context = this.contextSource.forPath(
+      this.observableValue,
+      valuePath as unknown as keyof ValuePathsToAdapters,
+    )
     const value = create(valuePath, context)
     const { value: displayValue } = convert(value, valuePath, context)
     const key = valuePath as unknown as keyof ValuePathsToAdapters
@@ -565,18 +670,29 @@ export abstract class FormModel<
     })
   }
 
-  isValuePathActive<K extends keyof ValuePathsToAdapters>(valuePath: K): boolean {
-    const values = flattenValuesOfType(this.type, this.observableValue, this.listIndicesToKeys)
+  isValuePathActive<K extends keyof ValuePathsToAdapters>(
+    valuePath: K,
+  ): boolean {
+    const values = flattenValuesOfType(
+      this.type,
+      this.observableValue,
+      this.listIndicesToKeys,
+    )
     const keys = new Set(Object.keys(values))
     return keys.has(valuePath as string)
   }
 
-  getValidation<K extends keyof ValuePathsToAdapters>(valuePath: K): Validation {
+  getValidation<K extends keyof ValuePathsToAdapters>(
+    valuePath: K,
+  ): Validation {
     return this.validation[valuePath] ?? Validation.None
   }
 
   isFieldDirty<K extends keyof ValuePathsToAdapters>(valuePath: K): boolean {
-    const typePath = valuePathToTypePath<ValueToTypePaths, keyof ValueToTypePaths>(
+    const typePath = valuePathToTypePath<
+      ValueToTypePaths,
+      keyof ValueToTypePaths
+    >(
       this.type,
       valuePath as keyof ValueToTypePaths,
       true,
@@ -590,7 +706,10 @@ export abstract class FormModel<
     const { displayedValue, convert, revert, context, defaultValue } = field
 
     // if either the display value, or the stored value, match the original, then assume it's not dirty
-    const originalValue = valuePath in this.originalValues ? this.originalValues[valuePath as string] : defaultValue
+    const originalValue =
+      valuePath in this.originalValues
+        ? this.originalValues[valuePath as string]
+        : defaultValue
     if (revert != null) {
       const typeDef = this.flattenedTypeDefs[typePath as string]
       const { value, type } = revert(displayedValue, valuePath, context)
@@ -600,7 +719,11 @@ export abstract class FormModel<
         }
       }
     }
-    const { value: originalDisplayedValue } = convert(originalValue, valuePath, context)
+    const { value: originalDisplayedValue } = convert(
+      originalValue,
+      valuePath,
+      context,
+    )
     // try to compare the displayed values directly if we can't revert the displayed value
     return displayedValue !== originalDisplayedValue
   }

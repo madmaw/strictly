@@ -5,14 +5,14 @@ import { type FlattenedAccessorsOfType } from 'types/FlattenedAccessorsOfType'
 import { type ValueOfType } from 'types/ValueOfType'
 import { type Mock, vi } from 'vitest'
 
-describe('flattenAccessorsOfType', function () {
+describe('flattenAccessorsOfType', () => {
   let setter: Mock
   const builder = object().field('a', list(numberType)).field('b', booleanType)
 
   let flattened: FlattenedAccessorsOfType<typeof builder>
   let value: ValueOfType<typeof builder>
 
-  beforeEach(function () {
+  beforeEach(() => {
     setter = vi.fn()
     value = {
       a: [1, 2, 4],
@@ -23,7 +23,7 @@ describe('flattenAccessorsOfType', function () {
 
   // note that we already have tests for the type and the function that this calls, so
   // this is only a sanity check
-  it('flattens to expected type', function () {
+  it('flattens to expected type', () => {
     expect(flattened).toEqual({
       $: {
         value: {
@@ -50,7 +50,7 @@ describe('flattenAccessorsOfType', function () {
     })
   })
 
-  it('sets an internal value of a struct', function () {
+  it('sets an internal value of a struct', () => {
     expectDefinedAndReturn(flattened['$.a']).set([5])
 
     expect(value).toEqual({
@@ -59,7 +59,7 @@ describe('flattenAccessorsOfType', function () {
     })
   })
 
-  it('sets an internal value of an array', function () {
+  it('sets an internal value of an array', () => {
     expectDefinedAndReturn(flattened['$.a.1']).set(99)
 
     expect(value).toEqual({
@@ -68,7 +68,7 @@ describe('flattenAccessorsOfType', function () {
     })
   })
 
-  it('sets the top level value', function () {
+  it('sets the top level value', () => {
     const newValue: ValueOfType<typeof builder> = {
       a: [-1, 5],
       b: true,

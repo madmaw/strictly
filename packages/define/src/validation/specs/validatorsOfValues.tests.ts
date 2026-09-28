@@ -1,8 +1,8 @@
 import { type Validator } from 'validation/validator'
 import { type ValidatorsOfValues } from 'validation/ValidatorsOfValues'
 
-describe('FlattenedValidatorsOfType', function () {
-  describe('literal', function () {
+describe('FlattenedValidatorsOfType', () => {
+  describe('literal', () => {
     type T = ValidatorsOfValues<
       {
         $: 'a' | 'b' | 'c'
@@ -18,12 +18,12 @@ describe('FlattenedValidatorsOfType', function () {
       readonly $: Validator<'a' | 'b' | 'c', any, '$', 1>
     }
 
-    it('has the expected type', function () {
+    it('has the expected type', () => {
       expectTypeOf<T>().toEqualTypeOf<C>()
     })
   })
 
-  describe('list', function () {
+  describe('list', () => {
     type T = ValidatorsOfValues<
       {
         $: number[]
@@ -43,12 +43,12 @@ describe('FlattenedValidatorsOfType', function () {
       readonly '$.*': Validator<number, any, `$.${number}`, 2>
     }
 
-    it('has the expected type', function () {
+    it('has the expected type', () => {
       expectTypeOf<T>().toEqualTypeOf<C>()
     })
   })
 
-  describe('with defaults', function () {
+  describe('with defaults', () => {
     type T = ValidatorsOfValues<{
       $: number[]
       '$.*': number
@@ -59,7 +59,7 @@ describe('FlattenedValidatorsOfType', function () {
       readonly '$.*': Validator<number>
     }
 
-    it('has the expected type', function () {
+    it('has the expected type', () => {
       expectTypeOf<T>().toEqualTypeOf<C>()
     })
   })

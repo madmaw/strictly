@@ -1,55 +1,66 @@
 import { t } from '@lingui/core/macro'
 import { Trans } from '@lingui/react/macro'
-import { Button, Card, Group, Pill, type PillProps, PillsInput, Stack } from '@mantine/core'
+import {
+  Button,
+  Card,
+  Group,
+  Pill,
+  type PillProps,
+  PillsInput,
+  Stack,
+} from '@mantine/core'
 import { UnreachableError } from '@strictly/base'
 import { MinimumStringLengthValidationErrorType } from '@strictly/define'
-import { type ErrorRendererProps, type FieldsViewProps, useMantineFormFields } from '@strictly/react-form'
+import {
+  type ErrorRendererProps,
+  type FieldsViewProps,
+  useMantineFormFields,
+} from '@strictly/react-form'
 import { type ComponentType, type Ref, useCallback, useMemo } from 'react'
-import { type PetFields, type PetValuePaths, TagAlreadyExistsErrorType, TagNotEmptyErrorType } from './fields'
+import {
+  type PetFields,
+  type PetValuePaths,
+  TagAlreadyExistsErrorType,
+  TagNotEmptyErrorType,
+} from './fields'
 import styles from './PetFieldsView.module.css'
 import { PetOwnerFieldsView } from './PetOwnerFieldsView'
 import { CatNameMustBeCapitalizedType, type TagValuePath } from './types'
 
-export function submitLabel() {
-  return t({
-    message: 'Submit',
-    comment: 'message that appears on the submit button for the pet form',
-  })
+export function SubmitLabel() {
+  return (
+    <Trans comment='message that appears on the submit button for the pet form'>
+      Submit
+    </Trans>
+  )
 }
 
-export function forceValidateLabel() {
-  return t({
-    message: 'Force Validation',
-    comment: 'message that appears on a button that forces the form fields to validate',
-  })
+export function ForceValidateLabel() {
+  return (
+    <Trans comment='message that appears on a button that forces the form fields to validate'>
+      Force Validation
+    </Trans>
+  )
 }
 
-export function nameTextInputLabel() {
-  return t({
-    message: 'Name',
-    comment: 'label for the name text input',
-  })
+export function NameTextInputLabel() {
+  return <Trans comment='label for the name text input'>Name</Trans>
 }
 
-export function ownerCheckboxLabel() {
-  return t({
-    message: 'Has Owner?',
-    comment: 'label for a checkbox indicating the pet has an owner',
-  })
+export function OwnerCheckboxLabel() {
+  return (
+    <Trans comment='label for a checkbox indicating the pet has an owner'>
+      Has Owner?
+    </Trans>
+  )
 }
 
-export function aliveCheckboxLabel() {
-  return t({
-    message: 'Alive?',
-    comment: 'label for the alive checkbox',
-  })
+export function AliveCheckboxLabel() {
+  return <Trans comment='label for the alive checkbox'>Alive?</Trans>
 }
 
-export function tagsInputLabel() {
-  return t({
-    message: 'Tags',
-    comment: 'label for the list of tags',
-  })
+export function TagsInputLabel() {
+  return <Trans comment='label for the list of tags'>Tags</Trans>
 }
 
 export function newTagPlaceholder() {
@@ -83,7 +94,9 @@ export type PetFieldsViewProps = FieldsViewProps<PetFormFields> & {
   firstInputRef?: Ref<HTMLInputElement>
 }
 
-function NameInputErrorRenderer({ error }: ErrorRendererProps<PetFormFields, '$.name'>) {
+function NameInputErrorRenderer({
+  error,
+}: ErrorRendererProps<PetFormFields, '$.name'>) {
   switch (error.type) {
     case MinimumStringLengthValidationErrorType:
       return (
@@ -102,7 +115,9 @@ function NameInputErrorRenderer({ error }: ErrorRendererProps<PetFormFields, '$.
   }
 }
 
-function NewTagInputErrorRenderer({ error }: ErrorRendererProps<PetFormFields, '$.newTag'>) {
+function NewTagInputErrorRenderer({
+  error,
+}: ErrorRendererProps<PetFormFields, '$.newTag'>) {
   switch (error.type) {
     case MinimumStringLengthValidationErrorType:
       return (
@@ -128,31 +143,46 @@ function NewTagInputErrorRenderer({ error }: ErrorRendererProps<PetFormFields, '
 }
 
 export function PetFieldsView(props: PetFieldsViewProps) {
-  const { onSubmit, onRemoveTag, onForceValidate, submitDisabled, SpeciesComponent, onClearField, firstInputRef } =
-    props
+  const {
+    onSubmit,
+    onRemoveTag,
+    onForceValidate,
+    submitDisabled,
+    SpeciesComponent,
+    onClearField,
+    firstInputRef,
+  } = props
   const form = useMantineFormFields(props)
   const NameTextInput = form.textInput('$.name')
   const AliveCheckbox = form.checkbox('$.alive')
   const OwnerCheckbox = form.checkbox('$.owner')
   const NewTagInputField = form.textInput('$.newTag', PillsInput.Field)
   const Tags = form.list('$.tags')
-  const { Component: Owner, callbackMapper: ownerCallbackMapper } = form.fieldsView('$.owner', PetOwnerFieldsView)
+  const { Component: Owner, callbackMapper: ownerCallbackMapper } =
+    form.fieldsView('$.owner', PetOwnerFieldsView)
 
-  const onClearOwnerField = useMemo(() => ownerCallbackMapper(onClearField), [ownerCallbackMapper, onClearField])
+  const onClearOwnerField = useMemo(
+    () => ownerCallbackMapper(onClearField),
+    [ownerCallbackMapper, onClearField],
+  )
 
   const NewTagField = form.fieldView('$.newTag')
   const HasOwnerField = form.fieldView('$.owner')
 
   return (
     <Stack>
-      <NameTextInput ErrorRenderer={NameInputErrorRenderer} label={nameTextInputLabel()} ref={firstInputRef} />
-      <AliveCheckbox label={aliveCheckboxLabel()} />
+      <NameTextInput
+        ErrorRenderer={NameInputErrorRenderer}
+        label=<NameTextInputLabel />
+        ref={firstInputRef}
+      />
+      <AliveCheckbox label=<AliveCheckboxLabel /> />
       <NewTagField>
         {({ error, ErrorSink, disabled, required }) => (
           <PillsInput
             disabled={disabled}
             error={error && <NewTagInputErrorRenderer error={error} />}
-            label={tagsInputLabel()}
+            label=<TagsInputLabel />
             required={required}
           >
             <Pill.Group>
@@ -170,7 +200,10 @@ export function PetFieldsView(props: PetFieldsViewProps) {
                 }}
               </Tags>
               {/* PillsInput.Field does not display errors, so we need to get our container to do it */}
-              <NewTagInputField ErrorRenderer={ErrorSink} placeholder={newTagPlaceholder()} />
+              <NewTagInputField
+                ErrorRenderer={ErrorSink}
+                placeholder={newTagPlaceholder()}
+              />
             </Pill.Group>
           </PillsInput>
         )}
@@ -185,7 +218,7 @@ export function PetFieldsView(props: PetFieldsViewProps) {
               // need to observe it here since we're not using a hook component
               <>
                 <OwnerCheckbox
-                  label={ownerCheckboxLabel()}
+                  label=<OwnerCheckboxLabel />
                   // oxlint-disable-next-line no-undefined -- undefined removes the padding
                   pb={hasOwner ? 'md' : undefined}
                 />
@@ -200,12 +233,20 @@ export function PetFieldsView(props: PetFieldsViewProps) {
         <SpeciesComponent />
       </Card>
       <Group flex={1}>
-        <Button flex={1} onClick={onForceValidate}>
-          {forceValidateLabel()}
+        <Button
+          flex={1}
+          onClick={onForceValidate}
+        >
+          <ForceValidateLabel />
         </Button>
 
-        <Button className={styles.hot} disabled={submitDisabled} flex={1} onClick={onSubmit}>
-          {submitLabel()}
+        <Button
+          className={styles.hot}
+          disabled={submitDisabled}
+          flex={1}
+          onClick={onSubmit}
+        >
+          <SubmitLabel />
         </Button>
       </Group>
     </Stack>
@@ -220,11 +261,13 @@ function TagPill({
   valuePath: TagValuePath
   onRemoveByValuePath: (valuePath: TagValuePath) => void
 }) {
-  const onRemove = useCallback(
-    function () {
-      onRemoveByValuePath(valuePath)
-    },
-    [valuePath, onRemoveByValuePath],
+  const onRemove = useCallback(() => {
+    onRemoveByValuePath(valuePath)
+  }, [valuePath, onRemoveByValuePath])
+  return (
+    <Pill
+      onRemove={onRemove}
+      {...props}
+    />
   )
-  return <Pill onRemove={onRemove} {...props} />
 }

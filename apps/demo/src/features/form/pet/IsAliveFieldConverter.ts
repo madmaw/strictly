@@ -13,9 +13,23 @@ const ALWAYS_MODIFIABLE = new Set<PetTypePaths>(['$.alive'])
 export class IsAliveTwoWayConverter<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   V = any,
-> implements TwoWayFieldConverter<V, V, never, PetValuePaths, { alive: boolean }> {
-  convert(value: V, valuePath: PetValuePaths, { alive }: { alive: boolean }): AnnotatedFieldConversion<V> {
-    const typePath = valuePathToTypePath<PetValueToTypePaths, PetValuePaths>(petType, valuePath, true)
+> implements TwoWayFieldConverter<
+  V,
+  V,
+  never,
+  PetValuePaths,
+  { alive: boolean }
+> {
+  convert(
+    value: V,
+    valuePath: PetValuePaths,
+    { alive }: { alive: boolean },
+  ): AnnotatedFieldConversion<V> {
+    const typePath = valuePathToTypePath<PetValueToTypePaths, PetValuePaths>(
+      petType,
+      valuePath,
+      true,
+    )
     const readonly = !ALWAYS_MODIFIABLE.has(typePath) && !alive
     return {
       value,

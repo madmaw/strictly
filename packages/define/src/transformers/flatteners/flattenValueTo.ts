@@ -31,7 +31,11 @@ type FlattenContext<M> = {
   readonly listIndicesToKeys: Record<string, number[]>
 }
 
-export function flattenValueTo<T extends StrictType, M, R extends Readonly<Record<string, M>>>(
+export function flattenValueTo<
+  T extends StrictType,
+  M,
+  R extends Readonly<Record<string, M>>,
+>(
   { definition }: T,
   v: ValueOfType<ReadonlyTypeOfType<T>>,
   setter: Setter<ValueOfType<T>>,
@@ -110,7 +114,7 @@ function internalFlattenListChildren<M>(
   const keys = indicesToKeys
 
   const newTypePath = jsonPath(typePath, '*')
-  v.forEach(function (e, index) {
+  v.forEach((e, index) => {
     const key = keys[index]
     // we have consumed the next id passively
     if (index === keys.length - 1) {
@@ -138,7 +142,7 @@ function internalFlattenRecordChildren<M>(
   context: FlattenContext<M>,
 ) {
   const newTypePath = jsonPath(typePath, '*')
-  Object.keys(v).forEach(function (k) {
+  Object.keys(v).forEach((k) => {
     internalFlattenValue(
       jsonPath(valuePath, k),
       newTypePath,
@@ -159,7 +163,7 @@ function internalFlattenObjectChildren<M>(
   v: Record<string, AnyValueType>,
   context: FlattenContext<M>,
 ) {
-  Object.keys(fields).forEach(function (k) {
+  Object.keys(fields).forEach((k) => {
     const fieldTypeDef = fields[k]
     const fieldValue = v[k]
     internalFlattenValue(
@@ -183,8 +187,15 @@ function internalFlattenUnionChildren<M>(
   context: FlattenContext<M>,
 ) {
   const childTypeDef = getUnionTypeDef(typeDef, v)
-  const qualifier = typeDef.discriminator == null ? '' : `:${v[typeDef.discriminator]}`
-  internalFlattenValueChildren(`${valuePath}${qualifier}`, `${typePath}${qualifier}`, childTypeDef, v, context)
+  const qualifier =
+    typeDef.discriminator == null ? '' : `:${v[typeDef.discriminator]}`
+  internalFlattenValueChildren(
+    `${valuePath}${qualifier}`,
+    `${typePath}${qualifier}`,
+    childTypeDef,
+    v,
+    context,
+  )
 }
 
 export function getUnionTypeDef<T extends UnionTypeDef>(
@@ -200,8 +211,9 @@ export function getUnionTypeDef<T extends UnionTypeDef>(
     // we match the non-literal, or the literal value with no prototype, value
     return reduce<string, TypeDef, null | TypeDef>(
       typeDef.unions,
-      function (acc, _k, t) {
-        const valuePrototype = t.type === TypeDefType.Literal ? valuePrototypeOf(t) : null
+      (acc, _k, t) => {
+        const valuePrototype =
+          t.type === TypeDefType.Literal ? valuePrototypeOf(t) : null
         if (valuePrototype == null) {
           if (acc == null) {
             return t

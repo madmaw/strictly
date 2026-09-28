@@ -25,10 +25,12 @@ import {
   trimmingStringAdapter,
 } from '@strictly/react-form'
 import { IsAliveTwoWayConverter } from './IsAliveFieldConverter'
-import { petOwnerType, unvalidatedPetOwnerFieldAdapters } from './PetOwnerFieldsView'
+import {
+  petOwnerType,
+  unvalidatedPetOwnerFieldAdapters,
+} from './PetOwnerFieldsView'
 import {
   catBreedType,
-  type DogBreed,
   dogBreedType,
   NOT_A_BREED_ERROR,
   NOT_A_NUMBER_ERROR,
@@ -44,7 +46,10 @@ export type TagAlreadyExistsError = {
   value: string
 }
 
-const petTypeValidators = flattenValidatorsOfValidatingTypeWithMutability<typeof petType, PetTypeToValuePaths>(petType)
+const petTypeValidators = flattenValidatorsOfValidatingTypeWithMutability<
+  typeof petType,
+  PetTypeToValuePaths
+>(petType)
 
 // want to assign it to a type
 const tagAlreadyExistsValidator: FunctionalValidator<
@@ -69,14 +74,21 @@ export type TagNotEmptyError = {
 }
 
 // want to assign it to a type
-const tagNotEmptyErrorValidator: FunctionalValidator<string, TagNotEmptyError, '$.newTag'> = () =>
+const tagNotEmptyErrorValidator: FunctionalValidator<
+  string,
+  TagNotEmptyError,
+  '$.newTag'
+> = () =>
   // placeholder error so we can inject an error of this type manually
   null
 
 export const petValidators = {
   ...petTypeValidators,
   '$.newTag': mergeValidators(
-    mergeValidators(new MinimumStringLengthValidator(2), tagAlreadyExistsValidator),
+    mergeValidators(
+      new MinimumStringLengthValidator(2),
+      tagAlreadyExistsValidator,
+    ),
     tagNotEmptyErrorValidator,
   ),
 } as const
@@ -96,8 +108,7 @@ const rawPetFieldAdapters = {
         phoneNumber: '',
         email: '',
       },
-      // oxlint-disable-next-line no-undefined -- explicit undefined is the "no prototype" value
-      undefined,
+      null,
     ),
   ).narrow,
   '$.species': adapterFromTwoWayConverter(
@@ -121,15 +132,15 @@ const rawPetFieldAdapters = {
     new SelectStringConverter(
       catBreedType,
       ['Burmese', 'Siamese', 'DSH'] as const,
-      // oxlint-disable-next-line no-undefined -- explicit undefined is the "no prototype" value
-      undefined,
+      null,
       NOT_A_BREED_ERROR,
     ),
   ).narrow,
   '$.species:cat.meows': identityAdapter(0).narrow,
-  '$.species:dog.barks': adapterFromPrototype(new IntegerToStringConverter(NOT_A_NUMBER_ERROR), 0).withIdentity(
-    (v) => typeof v === 'number',
-  ).narrow,
+  '$.species:dog.barks': adapterFromPrototype(
+    new IntegerToStringConverter(NOT_A_NUMBER_ERROR),
+    0,
+  ).withIdentity((v) => typeof v === 'number').narrow,
   '$.species:dog.breed': adapterFromTwoWayConverter(
     new SelectLiteralConverter(
       dogBreedType,
@@ -138,8 +149,7 @@ const rawPetFieldAdapters = {
         Pug: 'Pug',
         other: 'Other',
       },
-      // oxlint-disable-next-line no-undefined -- explicit undefined is the "no prototype" value
-      undefined as undefined | DogBreed,
+      null,
       NOT_A_BREED_ERROR,
       false,
     ),
@@ -147,13 +157,26 @@ const rawPetFieldAdapters = {
   '$.tags': listAdapter<string, '$.tags', {}>().narrow,
   '$.tags.*': trimmingStringAdapter().narrow,
 } as const satisfies Partial<
-  FieldAdaptersOfValues<FlattenedValuesOfType<ReadonlyTypeOfType<typeof petType>, '*'>, PetTypeToValuePaths, {}> & {
+  FieldAdaptersOfValues<
+    FlattenedValuesOfType<ReadonlyTypeOfType<typeof petType>, '*'>,
+    PetTypeToValuePaths,
+    {}
+  > & {
     // TODO check list of existing tags in context
-    '$.newTag': FieldAdapter<string, string, TagAlreadyExistsError, '$.newTag', unknown>
+    '$.newTag': FieldAdapter<
+      string,
+      string,
+      TagAlreadyExistsError,
+      '$.newTag',
+      unknown
+    >
   }
 >
 
-const validatedPetAdapters = mergeAdaptersWithValidators(rawPetFieldAdapters, petValidators)
+const validatedPetAdapters = mergeAdaptersWithValidators(
+  rawPetFieldAdapters,
+  petValidators,
+)
 export type PetTypePaths = keyof typeof rawPetFieldAdapters
 export type PetValuePaths = PetTypeToValuePaths[PetTypePaths]
 
@@ -162,4 +185,7 @@ export const petFieldAdapters = mergeFieldAdaptersWithTwoWayConverter(
   new IsAliveTwoWayConverter(),
 )
 
-export type PetFields = FormFieldsOfFieldAdapters<PetValueToTypePaths, typeof petFieldAdapters>
+export type PetFields = FormFieldsOfFieldAdapters<
+  PetValueToTypePaths,
+  typeof petFieldAdapters
+>

@@ -34,12 +34,19 @@ export const petOwnerType = object()
   .field('phoneNumber', stringType.required().enforce(RegexpValidator.phone))
   .optionalField(
     'email',
-    stringType.enforce(OptionalValidatorProxy.createNullableOrEmptyString(RegexpValidator.email)),
+    stringType.enforce(
+      OptionalValidatorProxy.createNullableOrEmptyString(RegexpValidator.email),
+    ),
   ).narrow
 
 export type PetOwner = ValueOfType<typeof petOwnerType>
-export type FlattenedPetOwnerTypes = FlattenedTypesOfType<typeof petOwnerType, '*'>
-export type PetOwnerValueToTypePaths = ValueToTypePathsOfType<typeof petOwnerType>
+export type FlattenedPetOwnerTypes = FlattenedTypesOfType<
+  typeof petOwnerType,
+  '*'
+>
+export type PetOwnerValueToTypePaths = ValueToTypePathsOfType<
+  typeof petOwnerType
+>
 export type PetOwnerTypeToValuePaths = Reverse<PetOwnerValueToTypePaths>
 
 export const unvalidatedPetOwnerFieldAdapters = {
@@ -55,36 +62,36 @@ export const unvalidatedPetOwnerFieldAdapters = {
   >
 >
 
-const petOwnerValidators = flattenValidatorsOfValidatingType<typeof petOwnerType, PetOwnerTypeToValuePaths>(
-  petOwnerType,
-)
+const petOwnerValidators = flattenValidatorsOfValidatingType<
+  typeof petOwnerType,
+  PetOwnerTypeToValuePaths
+>(petOwnerType)
 
-export const petOwnerFieldAdapters = mergeAdaptersWithValidators(unvalidatedPetOwnerFieldAdapters, petOwnerValidators)
+export const petOwnerFieldAdapters = mergeAdaptersWithValidators(
+  unvalidatedPetOwnerFieldAdapters,
+  petOwnerValidators,
+)
 
 export type PetOwnerTypePaths = keyof typeof petOwnerFieldAdapters
 export type PetOwnerValuePaths = PetOwnerTypeToValuePaths[PetOwnerTypePaths]
 
-export type PetOwnerFields = FormFieldsOfFieldAdapters<PetOwnerValueToTypePaths, typeof petOwnerFieldAdapters>
+export type PetOwnerFields = FormFieldsOfFieldAdapters<
+  PetOwnerValueToTypePaths,
+  typeof petOwnerFieldAdapters
+>
 
-export function firstNameLabel() {
-  return t({
-    message: 'First Name',
-    comment: 'Text input for first name',
-  })
+export function FirstNameLabel() {
+  return <Trans comment='Text input for first name'>First Name</Trans>
 }
 
-export function surnameLabel() {
-  return t({
-    message: 'Surname',
-    comment: 'Text input for second name',
-  })
+export function SurnameLabel() {
+  return <Trans comment='Text input for second name'>Surname</Trans>
 }
 
-export function phoneNumberLabel() {
-  return t({
-    message: 'Phone number',
-    comment: 'Text input for contact phone number',
-  })
+export function PhoneNumberLabel() {
+  return (
+    <Trans comment='Text input for contact phone number'>Phone number</Trans>
+  )
 }
 
 export function phoneNumberPlaceholder() {
@@ -94,11 +101,8 @@ export function phoneNumberPlaceholder() {
   })
 }
 
-export function emailLabel() {
-  return t({
-    message: 'Email',
-    comment: 'Text input for email address',
-  })
+export function EmailLabel() {
+  return <Trans comment='Text input for email address'>Email</Trans>
 }
 
 export function emailPlaceholder() {
@@ -108,7 +112,9 @@ export function emailPlaceholder() {
   })
 }
 
-function FirstNameInputErrorRenderer({ error }: ErrorRendererProps<PetOwnerFields, '$.firstName'>) {
+function FirstNameInputErrorRenderer({
+  error,
+}: ErrorRendererProps<PetOwnerFields, '$.firstName'>) {
   return (
     <Trans comment='error that is displayed when the first name input is too short'>
       First name must be at least {error.minimumLength} characters long
@@ -116,7 +122,9 @@ function FirstNameInputErrorRenderer({ error }: ErrorRendererProps<PetOwnerField
   )
 }
 
-function SurnameInputErrorRenderer({ error }: ErrorRendererProps<PetOwnerFields, '$.firstName'>) {
+function SurnameInputErrorRenderer({
+  error,
+}: ErrorRendererProps<PetOwnerFields, '$.firstName'>) {
   return (
     <Trans comment='error that is displayed when the last name input is too short'>
       Surname must be at least {error.minimumLength} characters long
@@ -125,18 +133,29 @@ function SurnameInputErrorRenderer({ error }: ErrorRendererProps<PetOwnerFields,
 }
 
 function PhoneNumberErrorRenderer() {
-  return <Trans comment='error shown when the user puts in a weird phone number'>Must be a valid phone number</Trans>
+  return (
+    <Trans comment='error shown when the user puts in a weird phone number'>
+      Must be a valid phone number
+    </Trans>
+  )
 }
 
 function EmailErrorRenderer() {
-  return <Trans comment='error shown when the user puts in a weird email address'>Must be a valid email</Trans>
+  return (
+    <Trans comment='error shown when the user puts in a weird email address'>
+      Must be a valid email
+    </Trans>
+  )
 }
 
 export type PetOwnerFieldsViewProps = FieldsViewProps<PetOwnerFields> & {
   clearField: (valuePath: PetOwnerValuePaths) => void
 }
 
-export function PetOwnerFieldsView({ clearField, ...props }: PetOwnerFieldsViewProps) {
+export function PetOwnerFieldsView({
+  clearField,
+  ...props
+}: PetOwnerFieldsViewProps) {
   const form = useMantineFormFields(props)
   const FirstNameInput = form.textInput('$.firstName')
   const SurnameInput = form.textInput('$.surname')
@@ -147,34 +166,41 @@ export function PetOwnerFieldsView({ clearField, ...props }: PetOwnerFieldsViewP
     clearField('$.phoneNumber')
   }, [clearField])
 
-  const ClearPhoneNumberButton = useCallback(() => <CloseButton onClick={onClearPhoneNumber} />, [onClearPhoneNumber])
+  const ClearPhoneNumberButton = useCallback(
+    () => <CloseButton onClick={onClearPhoneNumber} />,
+    [onClearPhoneNumber],
+  )
 
   return (
     <Stack>
-      <Group align='start' grow preventGrowOverflow>
+      <Group
+        align='start'
+        grow
+        preventGrowOverflow
+      >
         <FirstNameInput
           ErrorRenderer={FirstNameInputErrorRenderer}
           autoCapitalize='words'
-          label={firstNameLabel()}
+          label=<FirstNameLabel />
           type='text'
         />
         <SurnameInput
           ErrorRenderer={SurnameInputErrorRenderer}
           autoCapitalize='words'
-          label={surnameLabel()}
+          label=<SurnameLabel />
           type='text'
         />
       </Group>
       <PhoneNumberInput
         ErrorRenderer={PhoneNumberErrorRenderer}
-        label={phoneNumberLabel()}
+        label=<PhoneNumberLabel />
         placeholder={phoneNumberPlaceholder()}
         rightSection={<ClearPhoneNumberButton />}
         type='tel'
       />
       <EmailInput
         ErrorRenderer={EmailErrorRenderer}
-        label={emailLabel()}
+        label=<EmailLabel />
         placeholder={emailPlaceholder()}
         type='email'
       />

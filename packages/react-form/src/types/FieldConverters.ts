@@ -21,7 +21,13 @@ export type UnreliableFieldConversion<V = any, E = any> =
 // a `from` type of `string`, and a `to` type of `number`
 
 // TODO converter can also have the allowable value path as a parameter
-export type UnreliableFieldConverter<From, To, E, ValuePath extends string, Context> = (
+export type UnreliableFieldConverter<
+  From,
+  To,
+  E,
+  ValuePath extends string,
+  Context,
+> = (
   from: From,
   valuePath: ValuePath,
   context: Context,
@@ -37,26 +43,40 @@ export type AnnotatedFieldConversion<V = any> = {
   value: V
 } & Annotation
 
-export type AnnotatedFieldConverter<From, To, ValuePath extends string, Context> = (
+export type AnnotatedFieldConverter<
+  From,
+  To,
+  ValuePath extends string,
+  Context,
+> = (
   from: From,
   valuePath: ValuePath,
   context: Context,
 ) => AnnotatedFieldConversion<To>
 
-export type TwoWayFieldConverter<From, To, E, ValuePath extends string, Context> = {
+export type TwoWayFieldConverter<
+  From,
+  To,
+  E,
+  ValuePath extends string,
+  Context,
+> = {
   convert: AnnotatedFieldConverter<From, To, ValuePath, Context>
 
   revert: UnreliableFieldConverter<To, From, E, ValuePath, Context>
 }
 
-export type FieldValueFactory<V, ValuePath extends string, Context> = (valuePath: ValuePath, context: Context) => V
+export type FieldValueFactory<V, ValuePath extends string, Context> = (
+  valuePath: ValuePath,
+  context: Context,
+) => V
 
-export type TwoWayFieldConverterWithValueFactory<From, To, E, ValuePath extends string, Context> = TwoWayFieldConverter<
+export type TwoWayFieldConverterWithValueFactory<
   From,
   To,
   E,
-  ValuePath,
-  Context
-> & {
+  ValuePath extends string,
+  Context,
+> = TwoWayFieldConverter<From, To, E, ValuePath, Context> & {
   readonly create: FieldValueFactory<From, ValuePath, Context>
 }

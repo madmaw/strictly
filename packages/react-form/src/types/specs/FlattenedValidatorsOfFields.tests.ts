@@ -1,12 +1,16 @@
-import { type booleanType, type numberType, type Validator } from '@strictly/define'
+import {
+  type booleanType,
+  type numberType,
+  type Validator,
+} from '@strictly/define'
 import { type Field } from 'types/Field'
 import { type FlattenedValidatorsOfFields } from 'types/FlattenedValidatorsOfFields'
 
 const error = Symbol()
 type Error = typeof error
 
-describe('FlattenedValidatorsOfFields', function () {
-  it('maps the converter types', function () {
+describe('FlattenedValidatorsOfFields', () => {
+  it('maps the converter types', () => {
     type Fields = {
       a: Field<string, Error>
     }
@@ -24,7 +28,7 @@ describe('FlattenedValidatorsOfFields', function () {
     }>()
   })
 
-  it('ignores extraneous types not listed in the fields', function () {
+  it('ignores extraneous types not listed in the fields', () => {
     type FormFields = {
       a: Field<string, Error>
     }
@@ -44,7 +48,7 @@ describe('FlattenedValidatorsOfFields', function () {
     }>()
   })
 
-  it('handles multiple fields', function () {
+  it('handles multiple fields', () => {
     type FormFields = {
       a: Field<string, Error>
       c: Field<boolean, never>
@@ -66,7 +70,7 @@ describe('FlattenedValidatorsOfFields', function () {
     }>()
   })
 
-  it('allows synthesized fields', function () {
+  it('allows synthesized fields', () => {
     type FormFields = {
       a: Field<string, Error>
       c: Field<number, never>

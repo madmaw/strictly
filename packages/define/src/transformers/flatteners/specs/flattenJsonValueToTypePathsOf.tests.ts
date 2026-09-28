@@ -1,23 +1,32 @@
 import { flattenJsonValueToTypePathsOf } from 'transformers/flatteners/flattenJsonValueToTypePathsOf'
-import { booleanType, list, nullType, numberType, object, record, stringType, union } from 'types/builders'
+import {
+  booleanType,
+  list,
+  nullType,
+  numberType,
+  object,
+  record,
+  stringType,
+  union,
+} from 'types/builders'
 
-describe('flattenJsonValueToTypePathsOf', function () {
-  describe('literal', function () {
+describe('flattenJsonValueToTypePathsOf', () => {
+  describe('literal', () => {
     const typeDef = numberType
     const flattened = flattenJsonValueToTypePathsOf(typeDef, 1)
 
-    it('equals expected value', function () {
+    it('equals expected value', () => {
       expect(flattened).toEqual({
         $: '$',
       })
     })
   })
 
-  describe('list', function () {
+  describe('list', () => {
     const typeDef = list(numberType)
     const flattened = flattenJsonValueToTypePathsOf(typeDef, [1, 2])
 
-    it('equals expected value', function () {
+    it('equals expected value', () => {
       expect(flattened).toEqual({
         $: '$',
         '$.0': '$.*',
@@ -26,14 +35,14 @@ describe('flattenJsonValueToTypePathsOf', function () {
     })
   })
 
-  describe('record', function () {
+  describe('record', () => {
     const typeDef = record<typeof numberType, 'a' | 'b'>(numberType)
     const flattened = flattenJsonValueToTypePathsOf(typeDef, {
       a: 1,
       b: 3,
     })
 
-    it('equals expected value', function () {
+    it('equals expected value', () => {
       expect(flattened).toEqual({
         $: '$',
         '$.a': '$.*',
@@ -42,14 +51,14 @@ describe('flattenJsonValueToTypePathsOf', function () {
     })
   })
 
-  describe('object', function () {
+  describe('object', () => {
     const typeDef = object().field('a', numberType).field('b', booleanType)
     const flattened = flattenJsonValueToTypePathsOf(typeDef, {
       a: 1,
       b: true,
     })
 
-    it('equals expected value', function () {
+    it('equals expected value', () => {
       expect(flattened).toEqual({
         $: '$',
         '$.a': '$.a',
@@ -58,12 +67,12 @@ describe('flattenJsonValueToTypePathsOf', function () {
     })
   })
 
-  describe('union', function () {
-    describe('non-discriminated', function () {
+  describe('union', () => {
+    describe('non-discriminated', () => {
       const typeDef = union().or('a', list(numberType)).or('b', nullType)
       const flattened = flattenJsonValueToTypePathsOf(typeDef, [1, 2, 3])
 
-      it('equals expected value', function () {
+      it('equals expected value', () => {
         expect(flattened).toEqual({
           $: '$',
           '$.0': '$.*',
@@ -73,7 +82,7 @@ describe('flattenJsonValueToTypePathsOf', function () {
       })
     })
 
-    describe('discriminated', function () {
+    describe('discriminated', () => {
       const typeDef = union('d')
         .or('x', object().field('a', numberType).field('b', booleanType))
         .or('y', object().field('c', stringType).field('d', booleanType))
@@ -83,7 +92,7 @@ describe('flattenJsonValueToTypePathsOf', function () {
         b: true,
       })
 
-      it('equals expected value', function () {
+      it('equals expected value', () => {
         expect(flattened).toEqual({
           $: '$',
           '$:x.a': '$:x.a',
