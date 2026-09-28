@@ -13,103 +13,216 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#: src/features/form/pet/pet_form.tsx:61
+#. Placeholder for the contact phone number
+#: src/features/form/pet/PetOwnerFieldsView.tsx:103
+msgid "04xxxxxxxx"
+msgstr ""
+
+#: src/features/form/pet/PetFieldsView.tsx:85
 msgid "A new tag"
 msgstr ""
 
+#. error shown when the user tries to add a tag that already exists
+#. placeholder {0}: error.value
+#: src/features/form/pet/PetFieldsView.tsx:140
+msgid "A tag with the value \"{0}\" already exists"
+msgstr ""
+
 #. label for the alive checkbox
-#: src/features/form/pet/pet_form.tsx:47
+#: src/features/form/pet/PetFieldsView.tsx:71
 msgid "Alive?"
 msgstr ""
 
 #. the dog breed Alsatian
-#: src/features/form/pet/pet_species_dog_form.tsx:46
+#: src/features/form/pet/PetSpeciesDogFieldsView.tsx:79
 msgid "Alsatian"
 msgstr ""
 
 #. label for an input that captures the number of barks a dog has made
-#: src/features/form/pet/pet_species_dog_form.tsx:38
+#: src/features/form/pet/PetSpeciesDogFieldsView.tsx:38
 msgid "Barks"
 msgstr ""
 
 #. Dog breed
 #. Input for choosing cat breed
-#: src/features/form/pet/pet_species_dog_form.tsx:31
-#: src/features/form/pet/pet_species_cat_form.tsx:28
+#: src/features/form/pet/PetSpeciesCatFieldsView.tsx:28
+#: src/features/form/pet/PetSpeciesDogFieldsView.tsx:31
 msgid "Breed"
 msgstr ""
 
 #. the cat breed Burmese
-#: src/features/form/pet/pet_species_cat_form.tsx:64
+#: src/features/form/pet/PetSpeciesCatFieldsView.tsx:83
 msgid "Burmese"
 msgstr ""
 
 #. The name of the animal cat
-#: src/features/form/pet/pet_species_form.tsx:39
+#: src/features/form/pet/PetSpeciesFieldsView.tsx:35
 msgid "Cat"
 msgstr ""
 
+#. error when the format of cat names is wrong
+#: src/features/form/pet/PetFieldsView.tsx:123
+msgid "Cat names must start with a capital letter. Know your place human!"
+msgstr ""
+
 #. The name of the animal dog
-#: src/features/form/pet/pet_species_form.tsx:44
+#: src/features/form/pet/PetSpeciesFieldsView.tsx:40
 msgid "Dog"
 msgstr ""
 
-#. domestic short hair cat
-#: src/features/form/pet/pet_species_cat_form.tsx:74
+#. domestic short hair cat breed
+#: src/features/form/pet/PetSpeciesCatFieldsView.tsx:93
 msgid "Domestic Short Hair"
 msgstr ""
 
+#. Text input for email address
+#: src/features/form/pet/PetOwnerFieldsView.tsx:110
+msgid "Email"
+msgstr ""
+
+#. Text input for first name
+#: src/features/form/pet/PetOwnerFieldsView.tsx:82
+msgid "First Name"
+msgstr ""
+
+#. error that is displayed when the first name input is too short
+#. placeholder {0}: error.minimumLength
+#: src/features/form/pet/PetOwnerFieldsView.tsx:126
+msgid "First name must be at least {0} characters long"
+msgstr ""
+
+#. message that appears on a button that forces the form fields to validate
+#: src/features/form/pet/PetFieldsView.tsx:50
+msgid "Force Validation"
+msgstr ""
+
+#. label for a checkbox indicating the pet has an owner
+#: src/features/form/pet/PetFieldsView.tsx:64
+msgid "Has Owner?"
+msgstr ""
+
+#. Placeholder for the email address text input
+#: src/features/form/pet/PetOwnerFieldsView.tsx:117
+msgid "me@somewhere.org"
+msgstr ""
+
 #. Input capturing the number of times a given cat has meowed
-#: src/features/form/pet/pet_species_cat_form.tsx:35
+#: src/features/form/pet/PetSpeciesCatFieldsView.tsx:35
 msgid "Meows"
 msgstr ""
 
+#. error shown when the user puts in a weird email address
+#: src/features/form/pet/PetOwnerFieldsView.tsx:162
+msgid "Must be a valid email"
+msgstr ""
+
+#. error shown when the user puts in a weird phone number
+#: src/features/form/pet/PetOwnerFieldsView.tsx:150
+msgid "Must be a valid phone number"
+msgstr ""
+
+#. error that is displayed when no breed is selected
+#. error that is displayed when no breed is selected
+#: src/features/form/pet/PetSpeciesCatFieldsView.tsx:72
+#: src/features/form/pet/PetSpeciesDogFieldsView.tsx:54
+msgid "Must specify a breed"
+msgstr ""
+
 #. label for the name text input
-#: src/features/form/pet/pet_form.tsx:40
+#: src/features/form/pet/PetFieldsView.tsx:57
 msgid "Name"
 msgstr ""
 
+#. error that is displayed when the name input is too short
+#. placeholder {0}: error.minimumLength
+#: src/features/form/pet/PetFieldsView.tsx:118
+msgid "Name must be at least {0} characters long"
+msgstr ""
+
+#. error that is displayed when the new tag input is too short
+#. placeholder {0}: error.minimumLength
+#: src/features/form/pet/PetFieldsView.tsx:135
+msgid "New tag must be at least {0} characters long"
+msgstr ""
+
 #. cat meows often
-#: src/features/form/pet/pet_species_cat_form.tsx:56
+#: src/features/form/pet/PetSpeciesCatFieldsView.tsx:56
 msgid "Noisy"
 msgstr ""
 
 #. meow frequency moderate
-#: src/features/form/pet/pet_species_cat_form.tsx:49
+#: src/features/form/pet/PetSpeciesCatFieldsView.tsx:49
 msgid "Normal"
 msgstr ""
 
+#. error that is displayed when an invalid breed is selected
+#: src/features/form/pet/PetSpeciesCatFieldsView.tsx:67
+msgid "Not a recognized cat breed"
+msgstr ""
+
+#. error that is displayed when an invalid breed is selected
+#: src/features/form/pet/PetSpeciesDogFieldsView.tsx:49
+msgid "Not a recognized dog breed"
+msgstr ""
+
+#. error that is displayed when the user enters a number of barks that is not a number
+#: src/features/form/pet/PetSpeciesDogFieldsView.tsx:68
+msgid "Number of barks must be a number"
+msgstr ""
+
 #. catch all for all other dog breeds
-#: src/features/form/pet/pet_species_dog_form.tsx:56
+#: src/features/form/pet/PetSpeciesDogFieldsView.tsx:89
 msgid "Other"
 msgstr ""
 
+#. Text input for contact phone number
+#: src/features/form/pet/PetOwnerFieldsView.tsx:96
+msgid "Phone number"
+msgstr ""
+
 #. the dog breed Pug
-#: src/features/form/pet/pet_species_dog_form.tsx:51
+#: src/features/form/pet/PetSpeciesDogFieldsView.tsx:84
 msgid "Pug"
 msgstr ""
 
 #. cat meows infrequently
-#: src/features/form/pet/pet_species_cat_form.tsx:42
+#: src/features/form/pet/PetSpeciesCatFieldsView.tsx:42
 msgid "Quiet"
 msgstr ""
 
 #. the cat breed Siamese
-#: src/features/form/pet/pet_species_cat_form.tsx:69
+#: src/features/form/pet/PetSpeciesCatFieldsView.tsx:88
 msgid "Siamese"
 msgstr ""
 
 #. label for species field
-#: src/features/form/pet/pet_species_form.tsx:20
+#: src/features/form/pet/PetSpeciesFieldsView.tsx:18
 msgid "Species"
 msgstr ""
 
 #. message that appears on the submit button for the pet form
-#: src/features/form/pet/pet_form.tsx:33
+#: src/features/form/pet/PetFieldsView.tsx:43
 msgid "Submit"
 msgstr ""
 
+#. Text input for second name
+#: src/features/form/pet/PetOwnerFieldsView.tsx:89
+msgid "Surname"
+msgstr ""
+
+#. error that is displayed when the last name input is too short
+#. placeholder {0}: error.minimumLength
+#: src/features/form/pet/PetOwnerFieldsView.tsx:138
+msgid "Surname must be at least {0} characters long"
+msgstr ""
+
 #. label for the list of tags
-#: src/features/form/pet/pet_form.tsx:54
+#: src/features/form/pet/PetFieldsView.tsx:78
 msgid "Tags"
+msgstr ""
+
+#. error shown when the user attempts to save the form when there is an uncommitted tag
+#. placeholder {0}: error.value
+#: src/features/form/pet/PetFieldsView.tsx:145
+msgid "Unsaved tag value \"{0}\""
 msgstr ""
