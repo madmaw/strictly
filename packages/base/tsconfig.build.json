@@ -8,6 +8,6 @@
   "include": [
     ".eslintrc.cjs",
     "vite.config.mts",
-    "vitest.workspace.ts"
+    "vitest.config.mts"
   ]
 }

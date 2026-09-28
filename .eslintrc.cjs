@@ -450,6 +450,8 @@ module.exports = {
                   '@strictly/*/*',
                   // the lingui cli config cannot be exported from the package index as storybook would bundle the cli
                   '!@strictly/lingui/config',
+                  // vite configuration is kept out of the package index so test shims are not loaded by storybook
+                  '!@strictly/vite/config',
                 ],
                 message: 'you can\'t import subfolders from workspace packages, export the file in the package instead',
               },
@@ -505,6 +507,8 @@ module.exports = {
                   '@strictly/*/*',
                   // the lingui cli config cannot be exported from the package index as storybook would bundle the cli
                   '!@strictly/lingui/config',
+                  // vite configuration is kept out of the package index so test shims are not loaded by storybook
+                  '!@strictly/vite/config',
                 ],
                 message: 'you can\'t import subfolders from workspace packages, export the file in the package instead',
               },
