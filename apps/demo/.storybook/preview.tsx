@@ -1,18 +1,15 @@
 import '@mantine/core/styles.css'
 import { MantineProvider } from '@mantine/core'
 import { type Preview } from '@storybook/react'
-// special case: needs to be fully qualified
-// eslint-disable-next-line no-restricted-imports
-import { messages as en } from '@strictly/demo/src/locales/en'
-// special case: needs to be fully qualified
-// eslint-disable-next-line no-restricted-imports
-import { messages as pseudo_en } from '@strictly/demo/src/locales/pseudo_en'
 import {
   type MetaArgsOf,
   StorybookLinguiProvider,
 } from '@strictly/spec'
 import { configure } from 'mobx'
 import { StrictMode } from 'react'
+// special case: .storybook is outside the tsconfig include, so baseUrl imports do not resolve here
+import { messages as en } from '../src/locales/en'
+import { messages as pseudo_en } from '../src/locales/pseudo_en'
 // eslint-disable-next-line no-restricted-imports
 import * as React from 'react'
 

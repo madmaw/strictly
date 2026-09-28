@@ -3,8 +3,9 @@
   "dependencies": {
   },
   "devDependencies": {
-    "@strictly/support-vite": "*",
-    "type-fest": "^4.27.0"
+    "@strictly/base": "workspace:*",
+    "@strictly/support-vite": "workspace:*",
+    "type-fest": "catalog:"
   },
   "homepage": "https://madmaw.github.io/strictly/define",
   "keywords": [
@@ -14,7 +15,6 @@
   ],
   "license": "MIT",
   "name": "@strictly/define",
-  "packageManager": "yarn@1.22.22",
   "peerDependencies": {
     "@strictly/base": "*",
     "mobx": "^6.0.0",
@@ -31,10 +31,10 @@
   "scripts": {
     "build": "tsup",
     "check-types": "tsc -b",
-    "clean": "del-cli dist .out .turbo",
+    "clean": "del-cli dist .out",
     "lint": "cross-env ESLINT_USE_FLAT_CONFIG=false eslint . --max-warnings=0",
     "lint:fix": "cross-env ESLINT_USE_FLAT_CONFIG=false eslint . --fix",
-    "release:exports": "json -f package.json -f package.exports.json --merge > package.release.json",
+    "release:exports": "json -f package.json -f package.exports.json --merge -e \"delete this.devDependencies\" > package.release.json",
     "test": "vitest run",
     "test:watch": "vitest"
   },

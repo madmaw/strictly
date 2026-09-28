@@ -22,57 +22,45 @@
     "eslint-plugin-unused-imports": "^4.1.4",
     "eslint-plugin-yml": "^1.15.0",
     "tsup": "^8.3.5",
-    "turbo": "^2.2.3",
     "typescript": "~5.7.3",
     "vite-tsconfig-paths": "^5.0.1",
     "vitest": "^2.1.3",
     "vitest-mock-extended": "^2.0.2"
   },
+  "engines": {
+    "node": ">=22.0.0",
+    "pnpm": ">=10.13.1"
+  },
   "license": "MIT",
   "main": "index.js",
   "name": "@strictly/strictly",
-  "packageManager": "yarn@1.22.22",
+  "packageManager": "pnpm@10.13.1",
   "private": true,
   "repository": {
     "type": "git",
     "url": "git+https://github.com/madmaw/strictly.git"
   },
-  "resolutions": {
-    "**/**/react": "=19.1.0",
-    "**/**/react-dom": "=19.1.0",
-    "**/**/vite": "=6.0.5"
-  },
   "scripts": {
-    "build": "turbo run build",
-    "build:force": "turbo run build --force",
-    "check-types": "turbo run check-types",
-    "check-types:force": "turbo run check-types --force",
-    "clean": "del-cli .turbo && turbo run clean",
-    "demo:build": "turbo run build --filter=@strictly/demo",
-    "demo:dev": "turbo run dev --filter=@strictly/demo",
-    "demo:storybook": "turbo run storybook --filter=@strictly/demo",
-    "docs:build": "turbo run build --filter=@strictly/docs",
-    "docs:dev": "turbo run dev --filter=@strictly/docs",
-    "lingui:compile": "turbo run lingui:compile",
-    "lingui:extract": "turbo run lingui:extract",
-    "lint": "turbo run lint --continue && yarn lint:root",
-    "lint:fix": "turbo run lint:fix --continue && yarn lint:root:fix",
+    "build": "pnpm -r build",
+    "check-types": "pnpm -r check-types",
+    "clean": "pnpm -r clean",
+    "demo:build": "pnpm -r --filter @strictly/demo build",
+    "demo:dev": "pnpm -r --filter @strictly/demo dev",
+    "demo:storybook": "pnpm -r --filter @strictly/demo storybook",
+    "docs:build": "pnpm -r --filter @strictly/docs build",
+    "docs:dev": "pnpm -r --filter @strictly/docs dev",
+    "lingui:compile": "pnpm -r lingui:compile",
+    "lingui:extract": "pnpm -r lingui:extract",
+    "lint": "pnpm -r --no-bail lint && pnpm lint:root",
+    "lint:fix": "pnpm -r --no-bail lint:fix && pnpm lint:root:fix",
     "lint:root": "cross-env ESLINT_USE_FLAT_CONFIG=false eslint --max-warnings=0 *.cjs *.json .github",
     "lint:root:fix": "cross-env ESLINT_USE_FLAT_CONFIG=false eslint --fix *.cjs *.json .github",
-    "react-form:storybook": "turbo storybook --filter=@strictly/react-form",
-    "release:exports": "turbo run release:exports",
-    "storybook:build": "turbo run storybook:build",
-    "storybook:test": "turbo run storybook:test --concurrency=1",
-    "test": "turbo run test",
-    "test:force": "turbo run test --force",
-    "test:update": "turbo run test:update"
+    "react-form:storybook": "pnpm -r --filter @strictly/react-form storybook",
+    "release:exports": "pnpm -r release:exports",
+    "storybook:build": "pnpm -r storybook:build",
+    "storybook:test": "pnpm -r --workspace-concurrency=1 storybook:test",
+    "test": "pnpm -r test",
+    "test:update": "pnpm -r test:update"
   },
-  "version": "0.0.41",
-  "workspaces": {
-    "packages": [
-      "apps/*",
-      "packages/*",
-      "support/*"
-    ]
-  }
+  "version": "0.0.41"
 }

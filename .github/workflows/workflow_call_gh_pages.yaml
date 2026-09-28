@@ -10,35 +10,23 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '22'
-      - name: Cache Node.js modules
-        id: cache
-        uses: actions/cache@v3
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
+          cache: pnpm
       - name: Run install
-        # act requires exact version numbers while github is OK with just major versions
-        uses: borales/actions-yarn@v4.2.0
-        with:
-          cmd: install
+        run: pnpm install --frozen-lockfile
       - name: Build Docs
-        uses: borales/actions-yarn@v4.2.0
-        with:
-          cmd: docs:build
+        run: pnpm docs:build
       - name: Build Storybooks
-        uses: borales/actions-yarn@v4.2.0
-        with:
-          cmd: storybook:build
+        run: pnpm storybook:build
       - name: Build Demo Site
-        uses: borales/actions-yarn@v4.2.0
-        with:
-          cmd: demo:build
+        run: pnpm demo:build
       - name: Copy outputs
         run: |
           cp -r -f ./packages/react-form/storybook-static/. ./apps/docs/dist/react-form-storybook

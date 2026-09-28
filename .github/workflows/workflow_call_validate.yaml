@@ -12,46 +12,30 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '22'
-      - name: Cache Node.js modules
-        id: cache
-        uses: actions/cache@v3
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
+          cache: pnpm
       - name: Run install
-        # act requires exact version numbers while github is OK with just major versions
-        uses: borales/actions-yarn@v4.2.0
-        with:
-          cmd: install
+        run: pnpm install --frozen-lockfile
       - name: Check if lockfile was modified
         run: |
-          if [[ `git status --porcelain yarn.lock` ]]; then
-            echo "The yarn.lock file has been modified. Please commit the updated lockfile."
+          if [[ `git status --porcelain pnpm-lock.yaml` ]]; then
+            echo "The pnpm-lock.yaml file has been modified. Please commit the updated lockfile."
             exit 1
           fi
       - name: Run typechecking
-        uses: borales/actions-yarn@v4.2.0
-        with:
-          cmd: check-types
+        run: pnpm check-types
       - name: Run linting
-        uses: borales/actions-yarn@v4.2.0
-        with:
-          cmd: lint
+        run: pnpm lint
       - name: Run tests
-        uses: borales/actions-yarn@v4.2.0
-        with:
-          cmd: test
+        run: pnpm test
       - name: Run storybook tests
-        uses: borales/actions-yarn@v4.2.0
-        with:
-          cmd: storybook:test
+        run: pnpm storybook:test
       - name: Run build
-        uses: borales/actions-yarn@v4.2.0
-        with:
-          cmd: build
+        run: pnpm build

@@ -2,7 +2,6 @@
 **/locales/*.ts
 .astro
 .out
-.turbo
 apps/scratch
 dist
 node_modules
