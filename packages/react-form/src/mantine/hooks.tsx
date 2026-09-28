@@ -13,7 +13,7 @@ import {
 } from '@mantine/core'
 import { Cache, type ElementOfArray } from '@strictly/base'
 import { type FieldsViewProps, type FormProps } from 'core/props'
-import { observable, runInAction } from 'mobx'
+import { observableRef, runInAction } from 'mobx'
 import {
   type ComponentProps,
   type ComponentType,
@@ -65,8 +65,8 @@ export function useMantineFormFields<F extends Fields>({
   // should use FieldView rather than observing fields directly from here
 }: FieldsViewProps<F>): Omit<MantineFormImpl<F>, 'fields'> {
   const form = useMemo(
-    () => new MantineFormImpl(fields),
-    // fields handled separately below
+    () => new MantineFormImpl(fields, onFieldValueChange),
+    // fields and the value change handler are kept up to date separately below
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )
@@ -156,9 +156,9 @@ class MantineFormImpl<F extends Fields> implements MantineForm<F> {
     ComponentType
   >(createForm.bind(this))
 
-  @observable.ref
+  @observableRef
   accessor fields: F
-  onFieldValueChange!: <K extends keyof F>(
+  onFieldValueChange: <K extends keyof F>(
     this: void,
     key: K,
     value: F[K]['value'],
@@ -167,8 +167,16 @@ class MantineFormImpl<F extends Fields> implements MantineForm<F> {
   onFieldBlur?: (this: void, key: keyof F) => void
   onFieldSubmit?: (this: void, key: keyof F) => boolean | void
 
-  constructor(fields: F) {
+  constructor(
+    fields: F,
+    onFieldValueChange: <K extends keyof F>(
+      this: void,
+      key: K,
+      value: F[K]['value'],
+    ) => void,
+  ) {
     this.fields = fields
+    this.onFieldValueChange = onFieldValueChange
   }
 
   textInput<K extends keyof StringFieldsOfFields<F>>(

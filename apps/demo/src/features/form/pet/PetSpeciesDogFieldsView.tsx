@@ -78,7 +78,10 @@ const BREED_NAMES: Record<DogBreed, () => string> = {
 
 export function PetSpeciesDogFieldsView(props: PetSpeciesDogFieldsViewProps) {
   const form = useMantineFormFields(props)
-  const BarksNumberInput = form.valueInput('$.species:dog.barks', NumberInput)
+  const BarksNumberInput = form.valueInput(
+    '$.species:dog.barks',
+    NumberInput<number>,
+  )
   const BreedInput = form.select('$.species:dog.breed')
 
   return (

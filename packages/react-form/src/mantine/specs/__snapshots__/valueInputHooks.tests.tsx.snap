@@ -3,20 +3,31 @@
 exports[`mantine value input hooks > renders AnJsonInput 1`] = `
 <div>
   <style
+    data-mantine-styles="true"
+  >
+    
+
+
+
+
+  </style>
+  <style
     data-mantine-styles="classes"
   >
     @media (max-width: 35.99375em) {.mantine-visible-from-xs {display: none !important;}}@media (min-width: 36em) {.mantine-hidden-from-xs {display: none !important;}}@media (max-width: 47.99375em) {.mantine-visible-from-sm {display: none !important;}}@media (min-width: 48em) {.mantine-hidden-from-sm {display: none !important;}}@media (max-width: 61.99375em) {.mantine-visible-from-md {display: none !important;}}@media (min-width: 62em) {.mantine-hidden-from-md {display: none !important;}}@media (max-width: 74.99375em) {.mantine-visible-from-lg {display: none !important;}}@media (min-width: 75em) {.mantine-hidden-from-lg {display: none !important;}}@media (max-width: 87.99375em) {.mantine-visible-from-xl {display: none !important;}}@media (min-width: 88em) {.mantine-hidden-from-xl {display: none !important;}}
   </style>
   <div
     class="m_46b77525 mantine-InputWrapper-root mantine-JsonInput-root"
+    data-size="sm"
   >
     <div
       class="m_6c018570 mantine-Input-wrapper mantine-JsonInput-wrapper"
       data-multiline="true"
+      data-size="sm"
       data-variant="default"
+      style="--input-height: var(--input-height-sm); --input-fz: var(--mantine-font-size-sm); --input-padding-y: var(--input-padding-y-sm);"
     >
       <textarea
-        aria-invalid="false"
         autocomplete="off"
         class="m_8fb7ebe7 mantine-Input-input mantine-JsonInput-input"
         data-monospace="true"
@@ -34,6 +45,15 @@ exports[`mantine value input hooks > renders AnJsonInput 1`] = `
 
 exports[`mantine value input hooks > renders AnRating 1`] = `
 <div>
+  <style
+    data-mantine-styles="true"
+  >
+    
+
+
+
+
+  </style>
   <style
     data-mantine-styles="classes"
   >
@@ -253,6 +273,15 @@ exports[`mantine value input hooks > renders AnRating 1`] = `
 exports[`mantine value input hooks > renders AnSlider 1`] = `
 <div>
   <style
+    data-mantine-styles="true"
+  >
+    
+
+
+
+
+  </style>
+  <style
     data-mantine-styles="classes"
   >
     @media (max-width: 35.99375em) {.mantine-visible-from-xs {display: none !important;}}@media (min-width: 36em) {.mantine-hidden-from-xs {display: none !important;}}@media (max-width: 47.99375em) {.mantine-visible-from-sm {display: none !important;}}@media (min-width: 48em) {.mantine-hidden-from-sm {display: none !important;}}@media (max-width: 61.99375em) {.mantine-visible-from-md {display: none !important;}}@media (min-width: 62em) {.mantine-hidden-from-md {display: none !important;}}@media (max-width: 74.99375em) {.mantine-visible-from-lg {display: none !important;}}@media (min-width: 75em) {.mantine-hidden-from-lg {display: none !important;}}@media (max-width: 87.99375em) {.mantine-visible-from-xl {display: none !important;}}@media (min-width: 88em) {.mantine-hidden-from-xl {display: none !important;}}
@@ -274,7 +303,9 @@ exports[`mantine value input hooks > renders AnSlider 1`] = `
           style="--slider-bar-width: calc(22.22222222222222% + 2 * var(--slider-size)); --slider-bar-offset: calc(0% - var(--slider-size));"
         />
         <div
+          aria-disabled="false"
           aria-label=""
+          aria-orientation="horizontal"
           aria-valuemax="10"
           aria-valuemin="1"
           aria-valuenow="3"
@@ -339,35 +370,47 @@ exports[`mantine value input hooks > renders AnSlider 1`] = `
 exports[`mantine value input hooks > renders DisabledNumberInput 1`] = `
 <div>
   <style
+    data-mantine-styles="true"
+  >
+    
+
+
+
+
+  </style>
+  <style
     data-mantine-styles="classes"
   >
     @media (max-width: 35.99375em) {.mantine-visible-from-xs {display: none !important;}}@media (min-width: 36em) {.mantine-hidden-from-xs {display: none !important;}}@media (max-width: 47.99375em) {.mantine-visible-from-sm {display: none !important;}}@media (min-width: 48em) {.mantine-hidden-from-sm {display: none !important;}}@media (max-width: 61.99375em) {.mantine-visible-from-md {display: none !important;}}@media (min-width: 62em) {.mantine-hidden-from-md {display: none !important;}}@media (max-width: 74.99375em) {.mantine-visible-from-lg {display: none !important;}}@media (min-width: 75em) {.mantine-hidden-from-lg {display: none !important;}}@media (max-width: 87.99375em) {.mantine-visible-from-xl {display: none !important;}}@media (min-width: 88em) {.mantine-hidden-from-xl {display: none !important;}}
   </style>
   <div
     class="m_e2f5cd4e m_46b77525 mantine-InputWrapper-root mantine-NumberInput-root"
+    data-size="sm"
   >
     <label
       class="m_8fdc1311 mantine-InputWrapper-label mantine-NumberInput-label"
+      data-size="sm"
       for="mantine-12voha2vo"
       id="mantine-12voha2vo-label"
+      style="--input-label-size: var(--mantine-font-size-sm);"
     >
       Number Input
     </label>
     <div
       class="m_6c018570 mantine-Input-wrapper mantine-NumberInput-wrapper"
       data-disabled="true"
+      data-size="sm"
       data-variant="default"
       data-with-right-section="true"
-      style="--input-right-section-width: var(--ni-right-section-width-sm); --input-right-section-pointer-events: none;"
+      style="--input-height: var(--input-height-sm); --input-fz: var(--mantine-font-size-sm); --input-right-section-width: var(--ni-right-section-width-sm); --input-right-section-pointer-events: none;"
     >
       <input
-        aria-invalid="false"
         class="m_8fb7ebe7 mantine-Input-input mantine-NumberInput-input"
         data-disabled="true"
         data-variant="default"
         disabled=""
         id="mantine-12voha2vo"
-        inputmode="numeric"
+        inputmode="decimal"
         name="$"
         type="text"
         value="3"
@@ -378,6 +421,7 @@ exports[`mantine value input hooks > renders DisabledNumberInput 1`] = `
       >
         <div
           class="m_95e17d22 mantine-NumberInput-controls"
+          style="--ni-chevron-size: var(--ni-chevron-size-sm);"
         >
           <button
             aria-hidden="true"
@@ -389,7 +433,7 @@ exports[`mantine value input hooks > renders DisabledNumberInput 1`] = `
           >
             <svg
               fill="none"
-              style="transform: rotate(180deg);"
+              style="width: var(--ni-chevron-size); height: var(--ni-chevron-size); transform: rotate(180deg);"
               viewBox="0 0 15 15"
               xmlns="http://www.w3.org/2000/svg"
             >
@@ -411,6 +455,7 @@ exports[`mantine value input hooks > renders DisabledNumberInput 1`] = `
           >
             <svg
               fill="none"
+              style="width: var(--ni-chevron-size); height: var(--ni-chevron-size);"
               viewBox="0 0 15 15"
               xmlns="http://www.w3.org/2000/svg"
             >
@@ -432,32 +477,44 @@ exports[`mantine value input hooks > renders DisabledNumberInput 1`] = `
 exports[`mantine value input hooks > renders EmptyNumberInput 1`] = `
 <div>
   <style
+    data-mantine-styles="true"
+  >
+    
+
+
+
+
+  </style>
+  <style
     data-mantine-styles="classes"
   >
     @media (max-width: 35.99375em) {.mantine-visible-from-xs {display: none !important;}}@media (min-width: 36em) {.mantine-hidden-from-xs {display: none !important;}}@media (max-width: 47.99375em) {.mantine-visible-from-sm {display: none !important;}}@media (min-width: 48em) {.mantine-hidden-from-sm {display: none !important;}}@media (max-width: 61.99375em) {.mantine-visible-from-md {display: none !important;}}@media (min-width: 62em) {.mantine-hidden-from-md {display: none !important;}}@media (max-width: 74.99375em) {.mantine-visible-from-lg {display: none !important;}}@media (min-width: 75em) {.mantine-hidden-from-lg {display: none !important;}}@media (max-width: 87.99375em) {.mantine-visible-from-xl {display: none !important;}}@media (min-width: 88em) {.mantine-hidden-from-xl {display: none !important;}}
   </style>
   <div
     class="m_e2f5cd4e m_46b77525 mantine-InputWrapper-root mantine-NumberInput-root"
+    data-size="sm"
   >
     <label
       class="m_8fdc1311 mantine-InputWrapper-label mantine-NumberInput-label"
+      data-size="sm"
       for="mantine-12voha2vo"
       id="mantine-12voha2vo-label"
+      style="--input-label-size: var(--mantine-font-size-sm);"
     >
       Number Input
     </label>
     <div
       class="m_6c018570 mantine-Input-wrapper mantine-NumberInput-wrapper"
+      data-size="sm"
       data-variant="default"
       data-with-right-section="true"
-      style="--input-right-section-width: var(--ni-right-section-width-sm);"
+      style="--input-height: var(--input-height-sm); --input-fz: var(--mantine-font-size-sm); --input-right-section-width: var(--ni-right-section-width-sm);"
     >
       <input
-        aria-invalid="false"
         class="m_8fb7ebe7 mantine-Input-input mantine-NumberInput-input"
         data-variant="default"
         id="mantine-12voha2vo"
-        inputmode="numeric"
+        inputmode="decimal"
         name="$"
         type="text"
         value=""
@@ -468,6 +525,7 @@ exports[`mantine value input hooks > renders EmptyNumberInput 1`] = `
       >
         <div
           class="m_95e17d22 mantine-NumberInput-controls"
+          style="--ni-chevron-size: var(--ni-chevron-size-sm);"
         >
           <button
             aria-hidden="true"
@@ -478,7 +536,7 @@ exports[`mantine value input hooks > renders EmptyNumberInput 1`] = `
           >
             <svg
               fill="none"
-              style="transform: rotate(180deg);"
+              style="width: var(--ni-chevron-size); height: var(--ni-chevron-size); transform: rotate(180deg);"
               viewBox="0 0 15 15"
               xmlns="http://www.w3.org/2000/svg"
             >
@@ -499,6 +557,7 @@ exports[`mantine value input hooks > renders EmptyNumberInput 1`] = `
           >
             <svg
               fill="none"
+              style="width: var(--ni-chevron-size); height: var(--ni-chevron-size);"
               viewBox="0 0 15 15"
               xmlns="http://www.w3.org/2000/svg"
             >
@@ -520,6 +579,15 @@ exports[`mantine value input hooks > renders EmptyNumberInput 1`] = `
 exports[`mantine value input hooks > renders ErrorNumberInput 1`] = `
 <div>
   <style
+    data-mantine-styles="true"
+  >
+    
+
+
+
+
+  </style>
+  <style
     data-mantine-styles="classes"
   >
     @media (max-width: 35.99375em) {.mantine-visible-from-xs {display: none !important;}}@media (min-width: 36em) {.mantine-hidden-from-xs {display: none !important;}}@media (max-width: 47.99375em) {.mantine-visible-from-sm {display: none !important;}}@media (min-width: 48em) {.mantine-hidden-from-sm {display: none !important;}}@media (max-width: 61.99375em) {.mantine-visible-from-md {display: none !important;}}@media (min-width: 62em) {.mantine-hidden-from-md {display: none !important;}}@media (max-width: 74.99375em) {.mantine-visible-from-lg {display: none !important;}}@media (min-width: 75em) {.mantine-hidden-from-lg {display: none !important;}}@media (max-width: 87.99375em) {.mantine-visible-from-xl {display: none !important;}}@media (min-width: 88em) {.mantine-hidden-from-xl {display: none !important;}}
@@ -527,20 +595,24 @@ exports[`mantine value input hooks > renders ErrorNumberInput 1`] = `
   <div
     class="m_e2f5cd4e m_46b77525 mantine-InputWrapper-root mantine-NumberInput-root"
     data-error="true"
+    data-size="sm"
   >
     <label
       class="m_8fdc1311 mantine-InputWrapper-label mantine-NumberInput-label"
+      data-size="sm"
       for="mantine-12voha2vo"
       id="mantine-12voha2vo-label"
+      style="--input-label-size: var(--mantine-font-size-sm);"
     >
       Number Input
     </label>
     <div
       class="m_6c018570 mantine-Input-wrapper mantine-NumberInput-wrapper"
       data-error="true"
+      data-size="sm"
       data-variant="default"
       data-with-right-section="true"
-      style="--input-margin-bottom: calc(var(--mantine-spacing-xs) / 2); --input-right-section-width: var(--ni-right-section-width-sm);"
+      style="--input-margin-bottom: calc(var(--mantine-spacing-xs) / 2); --input-height: var(--input-height-sm); --input-fz: var(--mantine-font-size-sm); --input-right-section-width: var(--ni-right-section-width-sm);"
     >
       <input
         aria-describedby="mantine-12voha2vo-error"
@@ -549,7 +621,7 @@ exports[`mantine value input hooks > renders ErrorNumberInput 1`] = `
         data-error="true"
         data-variant="default"
         id="mantine-12voha2vo"
-        inputmode="numeric"
+        inputmode="decimal"
         name="$"
         type="text"
         value="3"
@@ -560,6 +632,7 @@ exports[`mantine value input hooks > renders ErrorNumberInput 1`] = `
       >
         <div
           class="m_95e17d22 mantine-NumberInput-controls"
+          style="--ni-chevron-size: var(--ni-chevron-size-sm);"
         >
           <button
             aria-hidden="true"
@@ -570,7 +643,7 @@ exports[`mantine value input hooks > renders ErrorNumberInput 1`] = `
           >
             <svg
               fill="none"
-              style="transform: rotate(180deg);"
+              style="width: var(--ni-chevron-size); height: var(--ni-chevron-size); transform: rotate(180deg);"
               viewBox="0 0 15 15"
               xmlns="http://www.w3.org/2000/svg"
             >
@@ -591,6 +664,7 @@ exports[`mantine value input hooks > renders ErrorNumberInput 1`] = `
           >
             <svg
               fill="none"
+              style="width: var(--ni-chevron-size); height: var(--ni-chevron-size);"
               viewBox="0 0 15 15"
               xmlns="http://www.w3.org/2000/svg"
             >
@@ -607,7 +681,9 @@ exports[`mantine value input hooks > renders ErrorNumberInput 1`] = `
     </div>
     <p
       class="m_8f816625 mantine-InputWrapper-error mantine-NumberInput-error"
+      data-size="sm"
       id="mantine-12voha2vo-error"
+      style="--input-error-size: calc(var(--mantine-font-size-sm) - calc(0.125rem * var(--mantine-scale)));"
     >
       error an error
     </p>
@@ -618,32 +694,44 @@ exports[`mantine value input hooks > renders ErrorNumberInput 1`] = `
 exports[`mantine value input hooks > renders PopulatedNumberInput 1`] = `
 <div>
   <style
+    data-mantine-styles="true"
+  >
+    
+
+
+
+
+  </style>
+  <style
     data-mantine-styles="classes"
   >
     @media (max-width: 35.99375em) {.mantine-visible-from-xs {display: none !important;}}@media (min-width: 36em) {.mantine-hidden-from-xs {display: none !important;}}@media (max-width: 47.99375em) {.mantine-visible-from-sm {display: none !important;}}@media (min-width: 48em) {.mantine-hidden-from-sm {display: none !important;}}@media (max-width: 61.99375em) {.mantine-visible-from-md {display: none !important;}}@media (min-width: 62em) {.mantine-hidden-from-md {display: none !important;}}@media (max-width: 74.99375em) {.mantine-visible-from-lg {display: none !important;}}@media (min-width: 75em) {.mantine-hidden-from-lg {display: none !important;}}@media (max-width: 87.99375em) {.mantine-visible-from-xl {display: none !important;}}@media (min-width: 88em) {.mantine-hidden-from-xl {display: none !important;}}
   </style>
   <div
     class="m_e2f5cd4e m_46b77525 mantine-InputWrapper-root mantine-NumberInput-root"
+    data-size="sm"
   >
     <label
       class="m_8fdc1311 mantine-InputWrapper-label mantine-NumberInput-label"
+      data-size="sm"
       for="mantine-12voha2vo"
       id="mantine-12voha2vo-label"
+      style="--input-label-size: var(--mantine-font-size-sm);"
     >
       Number Input
     </label>
     <div
       class="m_6c018570 mantine-Input-wrapper mantine-NumberInput-wrapper"
+      data-size="sm"
       data-variant="default"
       data-with-right-section="true"
-      style="--input-right-section-width: var(--ni-right-section-width-sm);"
+      style="--input-height: var(--input-height-sm); --input-fz: var(--mantine-font-size-sm); --input-right-section-width: var(--ni-right-section-width-sm);"
     >
       <input
-        aria-invalid="false"
         class="m_8fb7ebe7 mantine-Input-input mantine-NumberInput-input"
         data-variant="default"
         id="mantine-12voha2vo"
-        inputmode="numeric"
+        inputmode="decimal"
         name="$"
         type="text"
         value="3"
@@ -654,6 +742,7 @@ exports[`mantine value input hooks > renders PopulatedNumberInput 1`] = `
       >
         <div
           class="m_95e17d22 mantine-NumberInput-controls"
+          style="--ni-chevron-size: var(--ni-chevron-size-sm);"
         >
           <button
             aria-hidden="true"
@@ -664,7 +753,7 @@ exports[`mantine value input hooks > renders PopulatedNumberInput 1`] = `
           >
             <svg
               fill="none"
-              style="transform: rotate(180deg);"
+              style="width: var(--ni-chevron-size); height: var(--ni-chevron-size); transform: rotate(180deg);"
               viewBox="0 0 15 15"
               xmlns="http://www.w3.org/2000/svg"
             >
@@ -685,6 +774,7 @@ exports[`mantine value input hooks > renders PopulatedNumberInput 1`] = `
           >
             <svg
               fill="none"
+              style="width: var(--ni-chevron-size); height: var(--ni-chevron-size);"
               viewBox="0 0 15 15"
               xmlns="http://www.w3.org/2000/svg"
             >
@@ -706,18 +796,30 @@ exports[`mantine value input hooks > renders PopulatedNumberInput 1`] = `
 exports[`mantine value input hooks > renders RequiredNumberInput 1`] = `
 <div>
   <style
+    data-mantine-styles="true"
+  >
+    
+
+
+
+
+  </style>
+  <style
     data-mantine-styles="classes"
   >
     @media (max-width: 35.99375em) {.mantine-visible-from-xs {display: none !important;}}@media (min-width: 36em) {.mantine-hidden-from-xs {display: none !important;}}@media (max-width: 47.99375em) {.mantine-visible-from-sm {display: none !important;}}@media (min-width: 48em) {.mantine-hidden-from-sm {display: none !important;}}@media (max-width: 61.99375em) {.mantine-visible-from-md {display: none !important;}}@media (min-width: 62em) {.mantine-hidden-from-md {display: none !important;}}@media (max-width: 74.99375em) {.mantine-visible-from-lg {display: none !important;}}@media (min-width: 75em) {.mantine-hidden-from-lg {display: none !important;}}@media (max-width: 87.99375em) {.mantine-visible-from-xl {display: none !important;}}@media (min-width: 88em) {.mantine-hidden-from-xl {display: none !important;}}
   </style>
   <div
     class="m_e2f5cd4e m_46b77525 mantine-InputWrapper-root mantine-NumberInput-root"
+    data-size="sm"
   >
     <label
       class="m_8fdc1311 mantine-InputWrapper-label mantine-NumberInput-label"
       data-required="true"
+      data-size="sm"
       for="mantine-12voha2vo"
       id="mantine-12voha2vo-label"
+      style="--input-label-size: var(--mantine-font-size-sm);"
     >
       Number Input
       <span
@@ -729,16 +831,16 @@ exports[`mantine value input hooks > renders RequiredNumberInput 1`] = `
     </label>
     <div
       class="m_6c018570 mantine-Input-wrapper mantine-NumberInput-wrapper"
+      data-size="sm"
       data-variant="default"
       data-with-right-section="true"
-      style="--input-right-section-width: var(--ni-right-section-width-sm);"
+      style="--input-height: var(--input-height-sm); --input-fz: var(--mantine-font-size-sm); --input-right-section-width: var(--ni-right-section-width-sm);"
     >
       <input
-        aria-invalid="false"
         class="m_8fb7ebe7 mantine-Input-input mantine-NumberInput-input"
         data-variant="default"
         id="mantine-12voha2vo"
-        inputmode="numeric"
+        inputmode="decimal"
         name="$"
         required=""
         type="text"
@@ -750,6 +852,7 @@ exports[`mantine value input hooks > renders RequiredNumberInput 1`] = `
       >
         <div
           class="m_95e17d22 mantine-NumberInput-controls"
+          style="--ni-chevron-size: var(--ni-chevron-size-sm);"
         >
           <button
             aria-hidden="true"
@@ -760,7 +863,7 @@ exports[`mantine value input hooks > renders RequiredNumberInput 1`] = `
           >
             <svg
               fill="none"
-              style="transform: rotate(180deg);"
+              style="width: var(--ni-chevron-size); height: var(--ni-chevron-size); transform: rotate(180deg);"
               viewBox="0 0 15 15"
               xmlns="http://www.w3.org/2000/svg"
             >
@@ -781,6 +884,7 @@ exports[`mantine value input hooks > renders RequiredNumberInput 1`] = `
           >
             <svg
               fill="none"
+              style="width: var(--ni-chevron-size); height: var(--ni-chevron-size);"
               viewBox="0 0 15 15"
               xmlns="http://www.w3.org/2000/svg"
             >

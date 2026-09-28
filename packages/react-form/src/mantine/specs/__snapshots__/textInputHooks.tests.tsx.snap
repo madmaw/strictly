@@ -3,27 +3,40 @@
 exports[`mantine checkbox hooks > renders Disabled 1`] = `
 <div>
   <style
+    data-mantine-styles="true"
+  >
+    
+
+
+
+
+  </style>
+  <style
     data-mantine-styles="classes"
   >
     @media (max-width: 35.99375em) {.mantine-visible-from-xs {display: none !important;}}@media (min-width: 36em) {.mantine-hidden-from-xs {display: none !important;}}@media (max-width: 47.99375em) {.mantine-visible-from-sm {display: none !important;}}@media (min-width: 48em) {.mantine-hidden-from-sm {display: none !important;}}@media (max-width: 61.99375em) {.mantine-visible-from-md {display: none !important;}}@media (min-width: 62em) {.mantine-hidden-from-md {display: none !important;}}@media (max-width: 74.99375em) {.mantine-visible-from-lg {display: none !important;}}@media (min-width: 75em) {.mantine-hidden-from-lg {display: none !important;}}@media (max-width: 87.99375em) {.mantine-visible-from-xl {display: none !important;}}@media (min-width: 88em) {.mantine-hidden-from-xl {display: none !important;}}
   </style>
   <div
     class="m_46b77525 mantine-InputWrapper-root mantine-TextInput-root"
+    data-size="sm"
   >
     <label
       class="m_8fdc1311 mantine-InputWrapper-label mantine-TextInput-label"
+      data-size="sm"
       for="mantine-1ssssssss"
       id="mantine-1ssssssss-label"
+      style="--input-label-size: var(--mantine-font-size-sm);"
     >
       Text Input
     </label>
     <div
       class="m_6c018570 mantine-Input-wrapper mantine-TextInput-wrapper"
       data-disabled="true"
+      data-size="sm"
       data-variant="default"
+      style="--input-height: var(--input-height-sm); --input-fz: var(--mantine-font-size-sm);"
     >
       <input
-        aria-invalid="false"
         class="m_8fb7ebe7 mantine-Input-input mantine-TextInput-input"
         data-disabled="true"
         data-variant="default"
@@ -40,26 +53,39 @@ exports[`mantine checkbox hooks > renders Disabled 1`] = `
 exports[`mantine checkbox hooks > renders Empty 1`] = `
 <div>
   <style
+    data-mantine-styles="true"
+  >
+    
+
+
+
+
+  </style>
+  <style
     data-mantine-styles="classes"
   >
     @media (max-width: 35.99375em) {.mantine-visible-from-xs {display: none !important;}}@media (min-width: 36em) {.mantine-hidden-from-xs {display: none !important;}}@media (max-width: 47.99375em) {.mantine-visible-from-sm {display: none !important;}}@media (min-width: 48em) {.mantine-hidden-from-sm {display: none !important;}}@media (max-width: 61.99375em) {.mantine-visible-from-md {display: none !important;}}@media (min-width: 62em) {.mantine-hidden-from-md {display: none !important;}}@media (max-width: 74.99375em) {.mantine-visible-from-lg {display: none !important;}}@media (min-width: 75em) {.mantine-hidden-from-lg {display: none !important;}}@media (max-width: 87.99375em) {.mantine-visible-from-xl {display: none !important;}}@media (min-width: 88em) {.mantine-hidden-from-xl {display: none !important;}}
   </style>
   <div
     class="m_46b77525 mantine-InputWrapper-root mantine-TextInput-root"
+    data-size="sm"
   >
     <label
       class="m_8fdc1311 mantine-InputWrapper-label mantine-TextInput-label"
+      data-size="sm"
       for="mantine-1ssssssss"
       id="mantine-1ssssssss-label"
+      style="--input-label-size: var(--mantine-font-size-sm);"
     >
       Text Input
     </label>
     <div
       class="m_6c018570 mantine-Input-wrapper mantine-TextInput-wrapper"
+      data-size="sm"
       data-variant="default"
+      style="--input-height: var(--input-height-sm); --input-fz: var(--mantine-font-size-sm);"
     >
       <input
-        aria-invalid="false"
         class="m_8fb7ebe7 mantine-Input-input mantine-TextInput-input"
         data-variant="default"
         id="mantine-1ssssssss"
@@ -74,6 +100,15 @@ exports[`mantine checkbox hooks > renders Empty 1`] = `
 exports[`mantine checkbox hooks > renders Error 1`] = `
 <div>
   <style
+    data-mantine-styles="true"
+  >
+    
+
+
+
+
+  </style>
+  <style
     data-mantine-styles="classes"
   >
     @media (max-width: 35.99375em) {.mantine-visible-from-xs {display: none !important;}}@media (min-width: 36em) {.mantine-hidden-from-xs {display: none !important;}}@media (max-width: 47.99375em) {.mantine-visible-from-sm {display: none !important;}}@media (min-width: 48em) {.mantine-hidden-from-sm {display: none !important;}}@media (max-width: 61.99375em) {.mantine-visible-from-md {display: none !important;}}@media (min-width: 62em) {.mantine-hidden-from-md {display: none !important;}}@media (max-width: 74.99375em) {.mantine-visible-from-lg {display: none !important;}}@media (min-width: 75em) {.mantine-hidden-from-lg {display: none !important;}}@media (max-width: 87.99375em) {.mantine-visible-from-xl {display: none !important;}}@media (min-width: 88em) {.mantine-hidden-from-xl {display: none !important;}}
@@ -81,19 +116,23 @@ exports[`mantine checkbox hooks > renders Error 1`] = `
   <div
     class="m_46b77525 mantine-InputWrapper-root mantine-TextInput-root"
     data-error="true"
+    data-size="sm"
   >
     <label
       class="m_8fdc1311 mantine-InputWrapper-label mantine-TextInput-label"
+      data-size="sm"
       for="mantine-1ssssssss"
       id="mantine-1ssssssss-label"
+      style="--input-label-size: var(--mantine-font-size-sm);"
     >
       Text Input
     </label>
     <div
       class="m_6c018570 mantine-Input-wrapper mantine-TextInput-wrapper"
       data-error="true"
+      data-size="sm"
       data-variant="default"
-      style="--input-margin-bottom: calc(var(--mantine-spacing-xs) / 2);"
+      style="--input-margin-bottom: calc(var(--mantine-spacing-xs) / 2); --input-height: var(--input-height-sm); --input-fz: var(--mantine-font-size-sm);"
     >
       <input
         aria-describedby="mantine-1ssssssss-error"
@@ -108,7 +147,9 @@ exports[`mantine checkbox hooks > renders Error 1`] = `
     </div>
     <p
       class="m_8f816625 mantine-InputWrapper-error mantine-TextInput-error"
+      data-size="sm"
       id="mantine-1ssssssss-error"
+      style="--input-error-size: calc(var(--mantine-font-size-sm) - calc(0.125rem * var(--mantine-scale)));"
     >
       error error
     </p>
@@ -118,6 +159,15 @@ exports[`mantine checkbox hooks > renders Error 1`] = `
 
 exports[`mantine checkbox hooks > renders OverriddenPillsInputField 1`] = `
 <div>
+  <style
+    data-mantine-styles="true"
+  >
+    
+
+
+
+
+  </style>
   <style
     data-mantine-styles="classes"
   >
@@ -137,27 +187,40 @@ exports[`mantine checkbox hooks > renders OverriddenPillsInputField 1`] = `
 exports[`mantine checkbox hooks > renders OverriddenTextarea 1`] = `
 <div>
   <style
+    data-mantine-styles="true"
+  >
+    
+
+
+
+
+  </style>
+  <style
     data-mantine-styles="classes"
   >
     @media (max-width: 35.99375em) {.mantine-visible-from-xs {display: none !important;}}@media (min-width: 36em) {.mantine-hidden-from-xs {display: none !important;}}@media (max-width: 47.99375em) {.mantine-visible-from-sm {display: none !important;}}@media (min-width: 48em) {.mantine-hidden-from-sm {display: none !important;}}@media (max-width: 61.99375em) {.mantine-visible-from-md {display: none !important;}}@media (min-width: 62em) {.mantine-hidden-from-md {display: none !important;}}@media (max-width: 74.99375em) {.mantine-visible-from-lg {display: none !important;}}@media (min-width: 75em) {.mantine-hidden-from-lg {display: none !important;}}@media (max-width: 87.99375em) {.mantine-visible-from-xl {display: none !important;}}@media (min-width: 88em) {.mantine-hidden-from-xl {display: none !important;}}
   </style>
   <div
     class="m_46b77525 mantine-InputWrapper-root mantine-Textarea-root"
+    data-size="sm"
   >
     <label
       class="m_8fdc1311 mantine-InputWrapper-label mantine-Textarea-label"
+      data-size="sm"
       for="mantine-1ssssssss"
       id="mantine-1ssssssss-label"
+      style="--input-label-size: var(--mantine-font-size-sm);"
     >
       Text Input
     </label>
     <div
       class="m_6c018570 mantine-Input-wrapper mantine-Textarea-wrapper"
       data-multiline="true"
+      data-size="sm"
       data-variant="default"
+      style="--input-height: var(--input-height-sm); --input-fz: var(--mantine-font-size-sm); --input-padding-y: var(--input-padding-y-sm);"
     >
       <textarea
-        aria-invalid="false"
         class="m_8fb7ebe7 mantine-Input-input mantine-Textarea-input"
         data-variant="default"
         id="mantine-1ssssssss"
@@ -173,26 +236,39 @@ exports[`mantine checkbox hooks > renders OverriddenTextarea 1`] = `
 exports[`mantine checkbox hooks > renders Populated 1`] = `
 <div>
   <style
+    data-mantine-styles="true"
+  >
+    
+
+
+
+
+  </style>
+  <style
     data-mantine-styles="classes"
   >
     @media (max-width: 35.99375em) {.mantine-visible-from-xs {display: none !important;}}@media (min-width: 36em) {.mantine-hidden-from-xs {display: none !important;}}@media (max-width: 47.99375em) {.mantine-visible-from-sm {display: none !important;}}@media (min-width: 48em) {.mantine-hidden-from-sm {display: none !important;}}@media (max-width: 61.99375em) {.mantine-visible-from-md {display: none !important;}}@media (min-width: 62em) {.mantine-hidden-from-md {display: none !important;}}@media (max-width: 74.99375em) {.mantine-visible-from-lg {display: none !important;}}@media (min-width: 75em) {.mantine-hidden-from-lg {display: none !important;}}@media (max-width: 87.99375em) {.mantine-visible-from-xl {display: none !important;}}@media (min-width: 88em) {.mantine-hidden-from-xl {display: none !important;}}
   </style>
   <div
     class="m_46b77525 mantine-InputWrapper-root mantine-TextInput-root"
+    data-size="sm"
   >
     <label
       class="m_8fdc1311 mantine-InputWrapper-label mantine-TextInput-label"
+      data-size="sm"
       for="mantine-1ssssssss"
       id="mantine-1ssssssss-label"
+      style="--input-label-size: var(--mantine-font-size-sm);"
     >
       Text Input
     </label>
     <div
       class="m_6c018570 mantine-Input-wrapper mantine-TextInput-wrapper"
+      data-size="sm"
       data-variant="default"
+      style="--input-height: var(--input-height-sm); --input-fz: var(--mantine-font-size-sm);"
     >
       <input
-        aria-invalid="false"
         class="m_8fb7ebe7 mantine-Input-input mantine-TextInput-input"
         data-variant="default"
         id="mantine-1ssssssss"
@@ -207,18 +283,30 @@ exports[`mantine checkbox hooks > renders Populated 1`] = `
 exports[`mantine checkbox hooks > renders Required 1`] = `
 <div>
   <style
+    data-mantine-styles="true"
+  >
+    
+
+
+
+
+  </style>
+  <style
     data-mantine-styles="classes"
   >
     @media (max-width: 35.99375em) {.mantine-visible-from-xs {display: none !important;}}@media (min-width: 36em) {.mantine-hidden-from-xs {display: none !important;}}@media (max-width: 47.99375em) {.mantine-visible-from-sm {display: none !important;}}@media (min-width: 48em) {.mantine-hidden-from-sm {display: none !important;}}@media (max-width: 61.99375em) {.mantine-visible-from-md {display: none !important;}}@media (min-width: 62em) {.mantine-hidden-from-md {display: none !important;}}@media (max-width: 74.99375em) {.mantine-visible-from-lg {display: none !important;}}@media (min-width: 75em) {.mantine-hidden-from-lg {display: none !important;}}@media (max-width: 87.99375em) {.mantine-visible-from-xl {display: none !important;}}@media (min-width: 88em) {.mantine-hidden-from-xl {display: none !important;}}
   </style>
   <div
     class="m_46b77525 mantine-InputWrapper-root mantine-TextInput-root"
+    data-size="sm"
   >
     <label
       class="m_8fdc1311 mantine-InputWrapper-label mantine-TextInput-label"
       data-required="true"
+      data-size="sm"
       for="mantine-1ssssssss"
       id="mantine-1ssssssss-label"
+      style="--input-label-size: var(--mantine-font-size-sm);"
     >
       Text Input
       <span
@@ -230,10 +318,11 @@ exports[`mantine checkbox hooks > renders Required 1`] = `
     </label>
     <div
       class="m_6c018570 mantine-Input-wrapper mantine-TextInput-wrapper"
+      data-size="sm"
       data-variant="default"
+      style="--input-height: var(--input-height-sm); --input-fz: var(--mantine-font-size-sm);"
     >
       <input
-        aria-invalid="false"
         class="m_8fb7ebe7 mantine-Input-input mantine-TextInput-input"
         data-variant="default"
         id="mantine-1ssssssss"

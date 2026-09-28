@@ -3,6 +3,15 @@
 exports[`PetSpeciesCatFieldsView > renders Disabled 1`] = `
 <div>
   <style
+    data-mantine-styles="true"
+  >
+    
+
+
+
+
+  </style>
+  <style
     data-mantine-styles="classes"
   >
     @media (max-width: 35.99375em) {.mantine-visible-from-xs {display: none !important;}}@media (min-width: 36em) {.mantine-hidden-from-xs {display: none !important;}}@media (max-width: 47.99375em) {.mantine-visible-from-sm {display: none !important;}}@media (min-width: 48em) {.mantine-hidden-from-sm {display: none !important;}}@media (max-width: 61.99375em) {.mantine-visible-from-md {display: none !important;}}@media (min-width: 62em) {.mantine-hidden-from-md {display: none !important;}}@media (max-width: 74.99375em) {.mantine-visible-from-lg {display: none !important;}}@media (min-width: 75em) {.mantine-hidden-from-lg {display: none !important;}}@media (max-width: 87.99375em) {.mantine-visible-from-xl {display: none !important;}}@media (min-width: 88em) {.mantine-hidden-from-xl {display: none !important;}}
@@ -13,12 +22,15 @@ exports[`PetSpeciesCatFieldsView > renders Disabled 1`] = `
   >
     <div
       class="m_46b77525 mantine-InputWrapper-root mantine-Select-root"
+      data-size="sm"
     >
       <label
         class="m_8fdc1311 mantine-InputWrapper-label mantine-Select-label"
         data-required="true"
+        data-size="sm"
         for="mantine-1ssssssss"
         id="mantine-1ssssssss-label"
+        style="--input-label-size: var(--mantine-font-size-sm);"
       >
         Breed
         <span
@@ -32,13 +44,14 @@ exports[`PetSpeciesCatFieldsView > renders Disabled 1`] = `
         class="m_6c018570 mantine-Input-wrapper mantine-Select-wrapper"
         data-disabled="true"
         data-pointer="true"
+        data-size="sm"
         data-variant="default"
         data-with-right-section="true"
-        style="--input-right-section-pointer-events: none;"
+        style="--input-height: var(--input-height-sm); --input-fz: var(--mantine-font-size-sm); --input-right-section-pointer-events: none;"
       >
         <input
+          aria-expanded="false"
           aria-haspopup="listbox"
-          aria-invalid="false"
           autocomplete="off"
           class="m_8fb7ebe7 mantine-Input-input mantine-Select-input"
           data-disabled="true"
@@ -47,6 +60,7 @@ exports[`PetSpeciesCatFieldsView > renders Disabled 1`] = `
           id="mantine-1ssssssss"
           readonly=""
           required=""
+          role="combobox"
           value="Domestic Short Hair"
         />
         <div
@@ -56,7 +70,9 @@ exports[`PetSpeciesCatFieldsView > renders Disabled 1`] = `
           <svg
             class="m_2943220b mantine-ComboboxChevron-chevron"
             data-combobox-chevron="true"
+            data-size="sm"
             fill="none"
+            style="--combobox-chevron-size: var(--combobox-chevron-size-sm);"
             viewBox="0 0 15 15"
             xmlns="http://www.w3.org/2000/svg"
           >
@@ -80,7 +96,7 @@ exports[`PetSpeciesCatFieldsView > renders Disabled 1`] = `
       class="m_dd36362e mantine-Slider-root"
       data-size="md"
       required=""
-      style="--slider-size: var(--slider-size-md); --slider-radius: var(--mantine-radius-xl); --slider-thumb-size: calc(var(--slider-size) * 2);"
+      style="--slider-size: var(--slider-size-md); --slider-radius: var(--mantine-radius-xl); --slider-thumb-size: calc(var(--slider-size) * 2); padding-bottom: var(--mantine-spacing-xl);"
       tabindex="-1"
     >
       <div
@@ -97,7 +113,9 @@ exports[`PetSpeciesCatFieldsView > renders Disabled 1`] = `
             style="--slider-bar-width: calc(40% + 2 * var(--slider-size)); --slider-bar-offset: calc(0% - var(--slider-size));"
           />
           <div
+            aria-disabled="true"
             aria-label=""
+            aria-orientation="horizontal"
             aria-valuemax="10"
             aria-valuemin="0"
             aria-valuenow="4"
@@ -105,7 +123,7 @@ exports[`PetSpeciesCatFieldsView > renders Disabled 1`] = `
             data-disabled="true"
             role="slider"
             style="--slider-thumb-offset: 40%;"
-            tabindex="0"
+            tabindex="-1"
           />
           <div>
             <div
@@ -167,6 +185,15 @@ exports[`PetSpeciesCatFieldsView > renders Disabled 1`] = `
 exports[`PetSpeciesCatFieldsView > renders Error 1`] = `
 <div>
   <style
+    data-mantine-styles="true"
+  >
+    
+
+
+
+
+  </style>
+  <style
     data-mantine-styles="classes"
   >
     @media (max-width: 35.99375em) {.mantine-visible-from-xs {display: none !important;}}@media (min-width: 36em) {.mantine-hidden-from-xs {display: none !important;}}@media (max-width: 47.99375em) {.mantine-visible-from-sm {display: none !important;}}@media (min-width: 48em) {.mantine-hidden-from-sm {display: none !important;}}@media (max-width: 61.99375em) {.mantine-visible-from-md {display: none !important;}}@media (min-width: 62em) {.mantine-hidden-from-md {display: none !important;}}@media (max-width: 74.99375em) {.mantine-visible-from-lg {display: none !important;}}@media (min-width: 75em) {.mantine-hidden-from-lg {display: none !important;}}@media (max-width: 87.99375em) {.mantine-visible-from-xl {display: none !important;}}@media (min-width: 88em) {.mantine-hidden-from-xl {display: none !important;}}
@@ -178,12 +205,15 @@ exports[`PetSpeciesCatFieldsView > renders Error 1`] = `
     <div
       class="m_46b77525 mantine-InputWrapper-root mantine-Select-root"
       data-error="true"
+      data-size="sm"
     >
       <label
         class="m_8fdc1311 mantine-InputWrapper-label mantine-Select-label"
         data-required="true"
+        data-size="sm"
         for="mantine-1ssssssss"
         id="mantine-1ssssssss-label"
+        style="--input-label-size: var(--mantine-font-size-sm);"
       >
         Breed
         <span
@@ -197,12 +227,14 @@ exports[`PetSpeciesCatFieldsView > renders Error 1`] = `
         class="m_6c018570 mantine-Input-wrapper mantine-Select-wrapper"
         data-error="true"
         data-pointer="true"
+        data-size="sm"
         data-variant="default"
         data-with-right-section="true"
-        style="--input-margin-bottom: calc(var(--mantine-spacing-xs) / 2); --input-right-section-pointer-events: none;"
+        style="--input-margin-bottom: calc(var(--mantine-spacing-xs) / 2); --input-height: var(--input-height-sm); --input-fz: var(--mantine-font-size-sm); --input-right-section-pointer-events: none;"
       >
         <input
           aria-describedby="mantine-1ssssssss-error"
+          aria-expanded="false"
           aria-haspopup="listbox"
           aria-invalid="true"
           autocomplete="off"
@@ -212,6 +244,7 @@ exports[`PetSpeciesCatFieldsView > renders Error 1`] = `
           id="mantine-1ssssssss"
           readonly=""
           required=""
+          role="combobox"
           value=""
         />
         <div
@@ -222,7 +255,9 @@ exports[`PetSpeciesCatFieldsView > renders Error 1`] = `
             class="m_2943220b mantine-ComboboxChevron-chevron"
             data-combobox-chevron="true"
             data-error="[object Object]"
+            data-size="sm"
             fill="none"
+            style="--combobox-chevron-size: var(--combobox-chevron-size-sm);"
             viewBox="0 0 15 15"
             xmlns="http://www.w3.org/2000/svg"
           >
@@ -237,7 +272,9 @@ exports[`PetSpeciesCatFieldsView > renders Error 1`] = `
       </div>
       <p
         class="m_8f816625 mantine-InputWrapper-error mantine-Select-error"
+        data-size="sm"
         id="mantine-1ssssssss-error"
+        style="--input-error-size: calc(var(--mantine-font-size-sm) - calc(0.125rem * var(--mantine-scale)));"
       >
         Not a recognized cat breed
       </p>
@@ -251,7 +288,7 @@ exports[`PetSpeciesCatFieldsView > renders Error 1`] = `
       class="m_dd36362e mantine-Slider-root"
       data-size="md"
       required=""
-      style="--slider-size: var(--slider-size-md); --slider-radius: var(--mantine-radius-xl); --slider-thumb-size: calc(var(--slider-size) * 2);"
+      style="--slider-size: var(--slider-size-md); --slider-radius: var(--mantine-radius-xl); --slider-thumb-size: calc(var(--slider-size) * 2); padding-bottom: var(--mantine-spacing-xl);"
       tabindex="-1"
     >
       <div
@@ -265,7 +302,9 @@ exports[`PetSpeciesCatFieldsView > renders Error 1`] = `
             style="--slider-bar-width: calc(10% + 2 * var(--slider-size)); --slider-bar-offset: calc(0% - var(--slider-size));"
           />
           <div
+            aria-disabled="false"
             aria-label=""
+            aria-orientation="horizontal"
             aria-valuemax="10"
             aria-valuemin="0"
             aria-valuenow="1"
@@ -331,6 +370,15 @@ exports[`PetSpeciesCatFieldsView > renders Error 1`] = `
 exports[`PetSpeciesCatFieldsView > renders Valid 1`] = `
 <div>
   <style
+    data-mantine-styles="true"
+  >
+    
+
+
+
+
+  </style>
+  <style
     data-mantine-styles="classes"
   >
     @media (max-width: 35.99375em) {.mantine-visible-from-xs {display: none !important;}}@media (min-width: 36em) {.mantine-hidden-from-xs {display: none !important;}}@media (max-width: 47.99375em) {.mantine-visible-from-sm {display: none !important;}}@media (min-width: 48em) {.mantine-hidden-from-sm {display: none !important;}}@media (max-width: 61.99375em) {.mantine-visible-from-md {display: none !important;}}@media (min-width: 62em) {.mantine-hidden-from-md {display: none !important;}}@media (max-width: 74.99375em) {.mantine-visible-from-lg {display: none !important;}}@media (min-width: 75em) {.mantine-hidden-from-lg {display: none !important;}}@media (max-width: 87.99375em) {.mantine-visible-from-xl {display: none !important;}}@media (min-width: 88em) {.mantine-hidden-from-xl {display: none !important;}}
@@ -341,12 +389,15 @@ exports[`PetSpeciesCatFieldsView > renders Valid 1`] = `
   >
     <div
       class="m_46b77525 mantine-InputWrapper-root mantine-Select-root"
+      data-size="sm"
     >
       <label
         class="m_8fdc1311 mantine-InputWrapper-label mantine-Select-label"
         data-required="true"
+        data-size="sm"
         for="mantine-1ssssssss"
         id="mantine-1ssssssss-label"
+        style="--input-label-size: var(--mantine-font-size-sm);"
       >
         Breed
         <span
@@ -359,19 +410,21 @@ exports[`PetSpeciesCatFieldsView > renders Valid 1`] = `
       <div
         class="m_6c018570 mantine-Input-wrapper mantine-Select-wrapper"
         data-pointer="true"
+        data-size="sm"
         data-variant="default"
         data-with-right-section="true"
-        style="--input-right-section-pointer-events: none;"
+        style="--input-height: var(--input-height-sm); --input-fz: var(--mantine-font-size-sm); --input-right-section-pointer-events: none;"
       >
         <input
+          aria-expanded="false"
           aria-haspopup="listbox"
-          aria-invalid="false"
           autocomplete="off"
           class="m_8fb7ebe7 mantine-Input-input mantine-Select-input"
           data-variant="default"
           id="mantine-1ssssssss"
           readonly=""
           required=""
+          role="combobox"
           value="Burmese"
         />
         <div
@@ -381,7 +434,9 @@ exports[`PetSpeciesCatFieldsView > renders Valid 1`] = `
           <svg
             class="m_2943220b mantine-ComboboxChevron-chevron"
             data-combobox-chevron="true"
+            data-size="sm"
             fill="none"
+            style="--combobox-chevron-size: var(--combobox-chevron-size-sm);"
             viewBox="0 0 15 15"
             xmlns="http://www.w3.org/2000/svg"
           >
@@ -404,7 +459,7 @@ exports[`PetSpeciesCatFieldsView > renders Valid 1`] = `
       class="m_dd36362e mantine-Slider-root"
       data-size="md"
       required=""
-      style="--slider-size: var(--slider-size-md); --slider-radius: var(--mantine-radius-xl); --slider-thumb-size: calc(var(--slider-size) * 2);"
+      style="--slider-size: var(--slider-size-md); --slider-radius: var(--mantine-radius-xl); --slider-thumb-size: calc(var(--slider-size) * 2); padding-bottom: var(--mantine-spacing-xl);"
       tabindex="-1"
     >
       <div
@@ -418,7 +473,9 @@ exports[`PetSpeciesCatFieldsView > renders Valid 1`] = `
             style="--slider-bar-width: calc(10% + 2 * var(--slider-size)); --slider-bar-offset: calc(0% - var(--slider-size));"
           />
           <div
+            aria-disabled="false"
             aria-label=""
+            aria-orientation="horizontal"
             aria-valuemax="10"
             aria-valuemin="0"
             aria-valuenow="1"
