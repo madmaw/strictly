@@ -7,8 +7,8 @@ import { configure } from 'mobx'
 import { StrictMode } from 'react'
 // special case: .storybook is outside the tsconfig include, so baseUrl imports do not resolve here
 import * as React from 'react'
-import { messages as en } from '../src/locales/en'
-import { messages as pseudo_en } from '../src/locales/pseudo_en'
+import { messages as en } from '../src/locales/en.po'
+import { messages as pseudo_en } from '../src/locales/pseudo_en.po'
 
 const testMessages = {
   [LOCALE_EN]: en,

@@ -298,7 +298,6 @@ export function createOxlintConfig({
     '**/storybook-static/**',
     // generated
     '**/*.d.ts',
-    '**/locales/*.ts',
   ]
 
   const mainFiles = toGlobs(mainProject?.include ?? [])

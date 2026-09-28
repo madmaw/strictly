@@ -5,7 +5,7 @@ import { Box, createTheme, MantineProvider } from '@mantine/core'
 import { assertExistsAndReturn } from '@strictly/base'
 import { PetForm } from 'features/form/pet/mobx/PetForm'
 import { type Pet } from 'features/form/pet/types'
-import { messages as en } from 'locales/en'
+import { messages as en } from 'locales/en.po'
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 

@@ -1,5 +1,3 @@
-**/locales/*.js
-**/locales/*.ts
 .astro
 .out
 apps/scratch
