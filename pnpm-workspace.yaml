@@ -18,6 +18,12 @@ overrides:
   # the mock bundles its own vitest, keep it on the same copy the tests run under
   'vitest-matchmedia-mock>vitest': $vitest
 
+peerDependencyRules:
+  allowedVersions:
+    # the storybook vitest addon still declares vitest 3 and 4 but runs every story on 5; storybook 11 widens the range
+    '@storybook/addon-vitest>@vitest/browser-playwright': '5'
+    '@storybook/addon-vitest>vitest': '5'
+
 catalog:
   '@astrojs/mdx': ^8.0.2
   '@astrojs/react': ^7.0.0
@@ -49,7 +55,7 @@ catalog:
   '@typescript/native': npm:typescript@^7.0.2
   '@rolldown/plugin-babel': ^0.2.4
   '@vitejs/plugin-react': ^6.1.1
-  '@vitest/browser-playwright': ^4.1.11
+  '@vitest/browser-playwright': ^5.0.2
   astro: ^7.3.5
   jsdom: ^30.1.1
   mobx: ^7.0.5
@@ -63,7 +69,7 @@ catalog:
   typescript: npm:@typescript/typescript6@^6.0.2
   vite: ^8.3.1
   vite-plugin-dts: ^5.1.1
-  vitest: ^4.1.11
+  vitest: ^5.0.2
   vitest-fail-on-console: ^0.10.1
   vitest-matchmedia-mock: ^2.0.4
   vitest-mock-extended: ^5.1.1
