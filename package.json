@@ -32,7 +32,6 @@
     "demo:storybook": "pnpm -r --filter @strictly/demo storybook",
     "docs:build": "pnpm -r --filter @strictly/docs build",
     "docs:dev": "pnpm -r --filter @strictly/docs dev",
-    "lingui:compile": "pnpm -r lingui:compile",
     "lingui:extract": "pnpm -r lingui:extract",
     "lint": "pnpm lint:format && pnpm -r --no-bail lint && pnpm lint:root",
     "lint:fix": "pnpm lint:format:fix && pnpm -r --no-bail lint:fix && pnpm lint:root:fix",
