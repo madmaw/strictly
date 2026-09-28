@@ -16,8 +16,8 @@ exports[`form hooks > renders Empty 1`] = `
     >
       <label
         class="m_8fdc1311 mantine-InputWrapper-label mantine-TextInput-label"
-        for="mantine-0px4bipx4"
-        id="mantine-0px4bipx4-label"
+        for="mantine-12voha2vo"
+        id="mantine-12voha2vo-label"
       >
         fields view
       </label>
@@ -29,7 +29,7 @@ exports[`form hooks > renders Empty 1`] = `
           aria-invalid="false"
           class="m_8fb7ebe7 mantine-Input-input mantine-TextInput-input"
           data-variant="default"
-          id="mantine-0px4bipx4"
+          id="mantine-12voha2vo"
           name="$"
           value=""
         />
@@ -44,8 +44,8 @@ exports[`form hooks > renders Empty 1`] = `
       >
         <label
           class="m_8fdc1311 mantine-InputWrapper-label mantine-NumberInput-label"
-          for="mantine-12voha2vo"
-          id="mantine-12voha2vo-label"
+          for="mantine-1fu8n1fu8"
+          id="mantine-1fu8n1fu8-label"
         >
           sub form
         </label>
@@ -59,7 +59,7 @@ exports[`form hooks > renders Empty 1`] = `
             aria-invalid="false"
             class="m_8fb7ebe7 mantine-Input-input mantine-NumberInput-input"
             data-variant="default"
-            id="mantine-12voha2vo"
+            id="mantine-1fu8n1fu8"
             inputmode="numeric"
             type="text"
             value="0"
@@ -152,8 +152,8 @@ exports[`form hooks > renders Populated 1`] = `
     >
       <label
         class="m_8fdc1311 mantine-InputWrapper-label mantine-TextInput-label"
-        for="mantine-0cyk5rcyk"
-        id="mantine-0cyk5rcyk-label"
+        for="mantine-12voha2vo"
+        id="mantine-12voha2vo-label"
       >
         fields view
       </label>
@@ -165,7 +165,7 @@ exports[`form hooks > renders Populated 1`] = `
           aria-invalid="false"
           class="m_8fb7ebe7 mantine-Input-input mantine-TextInput-input"
           data-variant="default"
-          id="mantine-0cyk5rcyk"
+          id="mantine-12voha2vo"
           name="$"
           value="Hello"
         />
@@ -180,8 +180,8 @@ exports[`form hooks > renders Populated 1`] = `
       >
         <label
           class="m_8fdc1311 mantine-InputWrapper-label mantine-NumberInput-label"
-          for="mantine-0px4bipx4"
-          id="mantine-0px4bipx4-label"
+          for="mantine-1fu8n1fu8"
+          id="mantine-1fu8n1fu8-label"
         >
           sub form
         </label>
@@ -195,7 +195,7 @@ exports[`form hooks > renders Populated 1`] = `
             aria-invalid="false"
             class="m_8fb7ebe7 mantine-Input-input mantine-NumberInput-input"
             data-variant="default"
-            id="mantine-0px4bipx4"
+            id="mantine-1fu8n1fu8"
             inputmode="numeric"
             type="text"
             value="2"

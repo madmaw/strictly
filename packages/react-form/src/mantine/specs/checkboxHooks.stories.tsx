@@ -1,11 +1,11 @@
-import { action } from '@storybook/addon-actions'
 import {
   type Meta,
   type StoryObj,
-} from '@storybook/react'
+} from '@storybook/react-vite'
 import { type FieldsViewProps } from 'core/props'
 import { useMantineFormFields } from 'mantine/hooks'
 import { type Ref } from 'react'
+import { action } from 'storybook/actions'
 import { type Field } from 'types/Field'
 import { CHECKBOX_LABEL } from './checkboxConstants'
 

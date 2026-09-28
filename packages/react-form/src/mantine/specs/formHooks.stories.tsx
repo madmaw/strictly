@@ -3,17 +3,17 @@ import {
   NumberInput,
   Stack,
 } from '@mantine/core'
-import { action } from '@storybook/addon-actions'
 import {
   type Meta,
   type StoryObj,
-} from '@storybook/react'
+} from '@storybook/react-vite'
 import {
   type FieldsViewProps,
   type FormProps,
 } from 'core/props'
 import { useMantineFormFields } from 'mantine/hooks'
 import { useCallback } from 'react'
+import { action } from 'storybook/actions'
 import { type Field } from 'types/Field'
 
 const onCancel = action('canceled')

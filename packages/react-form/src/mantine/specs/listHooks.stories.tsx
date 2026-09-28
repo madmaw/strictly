@@ -3,13 +3,13 @@ import {
   Paper,
   Stack,
 } from '@mantine/core'
-import { action } from '@storybook/addon-actions'
 import {
   type Meta,
   type StoryObj,
-} from '@storybook/react'
+} from '@storybook/react-vite'
 import { type FieldsViewProps } from 'core/props'
 import { useMantineFormFields } from 'mantine/hooks'
+import { action } from 'storybook/actions'
 import { type Field } from 'types/Field'
 
 type ListPath = `$.${number}`

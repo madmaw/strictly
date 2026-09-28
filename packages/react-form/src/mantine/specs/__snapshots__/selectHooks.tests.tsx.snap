@@ -12,8 +12,8 @@ exports[`mantine select hooks > renders DisabledSelect 1`] = `
   >
     <label
       class="m_8fdc1311 mantine-InputWrapper-label mantine-Select-label"
-      for="mantine-12voha2vo"
-      id="mantine-12voha2vo-label"
+      for="mantine-1ssssssss"
+      id="mantine-1ssssssss-label"
     >
       Select
     </label>
@@ -33,7 +33,7 @@ exports[`mantine select hooks > renders DisabledSelect 1`] = `
         data-disabled="true"
         data-variant="default"
         disabled=""
-        id="mantine-12voha2vo"
+        id="mantine-1ssssssss"
         readonly=""
         value="a"
       />
@@ -79,8 +79,8 @@ exports[`mantine select hooks > renders EmptySelect 1`] = `
   >
     <label
       class="m_8fdc1311 mantine-InputWrapper-label mantine-Select-label"
-      for="mantine-1fu8n1fu8"
-      id="mantine-1fu8n1fu8-label"
+      for="mantine-1ssssssss"
+      id="mantine-1ssssssss-label"
     >
       Select
     </label>
@@ -97,7 +97,7 @@ exports[`mantine select hooks > renders EmptySelect 1`] = `
         autocomplete="off"
         class="m_8fb7ebe7 mantine-Input-input mantine-Select-input"
         data-variant="default"
-        id="mantine-1fu8n1fu8"
+        id="mantine-1ssssssss"
         readonly=""
         value=""
       />
@@ -143,8 +143,8 @@ exports[`mantine select hooks > renders InvalidSelect 1`] = `
   >
     <label
       class="m_8fdc1311 mantine-InputWrapper-label mantine-Select-label"
-      for="mantine-12voha2vo"
-      id="mantine-12voha2vo-label"
+      for="mantine-1ssssssss"
+      id="mantine-1ssssssss-label"
     >
       Select
     </label>
@@ -157,14 +157,14 @@ exports[`mantine select hooks > renders InvalidSelect 1`] = `
       style="--input-margin-bottom: calc(var(--mantine-spacing-xs) / 2); --input-right-section-pointer-events: none;"
     >
       <input
-        aria-describedby="mantine-12voha2vo-error"
+        aria-describedby="mantine-1ssssssss-error"
         aria-haspopup="listbox"
         aria-invalid="true"
         autocomplete="off"
         class="m_8fb7ebe7 mantine-Input-input mantine-Select-input"
         data-error="true"
         data-variant="default"
-        id="mantine-12voha2vo"
+        id="mantine-1ssssssss"
         readonly=""
         value=""
       />
@@ -191,7 +191,7 @@ exports[`mantine select hooks > renders InvalidSelect 1`] = `
     </div>
     <p
       class="m_8f816625 mantine-InputWrapper-error mantine-Select-error"
-      id="mantine-12voha2vo-error"
+      id="mantine-1ssssssss-error"
     >
       Error invalid option
     </p>
@@ -216,8 +216,8 @@ exports[`mantine select hooks > renders PopulatedSelect 1`] = `
   >
     <label
       class="m_8fdc1311 mantine-InputWrapper-label mantine-Select-label"
-      for="mantine-12voha2vo"
-      id="mantine-12voha2vo-label"
+      for="mantine-1ssssssss"
+      id="mantine-1ssssssss-label"
     >
       Select
     </label>
@@ -234,7 +234,7 @@ exports[`mantine select hooks > renders PopulatedSelect 1`] = `
         autocomplete="off"
         class="m_8fb7ebe7 mantine-Input-input mantine-Select-input"
         data-variant="default"
-        id="mantine-12voha2vo"
+        id="mantine-1ssssssss"
         readonly=""
         value="a"
       />
@@ -280,8 +280,8 @@ exports[`mantine select hooks > renders RequiredSelect 1`] = `
     <label
       class="m_8fdc1311 mantine-InputWrapper-label mantine-Select-label"
       data-required="true"
-      for="mantine-12voha2vo"
-      id="mantine-12voha2vo-label"
+      for="mantine-1ssssssss"
+      id="mantine-1ssssssss-label"
     >
       Select
       <span
@@ -304,7 +304,7 @@ exports[`mantine select hooks > renders RequiredSelect 1`] = `
         autocomplete="off"
         class="m_8fb7ebe7 mantine-Input-input mantine-Select-input"
         data-variant="default"
-        id="mantine-12voha2vo"
+        id="mantine-1ssssssss"
         readonly=""
         required=""
         value="a"

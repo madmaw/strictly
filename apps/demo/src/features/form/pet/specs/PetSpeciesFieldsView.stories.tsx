@@ -1,10 +1,10 @@
 import { Card } from '@mantine/core'
-import { action } from '@storybook/addon-actions'
 import {
   type Meta,
   type StoryObj,
-} from '@storybook/react'
+} from '@storybook/react-vite'
 import { PetSpeciesFormFieldsView } from 'features/form/pet/PetSpeciesFieldsView'
+import { action } from 'storybook/actions'
 
 const Component = PetSpeciesFormFieldsView
 

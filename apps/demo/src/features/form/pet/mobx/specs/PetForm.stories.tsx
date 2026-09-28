@@ -1,15 +1,15 @@
-import { action } from '@storybook/addon-actions'
 import {
   type Meta,
   type StoryObj,
-} from '@storybook/react'
-import {
-  userEvent,
-  within,
-} from '@storybook/test'
+} from '@storybook/react-vite'
 import { delay } from '@strictly/base'
 import { PetForm } from 'features/form/pet/mobx/PetForm'
 import { SubmitLabel } from 'features/form/pet/PetFieldsView'
+import { action } from 'storybook/actions'
+import {
+  userEvent,
+  within,
+} from 'storybook/test'
 
 const Component = PetForm
 

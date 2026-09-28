@@ -3,17 +3,17 @@ import {
   Group,
   TextInput,
 } from '@mantine/core'
-import { action } from '@storybook/addon-actions'
 import {
   type Meta,
   type StoryObj,
-} from '@storybook/react'
+} from '@storybook/react-vite'
 import { type FieldsViewProps } from 'core/props'
 import { useMantineFormFields } from 'mantine/hooks'
 import {
   type ChangeEvent,
   useCallback,
 } from 'react'
+import { action } from 'storybook/actions'
 import { type Field } from 'types/Field'
 
 function Component(props: FieldsViewProps<{

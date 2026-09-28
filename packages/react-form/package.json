@@ -1,18 +1,11 @@
 {
   "author": "Chris <chris.glover@gmail.com> (@madmaw)",
-  "dependencies": {
-  },
   "description": "Types and utilities for creating React forms",
   "devDependencies": {
-    "@storybook/addon-actions": "catalog:",
-    "@storybook/addon-essentials": "catalog:",
-    "@storybook/addon-interactions": "catalog:",
+    "@chromatic-com/storybook": "catalog:",
+    "@storybook/addon-docs": "catalog:",
     "@storybook/addon-links": "catalog:",
-    "@storybook/blocks": "catalog:",
-    "@storybook/builder-vite": "catalog:",
-    "@storybook/react": "catalog:",
     "@storybook/react-vite": "catalog:",
-    "@storybook/test": "catalog:",
     "@storybook/test-runner": "catalog:",
     "@strictly/base": "workspace:*",
     "@strictly/define": "workspace:*",

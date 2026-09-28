@@ -17,8 +17,8 @@ exports[`PetSpeciesCatFieldsView > renders Disabled 1`] = `
       <label
         class="m_8fdc1311 mantine-InputWrapper-label mantine-Select-label"
         data-required="true"
-        for="mantine-12voha2vo"
-        id="mantine-12voha2vo-label"
+        for="mantine-1ssssssss"
+        id="mantine-1ssssssss-label"
       >
         Breed
         <span
@@ -44,7 +44,7 @@ exports[`PetSpeciesCatFieldsView > renders Disabled 1`] = `
           data-disabled="true"
           data-variant="default"
           disabled=""
-          id="mantine-12voha2vo"
+          id="mantine-1ssssssss"
           readonly=""
           required=""
           value="Domestic Short Hair"
@@ -182,8 +182,8 @@ exports[`PetSpeciesCatFieldsView > renders Error 1`] = `
       <label
         class="m_8fdc1311 mantine-InputWrapper-label mantine-Select-label"
         data-required="true"
-        for="mantine-12voha2vo"
-        id="mantine-12voha2vo-label"
+        for="mantine-1ssssssss"
+        id="mantine-1ssssssss-label"
       >
         Breed
         <span
@@ -202,14 +202,14 @@ exports[`PetSpeciesCatFieldsView > renders Error 1`] = `
         style="--input-margin-bottom: calc(var(--mantine-spacing-xs) / 2); --input-right-section-pointer-events: none;"
       >
         <input
-          aria-describedby="mantine-12voha2vo-error"
+          aria-describedby="mantine-1ssssssss-error"
           aria-haspopup="listbox"
           aria-invalid="true"
           autocomplete="off"
           class="m_8fb7ebe7 mantine-Input-input mantine-Select-input"
           data-error="true"
           data-variant="default"
-          id="mantine-12voha2vo"
+          id="mantine-1ssssssss"
           readonly=""
           required=""
           value=""
@@ -237,7 +237,7 @@ exports[`PetSpeciesCatFieldsView > renders Error 1`] = `
       </div>
       <p
         class="m_8f816625 mantine-InputWrapper-error mantine-Select-error"
-        id="mantine-12voha2vo-error"
+        id="mantine-1ssssssss-error"
       >
         Not a recognized cat breed
       </p>
@@ -345,8 +345,8 @@ exports[`PetSpeciesCatFieldsView > renders Valid 1`] = `
       <label
         class="m_8fdc1311 mantine-InputWrapper-label mantine-Select-label"
         data-required="true"
-        for="mantine-1fu8n1fu8"
-        id="mantine-1fu8n1fu8-label"
+        for="mantine-1ssssssss"
+        id="mantine-1ssssssss-label"
       >
         Breed
         <span
@@ -369,7 +369,7 @@ exports[`PetSpeciesCatFieldsView > renders Valid 1`] = `
           autocomplete="off"
           class="m_8fb7ebe7 mantine-Input-input mantine-Select-input"
           data-variant="default"
-          id="mantine-1fu8n1fu8"
+          id="mantine-1ssssssss"
           readonly=""
           required=""
           value="Burmese"
