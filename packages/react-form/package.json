@@ -4,9 +4,6 @@
   },
   "description": "Types and utilities for creating React forms",
   "devDependencies": {
-    "@babel/core": "catalog:",
-    "@babel/plugin-proposal-decorators": "catalog:",
-    "@babel/plugin-transform-class-static-block": "catalog:",
     "@storybook/addon-actions": "catalog:",
     "@storybook/addon-essentials": "catalog:",
     "@storybook/addon-interactions": "catalog:",
@@ -24,7 +21,6 @@
     "@testing-library/react": "catalog:",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
-    "@vitejs/plugin-react": "catalog:",
     "concurrently": "^9.1.2",
     "jsdom": "catalog:",
     "resize-observer-polyfill": "catalog:",
