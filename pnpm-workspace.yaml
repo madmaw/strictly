@@ -15,13 +15,14 @@ packages:
 overrides:
   react: 19.1.0
   react-dom: 19.1.0
-  vite: 6.4.3
+  # astro brings its own vite 8, so only pin the vite 6 requests everything else shares
+  'vite@6': 6.4.3
   # the mock bundles its own vitest, keep it on the same copy the tests run under
   'vitest-matchmedia-mock>vitest': $vitest
 
 catalog:
-  '@astrojs/mdx': ^4.3.14
-  '@astrojs/react': ^4.4.2
+  '@astrojs/mdx': ^8.0.2
+  '@astrojs/react': ^7.0.0
   '@babel/core': ^7.29.0
   '@babel/plugin-proposal-class-properties': ^7.18.6
   '@babel/plugin-proposal-decorators': ^7.25.9
@@ -48,7 +49,7 @@ catalog:
   # need the typescript 6 api under the typescript package name
   '@typescript/native': npm:typescript@^7.0.2
   '@vitejs/plugin-react': ^4.3.3
-  astro: ^5.18.2
+  astro: ^7.3.5
   jsdom: ^25.0.1
   mobx: ^6.13.5
   mobx-react: ^9.1.1
