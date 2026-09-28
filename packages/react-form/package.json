@@ -19,7 +19,7 @@
     "@storybook/test-runner": "catalog:",
     "@strictly/base": "workspace:*",
     "@strictly/define": "workspace:*",
-    "@strictly/support-vite": "workspace:*",
+    "@strictly/vite": "workspace:*",
     "@testing-library/dom": "catalog:",
     "@testing-library/react": "catalog:",
     "@types/react": "catalog:",
@@ -79,7 +79,7 @@
     "url": "git+https://github.com/madmaw/strictly.git"
   },
   "scripts": {
-    "build": "vite build",
+    "build": "vite build --configLoader runner",
     "check-types": "tsc -b",
     "clean": "del-cli dist .out",
     "lint": "cross-env ESLINT_USE_FLAT_CONFIG=false eslint . --max-warnings=0",
@@ -88,9 +88,9 @@
     "storybook:build": "storybook build",
     "storybook:test": "pnpm exec playwright install && pnpm storybook:build && concurrently -k -s first -n \"SB,TEST\" \"npx http-server storybook-static --port 6006 --silent\" \"npx wait-on tcp:127.0.0.1:6006 && pnpm storybook:test:client\"",
     "storybook:test:client": "test-storybook",
-    "test": "vitest run",
-    "test:update": "vitest run -u",
-    "test:watch": "vitest"
+    "test": "vitest run --configLoader runner",
+    "test:update": "vitest run -u --configLoader runner",
+    "test:watch": "vitest --configLoader runner"
   },
   "type": "module",
   "version": "0.0.41"

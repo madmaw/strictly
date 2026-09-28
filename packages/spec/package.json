@@ -9,6 +9,7 @@
   },
   "description": "Helper utilities for testing",
   "devDependencies": {
+    "@strictly/vite": "workspace:*",
     "@testing-library/dom": "catalog:",
     "@testing-library/react": "catalog:",
     "@types/react": "catalog:",
@@ -53,7 +54,7 @@
     "url": "git+https://github.com/madmaw/strictly.git"
   },
   "scripts": {
-    "build": "vite build",
+    "build": "vite build --configLoader runner",
     "check-types": "tsc -b",
     "clean": "del-cli dist .out",
     "lint": "cross-env ESLINT_USE_FLAT_CONFIG=false eslint . --max-warnings=0",

@@ -1,6 +1,6 @@
-/* eslint-env node */
-/** @type {import('@babel/core').TransformOptions} */
-const config = {
+import { type TransformOptions } from '@babel/core'
+
+const config: TransformOptions = {
   plugins: [
     [
       '@babel/plugin-proposal-decorators',
@@ -17,4 +17,4 @@ const config = {
   },
 }
 
-module.exports = config
+export default config

@@ -8,7 +8,7 @@
     ".storybook/**/*.ts",
     ".storybook/**/*.tsx",
     ".vitest/**/*.ts",
-    "babel.config.js",
+    "babel.config.ts",
     "lingui.config.ts",
     "vite.config.mts",
     "vitest.workspace.ts"

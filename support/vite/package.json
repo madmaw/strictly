@@ -5,7 +5,7 @@
   },
   "license": "MIT",
   "main": "src/index.ts",
-  "name": "@strictly/support-vite",
+  "name": "@strictly/vite",
   "scripts": {
     "check-types": "tsc -b",
     "clean": "del-cli dist .out",

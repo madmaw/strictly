@@ -3,7 +3,7 @@
   "dependencies": {
   },
   "devDependencies": {
-    "@strictly/support-vite": "workspace:*",
+    "@strictly/vite": "workspace:*",
     "type-fest": "catalog:"
   },
   "homepage": "https://madmaw.github.io/strictly/base",
@@ -43,13 +43,13 @@
     "url": "git+https://github.com/madmaw/strictly.git"
   },
   "scripts": {
-    "build": "vite build",
+    "build": "vite build --configLoader runner",
     "check-types": "tsc -b",
     "clean": "del-cli dist .out",
     "lint": "cross-env ESLINT_USE_FLAT_CONFIG=false eslint . --max-warnings=0",
     "lint:fix": "cross-env ESLINT_USE_FLAT_CONFIG=false eslint . --fix",
-    "test": "vitest run",
-    "test:watch": "vitest"
+    "test": "vitest run --configLoader runner",
+    "test:watch": "vitest --configLoader runner"
   },
   "type": "module",
   "version": "0.0.41"
