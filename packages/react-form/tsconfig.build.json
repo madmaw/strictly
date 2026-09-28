@@ -1,6 +1,8 @@
 {
   "compilerOptions": {
-    "baseUrl": "./src"
+    "paths": {
+      "*": ["./src/*"]
+    }
   },
   "extends": "../../tsconfig.build.json",
   "include": [
@@ -8,6 +10,5 @@
     ".storybook/vite.config.mts",
     "vite.config.mts",
     "vitest.workspace.ts"
-
   ]
 }

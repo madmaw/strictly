@@ -1,8 +1,14 @@
 {
   "compilerOptions": {
-    "baseUrl": "./src",
     "outDir": "./.out",
-    "plugins": [{"name": "typescript-plugin-css-modules"}]
+    "paths": {
+      "*": ["./src/*"]
+    },
+    "plugins": [
+      {
+        "name": "typescript-plugin-css-modules"
+      }
+    ]
   },
   "extends": "../../tsconfig.json",
   "include": [
@@ -11,10 +17,20 @@
     "tsconfig.json"
   ],
   "references": [
-    {"path": "../../support/vite"},
-    {"path": "../../packages/base"},
-    {"path": "../../packages/define"},
-    {"path": "../../packages/react-form"},
-    {"path": "../../packages/spec"}
+    {
+      "path": "../../support/vite"
+    },
+    {
+      "path": "../../packages/base"
+    },
+    {
+      "path": "../../packages/define"
+    },
+    {
+      "path": "../../packages/react-form"
+    },
+    {
+      "path": "../../packages/spec"
+    }
   ]
 }

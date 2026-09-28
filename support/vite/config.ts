@@ -129,6 +129,11 @@ export function createViteLibraryConfig(tsconfig: TsconfigJson, packageJson: Lib
           await copyFile(join(DIST, 'index.d.ts'), join(DIST, 'index.d.cts'))
         },
         include: ['src'],
+        // api extractor looks for lib.*.d.ts in the project typescript folder, but typescript 6 no longer ships
+        // them there, so let it fall back to the compiler it bundles
+        rollupOptions: {
+          typescriptCompilerFolder: undefined,
+        },
         rollupTypes: true,
       }),
     ],

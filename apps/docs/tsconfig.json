@@ -1,7 +1,9 @@
 {
   "compilerOptions": {
-    "baseUrl": "./src",
-    "outDir": "./.out"
+    "outDir": "./.out",
+    "paths": {
+      "*": ["./src/*"]
+    }
   },
   "exclude": [".astro"],
   "extends": "../../tsconfig.json",
@@ -13,8 +15,14 @@
     "tsconfig.json"
   ],
   "references": [
-    {"path": "../../packages/base"},
-    {"path": "../../packages/define"},
-    {"path": "../../packages/react-form"}
+    {
+      "path": "../../packages/base"
+    },
+    {
+      "path": "../../packages/define"
+    },
+    {
+      "path": "../../packages/react-form"
+    }
   ]
 }

@@ -2,8 +2,8 @@
   "compilerOptions": {
     "composite": false,
     "incremental": false,
-    "module": "commonjs",
-    "moduleResolution": "Node",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
     "noEmit": true
   },
   "extends": "./tsconfig.json",

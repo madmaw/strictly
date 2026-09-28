@@ -95,11 +95,9 @@ class TypeDefBuilder<T extends ValidatingTypeDef> implements ValidatingType<T> {
   }
 
   get narrow(): ValidatingType<T> {
-    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     return {
       definition: this.definition,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } as any
+    }
   }
 }
 

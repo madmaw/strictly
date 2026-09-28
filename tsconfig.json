@@ -23,6 +23,7 @@
     "noImplicitAny": true,
     "noImplicitOverride": true,
     "noImplicitThis": true,
+    "noUncheckedSideEffectImports": false,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "outDir": ".out",
@@ -50,12 +51,26 @@
     "tsconfig.json"
   ],
   "references": [
-    {"path": "apps/demo"},
-    {"path": "apps/docs"},
-    {"path": "packages/base"},
-    {"path": "packages/define"},
-    {"path": "packages/react-form"},
-    {"path": "packages/spec"},
-    {"path": "support/vite"}
+    {
+      "path": "apps/demo"
+    },
+    {
+      "path": "apps/docs"
+    },
+    {
+      "path": "packages/base"
+    },
+    {
+      "path": "packages/define"
+    },
+    {
+      "path": "packages/react-form"
+    },
+    {
+      "path": "packages/spec"
+    },
+    {
+      "path": "support/vite"
+    }
   ]
 }

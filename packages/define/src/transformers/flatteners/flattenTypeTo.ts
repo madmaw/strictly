@@ -30,7 +30,7 @@ export function flattenTypeTo<M, R extends Readonly<Record<string, M>>>(
       acc[key] = mapper(typeDef, key)
       return acc
     },
-    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-unnecessary-type-assertion
     {} as Record<string, M>,
   ) as R
 }
