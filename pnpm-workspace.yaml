@@ -64,9 +64,9 @@ catalog:
   typescript: npm:@typescript/typescript6@^6.0.2
   vite: ^8.3.1
   vite-plugin-dts: ^5.1.1
-  vite-tsconfig-paths: ^6.1.1
   vitest: ^4.1.11
   vitest-matchmedia-mock: ^2.0.4
+  vitest-mock-extended: ^5.1.1
 
 # run every script under this exact node version regardless of the machine's install
 useNodeVersion: 22.20.0

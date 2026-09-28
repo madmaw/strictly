@@ -7,9 +7,8 @@
     "oxlint": "1.85.0",
     "oxlint-tsgolint": "7.0.2003",
     "typescript": "catalog:",
-    "vite-tsconfig-paths": "catalog:",
     "vitest": "catalog:",
-    "vitest-mock-extended": "^5.1.1"
+    "vitest-mock-extended": "catalog:"
   },
   "engines": {
     "node": ">=22.18.0",

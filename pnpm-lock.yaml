@@ -126,15 +126,15 @@ catalogs:
     vite-plugin-dts:
       specifier: ^5.1.1
       version: 5.1.1
-    vite-tsconfig-paths:
-      specifier: ^6.1.1
-      version: 6.1.1
     vitest:
       specifier: ^4.1.11
       version: 4.1.11
     vitest-matchmedia-mock:
       specifier: ^2.0.4
       version: 2.0.4
+    vitest-mock-extended:
+      specifier: ^5.1.1
+      version: 5.1.1
 
 overrides:
   react: 19.1.0
@@ -166,14 +166,11 @@ importers:
       typescript:
         specifier: 'catalog:'
         version: '@typescript/typescript6@6.0.2'
-      vite-tsconfig-paths:
-        specifier: 'catalog:'
-        version: 6.1.1(@typescript/typescript6@6.0.2)(vite@8.3.1(@types/node@24.19.0)(esbuild@0.28.2)(jiti@2.7.0)(less@4.9.1)(sass@1.105.0)(stylus@0.62.0))
       vitest:
         specifier: 'catalog:'
         version: 4.1.11(@types/node@24.19.0)(@vitest/browser-playwright@4.1.11)(esbuild@0.28.2)(jiti@2.7.0)(jsdom@25.0.1)(less@4.9.1)(sass@1.105.0)(stylus@0.62.0)
       vitest-mock-extended:
-        specifier: ^5.1.1
+        specifier: 'catalog:'
         version: 5.1.1(@typescript/typescript6@6.0.2)(vitest@4.1.11)
 
   apps/demo:
@@ -547,9 +544,6 @@ importers:
       vite-plugin-dts:
         specifier: 'catalog:'
         version: 5.1.1(@microsoft/api-extractor@7.59.2(@types/node@24.19.0))(esbuild@0.28.2)(rolldown@1.2.11)(typescript@7.0.2)(vite@8.3.1(@types/node@24.19.0)(esbuild@0.28.2)(jiti@2.7.0)(less@4.9.1)(sass@1.105.0)(stylus@0.62.0))
-      vite-tsconfig-paths:
-        specifier: 'catalog:'
-        version: 6.1.1(typescript@7.0.2)(vite@8.3.1(@types/node@24.19.0)(esbuild@0.28.2)(jiti@2.7.0)(less@4.9.1)(sass@1.105.0)(stylus@0.62.0))
       vitest:
         specifier: 'catalog:'
         version: 4.1.11(@types/node@24.19.0)(@vitest/browser-playwright@4.1.11)(esbuild@0.28.2)(jiti@2.7.0)(jsdom@25.0.1)(less@4.9.1)(sass@1.105.0)(stylus@0.62.0)
@@ -3417,9 +3411,6 @@ packages:
     resolution: {integrity: sha512-0Ia46fDOaT7k4og1PDW4YbodWWr3scS2vAr2lTbsplOt2WkKp0vQbkI9wKis/T5LV/dqPjO3bpS/z6GTJB82LA==}
     engines: {node: '>=18'}
 
-  globrex@0.1.2:
-    resolution: {integrity: sha512-uHJgbwAMwNFf5mLst7IWLNg14x1CkeqglJb/K3doi4dw6q2IvAAmM/Y81kevy83wP+Sst+nutFTYOGg3d1lsxg==}
-
   gopd@1.2.0:
     resolution: {integrity: sha512-ZUKRh6/kUFoAiTAtTYPZJ3hw9wNxx+BIBOijnlG9PnrJsCcSjs1wyyD6vJpaYtgnzDrKYRSqf3OO6Rfa93xsRg==}
     engines: {node: '>= 0.4'}
@@ -4679,17 +4670,6 @@ packages:
       typescript:
         optional: true
 
-  tsconfck@3.1.6:
-    resolution: {integrity: sha512-ks6Vjr/jEw0P1gmOVwutM3B7fWxoWBL2KRDb1JfqGVawBmO5UsvmWOQFGHBPl5yxYz4eERr19E6L7NMv+Fej4w==}
-    engines: {node: ^18 || >=20}
-    deprecated: unmaintained
-    hasBin: true
-    peerDependencies:
-      typescript: ^5.0.0
-    peerDependenciesMeta:
-      typescript:
-        optional: true
-
   tsconfig-paths@4.2.0:
     resolution: {integrity: sha512-NoZ4roiN7LnbKn9QqE1amc9DJfzvZXxF4xDavcOWt1BPkdx+m+0gJuPM+S0vCe7zTJMYUP0R8pO2XMr+Y8oLIg==}
     engines: {node: '>=6'}
@@ -4958,11 +4938,6 @@ packages:
         optional: true
       vite:
         optional: true
-
-  vite-tsconfig-paths@6.1.1:
-    resolution: {integrity: sha512-2cihq7zliibCCZ8P9cKJrQBkfgdvcFkOOc3Y02o3GWUDLgqjWsZudaoiuOwO/gzTzy17cS5F7ZPo4bsnS4DGkg==}
-    peerDependencies:
-      vite: '*'
 
   vite@8.3.1:
     resolution: {integrity: sha512-/bvH9E9tmCXRGp2uXY3WbOldqpTwFkbha/8ANaEQ6VkxhH60KyqLwgZq6lG2y+4uT55x9+9eUHMpQ7uGnOCKjA==}
@@ -7717,8 +7692,6 @@ snapshots:
       slash: 5.1.0
       unicorn-magic: 0.3.0
 
-  globrex@0.1.2: {}
-
   gopd@1.2.0: {}
 
   graceful-fs@4.2.11: {}
@@ -9040,14 +9013,6 @@ snapshots:
     optionalDependencies:
       typescript: '@typescript/typescript6@6.0.2'
 
-  tsconfck@3.1.6(@typescript/typescript6@6.0.2):
-    optionalDependencies:
-      typescript: '@typescript/typescript6@6.0.2'
-
-  tsconfck@3.1.6(typescript@7.0.2):
-    optionalDependencies:
-      typescript: 7.0.2
-
   tsconfig-paths@4.2.0:
     dependencies:
       json5: 2.2.3
@@ -9281,26 +9246,6 @@ snapshots:
       - supports-color
       - typescript
       - webpack
-
-  vite-tsconfig-paths@6.1.1(@typescript/typescript6@6.0.2)(vite@8.3.1(@types/node@24.19.0)(esbuild@0.28.2)(jiti@2.7.0)(less@4.9.1)(sass@1.105.0)(stylus@0.62.0)):
-    dependencies:
-      debug: 4.4.3
-      globrex: 0.1.2
-      tsconfck: 3.1.6(@typescript/typescript6@6.0.2)
-      vite: 8.3.1(@types/node@24.19.0)(esbuild@0.28.2)(jiti@2.7.0)(less@4.9.1)(sass@1.105.0)(stylus@0.62.0)
-    transitivePeerDependencies:
-      - supports-color
-      - typescript
-
-  vite-tsconfig-paths@6.1.1(typescript@7.0.2)(vite@8.3.1(@types/node@24.19.0)(esbuild@0.28.2)(jiti@2.7.0)(less@4.9.1)(sass@1.105.0)(stylus@0.62.0)):
-    dependencies:
-      debug: 4.4.3
-      globrex: 0.1.2
-      tsconfck: 3.1.6(typescript@7.0.2)
-      vite: 8.3.1(@types/node@24.19.0)(esbuild@0.28.2)(jiti@2.7.0)(less@4.9.1)(sass@1.105.0)(stylus@0.62.0)
-    transitivePeerDependencies:
-      - supports-color
-      - typescript
 
   vite@8.3.1(@types/node@24.19.0)(esbuild@0.28.2)(jiti@2.7.0)(less@4.9.1)(sass@1.105.0)(stylus@0.62.0):
     dependencies:
