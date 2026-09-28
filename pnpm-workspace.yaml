@@ -22,7 +22,7 @@ overrides:
 catalog:
   '@astrojs/mdx': ^4.3.14
   '@astrojs/react': ^4.4.2
-  '@babel/core': ^7.26.0
+  '@babel/core': ^7.29.0
   '@babel/plugin-proposal-class-properties': ^7.18.6
   '@babel/plugin-proposal-decorators': ^7.25.9
   '@babel/plugin-transform-class-static-block': ^7.26.0
@@ -33,16 +33,12 @@ catalog:
   '@lingui/vite-plugin': ^5.1.2
   '@mantine/core': ^8.1.2
   '@mantine/hooks': ^8.1.2
-  '@storybook/addon-actions': ^8.4.5
-  '@storybook/addon-essentials': ^8.4.5
-  '@storybook/addon-interactions': ^8.4.5
-  '@storybook/addon-links': ^8.4.5
-  '@storybook/blocks': ^8.4.5
-  '@storybook/builder-vite': ^8.4.5
-  '@storybook/react': ^8.4.5
-  '@storybook/react-vite': ^8.4.5
-  '@storybook/test': ^8.4.5
-  '@storybook/test-runner': ^0.21.0
+  '@chromatic-com/storybook': ^5.3.1
+  '@storybook/addon-docs': ^10.6.0
+  '@storybook/addon-links': ^10.6.0
+  '@storybook/react': ^10.6.0
+  '@storybook/react-vite': ^10.6.0
+  '@storybook/test-runner': ^0.24.5
   '@testing-library/dom': ^10.4.0
   '@testing-library/react': ^16.0.1
   '@testing-library/user-event': ^14.5.2
@@ -59,10 +55,14 @@ catalog:
   react: ^19.0.0
   react-dom: ^19.0.0
   resize-observer-polyfill: ^1.5.1
-  storybook: ^8.4.5
+  storybook: ^10.6.0
   type-fest: ^4.27.0
   typescript: npm:@typescript/typescript6@^6.0.2
   vite: ^6.4.3
   vite-plugin-dts: ^4.5.4
   vite-tsconfig-paths: ^5.0.1
   vitest-matchmedia-mock: ^1.0.6
+
+# run every script under this exact node version regardless of the machine's install; node 24.6 breaks jest based
+# tooling like the storybook test runner
+useNodeVersion: 22.20.0
