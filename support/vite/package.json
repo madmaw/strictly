@@ -6,13 +6,18 @@
     "@babel/plugin-transform-class-static-block": "catalog:",
     "@lingui/babel-plugin-lingui-macro": "catalog:",
     "@lingui/vite-plugin": "catalog:",
+    "@microsoft/api-extractor": "catalog:",
+    "@rolldown/plugin-babel": "catalog:",
     "@storybook/addon-vitest": "catalog:",
     "@strictly/oxlint": "workspace:*",
+    "@types/babel__core": "catalog:",
     "@vitejs/plugin-react": "catalog:",
+    "@vitest/browser-playwright": "catalog:",
     "resize-observer-polyfill": "catalog:",
     "vite": "catalog:",
     "vite-plugin-dts": "catalog:",
     "vite-tsconfig-paths": "catalog:",
+    "vitest": "catalog:",
     "vitest-matchmedia-mock": "catalog:"
   },
   "exports": {

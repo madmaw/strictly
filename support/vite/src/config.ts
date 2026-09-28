@@ -2,13 +2,13 @@
 // loader, so this package gets handed to node directly rather than bundled, and node cannot resolve extensionless
 // relative imports.
 import { lingui } from '@lingui/vite-plugin'
+import babel from '@rolldown/plugin-babel'
 // oxlint-disable-next-line no-restricted-imports -- this package configures the storybook test runner
 import { storybookTest } from '@storybook/addon-vitest/vitest-plugin'
 import reactSupport from '@vitejs/plugin-react'
+import { playwright } from '@vitest/browser-playwright'
 import { existsSync, readdirSync, readFileSync } from 'node:fs'
-import { copyFile } from 'node:fs/promises'
 import { createRequire } from 'node:module'
-import { join } from 'node:path'
 import { type PluginOption } from 'vite'
 import dts from 'vite-plugin-dts'
 import tsconfigPaths from 'vite-tsconfig-paths'
@@ -49,15 +49,17 @@ export function createTsconfigPathsPlugin({ references }: TsconfigJson) {
 }
 
 /**
- * React via babel so that mobx decorators and class fields are transformed consistently everywhere
+ * React via babel so that mobx decorators and class fields are transformed consistently everywhere. Vite 8 dropped
+ * the babel option from the react plugin, so babel runs as its own rolldown plugin after the react transform
  */
 export function createReactPlugin({
   lingui: withLingui = false,
 }: {
   readonly lingui?: boolean
-} = {}) {
-  return reactSupport({
-    babel: {
+} = {}): PluginOption[] {
+  return [
+    reactSupport(),
+    babel({
       plugins: [
         [
           require.resolve('@babel/plugin-proposal-decorators'),
@@ -74,8 +76,8 @@ export function createReactPlugin({
       assumptions: {
         setPublicClassFields: false,
       },
-    },
-  })
+    }),
+  ]
 }
 
 /**
@@ -99,7 +101,7 @@ export function createReactViteConfig(
   return defineConfig({
     base,
     plugins: [
-      createReactPlugin({ lingui: withLingui }),
+      ...createReactPlugin({ lingui: withLingui }),
       ...(withLingui ? [lingui()] : []),
       createTsconfigPathsPlugin(tsconfig),
     ],
@@ -127,7 +129,7 @@ export function createViteLibraryConfig(
     ...packageJson.dependencies,
     ...packageJson.peerDependencies,
   })
-  const plugins: PluginOption[] = react ? [createReactPlugin()] : []
+  const plugins: PluginOption[] = react ? createReactPlugin() : []
   return defineConfig({
     build: {
       lib: {
@@ -137,7 +139,7 @@ export function createViteLibraryConfig(
       },
       minify: false,
       outDir: DIST,
-      rollupOptions: {
+      rolldownOptions: {
         external(id) {
           return externals.some(
             (external) => id === external || id.startsWith(`${external}/`),
@@ -149,18 +151,17 @@ export function createViteLibraryConfig(
       ...plugins,
       createTsconfigPathsPlugin(tsconfig),
       dts({
-        async afterBuild() {
-          // the CJS entry point needs its own declaration file
-          await copyFile(join(DIST, 'index.d.ts'), join(DIST, 'index.d.cts'))
+        bundleTypes: {
+          // api extractor looks for lib.*.d.ts in the project typescript folder, but typescript 6 no longer ships
+          // them there, so let it fall back to the compiler it bundles
+          invokeOptions: {
+            // oxlint-disable-next-line no-undefined -- undefined disables the folder lookup
+            typescriptCompilerFolder: undefined,
+          },
         },
         include: ['src'],
-        // api extractor looks for lib.*.d.ts in the project typescript folder, but typescript 6 no longer ships
-        // them there, so let it fall back to the compiler it bundles
-        rollupOptions: {
-          // oxlint-disable-next-line no-undefined -- undefined disables the folder lookup
-          typescriptCompilerFolder: undefined,
-        },
-        rollupTypes: true,
+        // the CJS entry point needs its own declaration file
+        outDirs: [DIST, { dir: DIST, moduleFormat: 'cjs' }],
       }),
     ],
   })
@@ -333,7 +334,7 @@ function createStorybookConfigurationBase(): TestProjectInlineConfiguration {
         enabled: true,
         headless: true,
         instances: [{ browser: 'chromium' }],
-        provider: 'playwright',
+        provider: playwright(),
       },
       exclude: EXCLUDE,
       globals: true,
