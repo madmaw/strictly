@@ -20,7 +20,6 @@
     "@storybook/addon-docs": "catalog:",
     "@storybook/addon-links": "catalog:",
     "@storybook/react-vite": "catalog:",
-    "@storybook/test-runner": "catalog:",
     "@strictly/lingui": "workspace:*",
     "@strictly/spec": "workspace:*",
     "@strictly/vite": "workspace:*",
@@ -29,15 +28,15 @@
     "@testing-library/user-event": "catalog:",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
+    "@vitest/browser": "catalog:",
     "jsdom": "catalog:",
+    "playwright": "catalog:",
     "postcss": "^8.4.47",
     "postcss-preset-mantine": "^1.17.0",
     "postcss-simple-vars": "^7.0.1",
-    "resize-observer-polyfill": "catalog:",
     "storybook": "catalog:",
     "typescript-plugin-css-modules": "^5.1.0",
-    "vite": "catalog:",
-    "vitest-matchmedia-mock": "catalog:"
+    "vite": "catalog:"
   },
   "license": "MIT",
   "name": "@strictly/demo",
@@ -54,11 +53,11 @@
     "preview": "vite preview",
     "storybook": "pnpm lingui:compile && storybook dev",
     "storybook:build": "pnpm lingui:compile && storybook build",
-    "storybook:test": "pnpm exec playwright install && pnpm storybook:build && concurrently -k -s first -n \"SB,TEST\" \"npx http-server storybook-static --port 6006 --silent\" \"npx wait-on tcp:127.0.0.1:6006 && pnpm storybook:test:client\"",
-    "storybook:test:client": "test-storybook",
-    "test": "pnpm lingui:compile && vitest run --configLoader runner",
-    "test:update": "pnpm lingui:compile && vitest run -u --configLoader runner",
-    "test:watch": "vitest --configLoader runner"
+    "test": "pnpm lingui:compile && pnpm vitest:run --project=unit/*",
+    "test:storybook": "pnpm exec playwright install chromium && pnpm lingui:compile && pnpm vitest:run --project=storybook/test",
+    "test:update": "pnpm lingui:compile && pnpm vitest:run -u --project=unit/*",
+    "test:watch": "pnpm vitest:run --watch --project=unit/*",
+    "vitest:run": "vitest run --configLoader runner"
   },
   "version": "0.0.41"
 }

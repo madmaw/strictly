@@ -1,4 +1,4 @@
-import { createViteLibraryConfig } from '@strictly/vite'
+import { createViteLibraryConfig } from '@strictly/vite/config'
 import packageJson from './package.json'
 import tsconfig from './tsconfig.json'
 

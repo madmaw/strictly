@@ -12,6 +12,6 @@
     ".vitest/**/*.ts",
     "lingui.config.ts",
     "vite.config.mts",
-    "vitest.workspace.ts"
+    "vitest.config.mts"
   ]
 }

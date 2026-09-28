@@ -6,13 +6,20 @@
     "@babel/plugin-transform-class-static-block": "catalog:",
     "@lingui/babel-plugin-lingui-macro": "catalog:",
     "@lingui/vite-plugin": "catalog:",
+    "@storybook/addon-vitest": "catalog:",
     "@vitejs/plugin-react": "catalog:",
+    "resize-observer-polyfill": "catalog:",
     "vite": "catalog:",
     "vite-plugin-dts": "catalog:",
-    "vite-tsconfig-paths": "catalog:"
+    "vite-tsconfig-paths": "catalog:",
+    "vitest-matchmedia-mock": "catalog:"
+  },
+  "exports": {
+    ".": "./src/index.ts",
+    "./config": "./src/config.ts"
   },
   "license": "MIT",
-  "main": "src/config.ts",
+  "main": "src/index.ts",
   "name": "@strictly/vite",
   "scripts": {
     "check-types": "tsc -b",

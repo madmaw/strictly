@@ -37,9 +37,9 @@ catalog:
   '@chromatic-com/storybook': ^5.3.1
   '@storybook/addon-docs': ^10.6.0
   '@storybook/addon-links': ^10.6.0
+  '@storybook/addon-vitest': ^10.6.0
   '@storybook/react': ^10.6.0
   '@storybook/react-vite': ^10.6.0
-  '@storybook/test-runner': ^0.24.5
   '@testing-library/dom': ^10.4.0
   '@testing-library/react': ^16.0.1
   '@testing-library/user-event': ^14.5.2
@@ -49,10 +49,12 @@ catalog:
   # need the typescript 6 api under the typescript package name
   '@typescript/native': npm:typescript@^7.0.2
   '@vitejs/plugin-react': ^4.3.3
+  '@vitest/browser': ^3.2.7
   astro: ^7.3.5
   jsdom: ^25.0.1
   mobx: ^6.13.5
   mobx-react: ^9.1.1
+  playwright: ^1.49.1
   react: ^19.0.0
   react-dom: ^19.0.0
   resize-observer-polyfill: ^1.5.1
@@ -64,6 +66,5 @@ catalog:
   vite-tsconfig-paths: ^5.0.1
   vitest-matchmedia-mock: ^1.0.6
 
-# run every script under this exact node version regardless of the machine's install; node 24.6 breaks jest based
-# tooling like the storybook test runner
+# run every script under this exact node version regardless of the machine's install
 useNodeVersion: 22.20.0
