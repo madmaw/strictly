@@ -49,11 +49,11 @@ const require = createRequire(import.meta.url)
  */
 export function createReactPlugin({
   lingui: withLingui = false,
-  root = process.cwd(),
+  root,
 }: {
   readonly lingui?: boolean
-  readonly root?: string
-} = {}): PluginOption[] {
+  readonly root: string
+}): PluginOption[] {
   const plugins: PluginItem[] = [
     [
       require.resolve('@babel/plugin-proposal-decorators'),
@@ -86,22 +86,22 @@ export function createReactPlugin({
  * Configuration for react applications, storybooks and their tests. Storybook should point at the vitest
  * configuration created by this so the stories and the tests share one vite configuration.
  *
- * Pass `import.meta.dirname` as the root so the configuration also works when loaded from another directory, e.g.
- * by a workspace task runner, as lingui otherwise looks for its config in the current working directory
+ * The root is the package directory (`import.meta.dirname`) so the configuration also works when loaded from
+ * another directory, e.g. by a workspace task runner, as lingui otherwise looks for its config in the working directory
  */
 export function createReactViteConfig({
   base,
   lingui: withLingui = false,
-  root = process.cwd(),
+  root,
   unitTest = false,
   storybook = false,
 }: {
   readonly base?: string
   readonly lingui?: boolean
-  readonly root?: string
+  readonly root: string
   readonly unitTest?: TestParameters
   readonly storybook?: TestParameters
-} = {}) {
+}) {
   return defineConfig({
     base,
     plugins: [
@@ -126,11 +126,11 @@ export function createViteLibraryConfig(
   packageJson: LibraryPackageJson,
   {
     react = false,
-    root = process.cwd(),
+    root,
   }: {
     readonly react?: boolean
-    readonly root?: string
-  } = {},
+    readonly root: string
+  },
 ) {
   const externals = Object.keys({
     ...packageJson.dependencies,
@@ -179,12 +179,12 @@ export function createViteLibraryConfig(
  * Test only configuration for packages without a react entry point
  */
 export function createVitestConfig({
-  root = process.cwd(),
+  root,
   unitTest = true,
 }: {
-  readonly root?: string
+  readonly root: string
   readonly unitTest?: TestParameters
-} = {}) {
+}) {
   return defineConfig({
     resolve: RESOLVE,
     root,
