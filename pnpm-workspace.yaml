@@ -15,8 +15,6 @@ packages:
 overrides:
   react: 19.1.0
   react-dom: 19.1.0
-  # astro brings its own vite 8, so only pin the vite 6 requests everything else shares
-  'vite@6': 6.4.3
   # the mock bundles its own vitest, keep it on the same copy the tests run under
   'vitest-matchmedia-mock>vitest': $vitest
 
@@ -33,6 +31,7 @@ catalog:
   '@lingui/react': ^6.8.0
   '@lingui/vite-plugin': ^6.8.0
   '@mantine/core': ^8.1.2
+  '@microsoft/api-extractor': ^7.59.2
   '@mantine/hooks': ^8.1.2
   '@chromatic-com/storybook': ^5.3.1
   '@storybook/addon-docs': ^10.6.0
@@ -48,8 +47,10 @@ catalog:
   # typescript 7 ships the native compiler without a javascript api, so typescript-eslint and vite-plugin-dts still
   # need the typescript 6 api under the typescript package name
   '@typescript/native': npm:typescript@^7.0.2
-  '@vitejs/plugin-react': ^4.3.3
-  '@vitest/browser': ^3.2.7
+  '@rolldown/plugin-babel': ^0.2.4
+  '@types/babel__core': ^7.20.5
+  '@vitejs/plugin-react': ^6.1.1
+  '@vitest/browser-playwright': ^4.1.11
   astro: ^7.3.5
   jsdom: ^25.0.1
   mobx: ^6.13.5
@@ -61,10 +62,11 @@ catalog:
   storybook: ^10.6.0
   type-fest: ^4.27.0
   typescript: npm:@typescript/typescript6@^6.0.2
-  vite: ^6.4.3
-  vite-plugin-dts: ^4.5.4
-  vite-tsconfig-paths: ^5.0.1
-  vitest-matchmedia-mock: ^1.0.6
+  vite: ^8.3.1
+  vite-plugin-dts: ^5.1.1
+  vitest: ^4.1.11
+  vitest-matchmedia-mock: ^2.0.4
+  vitest-mock-extended: ^5.1.1
 
 # run every script under this exact node version regardless of the machine's install
 useNodeVersion: 22.20.0
