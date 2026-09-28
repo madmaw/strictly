@@ -773,6 +773,8 @@ export function createOxlintConfig({
       'no-shadow': 'off',
       // project standard is trailing underscore indicates it is non-production code
       'no-underscore-dangle': 'off',
+      // creating new objects in map callbacks is intentional in this repository
+      'oxc/no-map-spread': 'off',
       'oxc/no-this-in-exported-function': 'off',
       // covered by the capitalized function call restricted syntax
       'react/capitalized-calls': 'off',
