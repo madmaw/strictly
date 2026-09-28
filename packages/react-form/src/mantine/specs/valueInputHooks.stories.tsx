@@ -8,17 +8,17 @@ import {
   Slider,
   type SliderProps,
 } from '@mantine/core'
-import { action } from '@storybook/addon-actions'
 import {
   type Meta,
   type StoryObj,
-} from '@storybook/react'
+} from '@storybook/react-vite'
 import { type FieldsViewProps } from 'core/props'
 import { type SuppliedValueInputProps } from 'mantine/createValueInput'
 import { useMantineFormFields } from 'mantine/hooks'
 import {
   type ComponentType,
 } from 'react'
+import { action } from 'storybook/actions'
 import { type Field } from 'types/Field'
 import {
   NUMBER_INPUT_LABEL,

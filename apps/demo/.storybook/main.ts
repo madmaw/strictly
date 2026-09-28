@@ -20,23 +20,16 @@ const config: StorybookConfig = {
 
   addons: [
     getAbsolutePath('@storybook/addon-links'),
-    getAbsolutePath('@storybook/addon-essentials'),
+    getAbsolutePath('@storybook/addon-docs'),
     getAbsolutePath('@chromatic-com/storybook'),
-    getAbsolutePath('@storybook/addon-interactions'),
   ],
-  core: {
-    builder: {
-      name: getAbsolutePath('@storybook/builder-vite'),
-      options: {
+  framework: {
+    name: getAbsolutePath('@storybook/react-vite'),
+    options: {
+      builder: {
         viteConfigPath: './vite.config.mts',
       },
     },
-  },
-  framework: {
-    // NOTE: the documentation says this should be @storybook/react-vite, which fails completely
-    // https://storybook.js.org/docs/get-started/frameworks/react-vite
-    name: getAbsolutePath('@storybook/react'),
-    options: {},
   },
 }
 export default config

@@ -22,7 +22,7 @@ exports[`mantine checkbox hooks > renders Disabled 1`] = `
         <input
           class="mantine-focus-auto m_26063560 mantine-Checkbox-input"
           disabled=""
-          id="mantine-0cyk5rcyk"
+          id="mantine-1ssssssss"
           name="$"
           type="checkbox"
         />
@@ -48,7 +48,7 @@ exports[`mantine checkbox hooks > renders Disabled 1`] = `
         <label
           class="m_8ee546b8 mantine-Checkbox-label"
           data-disabled="true"
-          for="mantine-0cyk5rcyk"
+          for="mantine-1ssssssss"
         >
           Checkbox
         </label>
@@ -82,7 +82,7 @@ exports[`mantine checkbox hooks > renders Error 1`] = `
           checked=""
           class="mantine-focus-auto m_26063560 mantine-Checkbox-input"
           data-error="true"
-          id="mantine-0cyk5rcyk"
+          id="mantine-1ssssssss"
           name="$"
           type="checkbox"
         />
@@ -106,7 +106,7 @@ exports[`mantine checkbox hooks > renders Error 1`] = `
       >
         <label
           class="m_8ee546b8 mantine-Checkbox-label"
-          for="mantine-0cyk5rcyk"
+          for="mantine-1ssssssss"
         >
           Checkbox
         </label>
@@ -142,7 +142,7 @@ exports[`mantine checkbox hooks > renders Off 1`] = `
       >
         <input
           class="mantine-focus-auto m_26063560 mantine-Checkbox-input"
-          id="mantine-0px4bipx4"
+          id="mantine-1ssssssss"
           name="$"
           type="checkbox"
         />
@@ -166,7 +166,7 @@ exports[`mantine checkbox hooks > renders Off 1`] = `
       >
         <label
           class="m_8ee546b8 mantine-Checkbox-label"
-          for="mantine-0px4bipx4"
+          for="mantine-1ssssssss"
         >
           Checkbox
         </label>
@@ -199,7 +199,7 @@ exports[`mantine checkbox hooks > renders On 1`] = `
         <input
           checked=""
           class="mantine-focus-auto m_26063560 mantine-Checkbox-input"
-          id="mantine-0cyk5rcyk"
+          id="mantine-1ssssssss"
           name="$"
           type="checkbox"
         />
@@ -223,7 +223,7 @@ exports[`mantine checkbox hooks > renders On 1`] = `
       >
         <label
           class="m_8ee546b8 mantine-Checkbox-label"
-          for="mantine-0cyk5rcyk"
+          for="mantine-1ssssssss"
         >
           Checkbox
         </label>
@@ -254,7 +254,7 @@ exports[`mantine checkbox hooks > renders Required 1`] = `
       >
         <input
           class="mantine-focus-auto m_26063560 mantine-Checkbox-input"
-          id="mantine-0cyk5rcyk"
+          id="mantine-1ssssssss"
           name="$"
           required=""
           type="checkbox"
@@ -279,7 +279,7 @@ exports[`mantine checkbox hooks > renders Required 1`] = `
       >
         <label
           class="m_8ee546b8 mantine-Checkbox-label"
-          for="mantine-0cyk5rcyk"
+          for="mantine-1ssssssss"
         >
           Checkbox
         </label>

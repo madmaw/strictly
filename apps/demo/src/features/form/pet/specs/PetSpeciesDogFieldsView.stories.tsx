@@ -1,13 +1,13 @@
-import { action } from '@storybook/addon-actions'
 import {
   type Meta,
   type StoryObj,
-} from '@storybook/react'
+} from '@storybook/react-vite'
 import { PetSpeciesDogFieldsView } from 'features/form/pet/PetSpeciesDogFieldsView'
 import {
   NOT_A_BREED_ERROR,
   NOT_A_NUMBER_ERROR,
 } from 'features/form/pet/types'
+import { action } from 'storybook/actions'
 
 const Component = PetSpeciesDogFieldsView
 

@@ -1,11 +1,11 @@
 import { Card } from '@mantine/core'
-import { action } from '@storybook/addon-actions'
 import {
   type Meta,
   type StoryObj,
-} from '@storybook/react'
+} from '@storybook/react-vite'
 import { MinimumStringLengthValidationErrorType } from '@strictly/define'
 import { PetFieldsView } from 'features/form/pet/PetFieldsView'
+import { action } from 'storybook/actions'
 
 const Component = PetFieldsView
 

@@ -1,6 +1,6 @@
 import '@mantine/core/styles.css'
 import { MantineProvider } from '@mantine/core'
-import { type Preview } from '@storybook/react'
+import { type Preview } from '@storybook/react-vite'
 import {
   type MetaArgsOf,
   StorybookLinguiProvider,

@@ -3,11 +3,10 @@ import {
   Textarea,
   type TextInputProps,
 } from '@mantine/core'
-import { action } from '@storybook/addon-actions'
 import {
   type Meta,
   type StoryObj,
-} from '@storybook/react'
+} from '@storybook/react-vite'
 import { type FieldsViewProps } from 'core/props'
 import {
   type SuppliedTextInputProps,
@@ -18,6 +17,7 @@ import {
   type ComponentType,
   type Ref,
 } from 'react'
+import { action } from 'storybook/actions'
 import { type Field } from 'types/Field'
 import { TEXT_INPUT_LABEL } from './textInputConstants'
 

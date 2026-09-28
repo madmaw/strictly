@@ -1,4 +1,4 @@
-import { type InputType } from '@storybook/csf'
+import { type InputType } from 'storybook/internal/types'
 
 type MetaArgType<T> = InputType & {
   t?: T,

@@ -17,8 +17,8 @@ exports[`PetFieldsView > renders Disabled 1`] = `
       <label
         class="m_8fdc1311 mantine-InputWrapper-label mantine-TextInput-label"
         data-required="true"
-        for="mantine-0cyk5rcyk"
-        id="mantine-0cyk5rcyk-label"
+        for="mantine-12voha2vo"
+        id="mantine-12voha2vo-label"
       >
         Name
         <span
@@ -39,7 +39,7 @@ exports[`PetFieldsView > renders Disabled 1`] = `
           data-disabled="true"
           data-variant="default"
           disabled=""
-          id="mantine-0cyk5rcyk"
+          id="mantine-12voha2vo"
           name="$.name"
           required=""
           value="Fido"
@@ -63,7 +63,7 @@ exports[`PetFieldsView > renders Disabled 1`] = `
             checked=""
             class="mantine-focus-auto m_26063560 mantine-Checkbox-input"
             disabled=""
-            id="mantine-0px4bipx4"
+            id="mantine-1fu8n1fu8"
             name="$.alive"
             type="checkbox"
           />
@@ -89,7 +89,7 @@ exports[`PetFieldsView > renders Disabled 1`] = `
           <label
             class="m_8ee546b8 mantine-Checkbox-label"
             data-disabled="true"
-            for="mantine-0px4bipx4"
+            for="mantine-1fu8n1fu8"
           >
             Alive?
           </label>
@@ -103,8 +103,8 @@ exports[`PetFieldsView > renders Disabled 1`] = `
       <label
         class="m_8fdc1311 mantine-InputWrapper-label mantine-PillsInput-label"
         data-size="sm"
-        for="mantine-12voha2vo"
-        id="mantine-12voha2vo-label"
+        for="mantine-1ssssssss"
+        id="mantine-1ssssssss-label"
         style="--input-label-size: var(--mantine-font-size-sm);"
       >
         Tags
@@ -233,7 +233,7 @@ exports[`PetFieldsView > renders Disabled 1`] = `
               data-disabled="true"
               data-type="visible"
               disabled=""
-              id="mantine-12voha2vo"
+              id="mantine-1ssssssss"
               name="$.newTag"
               placeholder="A new tag"
               type="text"
@@ -264,7 +264,7 @@ exports[`PetFieldsView > renders Disabled 1`] = `
               checked=""
               class="mantine-focus-auto m_26063560 mantine-Checkbox-input"
               disabled=""
-              id="mantine-1fu8n1fu8"
+              id="mantine-25rcyk5rc"
               name="$.owner"
               type="checkbox"
             />
@@ -290,7 +290,7 @@ exports[`PetFieldsView > renders Disabled 1`] = `
             <label
               class="m_8ee546b8 mantine-Checkbox-label"
               data-disabled="true"
-              for="mantine-1fu8n1fu8"
+              for="mantine-25rcyk5rc"
             >
               Has Owner?
             </label>
@@ -311,8 +311,8 @@ exports[`PetFieldsView > renders Disabled 1`] = `
           >
             <label
               class="m_8fdc1311 mantine-InputWrapper-label mantine-TextInput-label"
-              for="mantine-1ssssssss"
-              id="mantine-1ssssssss-label"
+              for="mantine-2ipx4bipx"
+              id="mantine-2ipx4bipx-label"
             >
               First Name
             </label>
@@ -328,7 +328,7 @@ exports[`PetFieldsView > renders Disabled 1`] = `
                 data-disabled="true"
                 data-variant="default"
                 disabled=""
-                id="mantine-1ssssssss"
+                id="mantine-2ipx4bipx"
                 name="$.firstName"
                 type="text"
                 value=""
@@ -340,8 +340,8 @@ exports[`PetFieldsView > renders Disabled 1`] = `
           >
             <label
               class="m_8fdc1311 mantine-InputWrapper-label mantine-TextInput-label"
-              for="mantine-25rcyk5rc"
-              id="mantine-25rcyk5rc-label"
+              for="mantine-2voha2voh"
+              id="mantine-2voha2voh-label"
             >
               Surname
             </label>
@@ -357,7 +357,7 @@ exports[`PetFieldsView > renders Disabled 1`] = `
                 data-disabled="true"
                 data-variant="default"
                 disabled=""
-                id="mantine-25rcyk5rc"
+                id="mantine-2voha2voh"
                 name="$.surname"
                 type="text"
                 value=""
@@ -370,8 +370,8 @@ exports[`PetFieldsView > renders Disabled 1`] = `
         >
           <label
             class="m_8fdc1311 mantine-InputWrapper-label mantine-TextInput-label"
-            for="mantine-2ipx4bipx"
-            id="mantine-2ipx4bipx-label"
+            for="mantine-38n1fu8n1"
+            id="mantine-38n1fu8n1-label"
           >
             Phone number
           </label>
@@ -387,7 +387,7 @@ exports[`PetFieldsView > renders Disabled 1`] = `
               data-disabled="true"
               data-variant="default"
               disabled=""
-              id="mantine-2ipx4bipx"
+              id="mantine-38n1fu8n1"
               name="$.phoneNumber"
               placeholder="04xxxxxxxx"
               type="tel"
@@ -423,8 +423,8 @@ exports[`PetFieldsView > renders Disabled 1`] = `
         >
           <label
             class="m_8fdc1311 mantine-InputWrapper-label mantine-TextInput-label"
-            for="mantine-2voha2voh"
-            id="mantine-2voha2voh-label"
+            for="mantine-3llllllll"
+            id="mantine-3llllllll-label"
           >
             Email
           </label>
@@ -439,7 +439,7 @@ exports[`PetFieldsView > renders Disabled 1`] = `
               data-disabled="true"
               data-variant="default"
               disabled=""
-              id="mantine-2voha2voh"
+              id="mantine-3llllllll"
               name="$.email"
               placeholder="me@somewhere.org"
               type="email"
@@ -517,8 +517,8 @@ exports[`PetFieldsView > renders Empty 1`] = `
       <label
         class="m_8fdc1311 mantine-InputWrapper-label mantine-TextInput-label"
         data-required="true"
-        for="mantine-0cyk5rcyk"
-        id="mantine-0cyk5rcyk-label"
+        for="mantine-12voha2vo"
+        id="mantine-12voha2vo-label"
       >
         Name
         <span
@@ -536,7 +536,7 @@ exports[`PetFieldsView > renders Empty 1`] = `
           aria-invalid="false"
           class="m_8fb7ebe7 mantine-Input-input mantine-TextInput-input"
           data-variant="default"
-          id="mantine-0cyk5rcyk"
+          id="mantine-12voha2vo"
           name="$.name"
           required=""
           value=""
@@ -557,7 +557,7 @@ exports[`PetFieldsView > renders Empty 1`] = `
         >
           <input
             class="mantine-focus-auto m_26063560 mantine-Checkbox-input"
-            id="mantine-0px4bipx4"
+            id="mantine-1fu8n1fu8"
             name="$.alive"
             type="checkbox"
           />
@@ -581,7 +581,7 @@ exports[`PetFieldsView > renders Empty 1`] = `
         >
           <label
             class="m_8ee546b8 mantine-Checkbox-label"
-            for="mantine-0px4bipx4"
+            for="mantine-1fu8n1fu8"
           >
             Alive?
           </label>
@@ -595,8 +595,8 @@ exports[`PetFieldsView > renders Empty 1`] = `
       <label
         class="m_8fdc1311 mantine-InputWrapper-label mantine-PillsInput-label"
         data-size="sm"
-        for="mantine-12voha2vo"
-        id="mantine-12voha2vo-label"
+        for="mantine-1ssssssss"
+        id="mantine-1ssssssss-label"
         style="--input-label-size: var(--mantine-font-size-sm);"
       >
         Tags
@@ -622,7 +622,7 @@ exports[`PetFieldsView > renders Empty 1`] = `
               aria-invalid="false"
               class="m_45c4369d mantine-PillsInputField-field"
               data-type="visible"
-              id="mantine-12voha2vo"
+              id="mantine-1ssssssss"
               name="$.newTag"
               placeholder="A new tag"
               type="text"
@@ -650,7 +650,7 @@ exports[`PetFieldsView > renders Empty 1`] = `
           >
             <input
               class="mantine-focus-auto m_26063560 mantine-Checkbox-input"
-              id="mantine-1fu8n1fu8"
+              id="mantine-25rcyk5rc"
               name="$.owner"
               type="checkbox"
             />
@@ -674,7 +674,7 @@ exports[`PetFieldsView > renders Empty 1`] = `
           >
             <label
               class="m_8ee546b8 mantine-Checkbox-label"
-              for="mantine-1fu8n1fu8"
+              for="mantine-25rcyk5rc"
             >
               Has Owner?
             </label>
@@ -751,8 +751,8 @@ exports[`PetFieldsView > renders Errors 1`] = `
       <label
         class="m_8fdc1311 mantine-InputWrapper-label mantine-TextInput-label"
         data-required="true"
-        for="mantine-0cyk5rcyk"
-        id="mantine-0cyk5rcyk-label"
+        for="mantine-12voha2vo"
+        id="mantine-12voha2vo-label"
       >
         Name
         <span
@@ -769,12 +769,12 @@ exports[`PetFieldsView > renders Errors 1`] = `
         style="--input-margin-bottom: calc(var(--mantine-spacing-xs) / 2);"
       >
         <input
-          aria-describedby="mantine-0cyk5rcyk-error"
+          aria-describedby="mantine-12voha2vo-error"
           aria-invalid="true"
           class="m_8fb7ebe7 mantine-Input-input mantine-TextInput-input"
           data-error="true"
           data-variant="default"
-          id="mantine-0cyk5rcyk"
+          id="mantine-12voha2vo"
           name="$.name"
           required=""
           value="Bad"
@@ -782,7 +782,7 @@ exports[`PetFieldsView > renders Errors 1`] = `
       </div>
       <p
         class="m_8f816625 mantine-InputWrapper-error mantine-TextInput-error"
-        id="mantine-0cyk5rcyk-error"
+        id="mantine-12voha2vo-error"
       >
         Name must be at least 8 characters long
       </p>
@@ -801,7 +801,7 @@ exports[`PetFieldsView > renders Errors 1`] = `
         >
           <input
             class="mantine-focus-auto m_26063560 mantine-Checkbox-input"
-            id="mantine-0px4bipx4"
+            id="mantine-1fu8n1fu8"
             name="$.alive"
             type="checkbox"
           />
@@ -825,7 +825,7 @@ exports[`PetFieldsView > renders Errors 1`] = `
         >
           <label
             class="m_8ee546b8 mantine-Checkbox-label"
-            for="mantine-0px4bipx4"
+            for="mantine-1fu8n1fu8"
           >
             Alive?
           </label>
@@ -839,8 +839,8 @@ exports[`PetFieldsView > renders Errors 1`] = `
       <label
         class="m_8fdc1311 mantine-InputWrapper-label mantine-PillsInput-label"
         data-size="sm"
-        for="mantine-12voha2vo"
-        id="mantine-12voha2vo-label"
+        for="mantine-1ssssssss"
+        id="mantine-1ssssssss-label"
         style="--input-label-size: var(--mantine-font-size-sm);"
       >
         Tags
@@ -899,7 +899,7 @@ exports[`PetFieldsView > renders Errors 1`] = `
               aria-invalid="false"
               class="m_45c4369d mantine-PillsInputField-field"
               data-type="visible"
-              id="mantine-12voha2vo"
+              id="mantine-1ssssssss"
               name="$.newTag"
               placeholder="A new tag"
               type="text"
@@ -929,7 +929,7 @@ exports[`PetFieldsView > renders Errors 1`] = `
             <input
               checked=""
               class="mantine-focus-auto m_26063560 mantine-Checkbox-input"
-              id="mantine-1fu8n1fu8"
+              id="mantine-25rcyk5rc"
               name="$.owner"
               type="checkbox"
             />
@@ -953,7 +953,7 @@ exports[`PetFieldsView > renders Errors 1`] = `
           >
             <label
               class="m_8ee546b8 mantine-Checkbox-label"
-              for="mantine-1fu8n1fu8"
+              for="mantine-25rcyk5rc"
             >
               Has Owner?
             </label>
@@ -974,8 +974,8 @@ exports[`PetFieldsView > renders Errors 1`] = `
           >
             <label
               class="m_8fdc1311 mantine-InputWrapper-label mantine-TextInput-label"
-              for="mantine-1ssssssss"
-              id="mantine-1ssssssss-label"
+              for="mantine-2ipx4bipx"
+              id="mantine-2ipx4bipx-label"
             >
               First Name
             </label>
@@ -988,7 +988,7 @@ exports[`PetFieldsView > renders Errors 1`] = `
                 autocapitalize="words"
                 class="m_8fb7ebe7 mantine-Input-input mantine-TextInput-input"
                 data-variant="default"
-                id="mantine-1ssssssss"
+                id="mantine-2ipx4bipx"
                 name="$.firstName"
                 type="text"
                 value=""
@@ -1000,8 +1000,8 @@ exports[`PetFieldsView > renders Errors 1`] = `
           >
             <label
               class="m_8fdc1311 mantine-InputWrapper-label mantine-TextInput-label"
-              for="mantine-25rcyk5rc"
-              id="mantine-25rcyk5rc-label"
+              for="mantine-2voha2voh"
+              id="mantine-2voha2voh-label"
             >
               Surname
             </label>
@@ -1014,7 +1014,7 @@ exports[`PetFieldsView > renders Errors 1`] = `
                 autocapitalize="words"
                 class="m_8fb7ebe7 mantine-Input-input mantine-TextInput-input"
                 data-variant="default"
-                id="mantine-25rcyk5rc"
+                id="mantine-2voha2voh"
                 name="$.surname"
                 type="text"
                 value=""
@@ -1027,8 +1027,8 @@ exports[`PetFieldsView > renders Errors 1`] = `
         >
           <label
             class="m_8fdc1311 mantine-InputWrapper-label mantine-TextInput-label"
-            for="mantine-2ipx4bipx"
-            id="mantine-2ipx4bipx-label"
+            for="mantine-38n1fu8n1"
+            id="mantine-38n1fu8n1-label"
           >
             Phone number
           </label>
@@ -1041,7 +1041,7 @@ exports[`PetFieldsView > renders Errors 1`] = `
               aria-invalid="false"
               class="m_8fb7ebe7 mantine-Input-input mantine-TextInput-input"
               data-variant="default"
-              id="mantine-2ipx4bipx"
+              id="mantine-38n1fu8n1"
               name="$.phoneNumber"
               placeholder="04xxxxxxxx"
               type="tel"
@@ -1077,8 +1077,8 @@ exports[`PetFieldsView > renders Errors 1`] = `
         >
           <label
             class="m_8fdc1311 mantine-InputWrapper-label mantine-TextInput-label"
-            for="mantine-2voha2voh"
-            id="mantine-2voha2voh-label"
+            for="mantine-3llllllll"
+            id="mantine-3llllllll-label"
           >
             Email
           </label>
@@ -1090,7 +1090,7 @@ exports[`PetFieldsView > renders Errors 1`] = `
               aria-invalid="false"
               class="m_8fb7ebe7 mantine-Input-input mantine-TextInput-input"
               data-variant="default"
-              id="mantine-2voha2voh"
+              id="mantine-3llllllll"
               name="$.email"
               placeholder="me@somewhere.org"
               type="email"
@@ -1168,8 +1168,8 @@ exports[`PetFieldsView > renders Populated 1`] = `
       <label
         class="m_8fdc1311 mantine-InputWrapper-label mantine-TextInput-label"
         data-required="true"
-        for="mantine-0px4bipx4"
-        id="mantine-0px4bipx4-label"
+        for="mantine-12voha2vo"
+        id="mantine-12voha2vo-label"
       >
         Name
         <span
@@ -1187,7 +1187,7 @@ exports[`PetFieldsView > renders Populated 1`] = `
           aria-invalid="false"
           class="m_8fb7ebe7 mantine-Input-input mantine-TextInput-input"
           data-variant="default"
-          id="mantine-0px4bipx4"
+          id="mantine-12voha2vo"
           name="$.name"
           required=""
           value="Fido"
@@ -1210,7 +1210,7 @@ exports[`PetFieldsView > renders Populated 1`] = `
           <input
             checked=""
             class="mantine-focus-auto m_26063560 mantine-Checkbox-input"
-            id="mantine-12voha2vo"
+            id="mantine-1fu8n1fu8"
             name="$.alive"
             type="checkbox"
           />
@@ -1234,7 +1234,7 @@ exports[`PetFieldsView > renders Populated 1`] = `
         >
           <label
             class="m_8ee546b8 mantine-Checkbox-label"
-            for="mantine-12voha2vo"
+            for="mantine-1fu8n1fu8"
           >
             Alive?
           </label>
@@ -1248,8 +1248,8 @@ exports[`PetFieldsView > renders Populated 1`] = `
       <label
         class="m_8fdc1311 mantine-InputWrapper-label mantine-PillsInput-label"
         data-size="sm"
-        for="mantine-1fu8n1fu8"
-        id="mantine-1fu8n1fu8-label"
+        for="mantine-1ssssssss"
+        id="mantine-1ssssssss-label"
         style="--input-label-size: var(--mantine-font-size-sm);"
       >
         Tags
@@ -1374,7 +1374,7 @@ exports[`PetFieldsView > renders Populated 1`] = `
               aria-invalid="false"
               class="m_45c4369d mantine-PillsInputField-field"
               data-type="visible"
-              id="mantine-1fu8n1fu8"
+              id="mantine-1ssssssss"
               name="$.newTag"
               placeholder="A new tag"
               type="text"
@@ -1404,7 +1404,7 @@ exports[`PetFieldsView > renders Populated 1`] = `
             <input
               checked=""
               class="mantine-focus-auto m_26063560 mantine-Checkbox-input"
-              id="mantine-1ssssssss"
+              id="mantine-25rcyk5rc"
               name="$.owner"
               type="checkbox"
             />
@@ -1428,7 +1428,7 @@ exports[`PetFieldsView > renders Populated 1`] = `
           >
             <label
               class="m_8ee546b8 mantine-Checkbox-label"
-              for="mantine-1ssssssss"
+              for="mantine-25rcyk5rc"
             >
               Has Owner?
             </label>
@@ -1449,8 +1449,8 @@ exports[`PetFieldsView > renders Populated 1`] = `
           >
             <label
               class="m_8fdc1311 mantine-InputWrapper-label mantine-TextInput-label"
-              for="mantine-25rcyk5rc"
-              id="mantine-25rcyk5rc-label"
+              for="mantine-2ipx4bipx"
+              id="mantine-2ipx4bipx-label"
             >
               First Name
             </label>
@@ -1463,7 +1463,7 @@ exports[`PetFieldsView > renders Populated 1`] = `
                 autocapitalize="words"
                 class="m_8fb7ebe7 mantine-Input-input mantine-TextInput-input"
                 data-variant="default"
-                id="mantine-25rcyk5rc"
+                id="mantine-2ipx4bipx"
                 name="$.firstName"
                 type="text"
                 value="Peggy"
@@ -1475,8 +1475,8 @@ exports[`PetFieldsView > renders Populated 1`] = `
           >
             <label
               class="m_8fdc1311 mantine-InputWrapper-label mantine-TextInput-label"
-              for="mantine-2ipx4bipx"
-              id="mantine-2ipx4bipx-label"
+              for="mantine-2voha2voh"
+              id="mantine-2voha2voh-label"
             >
               Surname
             </label>
@@ -1489,7 +1489,7 @@ exports[`PetFieldsView > renders Populated 1`] = `
                 autocapitalize="words"
                 class="m_8fb7ebe7 mantine-Input-input mantine-TextInput-input"
                 data-variant="default"
-                id="mantine-2ipx4bipx"
+                id="mantine-2voha2voh"
                 name="$.surname"
                 type="text"
                 value="Sue"
@@ -1502,8 +1502,8 @@ exports[`PetFieldsView > renders Populated 1`] = `
         >
           <label
             class="m_8fdc1311 mantine-InputWrapper-label mantine-TextInput-label"
-            for="mantine-2voha2voh"
-            id="mantine-2voha2voh-label"
+            for="mantine-38n1fu8n1"
+            id="mantine-38n1fu8n1-label"
           >
             Phone number
           </label>
@@ -1516,7 +1516,7 @@ exports[`PetFieldsView > renders Populated 1`] = `
               aria-invalid="false"
               class="m_8fb7ebe7 mantine-Input-input mantine-TextInput-input"
               data-variant="default"
-              id="mantine-2voha2voh"
+              id="mantine-38n1fu8n1"
               name="$.phoneNumber"
               placeholder="04xxxxxxxx"
               type="tel"
@@ -1552,8 +1552,8 @@ exports[`PetFieldsView > renders Populated 1`] = `
         >
           <label
             class="m_8fdc1311 mantine-InputWrapper-label mantine-TextInput-label"
-            for="mantine-38n1fu8n1"
-            id="mantine-38n1fu8n1-label"
+            for="mantine-3llllllll"
+            id="mantine-3llllllll-label"
           >
             Email
           </label>
@@ -1565,7 +1565,7 @@ exports[`PetFieldsView > renders Populated 1`] = `
               aria-invalid="false"
               class="m_8fb7ebe7 mantine-Input-input mantine-TextInput-input"
               data-variant="default"
-              id="mantine-38n1fu8n1"
+              id="mantine-3llllllll"
               name="$.email"
               placeholder="me@somewhere.org"
               type="email"

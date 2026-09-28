@@ -17,8 +17,8 @@ exports[`PetSpeciesDogFieldsView > renders Disabled 1`] = `
       <label
         class="m_8fdc1311 mantine-InputWrapper-label mantine-Select-label"
         data-required="true"
-        for="mantine-12voha2vo"
-        id="mantine-12voha2vo-label"
+        for="mantine-1ssssssss"
+        id="mantine-1ssssssss-label"
       >
         Breed
         <span
@@ -44,7 +44,7 @@ exports[`PetSpeciesDogFieldsView > renders Disabled 1`] = `
           data-disabled="true"
           data-variant="default"
           disabled=""
-          id="mantine-12voha2vo"
+          id="mantine-1ssssssss"
           readonly=""
           required=""
           value="Other"
@@ -82,8 +82,8 @@ exports[`PetSpeciesDogFieldsView > renders Disabled 1`] = `
       <label
         class="m_8fdc1311 mantine-InputWrapper-label mantine-NumberInput-label"
         data-required="true"
-        for="mantine-1fu8n1fu8"
-        id="mantine-1fu8n1fu8-label"
+        for="mantine-25rcyk5rc"
+        id="mantine-25rcyk5rc-label"
       >
         Barks
         <span
@@ -106,7 +106,7 @@ exports[`PetSpeciesDogFieldsView > renders Disabled 1`] = `
           data-disabled="true"
           data-variant="default"
           disabled=""
-          id="mantine-1fu8n1fu8"
+          id="mantine-25rcyk5rc"
           inputmode="numeric"
           name="$.species:dog.barks"
           required=""
@@ -189,8 +189,8 @@ exports[`PetSpeciesDogFieldsView > renders Error 1`] = `
       <label
         class="m_8fdc1311 mantine-InputWrapper-label mantine-Select-label"
         data-required="true"
-        for="mantine-12voha2vo"
-        id="mantine-12voha2vo-label"
+        for="mantine-1ssssssss"
+        id="mantine-1ssssssss-label"
       >
         Breed
         <span
@@ -209,14 +209,14 @@ exports[`PetSpeciesDogFieldsView > renders Error 1`] = `
         style="--input-margin-bottom: calc(var(--mantine-spacing-xs) / 2); --input-right-section-pointer-events: none;"
       >
         <input
-          aria-describedby="mantine-12voha2vo-error"
+          aria-describedby="mantine-1ssssssss-error"
           aria-haspopup="listbox"
           aria-invalid="true"
           autocomplete="off"
           class="m_8fb7ebe7 mantine-Input-input mantine-Select-input"
           data-error="true"
           data-variant="default"
-          id="mantine-12voha2vo"
+          id="mantine-1ssssssss"
           readonly=""
           required=""
           value=""
@@ -244,7 +244,7 @@ exports[`PetSpeciesDogFieldsView > renders Error 1`] = `
       </div>
       <p
         class="m_8f816625 mantine-InputWrapper-error mantine-Select-error"
-        id="mantine-12voha2vo-error"
+        id="mantine-1ssssssss-error"
       >
         Not a recognized dog breed
       </p>
@@ -261,8 +261,8 @@ exports[`PetSpeciesDogFieldsView > renders Error 1`] = `
       <label
         class="m_8fdc1311 mantine-InputWrapper-label mantine-NumberInput-label"
         data-required="true"
-        for="mantine-1fu8n1fu8"
-        id="mantine-1fu8n1fu8-label"
+        for="mantine-25rcyk5rc"
+        id="mantine-25rcyk5rc-label"
       >
         Barks
         <span
@@ -280,12 +280,12 @@ exports[`PetSpeciesDogFieldsView > renders Error 1`] = `
         style="--input-margin-bottom: calc(var(--mantine-spacing-xs) / 2); --input-right-section-width: var(--ni-right-section-width-sm);"
       >
         <input
-          aria-describedby="mantine-1fu8n1fu8-error"
+          aria-describedby="mantine-25rcyk5rc-error"
           aria-invalid="true"
           class="m_8fb7ebe7 mantine-Input-input mantine-NumberInput-input"
           data-error="true"
           data-variant="default"
-          id="mantine-1fu8n1fu8"
+          id="mantine-25rcyk5rc"
           inputmode="numeric"
           name="$.species:dog.barks"
           required=""
@@ -345,7 +345,7 @@ exports[`PetSpeciesDogFieldsView > renders Error 1`] = `
       </div>
       <p
         class="m_8f816625 mantine-InputWrapper-error mantine-NumberInput-error"
-        id="mantine-1fu8n1fu8-error"
+        id="mantine-25rcyk5rc-error"
       >
         Number of barks must be a number
       </p>
@@ -371,8 +371,8 @@ exports[`PetSpeciesDogFieldsView > renders Valid 1`] = `
       <label
         class="m_8fdc1311 mantine-InputWrapper-label mantine-Select-label"
         data-required="true"
-        for="mantine-1fu8n1fu8"
-        id="mantine-1fu8n1fu8-label"
+        for="mantine-1ssssssss"
+        id="mantine-1ssssssss-label"
       >
         Breed
         <span
@@ -395,7 +395,7 @@ exports[`PetSpeciesDogFieldsView > renders Valid 1`] = `
           autocomplete="off"
           class="m_8fb7ebe7 mantine-Input-input mantine-Select-input"
           data-variant="default"
-          id="mantine-1fu8n1fu8"
+          id="mantine-1ssssssss"
           readonly=""
           required=""
           value="Alsatian"
@@ -432,8 +432,8 @@ exports[`PetSpeciesDogFieldsView > renders Valid 1`] = `
       <label
         class="m_8fdc1311 mantine-InputWrapper-label mantine-NumberInput-label"
         data-required="true"
-        for="mantine-1ssssssss"
-        id="mantine-1ssssssss-label"
+        for="mantine-25rcyk5rc"
+        id="mantine-25rcyk5rc-label"
       >
         Barks
         <span
@@ -453,7 +453,7 @@ exports[`PetSpeciesDogFieldsView > renders Valid 1`] = `
           aria-invalid="false"
           class="m_8fb7ebe7 mantine-Input-input mantine-NumberInput-input"
           data-variant="default"
-          id="mantine-1ssssssss"
+          id="mantine-25rcyk5rc"
           inputmode="numeric"
           name="$.species:dog.barks"
           required=""

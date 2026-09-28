@@ -4,6 +4,7 @@
 import { lingui } from '@lingui/vite-plugin'
 import reactSupport from '@vitejs/plugin-react'
 import { copyFile } from 'node:fs/promises'
+import { createRequire } from 'node:module'
 import { join } from 'node:path'
 import {
   defineConfig,
@@ -23,6 +24,8 @@ export type LibraryPackageJson = {
 }
 
 const DIST = 'dist'
+// babel resolves plugin names relative to the package being built, where these are not installed
+const require = createRequire(import.meta.url)
 
 export function createTsconfigPathsPlugin({
   references,
@@ -50,14 +53,14 @@ export function createReactPlugin({
     babel: {
       plugins: [
         [
-          '@babel/plugin-proposal-decorators',
+          require.resolve('@babel/plugin-proposal-decorators'),
           {
             version: '2023-05',
           },
         ],
-        ['@babel/plugin-transform-class-static-block'],
-        ['@babel/plugin-proposal-class-properties'],
-        ...(withLingui ? [['@lingui/babel-plugin-lingui-macro']] : []),
+        [require.resolve('@babel/plugin-transform-class-static-block')],
+        [require.resolve('@babel/plugin-proposal-class-properties')],
+        ...(withLingui ? [[require.resolve('@lingui/babel-plugin-lingui-macro')]] : []),
       ],
       assumptions: {
         setPublicClassFields: false,

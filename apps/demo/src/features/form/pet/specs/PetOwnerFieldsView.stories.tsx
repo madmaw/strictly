@@ -1,13 +1,13 @@
-import { action } from '@storybook/addon-actions'
 import {
   type Meta,
   type StoryObj,
-} from '@storybook/react'
+} from '@storybook/react-vite'
 import {
   MinimumStringLengthValidationErrorType,
   RegexpValidationErrorType,
 } from '@strictly/define'
 import { PetOwnerFieldsView } from 'features/form/pet/PetOwnerFieldsView'
+import { action } from 'storybook/actions'
 
 const Component = PetOwnerFieldsView
 
