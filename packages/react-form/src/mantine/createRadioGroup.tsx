@@ -56,7 +56,7 @@ export function createRadioGroup<
       name: valuePath,
       value,
       required,
-      error: error != null && <ErrorRenderer error={error} />,
+      error: error == null ? null : <ErrorRenderer error={error} />,
       onChange,
       onFocus,
       onBlur,

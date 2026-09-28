@@ -16,6 +16,7 @@
     "vite": "catalog:",
     "vite-plugin-dts": "catalog:",
     "vitest": "catalog:",
+    "vitest-fail-on-console": "catalog:",
     "vitest-matchmedia-mock": "catalog:"
   },
   "exports": {

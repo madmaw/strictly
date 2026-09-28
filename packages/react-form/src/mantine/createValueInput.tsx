@@ -59,7 +59,7 @@ export function createValueInput<
       value,
       disabled: readonly,
       required,
-      error: error != null && <ErrorRenderer error={error} />,
+      error: error == null ? null : <ErrorRenderer error={error} />,
       onChange,
       onFocus,
       onBlur,
