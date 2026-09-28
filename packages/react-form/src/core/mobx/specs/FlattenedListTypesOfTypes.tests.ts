@@ -7,12 +7,10 @@ import {
   stringType,
   union,
 } from '@strictly/define'
-import {
-  type FlattenedListTypesOfType,
-} from 'core/mobx/FlattenedListTypesOfType'
+import { type FlattenedListTypesOfType } from 'core/mobx/FlattenedListTypesOfType'
 
-describe('FlattenedListTypesOfType', function () {
-  it('filters lists types', function () {
+describe('FlattenedListTypesOfType', () => {
+  it('filters lists types', () => {
     const listTypeDef = list(numberType)
     const recordTypeDef = record<typeof stringType, string>(stringType)
     const objectTypeDef = object()
@@ -27,7 +25,7 @@ describe('FlattenedListTypesOfType', function () {
     type F = FlattenedListTypesOfType<typeof typeDef._type>
 
     type E = {
-      readonly '$.list': typeof listTypeDef._type,
+      readonly '$.list': typeof listTypeDef._type
     }
 
     expectTypeOf<F>().toEqualTypeOf<E>()

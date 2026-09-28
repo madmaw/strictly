@@ -1,7 +1,4 @@
-import {
-  type Meta,
-  type StoryObj,
-} from '@storybook/react-vite'
+import { type Meta, type StoryObj } from '@storybook/react-vite'
 import { PetSpeciesCatFieldsView } from 'features/form/pet/PetSpeciesCatFieldsView'
 import { NOT_A_BREED_ERROR } from 'features/form/pet/types'
 import { action } from 'storybook/actions'

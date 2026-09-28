@@ -3,22 +3,17 @@ import {
   flattenValueTo,
   type Setter,
 } from 'transformers/flatteners/flattenValueTo'
-import {
-  type ReadonlyDeep,
-  type ValueOf,
-} from 'type-fest'
+import { type ReadonlyDeep, type ValueOf } from 'type-fest'
 import { type FlattenedTypesOfType } from 'types/FlattenedTypesOfType'
 import { type FlattenedValuesOfType } from 'types/FlattenedValuesOfType'
 import { type ReadonlyTypeOfType } from 'types/ReadonlyTypeOfType'
 import { type StrictTypeDef } from 'types/StrictType'
 import { type Type } from 'types/Type'
 import { type ValueOfType } from 'types/ValueOfType'
-import {
-  validate,
-  type Validator,
-} from 'validation/validator'
+import { validate, type Validator } from 'validation/validator'
 
-type ErrorOfValidator<V extends Validator> = V extends Validator<infer _V, infer E> ? E | null : never
+type ErrorOfValidator<V extends Validator> =
+  V extends Validator<infer _V, infer E> ? E | null : never
 
 export type ErrorsOfFlattenedValidators<
   TypePathsToValidators extends Readonly<Record<string, Validator>>,
@@ -32,26 +27,32 @@ export type FlattenedTypePathsToValidatorsOf<
   Context,
 > = {
   readonly [
-    K in keyof FlattenedValues
-    // TODO would be better to use the equivalent readonly typedef, but it causes typescript to
-    // infinitely recurse
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  ]?: Validator<ReadonlyDeep<FlattenedValues[K]>, any, any, Context>
+    K in keyof FlattenedValues // TODO would be better to use the equivalent readonly typedef, but it causes typescript to
+  ]?: // infinitely recurse
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  Validator<ReadonlyDeep<FlattenedValues[K]>, any, any, Context>
 }
 
 export type ValuePathsToValidatorsOf<
   TypePathsToAdapters extends Partial<Readonly<Record<string, Validator>>>,
   ValuePathsToTypePaths extends Readonly<Record<string, string>>,
-> = keyof TypePathsToAdapters extends ValueOf<ValuePathsToTypePaths> ? {
-    readonly [
-      K in keyof ValuePathsToTypePaths as unknown extends TypePathsToAdapters[ValuePathsToTypePaths[K]] ? never : K
-    ]: NonNullable<TypePathsToAdapters[ValuePathsToTypePaths[K]]>
-  }
-  : never
+> =
+  keyof TypePathsToAdapters extends ValueOf<ValuePathsToTypePaths>
+    ? {
+        readonly [
+          K in keyof ValuePathsToTypePaths as unknown extends TypePathsToAdapters[ValuePathsToTypePaths[K]]
+            ? never
+            : K
+        ]: NonNullable<TypePathsToAdapters[ValuePathsToTypePaths[K]]>
+      }
+    : never
 
 export type FlattenedValidatorsOfType<
   T extends Type,
-  Flattened extends Readonly<Record<string, Type>> = FlattenedTypesOfType<T, '*'>,
+  Flattened extends Readonly<Record<string, Type>> = FlattenedTypesOfType<
+    T,
+    '*'
+  >,
 > = {
   [K in keyof Flattened]: Validator
 }
@@ -63,11 +64,10 @@ export function flattenValidationErrorsOfType<
     FlattenedValuesOfType<T, '*'>,
     ValueOfType<ReadonlyTypeOfType<T>>
   >,
-  ValuePathsToValidators extends ValuePathsToValidatorsOf<TypePathsToValidators, ValueToTypePaths> =
-    ValuePathsToValidatorsOf<
-      TypePathsToValidators,
-      ValueToTypePaths
-    >,
+  ValuePathsToValidators extends ValuePathsToValidatorsOf<
+    TypePathsToValidators,
+    ValueToTypePaths
+  > = ValuePathsToValidatorsOf<TypePathsToValidators, ValueToTypePaths>,
 >(
   type: T,
   value: ValueOfType<T>,
@@ -78,17 +78,17 @@ export function flattenValidationErrorsOfType<
     type,
     value,
     () => {},
-    function (
+    (
       _t: StrictTypeDef,
       v: AnyValueType,
       _setter: Setter<AnyValueType>,
       typePath: string,
       valuePath: string,
-    ) {
-      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+    ) => {
       const validator = validators[typePath as keyof TypePathsToValidators]
-      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-      return validator != null ? validate(validator as Validator, v, valuePath, value) : null
+      return validator == null
+        ? null
+        : validate(validator as Validator, v, valuePath, value)
     },
     listIndicesToKeys,
   )

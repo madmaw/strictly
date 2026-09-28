@@ -9,10 +9,10 @@ export class DeterministicRandomPlugin implements VitestPlugin {
 
   install() {
     return {
-      afterEach: function () {
+      afterEach() {
         Math.random = DeterministicRandomPlugin.originalMathRandom
       },
-      beforeEach: function () {
+      beforeEach() {
         let count = 0
         Math.random = function () {
           count++

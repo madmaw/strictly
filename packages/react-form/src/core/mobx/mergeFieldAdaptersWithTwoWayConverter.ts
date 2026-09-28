@@ -2,7 +2,7 @@ import { map } from '@strictly/base'
 import {
   chainAnnotatedFieldConverter,
   chainUnreliableFieldConverter,
-} from 'field_converters/chainFieldConverter'
+} from 'field-converters/chainFieldConverter'
 import { type TwoWayFieldConverter } from 'types/FieldConverters'
 import {
   type ContextOfFieldAdapter,
@@ -27,11 +27,15 @@ export type MergedOfFieldAdaptersWithTwoWayConverter<
   >
 }
 
-type ValuePathsOfFieldAdapters<FieldAdapters extends Readonly<Record<string, FieldAdapter>>> = {
+type ValuePathsOfFieldAdapters<
+  FieldAdapters extends Readonly<Record<string, FieldAdapter>>,
+> = {
   [K in keyof FieldAdapters]: ValuePathOfFieldAdapter<FieldAdapters[K]>
 }[keyof FieldAdapters]
 
-type TosOfFieldAdapters<FieldAdapters extends Readonly<Record<string, FieldAdapter>>> = {
+type TosOfFieldAdapters<
+  FieldAdapters extends Readonly<Record<string, FieldAdapter>>,
+> = {
   [K in keyof FieldAdapters]: ToOfFieldAdapter<FieldAdapters[K]>
 }[keyof FieldAdapters]
 
@@ -53,18 +57,18 @@ export function mergeFieldAdaptersWithTwoWayConverter<
 ): MergedOfFieldAdaptersWithTwoWayConverter<FieldAdapters, E, Context> {
   return map<keyof FieldAdapters, FieldAdapter>(
     fieldAdapters,
-    function (_key, adapter) {
-      return {
-        convert: chainAnnotatedFieldConverter(
-          adapter.convert.bind(adapter),
-          converter.convert.bind(converter),
-        ),
-        revert: adapter.revert && chainUnreliableFieldConverter(
+    (_key, adapter) => ({
+      convert: chainAnnotatedFieldConverter(
+        adapter.convert.bind(adapter),
+        converter.convert.bind(converter),
+      ),
+      revert:
+        adapter.revert &&
+        chainUnreliableFieldConverter(
           converter.revert.bind(converter),
           adapter.revert.bind(adapter),
         ),
-        create: adapter.create.bind(adapter),
-      }
-    },
+      create: adapter.create.bind(adapter),
+    }),
   )
 }

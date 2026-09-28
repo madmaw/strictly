@@ -1,7 +1,4 @@
-import {
-  type Meta,
-  type StoryObj,
-} from '@storybook/react-vite'
+import { type Meta, type StoryObj } from '@storybook/react-vite'
 import { type FieldsViewProps } from 'core/props'
 import { useMantineFormFields } from 'mantine/hooks'
 import { action } from 'storybook/actions'
@@ -15,18 +12,14 @@ function ErrorRenderer({ error }: { error: string }) {
 function Component({
   ...props
 }: FieldsViewProps<{
-  $: Field<string | null, string>,
+  $: Field<string | null, string>
 }>) {
   const form = useMantineFormFields(props)
   const SelectComponent = form.select('$')
   return (
     <SelectComponent
       ErrorRenderer={ErrorRenderer}
-      data={[
-        'a',
-        'b',
-        'c',
-      ]}
+      data={['a', 'b', 'c']}
       label={SELECT_LABEL}
     />
   )

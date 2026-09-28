@@ -5,7 +5,7 @@ export function createToAbsoluteUrl(
   base: string,
   currentPath: string,
 ): ToAbsoluteUrl {
-  const baseUrl = new URL(base.endsWith('/') ? base : base + '/', site)
+  const baseUrl = new URL(base.endsWith('/') ? base : `${base}/`, site)
   const pageUrl = new URL(currentPath, baseUrl)
   return function (path: string) {
     let absoluteUrl: string

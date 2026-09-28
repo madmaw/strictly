@@ -3,18 +3,18 @@ import { type ErrorOfField } from 'types/ErrorOfField'
 import { type Fields } from 'types/Field'
 
 type InternalErrorRendererProps<E> = {
-  error: E,
+  error: E
 }
 
 export type ErrorRendererProps<
   F extends Fields,
   K extends keyof Fields,
-> = InternalErrorRendererProps<
-  ErrorOfField<F[K]>
->
+> = InternalErrorRendererProps<ErrorOfField<F[K]>>
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type ErrorRenderer<E = any> = ComponentType<InternalErrorRendererProps<E>>
+export type ErrorRenderer<E = any> = ComponentType<
+  InternalErrorRendererProps<E>
+>
 
 export function DefaultErrorRenderer({
   error,

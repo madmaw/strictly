@@ -8,25 +8,26 @@ import { type VitestPlugin } from 'test/VitestPlugin'
  */
 export function installVitestPlugins() {
   // some plugins only work in the browser (or a DOM shim)
-  const isBrowser = typeof window !== 'undefined' && typeof window.document !== 'undefined'
+  // oxlint-disable-next-line typescript/no-unnecessary-condition -- window does not exist under node
+  const isBrowser = typeof window?.document !== 'undefined'
   const plugins: VitestPlugin[] = [new DeterministicRandomPlugin()]
   if (isBrowser) {
     plugins.push(new ResizeObserverPlugin(), new MatchMediaPlugin())
   }
 
-  plugins.forEach(function (plugin) {
+  plugins.forEach((plugin) => {
     const callbacks = plugin.install()
 
-    beforeAll(async function () {
+    beforeAll(async () => {
       await callbacks.beforeAll?.()
     })
-    afterAll(async function () {
+    afterAll(async () => {
       await callbacks.afterAll?.()
     })
-    beforeEach(async function () {
+    beforeEach(async () => {
       await callbacks.beforeEach?.()
     })
-    afterEach(async function () {
+    afterEach(async () => {
       await callbacks.afterEach?.()
     })
   })

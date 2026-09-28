@@ -1,9 +1,10 @@
+/* oxlint-disable typescript/no-non-null-assertion -- these are type-level tests that never call the mapper */
 import { type CallbackMapper } from 'mantine/createFieldsView'
 
 describe('createFieldsView', () => {
   describe('CallbackMapper', () => {
     it('maps a root paths', () => {
-      type Cm = CallbackMapper<`$`>
+      type Cm = CallbackMapper<'$'>
       const callbackMapper: Cm = null!
       type Callback = (valuePath: '$') => void
       type MappedCallback = ReturnType<typeof callbackMapper<Callback>>
@@ -11,7 +12,7 @@ describe('createFieldsView', () => {
     })
 
     it('maps a simple paths', () => {
-      type Cm = CallbackMapper<`$.x`>
+      type Cm = CallbackMapper<'$.x'>
       const callbackMapper: Cm = null!
       type Callback = (valuePath: '$.x.y') => void
       type MappedCallback = ReturnType<typeof callbackMapper<Callback>>
@@ -23,7 +24,9 @@ describe('createFieldsView', () => {
       const callbackMapper: Cm = null!
       type Callback = (valuePath: `$.${number}.x.${number}.y`) => void
       type MappedCallback = ReturnType<typeof callbackMapper<Callback>>
-      expectTypeOf<MappedCallback>().toEqualTypeOf<(valuePath: `$.${number}.y`) => void>()
+      expectTypeOf<MappedCallback>().toEqualTypeOf<
+        (valuePath: `$.${number}.y`) => void
+      >()
     })
   })
 })

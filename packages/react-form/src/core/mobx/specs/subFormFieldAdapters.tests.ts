@@ -1,19 +1,11 @@
 import { type FieldAdapter } from 'core/mobx/FieldAdapter'
-import {
-  subFormFieldAdapters,
-} from 'core/mobx/subFormFieldAdapters'
+import { subFormFieldAdapters } from 'core/mobx/subFormFieldAdapters'
 import { UnreliableFieldConversionType } from 'types/FieldConverters'
-import {
-  mockDeep,
-  mockReset,
-} from 'vitest-mock-extended'
+import { mockDeep, mockReset } from 'vitest-mock-extended'
 
 describe('subFormFieldAdapters', () => {
   describe('empty value', () => {
-    const adapters = subFormFieldAdapters(
-      {},
-      '$.a',
-    )
+    const adapters = subFormFieldAdapters({}, '$.a')
 
     it('equals expected type', () => {
       expectTypeOf(adapters).toEqualTypeOf<{}>()
@@ -25,8 +17,10 @@ describe('subFormFieldAdapters', () => {
   })
 
   describe('single adapter', () => {
-    const mockedFieldAdapter1 = mockDeep<Required<FieldAdapter<string, boolean, number, '$', string>>>()
-    const fieldAdapter1: FieldAdapter<string, boolean, number, '$', string> = mockedFieldAdapter1
+    const mockedFieldAdapter1 =
+      mockDeep<Required<FieldAdapter<string, boolean, number, '$', string>>>()
+    const fieldAdapter1: FieldAdapter<string, boolean, number, '$', string> =
+      mockedFieldAdapter1
 
     const subAdapters = {
       $: fieldAdapter1,
@@ -35,10 +29,7 @@ describe('subFormFieldAdapters', () => {
       typeof subAdapters,
       '$.a',
       { '$.a': '$.a' }
-    >(
-      subAdapters,
-      '$.a',
-    )
+    >(subAdapters, '$.a')
 
     beforeEach(() => {
       mockReset(mockedFieldAdapter1)
@@ -48,7 +39,7 @@ describe('subFormFieldAdapters', () => {
       // TODO toEqualTypeOf (cannot reason about revert optionality, seems to be a TS issue as they
       // are both optional AFAICT)
       expectTypeOf(adapters).toMatchTypeOf<{
-        '$.a': FieldAdapter<string, boolean, number, '$.a', string>,
+        '$.a': FieldAdapter<string, boolean, number, '$.a', string>
       }>()
     })
 
@@ -92,8 +83,10 @@ describe('subFormFieldAdapters', () => {
   })
 
   describe('multiple adapters', () => {
-    const mockedFieldAdapter1 = mockDeep<Required<FieldAdapter<string, boolean>>>()
-    const fieldAdapter1: FieldAdapter<string, boolean, number> = mockedFieldAdapter1
+    const mockedFieldAdapter1 =
+      mockDeep<Required<FieldAdapter<string, boolean>>>()
+    const fieldAdapter1: FieldAdapter<string, boolean, number> =
+      mockedFieldAdapter1
     const mockedFieldAdapter2 = mockDeep<FieldAdapter<number, boolean>>()
     const fieldAdapter2: FieldAdapter<number, boolean> = mockedFieldAdapter2
 
@@ -113,8 +106,8 @@ describe('subFormFieldAdapters', () => {
     it('equals expected type', () => {
       // TODO toEqualTypeOf (seems to be a TS error)
       expectTypeOf(adapters).toMatchTypeOf<{
-        '$.a.x': FieldAdapter<string, boolean>,
-        '$.a.y': FieldAdapter<number, boolean>,
+        '$.a.x': FieldAdapter<string, boolean>
+        '$.a.y': FieldAdapter<number, boolean>
       }>()
     })
 
@@ -162,8 +155,10 @@ describe('subFormFieldAdapters', () => {
   })
 
   describe('list adapter', () => {
-    const mockedFieldAdapter1 = mockDeep<Required<FieldAdapter<string, boolean, number, '$', string>>>()
-    const fieldAdapter1: FieldAdapter<string, boolean, number, '$', string> = mockedFieldAdapter1
+    const mockedFieldAdapter1 =
+      mockDeep<Required<FieldAdapter<string, boolean, number, '$', string>>>()
+    const fieldAdapter1: FieldAdapter<string, boolean, number, '$', string> =
+      mockedFieldAdapter1
     const subAdapters = {
       $: fieldAdapter1,
     }
@@ -171,12 +166,9 @@ describe('subFormFieldAdapters', () => {
       typeof subAdapters,
       '$.*',
       {
-        '$.*': `$.${number}`,
+        '$.*': `$.${number}`
       }
-    >(
-      subAdapters,
-      '$.*',
-    )
+    >(subAdapters, '$.*')
 
     beforeEach(() => {
       mockReset(mockedFieldAdapter1)
@@ -185,7 +177,7 @@ describe('subFormFieldAdapters', () => {
     it('equals expected type', () => {
       // TODO toEqualTypeOf (seems to be a TS error)
       expectTypeOf(adapters).toMatchTypeOf<{
-        '$.*': FieldAdapter<string, boolean, number, `$.${number}`, string>,
+        '$.*': FieldAdapter<string, boolean, number, `$.${number}`, string>
       }>()
     })
 

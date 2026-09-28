@@ -1,14 +1,7 @@
-import {
-  Stack,
-} from '@mantine/core'
-import {
-  type Meta,
-  type StoryObj,
-} from '@storybook/react-vite'
+import { Stack } from '@mantine/core'
+import { type Meta, type StoryObj } from '@storybook/react-vite'
 import { type FieldsViewProps } from 'core/props'
-import {
-  type ErrorRenderer,
-} from 'mantine/ErrorRenderer'
+import { type ErrorRenderer } from 'mantine/ErrorRenderer'
 import { useMantineFormFields } from 'mantine/hooks'
 import { action } from 'storybook/actions'
 import { type Field } from 'types/Field'
@@ -26,7 +19,7 @@ function ErrorRenderer({ error }: { error: string }) {
 function Component({
   ...props
 }: FieldsViewProps<{
-  $: Field<RadioValue | null, string>,
+  $: Field<RadioValue | null, string>
 }>) {
   const form = useMantineFormFields(props)
   const RadioGroupComponent = form.radioGroup('$')
@@ -37,7 +30,7 @@ function Component({
       label={RADIO_GROUP_LABEL}
     >
       <Stack>
-        {RADIO_VALUES.map(function (value: RadioValue) {
+        {RADIO_VALUES.map((value: RadioValue) => {
           const label = RADIO_LABELS[value]
           const RadioComponent = form.radio('$', value)
           return (

@@ -14,18 +14,20 @@ import {
   useMemo,
 } from 'react'
 
-export type RefOfProps<P, Fallback = unknown> = P extends RefAttributes<infer R> ? R : Fallback
+export type RefOfProps<P, Fallback = unknown> =
+  P extends RefAttributes<infer R> ? R : Fallback
 
 export type PartialComponent<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   Component extends ComponentType<any>,
   CurriedProps,
   AdditionalProps = {},
-> = Exclude<keyof CurriedProps, keyof ComponentProps<Component>> extends never
-  ? UnsafePartialComponent<Component, CurriedProps, AdditionalProps>
-  : keyof CurriedProps extends (string | number)
-    ? `unmatched prop: ${Exclude<keyof CurriedProps, keyof ComponentProps<Component>>}`
-  : Exclude<keyof CurriedProps, keyof ComponentProps<Component>>
+> =
+  Exclude<keyof CurriedProps, keyof ComponentProps<Component>> extends never
+    ? UnsafePartialComponent<Component, CurriedProps, AdditionalProps>
+    : keyof CurriedProps extends string | number
+      ? `unmatched prop: ${Exclude<keyof CurriedProps, keyof ComponentProps<Component>>}`
+      : Exclude<keyof CurriedProps, keyof ComponentProps<Component>>
 
 export type UnsafePartialComponent<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -34,8 +36,10 @@ export type UnsafePartialComponent<
   AdditionalProps = {},
   R = RefOfProps<ComponentProps<Component>>,
 > = ForwardRefExoticComponent<
-  PropsWithoutRef<RemainingComponentProps<Component, CurriedProps> & AdditionalProps> & {
-    ref?: Ref<R>,
+  PropsWithoutRef<
+    RemainingComponentProps<Component, CurriedProps> & AdditionalProps
+  > & {
+    ref?: Ref<R>
   }
 >
 
@@ -47,15 +51,16 @@ export function createSimplePartialComponent<
   Component: Component,
   curriedProps: CurriedProps,
 ): PartialComponent<Component, CurriedProps> {
-  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
   return forwardRef(
-    function (
-      exposedProps: PropsWithoutRef<RemainingComponentProps<Component, CurriedProps>>,
+    (
+      exposedProps: PropsWithoutRef<
+        RemainingComponentProps<Component, CurriedProps>
+      >,
       ref: ForwardedRef<typeof Component>,
-    ) {
+    ) => {
       // forward ref types are really difficult to work with
       // still needs a cast as `extends ComponentType<any>` != `ComponentType<any>`
-      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-explicit-any, @typescript-eslint/no-unnecessary-type-assertion
+      // oxlint-disable-next-line typescript/no-unnecessary-type-assertion, typescript/no-explicit-any -- tsc disagrees with the linter here
       const C = Component as ComponentType<any>
 
       return (
@@ -86,7 +91,10 @@ export function createPartialComponent<
 >(
   Component: Component,
   curriedPropsSource: (additionalProps: AdditionalProps) => CurriedProps,
-  additionalPropKeys: FriendlyExhaustiveArrayOfUnion<keyof AdditionalProps, AllAdditionalPropKeys>,
+  additionalPropKeys: FriendlyExhaustiveArrayOfUnion<
+    keyof AdditionalProps,
+    AllAdditionalPropKeys
+  >,
 ): PartialComponent<Component, CurriedProps, AdditionalProps>
 export function createPartialComponent<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -98,39 +106,34 @@ export function createPartialComponent<
   curriedPropsSource: (additionalProps: AdditionalProps) => CurriedProps,
   additionalPropKeys: readonly (keyof AdditionalProps)[] = [],
 ): PartialComponent<Component, CurriedProps, AdditionalProps> {
-  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
   return forwardRef(
-    function (
-      props: PropsWithoutRef<RemainingComponentProps<Component, CurriedProps> & AdditionalProps>,
+    (
+      props: PropsWithoutRef<
+        RemainingComponentProps<Component, CurriedProps> & AdditionalProps
+      >,
       ref: ForwardedRef<typeof Component>,
-    ) {
+    ) => {
       // forward ref types are really difficult to work with
       // still needs a cast as `extends ComponentType<any>` != `ComponentType<any>`
-      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-explicit-any, @typescript-eslint/no-unnecessary-type-assertion
+      // oxlint-disable-next-line typescript/no-unnecessary-type-assertion, typescript/no-explicit-any -- tsc disagrees with the linter here
       const C = Component as ComponentType<any>
-      const [
-        additionalProps,
-        exposedProps,
-      ] = additionalPropKeys.reduce<[AdditionalProps, RemainingComponentProps<Component, CurriedProps>]>(
-        function (
-          [
-            additionalProps,
-            exposedProps,
-          ],
-          key,
-        ) {
-          const value = props[
-            // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-            key as keyof PropsWithoutRef<RemainingComponentProps<Component, CurriedProps> & AdditionalProps>
+      const [additionalProps, exposedProps] = additionalPropKeys.reduce<
+        [AdditionalProps, RemainingComponentProps<Component, CurriedProps>]
+      >(
+        ([additionalProps, exposedProps], key) => {
+          const value =
+            props[
+              key as keyof PropsWithoutRef<
+                RemainingComponentProps<Component, CurriedProps> &
+                  AdditionalProps
+              >
+            ]
+          delete exposedProps[
+            key as keyof RemainingComponentProps<Component, CurriedProps>
           ]
-          // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-          delete exposedProps[key as keyof RemainingComponentProps<Component, CurriedProps>]
-          // eslint-disable-next-line @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-explicit-any
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           additionalProps[key] = value as any
-          return [
-            additionalProps,
-            exposedProps,
-          ]
+          return [additionalProps, exposedProps]
         },
         [
           // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
@@ -173,7 +176,10 @@ export function usePartialComponent<
   curriedPropsSource: (additionalProps: AdditionalProps) => CurriedProps,
   deps: DependencyList,
   Component: Component,
-  additionalPropKeys: FriendlyExhaustiveArrayOfUnion<keyof AdditionalProps, AllAdditionalPropKeys>,
+  additionalPropKeys: FriendlyExhaustiveArrayOfUnion<
+    keyof AdditionalProps,
+    AllAdditionalPropKeys
+  >,
 ): PartialComponent<Component, CurriedProps, AdditionalProps>
 export function usePartialComponent<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -190,13 +196,8 @@ export function usePartialComponent<
   additionalPropKeys: readonly (keyof AdditionalProps)[] = [],
 ): PartialComponent<Component, CurriedProps, AdditionalProps> {
   return useMemo(
-    function () {
-      return createPartialComponent(
-        Component,
-        curriedPropsSource,
-        additionalPropKeys,
-      )
-    },
+    () =>
+      createPartialComponent(Component, curriedPropsSource, additionalPropKeys),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [
       // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -225,7 +226,10 @@ export function createPartialObserverComponent<
 >(
   Component: Component,
   curriedPropsSource: (additionalProps: AdditionalProps) => CurriedProps,
-  additionalPropKeys: FriendlyExhaustiveArrayOfUnion<keyof AdditionalProps, AllAdditionalPropKeys>,
+  additionalPropKeys: FriendlyExhaustiveArrayOfUnion<
+    keyof AdditionalProps,
+    AllAdditionalPropKeys
+  >,
 ): PartialComponent<Component, CurriedProps, AdditionalProps>
 export function createPartialObserverComponent<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -237,7 +241,6 @@ export function createPartialObserverComponent<
   curriedPropsSource: (additionalProps: AdditionalProps) => CurriedProps,
   additionalPropKeys: readonly (keyof AdditionalProps)[] = [],
 ): PartialComponent<Component, CurriedProps, AdditionalProps> {
-  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
   return createUnsafePartialObserverComponent(
     Component,
     curriedPropsSource,
@@ -262,7 +265,10 @@ export function createUnsafePartialObserverComponent<
 >(
   Component: Component,
   curriedPropsSource: (additionalProps: AdditionalProps) => CurriedProps,
-  additionalPropKeys: FriendlyExhaustiveArrayOfUnion<keyof AdditionalProps, AllAdditionalPropKeys>,
+  additionalPropKeys: FriendlyExhaustiveArrayOfUnion<
+    keyof AdditionalProps,
+    AllAdditionalPropKeys
+  >,
 ): UnsafePartialComponent<Component, CurriedProps, AdditionalProps>
 export function createUnsafePartialObserverComponent<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -274,41 +280,36 @@ export function createUnsafePartialObserverComponent<
   curriedPropsSource: (additionalProps?: AdditionalProps) => CurriedProps,
   additionalPropKeys: readonly (keyof AdditionalProps)[] = [],
 ): UnsafePartialComponent<Component, CurriedProps, AdditionalProps> {
-  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
   return forwardRef(
-    function (
-      props: PropsWithoutRef<RemainingComponentProps<Component, CurriedProps> & AdditionalProps>,
+    (
+      props: PropsWithoutRef<
+        RemainingComponentProps<Component, CurriedProps> & AdditionalProps
+      >,
       ref: ForwardedRef<typeof Component>,
-    ) {
+    ) => {
       // forward ref types are really difficult to work with
       // still needs a cast as `extends ComponentType<any>` != `ComponentType<any>`
-      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-explicit-any, @typescript-eslint/no-unnecessary-type-assertion
+      // oxlint-disable-next-line typescript/no-unnecessary-type-assertion, typescript/no-explicit-any -- tsc disagrees with the linter here
       const C = Component as ComponentType<any>
       // remove the additional props from the exposed props that get passed in to the component
       // as this generates react warnings
-      const [
-        additionalProps,
-        exposedProps,
-      ] = additionalPropKeys.reduce<[AdditionalProps, RemainingComponentProps<Component, CurriedProps>]>(
-        function (
-          [
-            additionalProps,
-            exposedProps,
-          ],
-          key,
-        ) {
-          const value = props[
-            // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-            key as keyof PropsWithoutRef<RemainingComponentProps<Component, CurriedProps> & AdditionalProps>
+      const [additionalProps, exposedProps] = additionalPropKeys.reduce<
+        [AdditionalProps, RemainingComponentProps<Component, CurriedProps>]
+      >(
+        ([additionalProps, exposedProps], key) => {
+          const value =
+            props[
+              key as keyof PropsWithoutRef<
+                RemainingComponentProps<Component, CurriedProps> &
+                  AdditionalProps
+              >
+            ]
+          delete exposedProps[
+            key as keyof RemainingComponentProps<Component, CurriedProps>
           ]
-          // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-          delete exposedProps[key as keyof RemainingComponentProps<Component, CurriedProps>]
-          // eslint-disable-next-line @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-explicit-any
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           additionalProps[key] = value as any
-          return [
-            additionalProps,
-            exposedProps,
-          ]
+          return [additionalProps, exposedProps]
         },
         [
           // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
@@ -356,7 +357,10 @@ export function usePartialObserverComponent<
   curriedPropsSource: (additionalProps: AdditionalProps) => CurriedProps,
   deps: DependencyList,
   Component: Component,
-  additionalPropKeys: FriendlyExhaustiveArrayOfUnion<keyof AdditionalProps, AllAdditionalPropKeys>,
+  additionalPropKeys: FriendlyExhaustiveArrayOfUnion<
+    keyof AdditionalProps,
+    AllAdditionalPropKeys
+  >,
 ): PartialComponent<Component, CurriedProps, AdditionalProps>
 export function usePartialObserverComponent<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -372,13 +376,12 @@ export function usePartialObserverComponent<
   additionalPropKeys: readonly (keyof AdditionalProps)[] = [],
 ): PartialComponent<Component, CurriedProps, AdditionalProps> {
   return useMemo(
-    function () {
-      return createPartialObserverComponent(
+    () =>
+      createPartialObserverComponent(
         Component,
         curriedPropsSource,
         additionalPropKeys,
-      )
-    },
+      ),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [
       // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -390,6 +393,8 @@ export function usePartialObserverComponent<
   )
 }
 
-type RemainingComponentProps<Component extends ComponentType, CurriedProps> =
-  & Omit<ComponentProps<Component>, keyof CurriedProps>
-  & JSX.IntrinsicAttributes
+type RemainingComponentProps<
+  Component extends ComponentType,
+  CurriedProps,
+> = Omit<ComponentProps<Component>, keyof CurriedProps> &
+  JSX.IntrinsicAttributes

@@ -1,14 +1,12 @@
 import { composeStories } from '@storybook/react-vite'
 import { toArray } from '@strictly/base'
-import {
-  render,
-} from '@testing-library/react'
+import { render } from '@testing-library/react'
 import * as stories from './PetSpeciesFieldsView.stories'
 
 const composedStories = composeStories(stories)
 
-describe('PetSpeciesFieldsView', function () {
-  it.each(toArray(composedStories))('renders %s', function (_name, Story) {
+describe('PetSpeciesFieldsView', () => {
+  it.each(toArray(composedStories))('renders %s', (_name, Story) => {
     const wrapper = render(<Story />)
     expect(wrapper.container).toMatchSnapshot()
   })

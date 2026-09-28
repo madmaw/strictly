@@ -1,7 +1,7 @@
 import {
   chainAnnotatedFieldConverter,
   chainUnreliableFieldConverter,
-} from 'field_converters/chainFieldConverter'
+} from 'field-converters/chainFieldConverter'
 import {
   type AnnotatedFieldConversion,
   type AnnotatedFieldConverter,
@@ -15,29 +15,51 @@ const CONTEXT = 'ctx'
 const ERROR1 = 'error 1'
 const ERROR2 = 'error 2'
 
-describe('chainUnreliableFieldConverter', function () {
-  const from: Mock<UnreliableFieldConverter<number, boolean, typeof ERROR1, 'x', typeof CONTEXT>> = vi.fn()
-  const to: Mock<UnreliableFieldConverter<boolean, string, typeof ERROR2, 'x', typeof CONTEXT>> = vi.fn()
+describe('chainUnreliableFieldConverter', () => {
+  const from: Mock<
+    UnreliableFieldConverter<
+      number,
+      boolean,
+      typeof ERROR1,
+      'x',
+      typeof CONTEXT
+    >
+  > = vi.fn()
+  const to: Mock<
+    UnreliableFieldConverter<
+      boolean,
+      string,
+      typeof ERROR2,
+      'x',
+      typeof CONTEXT
+    >
+  > = vi.fn()
 
-  let chained: UnreliableFieldConverter<number, string, typeof ERROR1 | typeof ERROR2, 'x', typeof CONTEXT>
+  let chained: UnreliableFieldConverter<
+    number,
+    string,
+    typeof ERROR1 | typeof ERROR2,
+    'x',
+    typeof CONTEXT
+  >
   let result: UnreliableFieldConversion<string, typeof ERROR1 | typeof ERROR2>
 
-  beforeEach(function () {
+  beforeEach(() => {
     from.mockReset()
     to.mockReset()
 
     chained = chainUnreliableFieldConverter(from, to)
   })
-  describe('from succeeds', function () {
-    beforeEach(function () {
+  describe('from succeeds', () => {
+    beforeEach(() => {
       from.mockReturnValue({
         type: UnreliableFieldConversionType.Success,
         value: true,
       })
     })
 
-    describe('to succeeds', function () {
-      beforeEach(function () {
+    describe('to succeeds', () => {
+      beforeEach(() => {
         to.mockReturnValue({
           type: UnreliableFieldConversionType.Success,
           value: 'x',
@@ -45,26 +67,26 @@ describe('chainUnreliableFieldConverter', function () {
         result = chained(1, 'x', CONTEXT)
       })
 
-      it('equals expected type', function () {
+      it('equals expected type', () => {
         expect(result).toEqual({
           type: UnreliableFieldConversionType.Success,
           value: 'x',
         })
       })
 
-      it('has the original value passed to the from converter', function () {
+      it('has the original value passed to the from converter', () => {
         expect(from).toHaveBeenCalledOnce()
         expect(from).toHaveBeenCalledWith(1, 'x', CONTEXT)
       })
 
-      it('has passed the from result to the to converter', function () {
+      it('has passed the from result to the to converter', () => {
         expect(to).toHaveBeenCalledOnce()
         expect(to).toHaveBeenCalledWith(true, 'x', CONTEXT)
       })
     })
 
-    describe('to fails with result', function () {
-      beforeEach(function () {
+    describe('to fails with result', () => {
+      beforeEach(() => {
         to.mockReturnValue({
           type: UnreliableFieldConversionType.Failure,
           value: ['y'],
@@ -73,7 +95,7 @@ describe('chainUnreliableFieldConverter', function () {
         result = chained(1, 'x', CONTEXT)
       })
 
-      it('equals expected type', function () {
+      it('equals expected type', () => {
         expect(result).toEqual({
           type: UnreliableFieldConversionType.Failure,
           value: ['y'],
@@ -83,8 +105,8 @@ describe('chainUnreliableFieldConverter', function () {
     })
   })
 
-  describe('from fails with a value', function () {
-    beforeEach(function () {
+  describe('from fails with a value', () => {
+    beforeEach(() => {
       from.mockReturnValue({
         type: UnreliableFieldConversionType.Failure,
         value: [true],
@@ -92,8 +114,8 @@ describe('chainUnreliableFieldConverter', function () {
       })
     })
 
-    describe('to succeeds', function () {
-      beforeEach(function () {
+    describe('to succeeds', () => {
+      beforeEach(() => {
         to.mockReturnValue({
           type: UnreliableFieldConversionType.Success,
           value: 'x',
@@ -101,7 +123,7 @@ describe('chainUnreliableFieldConverter', function () {
         result = chained(1, 'x', CONTEXT)
       })
 
-      it('equals expected type', function () {
+      it('equals expected type', () => {
         expect(result).toEqual({
           type: UnreliableFieldConversionType.Failure,
           value: ['x'],
@@ -109,19 +131,19 @@ describe('chainUnreliableFieldConverter', function () {
         })
       })
 
-      it('has the original value passed to the from converter', function () {
+      it('has the original value passed to the from converter', () => {
         expect(from).toHaveBeenCalledOnce()
         expect(from).toHaveBeenCalledWith(1, 'x', CONTEXT)
       })
 
-      it('passes the failure result to the to converter', function () {
+      it('passes the failure result to the to converter', () => {
         expect(to).toHaveBeenCalledOnce()
         expect(to).toHaveBeenCalledWith(true, 'x', CONTEXT)
       })
     })
 
-    describe('to fails', function () {
-      beforeEach(function () {
+    describe('to fails', () => {
+      beforeEach(() => {
         to.mockReturnValue({
           type: UnreliableFieldConversionType.Failure,
           value: ['x'],
@@ -130,7 +152,7 @@ describe('chainUnreliableFieldConverter', function () {
         result = chained(1, 'x', CONTEXT)
       })
 
-      it('equals expected type', function () {
+      it('equals expected type', () => {
         expect(result).toEqual({
           type: UnreliableFieldConversionType.Failure,
           value: ['x'],
@@ -140,8 +162,8 @@ describe('chainUnreliableFieldConverter', function () {
     })
   })
 
-  describe('from fails with no value', function () {
-    beforeEach(function () {
+  describe('from fails with no value', () => {
+    beforeEach(() => {
       from.mockReturnValue({
         type: UnreliableFieldConversionType.Failure,
         value: null,
@@ -150,7 +172,7 @@ describe('chainUnreliableFieldConverter', function () {
       result = chained(1, 'x', CONTEXT)
     })
 
-    it('equals expected type', function () {
+    it('equals expected type', () => {
       expect(result).toEqual({
         type: UnreliableFieldConversionType.Failure,
         value: null,
@@ -158,28 +180,32 @@ describe('chainUnreliableFieldConverter', function () {
       })
     })
 
-    it('does not call to converter', function () {
+    it('does not call to converter', () => {
       expect(to).not.toHaveBeenCalled()
     })
   })
 })
 
-describe('chainAnnotatedFieldConverter', function () {
-  const from: Mock<AnnotatedFieldConverter<string, boolean, 'x', typeof CONTEXT>> = vi.fn()
-  const to: Mock<AnnotatedFieldConverter<boolean, number, 'x', typeof CONTEXT>> = vi.fn()
+describe('chainAnnotatedFieldConverter', () => {
+  const from: Mock<
+    AnnotatedFieldConverter<string, boolean, 'x', typeof CONTEXT>
+  > = vi.fn()
+  const to: Mock<
+    AnnotatedFieldConverter<boolean, number, 'x', typeof CONTEXT>
+  > = vi.fn()
 
   let chained: AnnotatedFieldConverter<string, number, 'x', typeof CONTEXT>
   let result: AnnotatedFieldConversion<number>
 
-  beforeEach(function () {
+  beforeEach(() => {
     from.mockReset()
     to.mockReset()
 
     chained = chainAnnotatedFieldConverter(from, to)
   })
 
-  describe('value', function () {
-    beforeEach(function () {
+  describe('value', () => {
+    beforeEach(() => {
       from.mockReturnValue({
         value: true,
         readonly: false,
@@ -193,7 +219,7 @@ describe('chainAnnotatedFieldConverter', function () {
       result = chained('z', 'x', CONTEXT)
     })
 
-    it('returns expected value', function () {
+    it('returns expected value', () => {
       expect(result).toEqual(
         expect.objectContaining({
           value: 1,
@@ -201,42 +227,26 @@ describe('chainAnnotatedFieldConverter', function () {
       )
     })
 
-    it('calls the from converter', function () {
+    it('calls the from converter', () => {
       expect(from).toHaveBeenCalledOnce()
       expect(from).toHaveBeenCalledWith('z', 'x', CONTEXT)
     })
 
-    it('calls the to converter', function () {
+    it('calls the to converter', () => {
       expect(to).toHaveBeenCalledOnce()
       expect(to).toHaveBeenCalledWith(true, 'x', CONTEXT)
     })
   })
 
   describe.each([
-    [
-      true,
-      true,
-      true,
-    ],
-    [
-      true,
-      false,
-      true,
-    ],
-    [
-      false,
-      true,
-      true,
-    ],
-    [
-      false,
-      false,
-      false,
-    ],
+    [true, true, true],
+    [true, false, true],
+    [false, true, true],
+    [false, false, false],
   ] as const)(
     'from required %s to required %s result %s',
-    function (fromRequired, toRequired, required) {
-      beforeEach(function () {
+    (fromRequired, toRequired, required) => {
+      beforeEach(() => {
         from.mockReturnValue({
           value: true,
           readonly: false,
@@ -250,37 +260,21 @@ describe('chainAnnotatedFieldConverter', function () {
         result = chained('z', 'x', CONTEXT)
       })
 
-      it('required matches expected', function () {
+      it('required matches expected', () => {
         expect(result.required).toEqual(required)
       })
     },
   )
 
   describe.each([
-    [
-      true,
-      true,
-      true,
-    ],
-    [
-      true,
-      false,
-      true,
-    ],
-    [
-      false,
-      true,
-      true,
-    ],
-    [
-      false,
-      false,
-      false,
-    ],
+    [true, true, true],
+    [true, false, true],
+    [false, true, true],
+    [false, false, false],
   ] as const)(
     'from disabled %s to disabled %s result %s',
-    function (fromDisabled, toDisabled, disabled) {
-      beforeEach(function () {
+    (fromDisabled, toDisabled, disabled) => {
+      beforeEach(() => {
         from.mockReturnValue({
           value: true,
           readonly: fromDisabled,
@@ -294,7 +288,7 @@ describe('chainAnnotatedFieldConverter', function () {
         result = chained('z', 'x', CONTEXT)
       })
 
-      it('required matches expected', function () {
+      it('required matches expected', () => {
         expect(result.readonly).toEqual(disabled)
       })
     },

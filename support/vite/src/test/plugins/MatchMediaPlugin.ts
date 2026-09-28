@@ -8,10 +8,10 @@ export class MatchMediaPlugin implements VitestPlugin {
   install() {
     let matchMediaMock: MatchMediaMock | undefined
     return {
-      afterEach: function () {
+      afterEach() {
         matchMediaMock?.destroy()
       },
-      beforeEach: function () {
+      beforeEach() {
         matchMediaMock = new MatchMediaMock()
       },
     }

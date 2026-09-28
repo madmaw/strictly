@@ -1,7 +1,4 @@
-import {
-  type Type,
-  type TypeDef,
-} from 'types/Type'
+import { type Type, type TypeDef } from 'types/Type'
 import { type ValueOfType } from 'types/ValueOfType'
 import {
   type AnyValueType,
@@ -28,11 +25,10 @@ export function flattenJsonValueToTypePathsOf<
   // : FlattenedJsonValueToTypePathsOf<T>
   listIndicesToKeys?: Record<string, number[]>,
 ): R {
-  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
   return flattenValueTo(
     t,
     value,
-    function () {
+    () => {
       // do nothing
     },
     mapTypePaths,

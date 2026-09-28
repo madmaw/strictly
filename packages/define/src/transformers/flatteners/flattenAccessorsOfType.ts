@@ -2,10 +2,7 @@ import {
   type Accessor,
   type FlattenedAccessorsOfType,
 } from 'types/FlattenedAccessorsOfType'
-import {
-  type Type,
-  type TypeDef,
-} from 'types/Type'
+import { type Type, type TypeDef } from 'types/Type'
 import { type ValueOfType } from 'types/ValueOfType'
 import {
   type AnyValueType,
@@ -27,7 +24,8 @@ function mapAccessor(
 export function flattenAccessorsOfType<
   T extends Type,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  R extends Readonly<Record<string, Accessor<any>>> = FlattenedAccessorsOfType<T>,
+  R extends Readonly<Record<string, Accessor<any>>> =
+    FlattenedAccessorsOfType<T>,
 >(
   t: T,
   value: ValueOfType<T>,

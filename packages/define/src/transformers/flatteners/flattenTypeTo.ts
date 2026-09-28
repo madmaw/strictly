@@ -1,7 +1,4 @@
-import {
-  reduce,
-  UnreachableError,
-} from '@strictly/base'
+import { reduce, UnreachableError } from '@strictly/base'
 import {
   type StrictListTypeDef,
   type StrictObjectTypeDef,
@@ -23,15 +20,13 @@ export function flattenTypeTo<M, R extends Readonly<Record<string, M>>>(
   mapper: Mapper<M>,
 ): R {
   const typeDefs = internalFlattenTypeDef('$', definition, {})
-  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-  return reduce(
+  return reduce<string, StrictTypeDef, Record<string, M>>(
     typeDefs,
-    function (acc, key, typeDef) {
+    (acc, key, typeDef) => {
       acc[key] = mapper(typeDef, key)
       return acc
     },
-    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-unnecessary-type-assertion
-    {} as Record<string, M>,
+    {},
   ) as R
 }
 
@@ -90,13 +85,12 @@ function internalFlattenObjectTypeDefChildren(
 ): Record<string, StrictTypeDef> {
   return reduce(
     fields,
-    function (acc, fieldName, fieldTypeDef) {
-      return internalFlattenTypeDef(
+    (acc, fieldName, fieldTypeDef) =>
+      internalFlattenTypeDef(
         jsonPath(path, fieldName, qualifier),
         fieldTypeDef,
         acc,
-      )
-    },
+      ),
     r,
   )
 }
@@ -104,22 +98,18 @@ function internalFlattenObjectTypeDefChildren(
 function internalFlattenUnionTypeDefChildren(
   path: string,
   qualifier: string,
-  {
-    discriminator,
-    unions,
-  }: StrictUnionTypeDef,
+  { discriminator, unions }: StrictUnionTypeDef,
   r: Record<string, StrictTypeDef>,
 ): Record<string, StrictTypeDef> {
   return reduce(
     unions,
-    function (acc, key, typeDef: StrictTypeDef) {
-      return internalFlattenTypeDefChildren(
-        discriminator != null ? `${path}:${qualifier}` : path,
+    (acc, key, typeDef: StrictTypeDef) =>
+      internalFlattenTypeDefChildren(
+        discriminator == null ? path : `${path}:${qualifier}`,
         key,
         typeDef,
         acc,
-      )
-    },
+      ),
     r,
   )
 }

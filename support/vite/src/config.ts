@@ -2,13 +2,10 @@
 // loader, so this package gets handed to node directly rather than bundled, and node cannot resolve extensionless
 // relative imports.
 import { lingui } from '@lingui/vite-plugin'
+// oxlint-disable-next-line no-restricted-imports -- this package configures the storybook test runner
 import { storybookTest } from '@storybook/addon-vitest/vitest-plugin'
 import reactSupport from '@vitejs/plugin-react'
-import {
-  existsSync,
-  readdirSync,
-  readFileSync,
-} from 'node:fs'
+import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { copyFile } from 'node:fs/promises'
 import { createRequire } from 'node:module'
 import { join } from 'node:path'
@@ -22,12 +19,12 @@ import {
 } from 'vitest/config'
 
 export type TsconfigJson = {
-  readonly references: readonly { path: string }[],
+  readonly references: readonly { path: string }[]
 }
 
 export type LibraryPackageJson = {
-  readonly dependencies?: Readonly<Record<string, string>>,
-  readonly peerDependencies?: Readonly<Record<string, string>>,
+  readonly dependencies?: Readonly<Record<string, string>>
+  readonly peerDependencies?: Readonly<Record<string, string>>
 }
 
 type TestProjectConfig = NonNullable<TestProjectInlineConfiguration['test']>
@@ -36,23 +33,18 @@ type TestProjectConfig = NonNullable<TestProjectInlineConfiguration['test']>
  * `true` creates a single `<kind>/test` project, otherwise each key becomes a `<kind>/<key>` project with the
  * given overrides
  */
-export type TestParameters = Readonly<Record<string, Omit<Partial<TestProjectConfig>, 'name'>>> | boolean
+export type TestParameters =
+  | Readonly<Record<string, Omit<Partial<TestProjectConfig>, 'name'>>>
+  | boolean
 
 const DIST = 'dist'
 // babel resolves plugin names relative to the package being built, where these are not installed
 const require = createRequire(import.meta.url)
 
-export function createTsconfigPathsPlugin({
-  references,
-}: TsconfigJson) {
+export function createTsconfigPathsPlugin({ references }: TsconfigJson) {
   return tsconfigPaths({
     // must specify projects otherwise we get configuration errors for unrelated projects
-    projects: [
-      '.',
-      ...references.map(function ({ path }) {
-        return path
-      }),
-    ],
+    projects: ['.', ...references.map(({ path }) => path)],
   })
 }
 
@@ -62,7 +54,7 @@ export function createTsconfigPathsPlugin({
 export function createReactPlugin({
   lingui: withLingui = false,
 }: {
-  readonly lingui?: boolean,
+  readonly lingui?: boolean
 } = {}) {
   return reactSupport({
     babel: {
@@ -75,7 +67,9 @@ export function createReactPlugin({
         ],
         [require.resolve('@babel/plugin-transform-class-static-block')],
         [require.resolve('@babel/plugin-proposal-class-properties')],
-        ...(withLingui ? [[require.resolve('@lingui/babel-plugin-lingui-macro')]] : []),
+        ...(withLingui
+          ? [[require.resolve('@lingui/babel-plugin-lingui-macro')]]
+          : []),
       ],
       assumptions: {
         setPublicClassFields: false,
@@ -88,17 +82,20 @@ export function createReactPlugin({
  * Configuration for react applications, storybooks and their tests. Storybook should point at the vitest
  * configuration created by this so the stories and the tests share one vite configuration.
  */
-export function createReactViteConfig(tsconfig: TsconfigJson, {
-  base,
-  lingui: withLingui = false,
-  unitTest = false,
-  storybook = false,
-}: {
-  readonly base?: string,
-  readonly lingui?: boolean,
-  readonly unitTest?: TestParameters,
-  readonly storybook?: TestParameters,
-} = {}) {
+export function createReactViteConfig(
+  tsconfig: TsconfigJson,
+  {
+    base,
+    lingui: withLingui = false,
+    unitTest = false,
+    storybook = false,
+  }: {
+    readonly base?: string
+    readonly lingui?: boolean
+    readonly unitTest?: TestParameters
+    readonly storybook?: TestParameters
+  } = {},
+) {
   return defineConfig({
     base,
     plugins: [
@@ -117,11 +114,15 @@ export function createReactViteConfig(tsconfig: TsconfigJson, {
  * Bundles a publishable package from `src/index.ts` into ESM and CJS outputs with rolled up type declarations.
  * Anything listed in dependencies or peerDependencies is left external.
  */
-export function createViteLibraryConfig(tsconfig: TsconfigJson, packageJson: LibraryPackageJson, {
-  react = false,
-}: {
-  readonly react?: boolean,
-} = {}) {
+export function createViteLibraryConfig(
+  tsconfig: TsconfigJson,
+  packageJson: LibraryPackageJson,
+  {
+    react = false,
+  }: {
+    readonly react?: boolean
+  } = {},
+) {
   const externals = Object.keys({
     ...packageJson.dependencies,
     ...packageJson.peerDependencies,
@@ -132,18 +133,15 @@ export function createViteLibraryConfig(tsconfig: TsconfigJson, packageJson: Lib
       lib: {
         entry: 'src/index.ts',
         fileName: 'index',
-        formats: [
-          'es',
-          'cjs',
-        ],
+        formats: ['es', 'cjs'],
       },
       minify: false,
       outDir: DIST,
       rollupOptions: {
-        external: function (id) {
-          return externals.some(function (external) {
-            return id === external || id.startsWith(`${external}/`)
-          })
+        external(id) {
+          return externals.some(
+            (external) => id === external || id.startsWith(`${external}/`),
+          )
         },
       },
     },
@@ -151,7 +149,7 @@ export function createViteLibraryConfig(tsconfig: TsconfigJson, packageJson: Lib
       ...plugins,
       createTsconfigPathsPlugin(tsconfig),
       dts({
-        afterBuild: async function () {
+        async afterBuild() {
           // the CJS entry point needs its own declaration file
           await copyFile(join(DIST, 'index.d.ts'), join(DIST, 'index.d.cts'))
         },
@@ -159,6 +157,7 @@ export function createViteLibraryConfig(tsconfig: TsconfigJson, packageJson: Lib
         // api extractor looks for lib.*.d.ts in the project typescript folder, but typescript 6 no longer ships
         // them there, so let it fall back to the compiler it bundles
         rollupOptions: {
+          // oxlint-disable-next-line no-undefined -- undefined disables the folder lookup
           typescriptCompilerFolder: undefined,
         },
         rollupTypes: true,
@@ -170,11 +169,14 @@ export function createViteLibraryConfig(tsconfig: TsconfigJson, packageJson: Lib
 /**
  * Test only configuration for packages without a react entry point
  */
-export function createVitestConfig(tsconfig: TsconfigJson, {
-  unitTest = true,
-}: {
-  readonly unitTest?: TestParameters,
-} = {}) {
+export function createVitestConfig(
+  tsconfig: TsconfigJson,
+  {
+    unitTest = true,
+  }: {
+    readonly unitTest?: TestParameters
+  } = {},
+) {
   return defineConfig({
     plugins: [createTsconfigPathsPlugin(tsconfig)],
     test: createTestConfig({
@@ -188,10 +190,11 @@ function createTestConfig({
   unitTest,
   storybook,
 }: {
-  readonly unitTest: TestParameters,
-  readonly storybook: TestParameters,
+  readonly unitTest: TestParameters
+  readonly storybook: TestParameters
 }): ViteUserConfig['test'] {
   if (unitTest === false && storybook === false) {
+    // oxlint-disable-next-line no-undefined -- undefined disables vitest
     return undefined
   }
   return {
@@ -225,12 +228,15 @@ function findStorybookTestFiles(directory: string): string[] {
   if (!existsSync(directory)) {
     return []
   }
-  return readdirSync(directory, { withFileTypes: true }).flatMap(function (entry) {
+  return readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
     const path = `${directory}/${entry.name}`
     if (entry.isDirectory()) {
       return findStorybookTestFiles(path)
     }
-    if (UNIT_TEST_FILE_NAME.test(entry.name) && readFileSync(path, 'utf8').includes('@storybook/react')) {
+    if (
+      UNIT_TEST_FILE_NAME.test(entry.name) &&
+      readFileSync(path, 'utf8').includes('@storybook/react')
+    ) {
       return [path]
     }
     return []
@@ -249,35 +255,42 @@ function computeUnitTests(unitTest: TestParameters) {
   if (storybookTestFiles.length === 0) {
     return projects
   }
-  return projects.flatMap(function (project) {
-    return [
-      {
-        ...project,
-        test: {
-          ...project.test,
-          exclude: [
-            ...(project.test.exclude ?? EXCLUDE),
-            ...storybookTestFiles,
-          ],
-        },
+  return projects.flatMap((project) => [
+    {
+      ...project,
+      test: {
+        ...project.test,
+        exclude: [...(project.test.exclude ?? EXCLUDE), ...storybookTestFiles],
       },
-      {
-        ...project,
-        test: {
-          ...project.test,
-          include: storybookTestFiles,
-          name: `${project.test.name}/storybook`,
-          setupFiles: [
-            ...(project.test.setupFiles ?? []),
-            INSTALL_STORYBOOK_FILE,
-          ],
-        },
+    },
+    {
+      ...project,
+      test: {
+        ...project.test,
+        include: storybookTestFiles,
+        name: `${project.test.name}/storybook`,
+        setupFiles: [
+          ...setupFilesOf(project.test.setupFiles),
+          INSTALL_STORYBOOK_FILE,
+        ],
       },
-    ]
-  })
+    },
+  ])
 }
 
-function computeTests(createBase: () => TestProjectInlineConfiguration, tests: TestParameters) {
+function setupFilesOf(
+  setupFiles: string | readonly string[] | undefined,
+): readonly string[] {
+  if (setupFiles == null) {
+    return []
+  }
+  return typeof setupFiles === 'string' ? [setupFiles] : setupFiles
+}
+
+function computeTests(
+  createBase: () => TestProjectInlineConfiguration,
+  tests: TestParameters,
+) {
   if (tests === false) {
     return []
   }
@@ -286,22 +299,14 @@ function computeTests(createBase: () => TestProjectInlineConfiguration, tests: T
   // vitest also allows a labelled object as the name, but the bases only use strings
   const prefixes = typeof prefix === 'string' ? [prefix] : []
   const samples = tests === true ? { test: {} } : tests
-  return Object.entries(samples).map(function ([
-    name,
-    projectConfig,
-  ]) {
-    return {
-      ...base,
-      test: {
-        ...base.test,
-        ...projectConfig,
-        name: [
-          ...prefixes,
-          name,
-        ].join('/'),
-      },
-    }
-  })
+  return Object.entries(samples).map(([name, projectConfig]) => ({
+    ...base,
+    test: {
+      ...base.test,
+      ...projectConfig,
+      name: [...prefixes, name].join('/'),
+    },
+  }))
 }
 
 function createUnitTestConfigurationBase(): TestProjectInlineConfiguration {
@@ -333,10 +338,7 @@ function createStorybookConfigurationBase(): TestProjectInlineConfiguration {
       exclude: EXCLUDE,
       globals: true,
       name: 'storybook',
-      setupFiles: [
-        INSTALL_FILE,
-        INSTALL_STORYBOOK_FILE,
-      ],
+      setupFiles: [INSTALL_FILE, INSTALL_STORYBOOK_FILE],
       testTimeout: 30000,
     },
   }

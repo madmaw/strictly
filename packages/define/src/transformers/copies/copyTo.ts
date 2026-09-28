@@ -22,6 +22,7 @@ import {
   type UnionKey,
 } from 'types/Type'
 import { type ValueOfType } from 'types/ValueOfType'
+import { valuePrototypeOf } from 'types/valuePrototypeOf'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type AnyValueType = any
@@ -36,11 +37,7 @@ export function copyTo<
   value: ValueOfType<ReadonlyTypeOfType<T>>,
   copier: Copier<R>,
 ): R {
-  return internalCopyTo(
-    definition,
-    value,
-    copier,
-  )
+  return internalCopyTo(definition, value, copier)
 }
 
 /**
@@ -54,49 +51,28 @@ function internalCopyTo<R>(
   value: AnyValueType,
   copier: Copier<R>,
 ): R {
-  if (value === undefined) {
+  if (typeof value === 'undefined') {
     // don't copy things that don't exist
+    // oxlint-disable-next-line no-undefined, typescript/no-non-null-assertion -- propagate the missing value
     return undefined!
   }
   switch (definition.type) {
     case TypeDefType.Literal:
-      return copyLiteral(
-        definition,
-        value,
-        copier,
-      )
+      return copyLiteral(definition, value, copier)
     case TypeDefType.List:
-      return copyList(
-        definition,
-        value,
-        copier,
-      )
+      return copyList(definition, value, copier)
     case TypeDefType.Record:
-      return copyRecord(
-        definition,
-        value,
-        copier,
-      )
+      return copyRecord(definition, value, copier)
     case TypeDefType.Object:
-      return copyObject(
-        definition,
-        value,
-        copier,
-      )
+      return copyObject(definition, value, copier)
     case TypeDefType.Union:
-      return copyUnion(
-        definition,
-        value,
-        copier,
-      )
+      return copyUnion(definition, value, copier)
     default:
       throw new UnreachableError(definition)
   }
 }
 
-function copyLiteral<
-  R,
->(
+function copyLiteral<R>(
   typeDef: StrictLiteralTypeDef,
   value: ValueOfType<{ definition: StrictLiteralTypeDef }>,
   copier: Copier<R>,
@@ -105,92 +81,65 @@ function copyLiteral<
   return copier(value, typeDef)
 }
 
-function copyList<
-  R,
->(
+function copyList<R>(
   typeDef: StrictListTypeDef,
   arr: AnyValueType[],
   copier: Copier<R>,
 ): R {
-  const {
-    elements,
-  } = typeDef
-  const list = arr.map(function (value) {
-    return internalCopyTo(elements, value, copier)
-  })
-  return copier(
-    list,
-    typeDef,
-  )
+  const { elements } = typeDef
+  const list = arr.map((value) => internalCopyTo(elements, value, copier))
+  return copier(list, typeDef)
 }
 
-function copyRecord<
-  R,
->(
+function copyRecord<R>(
   typeDef: StrictRecordTypeDef,
   value: AnyValueType,
   copier: Copier<R>,
 ): R {
-  const {
-    valueTypeDef,
-  } = typeDef
-  const record = map(
-    value,
-    function (_key, value) {
-      return internalCopyTo(valueTypeDef, value, copier)
-    },
+  const { valueTypeDef } = typeDef
+  const record = map(value, (_key, value) =>
+    internalCopyTo(valueTypeDef, value, copier),
   )
-  return copier(
-    record,
-    typeDef,
-  )
+  return copier(record, typeDef)
 }
 
-function copyObjectFields<
-  R,
-  Extra extends Record<string, UnionKey>,
->(
+function copyObjectFields<R, Extra extends Record<string, UnionKey>>(
   fields: StrictObjectTypeDefFields,
   value: Record<ObjectFieldKey, AnyValueType>,
   copier: Copier<R>,
   extra: Extra,
 ): Record<ObjectFieldKey, AnyValueType> {
-  const record = reduce(fields, function (acc, key, field: TypeDef) {
-    const fieldValue = value[key]
-    acc[key] = fieldValue != null
-      ? internalCopyTo(field, fieldValue, copier)
-      : fieldValue
-    return acc
-    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-  }, extra as Record<string | number | symbol, AnyValueType>)
+  const record = reduce(
+    fields,
+    (acc, key, field: TypeDef) => {
+      const fieldValue = value[key]
+      acc[key] =
+        fieldValue == null
+          ? fieldValue
+          : internalCopyTo(field, fieldValue, copier)
+      return acc
+    },
+    extra as Record<string | number | symbol, AnyValueType>,
+  )
   return record
 }
 
-function copyObject<
-  R,
->(
+function copyObject<R>(
   typeDef: StrictObjectTypeDef,
   value: AnyValueType,
   copier: Copier<R>,
 ): R {
-  const {
-    fields,
-  } = typeDef
+  const { fields } = typeDef
   const record = copyObjectFields(fields, value, copier, {})
   return copier(record, typeDef)
 }
 
-function copyUnion<
-  R,
->(
+function copyUnion<R>(
   typeDef: StrictUnionTypeDef,
   value: AnyValueType,
   copier: Copier<R>,
 ): R {
-  const {
-    discriminator,
-    unions,
-  } = typeDef
+  const { discriminator, unions } = typeDef
 
   // is it a discriminated union with a struct?
   if (discriminator != null) {
@@ -201,16 +150,18 @@ function copyUnion<
   // is it a `<constant1> | <constant2> | X`? We can handle that
   // a good example is when we `| null` something
   const allTypeDefs = Object.values<TypeDef>(unions)
-  const variableTypeDefs = allTypeDefs.filter(function (typeDef: TypeDef) {
-    return typeDef.type !== TypeDefType.Literal || typeDef.valuePrototype == null
-  })
+  const variableTypeDefs = allTypeDefs.filter(
+    (typeDef: TypeDef) =>
+      typeDef.type !== TypeDefType.Literal || valuePrototypeOf(typeDef) == null,
+  )
   if (variableTypeDefs.length <= 1) {
     // can handle up to one non-constant value
-    const targetTypeDef = allTypeDefs.find(function (typeDef) {
-      return typeDef.type === TypeDefType.Literal
-        && typeDef.valuePrototype != null
-        && typeDef.valuePrototype.indexOf(value) >= 0
-    }) || variableTypeDefs[0]
+    const targetTypeDef =
+      allTypeDefs.find(
+        (typeDef) =>
+          typeDef.type === TypeDefType.Literal &&
+          valuePrototypeOf(typeDef)?.includes(value),
+      ) ?? variableTypeDefs[0]
     return internalCopyTo(targetTypeDef, value, copier)
   }
 

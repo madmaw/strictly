@@ -1,19 +1,11 @@
-import {
-  type CheckboxProps,
-} from '@mantine/core'
+import { type CheckboxProps } from '@mantine/core'
 import { type ComponentType } from 'react'
 import { type BooleanFieldsOfFields } from 'types/BooleanFieldsOfFields'
 import { type ErrorOfField } from 'types/ErrorOfField'
 import { type Fields } from 'types/Field'
 import { createUnsafePartialObserverComponent } from 'util/Partial'
-import {
-  DefaultErrorRenderer,
-  type ErrorRenderer,
-} from './ErrorRenderer'
-import {
-  type MantineFieldComponent,
-  type MantineForm,
-} from './types'
+import { DefaultErrorRenderer, type ErrorRenderer } from './ErrorRenderer'
+import { type MantineFieldComponent, type MantineForm } from './types'
 
 export type SuppliedCheckboxProps = Pick<
   CheckboxProps,
@@ -38,7 +30,7 @@ export function createCheckbox<
   Checkbox: ComponentType<Props>,
 ): MantineFieldComponent<SuppliedCheckboxProps, Props, ErrorOfField<F[K]>> {
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    this.onFieldValueChange?.(valuePath, e.target.checked)
+    this.onFieldValueChange(valuePath, e.target.checked)
   }
   const onFocus = () => {
     this.onFieldFocus?.(valuePath)
@@ -57,31 +49,23 @@ export function createCheckbox<
   const propSource = ({
     ErrorRenderer = DefaultErrorRenderer,
   }: {
-    ErrorRenderer?: ErrorRenderer<ErrorOfField<F[K]>>,
+    ErrorRenderer?: ErrorRenderer<ErrorOfField<F[K]>>
   }) => {
-    const {
-      readonly,
-      required,
-      value,
-      error,
-      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-    } = this.fields[valuePath as string]
+    const { readonly, required, value, error } =
+      this.fields[valuePath as string]
     return {
       name: valuePath,
       checked: value,
       disabled: readonly,
       required,
-      error: error && <ErrorRenderer error={error} />,
+      error: error != null && <ErrorRenderer error={error} />,
       onChange,
       onFocus,
       onBlur,
       onKeyUp,
     }
   }
-  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-  return createUnsafePartialObserverComponent(
-    Checkbox,
-    propSource,
-    ['ErrorRenderer'],
-  ) as MantineFieldComponent<SuppliedCheckboxProps, Props, ErrorOfField<F[K]>>
+  return createUnsafePartialObserverComponent(Checkbox, propSource, [
+    'ErrorRenderer',
+  ]) as MantineFieldComponent<SuppliedCheckboxProps, Props, ErrorOfField<F[K]>>
 }

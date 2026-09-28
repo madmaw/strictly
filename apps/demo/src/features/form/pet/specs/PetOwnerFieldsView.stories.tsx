@@ -1,7 +1,4 @@
-import {
-  type Meta,
-  type StoryObj,
-} from '@storybook/react-vite'
+import { type Meta, type StoryObj } from '@storybook/react-vite'
 import {
   MinimumStringLengthValidationErrorType,
   RegexpValidationErrorType,

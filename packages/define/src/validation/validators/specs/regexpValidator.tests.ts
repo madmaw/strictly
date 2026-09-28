@@ -32,35 +32,26 @@ describe('RegexpValidator', () => {
   })
 
   describe('email', () => {
-    it.each([
-      'x@y.z',
-      'support@company.com',
-      '...@......',
-      '1234@3454.23',
-    ])('accepts "%s"', (email) => {
-      expect(RegexpValidator.email.validate(email)).toBeNull()
-    })
+    it.each(['x@y.z', 'support@company.com', '...@......', '1234@3454.23'])(
+      'accepts "%s"',
+      (email) => {
+        expect(RegexpValidator.email.validate(email)).toBeNull()
+      },
+    )
 
-    it.each([
-      '',
-      '@@@@',
-      'email',
-      '@bee.com',
-      'aaa@bbb',
-      'a a@b b.c c',
-    ])('rejects "%s"', (email) => {
-      expect(RegexpValidator.email.validate(email)).toEqual({
-        type: RegexpValidationErrorType,
-        intent: 'email',
-      })
-    })
+    it.each(['', '@@@@', 'email', '@bee.com', 'aaa@bbb', 'a a@b b.c c'])(
+      'rejects "%s"',
+      (email) => {
+        expect(RegexpValidator.email.validate(email)).toEqual({
+          type: RegexpValidationErrorType,
+          intent: 'email',
+        })
+      },
+    )
   })
 
   describe('required', () => {
-    it.each([
-      true,
-      false,
-    ])('exposes required %s', (required) => {
+    it.each([true, false])('exposes required %s', (required) => {
       const validator = new RegexpValidator(/a/, 'test', {
         required,
       })
@@ -71,38 +62,30 @@ describe('RegexpValidator', () => {
   describe('general', () => {
     // not here to test if regexp works
     it.each([
-      [
-        '^a$',
-        'a',
-      ],
-      [
-        '^\\w+$',
-        'asdf',
-      ],
-    ])('passes validation with regexp "%s" and value "%s"', (regexpString, value) => {
-      const regexp = new RegExp(regexpString)
-      const validator = new RegexpValidator(regexp, 'test')
-      expect(validator.validate(value)).toBeNull()
-    })
+      ['^a$', 'a'],
+      ['^\\w+$', 'asdf'],
+    ])(
+      'passes validation with regexp "%s" and value "%s"',
+      (regexpString, value) => {
+        const regexp = new RegExp(regexpString)
+        const validator = new RegexpValidator(regexp, 'test')
+        expect(validator.validate(value)).toBeNull()
+      },
+    )
 
     it.each([
-      [
-        '^$',
-        'something',
-        'empty',
-      ],
-      [
-        '^\\w+$',
-        '',
-        'non-empty',
-      ],
-    ])('fails validation with regexp "%s" and value "%s', (regexpString, value, intent) => {
-      const regexp = new RegExp(regexpString)
-      const validator = new RegexpValidator(regexp, intent)
-      expect(validator.validate(value)).toEqual({
-        type: RegexpValidationErrorType,
-        intent,
-      })
-    })
+      ['^$', 'something', 'empty'],
+      ['^\\w+$', '', 'non-empty'],
+    ])(
+      'fails validation with regexp "%s" and value "%s',
+      (regexpString, value, intent) => {
+        const regexp = new RegExp(regexpString)
+        const validator = new RegexpValidator(regexp, intent)
+        expect(validator.validate(value)).toEqual({
+          type: RegexpValidationErrorType,
+          intent,
+        })
+      },
+    )
   })
 })

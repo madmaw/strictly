@@ -16,37 +16,32 @@ import {
   type TagValuePath,
 } from 'features/form/pet/types'
 import { Observer } from 'mobx-react'
-import {
-  type ComponentType,
-  useCallback,
-  useMemo,
-} from 'react'
-import {
-  PetFormModel,
-} from './PetFormModel'
+import { type ComponentType, useCallback, useMemo } from 'react'
+import { PetFormModel } from './PetFormModel'
+
+function focusInput(input: HTMLInputElement | null) {
+  input?.focus()
+}
 
 export function PetForm({
   value,
   onValueChange,
   forceMutable,
 }: FormProps<Pet> & {
-  forceMutable: boolean,
+  forceMutable: boolean
 }) {
-  const model = useMemo(() => {
-    return new PetFormModel(value, forceMutable)
-  }, [
-    value,
-    forceMutable,
-  ])
-
-  const firstInputRef = useCallback((input: HTMLInputElement | null) => {
-    input?.focus()
-  }, [])
+  const model = useMemo(
+    () => new PetFormModel(value, forceMutable),
+    [value, forceMutable],
+  )
 
   const onValidFieldSubmit = useCallback(
-    function<Path extends keyof PetFormModel['fields']> (valuePath: Path) {
+    <Path extends keyof PetFormModel['fields']>(valuePath: Path) => {
       const typePath = model.typePath(valuePath)
-      if (typePath === '$.newTag' && model.fields['$.newTag'].value.trim().length > 0) {
+      if (
+        typePath === '$.newTag' &&
+        model.fields['$.newTag'].value.trim().length > 0
+      ) {
         // get the validated value
         const newValue = model.fields['$.newTag'].value
         model.addListItem('$.tags', [newValue])
@@ -59,7 +54,7 @@ export function PetForm({
   )
 
   const onValidFormSubmit = useCallback(
-    function (value: Pet) {
+    (value: Pet) => {
       onValueChange(value)
     },
     [onValueChange],
@@ -81,7 +76,7 @@ export function PetForm({
   })
 
   const onClearField = useCallback(
-    function (valuePath: PetValuePaths) {
+    (valuePath: PetValuePaths) => {
       model.clearFieldValue(valuePath)
       model.clearFieldError(valuePath)
     },
@@ -89,7 +84,7 @@ export function PetForm({
   )
 
   const onRemoveTag = useCallback(
-    function (valuePath: TagValuePath) {
+    (valuePath: TagValuePath) => {
       model.removeTag(valuePath)
     },
     [model],
@@ -101,66 +96,46 @@ export function PetForm({
   // I think has previously caused recursion issues, but might be solvable if it all gets fixed instead of only
   // partly is done
   const SpeciesCatComponent = usePartialObserverComponent(
-    function () {
-      return {
-        fields: model.fields,
-        onFieldValueChange,
-        onFieldSubmit,
-        onFieldFocus,
-        onFieldBlur,
-      }
-    },
-    [
-      model,
+    () => ({
+      fields: model.fields,
       onFieldValueChange,
       onFieldSubmit,
       onFieldFocus,
       onFieldBlur,
-    ],
+    }),
+    [model, onFieldValueChange, onFieldSubmit, onFieldFocus, onFieldBlur],
     PetSpeciesCatFieldsView,
   )
 
   const SpeciesDogComponent = usePartialObserverComponent(
-    function () {
-      return {
-        fields: model.fields,
-        onFieldValueChange,
-        onFieldSubmit,
-        onFieldFocus,
-        onFieldBlur,
-      }
-    },
-    [
-      model,
+    () => ({
+      fields: model.fields,
       onFieldValueChange,
       onFieldSubmit,
       onFieldFocus,
       onFieldBlur,
-    ],
+    }),
+    [model, onFieldValueChange, onFieldSubmit, onFieldFocus, onFieldBlur],
     PetSpeciesDogFieldsView,
   )
 
-  const speciesComponents = useMemo<Record<Species, ComponentType>>(function () {
-    return {
+  const speciesComponents = useMemo<Record<Species, ComponentType>>(
+    () => ({
       cat: SpeciesCatComponent,
       dog: SpeciesDogComponent,
-    }
-  }, [
-    SpeciesCatComponent,
-    SpeciesDogComponent,
-  ])
+    }),
+    [SpeciesCatComponent, SpeciesDogComponent],
+  )
 
   const SpeciesComponent = usePartialObserverComponent(
-    function () {
-      return {
-        fields: model.fields,
-        onFieldValueChange,
-        onFieldSubmit,
-        onFieldFocus,
-        onFieldBlur,
-        speciesComponents,
-      }
-    },
+    () => ({
+      fields: model.fields,
+      onFieldValueChange,
+      onFieldSubmit,
+      onFieldFocus,
+      onFieldBlur,
+      speciesComponents,
+    }),
     [
       model,
       onFieldValueChange,
@@ -178,7 +153,7 @@ export function PetForm({
         <PetFieldsView
           SpeciesComponent={SpeciesComponent}
           fields={model.fields}
-          firstInputRef={firstInputRef}
+          firstInputRef={focusInput}
           onClearField={onClearField}
           onFieldBlur={onFieldBlur}
           onFieldFocus={onFieldFocus}

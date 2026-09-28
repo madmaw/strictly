@@ -1,0 +1,18 @@
+{
+  "devDependencies": {
+    "@stylistic/eslint-plugin": "5.10.0",
+    "@types/node": "^24.0.0",
+    "oxlint": "^1.85.0"
+  },
+  "license": "MIT",
+  "main": "src/index.ts",
+  "name": "@strictly/oxlint",
+  "scripts": {
+    "check-types": "tsc -b",
+    "clean": "del-cli .out",
+    "lint": "oxlint --type-aware",
+    "lint:fix": "oxlint --type-aware --fix"
+  },
+  "type": "module",
+  "version": "0.0.41"
+}

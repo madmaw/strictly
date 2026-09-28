@@ -1,23 +1,16 @@
 import { type ExhaustiveArrayOfUnion } from 'types/ExhaustiveArrayOfUnion'
 
-describe('ExhaustiveArrayOfUnion', function () {
-  it('allows matching array', function () {
+describe('ExhaustiveArrayOfUnion', () => {
+  it('allows matching array', () => {
     type X = 'a' | 'b' | 'c'
-    const a = [
-      'a',
-      'b',
-      'c',
-    ] as const
+    const a = ['a', 'b', 'c'] as const
     type T = ExhaustiveArrayOfUnion<X, typeof a>
     expectTypeOf<T>().toEqualTypeOf(a)
   })
 
-  it('disallows subset array', function () {
+  it('disallows subset array', () => {
     type X = 'a' | 'b' | 'c'
-    const a = [
-      'a',
-      'b',
-    ] as const
+    const a = ['a', 'b'] as const
     type T = ExhaustiveArrayOfUnion<X, typeof a>
     expectTypeOf<T>().not.toEqualTypeOf(a)
   })

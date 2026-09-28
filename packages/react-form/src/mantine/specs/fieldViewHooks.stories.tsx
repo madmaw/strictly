@@ -1,41 +1,28 @@
-import {
-  Button,
-  Group,
-  TextInput,
-} from '@mantine/core'
-import {
-  type Meta,
-  type StoryObj,
-} from '@storybook/react-vite'
+import { Button, Group, TextInput } from '@mantine/core'
+import { type Meta, type StoryObj } from '@storybook/react-vite'
 import { type FieldsViewProps } from 'core/props'
 import { useMantineFormFields } from 'mantine/hooks'
-import {
-  type ChangeEvent,
-  useCallback,
-} from 'react'
+import { type ChangeEvent, useCallback } from 'react'
 import { action } from 'storybook/actions'
 import { type Field } from 'types/Field'
 
-function Component(props: FieldsViewProps<{
-  $: Field<string, string>,
-}>) {
+function Component(
+  props: FieldsViewProps<{
+    $: Field<string, string>
+  }>,
+) {
   const form = useMantineFormFields(props)
   const FieldView = form.fieldView('$')
   return (
     <FieldView>
-      {({
-        error,
-        value,
-        onBlur,
-        onFocus,
-        onSubmit,
-        onValueChange,
-      }) => {
-        // this *is* a component eslint
-        // eslint-disable-next-line react-hooks/rules-of-hooks
-        const onChange = useCallback(({ target: { value } }: ChangeEvent<HTMLInputElement>) => {
-          onValueChange(value)
-        }, [onValueChange])
+      {({ error, value, onBlur, onFocus, onSubmit, onValueChange }) => {
+        // oxlint-disable-next-line react/hooks -- the render prop is called as a component
+        const onChange = useCallback(
+          ({ target: { value } }: ChangeEvent<HTMLInputElement>) => {
+            onValueChange(value)
+          },
+          [onValueChange],
+        )
         return (
           <Group
             align='start'
@@ -50,9 +37,7 @@ function Component(props: FieldsViewProps<{
               value={value}
             />
             {/* normally this would be done on enter, but with a field view you can implement it however you want */}
-            <Button onClick={onSubmit}>
-              Submit Field
-            </Button>
+            <Button onClick={onSubmit}>Submit Field</Button>
           </Group>
         )
       }}

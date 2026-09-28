@@ -6,10 +6,7 @@
     }
   },
   "extends": "../../tsconfig.json",
-  "include": [
-    "src",
-    "tsconfig.json"
-  ],
+  "include": ["src", "tsconfig.json"],
   "references": [
     {
       "path": "../base"

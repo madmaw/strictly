@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "outDir": "./.out",
+    "paths": {
+      "*": ["./src/*"]
+    },
+    "types": ["node"]
+  },
+  "extends": "../../tsconfig.json",
+  "include": ["src", "tsconfig.json"],
+  "references": []
+}

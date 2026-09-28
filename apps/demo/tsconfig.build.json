@@ -6,11 +6,11 @@
   },
   "extends": "../../tsconfig.build.json",
   "include": [
-    ".eslintrc.cjs",
     ".storybook/**/*.ts",
     ".storybook/**/*.tsx",
     ".vitest/**/*.ts",
     "lingui.config.ts",
+    "oxlint.config.ts",
     "vite.config.mts",
     "vitest.config.mts"
   ]

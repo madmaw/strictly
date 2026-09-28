@@ -19,12 +19,15 @@ import { computed } from 'mobx'
 // petFieldAdapters because of the spread operation (which is wrong because the newTag field
 // should be in a separate form)
 type PetFormModelContext = {
-  readonly tags: readonly string[],
+  readonly tags: readonly string[]
 } & ContextOf<typeof petFieldAdapters>
 
-class PetFormModelContextSource implements FormModelContextSource<PetFormModelContext, Pet, TagValuePath> {
-  constructor(private readonly forceMutable: boolean) {
-  }
+class PetFormModelContextSource implements FormModelContextSource<
+  PetFormModelContext,
+  Pet,
+  TagValuePath
+> {
+  constructor(private readonly forceMutable: boolean) {}
 
   forPath(value: Pet) {
     return {

@@ -31,7 +31,6 @@ import {
 } from './PetOwnerFieldsView'
 import {
   catBreedType,
-  type DogBreed,
   dogBreedType,
   NOT_A_BREED_ERROR,
   NOT_A_NUMBER_ERROR,
@@ -43,43 +42,45 @@ import {
 
 export const TagAlreadyExistsErrorType = 'tag_already_exists'
 export type TagAlreadyExistsError = {
-  type: typeof TagAlreadyExistsErrorType,
-  value: string,
+  type: typeof TagAlreadyExistsErrorType
+  value: string
 }
 
-const petTypeValidators = flattenValidatorsOfValidatingTypeWithMutability<typeof petType, PetTypeToValuePaths>(
-  petType,
-)
+const petTypeValidators = flattenValidatorsOfValidatingTypeWithMutability<
+  typeof petType,
+  PetTypeToValuePaths
+>(petType)
 
 // want to assign it to a type
-// eslint-disable-next-line func-style
-const tagAlreadyExistsValidator: FunctionalValidator<string, TagAlreadyExistsError, '$.newTag',
-  { readonly tags: readonly string[] }> = (
-    value,
-    _path,
-    { tags },
-  ) => {
-    if (tags.indexOf(value) >= 0) {
-      return {
-        type: TagAlreadyExistsErrorType,
-        value,
-      }
+const tagAlreadyExistsValidator: FunctionalValidator<
+  string,
+  TagAlreadyExistsError,
+  '$.newTag',
+  { readonly tags: readonly string[] }
+> = (value, _path, { tags }) => {
+  if (tags.includes(value)) {
+    return {
+      type: TagAlreadyExistsErrorType,
+      value,
     }
-    return null
   }
+  return null
+}
 
 export const TagNotEmptyErrorType = 'tag_not_empty'
 export type TagNotEmptyError = {
-  type: typeof TagNotEmptyErrorType,
-  value: string,
+  type: typeof TagNotEmptyErrorType
+  value: string
 }
 
 // want to assign it to a type
-// eslint-disable-next-line func-style
-const tagNotEmptyErrorValidator: FunctionalValidator<string, TagNotEmptyError, '$.newTag'> = () => {
+const tagNotEmptyErrorValidator: FunctionalValidator<
+  string,
+  TagNotEmptyError,
+  '$.newTag'
+> = () =>
   // placeholder error so we can inject an error of this type manually
-  return null
-}
+  null
 
 export const petValidators = {
   ...petTypeValidators,
@@ -97,10 +98,7 @@ const rawPetFieldAdapters = {
   '$.alive': identityAdapter(false).narrow,
   '$.name': trimmingStringAdapter().narrow,
   '$.newTag': trimmingStringAdapter().narrow,
-  ...subFormFieldAdapters(
-    unvalidatedPetOwnerFieldAdapters,
-    '$.owner',
-  ),
+  ...subFormFieldAdapters(unvalidatedPetOwnerFieldAdapters, '$.owner'),
   '$.owner': adapterFromTwoWayConverter(
     new NullableToBooleanConverter(
       petOwnerType,
@@ -110,7 +108,7 @@ const rawPetFieldAdapters = {
         phoneNumber: '',
         email: '',
       },
-      undefined,
+      null,
     ),
   ).narrow,
   '$.species': adapterFromTwoWayConverter(
@@ -133,12 +131,8 @@ const rawPetFieldAdapters = {
   '$.species:cat.breed': adapterFromTwoWayConverter(
     new SelectStringConverter(
       catBreedType,
-      [
-        'Burmese',
-        'Siamese',
-        'DSH',
-      ] as const,
-      undefined,
+      ['Burmese', 'Siamese', 'DSH'] as const,
+      null,
       NOT_A_BREED_ERROR,
     ),
   ).narrow,
@@ -146,9 +140,7 @@ const rawPetFieldAdapters = {
   '$.species:dog.barks': adapterFromPrototype(
     new IntegerToStringConverter(NOT_A_NUMBER_ERROR),
     0,
-  ).withIdentity(
-    v => typeof v === 'number',
-  ).narrow,
+  ).withIdentity((v) => typeof v === 'number').narrow,
   '$.species:dog.breed': adapterFromTwoWayConverter(
     new SelectLiteralConverter(
       dogBreedType,
@@ -157,8 +149,7 @@ const rawPetFieldAdapters = {
         Pug: 'Pug',
         other: 'Other',
       },
-      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-      undefined as undefined | DogBreed,
+      null,
       NOT_A_BREED_ERROR,
       false,
     ),
@@ -172,7 +163,13 @@ const rawPetFieldAdapters = {
     {}
   > & {
     // TODO check list of existing tags in context
-    '$.newTag': FieldAdapter<string, string, TagAlreadyExistsError, '$.newTag', unknown>,
+    '$.newTag': FieldAdapter<
+      string,
+      string,
+      TagAlreadyExistsError,
+      '$.newTag',
+      unknown
+    >
   }
 >
 
@@ -188,4 +185,7 @@ export const petFieldAdapters = mergeFieldAdaptersWithTwoWayConverter(
   new IsAliveTwoWayConverter(),
 )
 
-export type PetFields = FormFieldsOfFieldAdapters<PetValueToTypePaths, typeof petFieldAdapters>
+export type PetFields = FormFieldsOfFieldAdapters<
+  PetValueToTypePaths,
+  typeof petFieldAdapters
+>

@@ -9,13 +9,14 @@ import {
 // type defs with error types, lets us attach validation to types
 
 export type ValidatingType<T extends ValidatingTypeDef = ValidatingTypeDef> = {
-  readonly definition: T,
+  readonly definition: T
 }
 
-export type ErrorOfValidatingTypeDef<T extends ValidatingTypeDef> = T extends ValidatingTypeDef<infer E> ? E : never
+export type ErrorOfValidatingTypeDef<T extends ValidatingTypeDef> =
+  T extends ValidatingTypeDef<infer E> ? E : never
 
-export type ContextOfValidatingTypeDef<T extends ValidatingTypeDef> = T extends ValidatingTypeDef<infer _E, infer C> ? C
-  : never
+export type ContextOfValidatingTypeDef<T extends ValidatingTypeDef> =
+  T extends ValidatingTypeDef<infer _E, infer C> ? C : never
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type Rule<E, C, V = any> = FunctionalValidator<V, E, string, C>
@@ -35,11 +36,11 @@ type AnyTypeDef = any
 // literal
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type ValidatingLiteralTypeDef<E = any, C = any, V = any> = {
-  readonly type: TypeDefType.Literal,
-  readonly valuePrototype: [V],
-  readonly rule: Rule<E, C>,
-  readonly required: boolean,
-  readonly readonly: boolean,
+  readonly type: TypeDefType.Literal
+  readonly valuePrototype: [V]
+  readonly rule: Rule<E, C>
+  readonly required: boolean
+  readonly readonly: boolean
 }
 
 // list
@@ -50,12 +51,12 @@ export type ValidatingListTypeDef<
   C = any,
   Ele extends ValidatingTypeDef = AnyTypeDef,
 > = {
-  readonly type: TypeDefType.List,
+  readonly type: TypeDefType.List
   // readonly is inherited by the output
-  readonly elements: Ele,
-  readonly rule: Rule<E, C>,
-  readonly required: boolean,
-  readonly readonly: boolean,
+  readonly elements: Ele
+  readonly rule: Rule<E, C>
+  readonly required: boolean
+  readonly readonly: boolean
 }
 
 // map
@@ -68,14 +69,14 @@ export type ValidatingRecordTypeDef<
   // if `V` includes `undefined` the map is partial
   V extends ValidatingTypeDef | undefined = AnyTypeDef,
 > = {
-  readonly type: TypeDefType.Record,
+  readonly type: TypeDefType.Record
   // never actually populate
-  readonly keyPrototype: K,
+  readonly keyPrototype: K
   // readonly is inherited by the output
-  readonly valueTypeDef: V,
-  readonly rule: Rule<E, C>,
-  readonly required: boolean,
-  readonly readonly: boolean,
+  readonly valueTypeDef: V
+  readonly rule: Rule<E, C>
+  readonly required: boolean
+  readonly readonly: boolean
 }
 
 // structured type
@@ -83,7 +84,7 @@ export type ValidatingRecordTypeDef<
 // NOTE we use the `readonly` and `?` (partial) status of these field definitions
 // to describe the same attributes of the fields
 export type ValidatingObjectTypeDefFields = {
-  [Key: ObjectFieldKey]: AnyTypeDef,
+  [Key: ObjectFieldKey]: AnyTypeDef
 }
 
 // NOTE: we cannot collapse this type to
@@ -97,11 +98,11 @@ export type ValidatingObjectTypeDef<
   C = any,
   Fields extends ValidatingObjectTypeDefFields = ValidatingObjectTypeDefFields,
 > = {
-  readonly type: TypeDefType.Object,
-  readonly fields: Fields,
-  readonly rule: Rule<E, C>,
-  readonly required: boolean,
-  readonly readonly: boolean,
+  readonly type: TypeDefType.Object
+  readonly fields: Fields
+  readonly rule: Rule<E, C>
+  readonly required: boolean
+  readonly readonly: boolean
 }
 
 export type ValidatingUnionTypeDef<
@@ -110,12 +111,14 @@ export type ValidatingUnionTypeDef<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   C = any,
   D extends string | null = string | null,
-  U extends Readonly<Record<UnionKey, AnyTypeDef>> = Readonly<Record<UnionKey, AnyTypeDef>>,
+  U extends Readonly<Record<UnionKey, AnyTypeDef>> = Readonly<
+    Record<UnionKey, AnyTypeDef>
+  >,
 > = {
-  readonly discriminator: D,
-  readonly type: TypeDefType.Union,
-  readonly unions: U,
-  readonly rule: Rule<E, C>,
-  readonly required: boolean,
-  readonly readonly: boolean,
+  readonly discriminator: D
+  readonly type: TypeDefType.Union
+  readonly unions: U
+  readonly rule: Rule<E, C>
+  readonly required: boolean
+  readonly readonly: boolean
 }

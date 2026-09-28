@@ -21,6 +21,7 @@
     "@storybook/addon-links": "catalog:",
     "@storybook/react-vite": "catalog:",
     "@strictly/lingui": "workspace:*",
+    "@strictly/oxlint": "workspace:*",
     "@strictly/spec": "workspace:*",
     "@strictly/vite": "workspace:*",
     "@testing-library/dom": "catalog:",
@@ -48,8 +49,8 @@
     "lingui": "pnpm lingui:extract && pnpm lingui:compile",
     "lingui:compile": "lingui compile --typescript",
     "lingui:extract": "lingui extract",
-    "lint": "cross-env ESLINT_USE_FLAT_CONFIG=false eslint . --max-warnings=0",
-    "lint:fix": "cross-env ESLINT_USE_FLAT_CONFIG=false eslint . --fix",
+    "lint": "oxlint --type-aware",
+    "lint:fix": "oxlint --type-aware --fix",
     "preview": "vite preview",
     "storybook": "pnpm lingui:compile && storybook dev",
     "storybook:build": "pnpm lingui:compile && storybook build",
@@ -59,5 +60,6 @@
     "test:watch": "pnpm vitest:run --watch --project=unit/*",
     "vitest:run": "vitest run --configLoader runner"
   },
+  "type": "module",
   "version": "0.0.41"
 }

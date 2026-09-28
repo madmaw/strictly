@@ -5,10 +5,12 @@ import { loadEnv } from 'vite'
 import tsconfigPaths from 'vite-tsconfig-paths'
 import tsconfig from './tsconfig.json'
 
-const {
-  PUBLIC_BASE,
-  PUBLIC_SITE,
-} = loadEnv(process.env.NODE_ENV!, process.cwd(), '')
+const { PUBLIC_BASE, PUBLIC_SITE } = loadEnv(
+  // oxlint-disable-next-line typescript/no-non-null-assertion -- astro always sets the mode
+  process.env.NODE_ENV!,
+  process.cwd(),
+  '',
+)
 // https://astro.build/config
 const x: ReturnType<typeof defineConfig<['en']>> = defineConfig({
   site: PUBLIC_SITE,
@@ -35,12 +37,7 @@ const x: ReturnType<typeof defineConfig<['en']>> = defineConfig({
       tsconfigPaths({
         // must specify projects otherwise we get configuration errors for unrelated projects
         // NOTE we should use the packages rather than rely on project references
-        projects: [
-          '.',
-          ...tsconfig.references.map(function ({ path }) {
-            return path
-          }),
-        ],
+        projects: ['.', ...tsconfig.references.map(({ path }) => path)],
       }),
     ],
   },

@@ -1,9 +1,9 @@
 {
   "author": "Chris <chris.glover@gmail.com> (@madmaw)",
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "@strictly/base": "workspace:*",
+    "@strictly/oxlint": "workspace:*",
     "@strictly/vite": "workspace:*",
     "type-fest": "catalog:"
   },
@@ -27,12 +27,10 @@
       ".": {
         "import": {
           "types": "./dist/index.d.ts",
-
           "default": "./dist/index.js"
         },
         "require": {
           "types": "./dist/index.d.cts",
-
           "default": "./dist/index.cjs"
         }
       }
@@ -49,8 +47,8 @@
     "build": "vite build --configLoader runner",
     "check-types": "tsc -b",
     "clean": "del-cli dist .out",
-    "lint": "cross-env ESLINT_USE_FLAT_CONFIG=false eslint . --max-warnings=0",
-    "lint:fix": "cross-env ESLINT_USE_FLAT_CONFIG=false eslint . --fix",
+    "lint": "oxlint --type-aware",
+    "lint:fix": "oxlint --type-aware --fix",
     "test": "vitest run --configLoader runner",
     "test:watch": "vitest --configLoader runner"
   },

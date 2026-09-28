@@ -1,27 +1,22 @@
-import {
-  type RadioGroupProps,
-} from '@mantine/core'
+import { type RadioGroupProps } from '@mantine/core'
 import { type ComponentType } from 'react'
 import { type ErrorOfField } from 'types/ErrorOfField'
-import {
-  type Fields,
-} from 'types/Field'
+import { type Fields } from 'types/Field'
 import { type StringFieldsOfFields } from 'types/StringFieldsOfFields'
-import {
-  createUnsafePartialObserverComponent,
-} from 'util/Partial'
-import {
-  DefaultErrorRenderer,
-  type ErrorRenderer,
-} from './ErrorRenderer'
-import {
-  type MantineFieldComponent,
-  type MantineForm,
-} from './types'
+import { createUnsafePartialObserverComponent } from 'util/Partial'
+import { DefaultErrorRenderer, type ErrorRenderer } from './ErrorRenderer'
+import { type MantineFieldComponent, type MantineForm } from './types'
 
 export type SuppliedRadioGroupProps = Pick<
   RadioGroupProps,
-  'name' | 'value' | 'required' | 'error' | 'onChange' | 'onFocus' | 'onBlur' | 'onKeyUp'
+  | 'name'
+  | 'value'
+  | 'required'
+  | 'error'
+  | 'onChange'
+  | 'onFocus'
+  | 'onBlur'
+  | 'onKeyUp'
 >
 
 export function createRadioGroup<
@@ -34,7 +29,7 @@ export function createRadioGroup<
   RadioGroup: ComponentType<Props>,
 ): MantineFieldComponent<SuppliedRadioGroupProps, Props, ErrorOfField<F[K]>> {
   const onChange = (value: string) => {
-    this.onFieldValueChange?.(valuePath, value)
+    this.onFieldValueChange(valuePath, value)
   }
   const onFocus = () => {
     this.onFieldFocus?.(valuePath)
@@ -50,26 +45,27 @@ export function createRadioGroup<
     }
   }
 
-  const propSource = ({ ErrorRenderer = DefaultErrorRenderer }: { ErrorRenderer?: ErrorRenderer }) => {
-    const {
-      required,
-      value,
-      error,
-    } = this.fields[valuePath]
+  const propSource = ({
+    ErrorRenderer = DefaultErrorRenderer,
+  }: {
+    ErrorRenderer?: ErrorRenderer
+  }) => {
+    const { required, value, error } = this.fields[valuePath]
 
     return {
       name: valuePath,
       value,
       required,
-      error: error && <ErrorRenderer error={error} />,
+      error: error != null && <ErrorRenderer error={error} />,
       onChange,
       onFocus,
       onBlur,
       onKeyUp,
     }
   }
-  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-  return createUnsafePartialObserverComponent(RadioGroup, propSource, ['ErrorRenderer']) as MantineFieldComponent<
+  return createUnsafePartialObserverComponent(RadioGroup, propSource, [
+    'ErrorRenderer',
+  ]) as MantineFieldComponent<
     SuppliedRadioGroupProps,
     Props,
     ErrorOfField<F[K]>

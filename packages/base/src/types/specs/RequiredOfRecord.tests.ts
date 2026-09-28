@@ -1,16 +1,18 @@
 import { type RequiredOfRecord } from 'types/RequiredOfRecord'
 
-describe('RequiredOfRecord', function () {
-  it('works on empty record', function () {
+describe('RequiredOfRecord', () => {
+  it('works on empty record', () => {
     expectTypeOf<RequiredOfRecord<{}>>().toEqualTypeOf<{}>()
   })
 
-  it('removes all optional types', function () {
-    expectTypeOf<RequiredOfRecord<{ a?: 1, b?: true, c?: 'a' }>>().toEqualTypeOf<{}>()
+  it('removes all optional types', () => {
+    expectTypeOf<
+      RequiredOfRecord<{ a?: 1; b?: true; c?: 'a' }>
+    >().toEqualTypeOf<{}>()
   })
 
-  it('leaves all mandatory types alone', function () {
-    type T = { a: 1, b: true, c: 'a' }
+  it('leaves all mandatory types alone', () => {
+    type T = { a: 1; b: true; c: 'a' }
     expectTypeOf<RequiredOfRecord<T>>().toEqualTypeOf<T>()
   })
 })

@@ -6,8 +6,8 @@
   },
   "extends": "../../tsconfig.build.json",
   "include": [
-    ".eslintrc.cjs",
     ".storybook/vite.config.mts",
+    "oxlint.config.ts",
     "vite.config.mts",
     "vitest.workspace.ts"
   ]

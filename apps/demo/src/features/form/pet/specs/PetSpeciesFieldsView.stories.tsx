@@ -1,8 +1,5 @@
 import { Card } from '@mantine/core'
-import {
-  type Meta,
-  type StoryObj,
-} from '@storybook/react-vite'
+import { type Meta, type StoryObj } from '@storybook/react-vite'
 import { PetSpeciesFormFieldsView } from 'features/form/pet/PetSpeciesFieldsView'
 import { action } from 'storybook/actions'
 
@@ -12,9 +9,7 @@ const Component = PetSpeciesFormFieldsView
 function CatComponent() {
   return (
     <Card>
-      <h1>
-        Cat
-      </h1>
+      <h1>Cat</h1>
     </Card>
   )
 }
@@ -22,9 +17,7 @@ function CatComponent() {
 function DogComponent() {
   return (
     <Card>
-      <h1>
-        Dog
-      </h1>
+      <h1>Dog</h1>
     </Card>
   )
 }

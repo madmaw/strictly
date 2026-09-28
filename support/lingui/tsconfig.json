@@ -6,10 +6,6 @@
     }
   },
   "extends": "../../tsconfig.json",
-  "include": [
-    "config.ts",
-    "src",
-    "tsconfig.json"
-  ],
+  "include": ["config.ts", "src", "tsconfig.json"],
   "references": []
 }

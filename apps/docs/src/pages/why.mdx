@@ -63,22 +63,25 @@ As an implementor of a form UI, and client of a form library, I want my form com
 
 ```typescript
 type DomainObject = {
-  name: string,
-  age: number,
-  tags: string[],
+  name: string
+  age: number
+  tags: string[]
 }
 
 // nice for callers
 type CallerFriendlyAbstractionProps = {
-  value: DomainObject,
-  onSubmit: (value: DomainObject) => void,
+  value: DomainObject
+  onSubmit: (value: DomainObject) => void
 }
 
 // nice for implementors
 type StatelessFormProps<Fields extends FormFieldsOf<DomainObject>> = {
-  fields: Fields,
-  onFieldChange: <K extends keyof Fields>(fieldKey: K, value: Fields[K]['value']) => void,
-  onSubmit: () => void,
+  fields: Fields
+  onFieldChange: <K extends keyof Fields>(
+    fieldKey: K,
+    value: Fields[K]['value'],
+  ) => void
+  onSubmit: () => void
 }
 ```
 

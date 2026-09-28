@@ -8,88 +8,76 @@ import {
   record,
   union,
 } from 'types/builders'
-import {
-  type TypeDef,
-  TypeDefType,
-} from 'types/Type'
-import {
-  type Mock,
-  vi,
-} from 'vitest'
+import { type TypeDef, TypeDefType } from 'types/Type'
+import { type Mock, vi } from 'vitest'
 
-describe('flattenTypeDefTo', function () {
+describe('flattenTypeDefTo', () => {
   let toTypeDefType: Mock<(typeDef: TypeDef) => number>
   let flattened: Record<string, TypeDefType>
 
-  beforeEach(function () {
-    toTypeDefType = vi.fn(function (typeDef: TypeDef) {
-      return typeDef.type
-    })
+  beforeEach(() => {
+    toTypeDefType = vi.fn((typeDef: TypeDef) => typeDef.type)
   })
 
-  describe('literal', function () {
-    beforeEach(function () {
+  describe('literal', () => {
+    beforeEach(() => {
       flattened = flattenTypeTo(numberType, toTypeDefType)
     })
 
-    it('equals expected type', function () {
+    it('equals expected type', () => {
       expect(flattened).toEqual({
         $: TypeDefType.Literal,
       })
     })
 
-    it('calls the mapper function', function () {
+    it('calls the mapper function', () => {
       expect(toTypeDefType).toHaveBeenCalledTimes(1)
     })
   })
 
-  describe('list', function () {
+  describe('list', () => {
     const type = list(numberType)
-    beforeEach(function () {
+    beforeEach(() => {
       flattened = flattenTypeTo(type, toTypeDefType)
     })
 
-    it('equals expected type', function () {
+    it('equals expected type', () => {
       expect(flattened).toEqual({
         $: TypeDefType.List,
         '$.*': TypeDefType.Literal,
       })
     })
 
-    it('calls the mapper function', function () {
+    it('calls the mapper function', () => {
       expect(toTypeDefType).toHaveBeenCalledTimes(2)
     })
   })
 
-  describe('record', function () {
+  describe('record', () => {
     const type = record<typeof numberType, 'a' | 'b'>(numberType)
-    beforeEach(function () {
+    beforeEach(() => {
       flattened = flattenTypeTo(type, toTypeDefType)
     })
 
-    it('equals expected type', function () {
-      expect(
-        flattened,
-      ).toEqual({
+    it('equals expected type', () => {
+      expect(flattened).toEqual({
         $: TypeDefType.Record,
         '$.*': TypeDefType.Literal,
       })
     })
 
-    it('calls the mapper function', function () {
+    it('calls the mapper function', () => {
       expect(toTypeDefType).toHaveBeenCalledTimes(2)
     })
   })
 
-  describe('object', function () {
-    const type = object()
-      .field('a', numberType)
-      .field('b', list(booleanType))
-    beforeEach(function () {
+  describe('object', () => {
+    const type = object().field('a', numberType).field('b', list(booleanType))
+    beforeEach(() => {
       flattened = flattenTypeTo(type, toTypeDefType)
     })
 
-    it('equals expected type', function () {
+    it('equals expected type', () => {
       expect(flattened).toEqual({
         $: TypeDefType.Object,
         '$.a': TypeDefType.Literal,
@@ -98,41 +86,41 @@ describe('flattenTypeDefTo', function () {
       })
     })
 
-    it('calls the mapper function', function () {
+    it('calls the mapper function', () => {
       expect(toTypeDefType).toHaveBeenCalledTimes(4)
     })
   })
 
-  describe('union', function () {
-    describe('non-discriminated', function () {
+  describe('union', () => {
+    describe('non-discriminated', () => {
       const type = union()
         .or('a', nullType)
         .or('b', booleanType)
         .or('c', numberType)
-      beforeEach(function () {
+      beforeEach(() => {
         flattened = flattenTypeTo(type, toTypeDefType)
       })
 
-      it('equals expected type', function () {
+      it('equals expected type', () => {
         expect(flattened).toEqual({
           $: TypeDefType.Union,
         })
       })
 
-      it('calls the mapper function', function () {
+      it('calls the mapper function', () => {
         expect(toTypeDefType).toHaveBeenCalledTimes(1)
       })
     })
 
-    describe('discriminated', function () {
+    describe('discriminated', () => {
       const type = union('d')
         .or('a', object().field('a', booleanType))
         .or('b', object().field('b', numberType))
-      beforeEach(function () {
+      beforeEach(() => {
         flattened = flattenTypeTo(type, toTypeDefType)
       })
 
-      it('equals expected type', function () {
+      it('equals expected type', () => {
         expect(flattened).toEqual({
           $: TypeDefType.Union,
           '$:a.a': TypeDefType.Literal,
@@ -142,7 +130,7 @@ describe('flattenTypeDefTo', function () {
         })
       })
 
-      it('calls the mapper function', function () {
+      it('calls the mapper function', () => {
         expect(toTypeDefType).toHaveBeenCalledTimes(5)
       })
     })

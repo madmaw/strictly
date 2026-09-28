@@ -2,8 +2,8 @@ import { type Simplify } from 'type-fest'
 import { CompositeValidator } from './validators/CompositeValidator'
 
 export type Annotations = {
-  readonly required: boolean,
-  readonly readonly: boolean,
+  readonly required: boolean
+  readonly readonly: boolean
 }
 
 export type FunctionalValidator<
@@ -27,8 +27,8 @@ export type AnnotatedValidator<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   Context = any,
 > = {
-  readonly validate: (v: V, valuePath: ValuePath, context: Context) => E | null,
-  readonly annotations: (valuePath: ValuePath, context: Context) => Annotations,
+  readonly validate: (v: V, valuePath: ValuePath, context: Context) => E | null
+  readonly annotations: (valuePath: ValuePath, context: Context) => Annotations
 }
 
 export type Validator<
@@ -40,31 +40,28 @@ export type Validator<
   ValuePath extends string = any,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   Context = any,
-> = FunctionalValidator<V, E, ValuePath, Context> | AnnotatedValidator<V, E, ValuePath, Context>
+> =
+  | FunctionalValidator<V, E, ValuePath, Context>
+  | AnnotatedValidator<V, E, ValuePath, Context>
 
-export type ErrorOfValidator<V extends Validator> = V extends Validator<infer _V, infer E> ? E : never
+export type ErrorOfValidator<V extends Validator> =
+  V extends Validator<infer _V, infer E> ? E : never
 
 export type ValidationError<Type extends string, Data = {}> = Simplify<
   {
-    type: Type,
+    type: Type
   } & Data
 >
 
-export function isFunctionalValidator<
-  V,
-  E,
-  ValuePath extends string,
-  Context,
->(v: Validator<V, E, ValuePath, Context>): v is FunctionalValidator<V, E, ValuePath, Context> {
+export function isFunctionalValidator<V, E, ValuePath extends string, Context>(
+  v: Validator<V, E, ValuePath, Context>,
+): v is FunctionalValidator<V, E, ValuePath, Context> {
   return typeof v === 'function'
 }
 
-export function isAnnotatedValidator<
-  V,
-  E,
-  ValuePath extends string,
-  Context,
->(v: Validator<V, E, ValuePath, Context>): v is AnnotatedValidator<V, E, ValuePath, Context> {
+export function isAnnotatedValidator<V, E, ValuePath extends string, Context>(
+  v: Validator<V, E, ValuePath, Context>,
+): v is AnnotatedValidator<V, E, ValuePath, Context> {
   return typeof v !== 'function'
 }
 
@@ -85,9 +82,8 @@ export function validate<
 ): E | null {
   if (isAnnotatedValidator(validator)) {
     return validator.validate(v, valuePath, context)
-  } else {
-    return validator(v, valuePath, context)
   }
+  return validator(v, valuePath, context)
 }
 
 export function mergeValidators<
@@ -121,11 +117,10 @@ export function annotations<
 ) {
   if (isAnnotatedValidator(validator)) {
     return validator.annotations(valuePath, context)
-  } else {
-    return {
-      required: false,
-      readonly: false,
-    }
+  }
+  return {
+    required: false,
+    readonly: false,
   }
 }
 

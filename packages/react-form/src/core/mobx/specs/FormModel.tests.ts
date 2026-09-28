@@ -31,44 +31,37 @@ import {
   type ValuePathsToAdaptersOf,
 } from 'core/mobx/FormModel'
 import { mergeAdaptersWithValidators } from 'core/mobx/mergeFieldAdaptersWithValidators'
-import { IntegerToStringConverter } from 'field_converters/IntegerToStringConverter'
-import { NullableToBooleanConverter } from 'field_converters/NullableToBooleanConverter'
-import { SelectDiscriminatedUnionConverter } from 'field_converters/SelectValueTypeConverter'
-import { prototypingFieldValueFactory } from 'field_value_factories/prototypingFieldValueFactory'
-import {
-  type Simplify,
-} from 'type-fest'
+import { IntegerToStringConverter } from 'field-converters/IntegerToStringConverter'
+import { NullableToBooleanConverter } from 'field-converters/NullableToBooleanConverter'
+import { SelectDiscriminatedUnionConverter } from 'field-converters/SelectValueTypeConverter'
+import { prototypingFieldValueFactory } from 'field-value-factories/prototypingFieldValueFactory'
+import { type Simplify } from 'type-fest'
 import { type Field } from 'types/Field'
-import {
-  UnreliableFieldConversionType,
-} from 'types/FieldConverters'
-import {
-  createMockedAdapter,
-  resetMockAdapter,
-} from './fixtures'
+import { UnreliableFieldConversionType } from 'types/FieldConverters'
+import { createMockedAdapter, resetMockAdapter } from './fixtures'
 
 const IS_NAN_ERROR = 1
 
 const originalIntegerToStringAdapter = adapterFromTwoWayConverter(
-  new IntegerToStringConverter<typeof IS_NAN_ERROR, string, unknown>(IS_NAN_ERROR),
+  new IntegerToStringConverter<typeof IS_NAN_ERROR, string, unknown>(
+    IS_NAN_ERROR,
+  ),
   prototypingFieldValueFactory(0),
 )
 
 const originalBooleanToBooleanAdapter = identityAdapter(false)
 
 type TextFormContext = {
-  forceMutable: boolean,
-  value: unknown,
-  valuePath: unknown,
+  forceMutable: boolean
+  value: unknown
+  valuePath: unknown
 }
 
-class TestFormContextSource<V, ValuePath extends string | number | symbol> implements FormModelContextSource<
-  TextFormContext,
+class TestFormContextSource<
   V,
-  ValuePath
-> {
-  constructor(private readonly forceMutable: boolean) {
-  }
+  ValuePath extends string | number | symbol,
+> implements FormModelContextSource<TextFormContext, V, ValuePath> {
+  constructor(private readonly forceMutable: boolean) {}
 
   forPath(value: V, valuePath: ValuePath): TextFormContext {
     return {
@@ -93,18 +86,30 @@ class TestFormModel<
     adapters: TypePathsToAdapters,
     forceMutable = false,
   ) {
-    super(type, originalValue, adapters, new TestFormContextSource(forceMutable))
+    super(
+      type,
+      originalValue,
+      adapters,
+      new TestFormContextSource(forceMutable),
+    )
   }
 
-  setFieldValueAndValidate<K extends keyof ValuePathsToAdaptersOf<TypePathsToAdapters, ValueToTypePaths>>(
+  setFieldValueAndValidate<
+    K extends keyof ValuePathsToAdaptersOf<
+      TypePathsToAdapters,
+      ValueToTypePaths
+    >,
+  >(
     valuePath: K,
-    value: ToOfFieldAdapter<ValuePathsToAdaptersOf<TypePathsToAdapters, ValueToTypePaths>[K]>,
+    value: ToOfFieldAdapter<
+      ValuePathsToAdaptersOf<TypePathsToAdapters, ValueToTypePaths>[K]
+    >,
   ) {
     this.setFieldValue(valuePath, value, Validation.Always)
   }
 }
 
-describe('all', function () {
+describe('all', () => {
   const integerToStringAdapter = createMockedAdapter(
     originalIntegerToStringAdapter,
   )
@@ -112,12 +117,12 @@ describe('all', function () {
     originalBooleanToBooleanAdapter,
   )
 
-  beforeEach(function () {
+  beforeEach(() => {
     resetMockAdapter(originalIntegerToStringAdapter, integerToStringAdapter)
     resetMockAdapter(originalBooleanToBooleanAdapter, booleanToBooleanAdapter)
   })
 
-  describe('FlattenedTypePathsToAdaptersOf', function () {
+  describe('FlattenedTypePathsToAdaptersOf', () => {
     type ConvenientFieldAdapter<
       From,
       Context,
@@ -127,15 +132,9 @@ describe('all', function () {
       E = any,
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       ValuePath extends string = any,
-    > = FieldAdapter<
-      From,
-      To,
-      E,
-      ValuePath,
-      Context
-    >
+    > = FieldAdapter<From, To, E, ValuePath, Context>
 
-    describe('record', function () {
+    describe('record', () => {
       const typeDef = record<typeof numberType, 'a' | 'b'>(numberType)
       type T = Simplify<
         FlattenedTypePathsToAdaptersOf<
@@ -144,56 +143,72 @@ describe('all', function () {
         >
       >
       type C = Partial<{
-        readonly $: ConvenientFieldAdapter<Readonly<Record<'a' | 'b', number>>, ValueOfType<typeof typeDef>>,
-        readonly ['$.a']: ConvenientFieldAdapter<number, ValueOfType<typeof typeDef>>,
-        readonly ['$.b']: ConvenientFieldAdapter<number, ValueOfType<typeof typeDef>>,
+        readonly $: ConvenientFieldAdapter<
+          Readonly<Record<'a' | 'b', number>>,
+          ValueOfType<typeof typeDef>
+        >
+        readonly ['$.a']: ConvenientFieldAdapter<
+          number,
+          ValueOfType<typeof typeDef>
+        >
+        readonly ['$.b']: ConvenientFieldAdapter<
+          number,
+          ValueOfType<typeof typeDef>
+        >
       }>
 
-      it('equals expected type', function () {
+      it('equals expected type', () => {
         expectTypeOf<C>().toEqualTypeOf<T>()
       })
     })
 
-    describe('object', function () {
-      const typeDef = object()
-        .field('x', stringType)
-        .field('y', booleanType)
+    describe('object', () => {
+      const typeDef = object().field('x', stringType).field('y', booleanType)
       type T = FlattenedTypePathsToAdaptersOf<
         FlattenedValuesOfType<typeof typeDef>,
         ValueOfType<typeof typeDef>
       >
       type C = Partial<{
-        readonly $: ConvenientFieldAdapter<{ readonly x: string, readonly y: boolean }, ValueOfType<typeof typeDef>>,
-        readonly ['$.x']: ConvenientFieldAdapter<string, ValueOfType<typeof typeDef>>,
-        readonly ['$.y']: ConvenientFieldAdapter<boolean, ValueOfType<typeof typeDef>>,
+        readonly $: ConvenientFieldAdapter<
+          { readonly x: string; readonly y: boolean },
+          ValueOfType<typeof typeDef>
+        >
+        readonly ['$.x']: ConvenientFieldAdapter<
+          string,
+          ValueOfType<typeof typeDef>
+        >
+        readonly ['$.y']: ConvenientFieldAdapter<
+          boolean,
+          ValueOfType<typeof typeDef>
+        >
       }>
-      it('equals expected type', function () {
+      it('equals expected type', () => {
         expectTypeOf<C>().toEqualTypeOf<T>()
       })
 
-      it('matches representative adapters', function () {
+      it('matches representative adapters', () => {
         type A = {
-          '$.x': FieldAdapter<string, string>,
-          '$.y': FieldAdapter<boolean, string>,
+          '$.x': FieldAdapter<string, string>
+          '$.y': FieldAdapter<boolean, string>
         }
         expectTypeOf<A>().toMatchTypeOf<T>()
       })
 
-      it('does not allow mismatched adapters', function () {
+      it('does not allow mismatched adapters', () => {
         type A = {
-          '$.x': FieldAdapter<boolean, string, Record<string, Field>>,
-          '$.y': FieldAdapter<string, string, Record<string, Field>>,
+          '$.x': FieldAdapter<boolean, string, Record<string, Field>>
+          '$.y': FieldAdapter<string, string, Record<string, Field>>
         }
         expectTypeOf<A>().not.toMatchTypeOf<T>()
       })
     })
   })
 
-  describe('ValuePathsToAdaptersOf', function () {
-    describe('superset', function () {
+  describe('ValuePathsToAdaptersOf', () => {
+    describe('superset', () => {
       type A = {
-        '$.x': FieldAdapter<number, string, string, '$.a'>,
-        '$.y': FieldAdapter<boolean, boolean, string, '$.b'>,
+        '$.x': FieldAdapter<number, string, string, '$.a'>
+        '$.y': FieldAdapter<boolean, boolean, string, '$.b'>
       }
       const valuePathsToTypePaths = {
         $: '$',
@@ -201,23 +216,20 @@ describe('all', function () {
         '$.b': '$.y',
         '$.c': '$.z',
       } as const
-      type T = ValuePathsToAdaptersOf<
-        A,
-        typeof valuePathsToTypePaths
-      >
+      type T = ValuePathsToAdaptersOf<A, typeof valuePathsToTypePaths>
       type C = {
-        readonly '$.a': A['$.x'],
-        readonly '$.b': A['$.y'],
+        readonly '$.a': A['$.x']
+        readonly '$.b': A['$.y']
       }
-      it('equals expected type', function () {
+      it('equals expected type', () => {
         expectTypeOf<C>().toEqualTypeOf<T>()
       })
     })
   })
 
-  describe('FormModel', function () {
-    describe('literal', function () {
-      describe('optional', function () {
+  describe('FormModel', () => {
+    describe('literal', () => {
+      describe('optional', () => {
         const typeDef = numberType
         const adapters = {
           $: integerToStringAdapter,
@@ -228,26 +240,22 @@ describe('all', function () {
           ValueToTypePathsOfType<typeof typeDef>,
           typeof adapters
         >
-        beforeEach(function () {
+        beforeEach(() => {
           originalValue = 5
           model = new TestFormModel<
             typeof typeDef,
             ValueToTypePathsOfType<typeof typeDef>,
             typeof adapters
-          >(
-            typeDef,
-            originalValue,
-            adapters,
-          )
+          >(typeDef, originalValue, adapters)
         })
 
-        describe('accessors', function () {
-          it('gets the expected value', function () {
+        describe('accessors', () => {
+          it('gets the expected value', () => {
             const accessor = expectDefinedAndReturn(model.accessors.$)
             expect(accessor.value).toEqual(originalValue)
           })
 
-          it('sets the underlying value', function () {
+          it('sets the underlying value', () => {
             const newValue = 1
             const accessor = expectDefinedAndReturn(model.accessors.$)
             accessor.set(newValue)
@@ -255,8 +263,8 @@ describe('all', function () {
           })
         })
 
-        describe('fields', function () {
-          it('equals expected value', function () {
+        describe('fields', () => {
+          it('equals expected value', () => {
             expect(model.fields).toEqual(
               expect.objectContaining({
                 $: expect.objectContaining({
@@ -266,13 +274,13 @@ describe('all', function () {
             )
           })
 
-          it('has the expected keys', function () {
+          it('has the expected keys', () => {
             expect(Object.keys(model.fields)).toEqual(['$'])
           })
         })
       })
 
-      describe('required', function () {
+      describe('required', () => {
         const typeDef = numberType
         const adapters = {
           $: integerToStringAdapter,
@@ -283,7 +291,7 @@ describe('all', function () {
           ValueToTypePathsOfType<typeof typeDef>,
           typeof adapters
         >
-        beforeEach(function () {
+        beforeEach(() => {
           integerToStringAdapter.convert.mockReturnValue({
             value: 'x',
             required: true,
@@ -294,14 +302,10 @@ describe('all', function () {
             typeof typeDef,
             ValueToTypePathsOfType<typeof typeDef>,
             typeof adapters
-          >(
-            typeDef,
-            originalValue,
-            adapters,
-          )
+          >(typeDef, originalValue, adapters)
         })
 
-        it('reports required status', function () {
+        it('reports required status', () => {
           expect(model.fields).toEqual(
             expect.objectContaining({
               $: expect.objectContaining({
@@ -314,7 +318,7 @@ describe('all', function () {
       })
     })
 
-    describe('list', function () {
+    describe('list', () => {
       const typeDef = list(numberType)
       const adapters = {
         '$.*': integerToStringAdapter,
@@ -325,74 +329,55 @@ describe('all', function () {
         ValueToTypePathsOfType<typeof typeDef>,
         typeof adapters
       >
-      beforeEach(function () {
-        value = [
-          1,
-          4,
-          17,
-        ]
+      beforeEach(() => {
+        value = [1, 4, 17]
         model = new TestFormModel<
           typeof typeDef,
           ValueToTypePathsOfType<typeof typeDef>,
           typeof adapters
-        >(
-          typeDef,
-          value,
-          adapters,
-        )
+        >(typeDef, value, adapters)
       })
 
-      describe('accessors', function () {
+      describe('accessors', () => {
         it.each([
-          [
-            '$.0',
-            1,
-          ],
-          [
-            '$.1',
-            4,
-          ],
-          [
-            '$.2',
-            17,
-          ],
-        ] as const)('gets the expected values for %s', function (valuePath, value) {
+          ['$.0', 1],
+          ['$.1', 4],
+          ['$.2', 17],
+        ] as const)('gets the expected values for %s', (valuePath, value) => {
           const accessor = expectDefinedAndReturn(model.accessors[valuePath])
           expect(accessor.value).toEqual(value)
         })
 
-        it('sets a value', function () {
+        it('sets a value', () => {
           const accessor = expectDefinedAndReturn(model.accessors['$.0'])
           accessor.set(100)
-          expect(model.value).toEqual([
-            100,
-            4,
-            17,
-          ])
+          expect(model.value).toEqual([100, 4, 17])
         })
       })
 
-      describe('fields', function () {
-        it('equals the expected value', function () {
-          expect(model.fields).toEqual(expect.objectContaining({
-            '$.0': expect.objectContaining({
-              value: '1',
-              required: false,
+      describe('fields', () => {
+        it('equals the expected value', () => {
+          expect(model.fields).toEqual(
+            expect.objectContaining({
+              '$.0': expect.objectContaining({
+                value: '1',
+                required: false,
+              }),
+              '$.1': expect.objectContaining({
+                value: '4',
+                required: false,
+              }),
+              '$.2': expect.objectContaining({
+                value: '17',
+                required: false,
+              }),
             }),
-            '$.1': expect.objectContaining({
-              value: '4',
-              required: false,
-            }),
-            '$.2': expect.objectContaining({
-              value: '17',
-              required: false,
-            }),
-          }))
+          )
         })
       })
     })
 
-    describe('record', function () {
+    describe('record', () => {
       const typeDef = record<typeof numberType, 'a' | 'b'>(numberType)
       const converters = {
         '$.*': integerToStringAdapter,
@@ -404,7 +389,7 @@ describe('all', function () {
         ValueToTypePathsOfType<typeof typeDef>,
         typeof converters
       >
-      beforeEach(function () {
+      beforeEach(() => {
         value = {
           a: 1,
           b: 2,
@@ -413,29 +398,19 @@ describe('all', function () {
           typeof typeDef,
           ValueToTypePathsOfType<typeof typeDef>,
           typeof converters
-        >(
-          typeDef,
-          value,
-          converters,
-        )
+        >(typeDef, value, converters)
       })
 
-      describe('accessors', function () {
+      describe('accessors', () => {
         it.each([
-          [
-            '$.a',
-            1,
-          ],
-          [
-            '$.b',
-            2,
-          ],
-        ] as const)('gets the expected value for %s', function (valuePath, value) {
+          ['$.a', 1],
+          ['$.b', 2],
+        ] as const)('gets the expected value for %s', (valuePath, value) => {
           const accessor = expectDefinedAndReturn(model.accessors[valuePath])
           expect(accessor.value).toEqual(value)
         })
 
-        it('sets a value', function () {
+        it('sets a value', () => {
           const accessor = expectDefinedAndReturn(model.accessors['$.b'])
           const newValue = 100
           accessor.set(newValue)
@@ -444,8 +419,8 @@ describe('all', function () {
         })
       })
 
-      describe('fields', function () {
-        it('equals expected value', function () {
+      describe('fields', () => {
+        it('equals expected value', () => {
           expect(model.fields).toEqual(
             expect.objectContaining({
               '$.a': expect.objectContaining({
@@ -460,10 +435,8 @@ describe('all', function () {
       })
     })
 
-    describe('object', function () {
-      const typeDef = object()
-        .field('a', numberType)
-        .field('b', booleanType)
+    describe('object', () => {
+      const typeDef = object().field('a', numberType).field('b', booleanType)
       const converters = {
         '$.a': integerToStringAdapter,
         '$.b': booleanToBooleanAdapter,
@@ -474,7 +447,7 @@ describe('all', function () {
         ValueToTypePathsOfType<typeof typeDef>,
         typeof converters
       >
-      beforeEach(function () {
+      beforeEach(() => {
         value = {
           a: 1,
           b: true,
@@ -483,37 +456,27 @@ describe('all', function () {
           typeof typeDef,
           ValueToTypePathsOfType<typeof typeDef>,
           typeof converters
-        >(
-          typeDef,
-          value,
-          converters,
-        )
+        >(typeDef, value, converters)
       })
 
-      describe('accessors', function () {
+      describe('accessors', () => {
         it.each([
-          [
-            '$.a',
-            1,
-          ],
-          [
-            '$.b',
-            true,
-          ],
-        ] as const)('gets the expected value for %s', function (valuePath, value) {
+          ['$.a', 1],
+          ['$.b', true],
+        ] as const)('gets the expected value for %s', (valuePath, value) => {
           const accessor = expectDefinedAndReturn(model.accessors[valuePath])
           expect(accessor.value).toEqual(value)
         })
 
-        it('sets a value', function () {
+        it('sets a value', () => {
           const accessor = expectDefinedAndReturn(model.accessors['$.b'])
           accessor.set(false)
           expect(model.value.b).toEqual(false)
         })
       })
 
-      describe('fields', function () {
-        it('equals expected value', function () {
+      describe('fields', () => {
+        it('equals expected value', () => {
           expect(model.fields).toEqual(
             expect.objectContaining({
               '$.a': expect.objectContaining({
@@ -531,8 +494,8 @@ describe('all', function () {
     // TODO union
   })
 
-  describe('FormModel', function () {
-    describe('literal', function () {
+  describe('FormModel', () => {
+    describe('literal', () => {
       const typeDef = numberType
       const adapters = {
         $: integerToStringAdapter,
@@ -543,63 +506,63 @@ describe('all', function () {
         ValueToTypePathsOfType<typeof typeDef>,
         typeof adapters
       >
-      beforeEach(function () {
+      beforeEach(() => {
         model = new TestFormModel<
           typeof typeDef,
           ValueToTypePathsOfType<typeof typeDef>,
           typeof adapters
-        >(
-          typeDef,
-          originalValue,
-          adapters,
-        )
+        >(typeDef, originalValue, adapters)
       })
 
-      describe('setFieldValueAndValidate', function () {
-        describe('success', function () {
-          beforeEach(function () {
+      describe('setFieldValueAndValidate', () => {
+        describe('success', () => {
+          beforeEach(() => {
             model.setFieldValueAndValidate<'$'>('$', '1')
           })
 
-          it('does set the underlying value', function () {
+          it('does set the underlying value', () => {
             expect(model.value).toEqual(1)
           })
 
-          it('sets the fields', function () {
-            expect(model.fields).toEqual(expect.objectContaining({
-              $: expect.objectContaining({
-                value: '1',
-                error: undefined,
+          it('sets the fields', () => {
+            expect(model.fields).toEqual(
+              expect.objectContaining({
+                $: expect.objectContaining({
+                  value: '1',
+                  error: undefined,
+                }),
               }),
-            }))
+            )
           })
         })
 
-        describe('failure', function () {
-          describe('conversion fails', function () {
-            beforeEach(function () {
+        describe('failure', () => {
+          describe('conversion fails', () => {
+            beforeEach(() => {
               model.setFieldValueAndValidate<'$'>('$', 'x')
             })
 
-            it('does not set the underlying value', function () {
+            it('does not set the underlying value', () => {
               expect(model.value).toEqual(originalValue)
             })
 
-            it('sets the error state', function () {
-              expect(model.fields).toEqual(expect.objectContaining({
-                $: expect.objectContaining({
-                  value: 'x',
-                  error: IS_NAN_ERROR,
+            it('sets the error state', () => {
+              expect(model.fields).toEqual(
+                expect.objectContaining({
+                  $: expect.objectContaining({
+                    value: 'x',
+                    error: IS_NAN_ERROR,
+                  }),
                 }),
-              }))
+              )
             })
           })
 
-          describe('conversion succeeds, but validation fails', function () {
+          describe('conversion succeeds, but validation fails', () => {
             const newValue = -1
             const errorCode = IS_NAN_ERROR
-            beforeEach(function () {
-              integerToStringAdapter.revert?.mockReturnValue({
+            beforeEach(() => {
+              integerToStringAdapter.revert.mockReturnValue({
                 type: UnreliableFieldConversionType.Failure,
                 error: errorCode,
                 value: [newValue],
@@ -607,11 +570,11 @@ describe('all', function () {
               model.setFieldValueAndValidate<'$'>('$', '-1')
             })
 
-            it('does set the underlying value', function () {
+            it('does set the underlying value', () => {
               expect(model.value).toEqual(newValue)
             })
 
-            it('does update the field', function () {
+            it('does update the field', () => {
               expect(model.fields).toEqual({
                 $: expect.objectContaining({
                   value: '-1',
@@ -625,35 +588,31 @@ describe('all', function () {
       })
 
       describe.each([
-        [
-          '1',
-          1,
-        ],
-        [
-          'x',
-          originalValue,
-        ],
-      ] as const)('setFieldValue to %s', function (newValue, expectedValue) {
-        beforeEach(function () {
+        ['1', 1],
+        ['x', originalValue],
+      ] as const)('setFieldValue to %s', (newValue, expectedValue) => {
+        beforeEach(() => {
           model.setFieldValue<'$'>('$', newValue)
         })
 
-        it('does set the underlying value', function () {
+        it('does set the underlying value', () => {
           expect(model.value).toEqual(expectedValue)
         })
 
-        it('sets the field value', function () {
-          expect(model.fields).toEqual(expect.objectContaining({
-            $: expect.objectContaining({
-              value: newValue,
-              error: undefined,
+        it('sets the field value', () => {
+          expect(model.fields).toEqual(
+            expect.objectContaining({
+              $: expect.objectContaining({
+                value: newValue,
+                error: undefined,
+              }),
             }),
-          }))
+          )
         })
       })
     })
 
-    describe('list', function () {
+    describe('list', () => {
       const typeDef = list(numberType)
       const converters = {
         '$.*': integerToStringAdapter,
@@ -664,137 +623,128 @@ describe('all', function () {
         ValueToTypePathsOfType<typeof typeDef>,
         typeof converters
       >
-      beforeEach(function () {
-        originalValue = [
-          1,
-          3,
-          7,
-        ]
+      beforeEach(() => {
+        originalValue = [1, 3, 7]
         model = new TestFormModel<
           typeof typeDef,
           ValueToTypePathsOfType<typeof typeDef>,
           typeof converters
-        >(
-          typeDef,
-          originalValue,
-          converters,
-        )
+        >(typeDef, originalValue, converters)
       })
 
-      describe('setFieldValueAndValidate', function () {
-        describe('success', function () {
-          beforeEach(function () {
+      describe('setFieldValueAndValidate', () => {
+        describe('success', () => {
+          beforeEach(() => {
             model.setFieldValueAndValidate<'$.0'>('$.0', '100')
           })
 
-          it('sets the underlying value', function () {
-            expect(model.value).toEqual([
-              100,
-              3,
-              7,
-            ])
+          it('sets the underlying value', () => {
+            expect(model.value).toEqual([100, 3, 7])
           })
 
-          it('sets the fields', function () {
-            expect(model.fields).toEqual(expect.objectContaining({
-              '$.0': expect.objectContaining({
-                value: '100',
-                error: undefined,
+          it('sets the fields', () => {
+            expect(model.fields).toEqual(
+              expect.objectContaining({
+                '$.0': expect.objectContaining({
+                  value: '100',
+                  error: undefined,
+                }),
               }),
-            }))
+            )
           })
         })
 
-        describe('failure', function () {
-          beforeEach(function () {
+        describe('failure', () => {
+          beforeEach(() => {
             model.setFieldValueAndValidate<'$.0'>('$.0', 'x')
           })
 
-          it('does not set the underlying value', function () {
+          it('does not set the underlying value', () => {
             expect(model.value).toEqual(originalValue)
           })
 
-          it('sets the error state', function () {
-            expect(model.fields).toEqual(expect.objectContaining({
-              '$.0': expect.objectContaining({
-                value: 'x',
-                error: IS_NAN_ERROR,
+          it('sets the error state', () => {
+            expect(model.fields).toEqual(
+              expect.objectContaining({
+                '$.0': expect.objectContaining({
+                  value: 'x',
+                  error: IS_NAN_ERROR,
+                }),
               }),
-            }))
+            )
           })
         })
       })
 
-      describe.each([
-        '1',
-        'x',
-      ])('setFieldValue to %s', function (newValue) {
-        beforeEach(function () {
+      describe.each(['1', 'x'])('setFieldValue to %s', (newValue) => {
+        beforeEach(() => {
           model.setFieldValue('$.0', newValue)
         })
 
-        it('does not set the underlying value', function () {
+        it('does not set the underlying value', () => {
           expect(model.value).toEqual(originalValue)
         })
 
-        it('sets the field value', function () {
-          expect(model.fields).toEqual(expect.objectContaining({
-            '$.0': expect.objectContaining({
-              value: newValue,
-              error: undefined,
+        it('sets the field value', () => {
+          expect(model.fields).toEqual(
+            expect.objectContaining({
+              '$.0': expect.objectContaining({
+                value: newValue,
+                error: undefined,
+              }),
             }),
-          }))
+          )
         })
       })
 
-      describe('validate', function () {
-        beforeEach(function () {
+      describe('validate', () => {
+        beforeEach(() => {
           model.setFieldValue('$.0', 'x')
           model.setFieldValue('$.1', '2')
           model.setFieldValue('$.2', 'z')
           model.validateAll()
         })
 
-        it('contains errors for all invalid fields', function () {
-          expect(model.fields).toEqual(expect.objectContaining({
-            '$.0': expect.objectContaining({
-              value: 'x',
-              error: IS_NAN_ERROR,
+        it('contains errors for all invalid fields', () => {
+          expect(model.fields).toEqual(
+            expect.objectContaining({
+              '$.0': expect.objectContaining({
+                value: 'x',
+                error: IS_NAN_ERROR,
+              }),
+              '$.1': expect.objectContaining({
+                value: '2',
+                error: undefined,
+              }),
+              '$.2': expect.objectContaining({
+                value: 'z',
+                error: IS_NAN_ERROR,
+              }),
             }),
-            '$.1': expect.objectContaining({
-              value: '2',
-              error: undefined,
-            }),
-            '$.2': expect.objectContaining({
-              value: 'z',
-              error: IS_NAN_ERROR,
-            }),
-          }))
+          )
         })
 
-        it('sets the value only for valid fields', function () {
-          expect(model.value).toEqual([
-            1,
-            2,
-            7,
-          ])
+        it('sets the value only for valid fields', () => {
+          expect(model.value).toEqual([1, 2, 7])
         })
       })
 
       // no longer passes context, but will pass context eventually again
-      describe('passes context', function () {
+      describe('passes context', () => {
         let contextCopy: string
-        beforeEach(function () {
-          integerToStringAdapter.revert.mockImplementationOnce(function (_value, _path, context) {
-            contextCopy = JSON.stringify(context)
-            return {
-              type: UnreliableFieldConversionType.Success,
-              value: 1,
-            }
-          })
+        beforeEach(() => {
+          integerToStringAdapter.revert.mockImplementationOnce(
+            (_value, _path, context) => {
+              contextCopy = JSON.stringify(context)
+              return {
+                type: UnreliableFieldConversionType.Success,
+                value: 1,
+              }
+            },
+          )
         })
 
-        it('supplies the context when converting', function () {
+        it('supplies the context when converting', () => {
           model.setFieldValueAndValidate('$.2', '4')
 
           expect(integerToStringAdapter.revert).toHaveBeenCalledOnce()
@@ -811,23 +761,19 @@ describe('all', function () {
           )
         })
 
-        it('supplies the correct context value at the time it is being checked', function () {
+        it('supplies the correct context value at the time it is being checked', () => {
           // the copy will show the supplied value however
           expect(JSON.parse(contextCopy)).toEqual({
-            value: [
-              1,
-              3,
-              7,
-            ],
+            value: [1, 3, 7],
             valuePath: '$.2',
             forceMutable: false,
           })
         })
       })
 
-      describe('addListItem', function () {
-        describe('adds default to start of the list', function () {
-          beforeEach(function () {
+      describe('addListItem', () => {
+        describe('adds default to start of the list', () => {
+          beforeEach(() => {
             model.setFieldValue('$.0', 'x')
             model.setFieldValue('$.1', '3')
             model.setFieldValue('$.2', 'z')
@@ -836,13 +782,8 @@ describe('all', function () {
             model.addListItem('$', null, 0)
           })
 
-          it('adds the list item to the underlying value', function () {
-            expect(model.value).toEqual([
-              0,
-              1,
-              3,
-              7,
-            ])
+          it('adds the list item to the underlying value', () => {
+            expect(model.value).toEqual([0, 1, 3, 7])
           })
 
           it.each([
@@ -851,21 +792,15 @@ describe('all', function () {
               '$.3',
               '0',
             ],
-            [
-              '$.0',
-              'x',
-            ],
-            [
-              '$.1',
-              '3',
-            ],
-            [
-              '$.2',
-              'z',
-            ],
-          ] as const)('it reports the value of field %s as %s', function (path, fieldValue) {
-            expect(model.fields[path]?.value).toBe(fieldValue)
-          })
+            ['$.0', 'x'],
+            ['$.1', '3'],
+            ['$.2', 'z'],
+          ] as const)(
+            'it reports the value of field %s as %s',
+            (path, fieldValue) => {
+              expect(model.fields[path]?.value).toBe(fieldValue)
+            },
+          )
 
           it.each([
             [
@@ -873,29 +808,20 @@ describe('all', function () {
               '$.3',
               undefined,
             ],
-            [
-              '$.0',
-              IS_NAN_ERROR,
-            ],
-            [
-              '$.1',
-              undefined,
-            ],
-            [
-              '$.2',
-              IS_NAN_ERROR,
-            ],
-          ] as const)('it reports the error of field %s', function (path, error) {
+            ['$.0', IS_NAN_ERROR],
+            ['$.1', undefined],
+            ['$.2', IS_NAN_ERROR],
+          ] as const)('it reports the error of field %s', (path, error) => {
             expect(model.fields[path]?.error).toBe(error)
           })
         })
 
-        describe('add defined value', function () {
-          beforeEach(function () {
+        describe('add defined value', () => {
+          beforeEach(() => {
             model.addListItem('$', [5])
           })
 
-          it('adds the expected value at the end', function () {
+          it('adds the expected value at the end', () => {
             expect(model.fields).toEqual(
               expect.objectContaining({
                 '$.0': expect.objectContaining({
@@ -914,38 +840,30 @@ describe('all', function () {
             )
           })
 
-          it('updates the underlying value', function () {
-            expect(model.value).toEqual([
-              1,
-              3,
-              7,
-              5,
-            ])
+          it('updates the underlying value', () => {
+            expect(model.value).toEqual([1, 3, 7, 5])
           })
         })
       })
 
-      describe('removeListItem', function () {
-        beforeEach(function () {
+      describe('removeListItem', () => {
+        beforeEach(() => {
           model.setFieldValue('$.0', 'x')
           model.setFieldValue('$.1', '3')
           model.setFieldValue('$.2', 'z')
           model.validateAll()
         })
 
-        describe('remove first item', function () {
-          beforeEach(function () {
+        describe('remove first item', () => {
+          beforeEach(() => {
             model.removeListItem('$.0')
           })
 
-          it('updates the underlying value', function () {
-            expect(model.value).toEqual([
-              3,
-              7,
-            ])
+          it('updates the underlying value', () => {
+            expect(model.value).toEqual([3, 7])
           })
 
-          it('updates the field values and errors', function () {
+          it('updates the field values and errors', () => {
             expect(model.fields).toEqual({
               '$.1': expect.objectContaining({
                 value: '3',
@@ -959,19 +877,16 @@ describe('all', function () {
           })
         })
 
-        describe('remove second item', function () {
-          beforeEach(function () {
+        describe('remove second item', () => {
+          beforeEach(() => {
             model.removeListItem('$.1')
           })
 
-          it('updates the underlying value', function () {
-            expect(model.value).toEqual([
-              1,
-              7,
-            ])
+          it('updates the underlying value', () => {
+            expect(model.value).toEqual([1, 7])
           })
 
-          it('updates the field values and errors', function () {
+          it('updates the field values and errors', () => {
             expect(model.fields).toEqual({
               '$.0': expect.objectContaining({
                 value: 'x',
@@ -985,16 +900,16 @@ describe('all', function () {
           })
         })
 
-        describe('remove two items', function () {
-          beforeEach(function () {
+        describe('remove two items', () => {
+          beforeEach(() => {
             model.removeListItem('$.0', '$.1')
           })
 
-          it('updates the underlying value', function () {
+          it('updates the underlying value', () => {
             expect(model.value).toEqual([7])
           })
 
-          it('updates the field values and errors', function () {
+          it('updates the field values and errors', () => {
             expect(model.fields).toEqual({
               '$.2': expect.objectContaining({
                 value: 'z',
@@ -1008,37 +923,29 @@ describe('all', function () {
 
     // TODO record / object
 
-    describe('union', function () {
-      describe('non-discriminated', function () {
+    describe('union', () => {
+      describe('non-discriminated', () => {
         const listOfNumbersTypeDef = list(numberType)
-        const type = union()
-          .or('null', nullType)
-          .or('0', listOfNumbersTypeDef)
+        const type = union().or('null', nullType).or('0', listOfNumbersTypeDef)
         const adapters = {
-          $: adapterFromTwoWayConverter(new NullableToBooleanConverter(type, [1], null)),
+          $: adapterFromTwoWayConverter(
+            new NullableToBooleanConverter(type, [1], null),
+          ),
           '$.*': integerToStringAdapter,
         } as const
         type ValueToTypePaths = ValueToTypePathsOfType<typeof type>
         let originalValue: ValueOfType<typeof type>
-        let model: TestFormModel<
-          typeof type,
-          ValueToTypePaths,
-          typeof adapters
-        >
-        beforeEach(function () {
+        let model: TestFormModel<typeof type, ValueToTypePaths, typeof adapters>
+        beforeEach(() => {
           originalValue = null
           model = new TestFormModel<
             typeof type,
             ValueToTypePaths,
             typeof adapters
-          >(
-            type,
-            originalValue,
-            adapters,
-          )
+          >(type, originalValue, adapters)
         })
 
-        it('has the expected fields', function () {
+        it('has the expected fields', () => {
           expect(model.fields).toEqual({
             $: {
               readonly: false,
@@ -1049,49 +956,49 @@ describe('all', function () {
           })
         })
 
-        describe('setFieldValueAndValidate', function () {
-          describe('success', function () {
-            beforeEach(function () {
+        describe('setFieldValueAndValidate', () => {
+          describe('success', () => {
+            beforeEach(() => {
               model.setFieldValueAndValidate<'$'>('$', true)
             })
 
-            it('sets the underlying value', function () {
+            it('sets the underlying value', () => {
               expect(model.value).toEqual([1])
             })
           })
         })
       })
 
-      describe('discriminated', function () {
+      describe('discriminated', () => {
         const struct1 = object().field('a', numberType)
         const struct2 = object().field('b', booleanType)
-        const type = union('d')
-          .or('x', struct1)
-          .or('y', struct2)
+        const type = union('d').or('x', struct1).or('y', struct2)
         type ValueToTypePaths = ValueToTypePathsOfType<typeof type>
 
         const adapters = {
-          $: adapterFromTwoWayConverter(new SelectDiscriminatedUnionConverter(
-            type,
-            {
-              x: {
-                d: 'x',
-                a: 0,
+          $: adapterFromTwoWayConverter(
+            new SelectDiscriminatedUnionConverter(
+              type,
+              {
+                x: {
+                  d: 'x',
+                  a: 0,
+                },
+                y: {
+                  d: 'y',
+                  b: false,
+                },
               },
-              y: {
-                d: 'y',
-                b: false,
-              },
-            },
-            'x',
-            true,
-          )).narrow,
+              'x',
+              true,
+            ),
+          ).narrow,
           '$:x.a': identityAdapter(0).narrow,
           '$:y.b': identityAdapter(false).narrow,
         } as const
 
-        describe('isValuePathActive', function () {
-          describe('discriminator x', function () {
+        describe('isValuePathActive', () => {
+          describe('discriminator x', () => {
             const model = new TestFormModel<
               typeof type,
               ValueToTypePaths,
@@ -1105,25 +1012,16 @@ describe('all', function () {
               adapters,
             )
             it.each([
-              [
-                '$',
-                true,
-              ],
-              [
-                '$:x.a',
-                true,
-              ],
-              [
-                '$:y.b',
-                false,
-              ],
-            ] as const)('value path %s is active %s', function (path, expected) {
+              ['$', true],
+              ['$:x.a', true],
+              ['$:y.b', false],
+            ] as const)('value path %s is active %s', (path, expected) => {
               const isValid = model.isValuePathActive(path)
               expect(isValid).toBe(expected)
             })
           })
 
-          describe('discriminator y', function () {
+          describe('discriminator y', () => {
             const model = new TestFormModel<
               typeof type,
               ValueToTypePaths,
@@ -1137,19 +1035,10 @@ describe('all', function () {
               adapters,
             )
             it.each([
-              [
-                '$',
-                true,
-              ],
-              [
-                '$:x.a',
-                false,
-              ],
-              [
-                '$:y.b',
-                true,
-              ],
-            ] as const)('value path %s is active %s', function (path, expected) {
+              ['$', true],
+              ['$:x.a', false],
+              ['$:y.b', true],
+            ] as const)('value path %s is active %s', (path, expected) => {
               const isValid = model.isValuePathActive(path)
               expect(isValid).toBe(expected)
             })
@@ -1158,60 +1047,59 @@ describe('all', function () {
       })
     })
 
-    describe('fake', function () {
+    describe('fake', () => {
       const typeDef = numberType
       const converters = {
         $: integerToStringAdapter,
         '$.fake': booleanToBooleanAdapter,
       } as const
       type JsonPaths = {
-        $: '$',
-        '$.fake': '$.fake',
+        $: '$'
+        '$.fake': '$.fake'
       }
       let originalValue: ValueOfType<typeof typeDef>
-      let model: FormModel<
-        typeof typeDef,
-        JsonPaths,
-        typeof converters
-      >
-      beforeEach(function () {
+      let model: FormModel<typeof typeDef, JsonPaths, typeof converters>
+      beforeEach(() => {
         originalValue = 1
-        model = new TestFormModel<
-          typeof typeDef,
-          JsonPaths,
-          typeof converters
-        >(
+        model = new TestFormModel<typeof typeDef, JsonPaths, typeof converters>(
           typeDef,
           originalValue,
           converters,
         )
       })
 
-      it('returns the default value for the fake field', function () {
-        expect(model.fields['$.fake']).toEqual(expect.objectContaining({
-          value: false,
-        }))
+      it('returns the default value for the fake field', () => {
+        expect(model.fields['$.fake']).toEqual(
+          expect.objectContaining({
+            value: false,
+          }),
+        )
       })
 
-      describe('setting fake field', function () {
-        beforeEach(function () {
+      describe('setting fake field', () => {
+        beforeEach(() => {
           model.setFieldValue('$.fake', true)
         })
 
-        it('stores the new value', function () {
-          expect(model.fields['$.fake']).toEqual(expect.objectContaining({
-            value: true,
-          }))
+        it('stores the new value', () => {
+          expect(model.fields['$.fake']).toEqual(
+            expect.objectContaining({
+              value: true,
+            }),
+          )
         })
 
-        it('does not change the original value', function () {
+        it('does not change the original value', () => {
           expect(model.value).toBe(originalValue)
         })
       })
     })
 
     describe('interaction with mutability', () => {
-      const typeDef = object().readonlyField('n', numberType.enforce(n => n < 10 ? 'err' : null))
+      const typeDef = object().readonlyField(
+        'n',
+        numberType.enforce((n) => (n < 10 ? 'err' : null)),
+      )
       const adapters = mergeAdaptersWithValidators(
         {
           $: identityAdapter({ n: 0 }),
@@ -1220,8 +1108,8 @@ describe('all', function () {
         flattenValidatorsOfValidatingTypeWithMutability(typeDef),
       )
       type JsonPaths = {
-        $: '$',
-        '$.n': '$.n',
+        $: '$'
+        '$.n': '$.n'
       }
       let originalValue: ValueOfType<typeof typeDef>
       beforeEach(() => {
@@ -1230,17 +1118,9 @@ describe('all', function () {
         }
       })
       describe('create mode', () => {
-        let model: TestFormModel<
-          typeof typeDef,
-          JsonPaths,
-          typeof adapters
-        >
+        let model: TestFormModel<typeof typeDef, JsonPaths, typeof adapters>
         beforeEach(() => {
-          model = new TestFormModel<
-            typeof typeDef,
-            JsonPaths,
-            typeof adapters
-          >(
+          model = new TestFormModel<typeof typeDef, JsonPaths, typeof adapters>(
             typeDef,
             originalValue,
             adapters,

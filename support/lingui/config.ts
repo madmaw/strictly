@@ -10,7 +10,9 @@ export * from './src/locales'
 export type LinguiConfig = Parameters<typeof defineConfig>[0]
 
 // NOTE: do not move this file into "src" otherwise Storybook will attempt to execute "@lingui/cli" in the browser
-export function createLinguiConfig(config: Partial<LinguiConfig> = {}): LinguiConfig {
+export function createLinguiConfig(
+  config: Partial<LinguiConfig> = {},
+): LinguiConfig {
   return defineConfig({
     locales: ALL_SUPPORTED_LOCALES,
     pseudoLocale: LOCALE_PSEUDO_EN,

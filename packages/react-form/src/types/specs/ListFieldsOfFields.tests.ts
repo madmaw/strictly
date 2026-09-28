@@ -9,7 +9,7 @@ describe('ListFieldsOfFields', () => {
 
   it('matches the expected type of a set of fields containing a single list', () => {
     type X = {
-      l: Field<number[]>,
+      l: Field<number[]>
     }
     type T = ListFieldsOfFields<X>
     expectTypeOf<T>().toEqualTypeOf<X>()
@@ -17,13 +17,13 @@ describe('ListFieldsOfFields', () => {
 
   it('matches the expected type of a set of fields containing a multiple fields, including a list', () => {
     type X = {
-      readonly a: Field<number>,
-      readonly b: Field<string>,
-      readonly l: Field<readonly number[]>,
+      readonly a: Field<number>
+      readonly b: Field<string>
+      readonly l: Field<readonly number[]>
     }
     type T = ListFieldsOfFields<X>
     expectTypeOf<T>().toEqualTypeOf<{
-      readonly l: Field<readonly number[]>,
+      readonly l: Field<readonly number[]>
     }>()
   })
 })

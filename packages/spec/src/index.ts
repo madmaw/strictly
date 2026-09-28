@@ -1,2 +1,3 @@
+export * from './react/textContentOf'
 export * from './storybook/LinguiProvider'
-export * from './storybook/types'
+export type * from './storybook/types'

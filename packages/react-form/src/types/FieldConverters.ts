@@ -5,14 +5,16 @@ export enum UnreliableFieldConversionType {
   Failure = 1,
 }
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type UnreliableFieldConversion<V = any, E = any> = {
-  type: UnreliableFieldConversionType.Success,
-  value: V,
-} | {
-  type: UnreliableFieldConversionType.Failure,
-  error: E,
-  value: Maybe<V>,
-}
+export type UnreliableFieldConversion<V = any, E = any> =
+  | {
+      type: UnreliableFieldConversionType.Success
+      value: V
+    }
+  | {
+      type: UnreliableFieldConversionType.Failure
+      error: E
+      value: Maybe<V>
+    }
 
 // convert to the model type from the display type
 // for example a text field that renders an integer would have
@@ -25,18 +27,20 @@ export type UnreliableFieldConverter<
   E,
   ValuePath extends string,
   Context,
-> = {
-  (from: From, valuePath: ValuePath, context: Context): UnreliableFieldConversion<To, E>,
-}
+> = (
+  from: From,
+  valuePath: ValuePath,
+  context: Context,
+) => UnreliableFieldConversion<To, E>
 
 export type Annotation = {
-  readonly required: boolean,
-  readonly readonly: boolean,
+  readonly required: boolean
+  readonly readonly: boolean
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type AnnotatedFieldConversion<V = any> = {
-  value: V,
+  value: V
 } & Annotation
 
 export type AnnotatedFieldConverter<
@@ -44,9 +48,11 @@ export type AnnotatedFieldConverter<
   To,
   ValuePath extends string,
   Context,
-> = {
-  (from: From, valuePath: ValuePath, context: Context): AnnotatedFieldConversion<To>,
-}
+> = (
+  from: From,
+  valuePath: ValuePath,
+  context: Context,
+) => AnnotatedFieldConversion<To>
 
 export type TwoWayFieldConverter<
   From,
@@ -55,14 +61,15 @@ export type TwoWayFieldConverter<
   ValuePath extends string,
   Context,
 > = {
-  convert: AnnotatedFieldConverter<From, To, ValuePath, Context>,
+  convert: AnnotatedFieldConverter<From, To, ValuePath, Context>
 
-  revert: UnreliableFieldConverter<To, From, E, ValuePath, Context>,
+  revert: UnreliableFieldConverter<To, From, E, ValuePath, Context>
 }
 
-export type FieldValueFactory<V, ValuePath extends string, Context> = {
-  (valuePath: ValuePath, context: Context): V,
-}
+export type FieldValueFactory<V, ValuePath extends string, Context> = (
+  valuePath: ValuePath,
+  context: Context,
+) => V
 
 export type TwoWayFieldConverterWithValueFactory<
   From,
@@ -71,5 +78,5 @@ export type TwoWayFieldConverterWithValueFactory<
   ValuePath extends string,
   Context,
 > = TwoWayFieldConverter<From, To, E, ValuePath, Context> & {
-  readonly create: FieldValueFactory<From, ValuePath, Context>,
+  readonly create: FieldValueFactory<From, ValuePath, Context>
 }

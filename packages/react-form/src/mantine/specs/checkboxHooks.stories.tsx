@@ -1,7 +1,4 @@
-import {
-  type Meta,
-  type StoryObj,
-} from '@storybook/react-vite'
+import { type Meta, type StoryObj } from '@storybook/react-vite'
 import { type FieldsViewProps } from 'core/props'
 import { useMantineFormFields } from 'mantine/hooks'
 import { type Ref } from 'react'
@@ -17,9 +14,9 @@ function Component({
   componentRef,
   ...props
 }: FieldsViewProps<{
-  $: Field<boolean, string>,
+  $: Field<boolean, string>
 }> & {
-  componentRef: Ref<HTMLInputElement>,
+  componentRef: Ref<HTMLInputElement>
 }) {
   const inputProps = useMantineFormFields(props)
   const CheckboxComponent = inputProps.checkbox('$')

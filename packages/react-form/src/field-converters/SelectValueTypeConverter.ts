@@ -1,3 +1,4 @@
+/* oxlint-disable typescript/no-non-null-assertion -- whether null is allowed is encoded in the generic parameters */
 import {
   type ExhaustiveArrayOfUnion,
   reverse,
@@ -40,8 +41,7 @@ export abstract class AbstractSelectValueTypeConverter<
     private readonly defaultValueKey: keyof Values | null | undefined,
     private readonly noSuchValueError: NoSuchValueError | null,
     private readonly required: boolean,
-  ) {
-  }
+  ) {}
 
   revert(from: To): UnreliableFieldConversion<From, NoSuchValueError> {
     const prototype: From = from == null ? null! : this.values[from]
@@ -73,13 +73,17 @@ export abstract class AbstractSelectValueTypeConverter<
   protected abstract doConvert(from: NonNullable<ValueOfType<T>>): To
 
   create(): From {
-    return this.defaultValueKey != null ? this.values[this.defaultValueKey] : null!
+    return this.defaultValueKey == null
+      ? null!
+      : this.values[this.defaultValueKey]
   }
 }
 
 export class SelectDiscriminatedUnionConverter<
   U extends UnionTypeDef,
-  From extends ValueOfType<ReadonlyTypeOfType<Type<U>>> | (Required extends true ? never : undefined),
+  From extends
+    | ValueOfType<ReadonlyTypeOfType<Type<U>>>
+    | (Required extends true ? never : undefined),
   To extends StringKeyOf<U['unions']> | null,
   ValuePath extends string,
   Context,
@@ -99,20 +103,12 @@ export class SelectDiscriminatedUnionConverter<
     defaultValueKey: keyof U['unions'],
     required: Required,
   ) {
-    super(
-      type,
-      values,
-      defaultValueKey,
-      null,
-      required,
-    )
+    super(type, values, defaultValueKey, null, required)
   }
 
   protected override doConvert(from: NonNullable<ValueOfType<Type<U>>>) {
     const {
-      definition: {
-        discriminator,
-      },
+      definition: { discriminator },
     } = this.typeDef
     return from[discriminator!]
   }
@@ -139,14 +135,14 @@ export class SelectLiteralConverter<
   constructor(
     typeDef: Type<LiteralTypeDef<L>>,
     private readonly valuesToStrings: Values,
-    defaultValue: From,
+    defaultValue: From | null,
     noSuchValueError: NoSuchValueError | null,
     required: Required,
   ) {
     super(
       typeDef,
       reverse(valuesToStrings),
-      defaultValue && valuesToStrings[defaultValue],
+      defaultValue == null ? null : valuesToStrings[defaultValue],
       noSuchValueError,
       required,
     )
@@ -176,19 +172,16 @@ export class SelectStringConverter<
   constructor(
     typeDef: Type<LiteralTypeDef<L>>,
     allowedValues: ExhaustiveArrayOfUnion<NonNullable<From>, A>,
-    defaultValue: L | undefined,
+    defaultValue: L | null,
     noSuchValueError: NoSuchValueError | null,
     required = false,
   ) {
     super(
       typeDef,
-      allowedValues.reduce<Record<string, From>>(
-        function (acc, value) {
-          acc[value] = value
-          return acc
-        },
-        {},
-      ),
+      allowedValues.reduce<Record<string, From>>((acc, value) => {
+        acc[value] = value
+        return acc
+      }, {}),
       defaultValue,
       noSuchValueError,
       required,
