@@ -11,16 +11,11 @@ import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { createRequire } from 'node:module'
 import { type PluginOption } from 'vite'
 import dts from 'vite-plugin-dts'
-import tsconfigPaths from 'vite-tsconfig-paths'
 import {
   defineConfig,
   type TestProjectInlineConfiguration,
   type ViteUserConfig,
 } from 'vitest/config'
-
-export type TsconfigJson = {
-  readonly references: readonly { path: string }[]
-}
 
 export type LibraryPackageJson = {
   readonly dependencies?: Readonly<Record<string, string>>
@@ -38,15 +33,12 @@ export type TestParameters =
   | boolean
 
 const DIST = 'dist'
+// resolves the bare `paths` imports of every package, including workspace packages, from their own tsconfig
+const RESOLVE = {
+  tsconfigPaths: true,
+} as const
 // babel resolves plugin names relative to the package being built, where these are not installed
 const require = createRequire(import.meta.url)
-
-export function createTsconfigPathsPlugin({ references }: TsconfigJson) {
-  return tsconfigPaths({
-    // must specify projects otherwise we get configuration errors for unrelated projects
-    projects: ['.', ...references.map(({ path }) => path)],
-  })
-}
 
 /**
  * React via babel so that mobx decorators and class fields are transformed consistently everywhere. Vite 8 dropped
@@ -84,27 +76,24 @@ export function createReactPlugin({
  * Configuration for react applications, storybooks and their tests. Storybook should point at the vitest
  * configuration created by this so the stories and the tests share one vite configuration.
  */
-export function createReactViteConfig(
-  tsconfig: TsconfigJson,
-  {
-    base,
-    lingui: withLingui = false,
-    unitTest = false,
-    storybook = false,
-  }: {
-    readonly base?: string
-    readonly lingui?: boolean
-    readonly unitTest?: TestParameters
-    readonly storybook?: TestParameters
-  } = {},
-) {
+export function createReactViteConfig({
+  base,
+  lingui: withLingui = false,
+  unitTest = false,
+  storybook = false,
+}: {
+  readonly base?: string
+  readonly lingui?: boolean
+  readonly unitTest?: TestParameters
+  readonly storybook?: TestParameters
+} = {}) {
   return defineConfig({
     base,
     plugins: [
       ...createReactPlugin({ lingui: withLingui }),
       ...(withLingui ? [lingui()] : []),
-      createTsconfigPathsPlugin(tsconfig),
     ],
+    resolve: RESOLVE,
     test: createTestConfig({
       unitTest,
       storybook,
@@ -117,7 +106,6 @@ export function createReactViteConfig(
  * Anything listed in dependencies or peerDependencies is left external.
  */
 export function createViteLibraryConfig(
-  tsconfig: TsconfigJson,
   packageJson: LibraryPackageJson,
   {
     react = false,
@@ -149,7 +137,6 @@ export function createViteLibraryConfig(
     },
     plugins: [
       ...plugins,
-      createTsconfigPathsPlugin(tsconfig),
       dts({
         bundleTypes: {
           // api extractor looks for lib.*.d.ts in the project typescript folder, but typescript 6 no longer ships
@@ -164,22 +151,20 @@ export function createViteLibraryConfig(
         outDirs: [DIST, { dir: DIST, moduleFormat: 'cjs' }],
       }),
     ],
+    resolve: RESOLVE,
   })
 }
 
 /**
  * Test only configuration for packages without a react entry point
  */
-export function createVitestConfig(
-  tsconfig: TsconfigJson,
-  {
-    unitTest = true,
-  }: {
-    readonly unitTest?: TestParameters
-  } = {},
-) {
+export function createVitestConfig({
+  unitTest = true,
+}: {
+  readonly unitTest?: TestParameters
+} = {}) {
   return defineConfig({
-    plugins: [createTsconfigPathsPlugin(tsconfig)],
+    resolve: RESOLVE,
     test: createTestConfig({
       unitTest,
       storybook: false,

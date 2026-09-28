@@ -16,7 +16,6 @@
     "resize-observer-polyfill": "catalog:",
     "vite": "catalog:",
     "vite-plugin-dts": "catalog:",
-    "vite-tsconfig-paths": "catalog:",
     "vitest": "catalog:",
     "vitest-matchmedia-mock": "catalog:"
   },

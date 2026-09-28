@@ -1,7 +1,6 @@
 import { createReactViteConfig } from '@strictly/vite/config'
-import tsconfig from './tsconfig.json'
 
-export default createReactViteConfig(tsconfig, {
+export default createReactViteConfig({
   base: '',
   lingui: true,
   storybook: true,
