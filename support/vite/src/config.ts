@@ -56,13 +56,13 @@ export function createReactPlugin({
         [
           require.resolve('@babel/plugin-proposal-decorators'),
           {
-            version: '2023-05',
+            version: '2023-11',
           },
         ],
-        [require.resolve('@babel/plugin-transform-class-static-block')],
-        [require.resolve('@babel/plugin-proposal-class-properties')],
+        require.resolve('@babel/plugin-transform-class-static-block'),
+        require.resolve('@babel/plugin-transform-class-properties'),
         ...(withLingui
-          ? [[require.resolve('@lingui/babel-plugin-lingui-macro')]]
+          ? [require.resolve('@lingui/babel-plugin-lingui-macro')]
           : []),
       ],
       assumptions: {

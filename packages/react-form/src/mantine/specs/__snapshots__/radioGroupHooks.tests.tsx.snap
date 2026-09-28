@@ -3,6 +3,15 @@
 exports[`mantine radio group hooks > renders Disabled 1`] = `
 <div>
   <style
+    data-mantine-styles="true"
+  >
+    
+
+
+
+
+  </style>
+  <style
     data-mantine-styles="classes"
   >
     @media (max-width: 35.99375em) {.mantine-visible-from-xs {display: none !important;}}@media (min-width: 36em) {.mantine-hidden-from-xs {display: none !important;}}@media (max-width: 47.99375em) {.mantine-visible-from-sm {display: none !important;}}@media (min-width: 48em) {.mantine-hidden-from-sm {display: none !important;}}@media (max-width: 61.99375em) {.mantine-visible-from-md {display: none !important;}}@media (min-width: 62em) {.mantine-hidden-from-md {display: none !important;}}@media (max-width: 74.99375em) {.mantine-visible-from-lg {display: none !important;}}@media (min-width: 75em) {.mantine-hidden-from-lg {display: none !important;}}@media (max-width: 87.99375em) {.mantine-visible-from-xl {display: none !important;}}@media (min-width: 88em) {.mantine-hidden-from-xl {display: none !important;}}
@@ -38,6 +47,7 @@ exports[`mantine radio group hooks > renders Disabled 1`] = `
             >
               <input
                 class="mantine-focus-auto m_8a3dbb89 mantine-Radio-radio"
+                data-with-error-styles="true"
                 disabled=""
                 id="mantine-12voha2vo"
                 name="$"
@@ -89,6 +99,7 @@ exports[`mantine radio group hooks > renders Disabled 1`] = `
               <input
                 checked=""
                 class="mantine-focus-auto m_8a3dbb89 mantine-Radio-radio"
+                data-with-error-styles="true"
                 disabled=""
                 id="mantine-1fu8n1fu8"
                 name="$"
@@ -138,6 +149,7 @@ exports[`mantine radio group hooks > renders Disabled 1`] = `
             >
               <input
                 class="mantine-focus-auto m_8a3dbb89 mantine-Radio-radio"
+                data-with-error-styles="true"
                 disabled=""
                 id="mantine-1ssssssss"
                 name="$"
@@ -182,6 +194,15 @@ exports[`mantine radio group hooks > renders Disabled 1`] = `
 exports[`mantine radio group hooks > renders Empty 1`] = `
 <div>
   <style
+    data-mantine-styles="true"
+  >
+    
+
+
+
+
+  </style>
+  <style
     data-mantine-styles="classes"
   >
     @media (max-width: 35.99375em) {.mantine-visible-from-xs {display: none !important;}}@media (min-width: 36em) {.mantine-hidden-from-xs {display: none !important;}}@media (max-width: 47.99375em) {.mantine-visible-from-sm {display: none !important;}}@media (min-width: 48em) {.mantine-hidden-from-sm {display: none !important;}}@media (max-width: 61.99375em) {.mantine-visible-from-md {display: none !important;}}@media (min-width: 62em) {.mantine-hidden-from-md {display: none !important;}}@media (max-width: 74.99375em) {.mantine-visible-from-lg {display: none !important;}}@media (min-width: 75em) {.mantine-hidden-from-lg {display: none !important;}}@media (max-width: 87.99375em) {.mantine-visible-from-xl {display: none !important;}}@media (min-width: 88em) {.mantine-hidden-from-xl {display: none !important;}}
@@ -217,6 +238,7 @@ exports[`mantine radio group hooks > renders Empty 1`] = `
             >
               <input
                 class="mantine-focus-auto m_8a3dbb89 mantine-Radio-radio"
+                data-with-error-styles="true"
                 id="mantine-12voha2vo"
                 name="$"
                 type="radio"
@@ -263,6 +285,7 @@ exports[`mantine radio group hooks > renders Empty 1`] = `
             >
               <input
                 class="mantine-focus-auto m_8a3dbb89 mantine-Radio-radio"
+                data-with-error-styles="true"
                 id="mantine-1fu8n1fu8"
                 name="$"
                 type="radio"
@@ -309,6 +332,7 @@ exports[`mantine radio group hooks > renders Empty 1`] = `
             >
               <input
                 class="mantine-focus-auto m_8a3dbb89 mantine-Radio-radio"
+                data-with-error-styles="true"
                 id="mantine-1ssssssss"
                 name="$"
                 type="radio"
@@ -350,6 +374,15 @@ exports[`mantine radio group hooks > renders Empty 1`] = `
 exports[`mantine radio group hooks > renders Error 1`] = `
 <div>
   <style
+    data-mantine-styles="true"
+  >
+    
+
+
+
+
+  </style>
+  <style
     data-mantine-styles="classes"
   >
     @media (max-width: 35.99375em) {.mantine-visible-from-xs {display: none !important;}}@media (min-width: 36em) {.mantine-hidden-from-xs {display: none !important;}}@media (max-width: 47.99375em) {.mantine-visible-from-sm {display: none !important;}}@media (min-width: 48em) {.mantine-hidden-from-sm {display: none !important;}}@media (max-width: 61.99375em) {.mantine-visible-from-md {display: none !important;}}@media (min-width: 62em) {.mantine-hidden-from-md {display: none !important;}}@media (max-width: 74.99375em) {.mantine-visible-from-lg {display: none !important;}}@media (min-width: 75em) {.mantine-hidden-from-lg {display: none !important;}}@media (max-width: 87.99375em) {.mantine-visible-from-xl {display: none !important;}}@media (min-width: 88em) {.mantine-hidden-from-xl {display: none !important;}}
@@ -387,6 +420,7 @@ exports[`mantine radio group hooks > renders Error 1`] = `
             >
               <input
                 class="mantine-focus-auto m_8a3dbb89 mantine-Radio-radio"
+                data-with-error-styles="true"
                 id="mantine-12voha2vo"
                 name="$"
                 type="radio"
@@ -435,6 +469,7 @@ exports[`mantine radio group hooks > renders Error 1`] = `
               <input
                 checked=""
                 class="mantine-focus-auto m_8a3dbb89 mantine-Radio-radio"
+                data-with-error-styles="true"
                 id="mantine-1fu8n1fu8"
                 name="$"
                 type="radio"
@@ -481,6 +516,7 @@ exports[`mantine radio group hooks > renders Error 1`] = `
             >
               <input
                 class="mantine-focus-auto m_8a3dbb89 mantine-Radio-radio"
+                data-with-error-styles="true"
                 id="mantine-1ssssssss"
                 name="$"
                 type="radio"
@@ -528,6 +564,15 @@ exports[`mantine radio group hooks > renders Error 1`] = `
 exports[`mantine radio group hooks > renders Populated 1`] = `
 <div>
   <style
+    data-mantine-styles="true"
+  >
+    
+
+
+
+
+  </style>
+  <style
     data-mantine-styles="classes"
   >
     @media (max-width: 35.99375em) {.mantine-visible-from-xs {display: none !important;}}@media (min-width: 36em) {.mantine-hidden-from-xs {display: none !important;}}@media (max-width: 47.99375em) {.mantine-visible-from-sm {display: none !important;}}@media (min-width: 48em) {.mantine-hidden-from-sm {display: none !important;}}@media (max-width: 61.99375em) {.mantine-visible-from-md {display: none !important;}}@media (min-width: 62em) {.mantine-hidden-from-md {display: none !important;}}@media (max-width: 74.99375em) {.mantine-visible-from-lg {display: none !important;}}@media (min-width: 75em) {.mantine-hidden-from-lg {display: none !important;}}@media (max-width: 87.99375em) {.mantine-visible-from-xl {display: none !important;}}@media (min-width: 88em) {.mantine-hidden-from-xl {display: none !important;}}
@@ -563,6 +608,7 @@ exports[`mantine radio group hooks > renders Populated 1`] = `
             >
               <input
                 class="mantine-focus-auto m_8a3dbb89 mantine-Radio-radio"
+                data-with-error-styles="true"
                 id="mantine-12voha2vo"
                 name="$"
                 type="radio"
@@ -609,6 +655,7 @@ exports[`mantine radio group hooks > renders Populated 1`] = `
             >
               <input
                 class="mantine-focus-auto m_8a3dbb89 mantine-Radio-radio"
+                data-with-error-styles="true"
                 id="mantine-1fu8n1fu8"
                 name="$"
                 type="radio"
@@ -657,6 +704,7 @@ exports[`mantine radio group hooks > renders Populated 1`] = `
               <input
                 checked=""
                 class="mantine-focus-auto m_8a3dbb89 mantine-Radio-radio"
+                data-with-error-styles="true"
                 id="mantine-1ssssssss"
                 name="$"
                 type="radio"
@@ -697,6 +745,15 @@ exports[`mantine radio group hooks > renders Populated 1`] = `
 
 exports[`mantine radio group hooks > renders Required 1`] = `
 <div>
+  <style
+    data-mantine-styles="true"
+  >
+    
+
+
+
+
+  </style>
   <style
     data-mantine-styles="classes"
   >
@@ -742,6 +799,7 @@ exports[`mantine radio group hooks > renders Required 1`] = `
               <input
                 checked=""
                 class="mantine-focus-auto m_8a3dbb89 mantine-Radio-radio"
+                data-with-error-styles="true"
                 id="mantine-12voha2vo"
                 name="$"
                 type="radio"
@@ -788,6 +846,7 @@ exports[`mantine radio group hooks > renders Required 1`] = `
             >
               <input
                 class="mantine-focus-auto m_8a3dbb89 mantine-Radio-radio"
+                data-with-error-styles="true"
                 id="mantine-1fu8n1fu8"
                 name="$"
                 type="radio"
@@ -834,6 +893,7 @@ exports[`mantine radio group hooks > renders Required 1`] = `
             >
               <input
                 class="mantine-focus-auto m_8a3dbb89 mantine-Radio-radio"
+                data-with-error-styles="true"
                 id="mantine-1ssssssss"
                 name="$"
                 type="radio"

@@ -3,6 +3,15 @@
 exports[`mantine checkbox hooks > renders Disabled 1`] = `
 <div>
   <style
+    data-mantine-styles="true"
+  >
+    
+
+
+
+
+  </style>
+  <style
     data-mantine-styles="classes"
   >
     @media (max-width: 35.99375em) {.mantine-visible-from-xs {display: none !important;}}@media (min-width: 36em) {.mantine-hidden-from-xs {display: none !important;}}@media (max-width: 47.99375em) {.mantine-visible-from-sm {display: none !important;}}@media (min-width: 48em) {.mantine-hidden-from-sm {display: none !important;}}@media (max-width: 61.99375em) {.mantine-visible-from-md {display: none !important;}}@media (min-width: 62em) {.mantine-hidden-from-md {display: none !important;}}@media (max-width: 74.99375em) {.mantine-visible-from-lg {display: none !important;}}@media (min-width: 75em) {.mantine-hidden-from-lg {display: none !important;}}@media (max-width: 87.99375em) {.mantine-visible-from-xl {display: none !important;}}@media (min-width: 88em) {.mantine-hidden-from-xl {display: none !important;}}
@@ -10,7 +19,8 @@ exports[`mantine checkbox hooks > renders Disabled 1`] = `
   <div
     class="m_bf2d988c mantine-Checkbox-root m_5f75b09e mantine-Checkbox-root"
     data-label-position="right"
-    style="--checkbox-color: var(--mantine-color-blue-filled);"
+    data-variant="filled"
+    style="--checkbox-radius: var(--mantine-radius-sm); --checkbox-color: var(--mantine-color-blue-filled);"
   >
     <div
       class="m_5f6e695e mantine-Checkbox-body"
@@ -21,6 +31,7 @@ exports[`mantine checkbox hooks > renders Disabled 1`] = `
       >
         <input
           class="mantine-focus-auto m_26063560 mantine-Checkbox-input"
+          data-with-error-styles="true"
           disabled=""
           id="mantine-1ssssssss"
           name="$"
@@ -61,6 +72,15 @@ exports[`mantine checkbox hooks > renders Disabled 1`] = `
 exports[`mantine checkbox hooks > renders Error 1`] = `
 <div>
   <style
+    data-mantine-styles="true"
+  >
+    
+
+
+
+
+  </style>
+  <style
     data-mantine-styles="classes"
   >
     @media (max-width: 35.99375em) {.mantine-visible-from-xs {display: none !important;}}@media (min-width: 36em) {.mantine-hidden-from-xs {display: none !important;}}@media (max-width: 47.99375em) {.mantine-visible-from-sm {display: none !important;}}@media (min-width: 48em) {.mantine-hidden-from-sm {display: none !important;}}@media (max-width: 61.99375em) {.mantine-visible-from-md {display: none !important;}}@media (min-width: 62em) {.mantine-hidden-from-md {display: none !important;}}@media (max-width: 74.99375em) {.mantine-visible-from-lg {display: none !important;}}@media (min-width: 75em) {.mantine-hidden-from-lg {display: none !important;}}@media (max-width: 87.99375em) {.mantine-visible-from-xl {display: none !important;}}@media (min-width: 88em) {.mantine-hidden-from-xl {display: none !important;}}
@@ -69,7 +89,8 @@ exports[`mantine checkbox hooks > renders Error 1`] = `
     class="m_bf2d988c mantine-Checkbox-root m_5f75b09e mantine-Checkbox-root"
     data-checked="true"
     data-label-position="right"
-    style="--checkbox-color: var(--mantine-color-blue-filled);"
+    data-variant="filled"
+    style="--checkbox-radius: var(--mantine-radius-sm); --checkbox-color: var(--mantine-color-blue-filled);"
   >
     <div
       class="m_5f6e695e mantine-Checkbox-body"
@@ -79,9 +100,11 @@ exports[`mantine checkbox hooks > renders Error 1`] = `
         data-label-position="right"
       >
         <input
+          aria-describedby="mantine-1ssssssss-error"
           checked=""
           class="mantine-focus-auto m_26063560 mantine-Checkbox-input"
           data-error="true"
+          data-with-error-styles="true"
           id="mantine-1ssssssss"
           name="$"
           type="checkbox"
@@ -112,6 +135,7 @@ exports[`mantine checkbox hooks > renders Error 1`] = `
         </label>
         <p
           class="m_8e8a99cc mantine-Checkbox-error m_8f816625 mantine-InputWrapper-error"
+          id="mantine-1ssssssss-error"
         >
           Error error
         </p>
@@ -124,6 +148,15 @@ exports[`mantine checkbox hooks > renders Error 1`] = `
 exports[`mantine checkbox hooks > renders Off 1`] = `
 <div>
   <style
+    data-mantine-styles="true"
+  >
+    
+
+
+
+
+  </style>
+  <style
     data-mantine-styles="classes"
   >
     @media (max-width: 35.99375em) {.mantine-visible-from-xs {display: none !important;}}@media (min-width: 36em) {.mantine-hidden-from-xs {display: none !important;}}@media (max-width: 47.99375em) {.mantine-visible-from-sm {display: none !important;}}@media (min-width: 48em) {.mantine-hidden-from-sm {display: none !important;}}@media (max-width: 61.99375em) {.mantine-visible-from-md {display: none !important;}}@media (min-width: 62em) {.mantine-hidden-from-md {display: none !important;}}@media (max-width: 74.99375em) {.mantine-visible-from-lg {display: none !important;}}@media (min-width: 75em) {.mantine-hidden-from-lg {display: none !important;}}@media (max-width: 87.99375em) {.mantine-visible-from-xl {display: none !important;}}@media (min-width: 88em) {.mantine-hidden-from-xl {display: none !important;}}
@@ -131,7 +164,8 @@ exports[`mantine checkbox hooks > renders Off 1`] = `
   <div
     class="m_bf2d988c mantine-Checkbox-root m_5f75b09e mantine-Checkbox-root"
     data-label-position="right"
-    style="--checkbox-color: var(--mantine-color-blue-filled);"
+    data-variant="filled"
+    style="--checkbox-radius: var(--mantine-radius-sm); --checkbox-color: var(--mantine-color-blue-filled);"
   >
     <div
       class="m_5f6e695e mantine-Checkbox-body"
@@ -142,6 +176,7 @@ exports[`mantine checkbox hooks > renders Off 1`] = `
       >
         <input
           class="mantine-focus-auto m_26063560 mantine-Checkbox-input"
+          data-with-error-styles="true"
           id="mantine-1ssssssss"
           name="$"
           type="checkbox"
@@ -179,6 +214,15 @@ exports[`mantine checkbox hooks > renders Off 1`] = `
 exports[`mantine checkbox hooks > renders On 1`] = `
 <div>
   <style
+    data-mantine-styles="true"
+  >
+    
+
+
+
+
+  </style>
+  <style
     data-mantine-styles="classes"
   >
     @media (max-width: 35.99375em) {.mantine-visible-from-xs {display: none !important;}}@media (min-width: 36em) {.mantine-hidden-from-xs {display: none !important;}}@media (max-width: 47.99375em) {.mantine-visible-from-sm {display: none !important;}}@media (min-width: 48em) {.mantine-hidden-from-sm {display: none !important;}}@media (max-width: 61.99375em) {.mantine-visible-from-md {display: none !important;}}@media (min-width: 62em) {.mantine-hidden-from-md {display: none !important;}}@media (max-width: 74.99375em) {.mantine-visible-from-lg {display: none !important;}}@media (min-width: 75em) {.mantine-hidden-from-lg {display: none !important;}}@media (max-width: 87.99375em) {.mantine-visible-from-xl {display: none !important;}}@media (min-width: 88em) {.mantine-hidden-from-xl {display: none !important;}}
@@ -187,7 +231,8 @@ exports[`mantine checkbox hooks > renders On 1`] = `
     class="m_bf2d988c mantine-Checkbox-root m_5f75b09e mantine-Checkbox-root"
     data-checked="true"
     data-label-position="right"
-    style="--checkbox-color: var(--mantine-color-blue-filled);"
+    data-variant="filled"
+    style="--checkbox-radius: var(--mantine-radius-sm); --checkbox-color: var(--mantine-color-blue-filled);"
   >
     <div
       class="m_5f6e695e mantine-Checkbox-body"
@@ -199,6 +244,7 @@ exports[`mantine checkbox hooks > renders On 1`] = `
         <input
           checked=""
           class="mantine-focus-auto m_26063560 mantine-Checkbox-input"
+          data-with-error-styles="true"
           id="mantine-1ssssssss"
           name="$"
           type="checkbox"
@@ -236,6 +282,15 @@ exports[`mantine checkbox hooks > renders On 1`] = `
 exports[`mantine checkbox hooks > renders Required 1`] = `
 <div>
   <style
+    data-mantine-styles="true"
+  >
+    
+
+
+
+
+  </style>
+  <style
     data-mantine-styles="classes"
   >
     @media (max-width: 35.99375em) {.mantine-visible-from-xs {display: none !important;}}@media (min-width: 36em) {.mantine-hidden-from-xs {display: none !important;}}@media (max-width: 47.99375em) {.mantine-visible-from-sm {display: none !important;}}@media (min-width: 48em) {.mantine-hidden-from-sm {display: none !important;}}@media (max-width: 61.99375em) {.mantine-visible-from-md {display: none !important;}}@media (min-width: 62em) {.mantine-hidden-from-md {display: none !important;}}@media (max-width: 74.99375em) {.mantine-visible-from-lg {display: none !important;}}@media (min-width: 75em) {.mantine-hidden-from-lg {display: none !important;}}@media (max-width: 87.99375em) {.mantine-visible-from-xl {display: none !important;}}@media (min-width: 88em) {.mantine-hidden-from-xl {display: none !important;}}
@@ -243,7 +298,8 @@ exports[`mantine checkbox hooks > renders Required 1`] = `
   <div
     class="m_bf2d988c mantine-Checkbox-root m_5f75b09e mantine-Checkbox-root"
     data-label-position="right"
-    style="--checkbox-color: var(--mantine-color-blue-filled);"
+    data-variant="filled"
+    style="--checkbox-radius: var(--mantine-radius-sm); --checkbox-color: var(--mantine-color-blue-filled);"
   >
     <div
       class="m_5f6e695e mantine-Checkbox-body"
@@ -254,6 +310,7 @@ exports[`mantine checkbox hooks > renders Required 1`] = `
       >
         <input
           class="mantine-focus-auto m_26063560 mantine-Checkbox-input"
+          data-with-error-styles="true"
           id="mantine-1ssssssss"
           name="$"
           required=""

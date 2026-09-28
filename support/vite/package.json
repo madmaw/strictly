@@ -1,7 +1,7 @@
 {
   "devDependencies": {
     "@babel/core": "catalog:",
-    "@babel/plugin-proposal-class-properties": "catalog:",
+    "@babel/plugin-transform-class-properties": "catalog:",
     "@babel/plugin-proposal-decorators": "catalog:",
     "@babel/plugin-transform-class-static-block": "catalog:",
     "@lingui/babel-plugin-lingui-macro": "catalog:",
@@ -10,7 +10,6 @@
     "@rolldown/plugin-babel": "catalog:",
     "@storybook/addon-vitest": "catalog:",
     "@strictly/oxlint": "workspace:*",
-    "@types/babel__core": "catalog:",
     "@vitejs/plugin-react": "catalog:",
     "@vitest/browser-playwright": "catalog:",
     "resize-observer-polyfill": "catalog:",

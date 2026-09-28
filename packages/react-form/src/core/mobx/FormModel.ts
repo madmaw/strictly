@@ -28,11 +28,17 @@ import {
   type ValueOfType,
   valuePathToTypePath,
 } from '@strictly/define'
-import { action, computed, observable, runInAction } from 'mobx'
 import {
+  action,
+  computed,
+  observableRef,
+  observableShallow,
+  runInAction,
+} from 'mobx'
+import {
+  type KeyAsString,
   type ReadonlyDeep,
   type SimplifyDeep,
-  type StringKeyOf,
   type UnionToIntersection,
   type ValueOf,
 } from 'type-fest'
@@ -164,13 +170,13 @@ export abstract class FormModel<
     ValueToTypePaths
   > = ValuePathsToAdaptersOf<TypePathsToAdapters, ValueToTypePaths>,
 > {
-  @observable.ref
+  @observableRef
   private accessor observableValue: MobxValueOfType<T>
-  @observable.shallow
+  @observableShallow
   accessor fieldOverrides: FlattenedFieldOverrides<ValuePathsToAdapters>
-  @observable.shallow
+  @observableShallow
   accessor errorOverrides: FlattenedErrorOverrides<ValuePathsToAdapters> = {}
-  @observable.shallow
+  @observableShallow
   accessor validation: FlattenedValidation<ValuePathsToAdapters> = {}
 
   private readonly flattenedTypeDefs: Readonly<Record<string, Type>>
@@ -638,7 +644,7 @@ export abstract class FormModel<
     }
   }
 
-  clearFieldValue<K extends StringKeyOf<ValuePathsToAdapters>>(valuePath: K) {
+  clearFieldValue<K extends KeyAsString<ValuePathsToAdapters>>(valuePath: K) {
     const typePath = this.typePath(valuePath)
     const adapter = this.adapters[typePath as keyof TypePathsToAdapters]
     if (adapter == null) {
