@@ -6,7 +6,6 @@
   "include": [
     ".eslintrc.cjs",
     ".storybook/vite.config.mts",
-    "babel.config.ts",
     "vite.config.mts",
     "vitest.workspace.ts"
 

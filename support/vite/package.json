@@ -1,10 +1,18 @@
 {
   "devDependencies": {
+    "@babel/core": "catalog:",
+    "@babel/plugin-proposal-class-properties": "catalog:",
+    "@babel/plugin-proposal-decorators": "catalog:",
+    "@babel/plugin-transform-class-static-block": "catalog:",
+    "@lingui/babel-plugin-lingui-macro": "catalog:",
+    "@lingui/vite-plugin": "catalog:",
+    "@vitejs/plugin-react": "catalog:",
     "vite": "catalog:",
-    "vite-plugin-dts": "catalog:"
+    "vite-plugin-dts": "catalog:",
+    "vite-tsconfig-paths": "catalog:"
   },
   "license": "MIT",
-  "main": "src/index.ts",
+  "main": "config.ts",
   "name": "@strictly/vite",
   "scripts": {
     "check-types": "tsc -b",
@@ -12,5 +20,6 @@
     "lint": "cross-env ESLINT_USE_FLAT_CONFIG=false eslint . --max-warnings=0",
     "lint:fix": "cross-env ESLINT_USE_FLAT_CONFIG=false eslint . --fix"
   },
+  "type": "module",
   "version": "0.0.41"
 }

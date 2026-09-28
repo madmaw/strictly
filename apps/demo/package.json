@@ -15,14 +15,8 @@
     "react-dom": "catalog:"
   },
   "devDependencies": {
-    "@babel/core": "catalog:",
-    "@babel/plugin-proposal-class-properties": "^7.18.6",
-    "@babel/plugin-proposal-decorators": "catalog:",
-    "@babel/plugin-transform-class-static-block": "catalog:",
     "@chromatic-com/storybook": "^3.2.2",
-    "@lingui/babel-plugin-lingui-macro": "catalog:",
     "@lingui/cli": "catalog:",
-    "@lingui/vite-plugin": "catalog:",
     "@storybook/addon-actions": "catalog:",
     "@storybook/addon-essentials": "catalog:",
     "@storybook/addon-interactions": "catalog:",
@@ -40,7 +34,6 @@
     "@testing-library/user-event": "catalog:",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
-    "@vitejs/plugin-react": "catalog:",
     "jsdom": "catalog:",
     "postcss": "^8.4.47",
     "postcss-preset-mantine": "^1.17.0",
