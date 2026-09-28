@@ -6,5 +6,4 @@ apps/scratch
 dist
 node_modules
 packages/struct
-package.release.json
 storybook-static

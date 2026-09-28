@@ -569,7 +569,6 @@ module.exports = {
     '**/*.d.ts',
     '**/locales/*.ts',
     'node_modules',
-    'package.release.json',
     'storybook-static',
   ],
 }

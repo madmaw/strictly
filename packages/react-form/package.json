@@ -55,7 +55,21 @@
     "react-dom": "^19.0.0 || ^18.0.0"
   },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "exports": {
+      ".": {
+        "import": {
+          "types": "./dist/index.d.ts",
+          "default": "./dist/index.js"
+        },
+        "require": {
+          "types": "./dist/index.d.cts",
+          "default": "./dist/index.cjs"
+        }
+      }
+    },
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts"
   },
   "repository": {
     "directory": "packages/react-form",
@@ -68,7 +82,6 @@
     "clean": "del-cli dist .out",
     "lint": "cross-env ESLINT_USE_FLAT_CONFIG=false eslint . --max-warnings=0",
     "lint:fix": "cross-env ESLINT_USE_FLAT_CONFIG=false eslint . --fix",
-    "release:exports": "json -f package.json -f package.exports.json --merge -e \"delete this.devDependencies\" > package.release.json",
     "storybook": "storybook dev",
     "storybook:build": "storybook build",
     "storybook:test": "pnpm exec playwright install && pnpm storybook:build && concurrently -k -s first -n \"SB,TEST\" \"npx http-server storybook-static --port 6006 --silent\" \"npx wait-on tcp:127.0.0.1:6006 && pnpm storybook:test:client\"",
