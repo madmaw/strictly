@@ -32,7 +32,7 @@
     "@vitest/browser-playwright": "catalog:",
     "jsdom": "catalog:",
     "playwright": "catalog:",
-    "postcss": "^8.4.47",
+    "postcss": "^8.5.28",
     "postcss-preset-mantine": "^1.17.0",
     "postcss-simple-vars": "^7.0.1",
     "storybook": "catalog:",

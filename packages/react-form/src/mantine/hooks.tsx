@@ -328,29 +328,26 @@ class MantineFormImpl<F extends Fields> implements MantineForm<F> {
     >
   }
 
+  // individual radios cannot display an error (the group does), so they take no error renderer
   radio<K extends keyof StringFieldsOfFields<F>>(
     valuePath: K,
     value: ValueTypeOfField<F[K]>,
-  ): MantineFieldComponent<SuppliedRadioProps, RadioProps, ErrorOfField<F[K]>>
+  ): MantineFieldComponent<SuppliedRadioProps, RadioProps, never>
   radio<K extends keyof StringFieldsOfFields<F>, P extends SuppliedRadioProps>(
     valuePath: K,
     value: ValueTypeOfField<F[K]>,
     Radio: ComponentType<P>,
-  ): MantineFieldComponent<SuppliedRadioProps, P, ErrorOfField<F[K]>>
+  ): MantineFieldComponent<SuppliedRadioProps, P, never>
   radio<K extends keyof StringFieldsOfFields<F>, P extends SuppliedRadioProps>(
     valuePath: K,
     value: ValueTypeOfField<F[K]>,
     Radio: ComponentType<P> = RadioImpl as ComponentType<P>,
-  ): MantineFieldComponent<SuppliedRadioProps, P, ErrorOfField<F[K]>> {
+  ): MantineFieldComponent<SuppliedRadioProps, P, never> {
     return this.radioCache.retrieveOrCreate(
       valuePath,
       value,
       Radio as ComponentType<SuppliedRadioProps>,
-    ) as unknown as MantineFieldComponent<
-      SuppliedRadioProps,
-      P,
-      ErrorOfField<F[K]>
-    >
+    ) as unknown as MantineFieldComponent<SuppliedRadioProps, P, never>
   }
 
   pill<K extends keyof AllFieldsOfFields<F>>(
