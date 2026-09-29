@@ -1,6 +1,6 @@
 import { type FieldAdapter } from 'core/mobx/FieldAdapter'
 import { type TwoWayFieldConverter } from 'types/FieldConverters'
-import { type Mocked } from 'vitest'
+import { type Mocked } from 'vite-plus/test'
 import { mock, mockReset } from 'vitest-mock-extended'
 
 export function createMockedAdapter<E, To, From, ValuePath extends string>(

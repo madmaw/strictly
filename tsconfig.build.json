@@ -7,6 +7,6 @@
     "noEmit": true
   },
   "extends": "./tsconfig.json",
-  "include": [".vscode", "oxlint.config.ts"],
+  "include": [".vscode", "vite.config.ts"],
   "references": []
 }

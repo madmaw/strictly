@@ -6,7 +6,7 @@ import {
   type Validator,
 } from '@strictly/define'
 import { type MergedOfValidators, mergeValidators } from 'types/mergeValidators'
-import { type Mock, type Mocked } from 'vitest'
+import { type Mock, type Mocked } from 'vite-plus/test'
 import { mock, mockReset } from 'vitest-mock-extended'
 
 describe('MergedOfValidators', () => {

@@ -9,7 +9,7 @@ import {
   UnreliableFieldConversionType,
   type UnreliableFieldConverter,
 } from 'types/FieldConverters'
-import { type Mock } from 'vitest'
+import { type Mock } from 'vite-plus/test'
 
 const CONTEXT = 'ctx'
 const ERROR1 = 'error 1'

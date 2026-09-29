@@ -3,7 +3,6 @@
   "dependencies": {},
   "devDependencies": {
     "@strictly/base": "workspace:*",
-    "@strictly/oxlint": "workspace:*",
     "@strictly/vite": "workspace:*",
     "type-fest": "catalog:"
   },
@@ -44,13 +43,11 @@
     "url": "git+https://github.com/madmaw/strictly.git"
   },
   "scripts": {
-    "build": "vite build --configLoader runner",
+    "build": "vp build --configLoader runner",
     "check-types": "tsc -b",
     "clean": "del-cli dist .out",
-    "lint": "oxlint --type-aware",
-    "lint:fix": "oxlint --type-aware --fix",
-    "test": "vitest run --configLoader runner",
-    "test:watch": "vitest --configLoader runner"
+    "test": "vp test run --configLoader runner",
+    "test:watch": "vp test watch --configLoader runner"
   },
   "type": "module",
   "version": "0.0.41"

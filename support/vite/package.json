@@ -10,12 +10,13 @@
     "@microsoft/api-extractor": "catalog:",
     "@rolldown/plugin-babel": "catalog:",
     "@storybook/addon-vitest": "catalog:",
-    "@strictly/oxlint": "workspace:*",
     "@vitejs/plugin-react": "catalog:",
     "@vitest/browser-playwright": "catalog:",
+    "playwright": "catalog:",
     "resize-observer-polyfill": "catalog:",
     "vite": "catalog:",
     "vite-plugin-dts": "catalog:",
+    "vite-plus": "catalog:",
     "vitest": "catalog:",
     "vitest-fail-on-console": "catalog:",
     "vitest-matchmedia-mock": "catalog:"
@@ -29,9 +30,7 @@
   "name": "@strictly/vite",
   "scripts": {
     "check-types": "tsc -b",
-    "clean": "del-cli dist .out",
-    "lint": "oxlint --type-aware",
-    "lint:fix": "oxlint --type-aware --fix"
+    "clean": "del-cli dist .out"
   },
   "type": "module",
   "version": "0.0.41"

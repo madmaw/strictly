@@ -8,7 +8,6 @@ import babel from '@rolldown/plugin-babel'
 // oxlint-disable-next-line no-restricted-imports -- this package configures the storybook test runner
 import { storybookTest } from '@storybook/addon-vitest/vitest-plugin'
 import reactSupport from '@vitejs/plugin-react'
-import { playwright } from '@vitest/browser-playwright'
 import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { createRequire } from 'node:module'
 import { join } from 'node:path'
@@ -18,7 +17,8 @@ import {
   defineConfig,
   type TestProjectInlineConfiguration,
   type ViteUserConfig,
-} from 'vitest/config'
+} from 'vite-plus'
+import { playwright } from 'vite-plus/test/browser-playwright'
 
 export type LibraryPackageJson = {
   readonly dependencies?: Readonly<Record<string, string>>

@@ -1,7 +1,7 @@
 import { composeStories } from '@storybook/react-vite'
 import { toArray } from '@strictly/base'
 import { fireEvent, render, type RenderResult } from '@testing-library/react'
-import { type Mock, vi } from 'vitest'
+import { type Mock, vi } from 'vite-plus/test'
 import { CHECKBOX_LABEL } from './checkboxConstants'
 import * as stories from './checkboxHooks.stories'
 

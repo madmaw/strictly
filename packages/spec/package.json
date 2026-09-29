@@ -9,7 +9,6 @@
   },
   "description": "Helper utilities for testing",
   "devDependencies": {
-    "@strictly/oxlint": "workspace:*",
     "@strictly/vite": "workspace:*",
     "@testing-library/dom": "catalog:",
     "@testing-library/react": "catalog:",
@@ -19,6 +18,8 @@
     "resize-observer-polyfill": "catalog:",
     "storybook": "catalog:",
     "vite": "catalog:",
+    "vite-plus": "catalog:",
+    "vitest": "catalog:",
     "vitest-matchmedia-mock": "catalog:"
   },
   "homepage": "https://madmaw.github.io/strictly/spec",
@@ -53,11 +54,9 @@
     "url": "git+https://github.com/madmaw/strictly.git"
   },
   "scripts": {
-    "build": "vite build --configLoader runner",
+    "build": "vp build --configLoader runner",
     "check-types": "tsc -b",
-    "clean": "del-cli dist .out",
-    "lint": "oxlint --type-aware",
-    "lint:fix": "oxlint --type-aware --fix"
+    "clean": "del-cli dist .out"
   },
   "type": "module",
   "version": "0.0.41"

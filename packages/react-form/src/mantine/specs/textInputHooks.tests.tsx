@@ -1,7 +1,7 @@
 import { composeStories } from '@storybook/react-vite'
 import { toArray } from '@strictly/base'
 import { fireEvent, render, type RenderResult } from '@testing-library/react'
-import { type Mock, vi } from 'vitest'
+import { type Mock, vi } from 'vite-plus/test'
 import { TEXT_INPUT_LABEL } from './textInputConstants'
 import * as stories from './textInputHooks.stories'
 

@@ -1,5 +1,5 @@
 import { Cache, type CacheValueFactory } from 'util/Cache'
-import { type Mock, vi } from 'vitest'
+import { type Mock, vi } from 'vite-plus/test'
 
 describe('cache', () => {
   type Args = [string, number, boolean]

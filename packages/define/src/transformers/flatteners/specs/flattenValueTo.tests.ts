@@ -18,7 +18,7 @@ import {
 import { type FlattenedTypesOfType } from 'types/FlattenedTypesOfType'
 import { type Type, type TypeDef } from 'types/Type'
 import { type ValueOfType } from 'types/ValueOfType'
-import { type Mock, vi } from 'vitest'
+import { type Mock, vi } from 'vite-plus/test'
 
 type FlattenedSetters<R extends Record<string, Type>> = {
   [K in keyof R]: Setter<ValueOfType<R[K]>>

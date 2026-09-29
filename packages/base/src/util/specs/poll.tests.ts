@@ -1,6 +1,6 @@
 import { type Maybe } from 'types/Maybe'
 import { constantPollInterval, poll } from 'util/poll'
-import { type Mock, vi } from 'vitest'
+import { type Mock, vi } from 'vite-plus/test'
 
 describe('poll', () => {
   const pollInterval = constantPollInterval(1)
