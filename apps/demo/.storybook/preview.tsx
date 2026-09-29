@@ -1,6 +1,9 @@
 import { LOCALE_EN, LOCALE_PSEUDO_EN } from '@strictly/lingui'
-import { type MetaArgsOf, StorybookLinguiProvider } from '@strictly/spec'
-import { createStorybookPreview } from '@strictly/storybook/preview'
+import {
+  createStorybookPreview,
+  type MetaArgsOf,
+  StorybookLinguiProvider,
+} from '@strictly/storybook'
 // special case: .storybook is outside the tsconfig include, so baseUrl imports do not resolve here
 import * as React from 'react'
 import { messages as en } from '../src/locales/en.po'

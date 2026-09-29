@@ -17,7 +17,6 @@
     "@types/react-dom": "catalog:",
     "jsdom": "catalog:",
     "resize-observer-polyfill": "catalog:",
-    "storybook": "catalog:",
     "vite": "catalog:",
     "vite-plus": "catalog:",
     "vitest": "catalog:",

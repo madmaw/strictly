@@ -1,4 +1,4 @@
-// oxlint-disable-next-line no-restricted-imports -- this package exists to support storybook
+// oxlint-disable-next-line no-restricted-imports -- this package exists to configure storybook
 import { type InputType } from 'storybook/internal/types'
 
 type MetaArgType<T> = InputType & {

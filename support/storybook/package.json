@@ -2,6 +2,8 @@
   "description": "Shared storybook configuration for the workspace",
   "devDependencies": {
     "@chromatic-com/storybook": "catalog:",
+    "@lingui/core": "catalog:",
+    "@lingui/react": "catalog:",
     "@mantine/core": "catalog:",
     "@storybook/addon-docs": "catalog:",
     "@storybook/addon-links": "catalog:",
@@ -16,10 +18,11 @@
     "storybook": "catalog:"
   },
   "exports": {
-    "./main": "./src/main.ts",
-    "./preview": "./src/preview.tsx"
+    ".": "./src/index.ts",
+    "./main": "./src/main.ts"
   },
   "license": "MIT",
+  "main": "src/index.ts",
   "name": "@strictly/storybook",
   "scripts": {
     "check-types": "tsc -b",
