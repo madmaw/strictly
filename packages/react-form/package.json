@@ -49,10 +49,12 @@
       ".": {
         "import": {
           "types": "./dist/index.d.ts",
+
           "default": "./dist/index.js"
         },
         "require": {
           "types": "./dist/index.d.cts",
+
           "default": "./dist/index.cjs"
         }
       }
@@ -72,7 +74,7 @@
     "storybook": "storybook dev",
     "storybook:build": "storybook build",
     "test": "vp test run --configLoader runner --project=unit/*",
-    "test:storybook": "pnpm exec playwright install chromium && vp test run --configLoader runner --project=storybook/test",
+    "test:storybook": "playwright install chromium && vp test run --configLoader runner --project=storybook/test",
     "test:update": "vp test run --configLoader runner -u --project=unit/*",
     "test:watch": "vp test watch --configLoader runner --project=unit/*"
   },
