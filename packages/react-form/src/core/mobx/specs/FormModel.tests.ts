@@ -135,7 +135,7 @@ describe('all', () => {
     > = FieldAdapter<From, To, E, ValuePath, Context>
 
     describe('record', () => {
-      const typeDef = record<typeof numberType, 'a' | 'b'>(numberType)
+      const typeDef = record<typeof numberType, 'a' | 'b'>(numberType).narrow
       type T = Simplify<
         FlattenedTypePathsToAdaptersOf<
           FlattenedValuesOfType<typeof typeDef>,
@@ -163,7 +163,9 @@ describe('all', () => {
     })
 
     describe('object', () => {
-      const typeDef = object().field('x', stringType).field('y', booleanType)
+      const typeDef = object()
+        .field('x', stringType)
+        .field('y', booleanType).narrow
       type T = FlattenedTypePathsToAdaptersOf<
         FlattenedValuesOfType<typeof typeDef>,
         ValueOfType<typeof typeDef>
@@ -230,7 +232,7 @@ describe('all', () => {
   describe('FormModel', () => {
     describe('literal', () => {
       describe('optional', () => {
-        const typeDef = numberType
+        const typeDef = numberType.narrow
         const adapters = {
           $: integerToStringAdapter,
         } as const
@@ -281,7 +283,7 @@ describe('all', () => {
       })
 
       describe('required', () => {
-        const typeDef = numberType
+        const typeDef = numberType.narrow
         const adapters = {
           $: integerToStringAdapter,
         } as const
@@ -319,7 +321,7 @@ describe('all', () => {
     })
 
     describe('list', () => {
-      const typeDef = list(numberType)
+      const typeDef = list(numberType).narrow
       const adapters = {
         '$.*': integerToStringAdapter,
       } as const
@@ -378,7 +380,7 @@ describe('all', () => {
     })
 
     describe('record', () => {
-      const typeDef = record<typeof numberType, 'a' | 'b'>(numberType)
+      const typeDef = record<typeof numberType, 'a' | 'b'>(numberType).narrow
       const converters = {
         '$.*': integerToStringAdapter,
         // '$.*': booleanToBooleanConverter,
@@ -436,7 +438,9 @@ describe('all', () => {
     })
 
     describe('object', () => {
-      const typeDef = object().field('a', numberType).field('b', booleanType)
+      const typeDef = object()
+        .field('a', numberType)
+        .field('b', booleanType).narrow
       const converters = {
         '$.a': integerToStringAdapter,
         '$.b': booleanToBooleanAdapter,
@@ -496,7 +500,7 @@ describe('all', () => {
 
   describe('FormModel', () => {
     describe('literal', () => {
-      const typeDef = numberType
+      const typeDef = numberType.narrow
       const adapters = {
         $: integerToStringAdapter,
       } as const
@@ -613,7 +617,7 @@ describe('all', () => {
     })
 
     describe('list', () => {
-      const typeDef = list(numberType)
+      const typeDef = list(numberType).narrow
       const converters = {
         '$.*': integerToStringAdapter,
       } as const
@@ -926,7 +930,9 @@ describe('all', () => {
     describe('union', () => {
       describe('non-discriminated', () => {
         const listOfNumbersTypeDef = list(numberType)
-        const type = union().or('null', nullType).or('0', listOfNumbersTypeDef)
+        const type = union()
+          .or('null', nullType)
+          .or('0', listOfNumbersTypeDef).narrow
         const adapters = {
           $: adapterFromTwoWayConverter(
             new NullableToBooleanConverter(type, [1], null),
@@ -972,7 +978,7 @@ describe('all', () => {
       describe('discriminated', () => {
         const struct1 = object().field('a', numberType)
         const struct2 = object().field('b', booleanType)
-        const type = union('d').or('x', struct1).or('y', struct2)
+        const type = union('d').or('x', struct1).or('y', struct2).narrow
         type ValueToTypePaths = ValueToTypePathsOfType<typeof type>
 
         const adapters = {
@@ -1048,7 +1054,7 @@ describe('all', () => {
     })
 
     describe('fake', () => {
-      const typeDef = numberType
+      const typeDef = numberType.narrow
       const converters = {
         $: integerToStringAdapter,
         '$.fake': booleanToBooleanAdapter,
@@ -1099,7 +1105,7 @@ describe('all', () => {
       const typeDef = object().readonlyField(
         'n',
         numberType.enforce((n) => (n < 10 ? 'err' : null)),
-      )
+      ).narrow
       const adapters = mergeAdaptersWithValidators(
         {
           $: identityAdapter({ n: 0 }),

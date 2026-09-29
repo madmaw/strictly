@@ -5,7 +5,7 @@ import { type ValueOfType } from 'types/ValueOfType'
 describe('mobxCopy', () => {
   describe('object', () => {
     describe('optional field', () => {
-      const type = object().optionalField('n', numberType)
+      const type = object().optionalField('n', numberType).narrow
       type T = ValueOfType<typeof type>
       it('copies unpopulated', () => {
         const v: T = {}

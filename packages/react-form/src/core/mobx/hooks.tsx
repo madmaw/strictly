@@ -12,6 +12,7 @@ import { peek } from './peek'
 type FormModelInterface<T extends Type = any> = Pick<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   FormModel<T, any, any, any, any, any>,
+  | 'type'
   | 'fields'
   | 'value'
   | 'getValidation'
@@ -22,10 +23,9 @@ type FormModelInterface<T extends Type = any> = Pick<
   | 'isValuePathActive'
 >
 
-type ValueOfModel<M extends FormModelInterface> =
-  M extends FormModelInterface<infer T>
-    ? ValueOfType<ReadonlyTypeOfType<T>>
-    : never
+type ValueOfModel<M extends FormModelInterface> = ValueOfType<
+  ReadonlyTypeOfType<M['type']>
+>
 
 export function useDefaultMobxFormHooks<
   M extends FormModelInterface,

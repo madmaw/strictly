@@ -4,17 +4,21 @@ import {
   assertExistsAndReturn,
   lookup,
   PreconditionFailedError,
-  reduce,
   UnreachableError,
 } from '@strictly/base'
-import { type Type, type TypeDef, TypeDefType } from 'types/Type'
-import { valuePrototypeOf } from 'types/valuePrototypeOf'
+import {
+  nodeOf,
+  optionsByDiscriminatorOf,
+  type SchemaNode,
+  variableOptionOf,
+} from 'types/node'
+import { type Type } from 'types/Type'
 
 export function valuePathToTypePath<
   ValuePathsToTypePaths extends Record<string, string>,
   ValuePath extends keyof ValuePathsToTypePaths,
 >(
-  { definition: typeDef }: Type,
+  t: Type,
   valuePath: ValuePath,
   allowMissingPaths = false,
 ): ValuePathsToTypePaths[ValuePath] {
@@ -24,7 +28,7 @@ export function valuePathToTypePath<
   assertEqual(first, '$')
 
   const typeSteps = internalJsonValuePathToTypePath(
-    typeDef,
+    nodeOf(t),
     qualifiers,
     valueSteps.slice(1),
     allowMissingPaths,
@@ -35,7 +39,7 @@ export function valuePathToTypePath<
 }
 
 function internalJsonValuePathToTypePath(
-  typeDef: TypeDef,
+  node: SchemaNode,
   qualifiers: string[],
   valueSteps: string[],
   allowMissingPaths: boolean,
@@ -47,8 +51,8 @@ function internalJsonValuePathToTypePath(
   const [nextValueStepAndQualifiersString, ...remainingValueSteps] = valueSteps
   const nextValueStepAndQualifiers = nextValueStepAndQualifiersString.split(':')
   const [valueStep, ...nextQualifiers] = nextValueStepAndQualifiers
-  switch (typeDef.type) {
-    case TypeDefType.Literal:
+  switch (node.kind) {
+    case 'literal':
       if (allowMissingPaths) {
         // fake it
         return valueSteps
@@ -58,39 +62,47 @@ function internalJsonValuePathToTypePath(
         originalValuePath,
         nextValueStepAndQualifiersString,
       )
-
-    case TypeDefType.List:
+    case 'wrapper':
+      return internalJsonValuePathToTypePath(
+        nodeOf(node.inner),
+        qualifiers,
+        valueSteps,
+        allowMissingPaths,
+        originalValuePath,
+      )
+    case 'list':
       // TODO assert format of current step
       return [
         ['*', ...nextQualifiers].join(':'),
         ...internalJsonValuePathToTypePath(
-          typeDef.elements,
+          nodeOf(node.element),
           nextQualifiers,
           remainingValueSteps,
           allowMissingPaths,
           originalValuePath,
         ),
       ]
-    case TypeDefType.Record:
+    case 'record':
       return [
         ['*', ...nextQualifiers].join(':'),
         ...internalJsonValuePathToTypePath(
-          typeDef.valueTypeDef,
+          nodeOf(node.value),
           nextQualifiers,
           remainingValueSteps,
           allowMissingPaths,
           originalValuePath,
         ),
       ]
-    case TypeDefType.Object:
+    case 'object': {
+      const field = lookup<string, Type>(node.fields, valueStep)
       if (allowMissingPaths) {
-        if (lookup(typeDef.fields, valueStep) == null) {
+        if (field == null) {
           // fake it
           return valueSteps
         }
       } else {
         assertExists(
-          lookup<string, TypeDef>(typeDef.fields, valueStep),
+          field,
           'missing field in {} ({})',
           originalValuePath,
           valueStep,
@@ -99,33 +111,21 @@ function internalJsonValuePathToTypePath(
       return [
         nextValueStepAndQualifiersString,
         ...internalJsonValuePathToTypePath(
-          typeDef.fields[valueStep],
+          nodeOf(field),
           nextQualifiers,
           remainingValueSteps,
           allowMissingPaths,
           originalValuePath,
         ),
       ]
-    case TypeDefType.Union:
-      if (typeDef.discriminator == null) {
+    }
+    case 'union':
+      if (node.discriminator == null) {
         if (remainingValueSteps.length > 0) {
-          // find the non-literal typedef
-          const union = reduce<string, TypeDef, null | TypeDef>(
-            typeDef.unions,
-            (acc, _k, v) => {
-              if (
-                v.type !== TypeDefType.Literal ||
-                valuePrototypeOf(v) == null
-              ) {
-                return v
-              }
-              return acc
-            },
-            null,
-          )
-          assertExists(union, 'expected a complex union {}', originalValuePath)
+          const option = variableOptionOf(node)
+          assertExists(option, 'expected a complex union {}', originalValuePath)
           return internalJsonValuePathToTypePath(
-            union,
+            nodeOf(option),
             nextQualifiers,
             valueSteps,
             allowMissingPaths,
@@ -147,21 +147,20 @@ function internalJsonValuePathToTypePath(
       }
       {
         const [qualifier, ...remainingQualifiers] = qualifiers
-        const union = assertExistsAndReturn(
-          typeDef.unions[qualifier],
+        const option = assertExistsAndReturn(
+          optionsByDiscriminatorOf(node)[qualifier],
           'missing union {}',
           qualifier,
         )
         return internalJsonValuePathToTypePath(
-          union,
+          nodeOf(option),
           remainingQualifiers,
           valueSteps,
           allowMissingPaths,
           originalValuePath,
         )
       }
-
     default:
-      throw new UnreachableError(typeDef)
+      throw new UnreachableError(node)
   }
 }

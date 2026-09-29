@@ -9,7 +9,7 @@ export type Accessor<T = any> = {
 
 export type FlattenedAccessorsOfType<
   T extends Type,
-  Flattened extends Readonly<Record<string, Accessor>> =
+  Flattened extends Readonly<Record<string, unknown>> =
     FlattenedValuesOfType<T>,
 > = {
   readonly [K in keyof Flattened]: Accessor<Flattened[K]>

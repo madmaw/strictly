@@ -1,33 +1,23 @@
 import { type SimplifyDeep, type UnionToIntersection } from 'type-fest'
+import { type z } from 'zod'
 import { type Depths, type StartingDepth } from './flattened'
 import { type PathOf } from './PathOf'
-import { type StrictType } from './StrictType'
 import {
-  type ListTypeDef,
-  type LiteralTypeDef,
-  type ObjectTypeDef,
-  type RecordTypeDef,
-  type TypeDef,
-  type UnionTypeDef,
+  type OptionsOfDiscriminatedUnion,
+  type Type,
+  type Unwrap,
 } from './Type'
 
 export type ValueToTypePathsOfType<
-  T extends StrictType,
+  T extends Type,
   SegmentOverride extends string = '*',
   Path extends string = '$',
 > = SimplifyDeep<
-  InternalFlattenedTypePathsOf<
-    T['definition'],
-    SegmentOverride,
-    Path,
-    Path,
-    StartingDepth
-  >
+  InternalFlattenedTypePathsOf<T, SegmentOverride, Path, Path, StartingDepth>
 >
 
-// TODO rename to FlattenTypePathsOfTypeDef and apply pattern to subsequent types
 type InternalFlattenedTypePathsOf<
-  T extends TypeDef,
+  T,
   SegmentOverride extends string,
   ValuePath extends string,
   TypePath extends string,
@@ -35,7 +25,7 @@ type InternalFlattenedTypePathsOf<
 > = {
   readonly [K in ValuePath]: TypePath
 } & InternalFlattenedTypePathsOfChildren<
-  T,
+  Unwrap<T>,
   SegmentOverride,
   ValuePath,
   TypePath,
@@ -43,7 +33,7 @@ type InternalFlattenedTypePathsOf<
 >
 
 type InternalFlattenedTypePathsOfChildren<
-  T extends TypeDef,
+  T,
   SegmentOverride extends string,
   ValuePath extends string,
   TypePath extends string,
@@ -51,149 +41,106 @@ type InternalFlattenedTypePathsOfChildren<
   NextDepth extends number = Depths[Depth],
 > = NextDepth extends -1
   ? never
-  : T extends LiteralTypeDef
-    ? InternalFlattenedTypePathsOfLiteralChildren
-    : T extends ListTypeDef
-      ? InternalFlattenedTypePathsOfListChildren<
-          T,
+  : T extends z.ZodArray<infer E>
+    ? InternalFlattenedTypePathsOf<
+        E,
+        SegmentOverride,
+        PathOf<ValuePath, number>,
+        PathOf<TypePath, number, SegmentOverride>,
+        NextDepth
+      >
+    : T extends z.ZodRecord<infer K, infer V>
+      ? InternalFlattenedTypePathsOf<
+          V,
           SegmentOverride,
-          ValuePath,
-          TypePath,
+          PathOf<ValuePath, K['_zod']['output'] & (string | number)>,
+          PathOf<
+            TypePath,
+            K['_zod']['output'] & (string | number),
+            SegmentOverride
+          >,
           NextDepth
         >
-      : T extends RecordTypeDef
-        ? InternalFlattenedTypePathsOfRecordChildren<
-            T,
+      : T extends z.ZodObject<infer Shape>
+        ? InternalFlattenedTypePathsOfObjectChildren<
+            Shape,
             SegmentOverride,
             ValuePath,
             TypePath,
             NextDepth
           >
-        : T extends ObjectTypeDef
-          ? InternalFlattenedTypePathsOfObjectChildren<
-              T,
+        : T extends z.ZodDiscriminatedUnion<infer Options, infer D>
+          ? InternalFlattenedTypePathsOfDiscriminatedUnionChildren<
+              OptionsOfDiscriminatedUnion<Options, D>,
               SegmentOverride,
               ValuePath,
               TypePath,
               NextDepth
             >
-          : T extends UnionTypeDef
+          : T extends z.ZodUnion<infer Options>
             ? InternalFlattenedTypePathsOfUnionChildren<
-                T,
+                Options[number],
                 SegmentOverride,
                 ValuePath,
                 TypePath,
                 NextDepth
               >
-            : never
-
-type InternalFlattenedTypePathsOfLiteralChildren = {}
-
-type InternalFlattenedTypePathsOfListChildren<
-  T extends ListTypeDef,
-  SegmentOverride extends string,
-  ValuePath extends string,
-  TypePath extends string,
-  Depth extends number,
-> = InternalFlattenedTypePathsOf<
-  T['elements'],
-  SegmentOverride,
-  PathOf<ValuePath, number>,
-  PathOf<TypePath, number, SegmentOverride>,
-  Depth
->
-
-type InternalFlattenedTypePathsOfRecordChildren<
-  T extends RecordTypeDef,
-  SegmentOverride extends string,
-  ValuePath extends string,
-  TypePath extends string,
-  Depth extends number,
-> = InternalFlattenedTypePathsOf<
-  T['valueTypeDef'],
-  SegmentOverride,
-  PathOf<ValuePath, T['keyPrototype']>,
-  PathOf<TypePath, T['keyPrototype'], SegmentOverride>,
-  Depth
->
+            : {}
 
 type InternalFlattenedTypePathsOfObjectChildren<
-  T extends ObjectTypeDef,
+  Shape,
   SegmentOverride extends string,
   ValuePath extends string,
   TypePath extends string,
   Depth extends number,
-> =
-  T extends ObjectTypeDef<infer Fields>
-    ? keyof Fields extends string
-      ? UnionToIntersection<
-          {
-            readonly [K in keyof Fields]-?: InternalFlattenedTypePathsOf<
-              Exclude<Fields[K], undefined>,
-              SegmentOverride,
-              PathOf<ValuePath, K>,
-              PathOf<TypePath, K>,
-              Depth
-            >
-          }[keyof Fields]
+> = keyof Shape extends string
+  ? UnionToIntersection<
+      {
+        readonly [K in keyof Shape]-?: InternalFlattenedTypePathsOf<
+          Shape[K],
+          SegmentOverride,
+          PathOf<ValuePath, K>,
+          PathOf<TypePath, K>,
+          Depth
         >
-      : never
-    : never
+      }[keyof Shape]
+    >
+  : never
 
-// type InternalFlattenedTypePathsOfUnionChildren<
-//   T extends UnionTypeDef,
-//   SegmentOverride extends string,
-//   ValuePath extends string,
-//   TypePath extends string,
-//   Depth extends number,
-// > = T extends UnionTypeDef<infer D, infer Unions> ?
-//     & ({
-//       [K in keyof Unions]: InternalFlattenedTypePathsOfChildren<
-//         Unions[K],
-//         SegmentOverride,
-//         ValuePath,
-//         TypePath,
-//         Depth
-//       >
-//     }[keyof Unions])
-//     & (D extends string ? ReadonlyRecord<JsonPathOf<ValuePath, D>, JsonPathOf<TypePath, D>> : {})
-//   : never
+type InternalFlattenedTypePathsOfDiscriminatedUnionChildren<
+  Options,
+  SegmentOverride extends string,
+  ValuePath extends string,
+  TypePath extends string,
+  Depth extends number,
+> = UnionToIntersection<
+  {
+    readonly [
+      K in keyof Options & string
+    ]: InternalFlattenedTypePathsOfChildren<
+      Unwrap<Options[K]>,
+      SegmentOverride,
+      `${ValuePath}:${K}`,
+      `${TypePath}:${K}`,
+      Depth
+    >
+  }[keyof Options & string]
+>
 
 type InternalFlattenedTypePathsOfUnionChildren<
-  T extends UnionTypeDef,
+  Option,
   SegmentOverride extends string,
   ValuePath extends string,
   TypePath extends string,
   Depth extends number,
-> =
-  T extends UnionTypeDef<infer D, infer Unions>
-    ? keyof Unions extends string
-      ? D extends null
-        ? UnionToIntersection<
-            {
-              readonly [
-                K in keyof Unions
-              ]: InternalFlattenedTypePathsOfChildren<
-                Unions[K],
-                SegmentOverride,
-                ValuePath,
-                TypePath,
-                Depth
-              >
-            }[keyof Unions]
-          >
-        : UnionToIntersection<
-            {
-              readonly [
-                K in keyof Unions
-              ]: InternalFlattenedTypePathsOfChildren<
-                Unions[K],
-                SegmentOverride,
-                `${ValuePath}:${K}`,
-                `${TypePath}:${K}`,
-                Depth
-              >
-            }[keyof Unions]
-          >
-      : never
+> = UnionToIntersection<
+  Option extends unknown
+    ? InternalFlattenedTypePathsOfChildren<
+        Unwrap<Option>,
+        SegmentOverride,
+        ValuePath,
+        TypePath,
+        Depth
+      >
     : never
+>

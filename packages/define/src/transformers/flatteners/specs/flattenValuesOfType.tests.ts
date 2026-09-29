@@ -1,12 +1,12 @@
 import { flattenValuesOfType } from 'transformers/flatteners/flattenValuesOfType'
 import { booleanType, list, numberType, object } from 'types/builders'
 
-describe('flattenValueTypesOf', () => {
+describe('flattenValuesOfType', () => {
   // note that we already have tests for the type and the function that this calls, so
   // this is only a sanity check
   it('flattens', () => {
     const flattened = flattenValuesOfType(
-      object().field('a', list(numberType)).field('b', booleanType),
+      object().field('a', list(numberType)).field('b', booleanType).narrow,
       {
         a: [1, 2, 4],
         b: false,

@@ -6,155 +6,135 @@ import {
   stringType,
   union,
 } from 'types/builders'
-import { type ReadonlyTypeOfType } from 'types/ReadonlyTypeOfType'
-import { type TypeDefType } from 'types/Type'
+import { type FlattenedTypesOfType } from 'types/FlattenedTypesOfType'
+import { type FlattenedValuesOfType } from 'types/FlattenedValuesOfType'
+import {
+  type IsReadonlyType,
+  type ReadonlyTypeOfType,
+} from 'types/ReadonlyTypeOfType'
+import { type ValueOfType } from 'types/ValueOfType'
 
-describe('ReadonlyTypeDefOf', () => {
+describe('ReadonlyTypeOfType', () => {
   describe('literal', () => {
-    type T = ReadonlyTypeOfType<typeof numberType._type>
+    type T = ReadonlyTypeOfType<typeof numberType.narrow>
 
-    type C = {
-      readonly definition: {
-        readonly type: TypeDefType.Literal
-        readonly valuePrototype: [number]
-      }
-    }
-    it('equals expected type', () => {
-      expectTypeOf<C>().toEqualTypeOf<T>()
+    it('is readonly', () => {
+      expectTypeOf<IsReadonlyType<T>>().toEqualTypeOf<true>()
+      expectTypeOf<
+        IsReadonlyType<typeof numberType.narrow>
+      >().toEqualTypeOf<false>()
+    })
+
+    it('has the same value', () => {
+      expectTypeOf<ValueOfType<T>>().toEqualTypeOf<number>()
+    })
+
+    it('is still the same schema at runtime', () => {
+      const t: T = numberType.narrow as T
+      expect(t.safeParse(1).success).toBe(true)
     })
   })
 
   describe('list', () => {
-    const builder = list(numberType)
-    type T = ReadonlyTypeOfType<typeof builder._type>
+    const t = list(numberType).narrow
+    type T = ReadonlyTypeOfType<typeof t>
 
-    type C = {
-      readonly definition: {
-        readonly type: TypeDefType.List
-        readonly elements: {
-          readonly type: TypeDefType.Literal
-          readonly valuePrototype: [number]
-        }
-      }
-    }
-    it('equals expected type', () => {
-      expectTypeOf<C>().toEqualTypeOf<T>()
+    it('has a readonly value', () => {
+      expectTypeOf<ValueOfType<T>>().toEqualTypeOf<readonly number[]>()
     })
   })
 
   describe('record', () => {
-    const builder = record<typeof numberType, 'a' | 'b'>(numberType)
-    type T = ReadonlyTypeOfType<typeof builder._type>
+    const t = record<typeof numberType, 'a' | 'b'>(numberType).narrow
+    type T = ReadonlyTypeOfType<typeof t>
 
-    type C = {
-      readonly definition: {
-        readonly type: TypeDefType.Record
-        readonly keyPrototype: 'a' | 'b'
-        readonly valueTypeDef: {
-          readonly type: TypeDefType.Literal
-          readonly valuePrototype: [number]
-        }
-      }
-    }
-    it('equals expected type', () => {
-      expectTypeOf<C>().toEqualTypeOf<T>()
+    it('has a readonly value', () => {
+      expectTypeOf<ValueOfType<T>>().toEqualTypeOf<
+        Readonly<Record<'a' | 'b', number>>
+      >()
     })
   })
 
   describe('object', () => {
-    const builder = object()
+    const t = object()
       .field('a', numberType)
-      .optionalField('b', stringType)
-    type T = ReadonlyTypeOfType<typeof builder._type>
+      .optionalField('b', stringType).narrow
+    type T = ReadonlyTypeOfType<typeof t>
 
-    type C = {
-      readonly definition: {
-        readonly type: TypeDefType.Object
-        readonly fields: {
-          readonly a: {
-            readonly type: TypeDefType.Literal
-            readonly valuePrototype: [number]
-          }
-          readonly b?: {
-            readonly type: TypeDefType.Literal
-            readonly valuePrototype: [string]
-          }
-        }
-      }
-    }
-    it('equals expected type', () => {
-      expectTypeOf<C>().toEqualTypeOf<T>()
+    it('has a readonly value', () => {
+      expectTypeOf<ValueOfType<T>>().toEqualTypeOf<{
+        readonly a: number
+        readonly b?: string | undefined
+      }>()
+    })
+
+    it('propagates to the flattened children', () => {
+      type Flattened = FlattenedTypesOfType<T, null>
+      expectTypeOf<IsReadonlyType<Flattened['$.a']>>().toEqualTypeOf<true>()
+      expectTypeOf<IsReadonlyType<Flattened['$.b']>>().toEqualTypeOf<true>()
     })
   })
 
   describe('union', () => {
-    const builder = union()
+    const t = union()
       .or('1', record<typeof numberType, 'a'>(numberType))
-      .or('2', stringType)
-    type T = ReadonlyTypeOfType<typeof builder._type>
+      .or('2', stringType).narrow
+    type T = ReadonlyTypeOfType<typeof t>
 
-    type C = {
-      readonly definition: {
-        readonly type: TypeDefType.Union
-        readonly discriminator: null
-        readonly unions: {
-          readonly [1]: {
-            readonly type: TypeDefType.Record
-            readonly keyPrototype: 'a'
-            readonly valueTypeDef: {
-              readonly type: TypeDefType.Literal
-              readonly valuePrototype: [number]
-            }
-          }
-          readonly [2]: {
-            readonly type: TypeDefType.Literal
-            readonly valuePrototype: [string]
-          }
-        }
-      }
-    }
-    it('equals expected type', () => {
-      expectTypeOf<C>().toEqualTypeOf<T>()
+    it('has a readonly value', () => {
+      expectTypeOf<ValueOfType<T>>().toEqualTypeOf<
+        Readonly<Record<'a', number>> | string
+      >()
     })
   })
 
   describe('partial', () => {
-    const builder = record<typeof numberType, 'a'>(numberType).partialKeys()
-    type T = ReadonlyTypeOfType<typeof builder._type>
+    const t = record<typeof numberType, 'a'>(numberType).partialKeys().narrow
+    type T = ReadonlyTypeOfType<typeof t>
 
-    type C = {
-      readonly definition: {
-        readonly type: TypeDefType.Record
-        readonly keyPrototype: 'a'
-        readonly valueTypeDef:
-          | {
-              readonly type: TypeDefType.Literal
-              readonly valuePrototype: [number]
-            }
-          | undefined
-      }
-    }
-    it('equals expected type', () => {
-      expectTypeOf<C>().toEqualTypeOf<T>()
+    it('has a readonly value', () => {
+      expectTypeOf<ValueOfType<T>>().toEqualTypeOf<{
+        readonly a?: number
+      }>()
     })
   })
 
   describe('readonly', () => {
-    const builder = record<typeof numberType, 'a'>(numberType).readonlyKeys()
-    type T = ReadonlyTypeOfType<typeof builder._type>
+    const t = record<typeof numberType, 'a'>(numberType).readonlyKeys().narrow
+    type T = ReadonlyTypeOfType<typeof t>
 
-    type C = {
-      readonly definition: {
-        readonly type: TypeDefType.Record
-        readonly keyPrototype: 'a'
-        readonly valueTypeDef: {
-          readonly type: TypeDefType.Literal
-          readonly valuePrototype: [number]
-        }
-      }
-    }
-    it('equals expected type', () => {
-      expectTypeOf<C>().toEqualTypeOf<T>()
+    it('has a readonly value', () => {
+      expectTypeOf<ValueOfType<T>>().toEqualTypeOf<
+        Readonly<Record<'a', number>>
+      >()
+    })
+  })
+
+  describe('nested', () => {
+    const t = object().field(
+      'l',
+      list(object().field('r', record(numberType))),
+    ).narrow
+    type T = ReadonlyTypeOfType<typeof t>
+
+    it('is readonly all the way down', () => {
+      expectTypeOf<ValueOfType<T>>().toEqualTypeOf<{
+        readonly l: readonly {
+          readonly r: Readonly<Record<string, number>>
+        }[]
+      }>()
+    })
+
+    it('flattens to readonly values', () => {
+      type Values = FlattenedValuesOfType<T, '*'>
+      expectTypeOf<Values['$.l']>().toEqualTypeOf<
+        readonly {
+          readonly r: Readonly<Record<string, number>>
+        }[]
+      >()
+      expectTypeOf<Values['$.l.*.r']>().toEqualTypeOf<
+        Readonly<Record<string, number>>
+      >()
     })
   })
 })

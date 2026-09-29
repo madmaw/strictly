@@ -17,6 +17,7 @@ import {
   union,
   type ValueOfType,
   type ValueToTypePathsOfType,
+  type ValueTypesOfDiscriminatedUnion,
 } from '@strictly/define'
 import { petOwnerType } from './PetOwnerFieldsView'
 
@@ -76,7 +77,7 @@ export const speciesType = union('type')
       .readonly(),
   ).narrow
 
-export type Species = keyof (typeof speciesType)['definition']['unions']
+export type Species = keyof ValueTypesOfDiscriminatedUnion<typeof speciesType>
 
 export const petType = object()
   .field(

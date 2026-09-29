@@ -21,7 +21,8 @@
     "type-fest": "catalog:",
     "vite": "catalog:",
     "vite-plus": "catalog:",
-    "vitest": "catalog:"
+    "vitest": "catalog:",
+    "zod": "catalog:"
   },
   "homepage": "https://madmaw.github.io/strictly/form",
   "keywords": [
@@ -42,7 +43,8 @@
     "mobx": "^7.0.0",
     "mobx-react": "^10.0.0",
     "react": "^19.2.0",
-    "react-dom": "^19.2.0"
+    "react-dom": "^19.2.0",
+    "zod": "^4.0.0"
   },
   "publishConfig": {
     "access": "public",

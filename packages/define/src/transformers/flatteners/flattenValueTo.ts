@@ -1,16 +1,8 @@
-import { lookup, reduce, UnreachableError } from '@strictly/base'
+import { lookup, UnreachableError } from '@strictly/base'
+import { nodeOf, optionOf, type SchemaNode } from 'types/node'
 import { type ReadonlyTypeOfType } from 'types/ReadonlyTypeOfType'
-import {
-  type StrictListTypeDef,
-  type StrictObjectTypeDef,
-  type StrictRecordTypeDef,
-  type StrictType,
-  type StrictTypeDef,
-  type StrictUnionTypeDef,
-} from 'types/StrictType'
-import { type TypeDef, TypeDefType, type UnionTypeDef } from 'types/Type'
+import { type Type } from 'types/Type'
 import { type ValueOfType } from 'types/ValueOfType'
-import { valuePrototypeOf } from 'types/valuePrototypeOf'
 import { jsonPath } from './jsonPath'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -18,7 +10,7 @@ export type AnyValueType = any
 export type Setter<V> = (v: V) => void
 
 export type Mapper<R> = (
-  t: StrictTypeDef,
+  t: Type,
   v: AnyValueType,
   setter: Setter<AnyValueType>,
   typePath: string,
@@ -32,11 +24,11 @@ type FlattenContext<M> = {
 }
 
 export function flattenValueTo<
-  T extends StrictType,
+  T extends Type,
   M,
   R extends Readonly<Record<string, M>>,
 >(
-  { definition }: T,
+  t: T,
   v: ValueOfType<ReadonlyTypeOfType<T>>,
   setter: Setter<ValueOfType<T>>,
   mapper: Mapper<M>,
@@ -46,7 +38,7 @@ export function flattenValueTo<
   listIndicesToKeys: Record<string, number[]> = {},
 ): R {
   const r: Record<string, AnyValueType> = {}
-  internalFlattenValue('$', '$', definition, v, setter, {
+  internalFlattenValue('$', '$', t, v, setter, {
     mapper,
     r,
     listIndicesToKeys,
@@ -57,51 +49,75 @@ export function flattenValueTo<
 function internalFlattenValue<M>(
   valuePath: string,
   typePath: string,
-  typeDef: StrictTypeDef,
+  t: Type,
   v: AnyValueType,
   setter: Setter<AnyValueType>,
   context: FlattenContext<M>,
 ) {
-  context.r[valuePath] = context.mapper(typeDef, v, setter, typePath, valuePath)
-  // assume undefined means the field is optional and not populated
-  // TODO: actually capture if field is optional in typedef (or in builder for creating validator)
+  context.r[valuePath] = context.mapper(t, v, setter, typePath, valuePath)
+  // a missing value has no children
   if (v != null) {
-    internalFlattenValueChildren(valuePath, typePath, typeDef, v, context)
+    internalFlattenValueChildren(valuePath, typePath, nodeOf(t), v, context)
   }
 }
 
 function internalFlattenValueChildren<M>(
   valuePath: string,
   typePath: string,
-  typeDef: StrictTypeDef,
+  node: SchemaNode,
   v: AnyValueType,
   context: FlattenContext<M>,
 ) {
-  switch (typeDef.type) {
-    case TypeDefType.Literal:
+  switch (node.kind) {
+    case 'literal':
       // no children
       break
-    case TypeDefType.List:
-      internalFlattenListChildren(valuePath, typePath, typeDef, v, context)
+    case 'wrapper':
+      internalFlattenValueChildren(
+        valuePath,
+        typePath,
+        nodeOf(node.inner),
+        v,
+        context,
+      )
       break
-    case TypeDefType.Record:
-      internalFlattenRecordChildren(valuePath, typePath, typeDef, v, context)
+    case 'list':
+      internalFlattenListChildren(valuePath, typePath, node.element, v, context)
       break
-    case TypeDefType.Object:
-      internalFlattenObjectChildren(valuePath, typePath, typeDef, v, context)
+    case 'record':
+      internalFlattenRecordChildren(valuePath, typePath, node.value, v, context)
       break
-    case TypeDefType.Union:
-      internalFlattenUnionChildren(valuePath, typePath, typeDef, v, context)
+    case 'object':
+      internalFlattenObjectChildren(
+        valuePath,
+        typePath,
+        node.fields,
+        v,
+        context,
+      )
       break
+    case 'union': {
+      const option = optionOf(node, v)
+      const qualifier =
+        node.discriminator == null ? '' : `:${v[node.discriminator]}`
+      internalFlattenValueChildren(
+        `${valuePath}${qualifier}`,
+        `${typePath}${qualifier}`,
+        nodeOf(option),
+        v,
+        context,
+      )
+      break
+    }
     default:
-      throw new UnreachableError(typeDef)
+      throw new UnreachableError(node)
   }
 }
 
 function internalFlattenListChildren<M>(
   valuePath: string,
   typePath: string,
-  { elements }: StrictListTypeDef,
+  element: Type,
   v: AnyValueType[],
   context: FlattenContext<M>,
 ) {
@@ -124,7 +140,7 @@ function internalFlattenListChildren<M>(
     internalFlattenValue(
       jsonPath(valuePath, key),
       newTypePath,
-      elements,
+      element,
       e,
       (e: AnyValueType) => {
         v[index] = e
@@ -137,7 +153,7 @@ function internalFlattenListChildren<M>(
 function internalFlattenRecordChildren<M>(
   valuePath: string,
   typePath: string,
-  { valueTypeDef }: StrictRecordTypeDef,
+  value: Type,
   v: Record<string, AnyValueType>,
   context: FlattenContext<M>,
 ) {
@@ -146,7 +162,7 @@ function internalFlattenRecordChildren<M>(
     internalFlattenValue(
       jsonPath(valuePath, k),
       newTypePath,
-      valueTypeDef,
+      value,
       v[k],
       (value: AnyValueType) => {
         v[k] = value
@@ -159,72 +175,20 @@ function internalFlattenRecordChildren<M>(
 function internalFlattenObjectChildren<M>(
   valuePath: string,
   typePath: string,
-  { fields }: StrictObjectTypeDef,
+  fields: Readonly<Record<string, Type>>,
   v: Record<string, AnyValueType>,
   context: FlattenContext<M>,
 ) {
   Object.keys(fields).forEach((k) => {
-    const fieldTypeDef = fields[k]
-    const fieldValue = v[k]
     internalFlattenValue(
       jsonPath(valuePath, k),
       jsonPath(typePath, k),
-      fieldTypeDef,
-      fieldValue,
+      fields[k],
+      v[k],
       (value: AnyValueType) => {
         v[k] = value
       },
       context,
     )
   })
-}
-
-function internalFlattenUnionChildren<M>(
-  valuePath: string,
-  typePath: string,
-  typeDef: StrictUnionTypeDef,
-  v: AnyValueType,
-  context: FlattenContext<M>,
-) {
-  const childTypeDef = getUnionTypeDef(typeDef, v)
-  const qualifier =
-    typeDef.discriminator == null ? '' : `:${v[typeDef.discriminator]}`
-  internalFlattenValueChildren(
-    `${valuePath}${qualifier}`,
-    `${typePath}${qualifier}`,
-    childTypeDef,
-    v,
-    context,
-  )
-}
-
-export function getUnionTypeDef<T extends UnionTypeDef>(
-  typeDef: T,
-  v: ValueOfType<
-    ReadonlyTypeOfType<{
-      definition: T
-    }>
-  >,
-) {
-  if (typeDef.discriminator == null) {
-    // find either a literal who's prototype we match, or assume that
-    // we match the non-literal, or the literal value with no prototype, value
-    return reduce<string, TypeDef, null | TypeDef>(
-      typeDef.unions,
-      (acc, _k, t) => {
-        const valuePrototype =
-          t.type === TypeDefType.Literal ? valuePrototypeOf(t) : null
-        if (valuePrototype == null) {
-          if (acc == null) {
-            return t
-          }
-        } else if (valuePrototype.includes(v)) {
-          return t
-        }
-        return acc
-      },
-      null,
-    )
-  }
-  return typeDef.unions[v[typeDef.discriminator]]
 }

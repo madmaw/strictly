@@ -1,10 +1,7 @@
-import {
-  type booleanType,
-  type numberType,
-  type Validator,
-} from '@strictly/define'
+import { type Validator } from '@strictly/define'
 import { type Field } from 'types/Field'
 import { type FlattenedValidatorsOfFields } from 'types/FlattenedValidatorsOfFields'
+import { type z } from 'zod'
 
 const error = Symbol()
 type Error = typeof error
@@ -19,7 +16,7 @@ describe('FlattenedValidatorsOfFields', () => {
         a: 'b'
       },
       {
-        b: typeof numberType
+        b: z.ZodNumber
       },
       Fields
     >
@@ -38,8 +35,8 @@ describe('FlattenedValidatorsOfFields', () => {
         c: 'd'
       },
       {
-        b: typeof numberType
-        d: typeof booleanType
+        b: z.ZodNumber
+        d: z.ZodBoolean
       },
       FormFields
     >
@@ -59,8 +56,8 @@ describe('FlattenedValidatorsOfFields', () => {
         c: 'd'
       },
       {
-        b: typeof numberType
-        d: typeof booleanType
+        b: z.ZodNumber
+        d: z.ZodBoolean
       },
       FormFields
     >
@@ -81,7 +78,7 @@ describe('FlattenedValidatorsOfFields', () => {
         c: 'd'
       },
       {
-        b: typeof numberType
+        b: z.ZodNumber
       },
       FormFields
     >

@@ -1,173 +1,73 @@
-import {
-  map,
-  reduce,
-  UnexpectedImplementationError,
-  UnreachableError,
-} from '@strictly/base'
+import { map, reduce, UnreachableError } from '@strictly/base'
+import { nodeOf, optionOf } from 'types/node'
 import { type ReadonlyTypeOfType } from 'types/ReadonlyTypeOfType'
-import {
-  type StrictListTypeDef,
-  type StrictLiteralTypeDef,
-  type StrictObjectTypeDef,
-  type StrictObjectTypeDefFields,
-  type StrictRecordTypeDef,
-  type StrictType,
-  type StrictTypeDef,
-  type StrictUnionTypeDef,
-} from 'types/StrictType'
-import {
-  type ObjectFieldKey,
-  type TypeDef,
-  TypeDefType,
-  type UnionKey,
-} from 'types/Type'
+import { type Type } from 'types/Type'
 import { type ValueOfType } from 'types/ValueOfType'
-import { valuePrototypeOf } from 'types/valuePrototypeOf'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type AnyValueType = any
 
-export type Copier<R> = (v: AnyValueType, t: StrictTypeDef) => R
+export type Copier<R> = (v: AnyValueType, t: Type) => R
 
 export function copyTo<
-  T extends StrictType,
+  T extends Type,
   R extends ValueOfType<ReadonlyTypeOfType<T>>,
->(
-  { definition }: T,
-  value: ValueOfType<ReadonlyTypeOfType<T>>,
-  copier: Copier<R>,
-): R {
-  return internalCopyTo(definition, value, copier)
+>(t: T, value: ValueOfType<ReadonlyTypeOfType<T>>, copier: Copier<R>): R {
+  return internalCopyTo(t, value, copier)
 }
 
 /**
  * Creates a copy of the supplied value
- * @param def description of the object to create
+ * @param t description of the object to create
  * @param value the value to populate the object from
  * @returns a copy of the supplied value
  */
-function internalCopyTo<R>(
-  definition: TypeDef,
-  value: AnyValueType,
-  copier: Copier<R>,
-): R {
+function internalCopyTo<R>(t: Type, value: AnyValueType, copier: Copier<R>): R {
   if (typeof value === 'undefined') {
     // don't copy things that don't exist
     // oxlint-disable-next-line no-undefined, typescript/no-non-null-assertion -- propagate the missing value
     return undefined!
   }
-  switch (definition.type) {
-    case TypeDefType.Literal:
-      return copyLiteral(definition, value, copier)
-    case TypeDefType.List:
-      return copyList(definition, value, copier)
-    case TypeDefType.Record:
-      return copyRecord(definition, value, copier)
-    case TypeDefType.Object:
-      return copyObject(definition, value, copier)
-    case TypeDefType.Union:
-      return copyUnion(definition, value, copier)
+  const node = nodeOf(t)
+  switch (node.kind) {
+    case 'literal':
+      return copier(value, t)
+    case 'wrapper':
+      return value == null
+        ? copier(value, t)
+        : internalCopyTo(node.inner, value, copier)
+    case 'list': {
+      const { element } = node
+      const list = (value as AnyValueType[]).map((e) =>
+        internalCopyTo(element, e, copier),
+      )
+      return copier(list, t)
+    }
+    case 'record': {
+      const { value: valueType } = node
+      const record = map(value, (_key, v) =>
+        internalCopyTo(valueType, v, copier),
+      )
+      return copier(record, t)
+    }
+    case 'object': {
+      const record = reduce(
+        node.fields,
+        (acc, key, field) => {
+          const fieldValue = value[key]
+          acc[key] =
+            fieldValue == null
+              ? fieldValue
+              : internalCopyTo(field, fieldValue, copier)
+          return acc
+        },
+        {} as Record<string, AnyValueType>,
+      )
+      return copier(record, t)
+    }
+    case 'union':
+      return internalCopyTo(optionOf(node, value), value, copier)
     default:
-      throw new UnreachableError(definition)
+      throw new UnreachableError(node)
   }
-}
-
-function copyLiteral<R>(
-  typeDef: StrictLiteralTypeDef,
-  value: ValueOfType<{ definition: StrictLiteralTypeDef }>,
-  copier: Copier<R>,
-): R {
-  // mutable and immutable literals should be the same type
-  return copier(value, typeDef)
-}
-
-function copyList<R>(
-  typeDef: StrictListTypeDef,
-  arr: AnyValueType[],
-  copier: Copier<R>,
-): R {
-  const { elements } = typeDef
-  const list = arr.map((value) => internalCopyTo(elements, value, copier))
-  return copier(list, typeDef)
-}
-
-function copyRecord<R>(
-  typeDef: StrictRecordTypeDef,
-  value: AnyValueType,
-  copier: Copier<R>,
-): R {
-  const { valueTypeDef } = typeDef
-  const record = map(value, (_key, value) =>
-    internalCopyTo(valueTypeDef, value, copier),
-  )
-  return copier(record, typeDef)
-}
-
-function copyObjectFields<R, Extra extends Record<string, UnionKey>>(
-  fields: StrictObjectTypeDefFields,
-  value: Record<ObjectFieldKey, AnyValueType>,
-  copier: Copier<R>,
-  extra: Extra,
-): Record<ObjectFieldKey, AnyValueType> {
-  const record = reduce(
-    fields,
-    (acc, key, field: TypeDef) => {
-      const fieldValue = value[key]
-      acc[key] =
-        fieldValue == null
-          ? fieldValue
-          : internalCopyTo(field, fieldValue, copier)
-      return acc
-    },
-    extra as Record<string | number | symbol, AnyValueType>,
-  )
-  return record
-}
-
-function copyObject<R>(
-  typeDef: StrictObjectTypeDef,
-  value: AnyValueType,
-  copier: Copier<R>,
-): R {
-  const { fields } = typeDef
-  const record = copyObjectFields(fields, value, copier, {})
-  return copier(record, typeDef)
-}
-
-function copyUnion<R>(
-  typeDef: StrictUnionTypeDef,
-  value: AnyValueType,
-  copier: Copier<R>,
-): R {
-  const { discriminator, unions } = typeDef
-
-  // is it a discriminated union with a struct?
-  if (discriminator != null) {
-    const discriminatorValue = value[discriminator]
-    return internalCopyTo(unions[discriminatorValue], value, copier)
-  }
-
-  // is it a `<constant1> | <constant2> | X`? We can handle that
-  // a good example is when we `| null` something
-  const allTypeDefs = Object.values<TypeDef>(unions)
-  const variableTypeDefs = allTypeDefs.filter(
-    (typeDef: TypeDef) =>
-      typeDef.type !== TypeDefType.Literal || valuePrototypeOf(typeDef) == null,
-  )
-  if (variableTypeDefs.length <= 1) {
-    // can handle up to one non-constant value
-    const targetTypeDef =
-      allTypeDefs.find(
-        (typeDef) =>
-          typeDef.type === TypeDefType.Literal &&
-          valuePrototypeOf(typeDef)?.includes(value),
-      ) ?? variableTypeDefs[0]
-    return internalCopyTo(targetTypeDef, value, copier)
-  }
-
-  // oh dear!
-  // this should have caused a type error already
-  throw new UnexpectedImplementationError(
-    'unions must be strict in order to be copied',
-  )
 }

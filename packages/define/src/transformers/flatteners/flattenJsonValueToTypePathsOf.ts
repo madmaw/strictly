@@ -1,4 +1,4 @@
-import { type Type, type TypeDef } from 'types/Type'
+import { type Type } from 'types/Type'
 import { type ValueOfType } from 'types/ValueOfType'
 import {
   type AnyValueType,
@@ -7,7 +7,7 @@ import {
 } from './flattenValueTo'
 
 function mapTypePaths(
-  _t: TypeDef,
+  _t: Type,
   _value: AnyValueType,
   _set: Setter<AnyValueType>,
   typePath: string,

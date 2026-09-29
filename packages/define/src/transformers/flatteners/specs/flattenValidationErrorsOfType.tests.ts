@@ -2,9 +2,9 @@ import { flattenValidationErrorsOfType } from 'transformers/flatteners/flattenVa
 import { literal } from 'types/builders'
 import { type ValueToTypePathsOfType } from 'types/ValueToTypePathsOfType'
 
-describe('flattenValidationsOfType', () => {
+describe('flattenValidationErrorsOfType', () => {
   describe('literal', () => {
-    const type = literal<'a' | 'b' | 'c'>()
+    const type = literal<'a' | 'b' | 'c'>().narrow
     describe('failures', () => {
       const validators = {
         $: () => 'error',

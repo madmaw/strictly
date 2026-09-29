@@ -9,19 +9,19 @@ import {
   stringType,
   union,
 } from 'types/builders'
-import { type StrictTypeDef } from 'types/StrictType'
-import { TypeDefType } from 'types/Type'
+import { nodeOf } from 'types/node'
+import { type Type } from 'types/Type'
 
 describe('copyTo', () => {
-  function toString(v: AnyValueType, t: StrictTypeDef) {
-    if (t.type === TypeDefType.Literal) {
+  function toString(v: AnyValueType, t: Type) {
+    if (nodeOf(t).kind === 'literal') {
       return JSON.stringify(v)
     }
     return v
   }
 
   describe('literal', () => {
-    const type = literal<1>()
+    const type = literal<1>().narrow
     it('copies', () => {
       const c = copyTo(type, 1, toString)
       expect(c).toEqual('1')
@@ -29,18 +29,18 @@ describe('copyTo', () => {
   })
 
   describe('list', () => {
-    const typeDef = list(literal<number>())
+    const type = list(literal<number>()).narrow
     it('copies', () => {
-      const c = copyTo(typeDef, [1, 2, 3], toString)
+      const c = copyTo(type, [1, 2, 3], toString)
       expect(c).toEqual(['1', '2', '3'])
     })
   })
 
   describe('record', () => {
-    const typeDef = record<typeof numberType, 'a' | 'b'>(numberType)
+    const type = record<typeof numberType, 'a' | 'b'>(numberType).narrow
     it('copies', () => {
       const c = copyTo(
-        typeDef,
+        type,
         {
           a: 1,
           b: 2,
@@ -55,13 +55,13 @@ describe('copyTo', () => {
   })
 
   describe('object', () => {
-    const typeDef = object()
+    const type = object()
       .field('a', numberType)
       .field('b', booleanType)
-      .field('c', stringType)
+      .field('c', stringType).narrow
     it('copies', () => {
       const c = copyTo(
-        typeDef,
+        type,
         {
           a: 1,
           b: true,
@@ -79,29 +79,34 @@ describe('copyTo', () => {
 
   describe('union', () => {
     describe('non-discriminated', () => {
-      const typeDef = union()
+      const type = union()
         .or('0', list(numberType))
         .or('1', literal(['b']))
-        .or('2', literal([false]))
+        .or('2', literal([false])).narrow
       it('copies string literal', () => {
-        const c = copyTo(typeDef, 'b', toString)
+        const c = copyTo(type, 'b', toString)
         expect(c).toEqual('"b"')
       })
 
       it('copies boolean literal', () => {
-        const c = copyTo(typeDef, false, toString)
+        const c = copyTo(type, false, toString)
         expect(c).toEqual('false')
+      })
+
+      it('copies the non-literal option', () => {
+        const c = copyTo(type, [1, 2], toString)
+        expect(c).toEqual(['1', '2'])
       })
     })
 
     describe('discriminated', () => {
-      const typeDef = union('d')
+      const type = union('d')
         .or('a', object().field('x', numberType))
-        .or('b', object().field('y', booleanType))
+        .or('b', object().field('y', booleanType)).narrow
 
       it('copies', () => {
         const c = copyTo(
-          typeDef,
+          type,
           {
             d: 'a',
             x: 1,

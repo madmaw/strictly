@@ -1,4 +1,4 @@
-import { type SimplifyDeep } from 'type-fest'
+import { type Simplify } from 'type-fest'
 import {
   booleanType,
   list,
@@ -9,19 +9,21 @@ import {
   union,
 } from 'types/builders'
 import { type FlattenedTypesOfType } from 'types/FlattenedTypesOfType'
-import { type TypeDefType } from 'types/Type'
+import { type ReadonlyField } from 'types/Type'
+import { type ValueOfType } from 'types/ValueOfType'
+import { type ErrorsOfType, type Rules } from 'validation/rules'
+import { type z } from 'zod'
+
+type NumberSchema = z.ZodNumber & Rules<never, {}>
+type StringSchema = z.ZodString & Rules<never, {}>
+type BooleanSchema = z.ZodBoolean & Rules<never, {}>
 
 describe('FlattenedTypesOfType', () => {
   describe('literal', () => {
-    type T = FlattenedTypesOfType<typeof numberType._type, null>
+    type T = Simplify<FlattenedTypesOfType<typeof numberType.narrow, null>>
 
     type C = {
-      readonly $: {
-        readonly definition: {
-          readonly type: TypeDefType.Literal
-          readonly valuePrototype: [number]
-        }
-      }
+      readonly $: NumberSchema
     }
     it('equals expected type', () => {
       expectTypeOf<C>().toEqualTypeOf<T>()
@@ -29,17 +31,12 @@ describe('FlattenedTypesOfType', () => {
   })
 
   describe('list', () => {
-    const builder = list(numberType)
-    type T = SimplifyDeep<FlattenedTypesOfType<typeof builder._type, '*'>>
+    const t = list(numberType).narrow
+    type T = Simplify<FlattenedTypesOfType<typeof t, '*'>>
 
     type C = {
-      readonly $: SimplifyDeep<typeof builder._type>
-      readonly ['$.*']: {
-        readonly definition: {
-          readonly type: TypeDefType.Literal
-          readonly valuePrototype: [number]
-        }
-      }
+      readonly $: typeof t
+      readonly ['$.*']: NumberSchema
     }
     it('equals expected type', () => {
       expectTypeOf<C>().toEqualTypeOf<T>()
@@ -47,17 +44,12 @@ describe('FlattenedTypesOfType', () => {
   })
 
   describe('record', () => {
-    const builder = record<typeof numberType, 'a' | 'b'>(numberType)
-    type T = SimplifyDeep<FlattenedTypesOfType<typeof builder._type, '*'>>
+    const t = record<typeof numberType, 'a' | 'b'>(numberType).narrow
+    type T = Simplify<FlattenedTypesOfType<typeof t, '*'>>
 
     type C = {
-      readonly $: SimplifyDeep<typeof builder._type>
-      readonly ['$.*']: {
-        readonly definition: {
-          readonly type: TypeDefType.Literal
-          readonly valuePrototype: [number]
-        }
-      }
+      readonly $: typeof t
+      readonly ['$.*']: NumberSchema
     }
     it('equals expected type', () => {
       expectTypeOf<C>().toEqualTypeOf<T>()
@@ -66,58 +58,18 @@ describe('FlattenedTypesOfType', () => {
 
   describe('object', () => {
     describe('simple', () => {
-      const builder = object()
+      const t = object()
         .field('a', numberType)
         .optionalField('b', stringType)
         .readonlyField('c', booleanType)
-        .readonlyOptionalField('d', stringType)
-      type T = SimplifyDeep<FlattenedTypesOfType<typeof builder._type, null>>
+        .readonlyOptionalField('d', stringType).narrow
+      type T = Simplify<FlattenedTypesOfType<typeof t, null>>
       type C = {
-        readonly $: SimplifyDeep<typeof builder._type>
-        readonly ['$.a']: {
-          readonly definition: {
-            readonly type: TypeDefType.Literal
-            readonly valuePrototype: [number]
-          }
-        }
-        readonly ['$.b']: {
-          readonly definition: {
-            readonly discriminator: null
-            readonly type: TypeDefType.Union
-            readonly unions: {
-              readonly '0': {
-                readonly type: TypeDefType.Literal
-                readonly valuePrototype: [string]
-              }
-              readonly '1': {
-                readonly type: TypeDefType.Literal
-                readonly valuePrototype: [undefined]
-              }
-            }
-          }
-        }
-        readonly ['$.c']: {
-          readonly definition: {
-            readonly type: TypeDefType.Literal
-            readonly valuePrototype: [boolean]
-          }
-        }
-        readonly ['$.d']: {
-          readonly definition: {
-            readonly discriminator: null
-            readonly type: TypeDefType.Union
-            readonly unions: {
-              readonly '0': {
-                readonly type: TypeDefType.Literal
-                readonly valuePrototype: [string]
-              }
-              readonly '1': {
-                readonly type: TypeDefType.Literal
-                readonly valuePrototype: [undefined]
-              }
-            }
-          }
-        }
+        readonly $: typeof t
+        readonly ['$.a']: NumberSchema
+        readonly ['$.b']: z.ZodOptional<StringSchema>
+        readonly ['$.c']: ReadonlyField<BooleanSchema>
+        readonly ['$.d']: ReadonlyField<z.ZodOptional<StringSchema>>
       }
       it('equals expected type', () => {
         expectTypeOf<C>().toEqualTypeOf<T>()
@@ -125,31 +77,37 @@ describe('FlattenedTypesOfType', () => {
     })
 
     describe('optional', () => {
-      const builder = object().optionalField('a', stringType)
-      type T = SimplifyDeep<FlattenedTypesOfType<typeof builder._type, null>>
+      const t = object().optionalField('a', stringType).narrow
+      type T = Simplify<FlattenedTypesOfType<typeof t, null>>
 
       type C = {
-        readonly $: SimplifyDeep<typeof builder._type>
-        readonly '$.a': {
-          readonly definition: {
-            readonly discriminator: null
-            readonly type: TypeDefType.Union
-            readonly unions: {
-              readonly '0': {
-                readonly type: TypeDefType.Literal
-                readonly valuePrototype: [string]
-              }
-              readonly '1': {
-                readonly type: TypeDefType.Literal
-                readonly valuePrototype: [undefined]
-              }
-            }
-          }
-        }
+        readonly $: typeof t
+        readonly '$.a': z.ZodOptional<StringSchema>
       }
 
       it('equals expected type', () => {
         expectTypeOf<C>().toEqualTypeOf<T>()
+      })
+
+      it('has an optional value at the path', () => {
+        expectTypeOf<ValueOfType<T['$.a']>>().toEqualTypeOf<
+          string | undefined
+        >()
+      })
+    })
+
+    describe('rules', () => {
+      const t = object()
+        .field(
+          'a',
+          numberType.enforce((): 'a' => 'a'),
+        )
+        .field('b', numberType).narrow
+      type T = Simplify<FlattenedTypesOfType<typeof t, null>>
+
+      it('keeps the rules of each path', () => {
+        expectTypeOf<ErrorsOfType<T['$.a']>>().toEqualTypeOf<'a'>()
+        expectTypeOf<ErrorsOfType<T['$.b']>>().toEqualTypeOf<never>()
       })
     })
   })
@@ -158,25 +116,15 @@ describe('FlattenedTypesOfType', () => {
 describe('union', () => {
   describe('overlapping', () => {
     describe('non-discriminated', () => {
-      const builder = union()
+      const t = union()
         .or('x', object().field('a', booleanType))
-        .or('y', object().field('b', numberType))
-      type T = SimplifyDeep<FlattenedTypesOfType<typeof builder._type, null>>
+        .or('y', object().field('b', numberType)).narrow
+      type T = Simplify<FlattenedTypesOfType<typeof t, null>>
 
       type C = {
-        readonly $: SimplifyDeep<typeof builder._type>
-        readonly ['$.a']: {
-          readonly definition: {
-            readonly type: TypeDefType.Literal
-            readonly valuePrototype: [boolean]
-          }
-        }
-        readonly ['$.b']: {
-          readonly definition: {
-            readonly type: TypeDefType.Literal
-            readonly valuePrototype: [number]
-          }
-        }
+        readonly $: typeof t
+        readonly ['$.a']: BooleanSchema
+        readonly ['$.b']: NumberSchema
       }
 
       it('equals expected type', () => {
@@ -185,72 +133,17 @@ describe('union', () => {
     })
 
     describe('discriminated', () => {
-      const builder = union('x')
+      const t = union('x')
         .or('1', object().field('a', booleanType))
-        .or('2', object().field('a', numberType))
-      type T = SimplifyDeep<FlattenedTypesOfType<typeof builder._type, null>>
+        .or('2', object().field('a', numberType)).narrow
+      type T = Simplify<FlattenedTypesOfType<typeof t, null>>
 
       type C = {
-        readonly $: SimplifyDeep<typeof builder._type>
-        readonly ['$:1.a']: {
-          readonly definition: {
-            readonly type: TypeDefType.Literal
-            readonly valuePrototype: [boolean]
-          }
-        }
-        readonly ['$:2.a']: {
-          readonly definition: {
-            readonly type: TypeDefType.Literal
-            readonly valuePrototype: [number]
-          }
-        }
-      }
-      it('equals expected type', () => {
-        expectTypeOf<C>().toEqualTypeOf<T>()
-      })
-    })
-
-    describe('nested discriminated', () => {
-      const builder = union('x')
-        .or(
-          '1',
-          union('y')
-            .or('p', object().field('a', booleanType))
-            .or('q', object().field('a', stringType)),
-        )
-        .or(
-          '2',
-          union('z')
-            .or('r', object().field('b', numberType))
-            .or('s', object().field('c', stringType)),
-        )
-      type T = SimplifyDeep<FlattenedTypesOfType<typeof builder._type, null>>
-      type C = {
-        readonly $: SimplifyDeep<typeof builder._type>
-        readonly ['$:1:p.a']: {
-          readonly definition: {
-            readonly type: TypeDefType.Literal
-            readonly valuePrototype: [boolean]
-          }
-        }
-        readonly ['$:1:q.a']: {
-          readonly definition: {
-            readonly type: TypeDefType.Literal
-            readonly valuePrototype: [string]
-          }
-        }
-        readonly ['$:2:r.b']: {
-          readonly definition: {
-            readonly type: TypeDefType.Literal
-            readonly valuePrototype: [number]
-          }
-        }
-        readonly ['$:2:s.c']: {
-          readonly definition: {
-            readonly type: TypeDefType.Literal
-            readonly valuePrototype: [string]
-          }
-        }
+        readonly $: typeof t
+        readonly ['$:1.a']: BooleanSchema
+        readonly ['$:1.x']: z.ZodLiteral<'1'>
+        readonly ['$:2.a']: NumberSchema
+        readonly ['$:2.x']: z.ZodLiteral<'2'>
       }
       it('equals expected type', () => {
         expectTypeOf<C>().toEqualTypeOf<T>()

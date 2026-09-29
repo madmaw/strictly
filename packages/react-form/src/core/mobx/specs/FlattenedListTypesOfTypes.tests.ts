@@ -22,10 +22,10 @@ describe('FlattenedListTypesOfType', () => {
       .field('object', objectTypeDef)
       .field('union', unionTypeDef)
 
-    type F = FlattenedListTypesOfType<typeof typeDef._type>
+    type F = FlattenedListTypesOfType<typeof typeDef.narrow>
 
     type E = {
-      readonly '$.list': typeof listTypeDef._type
+      readonly '$.list': typeof listTypeDef.narrow
     }
 
     expectTypeOf<F>().toEqualTypeOf<E>()

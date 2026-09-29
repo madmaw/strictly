@@ -2,7 +2,7 @@ import {
   type Accessor,
   type FlattenedAccessorsOfType,
 } from 'types/FlattenedAccessorsOfType'
-import { type Type, type TypeDef } from 'types/Type'
+import { type Type } from 'types/Type'
 import { type ValueOfType } from 'types/ValueOfType'
 import {
   type AnyValueType,
@@ -11,7 +11,7 @@ import {
 } from './flattenValueTo'
 
 function mapAccessor(
-  _t: TypeDef,
+  _t: Type,
   value: AnyValueType,
   set: Setter<AnyValueType>,
 ): Accessor<AnyValueType> {

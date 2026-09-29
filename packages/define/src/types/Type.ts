@@ -1,106 +1,77 @@
-// NOTE: this file, in conjunction with the types that derive information from these types, pushes the
-// Typescript compiler to its absolute limit. It tends to be a death of 1000 cuts so no individual feature
-// breaks it. When combined they hit some threshold (memory? performance? time?) beyond which the compiler
-// gives up. To avoid problems try to follow these guidelines
-// 1. Keep types as simple as possible.
-// If you find yourself having to unwrap a bunch of boolean flags (for example) you're probably going to encounter issues
-// 2. Only expose externally, and pass internally, the absolute minimum information information you need
-// TS tends to get overwhelmed, where you can, narrow the types that are being returned to just the information
-// the caller needs
-// 3. Take advantage of helper functions to hide complexity/fragility from client code
-// 4. Manually unroll complex operations
-// Typescript can choke on things like the below, however you can manually do a full implementation where you
-// check each type and return the appropriate value, and that seems to work.
-// ```
-// type HomogeneousFattenedValue<T extends TypeDef, V> = { [K in keyof FlattenedOf<T>]?: V }
-// ```
-// 5. Use longhand { [s: string]: number } instead of Record<string, number> when doing transformations and
-// defining types
+import { type z } from 'zod'
 
-export type Type<T extends TypeDef = TypeDef> = {
-  readonly definition: T
+/**
+ * Any Zod schema. Definitions in this package are ordinary Zod schemas, optionally carrying
+ * extra type information (rules, readonly fields) that Zod itself ignores
+ */
+export type Type = z.core.SomeType
+
+declare const readonlyFieldBrand: unique symbol
+
+/**
+ * Marks the schema of an object field as not reassignable. Distinct from `z.readonly`, which makes the
+ * value itself readonly: a readonly field can hold a mutable value and vice versa
+ */
+export type ReadonlyField<T extends Type = Type> = T & {
+  readonly [readonlyFieldBrand]: true
 }
 
-export type TypeDef =
-  | LiteralTypeDef
-  | ListTypeDef
-  | RecordTypeDef
-  | ObjectTypeDef
-  | UnionTypeDef
+export type IsReadonlyField<T> = T extends ReadonlyField
+  ? true
+  : Unwrap<T> extends ReadonlyField
+    ? true
+    : false
 
-export enum TypeDefType {
-  Literal = 1,
-  List = 2,
-  Record = 3,
-  Object = 4,
-  Union = 5,
-}
+/**
+ * Removes the wrappers that do not change the structure of the value
+ */
+export type Unwrap<T> =
+  T extends z.ZodOptional<infer I>
+    ? Unwrap<I>
+    : T extends z.ZodNullable<infer I>
+      ? Unwrap<I>
+      : T extends z.ZodReadonly<infer I>
+        ? Unwrap<I>
+        : T extends z.ZodDefault<infer I>
+          ? Unwrap<I>
+          : T
 
-// used to avoid TS complaining about circular references
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type AnyTypeDef = any
+export type IsOptionalField<T> = T extends z.ZodOptional ? true : false
 
-// literal
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type LiteralTypeDef<V = any> = {
-  readonly type: TypeDefType.Literal
-  readonly valuePrototype: [V]
-}
+/**
+ * The options of a discriminated union, keyed by the literal value of the discriminator
+ */
+export type OptionsOfDiscriminatedUnion<
+  Options extends readonly unknown[],
+  Discriminator extends string,
+> = UnionToIntersectionOfOptions<
+  {
+    [I in keyof Options]: DiscriminatorValueOf<
+      Options[I],
+      Discriminator
+    > extends infer L
+      ? L extends string
+        ? { readonly [K in L]: Options[I] }
+        : never
+      : never
+  }[number]
+>
 
-// list
-export type ListTypeDef<E extends TypeDef = AnyTypeDef> = {
-  readonly type: TypeDefType.List
-  // readonly is inherited by the output
-  readonly elements: E
-}
+/**
+ * The value of the discriminator in an option, which is the same on every option of a nested
+ * discriminated union
+ */
+type DiscriminatorValueOf<Option, Discriminator extends string> =
+  Unwrap<Option> extends z.ZodObject<infer Shape>
+    ? Shape[Discriminator] extends z.ZodLiteral<infer L>
+      ? L
+      : never
+    : Unwrap<Option> extends z.ZodDiscriminatedUnion<infer Options, string>
+      ? DiscriminatorValueOf<Options[number], Discriminator>
+      : never
 
-// map
-export type RecordKeyType = string | number
-
-// might be able to combine map and list into a single "homogeneous" type def with an implementation
-// hint, which might help with performance
-export type RecordTypeDef<
-  K extends RecordKeyType = RecordKeyType,
-  // if `V` includes `undefined` the map is partial
-  V extends TypeDef | undefined = AnyTypeDef,
-> = {
-  readonly type: TypeDefType.Record
-  // never actually populate
-  readonly keyPrototype: K
-  // readonly is inherited by the output
-  readonly valueTypeDef: V
-}
-
-// object type
-// could be replaced with a map and an intersection
-export type ObjectFieldKey = string
-
-// NOTE we use the `readonly` and `?` (partial) status of these field definitions
-// to describe the same attributes of the fields
-export type ObjectTypeDefFields = {
-  [Key: ObjectFieldKey]: AnyTypeDef
-}
-
-// NOTE: we cannot collapse this type to
-// `StructuredTypeDef = StructuredTypeDefFields`
-// as we rely on the `fields` field being unique to discriminate between different
-// TypeDefs
-export type ObjectTypeDef<
-  Fields extends ObjectTypeDefFields = ObjectTypeDefFields,
-> = {
-  readonly type: TypeDefType.Object
-  readonly fields: Fields
-}
-
-export type UnionKey = string
-
-export type UnionTypeDef<
-  D extends string | null = string | null,
-  U extends Readonly<Record<UnionKey, AnyTypeDef>> = Readonly<
-    Record<UnionKey, AnyTypeDef>
-  >,
-> = {
-  readonly discriminator: D
-  readonly type: TypeDefType.Union
-  readonly unions: U
-}
+type UnionToIntersectionOfOptions<U> = (
+  U extends unknown ? (u: U) => void : never
+) extends (u: infer I) => void
+  ? I
+  : never
