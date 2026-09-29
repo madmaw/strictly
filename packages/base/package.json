@@ -43,7 +43,7 @@
     "check-types": "tsc -b",
     "clean": "del-cli dist .out",
     "test": "vp test run --configLoader runner",
-    "test:watch": "vp test --configLoader runner"
+    "test:watch": "vp test watch --configLoader runner"
   },
   "type": "module",
   "version": "0.0.41"

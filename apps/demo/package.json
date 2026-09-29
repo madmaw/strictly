@@ -52,11 +52,10 @@
     "preview": "vp preview",
     "storybook": "storybook dev",
     "storybook:build": "storybook build",
-    "test": "pnpm vitest:run --project=unit/*",
-    "test:storybook": "pnpm exec playwright install chromium && pnpm vitest:run --project=storybook/test",
-    "test:update": "pnpm vitest:run -u --project=unit/*",
-    "test:watch": "pnpm vitest:run --watch --project=unit/*",
-    "vitest:run": "vp test run --configLoader runner"
+    "test": "vp test run --configLoader runner --project=unit/*",
+    "test:storybook": "pnpm exec playwright install chromium && vp test run --configLoader runner --project=storybook/test",
+    "test:update": "vp test run --configLoader runner -u --project=unit/*",
+    "test:watch": "vp test watch --configLoader runner --project=unit/*"
   },
   "type": "module",
   "version": "0.0.41"

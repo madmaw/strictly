@@ -35,9 +35,9 @@
     "lint:fix": "vp check --fix",
     "react-form:storybook": "pnpm -r --filter @strictly/react-form storybook",
     "storybook:build": "pnpm -r storybook:build",
-    "test": "pnpm -r test",
-    "test:storybook": "pnpm -r --workspace-concurrency=1 test:storybook",
-    "test:update": "pnpm -r test:update"
+    "test": "vp run -r test",
+    "test:storybook": "vp run -r --concurrency-limit 1 test:storybook",
+    "test:update": "vp run -r test:update"
   },
   "type": "module",
   "version": "0.0.41"
