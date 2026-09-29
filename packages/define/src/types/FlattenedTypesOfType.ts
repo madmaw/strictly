@@ -1,6 +1,5 @@
 import { type UnionToIntersection } from 'type-fest'
 import { type z } from 'zod'
-import { type Depths, type StartingDepth } from './flattened'
 import { type PathOf } from './PathOf'
 import { type IsReadonlyType, type ReadonlyBrand } from './ReadonlyTypeOfType'
 import {
@@ -15,8 +14,7 @@ export type FlattenedTypesOfType<
   T extends Type,
   SegmentOverride extends string | null,
   Path extends string = '$',
-  Depth extends number = StartingDepth,
-> = InternalFlattenedTypesOf<T, SegmentOverride, Path, Depth, IsReadonlyType<T>>
+> = InternalFlattenedTypesOf<T, SegmentOverride, Path, IsReadonlyType<T>>
 
 type Branded<T, R extends boolean> = R extends true ? T & ReadonlyBrand : T
 
@@ -24,75 +22,62 @@ type InternalFlattenedTypesOf<
   T,
   SegmentOverride extends string | null,
   Path extends string,
-  Depth extends number,
   R extends boolean,
 > = {
   readonly [K in Path]: Branded<T, R>
-} & InternalFlattenedTypesOfChildren<Unwrap<T>, SegmentOverride, Path, Depth, R>
+} & InternalFlattenedTypesOfChildren<Unwrap<T>, SegmentOverride, Path, R>
 
 export type InternalFlattenedTypesOfChildren<
   T,
   SegmentOverride extends string | null,
   Path extends string,
-  Depth extends number,
   R extends boolean,
-  NextDepth extends number = Depths[Depth],
 > =
-  // resolve anything too deep to `never` instead of to {} so the caller knows
-  // it has explicitly failed
-  NextDepth extends -1
-    ? never
-    : T extends z.ZodArray<infer E>
+  T extends z.ZodArray<infer E>
+    ? InternalFlattenedTypesOf<
+        E,
+        SegmentOverride,
+        PathOf<Path, number, SegmentOverride>,
+        R
+      >
+    : T extends z.ZodRecord<infer K, infer V>
       ? InternalFlattenedTypesOf<
-          E,
+          V,
           SegmentOverride,
-          PathOf<Path, number, SegmentOverride>,
-          NextDepth,
+          PathOf<
+            Path,
+            K['_zod']['output'] & (string | number),
+            SegmentOverride
+          >,
           R
         >
-      : T extends z.ZodRecord<infer K, infer V>
-        ? InternalFlattenedTypesOf<
-            V,
+      : T extends z.ZodObject<infer Shape>
+        ? InternalFlattenedTypesOfObjectChildren<
+            Shape,
             SegmentOverride,
-            PathOf<
-              Path,
-              K['_zod']['output'] & (string | number),
-              SegmentOverride
-            >,
-            NextDepth,
+            Path,
             R
           >
-        : T extends z.ZodObject<infer Shape>
-          ? InternalFlattenedTypesOfObjectChildren<
-              Shape,
+        : T extends z.ZodDiscriminatedUnion<infer Options, infer D>
+          ? InternalFlattenedTypesOfDiscriminatedUnionChildren<
+              OptionsOfDiscriminatedUnion<Options, D>,
               SegmentOverride,
               Path,
-              NextDepth,
               R
             >
-          : T extends z.ZodDiscriminatedUnion<infer Options, infer D>
-            ? InternalFlattenedTypesOfDiscriminatedUnionChildren<
-                OptionsOfDiscriminatedUnion<Options, D>,
+          : T extends z.ZodUnion<infer Options>
+            ? InternalFlattenedTypesOfUnionChildren<
+                Options[number],
                 SegmentOverride,
                 Path,
-                NextDepth,
                 R
               >
-            : T extends z.ZodUnion<infer Options>
-              ? InternalFlattenedTypesOfUnionChildren<
-                  Options[number],
-                  SegmentOverride,
-                  Path,
-                  NextDepth,
-                  R
-                >
-              : {}
+            : {}
 
 type InternalFlattenedTypesOfObjectChildren<
   Shape,
   SegmentOverride extends string | null,
   Path extends string,
-  Depth extends number,
   R extends boolean,
 > = keyof Shape extends string
   ? UnionToIntersection<
@@ -101,7 +86,6 @@ type InternalFlattenedTypesOfObjectChildren<
           Shape[K],
           SegmentOverride,
           PathOf<Path, K, null>,
-          Depth,
           R
         >
       }[keyof Shape]
@@ -112,7 +96,6 @@ type InternalFlattenedTypesOfDiscriminatedUnionChildren<
   Options,
   SegmentOverride extends string | null,
   Path extends string,
-  Depth extends number,
   R extends boolean,
 > = UnionToIntersection<
   {
@@ -120,7 +103,6 @@ type InternalFlattenedTypesOfDiscriminatedUnionChildren<
       Unwrap<Options[K]>,
       SegmentOverride,
       `${Path}:${K}`,
-      Depth,
       R
     >
   }[keyof Options & string]
@@ -130,16 +112,9 @@ type InternalFlattenedTypesOfUnionChildren<
   Option,
   SegmentOverride extends string | null,
   Path extends string,
-  Depth extends number,
   R extends boolean,
 > = UnionToIntersection<
   Option extends unknown
-    ? InternalFlattenedTypesOfChildren<
-        Unwrap<Option>,
-        SegmentOverride,
-        Path,
-        Depth,
-        R
-      >
+    ? InternalFlattenedTypesOfChildren<Unwrap<Option>, SegmentOverride, Path, R>
     : never
 >

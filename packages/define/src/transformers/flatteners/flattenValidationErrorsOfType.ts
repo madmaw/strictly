@@ -3,7 +3,7 @@ import {
   flattenValueTo,
   type Setter,
 } from 'transformers/flatteners/flattenValueTo'
-import { type ReadonlyDeep, type ValueOf } from 'type-fest'
+import { type ValueOf } from 'type-fest'
 import { type FlattenedTypesOfType } from 'types/FlattenedTypesOfType'
 import { type FlattenedValuesOfType } from 'types/FlattenedValuesOfType'
 import { type ReadonlyTypeOfType } from 'types/ReadonlyTypeOfType'
@@ -25,11 +25,12 @@ export type FlattenedTypePathsToValidatorsOf<
   FlattenedValues extends Readonly<Record<string, any>>,
   Context,
 > = {
-  readonly [
-    K in keyof FlattenedValues // TODO would be better to use the equivalent readonly typedef, but it causes typescript to
-  ]?: // infinitely recurse
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  Validator<ReadonlyDeep<FlattenedValues[K]>, any, any, Context>
+  readonly [K in keyof FlattenedValues]?: Validator<
+    FlattenedValues[K],
+    any, // oxlint-disable-line typescript/no-explicit-any
+    any, // oxlint-disable-line typescript/no-explicit-any
+    Context
+  >
 }
 
 export type ValuePathsToValidatorsOf<
@@ -60,7 +61,7 @@ export function flattenValidationErrorsOfType<
   T extends Type,
   ValueToTypePaths extends Readonly<Record<string, string>>,
   TypePathsToValidators extends FlattenedTypePathsToValidatorsOf<
-    FlattenedValuesOfType<T, '*'>,
+    FlattenedValuesOfType<ReadonlyTypeOfType<T>, '*'>,
     ValueOfType<ReadonlyTypeOfType<T>>
   >,
   ValuePathsToValidators extends ValuePathsToValidatorsOf<

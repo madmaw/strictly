@@ -1,6 +1,5 @@
 import { type SimplifyDeep, type UnionToIntersection } from 'type-fest'
 import { type z } from 'zod'
-import { type Depths, type StartingDepth } from './flattened'
 import { type PathOf } from './PathOf'
 import {
   type OptionsOfDiscriminatedUnion,
@@ -12,24 +11,20 @@ export type ValueToTypePathsOfType<
   T extends Type,
   SegmentOverride extends string = '*',
   Path extends string = '$',
-> = SimplifyDeep<
-  InternalFlattenedTypePathsOf<T, SegmentOverride, Path, Path, StartingDepth>
->
+> = SimplifyDeep<InternalFlattenedTypePathsOf<T, SegmentOverride, Path, Path>>
 
 type InternalFlattenedTypePathsOf<
   T,
   SegmentOverride extends string,
   ValuePath extends string,
   TypePath extends string,
-  Depth extends number,
 > = {
   readonly [K in ValuePath]: TypePath
 } & InternalFlattenedTypePathsOfChildren<
   Unwrap<T>,
   SegmentOverride,
   ValuePath,
-  TypePath,
-  Depth
+  TypePath
 >
 
 type InternalFlattenedTypePathsOfChildren<
@@ -37,17 +32,13 @@ type InternalFlattenedTypePathsOfChildren<
   SegmentOverride extends string,
   ValuePath extends string,
   TypePath extends string,
-  Depth extends number,
-  NextDepth extends number = Depths[Depth],
-> = NextDepth extends -1
-  ? never
-  : T extends z.ZodArray<infer E>
+> =
+  T extends z.ZodArray<infer E>
     ? InternalFlattenedTypePathsOf<
         E,
         SegmentOverride,
         PathOf<ValuePath, number>,
-        PathOf<TypePath, number, SegmentOverride>,
-        NextDepth
+        PathOf<TypePath, number, SegmentOverride>
       >
     : T extends z.ZodRecord<infer K, infer V>
       ? InternalFlattenedTypePathsOf<
@@ -58,32 +49,28 @@ type InternalFlattenedTypePathsOfChildren<
             TypePath,
             K['_zod']['output'] & (string | number),
             SegmentOverride
-          >,
-          NextDepth
+          >
         >
       : T extends z.ZodObject<infer Shape>
         ? InternalFlattenedTypePathsOfObjectChildren<
             Shape,
             SegmentOverride,
             ValuePath,
-            TypePath,
-            NextDepth
+            TypePath
           >
         : T extends z.ZodDiscriminatedUnion<infer Options, infer D>
           ? InternalFlattenedTypePathsOfDiscriminatedUnionChildren<
               OptionsOfDiscriminatedUnion<Options, D>,
               SegmentOverride,
               ValuePath,
-              TypePath,
-              NextDepth
+              TypePath
             >
           : T extends z.ZodUnion<infer Options>
             ? InternalFlattenedTypePathsOfUnionChildren<
                 Options[number],
                 SegmentOverride,
                 ValuePath,
-                TypePath,
-                NextDepth
+                TypePath
               >
             : {}
 
@@ -92,7 +79,6 @@ type InternalFlattenedTypePathsOfObjectChildren<
   SegmentOverride extends string,
   ValuePath extends string,
   TypePath extends string,
-  Depth extends number,
 > = keyof Shape extends string
   ? UnionToIntersection<
       {
@@ -100,8 +86,7 @@ type InternalFlattenedTypePathsOfObjectChildren<
           Shape[K],
           SegmentOverride,
           PathOf<ValuePath, K>,
-          PathOf<TypePath, K>,
-          Depth
+          PathOf<TypePath, K>
         >
       }[keyof Shape]
     >
@@ -112,7 +97,6 @@ type InternalFlattenedTypePathsOfDiscriminatedUnionChildren<
   SegmentOverride extends string,
   ValuePath extends string,
   TypePath extends string,
-  Depth extends number,
 > = UnionToIntersection<
   {
     readonly [
@@ -121,8 +105,7 @@ type InternalFlattenedTypePathsOfDiscriminatedUnionChildren<
       Unwrap<Options[K]>,
       SegmentOverride,
       `${ValuePath}:${K}`,
-      `${TypePath}:${K}`,
-      Depth
+      `${TypePath}:${K}`
     >
   }[keyof Options & string]
 >
@@ -132,15 +115,13 @@ type InternalFlattenedTypePathsOfUnionChildren<
   SegmentOverride extends string,
   ValuePath extends string,
   TypePath extends string,
-  Depth extends number,
 > = UnionToIntersection<
   Option extends unknown
     ? InternalFlattenedTypePathsOfChildren<
         Unwrap<Option>,
         SegmentOverride,
         ValuePath,
-        TypePath,
-        Depth
+        TypePath
       >
     : never
 >

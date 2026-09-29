@@ -36,7 +36,6 @@ import {
 } from 'mobx'
 import {
   type KeyAsString,
-  type ReadonlyDeep,
   type SimplifyDeep,
   type UnionToIntersection,
   type ValueOf,
@@ -68,11 +67,13 @@ export type FlattenedTypePathsToAdaptersOf<
   FlattenedValues extends Readonly<Record<string, any>>,
   Context,
 > = {
-  readonly [
-    K in keyof FlattenedValues // TODO would be better to use the equivalent readonly typedef, but it causes typescript to
-  ]?: // infinitely recurse
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  FieldAdapter<ReadonlyDeep<FlattenedValues[K]>, any, any, any, Context>
+  readonly [K in keyof FlattenedValues]?: FieldAdapter<
+    FlattenedValues[K],
+    any, // oxlint-disable-line typescript/no-explicit-any
+    any, // oxlint-disable-line typescript/no-explicit-any
+    any, // oxlint-disable-line typescript/no-explicit-any
+    Context
+  >
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -151,7 +152,7 @@ export abstract class FormModel<
   T extends Type,
   ValueToTypePaths extends Readonly<Record<string, string>>,
   TypePathsToAdapters extends FlattenedTypePathsToAdaptersOf<
-    FlattenedValuesOfType<T, '*'>,
+    FlattenedValuesOfType<ReadonlyTypeOfType<T>, '*'>,
     ContextType
   >,
   ContextType = ContextOf<TypePathsToAdapters>,

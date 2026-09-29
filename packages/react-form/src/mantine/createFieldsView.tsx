@@ -91,7 +91,7 @@ export function createFieldsView<
         Record<string, unknown>
       >(
         (acc, [fieldKey, fieldValue]) => {
-          if (fieldKey.startsWith(valuePath as string)) {
+          if (fieldKey.startsWith(valuePath)) {
             acc[toSubKey(fieldKey)] = fieldValue
           }
           return acc
