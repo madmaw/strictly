@@ -1,39 +1,7 @@
-import { createWorkspaceOxlintConfig } from '@strictly/oxlint'
-import { existsSync, readdirSync, readFileSync } from 'node:fs'
-import { join } from 'node:path'
+import { createOxlintConfig } from '@strictly/oxlint'
 import { defineConfig } from 'vite-plus'
-import rootBuildProject from './tsconfig.build.json' with { type: 'json' }
 
-const rootDir = import.meta.dirname
-
-function readProject(file: string) {
-  if (!existsSync(file)) {
-    return
-  }
-  return JSON.parse(readFileSync(file, 'utf8')) as Record<string, unknown>
-}
-
-// every workspace package with a tsconfig gets its own lint overrides, as vite plus ignores nested lint configs
-const packages = ['apps', 'packages', 'support']
-  .flatMap((group) =>
-    readdirSync(join(rootDir, group), { withFileTypes: true })
-      .filter((entry) => entry.isDirectory())
-      .map((entry) => `${group}/${entry.name}`),
-  )
-  .filter((dir) => existsSync(join(rootDir, dir, 'tsconfig.json')))
-  .map((dir) => ({
-    dir,
-    mainProject: readProject(join(rootDir, dir, 'tsconfig.json')),
-    otherProjects: [
-      readProject(join(rootDir, dir, 'tsconfig.build.json')),
-    ].filter((project) => project != null),
-  }))
-
-const lint = createWorkspaceOxlintConfig({
-  packages,
-  rootDir,
-  rootProjects: [rootBuildProject],
-})
+const lint = createOxlintConfig()
 
 export default defineConfig({
   lint: {

@@ -1,21 +1,8 @@
-import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { defineConfig, type OxlintConfig, type OxlintOverride } from 'oxlint'
 
 // NOTE: this file is loaded directly by oxlint via node's type stripping, so it must not use any typescript syntax that
 // requires transformation (enums, namespaces, parameter properties, etc...)
-
-type TSConfigProject = Partial<{
-  readonly compilerOptions: Partial<{
-    readonly paths: {
-      readonly '*'?: readonly string[]
-    }
-    readonly [_: string]: unknown
-  }>
-  readonly include: readonly string[]
-  readonly exclude: readonly string[]
-  readonly [_: string]: unknown
-}>
 
 type Restriction = {
   readonly message: string
@@ -231,67 +218,23 @@ const TEST_HELPER_IMPORT_NAMES = [
   'expectTruthy',
 ]
 
-const PATH_REGEX = /^\.\/(.*)\/\*$/
-function extractSrcFolder(project: TSConfigProject | undefined) {
-  const src = project?.compilerOptions?.paths?.['*']?.[0]
-  if (src == null) {
-    return
-  }
-  const maybePath = PATH_REGEX.exec(src)
-  if (maybePath == null || maybePath.length < 2) {
-    return src
-  }
-  return maybePath[1]
-}
-
-function toGlobs(includes: readonly string[]) {
-  return includes
-    .flatMap((f) => {
-      // assume it's a file with an extension
-      if (f.includes('.')) {
-        return [f]
-      }
-      const dir = f.endsWith('/') ? f : `${f}/`
-      return [
-        `${dir}**/*.ts`,
-        `${dir}**/*.tsx`,
-        `${dir}**/*.mts`,
-        `${dir}**/*.astro`,
-      ]
-    })
-    .filter(
-      (f) =>
-        f.endsWith('.ts') ||
-        f.endsWith('.mts') ||
-        f.endsWith('.tsx') ||
-        f.endsWith('.astro'),
-    )
-}
-
 export type CreateOxlintConfigOptions = {
-  // the absolute path of the directory containing the oxlint config (and the tsconfigs)
-  readonly rootDir: string
+  // the source folder of every package, relative to the package
   readonly srcFolder?: string
-  readonly mainProject?: TSConfigProject
-  readonly otherProjects?: readonly TSConfigProject[]
   // regex of additional hooks to check for exhaustive dependencies
   readonly additionalHooks?: string
 }
 
+/**
+ * One configuration for the whole workspace: every package keeps its sources under the same folder, and the rules
+ * that need the package root find it from the file being linted
+ */
 export function createOxlintConfig({
-  rootDir,
-  mainProject,
-  srcFolder = extractSrcFolder(mainProject) ?? '.',
-  otherProjects = [],
+  srcFolder = 'src',
   additionalHooks = '(usePartialComponent|usePartialObserverComponent|useWhen|useReaction|useAutorun|useObserverComponent|useConstant|useDeferredConstant)',
-}: CreateOxlintConfigOptions): OxlintConfig {
-  const allProjects = [
-    ...(mainProject == null ? [] : [mainProject]),
-    ...otherProjects,
-  ]
-
+}: CreateOxlintConfigOptions = {}): OxlintConfig {
   const ignorePatterns = [
-    ...allProjects.flatMap(({ exclude }) => exclude ?? []),
+    '**/.astro/**',
     '**/.out/**',
     '**/dist/**',
     '**/node_modules/**',
@@ -300,21 +243,18 @@ export function createOxlintConfig({
     '**/*.d.ts',
   ]
 
-  const mainFiles = toGlobs(mainProject?.include ?? [])
-  const sourceFiles =
-    srcFolder === '.'
-      ? mainFiles
-      : mainFiles.filter((f) => f.startsWith(srcFolder))
+  const sourceFiles = ['ts', 'tsx', 'mts', 'astro'].map(
+    (extension) => `**/${srcFolder}/**/*.${extension}`,
+  )
   const specsFiles = [
-    `${srcFolder}/**/specs/*.ts`,
-    `${srcFolder}/**/specs/*.tsx`,
+    `**/${srcFolder}/**/specs/*.ts`,
+    `**/${srcFolder}/**/specs/*.tsx`,
   ]
-  const storybookFiles = [`${srcFolder}/**/specs/*.stories.tsx`]
+  const storybookFiles = [`**/${srcFolder}/**/specs/*.stories.tsx`]
   const testFiles = [
-    `${srcFolder}/**/specs/*.tests.ts`,
-    `${srcFolder}/**/specs/*.tests.tsx`,
+    `**/${srcFolder}/**/specs/*.tests.ts`,
+    `**/${srcFolder}/**/specs/*.tests.tsx`,
   ]
-  const absoluteSrcFolder = path.resolve(rootDir, srcFolder)
 
   function noRestrictedImports(
     paths: readonly RestrictedImportPath[],
@@ -343,7 +283,7 @@ export function createOxlintConfig({
           'error',
           {
             allowSameFolder: true,
-            rootDir: absoluteSrcFolder,
+            srcFolder,
           },
         ],
         'import/no-default-export': 'error',
@@ -418,7 +358,7 @@ export function createOxlintConfig({
             // let storybook and unit tests reference their parents relatively to make moving the files around easier
             allowedDepth: 1,
             allowSameFolder: true,
-            rootDir: absoluteSrcFolder,
+            srcFolder,
           },
         ],
         'strictly/restricted-syntax': [
@@ -837,76 +777,4 @@ export function createOxlintConfig({
     },
     overrides,
   })
-}
-
-export type WorkspacePackage = {
-  // the package directory relative to the workspace root, e.g. `packages/base`
-  readonly dir: string
-  readonly mainProject?: TSConfigProject
-  readonly otherProjects?: readonly TSConfigProject[]
-}
-
-export type CreateWorkspaceOxlintConfigOptions = {
-  // the absolute path of the workspace root
-  readonly rootDir: string
-  // tsconfigs covering the files that live directly in the workspace root
-  readonly rootProjects?: readonly TSConfigProject[]
-  readonly packages: readonly WorkspacePackage[]
-}
-
-// vite plus reads a single lint configuration from the workspace root and ignores nested configs, so this combines
-// the per package configurations into one by prefixing their file patterns with the package directory
-function prefixGlobs(dir: string, globs: readonly string[] | undefined) {
-  return (globs ?? []).map((glob) => `${dir}/${glob}`)
-}
-
-export function createWorkspaceOxlintConfig({
-  rootDir,
-  rootProjects = [],
-  packages,
-}: CreateWorkspaceOxlintConfigOptions): OxlintConfig {
-  const root = createOxlintConfig({
-    otherProjects: rootProjects,
-    rootDir,
-  })
-  const packageGlobs = packages.map(({ dir }) => `${dir}/**`)
-  const packageConfigs = packages.map(
-    ({ dir, mainProject, otherProjects }) => ({
-      config: createOxlintConfig({
-        mainProject,
-        otherProjects,
-        rootDir: path.join(rootDir, dir),
-      }),
-      dir,
-    }),
-  )
-  const ignorePatterns = [
-    ...(root.ignorePatterns ?? []),
-    ...packageConfigs.flatMap(({ config, dir }) =>
-      (config.ignorePatterns ?? [])
-        // workspace wide patterns are already covered by the root
-        .filter((pattern) => !pattern.startsWith('**/'))
-        .map((pattern) => `${dir}/${pattern}`),
-    ),
-  ]
-  return {
-    ...root,
-    ignorePatterns: [...new Set(ignorePatterns)],
-    overrides: [
-      // the root overrides must not leak into the packages, which define their own
-      ...(root.overrides ?? []).map((override) => ({
-        ...override,
-        excludeFiles: [...(override.excludeFiles ?? []), ...packageGlobs],
-      })),
-      ...packageConfigs.flatMap(({ config, dir }) =>
-        (config.overrides ?? []).map((override) => ({
-          ...override,
-          files: prefixGlobs(dir, override.files),
-          ...(override.excludeFiles == null
-            ? {}
-            : { excludeFiles: prefixGlobs(dir, override.excludeFiles) }),
-        })),
-      ),
-    ],
-  }
 }

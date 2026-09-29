@@ -1,4 +1,5 @@
 /* oxlint-disable typescript/no-explicit-any -- oxlint does not export types for its plugin api */
+import { existsSync } from 'node:fs'
 import path from 'node:path'
 
 // NOTE: this file is loaded directly by oxlint via node's type stripping, so it must not use any typescript syntax that
@@ -12,8 +13,28 @@ type Restriction = {
 type NoRelativeImportPathsOptions = {
   readonly allowSameFolder?: boolean
   readonly allowedDepth?: number
-  // absolute path to the source folder
-  readonly rootDir: string
+  // the source folder, relative to the package (the nearest ancestor of the linted file holding a package.json)
+  readonly srcFolder?: string
+}
+
+const packageRoots = new Map<string, string | null>()
+
+// the directory of the nearest package.json above the given directory
+function findPackageRoot(dir: string): string | null {
+  if (packageRoots.has(dir)) {
+    return packageRoots.get(dir) ?? null
+  }
+  const parent = path.dirname(dir)
+  let root: string | null
+  if (existsSync(path.join(dir, 'package.json'))) {
+    root = dir
+  } else if (parent === dir) {
+    root = null
+  } else {
+    root = findPackageRoot(parent)
+  }
+  packageRoots.set(dir, root)
+  return root
 }
 
 // oxlint doesn't ship `no-restricted-syntax`, so we implement the same behaviour as a JS plugin using esquery selectors
@@ -46,8 +67,8 @@ function getRelativePathDepth(importPath: string) {
   return depth
 }
 
-// port of eslint-plugin-no-relative-import-paths that takes an absolute root directory so it behaves the same regardless
-// of the working directory oxlint was launched from
+// port of eslint-plugin-no-relative-import-paths that resolves the source root from the linted file's package, so one
+// configuration serves every package in the workspace regardless of the working directory oxlint was launched from
 const noRelativeImportPaths = {
   meta: {
     fixable: 'code',
@@ -57,7 +78,7 @@ const noRelativeImportPaths = {
         properties: {
           allowSameFolder: { type: 'boolean' },
           allowedDepth: { type: 'number' },
-          rootDir: { type: 'string' },
+          srcFolder: { type: 'string' },
         },
         additionalProperties: false,
       },
@@ -67,11 +88,16 @@ const noRelativeImportPaths = {
     const {
       allowSameFolder = false,
       allowedDepth,
-      rootDir,
-    }: NoRelativeImportPathsOptions = context.options[0]
+      srcFolder = 'src',
+    }: NoRelativeImportPathsOptions = context.options[0] ?? {}
     const filename: string = context.filename ?? context.getFilename()
     const fileDir = path.dirname(filename)
-    const rootPrefix = rootDir.endsWith(path.sep) ? rootDir : rootDir + path.sep
+    const packageRoot = findPackageRoot(fileDir)
+    if (packageRoot == null) {
+      return {}
+    }
+    const rootDir = path.join(packageRoot, srcFolder)
+    const rootPrefix = rootDir + path.sep
 
     function check(node: any, source: any) {
       const importPath: unknown = source?.value
