@@ -1,6 +1,7 @@
 {
   "devDependencies": {
-    "@lingui/cli": "catalog:"
+    "@lingui/cli": "catalog:",
+    "@strictly/typescript": "workspace:*"
   },
   "license": "MIT",
   "main": "src/index.ts",

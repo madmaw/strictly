@@ -1,12 +1,5 @@
 {
-  "compilerOptions": {
-    "composite": false,
-    "incremental": false,
-    "module": "ESNext",
-    "moduleResolution": "bundler",
-    "noEmit": true
-  },
-  "extends": "./tsconfig.json",
+  "extends": "@strictly/typescript/build.json",
   "include": [".vscode", "vite.config.ts"],
   "references": []
 }

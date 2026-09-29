@@ -8,6 +8,7 @@
     "@storybook/react-vite": "catalog:",
     "@strictly/base": "workspace:*",
     "@strictly/define": "workspace:*",
+    "@strictly/typescript": "workspace:*",
     "@strictly/vite": "workspace:*",
     "@testing-library/dom": "catalog:",
     "@testing-library/react": "catalog:",

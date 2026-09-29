@@ -4,6 +4,6 @@
       "*": ["./src/*"]
     }
   },
-  "extends": "../../tsconfig.build.json",
+  "extends": "@strictly/typescript/build.json",
   "include": ["vite.config.mts", "vitest.config.mts"]
 }

@@ -6,7 +6,7 @@
     },
     "types": ["node"]
   },
-  "extends": "../../tsconfig.json",
+  "extends": "@strictly/typescript/base.json",
   "include": ["src", "tsconfig.json"],
   "references": []
 }

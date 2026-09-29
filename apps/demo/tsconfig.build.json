@@ -4,7 +4,7 @@
       "*": ["./src/*"]
     }
   },
-  "extends": "../../tsconfig.build.json",
+  "extends": "@strictly/typescript/build.json",
   "include": [
     "src/@types/**/*.d.ts",
     ".storybook/**/*.ts",

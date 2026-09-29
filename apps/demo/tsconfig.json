@@ -10,7 +10,7 @@
       }
     ]
   },
-  "extends": "../../tsconfig.json",
+  "extends": "@strictly/typescript/base.json",
   "include": ["**/*.module.css", "src", "tsconfig.json"],
   "references": [
     {

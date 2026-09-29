@@ -6,7 +6,7 @@
     }
   },
   "exclude": [".astro"],
-  "extends": "../../tsconfig.json",
+  "extends": "@strictly/typescript/base.json",
   "include": [
     ".astro/types.d.ts",
     "astro.config.mts",

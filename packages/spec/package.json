@@ -9,6 +9,7 @@
   },
   "description": "Helper utilities for testing",
   "devDependencies": {
+    "@strictly/typescript": "workspace:*",
     "@strictly/vite": "workspace:*",
     "@testing-library/dom": "catalog:",
     "@testing-library/react": "catalog:",
