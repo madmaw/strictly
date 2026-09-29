@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "outDir": "./.out",
+    "paths": {
+      "*": ["./src/*"]
+    }
+  },
+  "extends": "@strictly/typescript/base.json",
+  "include": ["src", "tsconfig.json"],
+  "references": []
+}
