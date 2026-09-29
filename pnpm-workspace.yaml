@@ -17,12 +17,25 @@ overrides:
   react-dom: 19.3.0
   # the mock bundles its own vitest, keep it on the same copy the tests run under
   'vitest-matchmedia-mock>vitest': $vitest
+  # vite plus ships its own vite build under the vite name and pins the vitest it bundles, so every request in the
+  # tree, including astro's, resolves to those copies
+  vite@*: 'catalog:'
+  vitest@*: 'catalog:'
 
 peerDependencyRules:
   allowedVersions:
     # the storybook vitest addon still declares vitest 3 and 4 but runs every story on 5; storybook 11 widens the range
     '@storybook/addon-vitest>@vitest/browser-playwright': '5'
     '@storybook/addon-vitest>vitest': '5'
+    # the vite alias does not satisfy any published peer range
+    vite: '*'
+    vitest: '*'
+    # storybook still declares the pre release vite plus range
+    '@storybook/*>vite-plus': '1'
+    'storybook>vite-plus': '1'
+  allowAny:
+    - vite
+    - vitest
 
 catalog:
   '@astrojs/mdx': ^8.0.2
@@ -56,7 +69,7 @@ catalog:
   '@typescript/native': npm:typescript@^7.0.2
   '@rolldown/plugin-babel': ^0.2.4
   '@vitejs/plugin-react': ^6.1.1
-  '@vitest/browser-playwright': ^5.0.2
+  '@vitest/browser-playwright': 5.0.1
   astro: ^7.3.5
   jsdom: ^30.1.1
   mobx: ^7.0.5
@@ -68,12 +81,13 @@ catalog:
   storybook: ^10.6.0
   type-fest: ^5.10.0
   typescript: npm:@typescript/typescript6@^6.0.2
-  vite: ^8.3.1
+  vite: npm:@voidzero-dev/vite-plus-core@1.0.0
   vite-plugin-dts: ^5.1.1
-  vitest: ^5.0.2
+  vitest: 5.0.1
   vitest-fail-on-console: ^0.10.1
   vitest-matchmedia-mock: ^2.0.4
   vitest-mock-extended: ^5.1.1
+  vite-plus: 1.0.0
 
 # run every script under this exact node version regardless of the machine's install
 useNodeVersion: 22.23.3

@@ -838,3 +838,75 @@ export function createOxlintConfig({
     overrides,
   })
 }
+
+export type WorkspacePackage = {
+  // the package directory relative to the workspace root, e.g. `packages/base`
+  readonly dir: string
+  readonly mainProject?: TSConfigProject
+  readonly otherProjects?: readonly TSConfigProject[]
+}
+
+export type CreateWorkspaceOxlintConfigOptions = {
+  // the absolute path of the workspace root
+  readonly rootDir: string
+  // tsconfigs covering the files that live directly in the workspace root
+  readonly rootProjects?: readonly TSConfigProject[]
+  readonly packages: readonly WorkspacePackage[]
+}
+
+// vite plus reads a single lint configuration from the workspace root and ignores nested configs, so this combines
+// the per package configurations into one by prefixing their file patterns with the package directory
+function prefixGlobs(dir: string, globs: readonly string[] | undefined) {
+  return (globs ?? []).map((glob) => `${dir}/${glob}`)
+}
+
+export function createWorkspaceOxlintConfig({
+  rootDir,
+  rootProjects = [],
+  packages,
+}: CreateWorkspaceOxlintConfigOptions): OxlintConfig {
+  const root = createOxlintConfig({
+    otherProjects: rootProjects,
+    rootDir,
+  })
+  const packageGlobs = packages.map(({ dir }) => `${dir}/**`)
+  const packageConfigs = packages.map(
+    ({ dir, mainProject, otherProjects }) => ({
+      config: createOxlintConfig({
+        mainProject,
+        otherProjects,
+        rootDir: path.join(rootDir, dir),
+      }),
+      dir,
+    }),
+  )
+  const ignorePatterns = [
+    ...(root.ignorePatterns ?? []),
+    ...packageConfigs.flatMap(({ config, dir }) =>
+      (config.ignorePatterns ?? [])
+        // workspace wide patterns are already covered by the root
+        .filter((pattern) => !pattern.startsWith('**/'))
+        .map((pattern) => `${dir}/${pattern}`),
+    ),
+  ]
+  return {
+    ...root,
+    ignorePatterns: [...new Set(ignorePatterns)],
+    overrides: [
+      // the root overrides must not leak into the packages, which define their own
+      ...(root.overrides ?? []).map((override) => ({
+        ...override,
+        excludeFiles: [...(override.excludeFiles ?? []), ...packageGlobs],
+      })),
+      ...packageConfigs.flatMap(({ config, dir }) =>
+        (config.overrides ?? []).map((override) => ({
+          ...override,
+          files: prefixGlobs(dir, override.files),
+          ...(override.excludeFiles == null
+            ? {}
+            : { excludeFiles: prefixGlobs(dir, override.excludeFiles) }),
+        })),
+      ),
+    ],
+  }
+}

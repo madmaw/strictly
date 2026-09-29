@@ -14,11 +14,11 @@
     "react": "catalog:"
   },
   "devDependencies": {
-    "@strictly/oxlint": "workspace:*",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
     "http-server": "^14.1.1",
-    "vite": "catalog:"
+    "vite": "catalog:",
+    "vite-plus": "catalog:"
   },
   "license": "MIT",
   "main": "index.js",
@@ -28,8 +28,6 @@
     "check-types": "tsc -b",
     "clean": "del-cli dist .out",
     "dev": "astro dev",
-    "lint": "oxlint --type-aware",
-    "lint:fix": "oxlint --type-aware --fix",
     "preview": "astro preview",
     "serve": "http-server dist"
   },

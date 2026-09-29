@@ -5,5 +5,5 @@
     }
   },
   "extends": "../../tsconfig.build.json",
-  "include": ["oxlint.config.ts", "vite.config.mts", "vitest.config.mts"]
+  "include": ["vite.config.mts", "vitest.config.mts"]
 }

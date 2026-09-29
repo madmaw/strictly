@@ -3,7 +3,7 @@ import { flattenAccessorsOfType } from 'transformers/flatteners/flattenAccessors
 import { booleanType, list, numberType, object } from 'types/builders'
 import { type FlattenedAccessorsOfType } from 'types/FlattenedAccessorsOfType'
 import { type ValueOfType } from 'types/ValueOfType'
-import { type Mock, vi } from 'vitest'
+import { type Mock, vi } from 'vite-plus/test'
 
 describe('flattenAccessorsOfType', () => {
   let setter: Mock

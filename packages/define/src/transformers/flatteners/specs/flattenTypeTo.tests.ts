@@ -9,7 +9,7 @@ import {
   union,
 } from 'types/builders'
 import { type TypeDef, TypeDefType } from 'types/Type'
-import { type Mock, vi } from 'vitest'
+import { type Mock, vi } from 'vite-plus/test'
 
 describe('flattenTypeDefTo', () => {
   let toTypeDefType: Mock<(typeDef: TypeDef) => number>

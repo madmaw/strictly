@@ -3,7 +3,7 @@ import { toArray } from '@strictly/base'
 import { textContentOf } from '@strictly/spec'
 import { fireEvent, render } from '@testing-library/react'
 import { SubmitLabel } from 'features/form/pet/PetFieldsView'
-import { vi } from 'vitest'
+import { vi } from 'vite-plus/test'
 import * as stories from './PetFieldsView.stories'
 
 const composedStories = composeStories(stories)

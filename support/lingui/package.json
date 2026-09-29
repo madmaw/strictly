@@ -1,16 +1,13 @@
 {
   "devDependencies": {
-    "@lingui/cli": "catalog:",
-    "@strictly/oxlint": "workspace:*"
+    "@lingui/cli": "catalog:"
   },
   "license": "MIT",
   "main": "src/index.ts",
   "name": "@strictly/lingui",
   "scripts": {
     "check-types": "tsc -b",
-    "clean": "del-cli dist .out",
-    "lint": "oxlint --type-aware",
-    "lint:fix": "oxlint --type-aware --fix"
+    "clean": "del-cli dist .out"
   },
   "type": "module",
   "version": "0.0.41"
