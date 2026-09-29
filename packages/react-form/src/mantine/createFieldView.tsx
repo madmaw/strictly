@@ -1,6 +1,6 @@
+import { type StringKeyOf } from '@strictly/base'
 import { Observer } from 'mobx-react'
 import { type ComponentProps, type ComponentType, useCallback } from 'react'
-import { type AllFieldsOfFields } from 'types/AllFieldsOfFields'
 import { type ErrorOfField } from 'types/ErrorOfField'
 import { type Fields } from 'types/Field'
 import { type ValueTypeOfField } from 'types/ValueTypeOfField'
@@ -67,10 +67,10 @@ function FieldView<F extends Fields, K extends keyof F>({
   )
 }
 
-export function createFieldView<
-  F extends Fields,
-  K extends keyof AllFieldsOfFields<F>,
->(this: MantineForm<F>, valuePath: K): ComponentType<FieldViewProps<F, K>> {
+export function createFieldView<F extends Fields, K extends StringKeyOf<F>>(
+  this: MantineForm<F>,
+  valuePath: K,
+): ComponentType<FieldViewProps<F, K>> {
   return (props: FieldViewProps<F, K>) => (
     <FieldView
       form={this}

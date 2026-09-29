@@ -1,9 +1,8 @@
-import { type StringConcatOf } from '@strictly/base'
+import { type StringConcatOf, type StringKeyOf } from '@strictly/base'
 import { jsonPathPrefix, jsonPathUnprefix } from '@strictly/define'
 import type { FieldsViewProps } from 'core/props'
 import { observer } from 'mobx-react'
 import type { ComponentProps, ComponentType } from 'react'
-import type { AllFieldsOfFields } from 'types/AllFieldsOfFields'
 import type { Fields } from 'types/Field'
 import type { SubFormFields } from 'types/SubFormFields'
 import type { ValueTypeOfField } from 'types/ValueTypeOfField'
@@ -43,7 +42,7 @@ export type FieldsView<
 
 export function createFieldsView<
   F extends Fields,
-  K extends keyof AllFieldsOfFields<F>,
+  K extends StringKeyOf<F>,
   P extends FieldsViewProps<Fields> = FieldsViewProps<SubFormFields<F, K>>,
 >(
   valuePath: K,
