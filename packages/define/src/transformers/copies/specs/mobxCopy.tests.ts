@@ -1,3 +1,5 @@
+import { isObservableArray, isObservableObject } from 'mobx'
+import { petType, rex } from 'specs/fixtures/pet'
 import { mobxCopy } from 'transformers/copies/mobxCopy'
 import { numberType, object } from 'types/builders'
 import { type ValueOfType } from 'types/ValueOfType'
@@ -18,6 +20,25 @@ describe('mobxCopy', () => {
         const c = mobxCopy(type, v)
         expect(c).toEqual(v)
       })
+    })
+  })
+
+  describe('pet', () => {
+    const c = mobxCopy(petType, rex)
+
+    it('copies', () => {
+      expect(c).toEqual(rex)
+    })
+
+    it('observes the value through nullable and discriminated unions', () => {
+      expect(isObservableObject(c)).toBe(true)
+      expect(isObservableArray(c.tags)).toBe(true)
+      expect(isObservableObject(c.owner)).toBe(true)
+      expect(isObservableObject(c.species)).toBe(true)
+    })
+
+    it('leaves null values alone', () => {
+      expect(mobxCopy(petType, { ...rex, owner: null }).owner).toBeNull()
     })
   })
 })

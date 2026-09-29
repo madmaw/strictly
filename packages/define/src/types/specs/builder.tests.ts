@@ -379,5 +379,35 @@ describe('builder', () => {
         expect(() => union('d').or('1', numberType)).toThrow()
       })
     })
+
+    describe('nested discriminated', () => {
+      const inner = union('y')
+        .or('p', object().field('a', booleanType))
+        .or('q', object().field('b', numberType)).narrow
+      const t = union('x')
+        .or('1', inner)
+        .or('2', object().field('c', stringType)).narrow
+
+      it('equals expected type', () => {
+        type C =
+          | { x: '1'; y: 'p'; a: boolean }
+          | { x: '1'; y: 'q'; b: number }
+          | { x: '2'; c: string }
+        expectTypeOf<ValueOfType<typeof t>>().toMatchTypeOf<C>()
+        expectTypeOf<C>().toMatchTypeOf<ValueOfType<typeof t>>()
+      })
+
+      it('adds the discriminator to the options of the nested union', () => {
+        const [nested] = t.def.options
+        const [option1, option2] = nested.def.options
+        expect(option1.def.shape.x.def.values).toEqual(['1'])
+        expect(option2.def.shape.x.def.values).toEqual(['1'])
+      })
+
+      it('parses as a zod schema', () => {
+        expect(t.safeParse({ x: '1', y: 'q', b: 1 }).success).toBe(true)
+        expect(t.safeParse({ x: '1', c: '' }).success).toBe(false)
+      })
+    })
   })
 })

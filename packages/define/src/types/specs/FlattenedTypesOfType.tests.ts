@@ -149,5 +149,30 @@ describe('union', () => {
         expectTypeOf<C>().toEqualTypeOf<T>()
       })
     })
+
+    describe('nested discriminated', () => {
+      const inner = union('y')
+        .or('p', object().field('a', booleanType))
+        .or('q', object().field('b', numberType)).narrow
+      const t = union('x')
+        .or('1', inner)
+        .or('2', object().field('c', stringType)).narrow
+
+      it('has a path for every field of every nested option', () => {
+        expectTypeOf<
+          keyof FlattenedTypesOfType<typeof t, null>
+        >().toEqualTypeOf<
+          | '$'
+          | '$:1:p.a'
+          | '$:1:p.x'
+          | '$:1:p.y'
+          | '$:1:q.b'
+          | '$:1:q.x'
+          | '$:1:q.y'
+          | '$:2.c'
+          | '$:2.x'
+        >()
+      })
+    })
   })
 })

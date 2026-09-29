@@ -6,6 +6,7 @@ import {
   numberType,
   object,
   record,
+  stringType,
   union,
 } from 'types/builders'
 import { nodeOf, type SchemaNode } from 'types/node'
@@ -150,6 +151,32 @@ describe('flattenTypeTo', () => {
 
       it('calls the mapper function', () => {
         expect(toKind).toHaveBeenCalledTimes(5)
+      })
+    })
+
+    describe('nested discriminated', () => {
+      const inner = union('y')
+        .or('p', object().field('a', booleanType))
+        .or('q', object().field('b', numberType)).narrow
+      const type = union('x')
+        .or('1', inner)
+        .or('2', object().field('c', stringType)).narrow
+      beforeEach(() => {
+        flattened = flattenTypeTo(type, toKind)
+      })
+
+      it('qualifies the paths with every discriminator', () => {
+        expect(flattened).toEqual({
+          $: 'union',
+          '$:1:p.a': 'literal',
+          '$:1:p.x': 'literal',
+          '$:1:p.y': 'literal',
+          '$:1:q.b': 'literal',
+          '$:1:q.x': 'literal',
+          '$:1:q.y': 'literal',
+          '$:2.c': 'literal',
+          '$:2.x': 'literal',
+        })
       })
     })
   })
