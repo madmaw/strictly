@@ -21,7 +21,7 @@
     "@strictly/base": "*",
     "mobx": "^6.0.0 || ^7.0.0",
     "type-fest": "^5.0.0",
-    "zod": "^4.0.0"
+    "zod": "catalog:"
   },
   "publishConfig": {
     "access": "public",

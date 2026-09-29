@@ -9,10 +9,11 @@ describe('flattenTypesOfType', () => {
     const structType = object().field('a', listType).field('b', bType).narrow
     const flattened = flattenTypesOfType(structType)
 
-    expect(Object.keys(flattened).sort()).toEqual(['$', '$.a', '$.a.*', '$.b'])
-    expect(flattened.$).toBe(structType)
-    expect(flattened['$.a']).toBe(listType)
-    expect(flattened['$.a.*']).toBe(elementType)
-    expect(flattened['$.b']).toBe(bType)
+    expect(flattened).toEqual({
+      $: structType,
+      '$.a': listType,
+      '$.a.*': elementType,
+      '$.b': bType,
+    })
   })
 })
