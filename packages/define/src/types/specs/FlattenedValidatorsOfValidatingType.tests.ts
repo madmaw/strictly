@@ -1,4 +1,3 @@
-import { type Reverse } from '@strictly/base'
 import { list, numberType, object, stringType } from 'types/builders'
 import { type FlattenedTypesOfType } from 'types/FlattenedTypesOfType'
 import { type FlattenedValidatorsOfValidatingType } from 'types/FlattenedValidatorsOfValidatingType'
@@ -10,7 +9,7 @@ describe('FlattenedValidatorsOfValidatingType', () => {
     const literalType = numberType.enforce<'a', number>((): 'a' => 'a').narrow
     type T = FlattenedValidatorsOfValidatingType<
       typeof literalType,
-      Reverse<ValueToTypePathsOfType<typeof literalType>>
+      ValueToTypePathsOfType<typeof literalType>
     >
 
     type C = {
@@ -29,7 +28,7 @@ describe('FlattenedValidatorsOfValidatingType', () => {
     ).narrow
     type T = FlattenedValidatorsOfValidatingType<
       typeof listType,
-      Reverse<ValueToTypePathsOfType<typeof listType>>
+      ValueToTypePathsOfType<typeof listType>
     >
 
     type C = {
@@ -55,7 +54,7 @@ describe('FlattenedValidatorsOfValidatingType', () => {
       ).narrow
     type T = FlattenedValidatorsOfValidatingType<
       typeof objectType,
-      Reverse<ValueToTypePathsOfType<typeof objectType>>
+      ValueToTypePathsOfType<typeof objectType>
     >
 
     it('only keeps the paths with rules', () => {
@@ -74,7 +73,7 @@ describe('FlattenedValidatorsOfValidatingType', () => {
     it('includes the global context', () => {
       type G = FlattenedValidatorsOfValidatingType<
         typeof objectType,
-        Reverse<ValueToTypePathsOfType<typeof objectType>>,
+        ValueToTypePathsOfType<typeof objectType>,
         FlattenedTypesOfType<typeof objectType, '*'>,
         { readonly g: boolean }
       >

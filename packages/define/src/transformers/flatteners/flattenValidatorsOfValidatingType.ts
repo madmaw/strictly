@@ -2,13 +2,15 @@ import { type FlattenedTypesOfType } from 'types/FlattenedTypesOfType'
 import { type FlattenedValidatorsOfValidatingType } from 'types/FlattenedValidatorsOfValidatingType'
 import { unwrap } from 'types/node'
 import { type Type } from 'types/Type'
+import { type ValueToTypePathsOfType } from 'types/ValueToTypePathsOfType'
 import { metaOf, validateRulesOf } from 'validation/rules'
 import { type Validator } from 'validation/validator'
 import { flattenTypeTo } from './flattenTypeTo'
 
 export function flattenValidatorsOfValidatingType<
   T extends Type,
-  TypePathsToValuePaths extends Readonly<Record<keyof FlattenedTypes, string>>,
+  ValuePathsToTypePaths extends Readonly<Record<string, string>> =
+    ValueToTypePathsOfType<T>,
   FlattenedTypes extends Readonly<Record<string, Type>> = FlattenedTypesOfType<
     T,
     '*'
@@ -17,7 +19,7 @@ export function flattenValidatorsOfValidatingType<
   type: T,
 ): FlattenedValidatorsOfValidatingType<
   T,
-  TypePathsToValuePaths,
+  ValuePathsToTypePaths,
   FlattenedTypes
 > {
   return flattenValidatorsOfValidatingTypeWithMutability(type)
@@ -25,7 +27,8 @@ export function flattenValidatorsOfValidatingType<
 
 export function flattenValidatorsOfValidatingTypeWithMutability<
   T extends Type,
-  TypePathsToValuePaths extends Readonly<Record<keyof FlattenedTypes, string>>,
+  ValuePathsToTypePaths extends Readonly<Record<string, string>> =
+    ValueToTypePathsOfType<T>,
   FlattenedTypes extends Readonly<Record<string, Type>> = FlattenedTypesOfType<
     T,
     '*'
@@ -34,7 +37,7 @@ export function flattenValidatorsOfValidatingTypeWithMutability<
   type: T,
 ): FlattenedValidatorsOfValidatingType<
   T,
-  TypePathsToValuePaths,
+  ValuePathsToTypePaths,
   FlattenedTypes,
   { readonly forceMutable?: boolean }
 > {

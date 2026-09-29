@@ -5,6 +5,7 @@ import {
   mergeValidators,
   MinimumStringLengthValidator,
   type ReadonlyTypeOfType,
+  type ValuePathsOfTypePath,
 } from '@strictly/define'
 import {
   adapterFromPrototype,
@@ -35,7 +36,6 @@ import {
   NOT_A_BREED_ERROR,
   NOT_A_NUMBER_ERROR,
   petType,
-  type PetTypeToValuePaths,
   type PetValueToTypePaths,
   speciesType,
 } from './types'
@@ -46,10 +46,8 @@ export type TagAlreadyExistsError = {
   value: string
 }
 
-const petTypeValidators = flattenValidatorsOfValidatingTypeWithMutability<
-  typeof petType,
-  PetTypeToValuePaths
->(petType)
+const petTypeValidators =
+  flattenValidatorsOfValidatingTypeWithMutability(petType)
 
 // want to assign it to a type
 const tagAlreadyExistsValidator: FunctionalValidator<
@@ -159,7 +157,7 @@ const rawPetFieldAdapters = {
 } as const satisfies Partial<
   FieldAdaptersOfValues<
     FlattenedValuesOfType<ReadonlyTypeOfType<typeof petType>, '*'>,
-    PetTypeToValuePaths,
+    PetValueToTypePaths,
     {}
   > & {
     // TODO check list of existing tags in context
@@ -178,7 +176,10 @@ const validatedPetAdapters = mergeAdaptersWithValidators(
   petValidators,
 )
 export type PetTypePaths = keyof typeof rawPetFieldAdapters
-export type PetValuePaths = PetTypeToValuePaths[PetTypePaths]
+export type PetValuePaths = ValuePathsOfTypePath<
+  PetValueToTypePaths,
+  PetTypePaths
+>
 
 export const petFieldAdapters = mergeFieldAdaptersWithTwoWayConverter(
   validatedPetAdapters,

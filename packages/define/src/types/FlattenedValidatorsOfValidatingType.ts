@@ -5,6 +5,7 @@ import { type FlattenedTypesOfType } from './FlattenedTypesOfType'
 import { type ReadonlyTypeOfType } from './ReadonlyTypeOfType'
 import { type Type } from './Type'
 import { type ValueOfType } from './ValueOfType'
+import { type ValuePathsOfTypePath } from './ValuePathsOfTypePath'
 
 type ValidatorOfType<
   T extends Type,
@@ -22,7 +23,7 @@ type ValidatorOfType<
  */
 export type FlattenedValidatorsOfValidatingType<
   T extends Type,
-  TypePathsToValuePaths extends Readonly<Record<keyof FlattenedTypes, string>>,
+  ValuePathsToTypePaths extends Readonly<Record<string, string>>,
   FlattenedTypes extends Readonly<Record<string, Type>> = FlattenedTypesOfType<
     T,
     '*'
@@ -38,7 +39,7 @@ export type FlattenedValidatorsOfValidatingType<
         : K
     ]: ValidatorOfType<
       FlattenedTypes[K],
-      TypePathsToValuePaths[K],
+      ValuePathsOfTypePath<ValuePathsToTypePaths, K & string>,
       GlobalContext
     >
   }>
