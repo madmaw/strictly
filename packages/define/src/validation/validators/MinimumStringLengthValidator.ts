@@ -1,3 +1,4 @@
+import { bound } from '@strictly/base'
 import { type AnnotatedValidator } from 'validation/validator'
 
 export const MinimumStringLengthValidationErrorType = 'minimum_string_length'
@@ -16,6 +17,7 @@ export class MinimumStringLengthValidator implements AnnotatedValidator<
 > {
   constructor(private readonly minimumLength: number) {}
 
+  @bound
   validate(value: string): MinimumStringLengthValidationError | null {
     if (value.length < this.minimumLength) {
       return {
@@ -27,6 +29,7 @@ export class MinimumStringLengthValidator implements AnnotatedValidator<
     return null
   }
 
+  @bound
   annotations() {
     return {
       required: this.minimumLength > 0,

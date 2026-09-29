@@ -1,3 +1,4 @@
+import { bound } from '@strictly/base'
 import {
   type AnnotatedValidator,
   type Annotations,
@@ -17,6 +18,7 @@ export class CompositeValidator<
     this.validators = validators
   }
 
+  @bound
   validate(v: V, valuePath: ValuePath, context: C) {
     return this.validators.reduce<E | null>((error, validator) => {
       if (error != null) {
@@ -26,6 +28,7 @@ export class CompositeValidator<
     }, null)
   }
 
+  @bound
   annotations(valuePath: ValuePath, context: C): Annotations {
     return this.validators.reduce<Annotations>(
       ({ required, readonly }, validator) => {

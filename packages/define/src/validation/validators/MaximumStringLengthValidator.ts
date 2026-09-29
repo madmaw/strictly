@@ -1,3 +1,4 @@
+import { bound } from '@strictly/base'
 import { type AnnotatedValidator } from 'validation/validator'
 
 export const MaximumStringLengthValidationErrorType = 'maximum_string_length'
@@ -16,6 +17,7 @@ export class MaximumStringLengthValidator implements AnnotatedValidator<
 > {
   constructor(private readonly maximumLength: number) {}
 
+  @bound
   validate(value: string): MaximumStringLengthValidationError | null {
     if (value.length > this.maximumLength) {
       return {
@@ -27,6 +29,7 @@ export class MaximumStringLengthValidator implements AnnotatedValidator<
     return null
   }
 
+  @bound
   annotations() {
     return {
       required: false,

@@ -45,7 +45,7 @@ const definedValidator = new DefinedValidator(REQUIRED_ERROR)
 
 export const dogBreedType = literal<DogBreed>()
   .required()
-  .enforce(definedValidator.validate.bind(definedValidator)).narrow
+  .enforce(definedValidator.validate).narrow
 
 export const speciesType = union('type')
   .or(

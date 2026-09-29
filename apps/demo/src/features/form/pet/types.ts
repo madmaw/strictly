@@ -56,10 +56,10 @@ const catNameMustBeCapitalized: FunctionalValidator<
 
 export const dogBreedType = literal<DogBreed>()
   .required()
-  .enforce(definedValidator.validate.bind(definedValidator)).narrow
+  .enforce(definedValidator.validate).narrow
 export const catBreedType = literal<CatBreed>()
   .required()
-  .enforce(definedValidator.validate.bind(definedValidator)).narrow
+  .enforce(definedValidator.validate).narrow
 
 export const speciesType = union('type')
   .or(
