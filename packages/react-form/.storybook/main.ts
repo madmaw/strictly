@@ -14,6 +14,18 @@ function getAbsolutePath(value: string) {
 
 const config: StorybookConfig = {
   stories: ['../**/*.stories.@(ts|tsx)'],
+  // strip the `specs` path segment from auto-generated titles so it does not appear in the sidebar
+  experimental_indexers: (existing) =>
+    (existing ?? []).map((indexer) => ({
+      ...indexer,
+      createIndex: async (fileName, options) => {
+        const entries = await indexer.createIndex(fileName, options)
+        return entries.map((entry) => ({
+          ...entry,
+          title: options.makeTitle(entry.title).replace(/\/specs(?=\/|$)/g, ''),
+        }))
+      },
+    })),
 
   addons: [
     getAbsolutePath('@storybook/addon-links'),
