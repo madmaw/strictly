@@ -61,7 +61,7 @@ catalog:
   '@storybook/react-vite': ^10.6.0
   '@testing-library/dom': ^10.4.0
   '@testing-library/react': ^16.0.1
-  '@testing-library/user-event': ^14.5.2
+  '@testing-library/user-event': ^14.6.7
   '@types/react': ^19.2.0
   '@types/react-dom': ^19.2.0
   # typescript 7 ships the native compiler without a javascript api, so typescript-eslint and vite-plugin-dts still
