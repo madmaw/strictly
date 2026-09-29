@@ -1,4 +1,4 @@
-import { type SimplifyDeep, type ValueOf } from 'type-fest'
+import { type ValueOf } from 'type-fest'
 import {
   booleanType,
   list,
@@ -25,8 +25,8 @@ describe('ValueToTypePathsOfType', () => {
   })
 
   describe('list', () => {
-    const builder = list(list(numberType))
-    type T = SimplifyDeep<ValueToTypePathsOfType<typeof builder.narrow>>
+    const t = list(list(numberType)).narrow
+    type T = ValueToTypePathsOfType<typeof t>
 
     type C = {
       readonly $: '$'
@@ -40,8 +40,8 @@ describe('ValueToTypePathsOfType', () => {
 
   describe('record', () => {
     const l = list(numberType)
-    const builder = record<typeof l, 'a' | 'b'>(l)
-    type T = SimplifyDeep<ValueToTypePathsOfType<typeof builder>>
+    const t = record<typeof l, 'a' | 'b'>(l).narrow
+    type T = ValueToTypePathsOfType<typeof t>
 
     type C = {
       readonly $: '$'
@@ -60,13 +60,13 @@ describe('ValueToTypePathsOfType', () => {
   })
 
   describe('object', () => {
-    const builder = object()
+    const t = object()
       .field('a', list(numberType))
       .optionalField('b', booleanType)
       .readonlyField('c', stringType)
-      .readonlyOptionalField('d', stringType)
+      .readonlyOptionalField('d', stringType).narrow
 
-    type T = SimplifyDeep<ValueToTypePathsOfType<typeof builder>>
+    type T = ValueToTypePathsOfType<typeof t>
 
     type C = {
       readonly $: '$'
@@ -81,20 +81,20 @@ describe('ValueToTypePathsOfType', () => {
     })
 
     it('has the same value paths', () => {
-      type ValuePaths = keyof FlattenedTypesOfType<typeof builder, null>
+      type ValuePaths = keyof FlattenedTypesOfType<typeof t, null>
       expectTypeOf<ValuePaths>().toEqualTypeOf<keyof T>()
     })
 
     it('has the same type paths', () => {
-      type TypePaths = keyof FlattenedTypesOfType<typeof builder, '*'>
+      type TypePaths = keyof FlattenedTypesOfType<typeof t, '*'>
       expectTypeOf<TypePaths>().toEqualTypeOf<ValueOf<T>>()
     })
   })
 
   describe('union', () => {
     describe('non-discriminated', () => {
-      const builder = union().or('1', list(numberType)).or('2', stringType)
-      type T = SimplifyDeep<ValueToTypePathsOfType<typeof builder>>
+      const t = union().or('1', list(numberType)).or('2', stringType).narrow
+      type T = ValueToTypePathsOfType<typeof t>
 
       type C = {
         readonly $: '$'
@@ -107,38 +107,40 @@ describe('ValueToTypePathsOfType', () => {
     })
 
     describe('discriminated', () => {
-      const builder = union('d')
+      const t = union('d')
         .or('1', object().field('a', booleanType).field('b', numberType))
-        .or('2', object().field('x', numberType).field('y', stringType))
-      type T = SimplifyDeep<ValueToTypePathsOfType<typeof builder>>
+        .or('2', object().field('x', numberType).field('y', stringType)).narrow
+      type T = ValueToTypePathsOfType<typeof t>
 
       type C = {
         readonly $: '$'
         readonly ['$:1.a']: '$:1.a'
         readonly ['$:1.b']: '$:1.b'
+        readonly ['$:1.d']: '$:1.d'
         readonly ['$:2.x']: '$:2.x'
         readonly ['$:2.y']: '$:2.y'
+        readonly ['$:2.d']: '$:2.d'
       }
       it('equals expected type', () => {
         expectTypeOf<C>().toEqualTypeOf<T>()
       })
 
       it('has the same value paths', () => {
-        type ValuePaths = keyof FlattenedTypesOfType<typeof builder, null>
+        type ValuePaths = keyof FlattenedTypesOfType<typeof t, null>
         expectTypeOf<ValuePaths>().toEqualTypeOf<keyof T>()
       })
 
       it('has the same type paths', () => {
-        type TypePaths = keyof FlattenedTypesOfType<typeof builder, '*'>
+        type TypePaths = keyof FlattenedTypesOfType<typeof t, '*'>
         expectTypeOf<TypePaths>().toEqualTypeOf<ValueOf<T>>()
       })
     })
   })
 
   describe('readonly', () => {
-    const builder = list(list(numberType)).readonly()
+    const t = list(list(numberType)).readonlyElements().narrow
 
-    type T = SimplifyDeep<ValueToTypePathsOfType<typeof builder>>
+    type T = ValueToTypePathsOfType<typeof t>
 
     type C = {
       readonly $: '$'
@@ -151,9 +153,9 @@ describe('ValueToTypePathsOfType', () => {
   })
 
   describe('nullable', () => {
-    const builder = nullable(list(nullable(list(numberType))))
+    const t = nullable(list(nullable(list(numberType)))).narrow
 
-    type T = SimplifyDeep<ValueToTypePathsOfType<typeof builder>>
+    type T = ValueToTypePathsOfType<typeof t>
 
     type C = {
       readonly $: '$'
@@ -165,12 +167,12 @@ describe('ValueToTypePathsOfType', () => {
     })
 
     it('has the same value paths', () => {
-      type ValuePaths = keyof FlattenedTypesOfType<typeof builder, null>
+      type ValuePaths = keyof FlattenedTypesOfType<typeof t, null>
       expectTypeOf<ValuePaths>().toEqualTypeOf<keyof T>()
     })
 
     it('has the same type paths', () => {
-      type TypePaths = keyof FlattenedTypesOfType<typeof builder, '*'>
+      type TypePaths = keyof FlattenedTypesOfType<typeof t, '*'>
       expectTypeOf<TypePaths>().toEqualTypeOf<ValueOf<T>>()
     })
   })

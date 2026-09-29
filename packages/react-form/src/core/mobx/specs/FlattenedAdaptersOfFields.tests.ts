@@ -1,7 +1,7 @@
-import { type booleanType, type numberType } from '@strictly/define'
 import { type FieldAdapter } from 'core/mobx/FieldAdapter'
 import { type FlattenedAdaptersOfFields } from 'core/mobx/FlattenedAdaptersOfFields'
 import { type Field } from 'types/Field'
+import { type z } from 'zod'
 
 const error = Symbol()
 type Error = typeof error
@@ -16,7 +16,7 @@ describe('FlattenedAdaptersOfFields', () => {
         a: 'b'
       },
       {
-        b: typeof numberType
+        b: z.ZodNumber
       },
       Fields
     >
@@ -35,8 +35,8 @@ describe('FlattenedAdaptersOfFields', () => {
         c: 'd'
       },
       {
-        b: typeof numberType
-        d: typeof booleanType
+        b: z.ZodNumber
+        d: z.ZodBoolean
       },
       FormFields
     >
@@ -56,8 +56,8 @@ describe('FlattenedAdaptersOfFields', () => {
         c: 'd'
       },
       {
-        b: typeof numberType
-        d: typeof booleanType
+        b: z.ZodNumber
+        d: z.ZodBoolean
       },
       FormFields
     >
@@ -78,7 +78,7 @@ describe('FlattenedAdaptersOfFields', () => {
         c: 'd'
       },
       {
-        b: typeof numberType
+        b: z.ZodNumber
       },
       FormFields
     >

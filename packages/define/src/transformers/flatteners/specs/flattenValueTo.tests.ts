@@ -4,7 +4,6 @@ import {
   type Mapper,
   type Setter,
 } from 'transformers/flatteners/flattenValueTo'
-import { type SimplifyDeep } from 'type-fest'
 import {
   booleanType,
   list,
@@ -16,7 +15,7 @@ import {
   union,
 } from 'types/builders'
 import { type FlattenedTypesOfType } from 'types/FlattenedTypesOfType'
-import { type Type, type TypeDef } from 'types/Type'
+import { type Type } from 'types/Type'
 import { type ValueOfType } from 'types/ValueOfType'
 import { type Mock, vi } from 'vite-plus/test'
 
@@ -33,15 +32,15 @@ describe('flattenValueTo', () => {
   let setMapper: Mock<Mapper<(v: AnyValueType) => void>>
   let setter: Mock<(v: AnyValueType) => void>
   beforeEach(() => {
-    toStringMapper = vi.fn((_t: TypeDef, v: AnyValueType) => JSON.stringify(v))
+    toStringMapper = vi.fn((_t: Type, v: AnyValueType) => JSON.stringify(v))
     setMapper = vi.fn(
-      (_t: TypeDef, _v: AnyValueType, setter: Setter<AnyValueType>) => setter,
+      (_t: Type, _v: AnyValueType, setter: Setter<AnyValueType>) => setter,
     )
     setter = vi.fn()
   })
 
   describe('literal', () => {
-    const type = numberType
+    const type = numberType.narrow
     type F = FlattenedTypesOfType<typeof type, null>
     describe('toString', () => {
       let flattened: FlattenedToStrings<F>
@@ -76,9 +75,9 @@ describe('flattenValueTo', () => {
   })
 
   describe('list', () => {
-    const typeDef = list(numberType)
-    type F = FlattenedTypesOfType<typeof typeDef, null>
-    let l: ValueOfType<typeof typeDef>
+    const type = list(numberType).narrow
+    type F = FlattenedTypesOfType<typeof type, null>
+    let l: ValueOfType<typeof type>
     beforeEach(() => {
       l = [1, 2, 3]
     })
@@ -86,7 +85,7 @@ describe('flattenValueTo', () => {
     describe('toString', () => {
       let flattened: FlattenedToStrings<F>
       beforeEach(() => {
-        flattened = flattenValueTo(typeDef, l, setter, toStringMapper)
+        flattened = flattenValueTo(type, l, setter, toStringMapper)
       })
 
       it('equals expected type', () => {
@@ -106,7 +105,7 @@ describe('flattenValueTo', () => {
     describe('setter', () => {
       let flattened: FlattenedSetters<F>
       beforeEach(() => {
-        flattened = flattenValueTo(typeDef, l, setter, setMapper)
+        flattened = flattenValueTo(type, l, setter, setMapper)
       })
 
       it('sets a value in the list', () => {
@@ -117,10 +116,10 @@ describe('flattenValueTo', () => {
   })
 
   describe('record', () => {
-    const typeDef = record<typeof numberType, 'a' | 'b'>(numberType)
-    type F = FlattenedTypesOfType<typeof typeDef, null>
+    const type = record<typeof numberType, 'a' | 'b'>(numberType).narrow
+    type F = FlattenedTypesOfType<typeof type, null>
 
-    let m: ValueOfType<typeof typeDef>
+    let m: ValueOfType<typeof type>
     beforeEach(() => {
       m = {
         a: 1,
@@ -131,7 +130,7 @@ describe('flattenValueTo', () => {
     describe('toString', () => {
       let flattened: FlattenedToStrings<F>
       beforeEach(() => {
-        flattened = flattenValueTo(typeDef, m, setter, toStringMapper)
+        flattened = flattenValueTo(type, m, setter, toStringMapper)
       })
 
       it('equals expected type', () => {
@@ -146,7 +145,7 @@ describe('flattenValueTo', () => {
     describe('setter', () => {
       let flattened: FlattenedSetters<F>
       beforeEach(() => {
-        flattened = flattenValueTo(typeDef, m, setter, setMapper)
+        flattened = flattenValueTo(type, m, setter, setMapper)
       })
 
       it('sets a value in the record', () => {
@@ -161,7 +160,9 @@ describe('flattenValueTo', () => {
 
   describe('object', () => {
     describe('mandatory fields', () => {
-      const type = object().field('a', numberType).field('b', booleanType)
+      const type = object()
+        .field('a', numberType)
+        .field('b', booleanType).narrow
       type F = FlattenedTypesOfType<typeof type, null>
 
       let s: ValueOfType<typeof type>
@@ -215,7 +216,7 @@ describe('flattenValueTo', () => {
       const type = object().optionalField(
         'a',
         object().optionalField('b', numberType),
-      )
+      ).narrow
       type F = FlattenedTypesOfType<typeof type, null>
 
       describe('empty', () => {
@@ -230,10 +231,46 @@ describe('flattenValueTo', () => {
             flattened = flattenValueTo(type, s, setter, toStringMapper)
           })
 
-          it('equals expected type', () => {
+          it('maps the missing field but not its children', () => {
             expect(flattened).toEqual({
               $: '{}',
+              '$.a': undefined,
             })
+            expect(Object.keys(flattened).sort()).toEqual(['$', '$.a'])
+          })
+        })
+      })
+
+      describe('populated', () => {
+        let s: ValueOfType<typeof type>
+        beforeEach(() => {
+          s = { a: { b: 2 } }
+        })
+
+        describe('toString', () => {
+          let flattened: FlattenedToStrings<F>
+          beforeEach(() => {
+            flattened = flattenValueTo(type, s, setter, toStringMapper)
+          })
+
+          it('flattens through the optional wrappers', () => {
+            expect(flattened).toEqual({
+              $: '{"a":{"b":2}}',
+              '$.a': '{"b":2}',
+              '$.a.b': '2',
+            })
+          })
+        })
+
+        describe('setter', () => {
+          let flattened: FlattenedSetters<F>
+          beforeEach(() => {
+            flattened = flattenValueTo(type, s, setter, setMapper)
+          })
+
+          it('sets a nested optional value', () => {
+            flattened['$.a.b'](3)
+            expect(s).toEqual({ a: { b: 3 } })
           })
         })
       })
@@ -242,11 +279,11 @@ describe('flattenValueTo', () => {
 
   describe('union', () => {
     describe('discriminated', () => {
-      const typeDef = union('d')
+      const type = union('d')
         .or('1', object().field('a', numberType))
-        .or('2', object().field('b', booleanType))
-      type F = SimplifyDeep<FlattenedTypesOfType<typeof typeDef, null>>
-      let u: ValueOfType<typeof typeDef>
+        .or('2', object().field('b', booleanType)).narrow
+      type F = FlattenedTypesOfType<typeof type, null>
+      let u: ValueOfType<typeof type>
       beforeEach(() => {
         u = {
           d: '1',
@@ -257,7 +294,7 @@ describe('flattenValueTo', () => {
       describe('toString', () => {
         let flattened: FlattenedToStrings<F>
         beforeEach(() => {
-          flattened = flattenValueTo(typeDef, u, setter, toStringMapper)
+          flattened = flattenValueTo(type, u, setter, toStringMapper)
         })
 
         it('equals expected type', () => {
@@ -270,10 +307,9 @@ describe('flattenValueTo', () => {
       })
 
       describe('setter', () => {
-        type G = SimplifyDeep<FlattenedSetters<F>>
-        let flattened: G
+        let flattened: FlattenedSetters<F>
         beforeEach(() => {
-          flattened = flattenValueTo(typeDef, u, setter, setMapper)
+          flattened = flattenValueTo(type, u, setter, setMapper)
         })
 
         it('sets a value', () => {
@@ -297,7 +333,7 @@ describe('flattenValueTo', () => {
       })
     })
     describe('non-discriminated', () => {
-      const type = union().or('0', numberType).or('1', nullType)
+      const type = union().or('0', numberType).or('1', nullType).narrow
       type F = FlattenedTypesOfType<typeof type, null>
       let u: ValueOfType<typeof type>
 
@@ -337,7 +373,7 @@ describe('flattenValueTo', () => {
       const type = union()
         .or('z', list(numberType))
         .or('x', nullType)
-        .or('y', literal([false]))
+        .or('y', literal([false])).narrow
       type F = FlattenedTypesOfType<typeof type, null>
 
       let u: ValueOfType<typeof type>
@@ -374,9 +410,7 @@ describe('flattenValueTo', () => {
         })
 
         it('sets a subordinate value', () => {
-          // need to cast to any as TS cannot guarantee that '$.a' is present
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          ;(flattened as any)['$.1'](4)
+          flattened['$.1'](4)
           expect(u).toEqual([1, 4, 3])
         })
       })

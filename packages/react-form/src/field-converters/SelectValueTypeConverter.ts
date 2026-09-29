@@ -6,10 +6,8 @@ import {
 } from '@strictly/base'
 import {
   copy,
-  type LiteralTypeDef,
   type ReadonlyTypeOfType,
   type Type,
-  type UnionTypeDef,
   type ValueOfType,
   type ValueTypesOfDiscriminatedUnion,
 } from '@strictly/define'
@@ -19,6 +17,10 @@ import {
   type UnreliableFieldConversion,
   UnreliableFieldConversionType,
 } from 'types/FieldConverters'
+import { type z } from 'zod'
+
+// any schema whose values are the literal
+type LiteralType<L> = z.core.$ZodType<L>
 
 export abstract class AbstractSelectValueTypeConverter<
   T extends Type,
@@ -52,7 +54,8 @@ export abstract class AbstractSelectValueTypeConverter<
         value: null,
       }
     }
-    const value = prototype == null ? prototype : copy(this.typeDef, prototype)
+    const value: From =
+      prototype == null ? prototype : (copy(this.typeDef, prototype) as From)
     // TODO given we are dealing with strings, maybe we should have a check to make sure value is in the record
     // of values?
     return {
@@ -62,7 +65,7 @@ export abstract class AbstractSelectValueTypeConverter<
   }
 
   convert(from: From): AnnotatedFieldConversion<To> {
-    const value = from == null ? from! : this.doConvert(from)
+    const value = from == null ? (from as unknown as To) : this.doConvert(from)
     return {
       value,
       required: this.required,
@@ -79,38 +82,49 @@ export abstract class AbstractSelectValueTypeConverter<
   }
 }
 
+// the values of the union are the prototypes for the select, one per discriminator value
+type DiscriminatedUnionValues<
+  U extends Type,
+  To extends string | null,
+  From,
+> = ValueTypesOfDiscriminatedUnion<U> & Readonly<Record<NonNullable<To>, From>>
+
 export class SelectDiscriminatedUnionConverter<
-  U extends UnionTypeDef,
+  U extends z.ZodDiscriminatedUnion,
   From extends
-    | ValueOfType<ReadonlyTypeOfType<Type<U>>>
+    | ValueOfType<ReadonlyTypeOfType<U>>
     | (Required extends true ? never : undefined),
-  To extends StringKeyOf<U['unions']> | null,
+  To extends StringKeyOf<ValueTypesOfDiscriminatedUnion<U>> | null,
   ValuePath extends string,
   Context,
   Required extends boolean,
 > extends AbstractSelectValueTypeConverter<
-  Type<U>,
+  U,
   From,
   To,
-  ValueTypesOfDiscriminatedUnion<U>,
+  DiscriminatedUnionValues<U, To, From>,
   never,
   ValuePath,
   Context
 > {
   constructor(
-    type: Type<U>,
+    type: U,
     values: ValueTypesOfDiscriminatedUnion<U>,
-    defaultValueKey: keyof U['unions'],
+    defaultValueKey: keyof ValueTypesOfDiscriminatedUnion<U>,
     required: Required,
   ) {
-    super(type, values, defaultValueKey, null, required)
+    super(
+      type,
+      values as DiscriminatedUnionValues<U, To, From>,
+      defaultValueKey,
+      null,
+      required,
+    )
   }
 
-  protected override doConvert(from: NonNullable<ValueOfType<Type<U>>>) {
-    const {
-      definition: { discriminator },
-    } = this.typeDef
-    return from[discriminator!]
+  protected override doConvert(from: NonNullable<ValueOfType<U>>) {
+    const { discriminator } = this.typeDef.def
+    return from[discriminator as keyof typeof from] as To
   }
 }
 
@@ -124,7 +138,7 @@ export class SelectLiteralConverter<
   Context,
   Required extends boolean,
 > extends AbstractSelectValueTypeConverter<
-  Type<LiteralTypeDef<L>>,
+  LiteralType<L>,
   From,
   To,
   Record<NonNullable<To>, NonNullable<From>>,
@@ -133,7 +147,7 @@ export class SelectLiteralConverter<
   Context
 > {
   constructor(
-    typeDef: Type<LiteralTypeDef<L>>,
+    typeDef: LiteralType<L>,
     private readonly valuesToStrings: Values,
     defaultValue: From | null,
     noSuchValueError: NoSuchValueError | null,
@@ -161,7 +175,7 @@ export class SelectStringConverter<
   ValuePath extends string,
   Context,
 > extends AbstractSelectValueTypeConverter<
-  Type<LiteralTypeDef<L>>,
+  LiteralType<L>,
   From,
   string | null,
   Record<string, From>,
@@ -170,7 +184,7 @@ export class SelectStringConverter<
   Context
 > {
   constructor(
-    typeDef: Type<LiteralTypeDef<L>>,
+    typeDef: LiteralType<L>,
     allowedValues: ExhaustiveArrayOfUnion<NonNullable<From>, A>,
     defaultValue: L | null,
     noSuchValueError: NoSuchValueError | null,

@@ -7,7 +7,6 @@ import { type ReadonlyDeep, type ValueOf } from 'type-fest'
 import { type FlattenedTypesOfType } from 'types/FlattenedTypesOfType'
 import { type FlattenedValuesOfType } from 'types/FlattenedValuesOfType'
 import { type ReadonlyTypeOfType } from 'types/ReadonlyTypeOfType'
-import { type StrictTypeDef } from 'types/StrictType'
 import { type Type } from 'types/Type'
 import { type ValueOfType } from 'types/ValueOfType'
 import { validate, type Validator } from 'validation/validator'
@@ -79,7 +78,7 @@ export function flattenValidationErrorsOfType<
     value,
     () => {},
     (
-      _t: StrictTypeDef,
+      _t: Type,
       v: AnyValueType,
       _setter: Setter<AnyValueType>,
       typePath: string,

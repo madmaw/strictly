@@ -5,7 +5,8 @@
     "@strictly/base": "workspace:*",
     "@strictly/typescript": "workspace:*",
     "@strictly/vite": "workspace:*",
-    "type-fest": "catalog:"
+    "type-fest": "catalog:",
+    "zod": "catalog:"
   },
   "homepage": "https://madmaw.github.io/strictly/define",
   "keywords": [
@@ -18,8 +19,9 @@
   "name": "@strictly/define",
   "peerDependencies": {
     "@strictly/base": "*",
-    "mobx": "^6.0.0 || ^7.0.0",
-    "type-fest": "^5.0.0"
+    "mobx": "catalog:",
+    "type-fest": "catalog:",
+    "zod": "catalog:"
   },
   "publishConfig": {
     "access": "public",

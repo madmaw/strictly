@@ -37,7 +37,8 @@
     "typescript-plugin-css-modules": "^5.1.0",
     "vite": "catalog:",
     "vite-plus": "catalog:",
-    "vitest": "catalog:"
+    "vitest": "catalog:",
+    "zod": "catalog:"
   },
   "license": "MIT",
   "name": "@strictly/demo",

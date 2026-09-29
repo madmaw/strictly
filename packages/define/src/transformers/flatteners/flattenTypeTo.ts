@@ -1,115 +1,73 @@
 import { reduce, UnreachableError } from '@strictly/base'
-import {
-  type StrictListTypeDef,
-  type StrictObjectTypeDef,
-  type StrictRecordTypeDef,
-  type StrictType,
-  type StrictTypeDef,
-  type StrictUnionTypeDef,
-} from 'types/StrictType'
-import { TypeDefType } from 'types/Type'
+import { nodeOf, optionsByDiscriminatorOf, type SchemaNode } from 'types/node'
+import { type Type } from 'types/Type'
 import { jsonPath } from './jsonPath'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type AnyValueType = any
 
-export type Mapper<R> = (t: StrictTypeDef, key: string) => R
+export type Mapper<R> = (t: Type, key: string) => R
 
 export function flattenTypeTo<M, R extends Readonly<Record<string, M>>>(
-  { definition }: StrictType,
+  t: Type,
   mapper: Mapper<M>,
 ): R {
-  const typeDefs = internalFlattenTypeDef('$', definition, {})
-  return reduce<string, StrictTypeDef, Record<string, M>>(
-    typeDefs,
-    (acc, key, typeDef) => {
-      acc[key] = mapper(typeDef, key)
+  const types = internalFlattenType('$', t, {})
+  return reduce<string, Type, Record<string, M>>(
+    types,
+    (acc, key, type) => {
+      acc[key] = mapper(type, key)
       return acc
     },
     {},
   ) as R
 }
 
-function internalFlattenTypeDef(
+function internalFlattenType(
   path: string,
-  t: StrictTypeDef,
-  r: Record<string, StrictTypeDef>,
-): Record<string, StrictTypeDef> {
+  t: Type,
+  r: Record<string, Type>,
+): Record<string, Type> {
   r[path] = t
-  return internalFlattenTypeDefChildren(path, '', t, r)
+  return internalFlattenTypeChildren(path, nodeOf(t), r)
 }
 
-function internalFlattenTypeDefChildren(
+function internalFlattenTypeChildren(
   path: string,
-  qualifier: string,
-  t: StrictTypeDef,
-  r: Record<string, StrictTypeDef>,
-): Record<string, StrictTypeDef> {
-  switch (t.type) {
-    case TypeDefType.Literal:
+  node: SchemaNode,
+  r: Record<string, Type>,
+): Record<string, Type> {
+  switch (node.kind) {
+    case 'literal':
       return r
-    case TypeDefType.List:
-      return internalFlattenedListTypeDefChildren(path, t, r)
-    case TypeDefType.Record:
-      return internalFlattenRecordTypeDefChildren(path, t, r)
-    case TypeDefType.Object:
-      return internalFlattenObjectTypeDefChildren(path, qualifier, t, r)
-    case TypeDefType.Union:
-      return internalFlattenUnionTypeDefChildren(path, qualifier, t, r)
+    case 'wrapper':
+      return internalFlattenTypeChildren(path, nodeOf(node.inner), r)
+    case 'list':
+      return internalFlattenType(jsonPath(path, '*'), node.element, r)
+    case 'record':
+      return internalFlattenType(jsonPath(path, '*'), node.value, r)
+    case 'object':
+      return reduce(
+        node.fields,
+        (acc, fieldName, field) =>
+          internalFlattenType(jsonPath(path, fieldName), field, acc),
+        r,
+      )
+    case 'union':
+      if (node.discriminator == null) {
+        return node.options.reduce(
+          (acc, option) =>
+            internalFlattenTypeChildren(path, nodeOf(option), acc),
+          r,
+        )
+      }
+      return reduce(
+        optionsByDiscriminatorOf(node),
+        (acc, key, option) =>
+          internalFlattenTypeChildren(`${path}:${key}`, nodeOf(option), acc),
+        r,
+      )
     default:
-      throw new UnreachableError(t)
+      throw new UnreachableError(node)
   }
-}
-
-function internalFlattenedListTypeDefChildren(
-  path: string,
-  { elements }: StrictListTypeDef,
-  r: Record<string, StrictTypeDef>,
-): Record<string, StrictTypeDef> {
-  return internalFlattenTypeDef(jsonPath(path, '*'), elements, r)
-}
-
-function internalFlattenRecordTypeDefChildren(
-  path: string,
-  { valueTypeDef }: StrictRecordTypeDef,
-  r: Record<string, StrictTypeDef>,
-): Record<string, StrictTypeDef> {
-  return internalFlattenTypeDef(jsonPath(path, '*'), valueTypeDef, r)
-}
-
-function internalFlattenObjectTypeDefChildren(
-  path: string,
-  qualifier: string,
-  { fields }: StrictObjectTypeDef,
-  r: Record<string, StrictTypeDef>,
-): Record<string, StrictTypeDef> {
-  return reduce(
-    fields,
-    (acc, fieldName, fieldTypeDef) =>
-      internalFlattenTypeDef(
-        jsonPath(path, fieldName, qualifier),
-        fieldTypeDef,
-        acc,
-      ),
-    r,
-  )
-}
-
-function internalFlattenUnionTypeDefChildren(
-  path: string,
-  qualifier: string,
-  { discriminator, unions }: StrictUnionTypeDef,
-  r: Record<string, StrictTypeDef>,
-): Record<string, StrictTypeDef> {
-  return reduce(
-    unions,
-    (acc, key, typeDef: StrictTypeDef) =>
-      internalFlattenTypeDefChildren(
-        discriminator == null ? path : `${path}:${qualifier}`,
-        key,
-        typeDef,
-        acc,
-      ),
-    r,
-  )
 }

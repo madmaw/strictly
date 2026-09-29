@@ -1,17 +1,18 @@
-import { type FlattenedTypesOfValidatingType } from 'types/FlattenedTypesOfValidatingType'
+import { type FlattenedTypesOfType } from 'types/FlattenedTypesOfType'
 import { type FlattenedValidatorsOfValidatingType } from 'types/FlattenedValidatorsOfValidatingType'
-import {
-  type ValidatingType,
-  type ValidatingTypeDef,
-} from 'types/ValidatingType'
+import { unwrap } from 'types/node'
+import { type Type } from 'types/Type'
+import { metaOf, validateRulesOf } from 'validation/rules'
 import { type Validator } from 'validation/validator'
 import { flattenTypeTo } from './flattenTypeTo'
 
 export function flattenValidatorsOfValidatingType<
-  T extends ValidatingType,
+  T extends Type,
   TypePathsToValuePaths extends Readonly<Record<keyof FlattenedTypes, string>>,
-  FlattenedTypes extends Readonly<Record<string, ValidatingType>> =
-    FlattenedTypesOfValidatingType<T, '*'>,
+  FlattenedTypes extends Readonly<Record<string, Type>> = FlattenedTypesOfType<
+    T,
+    '*'
+  >,
 >(
   type: T,
 ): FlattenedValidatorsOfValidatingType<
@@ -23,10 +24,12 @@ export function flattenValidatorsOfValidatingType<
 }
 
 export function flattenValidatorsOfValidatingTypeWithMutability<
-  T extends ValidatingType,
+  T extends Type,
   TypePathsToValuePaths extends Readonly<Record<keyof FlattenedTypes, string>>,
-  FlattenedTypes extends Readonly<Record<string, ValidatingType>> =
-    FlattenedTypesOfValidatingType<T, '*'>,
+  FlattenedTypes extends Readonly<Record<string, Type>> = FlattenedTypesOfType<
+    T,
+    '*'
+  >,
 >(
   type: T,
 ): FlattenedValidatorsOfValidatingType<
@@ -35,8 +38,10 @@ export function flattenValidatorsOfValidatingTypeWithMutability<
   FlattenedTypes,
   { readonly forceMutable?: boolean }
 > {
-  return flattenTypeTo(type, (definition): Validator => {
-    const { rule, readonly, required } = definition as ValidatingTypeDef
+  return flattenTypeTo(type, (t): Validator => {
+    // rules and annotations live on the schema inside any optional or nullable wrapper
+    const inner = unwrap(t)
+    const { readonly, required } = metaOf(inner)
     return {
       annotations(
         _valuePath: string,
@@ -47,7 +52,9 @@ export function flattenValidatorsOfValidatingTypeWithMutability<
           required,
         }
       },
-      validate: rule,
+      validate(v, valuePath, context) {
+        return validateRulesOf(inner, v, valuePath, context)
+      },
     }
   })
 }

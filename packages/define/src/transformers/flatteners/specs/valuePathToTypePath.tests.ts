@@ -12,10 +12,10 @@ import { type ValueToTypePathsOfType } from 'types/ValueToTypePathsOfType'
 
 describe('valuePathToTypePath', () => {
   describe('literal', () => {
-    const typeDef = numberType
-    type Paths = ValueToTypePathsOfType<typeof typeDef>
+    const type = numberType.narrow
+    type Paths = ValueToTypePathsOfType<typeof type>
 
-    const typePath = valuePathToTypePath<Paths, '$'>(typeDef, '$')
+    const typePath = valuePathToTypePath<Paths, '$'>(type, '$')
 
     it('maps a value path to the expected type path', () => {
       expect(typePath).toEqual('$')
@@ -31,7 +31,7 @@ describe('valuePathToTypePath', () => {
           '$.fake': '$.fake'
         },
         '$.fake'
-      >(typeDef, '$.fake', true)
+      >(type, '$.fake', true)
 
       it('maps a value path to the expected type path', () => {
         expect(fakeTypePath).toEqual('$.fake')
@@ -44,14 +44,14 @@ describe('valuePathToTypePath', () => {
   })
 
   describe('list', () => {
-    const typeDef = list(numberType)
-    type Paths = ValueToTypePathsOfType<typeof typeDef>
+    const type = list(numberType).narrow
+    type Paths = ValueToTypePathsOfType<typeof type>
 
     describe.each([
       ['$', '$'],
       ['$.0', '$.*'],
     ] as const)('it maps "%s"', (from, to) => {
-      const typePath = valuePathToTypePath<Paths, typeof from>(typeDef, from)
+      const typePath = valuePathToTypePath<Paths, typeof from>(type, from)
 
       it('maps a value path to the expected type path', () => {
         expect(typePath).toEqual(to)
@@ -68,7 +68,7 @@ describe('valuePathToTypePath', () => {
           [_: `$.${number}.fake`]: '$.*.fake'
         },
         '$.0.fake'
-      >(typeDef, '$.0.fake', true)
+      >(type, '$.0.fake', true)
 
       it('maps a value path to the expected type path', () => {
         expect(fakeTypePath).toEqual('$.*.fake')
@@ -82,15 +82,15 @@ describe('valuePathToTypePath', () => {
 
   describe('record', () => {
     type Key = 'a' | 'b'
-    const typeDef = record<typeof numberType, Key>(numberType)
-    type Paths = ValueToTypePathsOfType<typeof typeDef>
+    const type = record<typeof numberType, Key>(numberType).narrow
+    type Paths = ValueToTypePathsOfType<typeof type>
 
     describe.each([
       ['$', '$'],
       ['$.a', '$.*'],
       ['$.b', '$.*'],
     ] as const)('it maps "%s"', (from, to) => {
-      const typePath = valuePathToTypePath<Paths, typeof from>(typeDef, from)
+      const typePath = valuePathToTypePath<Paths, typeof from>(type, from)
 
       it('maps a value path to the expected type path', () => {
         expect(typePath).toEqual(to)
@@ -108,7 +108,7 @@ describe('valuePathToTypePath', () => {
           '$.b.fake': '$.*.fake'
         },
         '$.a.fake'
-      >(typeDef, '$.a.fake', true)
+      >(type, '$.a.fake', true)
 
       it('maps a value path to the expected type path', () => {
         expect(fakeTypePath).toEqual('$.*.fake')
@@ -121,15 +121,15 @@ describe('valuePathToTypePath', () => {
   })
 
   describe('object', () => {
-    const typeDef = object().field('a', numberType).field('b', booleanType)
-    type Paths = ValueToTypePathsOfType<typeof typeDef>
+    const type = object().field('a', numberType).field('b', booleanType).narrow
+    type Paths = ValueToTypePathsOfType<typeof type>
 
     describe.each([
       ['$', '$'],
       ['$.a', '$.a'],
       ['$.b', '$.b'],
     ] as const)('it maps %s', (from, to) => {
-      const typePath = valuePathToTypePath<Paths, typeof from>(typeDef, from)
+      const typePath = valuePathToTypePath<Paths, typeof from>(type, from)
 
       it('maps a value path to the expected type path', () => {
         expect(typePath).toEqual(to)
@@ -146,7 +146,7 @@ describe('valuePathToTypePath', () => {
           '$.fake': '$.fake'
         },
         '$.fake'
-      >(typeDef, '$.fake', true)
+      >(type, '$.fake', true)
 
       it('maps a value path to the expected type path', () => {
         expect(fakeTypePath).toEqual('$.fake')
@@ -158,21 +158,42 @@ describe('valuePathToTypePath', () => {
     })
   })
 
+  describe('optional field', () => {
+    const type = object().optionalField('a', list(numberType)).narrow
+    type Paths = ValueToTypePathsOfType<typeof type>
+
+    describe.each([
+      ['$.a', '$.a'],
+      ['$.a.2', '$.a.*'],
+    ] as const)('it maps %s', (from, to) => {
+      const typePath = valuePathToTypePath<Paths, typeof from>(type, from)
+
+      it('maps a value path through the wrapper', () => {
+        expect(typePath).toEqual(to)
+      })
+
+      it('has expected type', () => {
+        expectTypeOf(typePath).toEqualTypeOf(to)
+      })
+    })
+  })
+
   describe('union', () => {
     describe('discriminated', () => {
-      const typeDef = union('w')
+      const type = union('w')
         .or('x', object().field('a', numberType).field('b', booleanType))
-        .or('y', object().field('b', stringType).field('c', booleanType))
-      type Paths = ValueToTypePathsOfType<typeof typeDef>
+        .or('y', object().field('b', stringType).field('c', booleanType)).narrow
+      type Paths = ValueToTypePathsOfType<typeof type>
 
       describe.each([
         ['$', '$'],
         ['$:x.a', '$:x.a'],
         ['$:x.b', '$:x.b'],
+        ['$:x.w', '$:x.w'],
         ['$:y.b', '$:y.b'],
         ['$:y.c', '$:y.c'],
       ] as const)('it maps %s', (from, to) => {
-        const typePath = valuePathToTypePath<Paths, typeof from>(typeDef, from)
+        const typePath = valuePathToTypePath<Paths, typeof from>(type, from)
 
         it('maps a value path to the expected type path', () => {
           expect(typePath).toEqual(to)
@@ -189,7 +210,7 @@ describe('valuePathToTypePath', () => {
             '$.fake': '$.fake'
           },
           '$.fake'
-        >(typeDef, '$.fake', true)
+        >(type, '$.fake', true)
 
         it('maps a value path to the expected type path', () => {
           expect(fakeTypePath).toEqual('$.fake')
@@ -201,8 +222,8 @@ describe('valuePathToTypePath', () => {
       })
 
       describe('nested discriminated', () => {
-        const nestedTypeDef = object().field('o', typeDef)
-        type Paths = ValueToTypePathsOfType<typeof nestedTypeDef>
+        const nestedType = object().field('o', type).narrow
+        type Paths = ValueToTypePathsOfType<typeof nestedType>
 
         describe.each([
           ['$', '$'],
@@ -213,7 +234,7 @@ describe('valuePathToTypePath', () => {
           ['$.o:y.c', '$.o:y.c'],
         ] as const)('it maps %s', (from, to) => {
           const typePath = valuePathToTypePath<Paths, typeof from>(
-            nestedTypeDef,
+            nestedType,
             from,
           )
 
@@ -228,8 +249,8 @@ describe('valuePathToTypePath', () => {
       })
 
       describe('list discriminated', () => {
-        const listTypeDef = list(typeDef)
-        type Paths = ValueToTypePathsOfType<typeof listTypeDef>
+        const listType = list(type).narrow
+        type Paths = ValueToTypePathsOfType<typeof listType>
 
         describe.each([
           ['$', '$'],
@@ -240,7 +261,7 @@ describe('valuePathToTypePath', () => {
           ['$.1:y.c', '$.*:y.c'],
         ] as const)('it maps %s', (from, to) => {
           const typePath = valuePathToTypePath<Paths, typeof from>(
-            listTypeDef,
+            listType,
             from,
           )
 

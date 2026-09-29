@@ -23,7 +23,6 @@ import {
   mobxCopy,
   type MobxValueOfType,
   type ReadonlyTypeOfType,
-  type StrictTypeDef,
   type Type,
   type ValueOfType,
   valuePathToTypePath,
@@ -208,7 +207,7 @@ export abstract class FormModel<
       originalValue,
       () => {},
       (
-        _t: StrictTypeDef,
+        _t: Type,
         fieldValue: AnyValueType,
         _setter,
         typePath,
@@ -275,7 +274,7 @@ export abstract class FormModel<
       () => {},
       // TODO swap these to valuePath, typePath in flatten
       (
-        _t: StrictTypeDef,
+        _t: Type,
         _v: AnyValueType,
         _setter,
         typePath,
@@ -646,7 +645,9 @@ export abstract class FormModel<
 
   clearFieldValue<K extends KeyAsString<ValuePathsToAdapters>>(valuePath: K) {
     const typePath = this.typePath(valuePath)
-    const adapter = this.adapters[typePath as keyof TypePathsToAdapters]
+    // the adapter for a path known only at runtime cannot be typed more precisely
+    const adapter: FieldAdapter | undefined =
+      this.adapters[typePath as keyof TypePathsToAdapters]
     if (adapter == null) {
       return
     }

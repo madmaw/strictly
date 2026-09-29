@@ -1,84 +1,90 @@
-import { type IsFieldReadonly } from '@strictly/base'
-import {
-  type ListTypeDef,
-  type LiteralTypeDef,
-  type ObjectTypeDef,
-  type RecordTypeDef,
-  type Type,
-  type TypeDef,
-  type UnionTypeDef,
-} from './Type'
+import { type z } from 'zod'
+import { type IsReadonlyType } from './ReadonlyTypeOfType'
+import { type IsOptionalField, type IsReadonlyField } from './Type'
 
-export type ValueOfType<T, Extra = {}> = T extends Type
-  ? ValueOfTypeDef<T['definition'], Extra>
-  : never
-
-export type ValueOfTypeDef<
-  F extends TypeDef,
-  Extra = {},
-> = F extends LiteralTypeDef
-  ? ValueOfLiteralTypeDef<F>
-  : F extends ListTypeDef
-    ? ValueOfListTypeDef<F, Extra>
-    : F extends RecordTypeDef
-      ? ValueOfRecordTypeDef<F, Extra>
-      : F extends ObjectTypeDef
-        ? ValueOfObjectTypeDef<F, Extra>
-        : F extends UnionTypeDef
-          ? ValueOfUnionTypeDef<F, Extra>
-          : never
-
-type ValueOfLiteralTypeDef<F extends LiteralTypeDef> =
-  F['valuePrototype'][number]
-
-type ValueOfListTypeDef<F extends ListTypeDef, Extra> =
-  IsFieldReadonly<F, 'elements'> extends true
-    ? readonly ValueOfTypeDef<F['elements'], Extra>[] & Extra
-    : ValueOfTypeDef<F['elements'], Extra>[] & Extra
-
-type ValueOfRecordTypeDef<
-  F extends RecordTypeDef,
+export type ValueOfType<T, Extra = {}> = InternalValueOfType<
+  T,
   Extra,
-> = undefined extends F['valueTypeDef']
-  ? // partial
-    IsFieldReadonly<F, 'valueTypeDef'> extends true
-    ? // readonly
-      {
-        readonly [k in F['keyPrototype']]?: ValueOfTypeDef<
-          F['valueTypeDef'],
-          Extra
-        >
-      }
-    : {
-        [k in F['keyPrototype']]?: ValueOfTypeDef<F['valueTypeDef'], Extra>
-      }
-  : // complete
-    IsFieldReadonly<F, 'valueTypeDef'> extends true
-    ? // readonly
-      {
-        readonly [k in F['keyPrototype']]: ValueOfTypeDef<
-          F['valueTypeDef'],
-          Extra
-        >
-      }
-    : {
-        [k in F['keyPrototype']]: ValueOfTypeDef<F['valueTypeDef'], Extra>
-      }
+  IsReadonlyType<T>
+>
 
-type ValueOfObjectTypeDef<F extends ObjectTypeDef, Extra> =
-  F extends ObjectTypeDef<infer Fields>
+type InternalValueOfType<T, Extra, R extends boolean> =
+  T extends z.ZodOptional<infer I>
+    ? InternalValueOfType<I, Extra, R> | undefined
+    : T extends z.ZodNullable<infer I>
+      ? InternalValueOfType<I, Extra, R> | null
+      : T extends z.ZodDefault<infer I>
+        ? InternalValueOfType<I, Extra, R>
+        : T extends z.ZodReadonly<infer I>
+          ? Readonly<InternalValueOfType<I, Extra, R>>
+          : T extends z.ZodArray<infer E>
+            ? R extends true
+              ? readonly InternalValueOfType<E, Extra, R>[] & Extra
+              : InternalValueOfType<E, Extra, R>[] & Extra
+            : T extends z.ZodRecord<infer K, infer V>
+              ? ValueOfRecord<K, V, Extra, R>
+              : T extends z.ZodObject<infer Shape>
+                ? ValueOfObject<Shape, Extra, R>
+                : T extends z.ZodUnion<infer Options>
+                  ? InternalValueOfType<Options[number], Extra, R>
+                  : z.core.output<T>
+
+type ValueOfRecord<K, V, Extra, R extends boolean> = K extends z.core.$partial
+  ? R extends true
     ? {
-        [K in keyof Fields]: ValueOfTypeDef<Fields[K], Extra>
-      } & Extra
-    : never
+        readonly [k in KeyOfRecord<K>]?: InternalValueOfType<V, Extra, R>
+      }
+    : {
+        [k in KeyOfRecord<K>]?: InternalValueOfType<V, Extra, R>
+      }
+  : R extends true
+    ? {
+        readonly [k in KeyOfRecord<K>]: InternalValueOfType<V, Extra, R>
+      }
+    : {
+        [k in KeyOfRecord<K>]: InternalValueOfType<V, Extra, R>
+      }
 
-type ValueOfUnionTypeDef<F extends UnionTypeDef, Extra> =
-  F extends UnionTypeDef<infer D, infer U>
-    ? D extends string
-      ? {
-          [K in keyof U]: ValueOfTypeDef<U[K], Extra> & Readonly<Record<D, K>>
-        }[keyof U]
-      : {
-          [K in keyof U]: ValueOfTypeDef<U[K], Extra>
-        }[keyof U]
-    : never
+type KeyOfRecord<K> = z.core.output<K> & (string | number)
+
+type ValueOfObject<Shape, Extra, R extends boolean> = R extends true
+  ? Readonly<ValueOfShape<Shape, Extra, true>>
+  : ValueOfShape<Shape, Extra, false>
+
+type ValueOfShape<Shape, Extra, R extends boolean> = Simplify<
+  {
+    [
+      K in keyof Shape as IsOptionalField<Shape[K]> extends true
+        ? never
+        : IsReadonlyField<Shape[K]> extends true
+          ? never
+          : K
+    ]: InternalValueOfType<Shape[K], Extra, R>
+  } & {
+    readonly [
+      K in keyof Shape as IsOptionalField<Shape[K]> extends true
+        ? never
+        : IsReadonlyField<Shape[K]> extends true
+          ? K
+          : never
+    ]: InternalValueOfType<Shape[K], Extra, R>
+  } & {
+    [
+      K in keyof Shape as IsOptionalField<Shape[K]> extends true
+        ? IsReadonlyField<Shape[K]> extends true
+          ? never
+          : K
+        : never
+    ]?: InternalValueOfType<Shape[K], Extra, R>
+  } & {
+    readonly [
+      K in keyof Shape as IsOptionalField<Shape[K]> extends true
+        ? IsReadonlyField<Shape[K]> extends true
+          ? K
+          : never
+        : never
+    ]?: InternalValueOfType<Shape[K], Extra, R>
+  } & Extra
+>
+
+type Simplify<T> = { [K in keyof T]: T[K] } & {}

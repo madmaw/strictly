@@ -1,19 +1,19 @@
 import { flattenTypesOfType } from 'transformers/flatteners/flattenTypesOfType'
 import { booleanType, list, numberType, object } from 'types/builders'
 
-describe('flattenTypeDefsOf', () => {
+describe('flattenTypesOfType', () => {
   it('flattens', () => {
-    const listTypeDef = list(numberType)
-    const structTypeDef = object()
-      .field('a', listTypeDef)
-      .field('b', booleanType)._type
-    const flattened = flattenTypesOfType(structTypeDef)
+    const elementType = numberType.narrow
+    const listType = list(elementType).narrow
+    const bType = booleanType.narrow
+    const structType = object().field('a', listType).field('b', bType).narrow
+    const flattened = flattenTypesOfType(structType)
 
     expect(flattened).toEqual({
-      $: structTypeDef,
-      '$.a': listTypeDef._type,
-      '$.a.*': numberType._type,
-      '$.b': booleanType._type,
+      $: structType,
+      '$.a': listType,
+      '$.a.*': elementType,
+      '$.b': bType,
     })
   })
 })

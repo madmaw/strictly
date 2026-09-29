@@ -15,7 +15,7 @@ describe('PathsOfType', () => {
     type P = '$'
 
     describe('regular', () => {
-      type T = PathsOfType<typeof stringType>
+      type T = PathsOfType<typeof stringType.narrow>
 
       it('equals expected type', () => {
         expectTypeOf<P>().toEqualTypeOf<T>()
@@ -23,8 +23,8 @@ describe('PathsOfType', () => {
     })
 
     describe('nullable', () => {
-      const builder = nullable(stringType)
-      type T = PathsOfType<typeof builder>
+      const t = nullable(stringType).narrow
+      type T = PathsOfType<typeof t>
 
       it('equals expected type', () => {
         expectTypeOf<P>().toEqualTypeOf<T>()
@@ -36,8 +36,8 @@ describe('PathsOfType', () => {
     type P = '$' | `$.${number}`
 
     describe('mutable', () => {
-      const builder = list(stringType)
-      type T = PathsOfType<typeof builder>
+      const t = list(stringType).narrow
+      type T = PathsOfType<typeof t>
 
       it('equals expected type', () => {
         expectTypeOf<P>().toEqualTypeOf<T>()
@@ -45,8 +45,8 @@ describe('PathsOfType', () => {
     })
 
     describe('readonly', () => {
-      const builder = list(stringType).readonly()
-      type T = PathsOfType<typeof builder>
+      const t = list(stringType).readonlyElements().narrow
+      type T = PathsOfType<typeof t>
 
       it('equals expected type', () => {
         expectTypeOf<P>().toEqualTypeOf<T>()
@@ -54,8 +54,8 @@ describe('PathsOfType', () => {
     })
 
     describe('nullable', () => {
-      const builder = nullable(list(stringType))
-      type T = PathsOfType<typeof builder>
+      const t = nullable(list(stringType)).narrow
+      type T = PathsOfType<typeof t>
 
       it('equals expected type', () => {
         expectTypeOf<P>().toEqualTypeOf<T>()
@@ -63,8 +63,8 @@ describe('PathsOfType', () => {
     })
 
     describe('override', () => {
-      const builder = list(stringType)
-      type T = PathsOfType<typeof builder, 'o'>
+      const t = list(stringType).narrow
+      type T = PathsOfType<typeof t, 'o'>
 
       type P = '$' | '$.o'
       it('equals expected type', () => {
@@ -74,11 +74,11 @@ describe('PathsOfType', () => {
   })
 
   describe('record', () => {
-    type P = '$' | `$.${string}` | `$.${number}`
+    type P = '$' | `$.${string}`
 
     describe('mutable', () => {
-      const builder = record(stringType)
-      type T = PathsOfType<typeof builder>
+      const t = record(stringType).narrow
+      type T = PathsOfType<typeof t>
 
       it('equals expected type', () => {
         expectTypeOf<P>().toEqualTypeOf<T>()
@@ -86,8 +86,8 @@ describe('PathsOfType', () => {
     })
 
     describe('mutable with exact keys', () => {
-      const builder = record<typeof stringType, 'a' | 'b'>(stringType)
-      type T = PathsOfType<typeof builder>
+      const t = record<typeof stringType, 'a' | 'b'>(stringType).narrow
+      type T = PathsOfType<typeof t>
 
       type P = '$' | '$.a' | '$.b'
       it('equals expected type', () => {
@@ -96,8 +96,8 @@ describe('PathsOfType', () => {
     })
 
     describe('mutable with numeric keys', () => {
-      const builder = record<typeof stringType, 1 | 2 | 3>(stringType)
-      type T = PathsOfType<typeof builder>
+      const t = record<typeof stringType, 1 | 2 | 3>(stringType).narrow
+      type T = PathsOfType<typeof t>
 
       type P = '$' | '$.1' | '$.2' | '$.3'
       it('equals expected type', () => {
@@ -106,8 +106,8 @@ describe('PathsOfType', () => {
     })
 
     describe('readonly', () => {
-      const builder = record(stringType).readonly()
-      type T = PathsOfType<typeof builder>
+      const t = record(stringType).readonlyKeys().narrow
+      type T = PathsOfType<typeof t>
 
       it('equals expected type', () => {
         expectTypeOf<P>().toEqualTypeOf<T>()
@@ -115,8 +115,8 @@ describe('PathsOfType', () => {
     })
 
     describe('partial', () => {
-      const builder = record(stringType).partialKeys()
-      type T = PathsOfType<typeof builder>
+      const t = record(stringType).partialKeys().narrow
+      type T = PathsOfType<typeof t>
 
       it('equals expected type', () => {
         expectTypeOf<P>().toEqualTypeOf<T>()
@@ -124,8 +124,8 @@ describe('PathsOfType', () => {
     })
 
     describe('nullable', () => {
-      const builder = nullable(record(stringType))
-      type T = PathsOfType<typeof builder>
+      const t = nullable(record(stringType)).narrow
+      type T = PathsOfType<typeof t>
 
       it('equals expected type', () => {
         expectTypeOf<P>().toEqualTypeOf<T>()
@@ -133,8 +133,8 @@ describe('PathsOfType', () => {
     })
 
     describe('override', () => {
-      const builder = record(stringType)
-      type T = PathsOfType<typeof builder, 'x'>
+      const t = record(stringType).narrow
+      type T = PathsOfType<typeof t, 'x'>
 
       type P = '$' | '$.x'
       it('equals expected type', () => {
@@ -145,11 +145,11 @@ describe('PathsOfType', () => {
 
   describe('object', () => {
     describe('simple', () => {
-      const builder = object()
+      const t = object()
         .field('n', numberType)
         .field('b', booleanType)
-        .field('s', stringType)
-      type T = PathsOfType<typeof builder>
+        .field('s', stringType).narrow
+      type T = PathsOfType<typeof t>
 
       type P = '$' | '$.n' | '$.b' | '$.s'
       it('equals expected type', () => {
@@ -170,16 +170,16 @@ describe('PathsOfType', () => {
       })
 
       it('ignores override', () => {
-        type T = PathsOfType<typeof builder, 'y'>
+        type T = PathsOfType<typeof t, 'y'>
         expectTypeOf<P>().toEqualTypeOf<T>()
       })
     })
 
     describe('nested', () => {
-      const builder = object()
+      const t = object()
         .field('s1', object().field('a1', booleanType))
-        .field('s2', object().field('a2', stringType))
-      type T = PathsOfType<typeof builder>
+        .field('s2', object().field('a2', stringType)).narrow
+      type T = PathsOfType<typeof t>
 
       type P = '$' | '$.s1' | '$.s1.a1' | '$.s2' | '$.s2.a2'
       it('equals expected type', () => {
@@ -187,11 +187,23 @@ describe('PathsOfType', () => {
       })
     })
 
+    describe('optional and readonly fields', () => {
+      const t = object()
+        .optionalField('o', object().field('a', numberType))
+        .readonlyField('r', list(numberType)).narrow
+      type T = PathsOfType<typeof t>
+
+      type P = '$' | '$.o' | '$.o.a' | '$.r' | `$.r.${number}`
+      it('equals expected type', () => {
+        expectTypeOf<P>().toEqualTypeOf<T>()
+      })
+    })
+
     describe('object of list', () => {
-      const builder = object().field('l', list(numberType))
+      const t = object().field('l', list(numberType)).narrow
 
       describe('no override', () => {
-        type T = PathsOfType<typeof builder>
+        type T = PathsOfType<typeof t>
 
         type P = '$' | '$.l' | `$.l.${number}`
         it('equals expected type', () => {
@@ -200,7 +212,7 @@ describe('PathsOfType', () => {
       })
 
       describe('passes override', () => {
-        type T = PathsOfType<typeof builder, 'o'>
+        type T = PathsOfType<typeof t, 'o'>
 
         type P = '$' | '$.l' | '$.l.o'
         it('equals expected type', () => {
@@ -212,8 +224,8 @@ describe('PathsOfType', () => {
 
   describe('union', () => {
     describe('with primitives', () => {
-      const builder = union().or('1', numberType).or('2', stringType)
-      type T = PathsOfType<typeof builder>
+      const t = union().or('1', numberType).or('2', stringType).narrow
+      type T = PathsOfType<typeof t>
 
       type P = '$'
       it('equals expected type', () => {
@@ -222,11 +234,11 @@ describe('PathsOfType', () => {
     })
 
     describe('with overlapping record', () => {
-      const builder = union()
+      const t = union()
         .or('1', object().field('a', numberType).field('b', stringType))
         .or('2', object().field('b', stringType).field('c', stringType))
-        .or('3', object().field('c', stringType).field('a', stringType))
-      type T = PathsOfType<typeof builder>
+        .or('3', object().field('c', stringType).field('a', stringType)).narrow
+      type T = PathsOfType<typeof t>
 
       type P = '$' | '$.a' | '$.b' | '$.c'
       it('equals expected type', () => {
@@ -235,7 +247,7 @@ describe('PathsOfType', () => {
     })
 
     describe('nested', () => {
-      const builder = union()
+      const t = union()
         .or(
           '1',
           object().field(
@@ -249,8 +261,8 @@ describe('PathsOfType', () => {
             'b',
             union().or('y', object().field('bb', stringType)),
           ),
-        )
-      type T = PathsOfType<typeof builder>
+        ).narrow
+      type T = PathsOfType<typeof t>
 
       type P = '$' | '$.a' | '$.a.aa' | '$.b' | '$.b.bb'
       it('equals expected type', () => {
@@ -260,42 +272,16 @@ describe('PathsOfType', () => {
   })
 
   describe('with discriminator', () => {
-    const builder = union('x')
+    const t = union('x')
       .or('1', object().field('a', booleanType))
-      .or('2', object().field('b', numberType))
+      .or('2', object().field('b', numberType)).narrow
 
-    type T = PathsOfType<typeof builder>
+    type T = PathsOfType<typeof t>
 
-    type P = '$' | '$:1.a' | '$:2.b'
-
-    it('equals expected type', () => {
-      expectTypeOf<P>().toEqualTypeOf<T>()
-    })
-  })
-
-  describe('with nested discriminator', () => {
-    const builder = union('x')
-      .or('1', union('y').or('p', object().field('a', booleanType)))
-      .or('2', union('z').or('q', object().field('b', numberType)))
-
-    type T = PathsOfType<typeof builder>
-
-    type P = '$' | '$:1:p.a' | '$:2:q.b'
+    type P = '$' | '$:1.a' | '$:1.x' | '$:2.b' | '$:2.x'
 
     it('equals expected type', () => {
       expectTypeOf<P>().toEqualTypeOf<T>()
     })
   })
-
-  // breaks linting
-  // describe('infinite recursion', function () {
-  //   function f<T extends Type>(t: T): JsonPathsOf<T> {
-  //     return JSON.stringify(t) as JsonPathsOf<T>
-  //   }
-  //   it('compiles', function () {
-  //     const builder = list(string)
-
-  //     expect(f(builder)).toBeDefined();
-  //   })
-  // })
 })

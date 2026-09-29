@@ -15,7 +15,7 @@
   "main": "src/index.ts",
   "name": "@strictly/base",
   "peerDependencies": {
-    "type-fest": "^5.0.0"
+    "type-fest": "catalog:"
   },
   "publishConfig": {
     "access": "public",

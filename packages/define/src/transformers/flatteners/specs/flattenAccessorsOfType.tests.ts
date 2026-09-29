@@ -7,10 +7,12 @@ import { type Mock, vi } from 'vite-plus/test'
 
 describe('flattenAccessorsOfType', () => {
   let setter: Mock
-  const builder = object().field('a', list(numberType)).field('b', booleanType)
+  const type = object()
+    .field('a', list(numberType))
+    .field('b', booleanType).narrow
 
-  let flattened: FlattenedAccessorsOfType<typeof builder>
-  let value: ValueOfType<typeof builder>
+  let flattened: FlattenedAccessorsOfType<typeof type>
+  let value: ValueOfType<typeof type>
 
   beforeEach(() => {
     setter = vi.fn()
@@ -18,7 +20,7 @@ describe('flattenAccessorsOfType', () => {
       a: [1, 2, 4],
       b: false,
     }
-    flattened = flattenAccessorsOfType<typeof builder>(builder, value, setter)
+    flattened = flattenAccessorsOfType<typeof type>(type, value, setter)
   })
 
   // note that we already have tests for the type and the function that this calls, so
@@ -69,7 +71,7 @@ describe('flattenAccessorsOfType', () => {
   })
 
   it('sets the top level value', () => {
-    const newValue: ValueOfType<typeof builder> = {
+    const newValue: ValueOfType<typeof type> = {
       a: [-1, 5],
       b: true,
     }
