@@ -44,6 +44,32 @@ const RESOLVE = {
 const require = createRequire(import.meta.url)
 
 /**
+ * Transforms decorators and class fields via babel so they behave the same in every package, react or not, e.g.
+ * mobx decorators and the `bound` method decorator. The rolldown babel plugin configures babel's typescript parser
+ * automatically, so this runs on raw `.ts` sources too. Extra babel plugins (e.g. the lingui macro) run afterwards.
+ */
+export function createDecoratorPlugin(
+  extraPlugins: readonly PluginItem[] = [],
+): PluginOption {
+  return babel({
+    plugins: [
+      [
+        require.resolve('@babel/plugin-proposal-decorators'),
+        {
+          version: '2023-11',
+        },
+      ],
+      require.resolve('@babel/plugin-transform-class-static-block'),
+      require.resolve('@babel/plugin-transform-class-properties'),
+      ...extraPlugins,
+    ],
+    assumptions: {
+      setPublicClassFields: false,
+    },
+  })
+}
+
+/**
  * React via babel so that mobx decorators and class fields are transformed consistently everywhere. Vite 8 dropped
  * the babel option from the react plugin, so babel runs as its own rolldown plugin after the react transform
  */
@@ -54,32 +80,16 @@ export function createReactPlugin({
   readonly lingui?: boolean
   readonly root: string
 }): PluginOption[] {
-  const plugins: PluginItem[] = [
-    [
-      require.resolve('@babel/plugin-proposal-decorators'),
-      {
-        version: '2023-11',
-      },
-    ],
-    require.resolve('@babel/plugin-transform-class-static-block'),
-    require.resolve('@babel/plugin-transform-class-properties'),
-  ]
-  if (withLingui) {
-    plugins.push([
-      require.resolve('@lingui/babel-plugin-lingui-macro'),
-      // the macro plugin otherwise searches the working directory for the lingui config
-      { linguiConfig: getLinguiConfig({ cwd: root }) },
-    ])
-  }
-  return [
-    reactSupport(),
-    babel({
-      plugins,
-      assumptions: {
-        setPublicClassFields: false,
-      },
-    }),
-  ]
+  const linguiPlugins: PluginItem[] = withLingui
+    ? [
+        [
+          require.resolve('@lingui/babel-plugin-lingui-macro'),
+          // the macro plugin otherwise searches the working directory for the lingui config
+          { linguiConfig: getLinguiConfig({ cwd: root }) },
+        ],
+      ]
+    : []
+  return [reactSupport(), createDecoratorPlugin(linguiPlugins)]
 }
 
 /**
@@ -136,7 +146,9 @@ export function createViteLibraryConfig(
     ...packageJson.dependencies,
     ...packageJson.peerDependencies,
   })
-  const plugins: PluginOption[] = react ? createReactPlugin({ root }) : []
+  const plugins: PluginOption[] = react
+    ? createReactPlugin({ root })
+    : [createDecoratorPlugin()]
   return defineConfig({
     build: {
       lib: {
@@ -186,6 +198,7 @@ export function createVitestConfig({
   readonly unitTest?: TestParameters
 }) {
   return defineConfig({
+    plugins: [createDecoratorPlugin()],
     resolve: RESOLVE,
     root,
     test: createTestConfig({

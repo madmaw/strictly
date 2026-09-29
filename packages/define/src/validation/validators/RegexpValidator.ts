@@ -1,3 +1,4 @@
+import { bound } from '@strictly/base'
 import { type AnnotatedValidator } from 'validation/validator'
 
 export const RegexpValidationErrorType = 'regexp'
@@ -49,6 +50,7 @@ export class RegexpValidator<
     this.required = required
   }
 
+  @bound
   validate(value: string): RegexpValidationError<Intent> | null {
     const passes = this.regexp.test(value)
     if ((!passes && !this.negate) || (passes && this.negate)) {
@@ -60,6 +62,7 @@ export class RegexpValidator<
     return null
   }
 
+  @bound
   annotations() {
     return {
       required: this.required,

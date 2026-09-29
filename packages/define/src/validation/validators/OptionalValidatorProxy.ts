@@ -1,3 +1,4 @@
+import { bound } from '@strictly/base'
 import { type AnnotatedValidator } from 'validation/validator'
 
 export class OptionalValidatorProxy<
@@ -30,6 +31,7 @@ export class OptionalValidatorProxy<
     private readonly isRequired: (v: V) => v is V1,
   ) {}
 
+  @bound
   validate(v: V, valuePath: ValuePath, context: Context): E | null {
     if (this.isRequired(v)) {
       return this.proxied.validate(v, valuePath, context)
@@ -37,6 +39,7 @@ export class OptionalValidatorProxy<
     return null
   }
 
+  @bound
   annotations(valuePath: ValuePath, context: Context) {
     return {
       ...this.proxied.annotations(valuePath, context),

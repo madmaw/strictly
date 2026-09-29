@@ -1,3 +1,4 @@
+import { bound } from '@strictly/base'
 import { type AnnotatedValidator } from 'validation/validator'
 
 export class DefinedValidator<V, E> implements AnnotatedValidator<
@@ -8,6 +9,7 @@ export class DefinedValidator<V, E> implements AnnotatedValidator<
 > {
   constructor(private readonly error: E) {}
 
+  @bound
   validate(v: V | null | undefined): E | null {
     if (v == null) {
       return this.error
@@ -15,6 +17,7 @@ export class DefinedValidator<V, E> implements AnnotatedValidator<
     return null
   }
 
+  @bound
   annotations() {
     return {
       required: true,
