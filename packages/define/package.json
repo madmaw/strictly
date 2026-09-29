@@ -19,8 +19,8 @@
   "name": "@strictly/define",
   "peerDependencies": {
     "@strictly/base": "*",
-    "mobx": "^6.0.0 || ^7.0.0",
-    "type-fest": "^5.0.0",
+    "mobx": "catalog:",
+    "type-fest": "catalog:",
     "zod": "catalog:"
   },
   "publishConfig": {
