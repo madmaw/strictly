@@ -15,13 +15,11 @@
     "react-dom": "catalog:"
   },
   "devDependencies": {
-    "@chromatic-com/storybook": "catalog:",
     "@lingui/cli": "catalog:",
-    "@storybook/addon-docs": "catalog:",
-    "@storybook/addon-links": "catalog:",
     "@storybook/react-vite": "catalog:",
     "@strictly/lingui": "workspace:*",
     "@strictly/spec": "workspace:*",
+    "@strictly/storybook": "workspace:*",
     "@strictly/typescript": "workspace:*",
     "@strictly/vite": "workspace:*",
     "@testing-library/dom": "catalog:",

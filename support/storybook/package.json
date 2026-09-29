@@ -1,0 +1,30 @@
+{
+  "description": "Shared storybook configuration for the workspace",
+  "devDependencies": {
+    "@chromatic-com/storybook": "catalog:",
+    "@mantine/core": "catalog:",
+    "@storybook/addon-docs": "catalog:",
+    "@storybook/addon-links": "catalog:",
+    "@storybook/react-vite": "catalog:",
+    "@strictly/typescript": "workspace:*",
+    "@types/node": "^24.0.0",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "mobx": "catalog:",
+    "react": "catalog:",
+    "react-dom": "catalog:",
+    "storybook": "catalog:"
+  },
+  "exports": {
+    "./main": "./src/main.ts",
+    "./preview": "./src/preview.tsx"
+  },
+  "license": "MIT",
+  "name": "@strictly/storybook",
+  "scripts": {
+    "check-types": "tsc -b",
+    "clean": "del-cli .out"
+  },
+  "type": "module",
+  "version": "0.0.41"
+}

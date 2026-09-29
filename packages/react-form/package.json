@@ -2,12 +2,10 @@
   "author": "Chris <chris.glover@gmail.com> (@madmaw)",
   "description": "Types and utilities for creating React forms",
   "devDependencies": {
-    "@chromatic-com/storybook": "catalog:",
-    "@storybook/addon-docs": "catalog:",
-    "@storybook/addon-links": "catalog:",
     "@storybook/react-vite": "catalog:",
     "@strictly/base": "workspace:*",
     "@strictly/define": "workspace:*",
+    "@strictly/storybook": "workspace:*",
     "@strictly/typescript": "workspace:*",
     "@strictly/vite": "workspace:*",
     "@testing-library/dom": "catalog:",
