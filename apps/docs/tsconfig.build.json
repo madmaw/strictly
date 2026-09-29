@@ -5,5 +5,5 @@
     }
   },
   "extends": "../../tsconfig.build.json",
-  "include": ["vite.config.mts", "vitest.workspace.ts"]
+  "include": ["astro.config.mts"]
 }

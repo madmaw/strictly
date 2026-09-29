@@ -5,9 +5,5 @@
     }
   },
   "extends": "../../tsconfig.build.json",
-  "include": [
-    ".storybook/vite.config.mts",
-    "vite.config.mts",
-    "vitest.workspace.ts"
-  ]
+  "include": ["vite.config.mts"]
 }
