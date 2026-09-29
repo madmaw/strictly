@@ -1,7 +1,6 @@
 import { t } from '@lingui/core/macro'
 import { Trans } from '@lingui/react/macro'
 import { CloseButton, Group, Stack } from '@mantine/core'
-import { type Reverse } from '@strictly/base'
 import {
   type FlattenedTypesOfType,
   type FlattenedValuesOfType,
@@ -13,6 +12,7 @@ import {
   RegexpValidator,
   stringType,
   type ValueOfType,
+  type ValuePathsOfTypePath,
   type ValueToTypePathsOfType,
 } from '@strictly/define'
 import {
@@ -47,7 +47,6 @@ export type FlattenedPetOwnerTypes = FlattenedTypesOfType<
 export type PetOwnerValueToTypePaths = ValueToTypePathsOfType<
   typeof petOwnerType
 >
-export type PetOwnerTypeToValuePaths = Reverse<PetOwnerValueToTypePaths>
 
 export const unvalidatedPetOwnerFieldAdapters = {
   '$.email': trimmingStringAdapter().optional().narrow,
@@ -57,15 +56,12 @@ export const unvalidatedPetOwnerFieldAdapters = {
 } as const satisfies Partial<
   FieldAdaptersOfValues<
     FlattenedValuesOfType<ReadonlyTypeOfType<typeof petOwnerType>, '*'>,
-    PetOwnerTypeToValuePaths,
+    PetOwnerValueToTypePaths,
     {}
   >
 >
 
-const petOwnerValidators = flattenValidatorsOfValidatingType<
-  typeof petOwnerType,
-  PetOwnerTypeToValuePaths
->(petOwnerType)
+const petOwnerValidators = flattenValidatorsOfValidatingType(petOwnerType)
 
 export const petOwnerFieldAdapters = mergeAdaptersWithValidators(
   unvalidatedPetOwnerFieldAdapters,
@@ -73,7 +69,10 @@ export const petOwnerFieldAdapters = mergeAdaptersWithValidators(
 )
 
 export type PetOwnerTypePaths = keyof typeof petOwnerFieldAdapters
-export type PetOwnerValuePaths = PetOwnerTypeToValuePaths[PetOwnerTypePaths]
+export type PetOwnerValuePaths = ValuePathsOfTypePath<
+  PetOwnerValueToTypePaths,
+  PetOwnerTypePaths
+>
 
 export type PetOwnerFields = FormFieldsOfFieldAdapters<
   PetOwnerValueToTypePaths,

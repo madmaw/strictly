@@ -1,18 +1,11 @@
-import { type Reverse } from '@strictly/base'
 import { petType, REQUIRED_ERROR } from 'specs/fixtures/pet'
 import { flattenValidatorsOfValidatingTypeWithMutability } from 'transformers/flatteners/flattenValidatorsOfValidatingType'
 import { numberType, object, stringType } from 'types/builders'
-import { type ValueToTypePathsOfType } from 'types/ValueToTypePathsOfType'
 import { annotations, validate, type Validator } from 'validation/validator'
-
-type PetTypeToValuePaths = Reverse<ValueToTypePathsOfType<typeof petType>>
 
 describe('flattenValidatorsOfValidatingType', () => {
   describe('rules', () => {
-    const validators = flattenValidatorsOfValidatingTypeWithMutability<
-      typeof petType,
-      PetTypeToValuePaths
-    >(petType)
+    const validators = flattenValidatorsOfValidatingTypeWithMutability(petType)
 
     it('only has validators for the paths with rules', () => {
       expectTypeOf<keyof typeof validators>().toEqualTypeOf<

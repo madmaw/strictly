@@ -1,4 +1,3 @@
-import { type Reverse } from '@strictly/base'
 import {
   booleanType,
   DefinedValidator,
@@ -101,5 +100,3 @@ export type PetValueToTypePaths = ValueToTypePathsOfType<typeof petType> & {
 }
 export type FlattenedPetValues = FlattenedValuesOfType<typeof petType>
 export type FlattenedPetAccessors = FlattenedAccessorsOfType<typeof petType>
-
-export type PetTypeToValuePaths = Reverse<PetValueToTypePaths>
