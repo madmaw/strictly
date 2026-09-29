@@ -1,10 +1,11 @@
 {
   "devDependencies": {
     "@babel/core": "catalog:",
-    "@babel/plugin-transform-class-properties": "catalog:",
     "@babel/plugin-proposal-decorators": "catalog:",
+    "@babel/plugin-transform-class-properties": "catalog:",
     "@babel/plugin-transform-class-static-block": "catalog:",
     "@lingui/babel-plugin-lingui-macro": "catalog:",
+    "@lingui/conf": "catalog:",
     "@lingui/vite-plugin": "catalog:",
     "@microsoft/api-extractor": "catalog:",
     "@rolldown/plugin-babel": "catalog:",
