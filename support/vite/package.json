@@ -10,6 +10,7 @@
     "@microsoft/api-extractor": "catalog:",
     "@rolldown/plugin-babel": "catalog:",
     "@storybook/addon-vitest": "catalog:",
+    "@strictly/typescript": "workspace:*",
     "@vitejs/plugin-react": "catalog:",
     "@vitest/browser-playwright": "catalog:",
     "playwright": "catalog:",

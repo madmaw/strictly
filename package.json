@@ -1,6 +1,7 @@
 {
   "devDependencies": {
     "@strictly/oxlint": "workspace:*",
+    "@strictly/typescript": "workspace:*",
     "@typescript/native": "catalog:",
     "del-cli": "^7.0.0",
     "typescript": "catalog:",

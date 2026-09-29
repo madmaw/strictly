@@ -22,6 +22,7 @@
     "@storybook/react-vite": "catalog:",
     "@strictly/lingui": "workspace:*",
     "@strictly/spec": "workspace:*",
+    "@strictly/typescript": "workspace:*",
     "@strictly/vite": "workspace:*",
     "@testing-library/dom": "catalog:",
     "@testing-library/react": "catalog:",

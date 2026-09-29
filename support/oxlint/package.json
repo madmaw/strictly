@@ -1,5 +1,6 @@
 {
   "devDependencies": {
+    "@strictly/typescript": "workspace:*",
     "@stylistic/eslint-plugin": "5.10.0",
     "@types/node": "^24.0.0",
     "vite-plus": "catalog:"

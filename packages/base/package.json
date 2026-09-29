@@ -1,6 +1,7 @@
 {
   "author": "Chris <chris.glover@gmail.com> (@madmaw)",
   "devDependencies": {
+    "@strictly/typescript": "workspace:*",
     "@strictly/vite": "workspace:*",
     "type-fest": "catalog:"
   },
