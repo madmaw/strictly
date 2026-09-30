@@ -14,7 +14,7 @@ import {
   type ValueOfType,
   type ValueToTypePathsOfType,
 } from '@strictly/base'
-import { expectDefinedAndReturn } from '@strictly/spec'
+import { expectDefinedAndReturn } from '@strictly/vitest'
 import {
   type FieldAdapter,
   type ToOfFieldAdapter,

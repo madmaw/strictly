@@ -1,6 +1,6 @@
 import { type Meta, type StoryObj } from '@storybook/react-vite'
 import { delay } from '@strictly/base'
-import { textContentOf } from '@strictly/spec'
+import { textContentOf } from '@strictly/react'
 import { PetForm } from 'features/form/pet/mobx/PetForm'
 import { SubmitLabel } from 'features/form/pet/PetFieldsView'
 import { action } from 'storybook/actions'

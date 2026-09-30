@@ -1,6 +1,6 @@
 import { composeStories } from '@storybook/react-vite'
 import { toArray } from '@strictly/base'
-import { textContentOf } from '@strictly/spec'
+import { textContentOf } from '@strictly/react'
 import { fireEvent, render } from '@testing-library/react'
 import { SubmitLabel } from 'features/form/pet/PetFieldsView'
 import { vi } from 'vite-plus/test'

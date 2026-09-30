@@ -293,7 +293,12 @@ export function createOxlintConfig({
             {
               importNames: TEST_HELPER_IMPORT_NAMES,
               message: "Don't use test imports in production code",
-              name: '@strictly/base',
+              name: '@strictly/vitest',
+            },
+            {
+              importNames: TEST_HELPER_IMPORT_NAMES,
+              message: "Don't use test imports in production code",
+              name: '@strictly/storybook',
             },
             {
               message: "Don't use test imports in production code",
@@ -420,6 +425,11 @@ export function createOxlintConfig({
           [
             {
               message:
+                "Don't use storybook helpers in unit tests. The equivalent test helpers live in @strictly/vitest.",
+              regex: '^@strictly\\/storybook(\\/.*)?$',
+            },
+            {
+              message:
                 "Don't use storybook imports in unit tests. There should be an @testing-library equivalent to whatever you are trying to import.",
               regex: '^(storybook)\\/.*$',
             },
@@ -436,6 +446,11 @@ export function createOxlintConfig({
         'no-restricted-imports': noRestrictedImports(
           [
             // ban vitest imports
+            {
+              message:
+                "Don't use vitest test helpers in storybook code. The equivalent assertions live in @strictly/storybook.",
+              name: '@strictly/vitest',
+            },
             {
               message:
                 "Don't use test imports in storybook code. Importing this will give incomprehensible errors in Storybook!",

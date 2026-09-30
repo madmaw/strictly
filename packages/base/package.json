@@ -1,9 +1,9 @@
 {
   "author": "Chris <chris.glover@gmail.com> (@madmaw)",
   "devDependencies": {
-    "@strictly/spec": "workspace:*",
     "@strictly/typescript": "workspace:*",
     "@strictly/vite": "workspace:*",
+    "@strictly/vitest": "workspace:*",
     "iter-ops": "catalog:",
     "mobx-utils": "catalog:",
     "real-cancellable-promise": "catalog:",

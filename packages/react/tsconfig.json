@@ -21,10 +21,10 @@
       "path": "../base"
     },
     {
-      "path": "../spec"
+      "path": "../../support/storybook"
     },
     {
-      "path": "../../support/storybook"
+      "path": "../../support/vitest"
     }
   ]
 }

@@ -1,4 +1,4 @@
-import { expectDefinedAndReturn } from '@strictly/spec'
+import { expectDefinedAndReturn } from '@strictly/vitest'
 import { flattenAccessorsOfType } from 'define/transformers/flatteners/flattenAccessorsOfType'
 import { booleanType, list, numberType, object } from 'define/types/builders'
 import { type FlattenedAccessorsOfType } from 'define/types/FlattenedAccessorsOfType'

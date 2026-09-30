@@ -26,9 +26,6 @@
       "path": "../../packages/react"
     },
     {
-      "path": "../../packages/spec"
-    },
-    {
       "path": "../../support/storybook"
     }
   ]

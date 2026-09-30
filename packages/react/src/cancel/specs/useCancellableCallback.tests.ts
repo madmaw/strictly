@@ -1,5 +1,5 @@
 import { CancellableHelper } from '@strictly/base'
-import { expectPendingPromise } from '@strictly/spec'
+import { expectPendingPromise } from '@strictly/vitest'
 import { renderHook } from '@testing-library/react'
 import { useCancellableCallback } from 'cancel/useCancellableCallback'
 import { useEffect } from 'react'

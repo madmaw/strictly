@@ -7,12 +7,5 @@
   },
   "extends": "@strictly/typescript/base.json",
   "include": ["src", "tsconfig.json"],
-  "references": [
-    {
-      "path": "../../support/vite"
-    },
-    {
-      "path": "../../support/vitest"
-    }
-  ]
+  "references": []
 }
