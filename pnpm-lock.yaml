@@ -198,12 +198,9 @@ importers:
       '@strictly/base':
         specifier: workspace:*
         version: link:../../packages/base
-      '@strictly/define':
+      '@strictly/react':
         specifier: workspace:*
-        version: link:../../packages/define
-      '@strictly/react-form':
-        specifier: workspace:*
-        version: link:../../packages/react-form
+        version: link:../../packages/react
       '@strictly/spec':
         specifier: workspace:*
         version: link:../../packages/spec
@@ -310,12 +307,9 @@ importers:
       '@strictly/base':
         specifier: workspace:*
         version: link:../../packages/base
-      '@strictly/define':
+      '@strictly/react':
         specifier: workspace:*
-        version: link:../../packages/define
-      '@strictly/react-form':
-        specifier: workspace:*
-        version: link:../../packages/react-form
+        version: link:../../packages/react
       astro:
         specifier: 'catalog:'
         version: 7.3.5(@types/node@24.19.0)(jiti@2.7.0)(less@4.9.1)(sass@1.105.0)(stylus@0.62.0)(typescript@7.0.2)
@@ -335,6 +329,9 @@ importers:
       '@strictly/typescript':
         specifier: workspace:*
         version: link:../../support/typescript
+      '@strictly/vite':
+        specifier: workspace:*
+        version: link:../../support/vite
       '@types/react':
         specifier: 'catalog:'
         version: 19.2.7
@@ -362,26 +359,11 @@ importers:
       type-fest:
         specifier: 'catalog:'
         version: 5.10.0
-
-  packages/define:
-    devDependencies:
-      '@strictly/base':
-        specifier: workspace:*
-        version: link:../base
-      '@strictly/typescript':
-        specifier: workspace:*
-        version: link:../../support/typescript
-      '@strictly/vite':
-        specifier: workspace:*
-        version: link:../../support/vite
-      type-fest:
-        specifier: 'catalog:'
-        version: 5.10.0
       zod:
         specifier: 'catalog:'
         version: 4.6.5
 
-  packages/react-form:
+  packages/react:
     devDependencies:
       '@storybook/react-vite':
         specifier: 'catalog:'
@@ -389,9 +371,6 @@ importers:
       '@strictly/base':
         specifier: workspace:*
         version: link:../base
-      '@strictly/define':
-        specifier: workspace:*
-        version: link:../define
       '@strictly/storybook':
         specifier: workspace:*
         version: link:../../support/storybook

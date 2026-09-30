@@ -33,7 +33,7 @@ jobs:
         # specifiers when packing, so no manifest rewriting is needed. Versions already on the registry are
         # skipped so this workflow can run on every push to main.
         run: |
-          for package in packages/base packages/define packages/react-form; do
+          for package in packages/base packages/react; do
             name=$(node -p "require('./${package}/package.json').name")
             version=$(node -p "require('./${package}/package.json').version")
             if npm view "${name}@${version}" version > /dev/null 2>&1; then

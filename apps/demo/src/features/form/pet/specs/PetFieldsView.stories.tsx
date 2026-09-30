@@ -1,6 +1,6 @@
 import { Card } from '@mantine/core'
 import { type Meta, type StoryObj } from '@storybook/react-vite'
-import { MinimumStringLengthValidationErrorType } from '@strictly/define'
+import { MinimumStringLengthValidationErrorType } from '@strictly/base'
 import { PetFieldsView } from 'features/form/pet/PetFieldsView'
 import { action } from 'storybook/actions'
 

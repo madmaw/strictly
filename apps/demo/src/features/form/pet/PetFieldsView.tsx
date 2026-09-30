@@ -9,13 +9,15 @@ import {
   PillsInput,
   Stack,
 } from '@mantine/core'
-import { UnreachableError } from '@strictly/base'
-import { MinimumStringLengthValidationErrorType } from '@strictly/define'
+import {
+  MinimumStringLengthValidationErrorType,
+  UnreachableError,
+} from '@strictly/base'
 import {
   type ErrorRendererProps,
   type FieldsViewProps,
   useMantineFormFields,
-} from '@strictly/react-form'
+} from '@strictly/react'
 import { type ComponentType, type Ref, useCallback, useMemo } from 'react'
 import {
   type PetFields,

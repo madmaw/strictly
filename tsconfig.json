@@ -16,10 +16,7 @@
       "path": "packages/base"
     },
     {
-      "path": "packages/define"
-    },
-    {
-      "path": "packages/react-form"
+      "path": "packages/react"
     },
     {
       "path": "packages/spec"

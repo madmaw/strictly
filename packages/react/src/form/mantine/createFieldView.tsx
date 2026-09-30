@@ -1,0 +1,81 @@
+import { type StringKeyOf } from '@strictly/base'
+import { type ErrorOfField } from 'form/types/ErrorOfField'
+import { type Fields } from 'form/types/Field'
+import { type ValueTypeOfField } from 'form/types/ValueTypeOfField'
+import { Empty } from 'form/util/Empty'
+import { Observer } from 'mobx-react'
+import { type ComponentProps, type ComponentType, useCallback } from 'react'
+import { type MantineForm } from './types'
+
+export type FieldViewProps<F extends Fields, K extends keyof F> = {
+  children: (props: {
+    disabled: boolean
+    required: boolean
+    value: ValueTypeOfField<F[K]>
+    error: ErrorOfField<F[K]> | undefined
+    ErrorSink: ComponentType<{ error: ErrorOfField<F[K]> }>
+    onFocus: () => void
+    onBlur: () => void
+    onValueChange: (v: ValueTypeOfField<F[K]>) => void
+    onSubmit: () => void
+  }) => ReturnType<NonNullable<ComponentProps<typeof Observer>['render']>>
+}
+
+/**
+ * Displays current value and error of a field
+ */
+function FieldView<F extends Fields, K extends keyof F>({
+  valuePath,
+  form,
+  children,
+}: FieldViewProps<F, K> & {
+  valuePath: K
+  form: MantineForm<F>
+}) {
+  const onFocus = useCallback(() => {
+    form.onFieldFocus?.(valuePath)
+  }, [form, valuePath])
+  const onBlur = useCallback(() => {
+    form.onFieldBlur?.(valuePath)
+  }, [form, valuePath])
+  const onValueChange = useCallback(
+    (value: ValueTypeOfField<F[K]>) => {
+      form.onFieldValueChange(valuePath, value)
+    },
+    [form, valuePath],
+  )
+  const onSubmit = useCallback(() => {
+    form.onFieldSubmit?.(valuePath)
+  }, [form, valuePath])
+  return (
+    <Observer>
+      {() => {
+        const { value, error, readonly, required } = form.fields[valuePath]
+        return children({
+          disabled: readonly,
+          required,
+          value,
+          error,
+          ErrorSink: Empty,
+          onFocus,
+          onBlur,
+          onValueChange,
+          onSubmit,
+        })
+      }}
+    </Observer>
+  )
+}
+
+export function createFieldView<F extends Fields, K extends StringKeyOf<F>>(
+  this: MantineForm<F>,
+  valuePath: K,
+): ComponentType<FieldViewProps<F, K>> {
+  return (props: FieldViewProps<F, K>) => (
+    <FieldView
+      form={this}
+      valuePath={valuePath}
+      {...props}
+    />
+  )
+}

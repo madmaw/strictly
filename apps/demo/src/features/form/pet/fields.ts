@@ -6,7 +6,7 @@ import {
   MinimumStringLengthValidator,
   type ReadonlyTypeOfType,
   type ValuePathsOfTypePath,
-} from '@strictly/define'
+} from '@strictly/base'
 import {
   adapterFromPrototype,
   adapterFromTwoWayConverter,
@@ -24,7 +24,7 @@ import {
   SelectStringConverter,
   subFormFieldAdapters,
   trimmingStringAdapter,
-} from '@strictly/react-form'
+} from '@strictly/react'
 import { IsAliveTwoWayConverter } from './IsAliveFieldConverter'
 import {
   petOwnerType,

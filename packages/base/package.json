@@ -3,7 +3,8 @@
   "devDependencies": {
     "@strictly/typescript": "workspace:*",
     "@strictly/vite": "workspace:*",
-    "type-fest": "catalog:"
+    "type-fest": "catalog:",
+    "zod": "catalog:"
   },
   "homepage": "https://madmaw.github.io/strictly/base",
   "keywords": [
@@ -15,7 +16,9 @@
   "main": "src/index.ts",
   "name": "@strictly/base",
   "peerDependencies": {
-    "type-fest": "catalog:"
+    "mobx": "catalog:",
+    "type-fest": "catalog:",
+    "zod": "catalog:"
   },
   "publishConfig": {
     "access": "public",

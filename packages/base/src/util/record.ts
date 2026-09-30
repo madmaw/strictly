@@ -29,7 +29,7 @@ export function rollup<
 }
 
 // TODO simplify the generics
-export function union<
+export function unionRecords<
   R1 extends Readonly<Record<K1, V1>>,
   K1 extends string | number | symbol,
   V1 extends R1[K1],

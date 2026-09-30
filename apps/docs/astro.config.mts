@@ -1,5 +1,6 @@
 import mdx from '@astrojs/mdx'
 import react from '@astrojs/react'
+import { createDecoratorPlugin } from '@strictly/vite/config'
 import { defineConfig } from 'astro/config'
 import { loadEnv } from 'vite'
 
@@ -31,6 +32,9 @@ const x: ReturnType<typeof defineConfig<['en']>> = defineConfig({
     format: 'preserve',
   },
   vite: {
+    // base's validators use decorators (e.g. the `bound` method decorator); transform them so the
+    // prerender build can load the @strictly/base barrel imported by the README route
+    plugins: [createDecoratorPlugin()],
     resolve: {
       tsconfigPaths: true,
     },

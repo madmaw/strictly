@@ -3,7 +3,7 @@ import { useMemo } from 'react'
 import styles from './mdxNavigation.module.css'
 import { type ToAbsoluteUrl } from './toAbsoluteUrl'
 
-export type PageId = 'home' | 'base' | 'define' | 'react-form' | 'why'
+export type PageId = 'home' | 'base' | 'react' | 'why'
 
 type PageMetadata = {
   title: string
@@ -19,13 +19,9 @@ export const pagePaths: Record<PageId, PageMetadata> = {
     path: '/base/README.md',
     title: 'Base',
   },
-  define: {
-    path: '/define/README.md',
-    title: 'Define',
-  },
-  'react-form': {
-    path: '/react-form/README.md',
-    title: 'React Form',
+  react: {
+    path: '/react/README.md',
+    title: 'React',
   },
   why: {
     path: '/why',

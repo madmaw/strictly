@@ -34,7 +34,7 @@
     "lingui:extract": "vp run -r lingui:extract",
     "lint": "vp check",
     "lint:fix": "vp check --fix",
-    "react-form:storybook": "vp run @strictly/react-form#storybook",
+    "react:storybook": "vp run @strictly/react#storybook",
     "storybook:build": "vp run -r storybook:build",
     "test": "vp run -r test",
     "test:storybook": "vp run -r --concurrency-limit 1 test:storybook",

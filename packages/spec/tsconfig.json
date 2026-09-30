@@ -18,9 +18,6 @@
       "path": "../../support/vite"
     },
     {
-      "path": "../define"
-    },
-    {
       "path": "../base"
     }
   ]

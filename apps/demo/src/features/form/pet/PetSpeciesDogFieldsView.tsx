@@ -6,7 +6,7 @@ import {
   type ErrorRendererProps,
   type FieldsViewProps,
   useMantineFormFields,
-} from '@strictly/react-form'
+} from '@strictly/react'
 import { type PetFields } from './fields'
 import { type DogBreed, NOT_A_BREED_ERROR, REQUIRED_ERROR } from './types'
 
