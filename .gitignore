@@ -5,3 +5,5 @@ dist
 node_modules
 packages/struct
 storybook-static
+# compiled by lingui:compile from the .po catalogs
+apps/demo/src/locales/*.ts
