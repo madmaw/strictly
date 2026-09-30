@@ -74,7 +74,7 @@ catalog:
   jsdom: ^30.1.1
   mobx: ^7.0.0
   mobx-react: ^10.0.0
-  playwright: ^1.49.1
+  playwright: ^1.55.1
   react: ^19.2.0
   react-dom: ^19.2.0
   resize-observer-polyfill: ^1.5.1
