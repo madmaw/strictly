@@ -1,7 +1,6 @@
 export * from './AbortError'
 export type * from './Cancellable'
 export * from './CancellableHelper'
-export { delayAnimationFrame, infiniteDelay } from './delay'
 export * from './isCancellationError'
 export * from './iteration/CancellableIterable'
 export * from './iteration/isAsyncIterable'

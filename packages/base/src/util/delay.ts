@@ -1,33 +1,50 @@
-export type Delay = () => Promise<void>
+import { CancellablePromise, Cancellation } from 'real-cancellable-promise'
 
-export function createDelay(millis: number): Delay {
-  return function () {
-    return delay(millis)
-  }
+export type Delay = () => CancellablePromise<void>
+
+export function createDelay(millis = 100): Delay {
+  return () => delay(millis)
 }
 
-/**
- * creates a delay that blocks everything for the specified number of cold milliseconds initially, then
- * the warm millis thereafter
- * @param coldMillis the number of milliseconds to block initial delays for
- * @param warmMillis the number of milliseconds to block subsequent delays for
- * @returns a Promise that awaits for the specified time
- */
-export function createWarmupDelay(coldMillis: number, warmMillis: number) {
-  let warmup: Promise<void> | undefined
-  return function () {
-    if (warmup == null) {
-      warmup = delay(coldMillis)
-      return warmup
-    }
-    return warmup.then(() => delay(warmMillis))
-  }
+export function delay(millis = 100): CancellablePromise<void> {
+  return CancellablePromise.delay(millis)
 }
 
-export function delay(millis: number): Promise<void> {
-  return new Promise((resolve) => {
-    setTimeout(resolve, millis)
-  })
+export function infiniteDelay<T = void>(): CancellablePromise<T> {
+  let doCancel: ((e: unknown) => void) | undefined
+  return new CancellablePromise(
+    new Promise((_res, rej) => {
+      doCancel = rej
+    }),
+    () => {
+      doCancel?.(new Cancellation('infinite cancelled'))
+    },
+  )
 }
 
-export const secondDelay = createDelay(1000)
+export function delayAnimationFrame(): CancellablePromise<number> {
+  let frameHandle: number | undefined
+  let timeoutHandle: ReturnType<typeof setTimeout> | undefined
+  let reject: (e: unknown) => void
+  return new CancellablePromise(
+    new Promise<number>((resolve, rej) => {
+      reject = rej
+      // base is environment independent; fall back to a macrotask when there is no animation frame
+      // timer (e.g. under node)
+      if (typeof requestAnimationFrame === 'function') {
+        frameHandle = requestAnimationFrame(resolve)
+      } else {
+        timeoutHandle = setTimeout(() => resolve(Date.now()), 0)
+      }
+    }),
+    () => {
+      if (frameHandle != null) {
+        cancelAnimationFrame(frameHandle)
+      }
+      if (timeoutHandle != null) {
+        clearTimeout(timeoutHandle)
+      }
+      reject(new Cancellation('delayAnimationFrame'))
+    },
+  )
+}

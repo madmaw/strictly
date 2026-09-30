@@ -4,6 +4,7 @@
   "devDependencies": {
     "@storybook/react-vite": "catalog:",
     "@strictly/base": "workspace:*",
+    "@strictly/spec": "workspace:*",
     "@strictly/storybook": "workspace:*",
     "@strictly/typescript": "workspace:*",
     "@strictly/vite": "workspace:*",

@@ -2,14 +2,7 @@ import {
   type Cancellable,
   type CancellablePromiseDisposer,
 } from 'cancel/Cancellable'
-import {
-  createDelay,
-  type Delay,
-  delayAnimationFrame,
-  infiniteDelay,
-} from 'cancel/delay'
 import { isCancellationError } from 'cancel/isCancellationError'
-import { isPromiseLike } from 'cancel/isPromiseLike'
 import {
   CancellableIterableCompletedError,
   type LooseCancellableIterable,
@@ -25,6 +18,13 @@ import {
   type PromiseWithCancel,
 } from 'real-cancellable-promise'
 import { type Maybe } from 'types/Maybe'
+import {
+  createDelay,
+  type Delay,
+  delayAnimationFrame,
+  infiniteDelay,
+} from 'util/delay'
+import { isPromiseLike } from 'util/isPromiseLike'
 
 export class ToValuesPromiseError<T> extends Error {
   constructor(

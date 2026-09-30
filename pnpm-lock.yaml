@@ -389,6 +389,9 @@ importers:
       '@strictly/base':
         specifier: workspace:*
         version: link:../base
+      '@strictly/spec':
+        specifier: workspace:*
+        version: link:../spec
       '@strictly/storybook':
         specifier: workspace:*
         version: link:../../support/storybook

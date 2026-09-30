@@ -1,11 +1,11 @@
 import type { CancellablePromiseDisposer } from 'cancel/Cancellable'
 import { CancellableHelper } from 'cancel/CancellableHelper'
-import { delay, infiniteDelay } from 'cancel/delay'
 /* oxlint-disable typescript/no-explicit-any -- any fine in generics */
 /* oxlint-disable vitest/no-standalone-expect -- assertions live in nested beforeEach setup */
 /* oxlint-disable vitest/no-disabled-tests -- documents a known async cancellation limitation */
 import { toIterable } from 'iter-ops'
 import { CancellablePromise, Cancellation } from 'real-cancellable-promise'
+import { delay, infiniteDelay } from 'util/delay'
 import type { Mocked } from 'vite-plus/test'
 
 function toAsyncGeneratorAndIterable<P extends any[], T, TReturn>(

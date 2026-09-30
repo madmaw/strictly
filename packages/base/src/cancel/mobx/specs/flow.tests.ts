@@ -1,7 +1,6 @@
 /* oxlint-disable vitest/no-standalone-expect -- assertions run inside generator methods exercised by the tests */
 import type { CancellablePromiseDisposer } from 'cancel/Cancellable'
 import { CancellableHelper } from 'cancel/CancellableHelper'
-import { delay } from 'cancel/delay'
 import {
   _getGlobalState,
   type IReactionDisposer,
@@ -9,6 +8,7 @@ import {
   reaction,
 } from 'mobx'
 import { Cancellation } from 'real-cancellable-promise'
+import { delay } from 'util/delay'
 import { flow } from '../flow'
 
 function inAction() {
