@@ -1,4 +1,4 @@
-import { type AllFieldsOfFields } from 'types/AllFieldsOfFields'
+import { type StringKeyOf } from '@strictly/base'
 import { type ErrorOfField } from 'types/ErrorOfField'
 import { type Fields } from 'types/Field'
 import { type ValueTypeOfField } from 'types/ValueTypeOfField'
@@ -19,7 +19,7 @@ export type SuppliedValueInputProps<V, T extends Element = Element> = Partial<{
 
 export function createValueInput<
   F extends Fields,
-  K extends keyof AllFieldsOfFields<F>,
+  K extends StringKeyOf<F>,
   Props extends SuppliedValueInputProps<ValueTypeOfField<F[K]>>,
 >(
   this: MantineForm<F>,

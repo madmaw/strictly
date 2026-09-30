@@ -76,7 +76,7 @@ class TestFormModel<
   T extends Type,
   ValueToTypePaths extends Readonly<Record<string, string>>,
   TypePathsToAdapters extends FlattenedTypePathsToAdaptersOf<
-    FlattenedValuesOfType<T, '*'>,
+    FlattenedValuesOfType<ReadonlyTypeOfType<T>, '*'>,
     {}
   >,
 > extends FormModel<T, ValueToTypePaths, TypePathsToAdapters, {}> {
@@ -138,7 +138,7 @@ describe('all', () => {
       const typeDef = record<typeof numberType, 'a' | 'b'>(numberType).narrow
       type T = Simplify<
         FlattenedTypePathsToAdaptersOf<
-          FlattenedValuesOfType<typeof typeDef>,
+          FlattenedValuesOfType<ReadonlyTypeOfType<typeof typeDef>>,
           ValueOfType<typeof typeDef>
         >
       >
@@ -167,7 +167,7 @@ describe('all', () => {
         .field('x', stringType)
         .field('y', booleanType).narrow
       type T = FlattenedTypePathsToAdaptersOf<
-        FlattenedValuesOfType<typeof typeDef>,
+        FlattenedValuesOfType<ReadonlyTypeOfType<typeof typeDef>>,
         ValueOfType<typeof typeDef>
       >
       type C = Partial<{

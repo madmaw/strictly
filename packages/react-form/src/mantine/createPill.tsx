@@ -1,6 +1,6 @@
 import { type PillProps } from '@mantine/core'
+import { type StringKeyOf } from '@strictly/base'
 import { type ComponentType } from 'react'
-import { type AllFieldsOfFields } from 'types/AllFieldsOfFields'
 import { type Fields } from 'types/Field'
 import { createUnsafePartialObserverComponent } from 'util/Partial'
 import { type MantineFieldComponent, type MantineForm } from './types'
@@ -10,7 +10,7 @@ export type SuppliedPillProps = Pick<PillProps, 'children' | 'disabled'>
 
 export function createPill<
   F extends Fields,
-  K extends keyof AllFieldsOfFields<F>,
+  K extends StringKeyOf<F>,
   Props extends SuppliedPillProps,
 >(
   this: MantineForm<F>,

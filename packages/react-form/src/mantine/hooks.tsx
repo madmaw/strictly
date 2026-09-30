@@ -11,7 +11,7 @@ import {
   TextInput as TextInputImpl,
   type TextInputProps,
 } from '@mantine/core'
-import { Cache, type ElementOfArray } from '@strictly/base'
+import { Cache, type ElementOfArray, type StringKeyOf } from '@strictly/base'
 import { type FieldsViewProps, type FormProps } from 'core/props'
 import { observableRef, runInAction } from 'mobx'
 import {
@@ -21,7 +21,6 @@ import {
   useEffect,
   useMemo,
 } from 'react'
-import { type AllFieldsOfFields } from 'types/AllFieldsOfFields'
 import { type BooleanFieldsOfFields } from 'types/BooleanFieldsOfFields'
 import { type ErrorOfField } from 'types/ErrorOfField'
 import { type Fields } from 'types/Field'
@@ -110,7 +109,7 @@ class MantineFormImpl<F extends Fields> implements MantineForm<F> {
   >(createTextInput.bind(this))
   private readonly valueInputCache = new Cache<
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    [keyof AllFieldsOfFields<F>, ComponentType<SuppliedValueInputProps<any>>],
+    [StringKeyOf<F>, ComponentType<SuppliedValueInputProps<any>>],
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     MantineFieldComponent<SuppliedValueInputProps<any>>
   >(createValueInput.bind(this))
@@ -127,7 +126,7 @@ class MantineFormImpl<F extends Fields> implements MantineForm<F> {
     MantineFieldComponent<SuppliedRadioProps>
   >(createRadio.bind(this))
   private readonly pillCache = new Cache<
-    [keyof AllFieldsOfFields<F>, ComponentType<SuppliedPillProps>],
+    [StringKeyOf<F>, ComponentType<SuppliedPillProps>],
     MantineFieldComponent<SuppliedPillProps>
   >(createPill.bind(this))
   private readonly listCache = new Cache<
@@ -138,21 +137,19 @@ class MantineFormImpl<F extends Fields> implements MantineForm<F> {
     MantineFieldComponent<SuppliedListProps, ComponentProps<typeof DefaultList>>
   >(createList.bind(this))
   private readonly fieldViewCache = new Cache<
-    [keyof AllFieldsOfFields<F>],
-    ComponentType<
-      FieldViewProps<F, Exclude<keyof AllFieldsOfFields<F>, number | symbol>>
-    >
+    [StringKeyOf<F>],
+    ComponentType<FieldViewProps<F, StringKeyOf<F>>>
   >(createFieldView.bind(this))
   private readonly fieldsViewCache = new Cache<
     // the cache cannot reference keys, so we just use any
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    [keyof AllFieldsOfFields<F>, ComponentType<any>, FieldsViewProps<F>],
+    [StringKeyOf<F>, ComponentType<any>, FieldsViewProps<F>],
     FieldsView
   >(createFieldsView.bind(this))
   private readonly formCache = new Cache<
     // the cache cannot reference keys, so we just use any
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    [keyof AllFieldsOfFields<F>, ComponentType<any>, FieldsViewProps<F>],
+    [StringKeyOf<F>, ComponentType<any>, FieldsViewProps<F>],
     ComponentType
   >(createForm.bind(this))
 
@@ -220,7 +217,7 @@ class MantineFormImpl<F extends Fields> implements MantineForm<F> {
   }
 
   valueInput<
-    K extends keyof AllFieldsOfFields<F>,
+    K extends StringKeyOf<F>,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     P extends SuppliedValueInputProps<ValueTypeOfField<F[K]>, any>,
   >(
@@ -243,7 +240,9 @@ class MantineFormImpl<F extends Fields> implements MantineForm<F> {
     >
   }
 
-  select<K extends keyof StringFieldsOfFields<F>>(valuePath: K) {
+  select<K extends keyof StringFieldsOfFields<F> & StringKeyOf<F>>(
+    valuePath: K,
+  ) {
     return this.valueInputCache.retrieveOrCreate(
       valuePath,
       SimpleSelect as ComponentType<
@@ -350,14 +349,14 @@ class MantineFormImpl<F extends Fields> implements MantineForm<F> {
     ) as unknown as MantineFieldComponent<SuppliedRadioProps, P, never>
   }
 
-  pill<K extends keyof AllFieldsOfFields<F>>(
+  pill<K extends StringKeyOf<F>>(
     valuePath: K,
   ): MantineFieldComponent<SuppliedPillProps, PillProps, ErrorOfField<F[K]>>
-  pill<K extends keyof AllFieldsOfFields<F>, P extends SuppliedPillProps>(
+  pill<K extends StringKeyOf<F>, P extends SuppliedPillProps>(
     valuePath: K,
     Pill: ComponentType<P>,
   ): MantineFieldComponent<SuppliedPillProps, P, ErrorOfField<F[K]>>
-  pill<K extends keyof AllFieldsOfFields<F>, P extends SuppliedPillProps>(
+  pill<K extends StringKeyOf<F>, P extends SuppliedPillProps>(
     valuePath: K,
     Pill: ComponentType<P> = PillImpl as ComponentType<P>,
   ): MantineFieldComponent<SuppliedPillProps, P, ErrorOfField<F[K]>> {
@@ -388,14 +387,14 @@ class MantineFormImpl<F extends Fields> implements MantineForm<F> {
     >
   }
 
-  fieldView<K extends keyof AllFieldsOfFields<F>>(
+  fieldView<K extends StringKeyOf<F>>(
     valuePath: K,
   ): ComponentType<FieldViewProps<F, K>> {
     return this.fieldViewCache.retrieveOrCreate(valuePath)
   }
 
   fieldsView<
-    K extends keyof AllFieldsOfFields<F>,
+    K extends StringKeyOf<F>,
     P extends FieldsViewProps<Fields> = FieldsViewProps<SubFormFields<F, K>>,
   >(
     valuePath: K,
@@ -416,7 +415,7 @@ class MantineFormImpl<F extends Fields> implements MantineForm<F> {
   }
 
   form<
-    K extends keyof AllFieldsOfFields<F>,
+    K extends StringKeyOf<F>,
     P extends FormProps<ValueTypeOfField<F[K]>> = FormProps<
       ValueTypeOfField<F[K]>
     >,

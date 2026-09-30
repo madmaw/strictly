@@ -1,14 +1,14 @@
+import { type StringKeyOf } from '@strictly/base'
 import { type FieldsViewProps, type FormProps } from 'core/props'
 import { observer } from 'mobx-react'
 import { type ComponentProps, type ComponentType } from 'react'
-import { type AllFieldsOfFields } from 'types/AllFieldsOfFields'
 import { type Fields } from 'types/Field'
 import { type ValueTypeOfField } from 'types/ValueTypeOfField'
 import { type MantineFieldComponent } from './types'
 
 export function createForm<
   F extends Fields,
-  K extends keyof AllFieldsOfFields<F>,
+  K extends StringKeyOf<F>,
   P extends FormProps<ValueTypeOfField<F[K]>> = FormProps<
     ValueTypeOfField<F[K]>
   >,
