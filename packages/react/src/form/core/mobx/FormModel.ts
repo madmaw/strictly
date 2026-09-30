@@ -1,0 +1,764 @@
+import {
+  type Accessor,
+  type AnyValueType,
+  assertExists,
+  assertExistsAndReturn,
+  checkValidNumber,
+  copy,
+  type ElementOfArray,
+  equals,
+  flattenAccessorsOfType,
+  type FlattenedValuesOfType,
+  flattenTypesOfType,
+  flattenValuesOfType,
+  flattenValueTo,
+  jsonPathPop,
+  lookup,
+  map,
+  type Maybe,
+  mobxCopy,
+  type MobxValueOfType,
+  type ReadonlyTypeOfType,
+  toArray,
+  type Type,
+  UnreachableError,
+  type ValueOfType,
+  valuePathToTypePath,
+} from '@strictly/base'
+import { type Field } from 'form/types/Field'
+import {
+  type AnnotatedFieldConversion,
+  UnreliableFieldConversionType,
+} from 'form/types/FieldConverters'
+import {
+  action,
+  computed,
+  observableRef,
+  observableShallow,
+  runInAction,
+} from 'mobx'
+import {
+  type KeyAsString,
+  type SimplifyDeep,
+  type UnionToIntersection,
+  type ValueOf,
+} from 'type-fest'
+import {
+  type ContextOfFieldAdapter,
+  type ErrorOfFieldAdapter,
+  type FieldAdapter,
+  type ToOfFieldAdapter,
+} from './FieldAdapter'
+import { type FlattenedListTypesOfType } from './FlattenedListTypesOfType'
+
+export type FlattenedConvertedFieldsOf<
+  ValuePathsToAdapters extends Readonly<Record<string, FieldAdapter>>,
+> = {
+  readonly [K in keyof ValuePathsToAdapters]: Field<
+    ToOfFieldAdapter<ValuePathsToAdapters[K]>,
+    ErrorOfFieldAdapter<ValuePathsToAdapters[K]>
+  >
+}
+
+export type FlattenedTypePathsToAdaptersOf<
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  FlattenedValues extends Readonly<Record<string, any>>,
+  Context,
+> = {
+  readonly [K in keyof FlattenedValues]?: FieldAdapter<
+    FlattenedValues[K],
+    any, // oxlint-disable-line typescript/no-explicit-any
+    any, // oxlint-disable-line typescript/no-explicit-any
+    any, // oxlint-disable-line typescript/no-explicit-any
+    Context
+  >
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type FieldOverride<V = any> = Maybe<V>
+
+type FlattenedFieldOverrides<
+  ValuePathsToAdapters extends Readonly<Record<string, FieldAdapter>>,
+> = {
+  -readonly [K in keyof ValuePathsToAdapters]?: FieldOverride<
+    ToOfFieldAdapter<ValuePathsToAdapters[K]>
+  >
+}
+
+type FlattenedErrorOverrides<
+  ValuePathsToAdapters extends Readonly<Record<string, FieldAdapter>>,
+> = {
+  -readonly [K in keyof ValuePathsToAdapters]?: ErrorOfFieldAdapter<
+    ValuePathsToAdapters[K]
+  >
+}
+
+export enum Validation {
+  None = 0,
+  Changed = 1,
+  Always = 2,
+}
+
+type FlattenedValidation<
+  ValuePathsToAdapters extends Readonly<Record<string, FieldAdapter>>,
+> = {
+  -readonly [K in keyof ValuePathsToAdapters]?: Validation
+}
+
+export type ValuePathsToAdaptersOf<
+  TypePathsToAdapters extends Partial<Readonly<Record<string, FieldAdapter>>>,
+  ValuePathsToTypePaths extends Readonly<Record<string, string>>,
+> =
+  keyof TypePathsToAdapters extends ValueOf<ValuePathsToTypePaths>
+    ? {
+        readonly [
+          K in keyof ValuePathsToTypePaths as unknown extends TypePathsToAdapters[ValuePathsToTypePaths[K]]
+            ? never
+            : K
+        ]: NonNullable<TypePathsToAdapters[ValuePathsToTypePaths[K]]>
+      }
+    : never
+
+export type ContextOf<
+  TypePathsToAdapters extends Partial<Readonly<Record<string, FieldAdapter>>>,
+> = UnionToIntersection<
+  | {
+      readonly [
+        K in keyof TypePathsToAdapters
+      ]: TypePathsToAdapters[K] extends undefined
+        ? undefined
+        : // ignore unspecified values
+          unknown extends ContextOfFieldAdapter<
+              NonNullable<TypePathsToAdapters[K]>
+            >
+          ? never
+          : ContextOfFieldAdapter<NonNullable<TypePathsToAdapters[K]>>
+    }[keyof TypePathsToAdapters]
+  // ensure we have at least one thing to intersect (can end up with a `never` context otherwise)
+  | {}
+>
+
+export type FormModelContextSource<
+  ContextType,
+  V,
+  ValuePath extends string | number | symbol,
+> = {
+  forPath(value: V, valuePath: ValuePath): ContextType
+}
+
+export abstract class FormModel<
+  T extends Type,
+  ValueToTypePaths extends Readonly<Record<string, string>>,
+  TypePathsToAdapters extends FlattenedTypePathsToAdaptersOf<
+    FlattenedValuesOfType<ReadonlyTypeOfType<T>, '*'>,
+    ContextType
+  >,
+  ContextType = ContextOf<TypePathsToAdapters>,
+  ContextSource extends FormModelContextSource<
+    ContextType,
+    ValueOfType<ReadonlyTypeOfType<T>>,
+    keyof ValuePathsToAdapters
+  > = FormModelContextSource<
+    ContextType,
+    ValueOfType<ReadonlyTypeOfType<T>>,
+    string | number | symbol
+  >,
+  ValuePathsToAdapters extends ValuePathsToAdaptersOf<
+    TypePathsToAdapters,
+    ValueToTypePaths
+  > = ValuePathsToAdaptersOf<TypePathsToAdapters, ValueToTypePaths>,
+> {
+  @observableRef
+  private accessor observableValue: MobxValueOfType<T>
+  @observableShallow
+  accessor fieldOverrides: FlattenedFieldOverrides<ValuePathsToAdapters>
+  @observableShallow
+  accessor errorOverrides: FlattenedErrorOverrides<ValuePathsToAdapters> = {}
+  @observableShallow
+  accessor validation: FlattenedValidation<ValuePathsToAdapters> = {}
+
+  private readonly flattenedTypeDefs: Readonly<Record<string, Type>>
+
+  // cannot be type safe
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private readonly originalValues: Record<string, any>
+
+  // maintains the value paths of lists when the original order is destroyed by deletes or reordering
+  private readonly listIndicesToKeys: Record<string, number[]> = {}
+
+  constructor(
+    readonly type: T,
+    private readonly originalValue: ValueOfType<ReadonlyTypeOfType<T>>,
+    protected readonly adapters: TypePathsToAdapters,
+    protected readonly contextSource: ContextSource,
+  ) {
+    this.originalValues = flattenValuesOfType<ReadonlyTypeOfType<T>>(
+      type,
+      originalValue,
+      this.listIndicesToKeys,
+    )
+    this.observableValue = mobxCopy(type, originalValue)
+    this.flattenedTypeDefs = flattenTypesOfType(type)
+    // pre-populate field overrides for consistent behavior when default information is overwritten
+    // then returned to
+    const conversions = flattenValueTo(
+      type,
+      originalValue,
+      () => {},
+      (
+        _t: Type,
+        fieldValue: AnyValueType,
+        _setter,
+        typePath,
+        valuePath,
+      ): AnnotatedFieldConversion<FieldOverride> | undefined => {
+        const contextValue = contextSource.forPath(
+          originalValue,
+          valuePath as keyof ValuePathsToAdapters,
+        )
+
+        const adapter = this.adapters[typePath as keyof TypePathsToAdapters]
+        if (adapter == null) {
+          return
+        }
+        const { convert, revert } = adapter
+        if (revert == null) {
+          // no need to store a temporary value if the value cannot be written back
+          return
+        }
+        // cannot call this.context yet as the "this" pointer has not been fully created
+        return convert(fieldValue, valuePath, contextValue)
+      },
+      this.listIndicesToKeys,
+    )
+    this.fieldOverrides = map(
+      conversions,
+      (_k, v) => v && [v.value],
+    ) as FlattenedFieldOverrides<ValuePathsToAdapters>
+  }
+
+  @computed
+  get value(): ValueOfType<ReadonlyTypeOfType<T>> {
+    // copy and strip out the mobx so this computed will fire every time anything changes
+    return copy(this.type, this.observableValue)
+  }
+
+  @computed
+  get fields(): SimplifyDeep<FlattenedConvertedFieldsOf<ValuePathsToAdapters>> {
+    return new Proxy<
+      SimplifyDeep<FlattenedConvertedFieldsOf<ValuePathsToAdapters>>
+    >(this.knownFields, {
+      get: (target, prop) => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const field = (target as any)[prop]
+        if (field != null) {
+          return field
+        }
+        if (typeof prop === 'string') {
+          return this.maybeSynthesizeFieldByValuePath(
+            prop as keyof ValuePathsToAdapters,
+          )
+        }
+      },
+    })
+  }
+
+  @computed
+  private get knownFields(): SimplifyDeep<
+    FlattenedConvertedFieldsOf<ValuePathsToAdapters>
+  > {
+    return flattenValueTo(
+      this.type,
+      this.observableValue,
+      () => {},
+      // TODO swap these to valuePath, typePath in flatten
+      (
+        _t: Type,
+        _v: AnyValueType,
+        _setter,
+        typePath,
+        valuePath,
+      ): Field | undefined =>
+        this.synthesizeFieldByPaths(
+          valuePath as keyof ValuePathsToAdapters,
+          typePath as keyof TypePathsToAdapters,
+        ),
+      this.listIndicesToKeys,
+    )
+  }
+
+  private maybeSynthesizeFieldByValuePath(
+    valuePath: keyof ValuePathsToAdapters,
+  ): Field | undefined {
+    let typePath: keyof TypePathsToAdapters
+    try {
+      typePath = valuePathToTypePath<ValueToTypePaths, keyof ValueToTypePaths>(
+        this.type,
+        valuePath as keyof ValueToTypePaths,
+        true,
+      ) as keyof TypePathsToAdapters
+    } catch (e) {
+      // TODO make jsonValuePathToTypePath return null in the event of an invalid
+      // value path instead of throwing an exception
+      // assume that the path was invalid
+      return
+    }
+    return this.synthesizeFieldByPaths(valuePath, typePath)
+  }
+
+  private getField(
+    valuePath: keyof ValuePathsToAdapters,
+    typePath: keyof TypePathsToAdapters,
+  ) {
+    const adapter = this.adapters[typePath]
+    if (adapter == null) {
+      // invalid path, which can happen
+      return
+    }
+    const { convert, create, revert } = adapter
+
+    const fieldOverride = this.fieldOverrides[valuePath]
+    const accessor = this.getAccessorForValuePath(valuePath)
+    const fieldTypeDef = lookup(this.flattenedTypeDefs, typePath as string)
+    const context = this.contextSource.forPath(this.observableValue, valuePath)
+    const defaultValue = create(valuePath, context)
+
+    const { value, required, readonly } = convert(
+      accessor == null
+        ? fieldTypeDef == null
+          ? // fake values can't be copied
+            defaultValue
+          : mobxCopy(fieldTypeDef, defaultValue)
+        : accessor.value,
+      valuePath,
+      context,
+    )
+    const displayedValue = fieldOverride == null ? value : fieldOverride[0]
+
+    return {
+      context,
+      convert,
+      create,
+      revert,
+      displayedValue,
+      // value,
+      required,
+      readonly,
+      defaultValue,
+    }
+  }
+
+  private synthesizeFieldByPaths(
+    valuePath: keyof ValuePathsToAdapters,
+    typePath: keyof TypePathsToAdapters,
+  ): Field | undefined {
+    const field = this.getField(valuePath, typePath)
+    if (field == null) {
+      return
+    }
+    const {
+      context,
+      convert,
+      revert,
+      displayedValue,
+      required,
+      readonly,
+      defaultValue,
+    } = field
+    const validation = this.validation[valuePath] ?? Validation.None
+    let error: unknown = this.errorOverrides[valuePath]
+    if (error == null) {
+      switch (validation) {
+        case Validation.None:
+          // skip validation
+          break
+        case Validation.Changed:
+          if (revert != null) {
+            const originalValue =
+              valuePath in this.originalValues
+                ? this.originalValues[valuePath as string]
+                : defaultValue
+            const { value: originalDisplayedValue } = convert(
+              originalValue,
+              valuePath,
+              context,
+            )
+            // TODO better comparisons, displayed values can still be complex
+            if (displayedValue !== originalDisplayedValue) {
+              const revertResult = revert(displayedValue, valuePath, context)
+              if (revertResult.type === UnreliableFieldConversionType.Failure) {
+                ;({ error } = revertResult)
+              }
+            }
+          }
+          break
+        case Validation.Always:
+          {
+            const revertResult = revert?.(displayedValue, valuePath, context)
+            if (revertResult?.type === UnreliableFieldConversionType.Failure) {
+              ;({ error } = revertResult)
+            }
+          }
+          break
+        default:
+          throw new UnreachableError(validation)
+      }
+    }
+
+    return {
+      value: displayedValue,
+      error,
+      readonly,
+      required,
+      // make a copy of the index mapping and remove the final value (next id)
+      listIndexToKey: this.listIndicesToKeys[valuePath as string]?.slice(0, -1),
+    }
+  }
+
+  getAccessorForValuePath(
+    valuePath: keyof ValuePathsToAdapters,
+  ): Accessor | undefined {
+    return this.accessors[valuePath as string]
+  }
+
+  @computed
+  // should only be referenced internally, so loosely typed
+  get accessors(): Readonly<Record<string, Accessor>> {
+    return flattenAccessorsOfType<T, Readonly<Record<string, Accessor>>>(
+      this.type,
+      this.observableValue,
+      (value: ValueOfType<T>): void => {
+        this.observableValue = mobxCopy(this.type, value)
+      },
+      this.listIndicesToKeys,
+    )
+  }
+
+  private maybeGetAdapterForValuePath(valuePath: keyof ValuePathsToAdapters) {
+    const typePath = valuePathToTypePath(this.type, valuePath as string, true)
+    return this.adapters[typePath as keyof TypePathsToAdapters]
+  }
+
+  private getAdapterForValuePath(valuePath: keyof ValuePathsToAdapters) {
+    return assertExistsAndReturn(
+      this.maybeGetAdapterForValuePath(valuePath),
+      'expected adapter to be defined {}',
+      valuePath,
+    )
+  }
+
+  @computed
+  get dirty() {
+    return Object.keys(this.accessors).some((valuePath) =>
+      this.isFieldDirty(valuePath as keyof ValuePathsToAdapters),
+    )
+  }
+
+  @computed
+  get valueChanged() {
+    return !equals(
+      this.type,
+      this.observableValue,
+      this.originalValue as ValueOfType<T>,
+    )
+  }
+
+  typePath<K extends keyof ValueToTypePaths>(
+    valuePath: K,
+  ): ValueToTypePaths[K] {
+    return valuePathToTypePath<ValueToTypePaths, K>(this.type, valuePath, true)
+  }
+
+  @action
+  setFieldValue<K extends keyof ValuePathsToAdapters>(
+    valuePath: K,
+    value: ToOfFieldAdapter<ValuePathsToAdapters[K]>,
+    validation?: Validation,
+  ): boolean {
+    return this.internalSetFieldValue(valuePath, value, validation)
+  }
+
+  listValuePaths<K extends keyof FlattenedListTypesOfType<T>>(
+    valuePath: K,
+  ): readonly `${K}.${number}`[] {
+    const { value, listIndexToKey } =
+      this.fields[valuePath as unknown as keyof ValuePathsToAdapters]
+    return (value as unknown[]).map((_, i) => {
+      const key = listIndexToKey?.[i]
+      return `${valuePath as string}.${key}` as `${K}.${number}`
+    })
+  }
+
+  addListItem<K extends keyof FlattenedListTypesOfType<T>>(
+    valuePath: K,
+    // TODO can this type be simplified?
+    elementValue: Maybe<ElementOfArray<FlattenedValuesOfType<T>[K]>> = null,
+    index?: number,
+  ) {
+    const listValuePath = valuePath as string
+    const accessor = this.accessors[valuePath]
+    const listTypePath = this.typePath(valuePath)
+    const definedIndex = index ?? accessor.value.length
+    const elementTypePath = `${listTypePath}.*` as keyof TypePathsToAdapters
+    const elementAdapter = assertExistsAndReturn(
+      this.adapters[elementTypePath],
+      'no adapter specified for list {} ({})',
+      elementTypePath,
+      valuePath,
+    )
+    // TODO validation on new elements
+    const element =
+      elementValue == null
+        ? elementAdapter.create(
+            elementTypePath,
+            // TODO what can we use for the value path here?
+            this.contextSource.forPath(
+              this.observableValue,
+              valuePath as unknown as keyof ValuePathsToAdapters,
+            ),
+          )
+        : elementValue[0]
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const originalList: any[] = accessor.value
+    const newList = [
+      ...originalList.slice(0, definedIndex),
+      element,
+      ...originalList.slice(definedIndex),
+    ]
+    runInAction(() => {
+      accessor.set(newList)
+      // delete any value overrides so the new list isn't shadowed
+      delete this.fieldOverrides[listValuePath as keyof ValuePathsToAdapters]
+      const indicesToKeys = assertExistsAndReturn(
+        this.listIndicesToKeys[listValuePath],
+        'no index to key mapping for list {}',
+        listValuePath,
+      )
+      const nextKey = indicesToKeys[indicesToKeys.length - 1]
+      // insert the next key
+      indicesToKeys.splice(definedIndex, 0, nextKey)
+      // create the new next key
+      indicesToKeys[indicesToKeys.length - 1] = nextKey + 1
+    })
+  }
+
+  removeListItem<K extends keyof FlattenedListTypesOfType<T>>(
+    ...elementValuePaths: readonly `${K}.${number}`[]
+  ) {
+    runInAction(() => {
+      elementValuePaths.forEach((elementValuePath) => {
+        const [listValuePath, elementKeyString] = assertExistsAndReturn(
+          jsonPathPop(elementValuePath),
+          'expected a path with two or more segments {}',
+          elementValuePath,
+        )
+        const accessor = this.accessors[listValuePath]
+        const elementKey = checkValidNumber(
+          Number.parseInt(elementKeyString, 10),
+          'unexpected id {} ({})',
+          elementKeyString,
+          elementValuePath,
+        )
+        const indicesToKeys = lookup(this.listIndicesToKeys, listValuePath)
+        if (indicesToKeys == null) {
+          return
+        }
+        const elementIndex = indicesToKeys.indexOf(elementKey)
+        if (elementIndex >= 0) {
+          const newList = [...accessor.value]
+          newList.splice(elementIndex, 1)
+          accessor.set(newList)
+          // delete any value overrides so the new list isn't shadowed
+          delete this.fieldOverrides[
+            listValuePath as keyof ValuePathsToAdapters
+          ]
+          indicesToKeys.splice(elementIndex, 1)
+        }
+      })
+    })
+  }
+
+  private internalSetFieldValue<K extends keyof ValuePathsToAdapters>(
+    valuePath: K,
+    value: ToOfFieldAdapter<ValuePathsToAdapters[K]>,
+    validation: Validation | undefined,
+  ): boolean {
+    const { revert } = this.getAdapterForValuePath(valuePath)
+
+    assertExists(revert, 'setting value not supported {}', valuePath)
+
+    const conversion = revert(
+      value,
+      valuePath as any, // oxlint-disable-line typescript/no-explicit-any
+      this.contextSource.forPath(this.observableValue, valuePath),
+    )
+    const accessor = this.getAccessorForValuePath(valuePath)
+    return runInAction(() => {
+      this.fieldOverrides[valuePath] = [value]
+      delete this.errorOverrides[valuePath]
+      if (validation != null) {
+        this.validation[valuePath] = validation
+      }
+      switch (conversion.type) {
+        case UnreliableFieldConversionType.Failure:
+          if (conversion.value != null && accessor != null) {
+            accessor.set(conversion.value[0])
+          }
+          return false
+        case UnreliableFieldConversionType.Success:
+          accessor?.set(conversion.value)
+          return true
+        default:
+          throw new UnreachableError(conversion)
+      }
+    })
+  }
+
+  /**
+   * Forces an error onto a field. Error will be removed if the field value changes
+   * @param valuePath the field to display an error for
+   * @param error the error to display
+   */
+  overrideFieldError<K extends keyof ValuePathsToAdapters>(
+    valuePath: K,
+    error?: ErrorOfFieldAdapter<ValuePathsToAdapters[K]>,
+  ) {
+    runInAction(() => {
+      if (error == null) {
+        delete this.errorOverrides[valuePath]
+      } else {
+        this.errorOverrides[valuePath] = error
+      }
+    })
+  }
+
+  clearFieldError<K extends keyof ValuePathsToAdapters>(valuePath: K) {
+    const fieldOverride = this.fieldOverrides[valuePath]
+    if (fieldOverride != null) {
+      runInAction(() => {
+        delete this.validation[valuePath]
+        delete this.errorOverrides[valuePath]
+      })
+    }
+  }
+
+  clearFieldValue<K extends KeyAsString<ValuePathsToAdapters>>(valuePath: K) {
+    const typePath = this.typePath(valuePath)
+    // the adapter for a path known only at runtime cannot be typed more precisely
+    const adapter: FieldAdapter | undefined =
+      this.adapters[typePath as keyof TypePathsToAdapters]
+    if (adapter == null) {
+      return
+    }
+    const { convert, create } = adapter
+
+    const context = this.contextSource.forPath(
+      this.observableValue,
+      valuePath as unknown as keyof ValuePathsToAdapters,
+    )
+    const value = create(valuePath, context)
+    const { value: displayValue } = convert(value, valuePath, context)
+    const key = valuePath as unknown as keyof ValuePathsToAdapters
+    runInAction(() => {
+      this.fieldOverrides[key] = [displayValue]
+      delete this.validation[key]
+      delete this.errorOverrides[key]
+    })
+  }
+
+  clearAll(value: ValueOfType<T>): void {
+    runInAction(() => {
+      this.validation = {}
+      // TODO this isn't correct, should reload from value
+      this.fieldOverrides = {}
+      this.errorOverrides = {}
+      this.observableValue = mobxCopy(this.type, value)
+    })
+  }
+
+  isValuePathActive<K extends keyof ValuePathsToAdapters>(
+    valuePath: K,
+  ): boolean {
+    const values = flattenValuesOfType(
+      this.type,
+      this.observableValue,
+      this.listIndicesToKeys,
+    )
+    const keys = new Set(Object.keys(values))
+    return keys.has(valuePath as string)
+  }
+
+  getValidation<K extends keyof ValuePathsToAdapters>(
+    valuePath: K,
+  ): Validation {
+    return this.validation[valuePath] ?? Validation.None
+  }
+
+  isFieldDirty<K extends keyof ValuePathsToAdapters>(valuePath: K): boolean {
+    const typePath = valuePathToTypePath<
+      ValueToTypePaths,
+      keyof ValueToTypePaths
+    >(
+      this.type,
+      valuePath as keyof ValueToTypePaths,
+      true,
+    ) as keyof TypePathsToAdapters
+    const field = this.getField(valuePath, typePath)
+
+    if (field == null) {
+      return false
+    }
+
+    const { displayedValue, convert, revert, context, defaultValue } = field
+
+    // if either the display value, or the stored value, match the original, then assume it's not dirty
+    const originalValue =
+      valuePath in this.originalValues
+        ? this.originalValues[valuePath as string]
+        : defaultValue
+    if (revert != null) {
+      const typeDef = this.flattenedTypeDefs[typePath as string]
+      const { value, type } = revert(displayedValue, valuePath, context)
+      if (type === UnreliableFieldConversionType.Success) {
+        if (equals(typeDef, originalValue, value)) {
+          return false
+        }
+      }
+    }
+    const { value: originalDisplayedValue } = convert(
+      originalValue,
+      valuePath,
+      context,
+    )
+    // try to compare the displayed values directly if we can't revert the displayed value
+    return displayedValue !== originalDisplayedValue
+  }
+
+  @action
+  validateField<K extends keyof ValuePathsToAdapters>(
+    valuePath: K,
+    validation: Validation = Validation.Always,
+  ): boolean {
+    this.validation[valuePath] = validation
+    delete this.errorOverrides[valuePath]
+    return this.fields[valuePath].error == null
+  }
+
+  @action
+  validateAll(validation: Validation = Validation.Always): boolean {
+    const accessors = toArray(this.accessors)
+
+    accessors.forEach(([valuePath]) => {
+      this.validation[valuePath as keyof ValuePathsToAdapters] = validation
+    })
+    return accessors.every(([valuePath]): boolean => {
+      // the proxy can return undefined for unknown paths even though the type says otherwise
+      const field = lookup<string, Field>(this.fields, valuePath)
+      return field?.error == null
+    })
+  }
+
+  validateSubmit() {
+    return this.validateAll()
+  }
+}
