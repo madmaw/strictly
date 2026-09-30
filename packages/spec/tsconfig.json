@@ -16,9 +16,6 @@
   "references": [
     {
       "path": "../../support/vite"
-    },
-    {
-      "path": "../base"
     }
   ]
 }

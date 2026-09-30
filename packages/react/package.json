@@ -4,6 +4,7 @@
   "devDependencies": {
     "@storybook/react-vite": "catalog:",
     "@strictly/base": "workspace:*",
+    "@strictly/spec": "workspace:*",
     "@strictly/storybook": "workspace:*",
     "@strictly/typescript": "workspace:*",
     "@strictly/vite": "workspace:*",
@@ -14,6 +15,7 @@
     "@vitest/browser-playwright": "catalog:",
     "jsdom": "catalog:",
     "playwright": "catalog:",
+    "real-cancellable-promise": "catalog:",
     "storybook": "catalog:",
     "type-fest": "catalog:",
     "vite": "catalog:",
@@ -40,6 +42,7 @@
     "mobx-react": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:",
+    "real-cancellable-promise": "catalog:",
     "zod": "catalog:"
   },
   "publishConfig": {

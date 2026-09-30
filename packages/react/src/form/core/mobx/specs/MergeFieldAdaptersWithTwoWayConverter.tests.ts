@@ -1,4 +1,4 @@
-import { expectDefinedAndReturn } from '@strictly/base'
+import { expectDefinedAndReturn } from '@strictly/spec'
 /* oxlint-disable typescript/no-explicit-any -- the adapters are intentionally untyped here */
 import { type FieldAdapter } from 'form/core/mobx/FieldAdapter'
 import { identityAdapter } from 'form/core/mobx/fieldAdapterBuilder'

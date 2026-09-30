@@ -21,6 +21,9 @@
       "path": "../base"
     },
     {
+      "path": "../spec"
+    },
+    {
       "path": "../../support/storybook"
     }
   ]

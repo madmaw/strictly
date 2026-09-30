@@ -1,6 +1,5 @@
 import {
   booleanType,
-  expectDefinedAndReturn,
   type FlattenedValuesOfType,
   flattenValidatorsOfValidatingTypeWithMutability,
   list,
@@ -15,6 +14,7 @@ import {
   type ValueOfType,
   type ValueToTypePathsOfType,
 } from '@strictly/base'
+import { expectDefinedAndReturn } from '@strictly/spec'
 import {
   type FieldAdapter,
   type ToOfFieldAdapter,

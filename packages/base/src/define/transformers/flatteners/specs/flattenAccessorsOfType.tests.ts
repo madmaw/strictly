@@ -1,8 +1,8 @@
+import { expectDefinedAndReturn } from '@strictly/spec'
 import { flattenAccessorsOfType } from 'define/transformers/flatteners/flattenAccessorsOfType'
 import { booleanType, list, numberType, object } from 'define/types/builders'
 import { type FlattenedAccessorsOfType } from 'define/types/FlattenedAccessorsOfType'
 import { type ValueOfType } from 'define/types/ValueOfType'
-import { expectDefinedAndReturn } from 'test'
 import { type Mock, vi } from 'vite-plus/test'
 
 describe('flattenAccessorsOfType', () => {
