@@ -298,7 +298,7 @@ export function createOxlintConfig({
             {
               importNames: TEST_HELPER_IMPORT_NAMES,
               message: "Don't use test imports in production code",
-              name: '@strictly/storybook/expect',
+              name: '@strictly/storybook',
             },
             {
               message: "Don't use test imports in production code",
@@ -448,7 +448,7 @@ export function createOxlintConfig({
             // ban vitest imports
             {
               message:
-                "Don't use vitest test helpers in storybook code. The equivalent assertions live in @strictly/storybook/expect.",
+                "Don't use vitest test helpers in storybook code. The equivalent assertions live in @strictly/storybook.",
               name: '@strictly/vitest',
             },
             {
