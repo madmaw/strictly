@@ -3,7 +3,6 @@
   "dependencies": {
     "@lingui/core": "catalog:",
     "@lingui/react": "catalog:",
-    "@strictly/base": "workspace:*",
     "react": "catalog:",
     "react-dom": "catalog:"
   },

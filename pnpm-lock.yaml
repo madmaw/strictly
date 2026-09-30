@@ -359,6 +359,9 @@ importers:
 
   packages/base:
     devDependencies:
+      '@strictly/spec':
+        specifier: workspace:*
+        version: link:../spec
       '@strictly/typescript':
         specifier: workspace:*
         version: link:../../support/typescript
@@ -452,9 +455,6 @@ importers:
       '@lingui/react':
         specifier: 'catalog:'
         version: 6.8.0(@babel/core@8.0.6)(react@19.3.0)
-      '@strictly/base':
-        specifier: workspace:*
-        version: link:../base
       react:
         specifier: 19.3.0
         version: 19.3.0

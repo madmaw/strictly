@@ -1,14 +1,9 @@
+import { expectDefinedAndReturn } from '@strictly/spec'
 import { flattenAccessorsOfType } from 'define/transformers/flatteners/flattenAccessorsOfType'
 import { booleanType, list, numberType, object } from 'define/types/builders'
 import { type FlattenedAccessorsOfType } from 'define/types/FlattenedAccessorsOfType'
 import { type ValueOfType } from 'define/types/ValueOfType'
 import { type Mock, vi } from 'vite-plus/test'
-
-// @strictly/spec is a downstream package, so this base spec keeps its own local assertion
-function expectDefinedAndReturn<V>(v: V): NonNullable<V> {
-  expect(v).toBeDefined()
-  return v as NonNullable<V>
-}
 
 describe('flattenAccessorsOfType', () => {
   let setter: Mock
