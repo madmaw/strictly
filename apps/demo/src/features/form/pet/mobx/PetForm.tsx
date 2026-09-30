@@ -3,7 +3,7 @@ import {
   useDefaultMobxFormHooks,
   usePartialObserverComponent,
   Validation,
-} from '@strictly/react-form'
+} from '@strictly/react'
 import { emulateTab } from 'emulate-tab'
 import { type PetValuePaths } from 'features/form/pet/fields'
 import { PetFieldsView } from 'features/form/pet/PetFieldsView'

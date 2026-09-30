@@ -1,0 +1,80 @@
+{
+  "author": "Chris <chris.glover@gmail.com> (@madmaw)",
+  "description": "Types and utilities for creating React forms",
+  "devDependencies": {
+    "@storybook/react-vite": "catalog:",
+    "@strictly/base": "workspace:*",
+    "@strictly/storybook": "workspace:*",
+    "@strictly/typescript": "workspace:*",
+    "@strictly/vite": "workspace:*",
+    "@testing-library/dom": "catalog:",
+    "@testing-library/react": "catalog:",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "@vitest/browser-playwright": "catalog:",
+    "jsdom": "catalog:",
+    "playwright": "catalog:",
+    "storybook": "catalog:",
+    "type-fest": "catalog:",
+    "vite": "catalog:",
+    "vite-plus": "catalog:",
+    "vitest": "catalog:",
+    "zod": "catalog:"
+  },
+  "homepage": "https://madmaw.github.io/strictly/react",
+  "keywords": [
+    "react",
+    "state management",
+    "types"
+  ],
+  "license": "MIT",
+  "main": "src/index.ts",
+  "name": "@strictly/react",
+  "peerDependencies": {
+    "@mantine/core": "catalog:",
+    "@mantine/hooks": "catalog:",
+    "@strictly/base": "*",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "mobx": "catalog:",
+    "mobx-react": "catalog:",
+    "react": "catalog:",
+    "react-dom": "catalog:",
+    "zod": "catalog:"
+  },
+  "publishConfig": {
+    "access": "public",
+    "exports": {
+      ".": {
+        "import": {
+          "types": "./dist/index.d.ts",
+          "default": "./dist/index.js"
+        },
+        "require": {
+          "types": "./dist/index.d.cts",
+          "default": "./dist/index.cjs"
+        }
+      }
+    },
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts"
+  },
+  "repository": {
+    "directory": "packages/react",
+    "type": "git",
+    "url": "git+https://github.com/madmaw/strictly.git"
+  },
+  "scripts": {
+    "build": "vp build --configLoader runner",
+    "check-types": "tsc -b",
+    "clean": "del-cli dist .out",
+    "storybook": "storybook dev",
+    "storybook:build": "storybook build",
+    "test": "vp test run --configLoader runner --project=unit/*",
+    "test:storybook": "playwright install chromium && vp test run --configLoader runner --project=storybook/test",
+    "test:update": "vp test run --configLoader runner -u --project=unit/*",
+    "test:watch": "vp test watch --configLoader runner --project=unit/*"
+  },
+  "type": "module",
+  "version": "0.0.41"
+}

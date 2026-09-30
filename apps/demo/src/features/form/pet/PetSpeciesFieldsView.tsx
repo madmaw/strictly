@@ -2,10 +2,7 @@ import { t } from '@lingui/core/macro'
 import { Trans } from '@lingui/react/macro'
 import { Group, Stack } from '@mantine/core'
 import { toArray } from '@strictly/base'
-import {
-  type FieldsViewProps,
-  useMantineFormFields,
-} from '@strictly/react-form'
+import { type FieldsViewProps, useMantineFormFields } from '@strictly/react'
 import { type ComponentType } from 'react'
 import { type PetFields } from './fields'
 import { type Species } from './types'

@@ -17,7 +17,7 @@ import {
   type ValueOfType,
   type ValueToTypePathsOfType,
   type ValueTypesOfDiscriminatedUnion,
-} from '@strictly/define'
+} from '@strictly/base'
 import { petOwnerType } from './PetOwnerFieldsView'
 
 // TODO move definitions into respective views

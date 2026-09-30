@@ -5,8 +5,7 @@
     "@mantine/core": "catalog:",
     "@mantine/hooks": "catalog:",
     "@strictly/base": "workspace:*",
-    "@strictly/define": "workspace:*",
-    "@strictly/react-form": "workspace:*",
+    "@strictly/react": "workspace:*",
     "astro": "catalog:",
     "marked": "^15.0.4",
     "mobx": "catalog:",
@@ -15,6 +14,7 @@
   },
   "devDependencies": {
     "@strictly/typescript": "workspace:*",
+    "@strictly/vite": "workspace:*",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
     "http-server": "^14.1.1",

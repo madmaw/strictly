@@ -2,7 +2,7 @@ import {
   type ContextOf,
   FormModel,
   type FormModelContextSource,
-} from '@strictly/react-form'
+} from '@strictly/react'
 import {
   petFieldAdapters,
   TagNotEmptyErrorType,

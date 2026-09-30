@@ -1,10 +1,10 @@
-import { valuePathToTypePath } from '@strictly/define'
+import { valuePathToTypePath } from '@strictly/base'
 import {
   type AnnotatedFieldConversion,
   type TwoWayFieldConverter,
   type UnreliableFieldConversion,
   UnreliableFieldConversionType,
-} from '@strictly/react-form'
+} from '@strictly/react'
 import { type PetTypePaths, type PetValuePaths } from './fields'
 import { petType, type PetValueToTypePaths } from './types'
 

@@ -14,7 +14,7 @@ import {
   type ValueOfType,
   type ValuePathsOfTypePath,
   type ValueToTypePathsOfType,
-} from '@strictly/define'
+} from '@strictly/base'
 import {
   type ErrorRendererProps,
   type FieldAdaptersOfValues,
@@ -23,7 +23,7 @@ import {
   mergeAdaptersWithValidators,
   trimmingStringAdapter,
   useMantineFormFields,
-} from '@strictly/react-form'
+} from '@strictly/react'
 import { useCallback } from 'react'
 
 const minimumNameLengthValidator = new MinimumStringLengthValidator(3)
