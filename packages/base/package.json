@@ -4,6 +4,9 @@
     "@strictly/typescript": "workspace:*",
     "@strictly/vite": "workspace:*",
     "@strictly/vitest": "workspace:*",
+    "iter-ops": "catalog:",
+    "mobx-utils": "catalog:",
+    "real-cancellable-promise": "catalog:",
     "type-fest": "catalog:",
     "zod": "catalog:"
   },
@@ -18,6 +21,8 @@
   "name": "@strictly/base",
   "peerDependencies": {
     "mobx": "catalog:",
+    "mobx-utils": "catalog:",
+    "real-cancellable-promise": "catalog:",
     "type-fest": "catalog:",
     "zod": "catalog:"
   },
