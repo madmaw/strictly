@@ -7,8 +7,21 @@ updates:
     directory: /
     schedule:
       interval: weekly
+    groups:
+      github-actions:
+        patterns:
+          - '*'
 
   - package-ecosystem: npm
     directory: /
     schedule:
       interval: weekly
+    # one PR per week for everything that stays within the declared ranges, and one per major so the lockfile only
+    # has to be rebased once rather than once per package
+    groups:
+      minor-and-patch:
+        patterns:
+          - '*'
+        update-types:
+          - minor
+          - patch
