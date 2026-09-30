@@ -17,3 +17,25 @@ export function expectDefinedAndReturn<V>(v: V): NonNullable<V> {
   expectDefined(v)
   return v
 }
+
+type PromiseState = 'fulfilled' | 'pending' | 'rejected'
+
+function pendingAfter(milliseconds: number): Promise<PromiseState> {
+  return new Promise((resolve) => {
+    setTimeout(() => resolve('pending'), milliseconds)
+  })
+}
+
+export async function expectPendingPromise<V>(
+  p: Promise<V>,
+  timeoutMilliseconds = 500,
+) {
+  const state = await Promise.race([
+    p.then<PromiseState, PromiseState>(
+      () => 'fulfilled',
+      () => 'rejected',
+    ),
+    pendingAfter(timeoutMilliseconds),
+  ])
+  expect(state).toBe('pending')
+}

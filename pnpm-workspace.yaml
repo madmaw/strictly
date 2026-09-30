@@ -33,6 +33,8 @@ peerDependencyRules:
     # storybook still declares the pre release vite plus range
     '@storybook/*>vite-plus': '1'
     'storybook>vite-plus': '1'
+    # mobx-utils 6 still declares a mobx 6 peer but works on mobx 7
+    'mobx-utils>mobx': '7'
   allowAny:
     - vite
     - vitest
@@ -71,10 +73,13 @@ catalog:
   '@vitejs/plugin-react': ^6.1.1
   '@vitest/browser-playwright': 5.0.1
   astro: ^7.3.5
+  iter-ops: ^3.5.0
   jsdom: ^30.1.1
   mobx: ^7.0.0
   mobx-react: ^10.0.0
+  mobx-utils: ^6.1.0
   playwright: ^1.49.1
+  real-cancellable-promise: ^1.2.3
   react: ^19.2.0
   react-dom: ^19.2.0
   resize-observer-polyfill: ^1.5.1

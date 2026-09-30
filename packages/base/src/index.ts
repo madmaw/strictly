@@ -1,3 +1,4 @@
+export * from './cancel'
 export * from './define'
 export * from './errors/NotImplemented'
 export * from './errors/UnexpectedImplementation'
