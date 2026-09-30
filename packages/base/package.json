@@ -3,6 +3,7 @@
   "devDependencies": {
     "@strictly/typescript": "workspace:*",
     "@strictly/vite": "workspace:*",
+    "@strictly/vitest": "workspace:*",
     "type-fest": "catalog:",
     "zod": "catalog:"
   },

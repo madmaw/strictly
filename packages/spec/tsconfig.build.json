@@ -1,9 +1,0 @@
-{
-  "compilerOptions": {
-    "paths": {
-      "*": ["./src/*"]
-    }
-  },
-  "extends": "@strictly/typescript/build.json",
-  "include": ["vite.config.mts"]
-}

@@ -1,10 +1,9 @@
 import {
   type AnnotatedValidator,
-  expectDefined,
-  expectEquals,
   type FunctionalValidator,
   type Validator,
 } from '@strictly/base'
+import { expectDefined, expectEquals } from '@strictly/vitest'
 import { type FieldAdapter } from 'form/core/mobx/FieldAdapter'
 import { identityAdapter } from 'form/core/mobx/fieldAdapterBuilder'
 import {

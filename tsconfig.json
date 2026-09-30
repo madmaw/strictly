@@ -19,9 +19,6 @@
       "path": "packages/react"
     },
     {
-      "path": "packages/spec"
-    },
-    {
       "path": "support/lingui"
     },
     {
@@ -29,6 +26,9 @@
     },
     {
       "path": "support/vite"
+    },
+    {
+      "path": "support/vitest"
     }
   ]
 }

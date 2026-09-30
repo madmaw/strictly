@@ -1,0 +1,16 @@
+{
+  "description": "Shared vitest assertion helpers for the workspace",
+  "devDependencies": {
+    "@strictly/typescript": "workspace:*",
+    "vitest": "catalog:"
+  },
+  "license": "MIT",
+  "main": "src/index.ts",
+  "name": "@strictly/vitest",
+  "scripts": {
+    "check-types": "tsc -b",
+    "clean": "del-cli .out"
+  },
+  "type": "module",
+  "version": "0.0.41"
+}

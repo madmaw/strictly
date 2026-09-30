@@ -1,5 +1,9 @@
 {
   "author": "Chris <chris.glover@gmail.com> (@madmaw)",
+  "dependencies": {
+    "@lingui/core": "catalog:",
+    "@lingui/react": "catalog:"
+  },
   "description": "Types and utilities for creating React forms",
   "devDependencies": {
     "@storybook/react-vite": "catalog:",
@@ -7,6 +11,7 @@
     "@strictly/storybook": "workspace:*",
     "@strictly/typescript": "workspace:*",
     "@strictly/vite": "workspace:*",
+    "@strictly/vitest": "workspace:*",
     "@testing-library/dom": "catalog:",
     "@testing-library/react": "catalog:",
     "@types/react": "catalog:",

@@ -22,6 +22,9 @@
     },
     {
       "path": "../../support/storybook"
+    },
+    {
+      "path": "../../support/vitest"
     }
   ]
 }

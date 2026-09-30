@@ -293,7 +293,12 @@ export function createOxlintConfig({
             {
               importNames: TEST_HELPER_IMPORT_NAMES,
               message: "Don't use test imports in production code",
-              name: '@strictly/base',
+              name: '@strictly/vitest',
+            },
+            {
+              importNames: TEST_HELPER_IMPORT_NAMES,
+              message: "Don't use test imports in production code",
+              name: '@strictly/storybook/test',
             },
             {
               message: "Don't use test imports in production code",
