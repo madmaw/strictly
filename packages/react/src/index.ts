@@ -1,2 +1,2 @@
 export * from './form'
-export * from './util/textContentOf'
+export * from './util'

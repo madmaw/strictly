@@ -20,7 +20,7 @@
   "exports": {
     ".": "./src/index.ts",
     "./main": "./src/main.ts",
-    "./test": "./src/test.ts"
+    "./expect": "./src/expect.ts"
   },
   "license": "MIT",
   "main": "src/index.ts",
