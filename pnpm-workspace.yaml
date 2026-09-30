@@ -63,7 +63,7 @@ catalog:
   '@testing-library/react': ^16.0.1
   '@testing-library/user-event': ^14.5.2
   '@types/react': ^19.2.0
-  '@types/react-dom': ^19.2.0
+  '@types/react-dom': ^19.3.0
   # typescript 7 ships the native compiler without a javascript api, so typescript-eslint and vite-plugin-dts still
   # need the typescript 6 api under the typescript package name
   '@typescript/native': npm:typescript@^7.0.2
