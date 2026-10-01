@@ -1,9 +1,8 @@
 import { Button, Checkbox, Stack } from '@mantine/core'
 import { type Meta, type StoryObj } from '@storybook/react-vite'
-import { CancellableHelper } from '@strictly/base'
+import { CancellablePromise } from '@strictly/base'
 import { useCancellableCallback } from 'cancel/useCancellableCallback'
 import { useState } from 'react'
-import { CancellablePromise } from 'real-cancellable-promise'
 import { action } from 'storybook/actions'
 import { userEvent, within } from 'storybook/test'
 
@@ -38,7 +37,7 @@ function Loader({ initialName }: { initialName: string }) {
   const [loading, setLoading] = useState(false)
   const callback = useCancellableCallback(() => {
     setLoading(true)
-    return CancellableHelper.ignoreCancellationErrors(
+    return CancellablePromise.ignoreCancellationErrors(
       delay(1000).then(() => {
         setLoading(false)
         setName('Bob')

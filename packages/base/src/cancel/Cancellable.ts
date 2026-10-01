@@ -1,5 +1,5 @@
+import { type CancellablePromise } from 'cancel/CancellablePromise'
 import { type LooseCancellableIterable } from 'cancel/iteration/CancellableIterable'
-import { type CancellablePromise } from 'real-cancellable-promise'
 
 export type CancellablePromiseDisposer = () => void
 

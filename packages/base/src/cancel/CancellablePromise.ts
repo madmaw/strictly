@@ -3,16 +3,13 @@ import {
   type CancellablePromiseDisposer,
 } from 'cancel/Cancellable'
 import { isCancellationError } from 'cancel/isCancellationError'
-import {
-  CancellableIterableCompletedError,
-  type LooseCancellableIterable,
-} from 'cancel/iteration/CancellableIterable'
+import { type LooseCancellableIterable } from 'cancel/iteration/CancellableIterable'
 import { isAsyncIterable } from 'cancel/iteration/isAsyncIterable'
 import { isIterable } from 'cancel/iteration/isIterable'
 /* oxlint-disable typescript/no-explicit-any, typescript/no-non-null-assertion -- generic promise/iterator plumbing */
 import { fromPromise, type IPromiseBasedObservable } from 'mobx-utils'
 import {
-  CancellablePromise,
+  CancellablePromise as CancellablePromiseImpl,
   Cancellation,
   isPromiseWithCancel,
   type PromiseWithCancel,
@@ -25,6 +22,14 @@ import {
   infiniteDelay,
 } from 'util/delay'
 import { isPromiseLike } from 'util/isPromiseLike'
+
+export { Cancellation } from 'real-cancellable-promise'
+
+export class CancellableIterableCompletedError<TReturn> extends Cancellation {
+  constructor(readonly returnValue: TReturn) {
+    super()
+  }
+}
 
 export class ToValuesPromiseError<T> extends Error {
   constructor(
@@ -48,18 +53,18 @@ export type CancellablePromiseFromIterableOptions<T> = {
   blocking?: boolean
 }
 
-export abstract class CancellableHelper<T> extends CancellablePromise<T> {
+export class CancellablePromise<T> extends CancellablePromiseImpl<T> {
   /**
    * Converts the cancellable to a promise, unless it is a non-deferred value (not an iterator or a promise)
    */
-  static toMaybePromise<T>(
+  static maybeFromCancellable<T>(
     cancellable: Cancellable<T> | PromiseLike<T> | PromiseWithCancel<T>,
   ): CancellablePromise<T> | T {
     if (isIterable(cancellable)) {
-      return CancellableHelper.fromIterable(cancellable)
+      return CancellablePromise.fromIterable(cancellable)
     }
     if (isPromiseWithCancel(cancellable)) {
-      if (cancellable instanceof CancellablePromise) {
+      if (cancellable instanceof CancellablePromiseImpl) {
         return cancellable
       }
       // assume it's a degenerate implementation of promise-with-cancel that will
@@ -69,7 +74,7 @@ export abstract class CancellableHelper<T> extends CancellablePromise<T> {
       })
     }
     if (isPromiseLike(cancellable)) {
-      return CancellableHelper.fromPromiseWithoutCancel(cancellable)
+      return CancellablePromise.fromPromiseWithoutCancel(cancellable)
     }
     return cancellable
   }
@@ -77,10 +82,10 @@ export abstract class CancellableHelper<T> extends CancellablePromise<T> {
   /**
    * Converts the cancellable to a promise
    */
-  static toPromise<T>(
+  static fromCancellable<T>(
     cancellable: Cancellable<T> | PromiseLike<T> | PromiseWithCancel<T>,
   ): CancellablePromise<T> {
-    const maybePromise = CancellableHelper.toMaybePromise(cancellable)
+    const maybePromise = CancellablePromise.maybeFromCancellable(cancellable)
     if (isPromiseWithCancel(maybePromise)) {
       return maybePromise
     }
@@ -90,12 +95,12 @@ export abstract class CancellableHelper<T> extends CancellablePromise<T> {
   static toObservable<T>(
     c: Cancellable<T>,
   ): CancellablePromiseBasedObservable<T> {
-    const p = CancellableHelper.toPromise(c)
+    const p = CancellablePromise.fromCancellable(c)
     const o = fromPromise(p) as CancellablePromiseBasedObservable<T>
     // mobx fromPromise throws away errors by default (you can observe them, but we still want the
     // trace) which is not what we ever want; the promise is already observed via `o`, so this only
     // swallows the trailing cancellation. The rethrow path is never actioned.
-    void CancellableHelper.ignoreCancellationErrors(p)
+    void CancellablePromise.ignoreCancellationErrors(p)
     // avoid circular calls
     const originalCancel = p.cancel
     // ensure that there isn't already a cancel operation on the returned promise
@@ -114,7 +119,7 @@ export abstract class CancellableHelper<T> extends CancellablePromise<T> {
   static fromPromiseWithoutCancel<V>(
     promise: PromiseLike<V>,
   ): CancellablePromise<V> {
-    const infinite = CancellableHelper.infinite<V>()
+    const infinite = CancellablePromise.infinite<V>()
     return new CancellablePromise(Promise.race([promise, infinite]), () =>
       infinite.cancel(),
     )
@@ -137,8 +142,8 @@ export abstract class CancellableHelper<T> extends CancellablePromise<T> {
       },
     }
     const promise = isAsyncIterable(g)
-      ? CancellableHelper.fromAsyncIterable(g, options)
-      : CancellableHelper.fromIterable(g, options)
+      ? CancellablePromise.fromAsyncIterable(g, options)
+      : CancellablePromise.fromIterable(g, options)
 
     return promise
       .then((returnValue) => ({ returnValue, values }))
@@ -151,7 +156,7 @@ export abstract class CancellableHelper<T> extends CancellablePromise<T> {
    * Creates a CancellablePromise from an Generator/Iterator/Iterable
    * @param g the Iterable/Iterator you want to convert to a promise
    *
-   * only exposed for testing, use toPromise instead
+   * only exposed for testing, use fromCancellable instead
    */
   static fromIterable<
     G extends Iterable<unknown, any, CancellablePromiseDisposer>,
@@ -228,7 +233,7 @@ export abstract class CancellableHelper<T> extends CancellablePromise<T> {
       }
       const consumed = consumer(value)
       if (consumed != null) {
-        await track(CancellableHelper.toPromise(consumed))
+        await track(CancellablePromise.fromCancellable(consumed))
       }
     }
     // decides what to do when awaiting a yielded value throws: hand the error back to the
@@ -261,7 +266,7 @@ export abstract class CancellableHelper<T> extends CancellablePromise<T> {
       try {
         const [resolved] = await track(
           CancellablePromise.all([
-            CancellableHelper.toPromise(value),
+            CancellablePromise.fromCancellable(value),
             blocking ? null : delayAnimationFrame(),
           ]),
         )
@@ -318,7 +323,7 @@ export abstract class CancellableHelper<T> extends CancellablePromise<T> {
           throw error
         }
         // very unlikely this will do anything while awaiting a promise given how async iterators work
-        await CancellableHelper.ignoreCancellationErrors(i.throw())
+        await CancellablePromise.ignoreCancellationErrors(i.throw())
       }
       if (done) {
         return value
@@ -327,13 +332,13 @@ export abstract class CancellableHelper<T> extends CancellablePromise<T> {
       return next()
     }
     // hide cancellation errors to avoid test failures
-    const promise = CancellableHelper.ignoreCancellationErrors(
+    const promise = CancellablePromise.ignoreCancellationErrors(
       next(),
       // cast it back, as we are racing the promise and it can only return void when it fails with
       // a cancellation error, and the infinite promise will always throw an error anyway, we cannot
       // actually return nothing
     ) as Promise<TReturn>
-    const infinite = CancellableHelper.infinite<Awaited<TReturn>>()
+    const infinite = CancellablePromise.infinite<Awaited<TReturn>>()
     return new CancellablePromise(
       CancellablePromise.race([promise, infinite]),
       () => {
@@ -393,7 +398,7 @@ export abstract class CancellableHelper<T> extends CancellablePromise<T> {
     canCancel: (cancellable: Cancellable<T>, index: number) => boolean = () =>
       true,
   ): CancellablePromise<Awaited<T>> {
-    const promises = cancellables.map(CancellableHelper.toPromise)
+    const promises = cancellables.map(CancellablePromise.fromCancellable)
     const maybeQuitOthers = (exceptIndex: number) => {
       // need to defer otherwise we trigger a bunch of cascading errors from all the canceled
       // promises throwing errors and cancelling the winner

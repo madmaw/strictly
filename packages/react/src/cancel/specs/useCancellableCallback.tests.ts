@@ -1,9 +1,8 @@
-import { CancellableHelper } from '@strictly/base'
+import { CancellablePromise, Cancellation } from '@strictly/base'
 import { expectPendingPromise } from '@strictly/vitest'
 import { renderHook } from '@testing-library/react'
 import { useCancellableCallback } from 'cancel/useCancellableCallback'
 import { useEffect } from 'react'
-import { CancellablePromise, Cancellation } from 'real-cancellable-promise'
 import { type Mock } from 'vite-plus/test'
 
 function delay() {
@@ -23,7 +22,7 @@ describe('useCancellablePromiseCallback', () => {
       const { m = 1, n = 0 } = a
       effect = vi.fn((n: number) => {
         accumulator += n * m
-        const promise = CancellableHelper.infinite()
+        const promise = CancellablePromise.infinite()
         promises.push(promise)
         return promise
       })

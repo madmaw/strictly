@@ -1,10 +1,7 @@
 /* oxlint-disable typescript/no-explicit-any -- any ok in generics */
-import { type Cancellable, CancellableHelper } from '@strictly/base'
+import { type Cancellable, CancellablePromise } from '@strictly/base'
 import { type DependencyList, useCallback, useEffect, useMemo } from 'react'
-import {
-  type CancellablePromise,
-  isPromiseWithCancel,
-} from 'real-cancellable-promise'
+import { isPromiseWithCancel } from 'real-cancellable-promise'
 
 function defaultCleanUpCancellablePromise<TReturn>(
   p: CancellablePromise<TReturn>,
@@ -30,9 +27,9 @@ export function useCancellableCallback<A extends any[], TReturn>(
   )
   const c = useCallback((...args: A) => {
     const result = cb(...args)
-    const maybePromise = CancellableHelper.toMaybePromise(result)
+    const maybePromise = CancellablePromise.maybeFromCancellable(result)
     if (isPromiseWithCancel(maybePromise)) {
-      void CancellableHelper.ignoreCancellationErrors(maybePromise)
+      void CancellablePromise.ignoreCancellationErrors(maybePromise)
       promises.push(maybePromise)
     }
     // oxlint-disable-next-line react/exhaustive-deps -- every time we run the callback make sure we can cancel it
