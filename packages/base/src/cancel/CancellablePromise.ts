@@ -57,7 +57,7 @@ export class CancellablePromise<T> extends CancellablePromiseImpl<T> {
   /**
    * Converts the cancellable to a promise, unless it is a non-deferred value (not an iterator or a promise)
    */
-  static toMaybePromise<T>(
+  static maybeFromCancellable<T>(
     cancellable: Cancellable<T> | PromiseLike<T> | PromiseWithCancel<T>,
   ): CancellablePromise<T> | T {
     if (isIterable(cancellable)) {
@@ -85,7 +85,7 @@ export class CancellablePromise<T> extends CancellablePromiseImpl<T> {
   static fromCancellable<T>(
     cancellable: Cancellable<T> | PromiseLike<T> | PromiseWithCancel<T>,
   ): CancellablePromise<T> {
-    const maybePromise = CancellablePromise.toMaybePromise(cancellable)
+    const maybePromise = CancellablePromise.maybeFromCancellable(cancellable)
     if (isPromiseWithCancel(maybePromise)) {
       return maybePromise
     }

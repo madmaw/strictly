@@ -27,7 +27,7 @@ export function useCancellableCallback<A extends any[], TReturn>(
   )
   const c = useCallback((...args: A) => {
     const result = cb(...args)
-    const maybePromise = CancellablePromise.toMaybePromise(result)
+    const maybePromise = CancellablePromise.maybeFromCancellable(result)
     if (isPromiseWithCancel(maybePromise)) {
       void CancellablePromise.ignoreCancellationErrors(maybePromise)
       promises.push(maybePromise)
