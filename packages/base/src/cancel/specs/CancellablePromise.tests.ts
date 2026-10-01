@@ -1,10 +1,10 @@
 import type { CancellablePromiseDisposer } from 'cancel/Cancellable'
-import { CancellableHelper } from 'cancel/CancellableHelper'
+import { CancellablePromise } from 'cancel/CancellablePromise'
 /* oxlint-disable typescript/no-explicit-any -- any fine in generics */
 /* oxlint-disable vitest/no-standalone-expect -- assertions live in nested beforeEach setup */
 /* oxlint-disable vitest/no-disabled-tests -- documents a known async cancellation limitation */
 import { toIterable } from 'iter-ops'
-import { CancellablePromise, Cancellation } from 'real-cancellable-promise'
+import { Cancellation } from 'real-cancellable-promise'
 import { delay, infiniteDelay } from 'util/delay'
 import type { Mocked } from 'vite-plus/test'
 
@@ -26,7 +26,7 @@ function toGeneratorAndIterable<P extends any[], T, TReturn>(
   ] as const
 }
 
-describe('CancellableHelper', () => {
+describe('CancellablePromise', () => {
   describe('fromAsyncIterable', () => {
     describe('cancel', () => {
       let infinite: CancellablePromise<void>
@@ -36,21 +36,21 @@ describe('CancellableHelper', () => {
       }
 
       beforeEach(() => {
-        infinite = CancellableHelper.infinite()
+        infinite = CancellablePromise.infinite()
       })
 
       describe.each(toAsyncGeneratorAndIterable(g))('%s', (_name, i) => {
         describe('cancellation error', () => {
           let promise: CancellablePromise<void>
           beforeEach(() => {
-            promise = CancellableHelper.fromAsyncIterable(i())
+            promise = CancellablePromise.fromAsyncIterable(i())
             promise.cancel()
           })
 
           afterEach(async () => {
             // force cancel
             infinite.cancel()
-            await CancellableHelper.ignoreCancellationErrors(infinite)
+            await CancellablePromise.ignoreCancellationErrors(infinite)
           })
 
           it('cancels the promise', async () => {
@@ -67,14 +67,14 @@ describe('CancellableHelper', () => {
 
     describe('return value', () => {
       async function* g() {
-        yield await CancellableHelper.resolve()
+        yield await CancellablePromise.resolve()
         return 1
       }
 
       describe.each(toAsyncGeneratorAndIterable(g))('%s', (_name, i) => {
         let result: number
         beforeEach(async () => {
-          result = await CancellableHelper.fromAsyncIterable<void, number>(i())
+          result = await CancellablePromise.fromAsyncIterable<void, number>(i())
         })
 
         it('returns the expected value', () => {
@@ -87,7 +87,7 @@ describe('CancellableHelper', () => {
       describe('asynchronous errors', () => {
         async function* g() {
           try {
-            yield await CancellableHelper.reject<void>(new Error())
+            yield await CancellablePromise.reject<void>(new Error())
             return 1
           } catch (_e) {
             return 2
@@ -97,7 +97,7 @@ describe('CancellableHelper', () => {
         describe.each(toAsyncGeneratorAndIterable(g))('%s', (_name, i) => {
           let result: number
           beforeEach(async () => {
-            result = await CancellableHelper.fromAsyncIterable<void, number>(
+            result = await CancellablePromise.fromAsyncIterable<void, number>(
               i(),
             )
           })
@@ -121,7 +121,7 @@ describe('CancellableHelper', () => {
         describe.each(toAsyncGeneratorAndIterable(g))('%s', (_name, i) => {
           let result: number
           beforeEach(async () => {
-            result = await CancellableHelper.fromAsyncIterable<void, number>(
+            result = await CancellablePromise.fromAsyncIterable<void, number>(
               i(),
             )
           })
@@ -146,7 +146,7 @@ describe('CancellableHelper', () => {
       describe.each(toAsyncGeneratorAndIterable(g))('%s', (_name, i) => {
         let result: number
         beforeEach(async () => {
-          result = await CancellableHelper.fromAsyncIterable<void, number>(i())
+          result = await CancellablePromise.fromAsyncIterable<void, number>(i())
         })
 
         it('returns the expected value', () => {
@@ -167,7 +167,7 @@ describe('CancellableHelper', () => {
         let consumer: Mocked<(n: number) => void>
         beforeEach(async () => {
           consumer = vi.fn()
-          await CancellableHelper.fromAsyncIterable<number, void>(i(), {
+          await CancellablePromise.fromAsyncIterable<number, void>(i(), {
             consumer,
           })
         })
@@ -193,19 +193,19 @@ describe('CancellableHelper', () => {
         }
 
         beforeEach(() => {
-          infinite = CancellableHelper.infinite()
+          infinite = CancellablePromise.infinite()
         })
 
         describe.each(toGeneratorAndIterable(g))('%s', (_name, i) => {
           describe('cancellation error', () => {
             let promise: CancellablePromise<void>
             beforeEach(() => {
-              promise = CancellableHelper.fromIterable(i())
+              promise = CancellablePromise.fromIterable(i())
               promise.cancel()
             })
 
             afterEach(async () => {
-              await CancellableHelper.ignoreCancellationErrors(promise)
+              await CancellablePromise.ignoreCancellationErrors(promise)
             })
 
             it('cancels the promise', async () => {
@@ -232,18 +232,18 @@ describe('CancellableHelper', () => {
         }
 
         beforeEach(() => {
-          infinite = CancellableHelper.infinite()
+          infinite = CancellablePromise.infinite()
         })
 
         describe.each(toGeneratorAndIterable(g))('%s', (_name, i) => {
           describe('cancellation error', () => {
             let promise: CancellablePromise<void>
             beforeEach(() => {
-              promise = CancellableHelper.fromIterable(i())
+              promise = CancellablePromise.fromIterable(i())
             })
 
             afterEach(async () => {
-              await CancellableHelper.ignoreCancellationErrors(promise)
+              await CancellablePromise.ignoreCancellationErrors(promise)
             })
 
             it('cancels the promise', async () => {
@@ -259,14 +259,14 @@ describe('CancellableHelper', () => {
 
       describe('return value', () => {
         function* g() {
-          yield CancellableHelper.resolve()
+          yield CancellablePromise.resolve()
           return 1
         }
 
         describe.each(toGeneratorAndIterable(g))('%s', (_name, i) => {
           let result: number
           beforeEach(async () => {
-            result = await CancellableHelper.fromIterable(i())
+            result = await CancellablePromise.fromIterable(i())
           })
 
           it('returns the expected value', () => {
@@ -279,7 +279,7 @@ describe('CancellableHelper', () => {
         describe('asynchronous errors', () => {
           function* g() {
             try {
-              yield CancellableHelper.reject<void>(new Error())
+              yield CancellablePromise.reject<void>(new Error())
               return 1
             } catch (_e) {
               return 2
@@ -289,7 +289,7 @@ describe('CancellableHelper', () => {
           describe.each(toGeneratorAndIterable(g))('%s', (_name, i) => {
             let result: number
             beforeEach(async () => {
-              result = await CancellableHelper.fromIterable(i())
+              result = await CancellablePromise.fromIterable(i())
             })
 
             it('returns the expected value', () => {
@@ -301,15 +301,15 @@ describe('CancellableHelper', () => {
         describe('nested asynchronous errors', () => {
           function* g() {
             try {
-              yield CancellableHelper.reject<void>(new Error())
+              yield CancellablePromise.reject<void>(new Error())
               return 1
             } catch (_e) {
               try {
-                yield CancellableHelper.reject<void>(new Error())
+                yield CancellablePromise.reject<void>(new Error())
                 return 2
               } catch (_e) {
                 try {
-                  yield CancellableHelper.reject<void>(new Error())
+                  yield CancellablePromise.reject<void>(new Error())
                   return 3
                 } catch (_e) {
                   return 4
@@ -321,7 +321,7 @@ describe('CancellableHelper', () => {
           describe.each(toGeneratorAndIterable(g))('%s', (_name, i) => {
             let result: number
             beforeEach(async () => {
-              result = await CancellableHelper.fromIterable(i())
+              result = await CancellablePromise.fromIterable(i())
             })
 
             it('returns the expected value', () => {
@@ -343,7 +343,7 @@ describe('CancellableHelper', () => {
           describe.each(toGeneratorAndIterable(g))('%s', (_name, i) => {
             let result: number
             beforeEach(async () => {
-              result = await CancellableHelper.fromIterable(i())
+              result = await CancellablePromise.fromIterable(i())
             })
 
             it('returns the expected value', () => {
@@ -366,7 +366,7 @@ describe('CancellableHelper', () => {
         describe.each(toGeneratorAndIterable(g))('%s', (_name, i) => {
           let result: number
           beforeEach(async () => {
-            result = await CancellableHelper.fromIterable(i())
+            result = await CancellablePromise.fromIterable(i())
           })
 
           it('returns the expected value', () => {
@@ -387,7 +387,7 @@ describe('CancellableHelper', () => {
           let consumer: Mocked<(n: number) => void>
           beforeEach(async () => {
             consumer = vi.fn()
-            await CancellableHelper.fromIterable(i(), {
+            await CancellablePromise.fromIterable(i(), {
               consumer,
             })
           })
@@ -419,7 +419,7 @@ describe('CancellableHelper', () => {
         promise2 = infiniteDelay().then(() => 2)
         promise3 = CancellablePromise.resolve(3)
 
-        const promise = CancellableHelper.raceAndCancelLosers([
+        const promise = CancellablePromise.raceAndCancelLosers([
           promise1,
           promise2,
           promise3,
@@ -450,7 +450,7 @@ describe('CancellableHelper', () => {
         promise2 = infiniteDelay().then(() => 2)
         promise3 = CancellablePromise.reject(error)
 
-        const promise = CancellableHelper.raceAndCancelLosers([
+        const promise = CancellablePromise.raceAndCancelLosers([
           promise1,
           promise2,
           promise3,
@@ -489,7 +489,7 @@ describe('CancellableHelper', () => {
         promise2 = infiniteDelay().then(() => 2)
         promise3 = specialInfiniteDelay().then(() => 3)
 
-        const promise = CancellableHelper.raceAndCancelLosers([
+        const promise = CancellablePromise.raceAndCancelLosers([
           promise1,
           promise2,
           promise3,
@@ -518,7 +518,7 @@ describe('CancellableHelper', () => {
         promise2 = delay(100).then(() => 2)
         promise3 = infiniteDelay().then(() => 3)
 
-        const promise = CancellableHelper.raceAndCancelLosers(
+        const promise = CancellablePromise.raceAndCancelLosers(
           [promise1, promise2, promise3],
           (p) => p === promise3,
         )

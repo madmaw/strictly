@@ -1,6 +1,6 @@
 /* oxlint-disable vitest/no-standalone-expect -- assertions run inside generator methods exercised by the tests */
 import type { CancellablePromiseDisposer } from 'cancel/Cancellable'
-import { CancellableHelper } from 'cancel/CancellableHelper'
+import { CancellablePromise } from 'cancel/CancellablePromise'
 import {
   _getGlobalState,
   type IReactionDisposer,
@@ -75,7 +75,7 @@ class Model {
   @flow
   *cancellableInfiniteFlow() {
     this.canceller = yield
-    yield CancellableHelper.infinite()
+    yield CancellablePromise.infinite()
   }
 
   cancelInfiniteFlow() {
@@ -105,7 +105,7 @@ describe('flow', () => {
 
   describe('asyncFlow', () => {
     beforeEach(async () => {
-      isInAction = await CancellableHelper.toPromise(model.asyncFlow())
+      isInAction = await CancellablePromise.toPromise(model.asyncFlow())
     })
 
     it('updates the value', () => {
@@ -124,7 +124,7 @@ describe('flow', () => {
   describe('boundAsyncFlow', () => {
     beforeEach(async () => {
       const flow = model.boundAsyncFlow
-      isInAction = await CancellableHelper.toPromise(flow())
+      isInAction = await CancellablePromise.toPromise(flow())
     })
 
     it('updates the value', () => {
@@ -142,7 +142,7 @@ describe('flow', () => {
 
   describe('flow', () => {
     beforeEach(async () => {
-      isInAction = await CancellableHelper.toPromise(model.flow())
+      isInAction = await CancellablePromise.toPromise(model.flow())
     })
 
     it('updates the value', () => {
@@ -161,7 +161,7 @@ describe('flow', () => {
   describe('errorFlow', () => {
     let result: string | null
     beforeEach(async () => {
-      result = await CancellableHelper.toPromise(model.errorFlow())
+      result = await CancellablePromise.toPromise(model.errorFlow())
     })
 
     it('updates the value', () => {
@@ -179,7 +179,7 @@ describe('flow', () => {
 
   describe('noFlow', () => {
     beforeEach(async () => {
-      isInAction = await CancellableHelper.toPromise(model.noFlow())
+      isInAction = await CancellablePromise.toPromise(model.noFlow())
     })
 
     it('is does not run in an action', () => {
@@ -189,7 +189,7 @@ describe('flow', () => {
 
   describe('cancellableInfiniteFlow', () => {
     it('supports cancels', async () => {
-      const promise = CancellableHelper.toPromise(
+      const promise = CancellablePromise.toPromise(
         model.cancellableInfiniteFlow(),
       )
       // brief delay to make sure the iterator is underway

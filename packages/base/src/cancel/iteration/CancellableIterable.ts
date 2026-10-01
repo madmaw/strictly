@@ -1,5 +1,6 @@
 /* oxlint-disable typescript/no-explicit-any -- any ok in generics */
-import { CancellablePromise, Cancellation } from 'real-cancellable-promise'
+import { CancellablePromise } from 'cancel/CancellablePromise'
+import { Cancellation } from 'real-cancellable-promise'
 
 export class CancellableIterableCompletedError<TReturn> extends Cancellation {
   constructor(readonly returnValue: TReturn) {
