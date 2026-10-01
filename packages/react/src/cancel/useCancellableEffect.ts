@@ -1,4 +1,4 @@
-import { type Cancellable, CancellableHelper } from '@strictly/base'
+import { type Cancellable, CancellablePromise } from '@strictly/base'
 import { type DependencyList, useEffect } from 'react'
 
 /**
@@ -12,9 +12,9 @@ export function useCancellableEffect(
   deps: DependencyList,
 ) {
   useEffect(() => {
-    const promise = CancellableHelper.ignoreCancellationErrors(
+    const promise = CancellablePromise.ignoreCancellationErrors(
       // ignore cancellations in effects
-      CancellableHelper.toPromise(effect()),
+      CancellablePromise.fromCancellable(effect()),
     )
     return () => promise.cancel()
     // oxlint-disable-next-line react/exhaustive-deps -- the deps are for effect, we pass through here

@@ -1,4 +1,4 @@
-import { CancellablePromise, Cancellation } from 'real-cancellable-promise'
+import { CancellablePromise, Cancellation } from 'cancel/CancellablePromise'
 
 export type Delay = () => CancellablePromise<void>
 

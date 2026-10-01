@@ -1,6 +1,6 @@
 import { AbortError } from 'cancel/AbortError'
+import { Cancellation } from 'cancel/CancellablePromise'
 import { FlowCancellationError } from 'mobx'
-import { Cancellation } from 'real-cancellable-promise'
 
 export const MOBX_CANCELLATION_ERROR_MESSAGE = 'WHEN_CANCELLED'
 
