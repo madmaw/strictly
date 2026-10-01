@@ -82,7 +82,7 @@ export class CancellablePromise<T> extends CancellablePromiseImpl<T> {
   /**
    * Converts the cancellable to a promise
    */
-  static toPromise<T>(
+  static fromCancellable<T>(
     cancellable: Cancellable<T> | PromiseLike<T> | PromiseWithCancel<T>,
   ): CancellablePromise<T> {
     const maybePromise = CancellablePromise.toMaybePromise(cancellable)
@@ -95,7 +95,7 @@ export class CancellablePromise<T> extends CancellablePromiseImpl<T> {
   static toObservable<T>(
     c: Cancellable<T>,
   ): CancellablePromiseBasedObservable<T> {
-    const p = CancellablePromise.toPromise(c)
+    const p = CancellablePromise.fromCancellable(c)
     const o = fromPromise(p) as CancellablePromiseBasedObservable<T>
     // mobx fromPromise throws away errors by default (you can observe them, but we still want the
     // trace) which is not what we ever want; the promise is already observed via `o`, so this only
@@ -156,7 +156,7 @@ export class CancellablePromise<T> extends CancellablePromiseImpl<T> {
    * Creates a CancellablePromise from an Generator/Iterator/Iterable
    * @param g the Iterable/Iterator you want to convert to a promise
    *
-   * only exposed for testing, use toPromise instead
+   * only exposed for testing, use fromCancellable instead
    */
   static fromIterable<
     G extends Iterable<unknown, any, CancellablePromiseDisposer>,
@@ -233,7 +233,7 @@ export class CancellablePromise<T> extends CancellablePromiseImpl<T> {
       }
       const consumed = consumer(value)
       if (consumed != null) {
-        await track(CancellablePromise.toPromise(consumed))
+        await track(CancellablePromise.fromCancellable(consumed))
       }
     }
     // decides what to do when awaiting a yielded value throws: hand the error back to the
@@ -266,7 +266,7 @@ export class CancellablePromise<T> extends CancellablePromiseImpl<T> {
       try {
         const [resolved] = await track(
           CancellablePromise.all([
-            CancellablePromise.toPromise(value),
+            CancellablePromise.fromCancellable(value),
             blocking ? null : delayAnimationFrame(),
           ]),
         )
@@ -398,7 +398,7 @@ export class CancellablePromise<T> extends CancellablePromiseImpl<T> {
     canCancel: (cancellable: Cancellable<T>, index: number) => boolean = () =>
       true,
   ): CancellablePromise<Awaited<T>> {
-    const promises = cancellables.map(CancellablePromise.toPromise)
+    const promises = cancellables.map(CancellablePromise.fromCancellable)
     const maybeQuitOthers = (exceptIndex: number) => {
       // need to defer otherwise we trigger a bunch of cascading errors from all the canceled
       // promises throwing errors and cancelling the winner

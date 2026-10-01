@@ -104,7 +104,7 @@ describe('flow', () => {
 
   describe('asyncFlow', () => {
     beforeEach(async () => {
-      isInAction = await CancellablePromise.toPromise(model.asyncFlow())
+      isInAction = await CancellablePromise.fromCancellable(model.asyncFlow())
     })
 
     it('updates the value', () => {
@@ -123,7 +123,7 @@ describe('flow', () => {
   describe('boundAsyncFlow', () => {
     beforeEach(async () => {
       const flow = model.boundAsyncFlow
-      isInAction = await CancellablePromise.toPromise(flow())
+      isInAction = await CancellablePromise.fromCancellable(flow())
     })
 
     it('updates the value', () => {
@@ -141,7 +141,7 @@ describe('flow', () => {
 
   describe('flow', () => {
     beforeEach(async () => {
-      isInAction = await CancellablePromise.toPromise(model.flow())
+      isInAction = await CancellablePromise.fromCancellable(model.flow())
     })
 
     it('updates the value', () => {
@@ -160,7 +160,7 @@ describe('flow', () => {
   describe('errorFlow', () => {
     let result: string | null
     beforeEach(async () => {
-      result = await CancellablePromise.toPromise(model.errorFlow())
+      result = await CancellablePromise.fromCancellable(model.errorFlow())
     })
 
     it('updates the value', () => {
@@ -178,7 +178,7 @@ describe('flow', () => {
 
   describe('noFlow', () => {
     beforeEach(async () => {
-      isInAction = await CancellablePromise.toPromise(model.noFlow())
+      isInAction = await CancellablePromise.fromCancellable(model.noFlow())
     })
 
     it('is does not run in an action', () => {
@@ -188,7 +188,7 @@ describe('flow', () => {
 
   describe('cancellableInfiniteFlow', () => {
     it('supports cancels', async () => {
-      const promise = CancellablePromise.toPromise(
+      const promise = CancellablePromise.fromCancellable(
         model.cancellableInfiniteFlow(),
       )
       // brief delay to make sure the iterator is underway
