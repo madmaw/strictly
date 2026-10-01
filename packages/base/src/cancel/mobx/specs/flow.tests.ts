@@ -1,7 +1,7 @@
 /* oxlint-disable vitest/no-standalone-expect -- assertions run inside generator methods exercised by the tests */
 import type { CancellablePromiseDisposer } from 'cancel/Cancellable'
 import { CancellablePromise, Cancellation } from 'cancel/CancellablePromise'
-import { y } from 'cancel/iteration/y'
+import { wait } from 'cancel/iteration/wait'
 import {
   _getGlobalState,
   type IReactionDisposer,
@@ -74,7 +74,7 @@ class Model {
 
   @flow
   *stepFlow() {
-    const isStepInAction = yield* y(() => this.step())
+    const isStepInAction = yield* wait(() => this.step())
     return isStepInAction && inAction()
   }
 

@@ -1,9 +1,7 @@
-import {
-  CancellableIterableCompletedError,
-  CancellablePromise,
-} from 'cancel/CancellablePromise'
+import { CancellablePromise } from 'cancel/CancellablePromise'
 import { type LooseCancellableIterable } from 'cancel/iteration/CancellableIterable'
-import { y } from 'cancel/iteration/y'
+import { next } from 'cancel/iteration/next'
+import { wait } from 'cancel/iteration/wait'
 import { delay } from 'util/delay'
 
 function* filterAwaited<T, TReturn>(
@@ -14,11 +12,7 @@ function* filterAwaited<T, TReturn>(
   const i = source[Symbol.iterator]()
   function* nextMatch() {
     for (;;) {
-      const result = i.next()
-      if (result.done) {
-        throw new CancellableIterableCompletedError(result.value)
-      }
-      const value = yield* y(result.value)
+      const value = yield* wait(next(i))
       if (predicate(value)) {
         return value
       }
@@ -26,7 +20,7 @@ function* filterAwaited<T, TReturn>(
   }
   try {
     for (;;) {
-      yield* y(nextMatch())
+      yield* wait(nextMatch())
     }
   } finally {
     onFinally()
@@ -80,11 +74,11 @@ function oneToFour(): IterableIterator<
   }
 }
 
-describe('y', () => {
+describe('wait', () => {
   describe('types', () => {
     it('returns the resolved type of a promise', () => {
       function* g() {
-        const value = yield* y(CancellablePromise.resolve(1))
+        const value = yield* wait(CancellablePromise.resolve(1))
         expectTypeOf(value).toEqualTypeOf<number>()
       }
       expect(g).toBeDefined()
@@ -96,7 +90,7 @@ describe('y', () => {
         return 'a'
       }
       function* g() {
-        const value = yield* y(step())
+        const value = yield* wait(step())
         expectTypeOf(value).toEqualTypeOf<string>()
       }
       expect(g).toBeDefined()
@@ -104,7 +98,7 @@ describe('y', () => {
 
     it('returns the return type of a factory', () => {
       function* g() {
-        const value = yield* y(function* () {
+        const value = yield* wait(function* () {
           yield CancellablePromise.resolve(1)
           return 'a'
         })
@@ -116,7 +110,7 @@ describe('y', () => {
     it('returns functions that need arguments as values', () => {
       const f = (n: number) => n
       function* g() {
-        const value = yield* y(f)
+        const value = yield* wait(f)
         expectTypeOf(value).toEqualTypeOf<(n: number) => number>()
         return value
       }
@@ -127,26 +121,26 @@ describe('y', () => {
   describe('in a flow', () => {
     it('returns a value synchronously', () => {
       function* g() {
-        return yield* y(1)
+        return yield* wait(1)
       }
       expect(g().next()).toEqual({ done: true, value: 1 })
     })
 
     it('returns the resolved value of a promise', async () => {
       function* g() {
-        const value = yield* y(CancellablePromise.resolve(1))
+        const value = yield* wait(CancellablePromise.resolve(1))
         return value + 1
       }
       expect(await CancellablePromise.fromIterable(g())).toEqual(2)
     })
 
     it.each([
-      ['generator', (step: () => Generator<unknown, number>) => y(step())],
-      ['factory', (step: () => Generator<unknown, number>) => y(step)],
+      ['generator', (step: () => Generator<unknown, number>) => wait(step())],
+      ['factory', (step: () => Generator<unknown, number>) => wait(step)],
     ])('returns the return value of a %s', async (_name, toY) => {
       function* step() {
-        const a = yield* y(CancellablePromise.resolve(1))
-        const b = yield* y(delay().then(() => 2))
+        const a = yield* wait(CancellablePromise.resolve(1))
+        const b = yield* wait(delay().then(() => 2))
         return a + b
       }
       function* g() {
@@ -158,7 +152,7 @@ describe('y', () => {
 
     it('runs a function returning a promise', async () => {
       function* g() {
-        return yield* y(() => CancellablePromise.resolve(1))
+        return yield* wait(() => CancellablePromise.resolve(1))
       }
       expect(await CancellablePromise.fromIterable(g())).toEqual(1)
     })
@@ -166,8 +160,8 @@ describe('y', () => {
     it('passes errors from a step back to the generator', async () => {
       function* g() {
         try {
-          yield* y(function* () {
-            yield* y(delay())
+          yield* wait(function* () {
+            yield* wait(delay())
             throw new Error('step failed')
           })
           return null
@@ -182,11 +176,11 @@ describe('y', () => {
   describe('in a stream', () => {
     it('emits a step as a single value', async () => {
       function* g() {
-        yield* y(function* () {
+        yield* wait(function* () {
           yield CancellablePromise.resolve('ignored')
           return 'a'
         })
-        yield* y(CancellablePromise.resolve('b'))
+        yield* wait(CancellablePromise.resolve('b'))
       }
       const { values } = await CancellablePromise.valuesFromIterable(g())
       expect(values).toEqual(['a', 'b'])
@@ -204,8 +198,8 @@ describe('y', () => {
       }
       let wrappedAfterDelay: boolean | undefined
       function* g() {
-        yield* y(function* () {
-          yield* y(delay())
+        yield* wait(function* () {
+          yield* wait(delay())
           wrappedAfterDelay = wrapped
         })
       }
