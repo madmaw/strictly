@@ -1,9 +1,8 @@
-import { CancellablePromise } from '@strictly/base'
+import { CancellablePromise, Cancellation } from '@strictly/base'
 import { expectPendingPromise } from '@strictly/vitest'
 import { renderHook } from '@testing-library/react'
 import { useCancellableCallback } from 'cancel/useCancellableCallback'
 import { useEffect } from 'react'
-import { Cancellation } from 'real-cancellable-promise'
 import { type Mock } from 'vite-plus/test'
 
 function delay() {

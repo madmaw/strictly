@@ -1,8 +1,8 @@
 import { type CancellablePromiseDisposer } from 'cancel/Cancellable'
+import { Cancellation } from 'cancel/CancellablePromise'
 import { type LooseCancellableIterable } from 'cancel/iteration/CancellableIterable'
 /* oxlint-disable typescript/no-explicit-any, typescript/no-non-null-assertion -- any ok in generics */
 import { runInAction } from 'mobx'
-import { Cancellation } from 'real-cancellable-promise'
 import { type Writable } from 'type-fest'
 import { type Maybe } from 'types/Maybe'
 

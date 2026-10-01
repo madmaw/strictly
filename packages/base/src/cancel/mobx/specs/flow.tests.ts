@@ -1,13 +1,12 @@
 /* oxlint-disable vitest/no-standalone-expect -- assertions run inside generator methods exercised by the tests */
 import type { CancellablePromiseDisposer } from 'cancel/Cancellable'
-import { CancellablePromise } from 'cancel/CancellablePromise'
+import { CancellablePromise, Cancellation } from 'cancel/CancellablePromise'
 import {
   _getGlobalState,
   type IReactionDisposer,
   observableRef,
   reaction,
 } from 'mobx'
-import { Cancellation } from 'real-cancellable-promise'
 import { delay } from 'util/delay'
 import { flow } from '../flow'
 

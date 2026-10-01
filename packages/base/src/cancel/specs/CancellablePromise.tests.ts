@@ -1,10 +1,9 @@
 import type { CancellablePromiseDisposer } from 'cancel/Cancellable'
-import { CancellablePromise } from 'cancel/CancellablePromise'
+import { CancellablePromise, Cancellation } from 'cancel/CancellablePromise'
 /* oxlint-disable typescript/no-explicit-any -- any fine in generics */
 /* oxlint-disable vitest/no-standalone-expect -- assertions live in nested beforeEach setup */
 /* oxlint-disable vitest/no-disabled-tests -- documents a known async cancellation limitation */
 import { toIterable } from 'iter-ops'
-import { Cancellation } from 'real-cancellable-promise'
 import { delay, infiniteDelay } from 'util/delay'
 import type { Mocked } from 'vite-plus/test'
 

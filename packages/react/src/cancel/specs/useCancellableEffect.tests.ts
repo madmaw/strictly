@@ -1,7 +1,6 @@
-import { CancellablePromise } from '@strictly/base'
+import { CancellablePromise, Cancellation } from '@strictly/base'
 import { renderHook } from '@testing-library/react'
 import { useCancellableEffect } from 'cancel/useCancellableEffect'
-import { Cancellation } from 'real-cancellable-promise'
 import { type Mock } from 'vite-plus/test'
 
 function delay() {

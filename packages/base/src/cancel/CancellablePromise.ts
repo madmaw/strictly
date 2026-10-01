@@ -3,10 +3,7 @@ import {
   type CancellablePromiseDisposer,
 } from 'cancel/Cancellable'
 import { isCancellationError } from 'cancel/isCancellationError'
-import {
-  CancellableIterableCompletedError,
-  type LooseCancellableIterable,
-} from 'cancel/iteration/CancellableIterable'
+import { type LooseCancellableIterable } from 'cancel/iteration/CancellableIterable'
 import { isAsyncIterable } from 'cancel/iteration/isAsyncIterable'
 import { isIterable } from 'cancel/iteration/isIterable'
 /* oxlint-disable typescript/no-explicit-any, typescript/no-non-null-assertion -- generic promise/iterator plumbing */
@@ -25,6 +22,14 @@ import {
   infiniteDelay,
 } from 'util/delay'
 import { isPromiseLike } from 'util/isPromiseLike'
+
+export { Cancellation } from 'real-cancellable-promise'
+
+export class CancellableIterableCompletedError<TReturn> extends Cancellation {
+  constructor(readonly returnValue: TReturn) {
+    super()
+  }
+}
 
 export class ToValuesPromiseError<T> extends Error {
   constructor(

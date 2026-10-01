@@ -1,12 +1,8 @@
 /* oxlint-disable typescript/no-explicit-any -- any ok in generics */
-import { CancellablePromise } from 'cancel/CancellablePromise'
-import { Cancellation } from 'real-cancellable-promise'
-
-export class CancellableIterableCompletedError<TReturn> extends Cancellation {
-  constructor(readonly returnValue: TReturn) {
-    super()
-  }
-}
+import {
+  CancellableIterableCompletedError,
+  CancellablePromise,
+} from 'cancel/CancellablePromise'
 
 /**
  * A synchronous iterator that returns (asynchronous) CancellablePromises. This is superior
