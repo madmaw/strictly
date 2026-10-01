@@ -1,6 +1,7 @@
 /* oxlint-disable vitest/no-standalone-expect -- assertions run inside generator methods exercised by the tests */
 import type { CancellablePromiseDisposer } from 'cancel/Cancellable'
 import { CancellablePromise, Cancellation } from 'cancel/CancellablePromise'
+import { y } from 'cancel/iteration/y'
 import {
   _getGlobalState,
   type IReactionDisposer,
@@ -69,6 +70,18 @@ class Model {
       this.thing++
       return e instanceof Error && inAction() ? e.message : null
     }
+  }
+
+  @flow
+  *stepFlow() {
+    const isStepInAction = yield* y(() => this.step())
+    return isStepInAction && inAction()
+  }
+
+  *step() {
+    yield delay()
+    this.thing++
+    return inAction()
   }
 
   @flow
@@ -173,6 +186,20 @@ describe('flow', () => {
 
     it('returns the error message', () => {
       expect(result).toEqual('hello')
+    })
+  })
+
+  describe('stepFlow', () => {
+    beforeEach(async () => {
+      isInAction = await CancellablePromise.fromCancellable(model.stepFlow())
+    })
+
+    it('updates the value', () => {
+      expect(model.thing).toEqual(1)
+    })
+
+    it('runs the step in an action', () => {
+      expect(isInAction).toBeTruthy()
     })
   })
 

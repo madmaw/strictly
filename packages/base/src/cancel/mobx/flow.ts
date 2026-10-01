@@ -1,6 +1,7 @@
 import { type CancellablePromiseDisposer } from 'cancel/Cancellable'
 import { Cancellation } from 'cancel/CancellablePromise'
 import { type LooseCancellableIterable } from 'cancel/iteration/CancellableIterable'
+import { isGenerator } from 'cancel/iteration/isGenerator'
 /* oxlint-disable typescript/no-explicit-any, typescript/no-non-null-assertion -- any ok in generics */
 import { runInAction } from 'mobx'
 import { type Writable } from 'type-fest'
@@ -58,7 +59,10 @@ function* runGeneratorInAction<
       return value
     }
     try {
-      cancellerImpl = yield value
+      // a yielded generator is a step in its own right, so it also needs to run in an action
+      cancellerImpl = yield isGenerator(value)
+        ? runGeneratorInAction(value)
+        : value
       error = null
     } catch (e) {
       if (i.throw == null || error === e) {

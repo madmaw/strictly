@@ -5,11 +5,24 @@ import {
 } from 'cancel/CancellablePromise'
 
 /**
+ * A yielded generator is run to completion as a single step, resolving to its return value
+ */
+export type CancellableStep<T> =
+  | CancellablePromise<T>
+  | Generator<unknown, T, any>
+
+/**
+ * The value that a yielded step resolves to
+ */
+export type ResolvedStep<S> =
+  S extends Generator<unknown, infer R, any> ? Awaited<R> : Awaited<S>
+
+/**
  * A synchronous iterator that returns (asynchronous) CancellablePromises. This is superior
  * to AsyncIterator as we can exit the iterator at any point instead of just between async calls.
  */
 export type CancellableIterable<T, TReturn = any, TNext = any> = Iterable<
-  CancellablePromise<T>,
+  CancellableStep<T>,
   TReturn,
   TNext
 >
@@ -23,7 +36,7 @@ export type LooseCancellableIterable<
   T = any,
   TReturn = any,
   TNext = any,
-> = Iterable<CancellablePromise<T> | T, TReturn, TNext>
+> = Iterable<CancellableStep<T> | T, TReturn, TNext>
 
 export function* asyncToCancellableIterable<T, TReturn>(
   i: AsyncIterable<T, TReturn>,

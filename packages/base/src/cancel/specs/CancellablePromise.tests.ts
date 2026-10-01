@@ -403,6 +403,30 @@ describe('CancellablePromise', () => {
           })
         })
       })
+
+      describe('yielded iterables', () => {
+        it('consumes iterables that are not generators as values', async () => {
+          function* g() {
+            yield [1, 2]
+            yield 'ab'
+            yield new Set([3])
+          }
+          const { values } = await CancellablePromise.valuesFromIterable(g())
+          expect(values).toEqual([[1, 2], 'ab', new Set([3])])
+        })
+
+        it('runs generators as a single step', async () => {
+          function* step() {
+            yield CancellablePromise.resolve(1)
+            return 2
+          }
+          function* g() {
+            yield step()
+          }
+          const { values } = await CancellablePromise.valuesFromIterable(g())
+          expect(values).toEqual([2])
+        })
+      })
     })
   })
 
