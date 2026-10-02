@@ -1,3 +1,4 @@
+import { expectInstanceOf } from '@strictly/vitest'
 import { type CancellablePromiseDisposer } from 'cancel/Cancellable'
 import {
   CancellableIterableCompletedError,
@@ -29,8 +30,8 @@ describe('next', () => {
     } catch (e) {
       error = e
     }
-    expect(error).toBeInstanceOf(CancellableIterableCompletedError)
-    expect(error).toHaveProperty('returnValue', 'end')
+    expectInstanceOf(error, CancellableIterableCompletedError)
+    expect(error.returnValue).toBe('end')
   })
 
   describe('TNext', () => {

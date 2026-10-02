@@ -7,10 +7,9 @@ import { type CancellableStep } from 'cancel/iteration/CancellableIterable'
  * ```
  * const value = yield* wait(next(i))
  * ```
- * The iterator is resumed without a value, so its `TNext` has to accept `undefined`. An iterator expecting
- * something to be passed back from `yield` (e.g. a disposer) is rejected.
  */
 export function next<T, TReturn>(
+  // TNext is intentionally `undefined`, disposers are not currently supported in next calls
   i: Iterator<CancellableStep<T> | T, TReturn, undefined>,
 ): CancellableStep<T> | T {
   const result = i.next()

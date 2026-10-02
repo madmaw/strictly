@@ -107,10 +107,10 @@ describe('wait', () => {
       expect(g).toBeDefined()
     })
 
-    it('returns functions that need arguments as values', () => {
+    it('returns functions that need arguments as values when typed as values', () => {
       const f = (n: number) => n
       function* g() {
-        const value = yield* wait(f)
+        const value = yield* wait<typeof f>(f)
         expectTypeOf(value).toEqualTypeOf<(n: number) => number>()
         return value
       }

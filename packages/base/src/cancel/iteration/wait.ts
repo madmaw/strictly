@@ -24,19 +24,25 @@ type YieldStep<T> = Generator<CancellableStep<T>, T, unknown>
  * factory for the step. Values that are not promises or generators are returned synchronously without
  * yielding.
  */
-export function wait<T>(factory: () => CancellableStep<T> | T): YieldStep<T>
-export function wait<T>(step: CancellableStep<T> | T): YieldStep<T>
-export function* wait(step: unknown): Generator<unknown, unknown, unknown> {
-  if (typeof step === 'function' && step.length === 0) {
-    return yield* wait((step as () => unknown)())
-  }
-  let result: unknown
+export function* wait<T>(
+  step: CancellableStep<T> | (() => CancellableStep<T> | T) | T,
+): YieldStep<T> {
+  return yield* waitFor(isFactory(step) ? step() : step)
+}
+
+function isFactory<S>(step: S | (() => S)): step is () => S {
+  return typeof step === 'function' && step.length === 0
+}
+
+function* waitFor<T>(step: CancellableStep<T> | T): YieldStep<T> {
+  let result: T | undefined
   if (isGenerator(step)) {
+    const generator = step as Generator<unknown, T, unknown>
     yield (function* () {
-      result = yield* step
+      result = yield* generator
       return result
     })()
-    return result
+    return result as T
   }
   if (!isPromiseLike(step)) {
     return step
@@ -47,5 +53,5 @@ export function* wait(step: unknown): Generator<unknown, unknown, unknown> {
     result = value
     return value
   })
-  return result
+  return result as T
 }
