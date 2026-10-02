@@ -96,9 +96,6 @@ catalogs:
     astro:
       specifier: ^7.3.5
       version: 7.3.5
-    iter-ops:
-      specifier: ^3.5.0
-      version: 3.5.0
     jsdom:
       specifier: ^30.1.1
       version: 30.1.1
@@ -365,9 +362,6 @@ importers:
       '@strictly/vitest':
         specifier: workspace:*
         version: link:../../support/vitest
-      iter-ops:
-        specifier: 'catalog:'
-        version: 3.5.0
       mobx-utils:
         specifier: 'catalog:'
         version: 6.1.1(mobx@7.0.5)
@@ -3711,10 +3705,6 @@ packages:
   is-wsl@3.1.1:
     resolution: {integrity: sha512-e6rvdUCiQCAuumZslxRJWR/Doq4VpPR82kqclvcS0efgt430SlGIk05vdCN58+VrzgtIcfNODjozVielycD4Sw==}
     engines: {node: '>=16'}
-
-  iter-ops@3.5.0:
-    resolution: {integrity: sha512-0/DU67w30nLAyyYETTAVOwtts871N6jjQEY9NAzSXqtlAGuo8CX6O+/Hx11eRZIchACaAMUn6alEndINx27j/Q==}
-    engines: {node: '>=18'}
 
   jest-get-type@29.6.3:
     resolution: {integrity: sha512-zrteXnqYxfQh7l5FHyL38jL39di8H8rHoecLH3JNxH3BwOrBsNeabdap5e0I23lD4HHI8W5VFBZqG4Eaq5LNcw==}
@@ -8273,8 +8263,6 @@ snapshots:
   is-wsl@3.1.1:
     dependencies:
       is-inside-container: 1.0.0
-
-  iter-ops@3.5.0: {}
 
   jest-get-type@29.6.3: {}
 

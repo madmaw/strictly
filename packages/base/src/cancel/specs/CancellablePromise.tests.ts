@@ -3,16 +3,40 @@ import { CancellablePromise, Cancellation } from 'cancel/CancellablePromise'
 /* oxlint-disable typescript/no-explicit-any -- any fine in generics */
 /* oxlint-disable vitest/no-standalone-expect -- assertions live in nested beforeEach setup */
 /* oxlint-disable vitest/no-disabled-tests -- documents a known async cancellation limitation */
-import { toIterable } from 'iter-ops'
 import { delay, infiniteDelay } from 'util/delay'
 import type { Mocked } from 'vite-plus/test'
+
+// plain (non-generator) iterables that only expose the iterator protocol of the wrapped generator
+function toIterable<T, TReturn, TNext>(
+  g: Generator<T, TReturn, TNext>,
+): Iterable<T, TReturn, TNext> {
+  return {
+    [Symbol.iterator]: () => ({
+      next: (...args: [] | [TNext]) => g.next(...args),
+      return: (value: TReturn) => g.return(value),
+      throw: (e: unknown) => g.throw(e),
+    }),
+  }
+}
+
+function toAsyncIterable<T, TReturn, TNext>(
+  g: AsyncGenerator<T, TReturn, TNext>,
+): AsyncIterable<T, TReturn, TNext> {
+  return {
+    [Symbol.asyncIterator]: () => ({
+      next: (...args: [] | [TNext]) => g.next(...args),
+      return: (value: TReturn) => g.return(value),
+      throw: (e: unknown) => g.throw(e),
+    }),
+  }
+}
 
 function toAsyncGeneratorAndIterable<P extends any[], T, TReturn>(
   f: (...p: P) => AsyncGenerator<T, TReturn>,
 ) {
   return [
     ['generator', f],
-    ['iterable', (...p: P) => toIterable(f(...p))],
+    ['iterable', (...p: P) => toAsyncIterable(f(...p))],
   ] as const
 }
 

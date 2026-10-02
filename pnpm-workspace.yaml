@@ -73,7 +73,6 @@ catalog:
   '@vitejs/plugin-react': ^6.1.1
   '@vitest/browser-playwright': 5.0.1
   astro: ^7.3.5
-  iter-ops: ^3.5.0
   jsdom: ^30.1.1
   mobx: ^7.0.0
   mobx-react: ^10.0.0
