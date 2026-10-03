@@ -53,14 +53,14 @@ catalog:
   '@lingui/react': ^6.8.0
   '@lingui/vite-plugin': ^6.8.0
   '@mantine/core': ^9.0.0
-  '@microsoft/api-extractor': ^7.59.2
+  '@microsoft/api-extractor': ^7.59.3
   '@mantine/hooks': ^9.0.0
   '@chromatic-com/storybook': ^5.3.1
-  '@storybook/addon-docs': ^10.6.0
-  '@storybook/addon-links': ^10.6.0
-  '@storybook/addon-vitest': ^10.6.0
+  '@storybook/addon-docs': ^10.6.1
+  '@storybook/addon-links': ^10.6.1
+  '@storybook/addon-vitest': ^10.6.1
   '@storybook/react': ^10.6.0
-  '@storybook/react-vite': ^10.6.0
+  '@storybook/react-vite': ^10.6.1
   '@testing-library/dom': ^10.4.2
   '@testing-library/react': ^16.3.3
   '@testing-library/user-event': ^14.6.7
@@ -71,7 +71,7 @@ catalog:
   '@typescript/native': npm:typescript@^7.0.2
   '@rolldown/plugin-babel': ^0.2.4
   '@vitejs/plugin-react': ^6.1.1
-  '@vitest/browser-playwright': 5.0.1
+  '@vitest/browser-playwright': 5.0.2
   astro: ^7.3.5
   jsdom: ^30.1.1
   mobx: ^7.0.0
@@ -82,12 +82,12 @@ catalog:
   react: ^19.2.0
   react-dom: ^19.2.0
   resize-observer-polyfill: ^1.5.1
-  storybook: ^10.6.0
+  storybook: ^10.6.1
   type-fest: ^5.0.0
   typescript: npm:@typescript/typescript6@^6.0.2
   vite: npm:@voidzero-dev/vite-plus-core@1.0.0
   vite-plugin-dts: ^5.1.1
-  vitest: 5.0.1
+  vitest: 5.0.2
   vitest-fail-on-console: ^0.10.1
   vitest-matchmedia-mock: ^2.0.4
   vitest-mock-extended: ^5.1.1
