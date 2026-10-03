@@ -3,8 +3,13 @@ import {
   type CancellablePromiseDisposer,
 } from 'cancel/Cancellable'
 import { isCancellationError } from 'cancel/isCancellationError'
-import { type LooseCancellableIterable } from 'cancel/iteration/CancellableIterable'
+import {
+  type CancellableStep,
+  type LooseCancellableIterable,
+  type ResolvedStep,
+} from 'cancel/iteration/CancellableIterable'
 import { isAsyncIterable } from 'cancel/iteration/isAsyncIterable'
+import { isGenerator } from 'cancel/iteration/isGenerator'
 import { isIterable } from 'cancel/iteration/isIterable'
 /* oxlint-disable typescript/no-explicit-any, typescript/no-non-null-assertion -- generic promise/iterator plumbing */
 import { fromPromise, type IPromiseBasedObservable } from 'mobx-utils'
@@ -63,6 +68,12 @@ export class CancellablePromise<T> extends CancellablePromiseImpl<T> {
     if (isIterable(cancellable)) {
       return CancellablePromise.fromIterable(cancellable)
     }
+    return CancellablePromise.maybeFromPromise<T>(cancellable)
+  }
+
+  private static maybeFromPromise<T>(
+    cancellable: PromiseLike<T> | PromiseWithCancel<T> | T,
+  ): CancellablePromise<T> | T {
     if (isPromiseWithCancel(cancellable)) {
       if (cancellable instanceof CancellablePromiseImpl) {
         return cancellable
@@ -143,7 +154,7 @@ export class CancellablePromise<T> extends CancellablePromiseImpl<T> {
     }
     const promise = isAsyncIterable(g)
       ? CancellablePromise.fromAsyncIterable(g, options)
-      : CancellablePromise.fromIterable(g, options)
+      : CancellablePromise.driveIterable(g, options, false)
 
     return promise
       .then((returnValue) => ({ returnValue, values }))
@@ -162,27 +173,35 @@ export class CancellablePromise<T> extends CancellablePromiseImpl<T> {
     G extends Iterable<unknown, any, CancellablePromiseDisposer>,
   >(
     g: G,
-    {
-      wrapper = (f: () => void) => f(),
-      consumer,
-      blocking,
-    }: CancellablePromiseFromIterableOptions<
-      G extends Iterable<infer T> ? Awaited<T> : never
+    options: CancellablePromiseFromIterableOptions<
+      G extends Iterable<infer T> ? ResolvedStep<T> : never
     > = {},
   ): G extends Iterable<infer _T, infer TReturn>
     ? CancellablePromise<Awaited<TReturn>>
     : never {
-    // Named after the parameters of the `Iterable<T, TReturn>` interface being consumed, so the
-    // helpers below read in those terms. The conditional return type erases the concrete values to
-    // `unknown` at the iterator-protocol boundary, so those crossings are bridged with casts.
-    type T = G extends Iterable<infer U> ? Awaited<U> : never
-    type TReturn = G extends Iterable<infer _U, infer R> ? Awaited<R> : never
+    return CancellablePromise.driveIterable(
+      g as Iterable<any, any, CancellablePromiseDisposer>,
+      options,
+      false,
+    ) as any
+  }
 
-    const i = (isIterable(g) ? g[Symbol.iterator]() : g) as Iterator<
-      CancellablePromise<T> | T,
-      TReturn,
-      CancellablePromiseDisposer
-    >
+  /**
+   * Drives the iterator, resolving each yielded step before asking for the next one. A yielded generator
+   * is driven as a single step with the same options, with any CancellableIterableCompletedError that
+   * escapes it propagated (`propagateCompletion`) so that it ends the enclosing iteration rather than
+   * resolving the step.
+   */
+  private static driveIterable<T, TReturn>(
+    g: Iterable<CancellableStep<T> | T, TReturn, CancellablePromiseDisposer>,
+    {
+      wrapper = (f: () => void) => f(),
+      consumer,
+      blocking,
+    }: CancellablePromiseFromIterableOptions<T>,
+    propagateCompletion: boolean,
+  ): CancellablePromise<TReturn> {
+    const i = isIterable(g) ? g[Symbol.iterator]() : g
     let cancellation: Cancellation | undefined
     // the single promise the loop is currently awaiting (an `all` of the yielded value plus the
     // optional frame delay, or a consumer's promise). Cancelling reaches into it directly rather
@@ -204,11 +223,9 @@ export class CancellablePromise<T> extends CancellablePromiseImpl<T> {
     }
     const step = (
       maybeError: Maybe<unknown>,
-    ): IteratorResult<CancellablePromise<T> | T, TReturn> => {
+    ): IteratorResult<CancellableStep<T> | T, TReturn> => {
       try {
-        let result:
-          | IteratorResult<CancellablePromise<T> | T, TReturn>
-          | undefined
+        let result: IteratorResult<CancellableStep<T> | T, TReturn> | undefined
         wrapper(() => {
           result =
             maybeError == null
@@ -249,24 +266,38 @@ export class CancellablePromise<T> extends CancellablePromiseImpl<T> {
         // is not handling the error
         (maybeError != null && maybeError[0] === e)
       ) {
-        if (e instanceof CancellableIterableCompletedError) {
+        if (
+          !propagateCompletion &&
+          e instanceof CancellableIterableCompletedError
+        ) {
           return { finished: e.returnValue as TReturn }
         }
         throw e
       }
       return { retry: e }
     }
+    // only generators are steps, any other iterable (e.g. an array or a string) is a value
+    const resolveStep = (
+      value: CancellableStep<T> | T,
+    ): CancellablePromise<T> | T =>
+      isGenerator(value)
+        ? CancellablePromise.driveIterable<unknown, T>(
+            value,
+            { wrapper, blocking },
+            true,
+          )
+        : CancellablePromise.maybeFromPromise(value)
     // awaits a single yielded value (alongside the frame delay that paces non-blocking loops) and
     // feeds any resolved value to the consumer. Returns the error to hand back to the generator on
     // the next step, or a terminal return value.
     const awaitStep = async (
-      value: T | CancellablePromise<T>,
+      value: CancellableStep<T> | T,
       maybeError: Maybe<unknown>,
     ): Promise<{ error: Maybe<unknown> } | { finished: TReturn }> => {
       try {
         const [resolved] = await track(
           CancellablePromise.all([
-            CancellablePromise.fromCancellable(value),
+            resolveStep(value),
             blocking ? null : delayAnimationFrame(),
           ]),
         )
@@ -295,7 +326,7 @@ export class CancellablePromise<T> extends CancellablePromiseImpl<T> {
       }
     }
 
-    return new CancellablePromise<TReturn>(run(), cancel) as any
+    return new CancellablePromise<TReturn>(run(), cancel)
   }
 
   /**
