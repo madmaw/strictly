@@ -60,12 +60,12 @@ export type CancellablePromiseFromIterableOptions<T> = {
 
 export class CancellablePromise<T> extends CancellablePromiseImpl<T> {
   /**
-   * Converts the cancellable to a promise, unless it is a non-deferred value (not an iterator or a promise)
+   * Converts the cancellable to a promise, unless it is a non-deferred value (not a generator or a promise)
    */
   static maybeFromCancellable<T>(
     cancellable: Cancellable<T> | PromiseLike<T> | PromiseWithCancel<T>,
   ): CancellablePromise<T> | T {
-    if (isIterable(cancellable)) {
+    if (isGenerator(cancellable)) {
       return CancellablePromise.fromIterable(cancellable)
     }
     return CancellablePromise.maybeFromPromise<T>(cancellable)
@@ -164,10 +164,9 @@ export class CancellablePromise<T> extends CancellablePromiseImpl<T> {
   }
 
   /**
-   * Creates a CancellablePromise from an Generator/Iterator/Iterable
+   * Creates a CancellablePromise from a Generator/Iterator/Iterable. fromCancellable only does this for generators,
+   * treating any other iterable as a value
    * @param g the Iterable/Iterator you want to convert to a promise
-   *
-   * only exposed for testing, use fromCancellable instead
    */
   static fromIterable<
     G extends Iterable<unknown, any, CancellablePromiseDisposer>,
