@@ -454,6 +454,31 @@ describe('CancellablePromise', () => {
     })
   })
 
+  describe('fromCancellable', () => {
+    it('runs a generator to its return value', async () => {
+      function* g() {
+        yield CancellablePromise.resolve('ignored')
+        return 1
+      }
+      expect(await CancellablePromise.fromCancellable(g())).toEqual(1)
+    })
+
+    it.each([
+      ['an array', [1, 2]],
+      ['a string', 'ab'],
+      ['a set', new Set([1])],
+    ])('resolves %s as a value', async (_name, value) => {
+      expect(await CancellablePromise.fromCancellable(value)).toEqual(value)
+    })
+  })
+
+  describe('maybeFromCancellable', () => {
+    it('returns iterables that are not generators synchronously', () => {
+      const value = [1, 2]
+      expect(CancellablePromise.maybeFromCancellable(value)).toBe(value)
+    })
+  })
+
   describe('raceAndCancelLosers', () => {
     let promise1: CancellablePromise<number>
     let promise2: CancellablePromise<number>
