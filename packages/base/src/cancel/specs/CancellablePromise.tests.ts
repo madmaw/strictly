@@ -3,16 +3,40 @@ import { CancellablePromise, Cancellation } from 'cancel/CancellablePromise'
 /* oxlint-disable typescript/no-explicit-any -- any fine in generics */
 /* oxlint-disable vitest/no-standalone-expect -- assertions live in nested beforeEach setup */
 /* oxlint-disable vitest/no-disabled-tests -- documents a known async cancellation limitation */
-import { toIterable } from 'iter-ops'
 import { delay, infiniteDelay } from 'util/delay'
 import type { Mocked } from 'vite-plus/test'
+
+// plain (non-generator) iterables that only expose the iterator protocol of the wrapped generator
+function toIterable<T, TReturn, TNext>(
+  g: Generator<T, TReturn, TNext>,
+): Iterable<T, TReturn, TNext> {
+  return {
+    [Symbol.iterator]: () => ({
+      next: (...args: [] | [TNext]) => g.next(...args),
+      return: (value: TReturn) => g.return(value),
+      throw: (e: unknown) => g.throw(e),
+    }),
+  }
+}
+
+function toAsyncIterable<T, TReturn, TNext>(
+  g: AsyncGenerator<T, TReturn, TNext>,
+): AsyncIterable<T, TReturn, TNext> {
+  return {
+    [Symbol.asyncIterator]: () => ({
+      next: (...args: [] | [TNext]) => g.next(...args),
+      return: (value: TReturn) => g.return(value),
+      throw: (e: unknown) => g.throw(e),
+    }),
+  }
+}
 
 function toAsyncGeneratorAndIterable<P extends any[], T, TReturn>(
   f: (...p: P) => AsyncGenerator<T, TReturn>,
 ) {
   return [
     ['generator', f],
-    ['iterable', (...p: P) => toIterable(f(...p))],
+    ['iterable', (...p: P) => toAsyncIterable(f(...p))],
   ] as const
 }
 
@@ -401,6 +425,30 @@ describe('CancellablePromise', () => {
             expect(consumer).toHaveBeenNthCalledWith(3, 8)
             expect(consumer).toHaveBeenNthCalledWith(4, 13)
           })
+        })
+      })
+
+      describe('yielded iterables', () => {
+        it('consumes iterables that are not generators as values', async () => {
+          function* g() {
+            yield [1, 2]
+            yield 'ab'
+            yield new Set([3])
+          }
+          const { values } = await CancellablePromise.valuesFromIterable(g())
+          expect(values).toEqual([[1, 2], 'ab', new Set([3])])
+        })
+
+        it('runs generators as a single step', async () => {
+          function* step() {
+            yield CancellablePromise.resolve(1)
+            return 2
+          }
+          function* g() {
+            yield step()
+          }
+          const { values } = await CancellablePromise.valuesFromIterable(g())
+          expect(values).toEqual([2])
         })
       })
     })

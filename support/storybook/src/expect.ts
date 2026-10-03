@@ -20,6 +20,13 @@ export function expectDefined<V>(v: V): asserts v is NonNullable<V> {
   void expect(v).toBeDefined()
 }
 
+export function expectInstanceOf<V1, V2 extends V1>(
+  instance: V1,
+  constructor: abstract new (...args: never[]) => V2,
+): asserts instance is V2 {
+  void expect(instance).toBeInstanceOf(constructor)
+}
+
 export function expectDefinedAndReturn<V>(v: V): NonNullable<V> {
   expectDefined(v)
   return v
