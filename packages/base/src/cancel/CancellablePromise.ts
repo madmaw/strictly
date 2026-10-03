@@ -11,6 +11,7 @@ import {
 import { isAsyncIterable } from 'cancel/iteration/isAsyncIterable'
 import { isGenerator } from 'cancel/iteration/isGenerator'
 import { isIterable } from 'cancel/iteration/isIterable'
+import { isStepFactory } from 'cancel/iteration/isStepFactory'
 /* oxlint-disable typescript/no-explicit-any, typescript/no-non-null-assertion -- generic promise/iterator plumbing */
 import { fromPromise, type IPromiseBasedObservable } from 'mobx-utils'
 import {
@@ -118,6 +119,33 @@ export class CancellablePromise<T> extends CancellablePromiseImpl<T> {
     // oxlint-disable-next-line typescript/no-unnecessary-condition -- fromPromise may return an observable without a cancel, despite the type
     o.cancel ??= (reason?: string) => originalCancel?.call(o, reason)
     return o
+  }
+
+  /**
+   * Starts a step, or a factory for one, without waiting for it, so it can be raced against other promises and
+   * kept running if it loses. A generator step is driven as it would be when yielded, so a
+   * CancellableIterableCompletedError escaping it rejects the returned promise rather than resolving it.
+   */
+  static fromStep<T>(
+    step: CancellableStep<T> | (() => CancellableStep<T> | T) | T,
+  ): CancellablePromise<T> {
+    let started: CancellableStep<T> | T
+    try {
+      started = isStepFactory(step) ? step() : step
+    } catch (e) {
+      return CancellablePromise.reject(e)
+    }
+    if (isGenerator(started)) {
+      return CancellablePromise.driveIterable<unknown, T>(
+        started,
+        { blocking: true },
+        true,
+      )
+    }
+    const maybePromise = CancellablePromise.maybeFromPromise(started)
+    return isPromiseWithCancel(maybePromise)
+      ? maybePromise
+      : CancellablePromise.resolve(maybePromise)
   }
 
   /**
