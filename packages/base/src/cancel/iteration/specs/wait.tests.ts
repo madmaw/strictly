@@ -263,7 +263,7 @@ describe('wait', () => {
 
       await expect(promise).rejects.toBeDefined()
       await expect(pending).rejects.toBeDefined()
-      expect(consumer.mock.calls).toEqual([[1]])
+      expect(consumer).toHaveBeenCalledExactlyOnceWith(1)
       expect(onSourceFinally).toHaveBeenCalledOnce()
       expect(onFinally).toHaveBeenCalledTimes(2)
     })
