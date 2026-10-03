@@ -1,9 +1,5 @@
 import type { CancellablePromiseDisposer } from 'cancel/Cancellable'
-import {
-  CancellableIterableCompletedError,
-  CancellablePromise,
-  Cancellation,
-} from 'cancel/CancellablePromise'
+import { CancellablePromise, Cancellation } from 'cancel/CancellablePromise'
 /* oxlint-disable typescript/no-explicit-any -- any fine in generics */
 /* oxlint-disable vitest/no-standalone-expect -- assertions live in nested beforeEach setup */
 /* oxlint-disable vitest/no-disabled-tests -- documents a known async cancellation limitation */
@@ -455,63 +451,6 @@ describe('CancellablePromise', () => {
           expect(values).toEqual([2])
         })
       })
-    })
-  })
-
-  describe('fromStep', () => {
-    it('resolves a value', async () => {
-      expect(await CancellablePromise.fromStep(1)).toEqual(1)
-    })
-
-    it('resolves a promise', async () => {
-      expect(
-        await CancellablePromise.fromStep(CancellablePromise.resolve(1)),
-      ).toEqual(1)
-    })
-
-    it('resolves a generator to its return value', async () => {
-      function* step() {
-        yield CancellablePromise.resolve('ignored')
-        return 1
-      }
-      expect(await CancellablePromise.fromStep(step())).toEqual(1)
-    })
-
-    it('starts a step from a factory', async () => {
-      expect(await CancellablePromise.fromStep(() => 1)).toEqual(1)
-    })
-
-    it('rejects when the factory throws', async () => {
-      await expect(
-        CancellablePromise.fromStep(() => {
-          throw new Error('factory failed')
-        }),
-      ).rejects.toThrow('factory failed')
-    })
-
-    it('rejects with a completion that escapes a generator', async () => {
-      function* step(): Generator<CancellablePromise<never>, number> {
-        yield CancellablePromise.reject(
-          new CancellableIterableCompletedError('end'),
-        )
-        return 1
-      }
-      await expect(CancellablePromise.fromStep(step())).rejects.toThrow(
-        CancellableIterableCompletedError,
-      )
-    })
-
-    it('cancels a generator step', async () => {
-      const pending = CancellablePromise.infinite()
-      function* step() {
-        yield pending
-      }
-      const promise = CancellablePromise.fromStep(step())
-      await delay()
-      promise.cancel()
-
-      await expect(promise).rejects.toBeDefined()
-      await expect(pending).rejects.toBeDefined()
     })
   })
 

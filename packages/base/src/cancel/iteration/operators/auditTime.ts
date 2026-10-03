@@ -7,6 +7,7 @@ import {
   type LooseCancellableIterable,
 } from 'cancel/iteration/CancellableIterable'
 import { next } from 'cancel/iteration/next'
+import { start } from 'cancel/iteration/start'
 import { wait } from 'cancel/iteration/wait'
 import { delay } from 'util/delay'
 
@@ -22,7 +23,7 @@ export function* auditTime<T, TReturn>(
   // the pull from the source is kept between emissions, so a value still on its way when the wait ends isn't lost.
   // The source ending is kept too, so it ends the iteration on the pull after the last emission
   let pending = null as CancellablePromise<T> | null
-  const pull = () => (pending ??= CancellablePromise.fromStep(() => next(i)))
+  const pull = () => (pending ??= start(() => next(i)))
   try {
     for (;;) {
       yield* wait(function* () {
