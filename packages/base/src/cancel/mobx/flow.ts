@@ -1,6 +1,6 @@
 import { type CancellablePromiseDisposer } from 'cancel/Cancellable'
 import { Cancellation } from 'cancel/CancellablePromise'
-import { type LooseCancellableIterable } from 'cancel/iteration/CancellableIterable'
+import { type CancellableIterable } from 'cancel/iteration/CancellableIterable'
 import { isGenerator } from 'cancel/iteration/isGenerator'
 /* oxlint-disable typescript/no-explicit-any, typescript/no-non-null-assertion -- any ok in generics */
 import { runInAction } from 'mobx'
@@ -11,11 +11,7 @@ function flowFactory(bound: boolean) {
   return <
     T,
     A extends unknown[],
-    G extends LooseCancellableIterable<
-      any,
-      unknown,
-      CancellablePromiseDisposer
-    >,
+    G extends CancellableIterable<any, unknown, CancellablePromiseDisposer>,
   >(
     target: (...a: A) => G,
     {
@@ -34,7 +30,7 @@ function flowFactory(bound: boolean) {
 }
 
 function* runGeneratorInAction<
-  G extends LooseCancellableIterable<any, unknown, CancellablePromiseDisposer>,
+  G extends CancellableIterable<any, unknown, CancellablePromiseDisposer>,
 >(
   g: G,
 ): Generator<
