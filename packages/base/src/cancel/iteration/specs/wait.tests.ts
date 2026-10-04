@@ -1,11 +1,11 @@
 import { CancellablePromise } from 'cancel/CancellablePromise'
-import { type LooseCancellableIterable } from 'cancel/iteration/CancellableIterable'
+import { type CancellableIterable } from 'cancel/iteration/CancellableIterable'
 import { next } from 'cancel/iteration/next'
 import { wait } from 'cancel/iteration/wait'
 import { delay } from 'util/delay'
 
 function* filterAwaited<T, TReturn>(
-  source: LooseCancellableIterable<T, TReturn>,
+  source: CancellableIterable<T, TReturn>,
   predicate: (value: T) => boolean,
   onFinally: () => void = () => {},
 ) {
@@ -30,7 +30,7 @@ function* filterAwaited<T, TReturn>(
 
 // cancels after `limit` values so that a stream that never ends fails rather than hanging
 function collect<T, TReturn>(
-  iterable: LooseCancellableIterable<T, TReturn>,
+  iterable: CancellableIterable<T, TReturn>,
   limit = 10,
 ) {
   const values: unknown[] = []
