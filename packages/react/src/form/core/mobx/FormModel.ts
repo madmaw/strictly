@@ -61,7 +61,7 @@ export type FlattenedConvertedFieldsOf<
 }
 
 export type FlattenedTypePathsToAdaptersOf<
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // oxlint-disable-next-line typescript/no-explicit-any
   FlattenedValues extends Readonly<Record<string, any>>,
   Context,
 > = {
@@ -74,7 +74,7 @@ export type FlattenedTypePathsToAdaptersOf<
   >
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// oxlint-disable-next-line typescript/no-explicit-any
 type FieldOverride<V = any> = Maybe<V>
 
 type FlattenedFieldOverrides<
@@ -180,7 +180,7 @@ export abstract class FormModel<
   private readonly flattenedTypeDefs: Readonly<Record<string, Type>>
 
   // cannot be type safe
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // oxlint-disable-next-line typescript/no-explicit-any
   private readonly originalValues: Record<string, any>
 
   // maintains the value paths of lists when the original order is destroyed by deletes or reordering
@@ -249,7 +249,7 @@ export abstract class FormModel<
       SimplifyDeep<FlattenedConvertedFieldsOf<ValuePathsToAdapters>>
     >(this.knownFields, {
       get: (target, prop) => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        // oxlint-disable-next-line typescript/no-explicit-any
         const field = (target as any)[prop]
         if (field != null) {
           return field
@@ -518,7 +518,7 @@ export abstract class FormModel<
             ),
           )
         : elementValue[0]
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // oxlint-disable-next-line typescript/no-explicit-any
     const originalList: any[] = accessor.value
     const newList = [
       ...originalList.slice(0, definedIndex),

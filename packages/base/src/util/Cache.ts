@@ -1,17 +1,17 @@
 import { type Maybe } from 'types/Maybe'
 import { assertExistsAndReturn } from 'util/preconditions'
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// oxlint-disable-next-line typescript/no-explicit-any
 export type CacheValueFactory<A extends any[], V> = (...args: A) => V
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// oxlint-disable-next-line typescript/no-explicit-any
 export class Cache<A extends any[], V> {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // oxlint-disable-next-line typescript/no-explicit-any
   private readonly cache = new Map<any, V>()
 
   constructor(private readonly valueFactory: CacheValueFactory<A, V>) {}
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // oxlint-disable-next-line typescript/no-explicit-any
   private retrieveFinalMap(...args: A): Map<any, V> {
     return args.slice(0, -1).reduce((cache, key) => {
       let map = cache.get(key)

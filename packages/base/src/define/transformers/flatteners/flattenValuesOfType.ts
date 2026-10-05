@@ -10,7 +10,7 @@ export function flattenValuesOfType<T extends Type>(
   t: Type,
   value: ValueOfType<T>,
   listIndicesToKeys?: Record<string, number[]>,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // oxlint-disable-next-line typescript/no-explicit-any
 ): Record<string, any> {
   return flattenValueTo(t, value, () => {}, mapper, listIndicesToKeys)
 }

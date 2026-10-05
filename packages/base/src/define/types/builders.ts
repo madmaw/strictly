@@ -18,7 +18,7 @@ import { nodeOf } from './node'
 import { type ReadonlyField, type Type } from './Type'
 import { type ValueOfType } from './ValueOfType'
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// oxlint-disable-next-line typescript/no-explicit-any
 type AnyBuilder = TypeBuilder<any, any, any> | UnionBuilder<any, any, any, any>
 
 export type Buildable = Type | AnyBuilder

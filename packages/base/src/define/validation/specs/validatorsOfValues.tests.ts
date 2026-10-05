@@ -14,7 +14,7 @@ describe('FlattenedValidatorsOfType', () => {
     >
 
     type C = {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // oxlint-disable-next-line typescript/no-explicit-any
       readonly $: Validator<'a' | 'b' | 'c', any, '$', 1>
     }
 
@@ -37,9 +37,9 @@ describe('FlattenedValidatorsOfType', () => {
     >
 
     type C = {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // oxlint-disable-next-line typescript/no-explicit-any
       readonly $: Validator<number[], any, '$', 2>
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // oxlint-disable-next-line typescript/no-explicit-any
       readonly '$.*': Validator<number, any, `$.${number}`, 2>
     }
 

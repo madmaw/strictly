@@ -187,7 +187,7 @@ export function optionsByDiscriminatorOf({
  * Finds the option of a union that describes the value. Unions without a discriminator must be
  * composed of literals and at most one other option, the way a nullable type is
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// oxlint-disable-next-line typescript/no-explicit-any
 export function optionOf(union: UnionNode, value: any): Type {
   const { discriminator, options } = union
   if (discriminator != null) {

@@ -8,9 +8,9 @@ import { useCallback } from 'react'
 import { type FormModel, Validation } from './FormModel'
 import { peek } from './peek'
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// oxlint-disable-next-line typescript/no-explicit-any
 type FormModelInterface<T extends Type = any> = Pick<
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // oxlint-disable-next-line typescript/no-explicit-any
   FormModel<T, any, any, any, any, any>,
   | 'type'
   | 'fields'

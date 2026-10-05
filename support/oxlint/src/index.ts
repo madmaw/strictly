@@ -530,7 +530,7 @@ export function createOxlintConfig({
     },
     options: {
       reportUnusedDisableDirectives: 'error',
-      respectEslintDisableDirectives: true,
+      respectEslintDisableDirectives: false,
     },
     rules: {
       // -- typescript --
@@ -799,12 +799,7 @@ export function createOxlintConfig({
       'directive-comments/no-use': [
         'error',
         {
-          allow: [
-            'eslint-disable-line',
-            'eslint-disable-next-line',
-            'oxlint-disable-line',
-            'oxlint-disable-next-line',
-          ],
+          allow: ['oxlint-disable-line', 'oxlint-disable-next-line'],
         },
       ],
     },

@@ -23,7 +23,7 @@ function mapAccessor(
 
 export function flattenAccessorsOfType<
   T extends Type,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // oxlint-disable-next-line typescript/no-explicit-any
   R extends Readonly<Record<string, Accessor<any>>> =
     FlattenedAccessorsOfType<T>,
 >(
@@ -32,7 +32,7 @@ export function flattenAccessorsOfType<
   setValue: Setter<ValueOfType<T>>,
   listIndicesToKeys?: Record<string, number[]>,
 ): R {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // oxlint-disable-next-line typescript/no-explicit-any
   return flattenValueTo<T, Accessor<any>, R>(
     t,
     value,

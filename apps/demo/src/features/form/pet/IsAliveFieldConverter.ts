@@ -11,7 +11,7 @@ import { petType, type PetValueToTypePaths } from './types'
 const ALWAYS_MODIFIABLE = new Set<PetTypePaths>(['$.alive'])
 
 export class IsAliveTwoWayConverter<
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // oxlint-disable-next-line typescript/no-explicit-any
   V = any,
 > implements TwoWayFieldConverter<
   V,

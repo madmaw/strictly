@@ -11,7 +11,7 @@ export type MetaArgTypesOf<P> = {
 
 // Enforce the correct arg types for mapped storybooks
 export type MetaArgsOf<
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // oxlint-disable-next-line typescript/no-explicit-any
   Types extends MetaArgTypesOf<any>,
 > = {
   [k in keyof Types]: Types[k]['mapping'] extends undefined

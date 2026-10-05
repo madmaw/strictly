@@ -18,7 +18,7 @@ export type RefOfProps<P, Fallback = unknown> =
   P extends RefAttributes<infer R> ? R : Fallback
 
 export type PartialComponent<
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // oxlint-disable-next-line typescript/no-explicit-any
   Component extends ComponentType<any>,
   CurriedProps,
   AdditionalProps = {},
@@ -30,7 +30,7 @@ export type PartialComponent<
       : Exclude<keyof CurriedProps, keyof ComponentProps<Component>>
 
 export type UnsafePartialComponent<
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // oxlint-disable-next-line typescript/no-explicit-any
   Component extends ComponentType<any>,
   CurriedProps,
   AdditionalProps = {},
@@ -44,7 +44,7 @@ export type UnsafePartialComponent<
 >
 
 export function createSimplePartialComponent<
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // oxlint-disable-next-line typescript/no-explicit-any
   Component extends ComponentType<any>,
   CurriedProps extends Partial<ComponentProps<Component>>,
 >(
@@ -75,7 +75,7 @@ export function createSimplePartialComponent<
 }
 
 export function createPartialComponent<
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // oxlint-disable-next-line typescript/no-explicit-any
   Component extends ComponentType<any>,
   CurriedProps,
 >(
@@ -83,7 +83,7 @@ export function createPartialComponent<
   curriedPropsSource: () => CurriedProps,
 ): PartialComponent<Component, CurriedProps, {}>
 export function createPartialComponent<
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // oxlint-disable-next-line typescript/no-explicit-any
   Component extends ComponentType<any>,
   CurriedProps,
   AdditionalProps,
@@ -97,7 +97,7 @@ export function createPartialComponent<
   >,
 ): PartialComponent<Component, CurriedProps, AdditionalProps>
 export function createPartialComponent<
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // oxlint-disable-next-line typescript/no-explicit-any
   Component extends ComponentType<any>,
   CurriedProps extends Partial<ComponentProps<Component>>,
   AdditionalProps,
@@ -131,14 +131,14 @@ export function createPartialComponent<
           delete exposedProps[
             key as keyof RemainingComponentProps<Component, CurriedProps>
           ]
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          // oxlint-disable-next-line typescript/no-explicit-any
           additionalProps[key] = value as any
           return [additionalProps, exposedProps]
         },
         [
-          // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+          // oxlint-disable-next-line typescript/consistent-type-assertions
           {} as AdditionalProps,
-          // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+          // oxlint-disable-next-line typescript/consistent-type-assertions
           { ...props } as RemainingComponentProps<Component, CurriedProps>,
         ],
       )
@@ -158,7 +158,7 @@ export function createPartialComponent<
 }
 
 export function usePartialComponent<
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // oxlint-disable-next-line typescript/no-explicit-any
   Component extends ComponentType<any>,
   CurriedProps,
 >(
@@ -167,7 +167,7 @@ export function usePartialComponent<
   Component: Component,
 ): PartialComponent<Component, CurriedProps, {}>
 export function usePartialComponent<
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // oxlint-disable-next-line typescript/no-explicit-any
   Component extends ComponentType<any>,
   CurriedProps,
   AdditionalProps,
@@ -182,15 +182,15 @@ export function usePartialComponent<
   >,
 ): PartialComponent<Component, CurriedProps, AdditionalProps>
 export function usePartialComponent<
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // oxlint-disable-next-line typescript/no-explicit-any
   Component extends ComponentType<any>,
   CurriedProps extends Partial<ComponentProps<Component>>,
   AdditionalProps,
 >(
-  // has to be first so eslint react-hooks/exhaustive-deps can find the callback
-  // has to be a function so eslint react-hooks/exhaustive-deps can reason about it :(
+  // has to be first so oxlint react-hooks/exhaustive-deps can find the callback
+  // has to be a function so oxlint react-hooks/exhaustive-deps can reason about it :(
   curriedPropsSource: (additionalProps: AdditionalProps) => CurriedProps,
-  // has to be next so eslint react-hooks/exhaustive-deps can find the deps
+  // has to be next so oxlint react-hooks/exhaustive-deps can find the deps
   deps: DependencyList,
   Component: Component,
   additionalPropKeys: readonly (keyof AdditionalProps)[] = [],
@@ -198,19 +198,19 @@ export function usePartialComponent<
   return useMemo(
     () =>
       createPartialComponent(Component, curriedPropsSource, additionalPropKeys),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // oxlint-disable-next-line react-hooks/exhaustive-deps
     [
-      // eslint-disable-next-line react-hooks/exhaustive-deps
+      // oxlint-disable-next-line react-hooks/exhaustive-deps
       ...deps,
       Component,
-      // eslint-disable-next-line react-hooks/exhaustive-deps
+      // oxlint-disable-next-line react-hooks/exhaustive-deps
       ...additionalPropKeys,
     ],
   )
 }
 
 export function createPartialObserverComponent<
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // oxlint-disable-next-line typescript/no-explicit-any
   Component extends ComponentType<any>,
   CurriedProps,
 >(
@@ -218,7 +218,7 @@ export function createPartialObserverComponent<
   curriedPropsSource: () => CurriedProps,
 ): PartialComponent<Component, CurriedProps, {}>
 export function createPartialObserverComponent<
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // oxlint-disable-next-line typescript/no-explicit-any
   Component extends ComponentType<any>,
   CurriedProps,
   AdditionalProps,
@@ -232,7 +232,7 @@ export function createPartialObserverComponent<
   >,
 ): PartialComponent<Component, CurriedProps, AdditionalProps>
 export function createPartialObserverComponent<
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // oxlint-disable-next-line typescript/no-explicit-any
   Component extends ComponentType<any>,
   CurriedProps extends Partial<ComponentProps<Component>>,
   AdditionalProps,
@@ -249,7 +249,7 @@ export function createPartialObserverComponent<
 }
 
 export function createUnsafePartialObserverComponent<
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // oxlint-disable-next-line typescript/no-explicit-any
   Component extends ComponentType<any>,
   CurriedProps,
 >(
@@ -257,7 +257,7 @@ export function createUnsafePartialObserverComponent<
   curriedPropsSource: () => CurriedProps,
 ): UnsafePartialComponent<Component, CurriedProps, {}>
 export function createUnsafePartialObserverComponent<
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // oxlint-disable-next-line typescript/no-explicit-any
   Component extends ComponentType<any>,
   CurriedProps,
   AdditionalProps,
@@ -271,7 +271,7 @@ export function createUnsafePartialObserverComponent<
   >,
 ): UnsafePartialComponent<Component, CurriedProps, AdditionalProps>
 export function createUnsafePartialObserverComponent<
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // oxlint-disable-next-line typescript/no-explicit-any
   Component extends ComponentType<any>,
   CurriedProps,
   AdditionalProps = {},
@@ -307,14 +307,14 @@ export function createUnsafePartialObserverComponent<
           delete exposedProps[
             key as keyof RemainingComponentProps<Component, CurriedProps>
           ]
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          // oxlint-disable-next-line typescript/no-explicit-any
           additionalProps[key] = value as any
           return [additionalProps, exposedProps]
         },
         [
-          // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+          // oxlint-disable-next-line typescript/consistent-type-assertions
           {} as AdditionalProps,
-          // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+          // oxlint-disable-next-line typescript/consistent-type-assertions
           { ...props } as RemainingComponentProps<Component, CurriedProps>,
         ],
       )
@@ -339,7 +339,7 @@ export function createUnsafePartialObserverComponent<
 }
 
 export function usePartialObserverComponent<
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // oxlint-disable-next-line typescript/no-explicit-any
   Component extends ComponentType<any>,
   CurriedProps,
 >(
@@ -348,7 +348,7 @@ export function usePartialObserverComponent<
   Component: Component,
 ): PartialComponent<Component, CurriedProps, {}>
 export function usePartialObserverComponent<
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // oxlint-disable-next-line typescript/no-explicit-any
   Component extends ComponentType<any>,
   CurriedProps,
   AdditionalProps,
@@ -363,14 +363,14 @@ export function usePartialObserverComponent<
   >,
 ): PartialComponent<Component, CurriedProps, AdditionalProps>
 export function usePartialObserverComponent<
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // oxlint-disable-next-line typescript/no-explicit-any
   Component extends ComponentType<any>,
   CurriedProps extends Partial<ComponentProps<Component>>,
   AdditionalProps = {},
 >(
-  // has to be first so eslint react-hooks/exhaustive-deps can find the callback
+  // has to be first so oxlint react-hooks/exhaustive-deps can find the callback
   curriedPropsSource: (additionalProps: AdditionalProps) => CurriedProps,
-  // has to be next so eslint react-hooks/exhaustive-deps can find the deps
+  // has to be next so oxlint react-hooks/exhaustive-deps can find the deps
   deps: DependencyList,
   Component: Component,
   additionalPropKeys: readonly (keyof AdditionalProps)[] = [],
@@ -382,12 +382,12 @@ export function usePartialObserverComponent<
         curriedPropsSource,
         additionalPropKeys,
       ),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // oxlint-disable-next-line react-hooks/exhaustive-deps
     [
-      // eslint-disable-next-line react-hooks/exhaustive-deps
+      // oxlint-disable-next-line react-hooks/exhaustive-deps
       ...deps,
       Component,
-      // eslint-disable-next-line react-hooks/exhaustive-deps
+      // oxlint-disable-next-line react-hooks/exhaustive-deps
       ...additionalPropKeys,
     ],
   )

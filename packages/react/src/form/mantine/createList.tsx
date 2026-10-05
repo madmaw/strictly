@@ -6,7 +6,7 @@ import { createUnsafePartialObserverComponent } from 'form/util/Partial'
 import { type ComponentType, Fragment } from 'react'
 import { type MantineFieldComponent, type MantineForm } from './types'
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// oxlint-disable-next-line typescript/no-explicit-any
 export type SuppliedListProps<Value = any, ListPath extends string = string> = {
   values: readonly Value[]
   indexKeys: number[]
