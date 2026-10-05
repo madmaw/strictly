@@ -729,7 +729,18 @@ export function createOxlintConfig({
       'typescript/no-unsafe-type-assertion': 'off',
       'unicorn/consistent-function-scoping': 'off',
       'unicorn/no-array-sort': 'off',
-      'vitest/no-commented-out-tests': 'off',
+      'vitest/no-standalone-expect': [
+        'error',
+        {
+          additionalTestBlockFunctions: [
+            'beforeEach',
+            'afterEach',
+            'beforeAll',
+            'afterAll',
+          ],
+        },
+      ],
+      // TODO check if this is feasible
       'vitest/require-mock-type-parameters': 'off',
       // -- equivalents of the biome recommended rules that oxlint does not enable by default --
       'default-case-last': 'error',

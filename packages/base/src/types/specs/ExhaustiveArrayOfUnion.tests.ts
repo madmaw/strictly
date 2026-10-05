@@ -15,17 +15,11 @@ describe('ExhaustiveArrayOfUnion', () => {
     expectTypeOf<T>().not.toEqualTypeOf(a)
   })
 
-  /*
-  it('disallows superset array', function () {
+  it('disallows superset array', () => {
     type X = 'a' | 'b'
-    const a = [
-      'a',
-      'b',
-      'c',
-    ] as const
-    // does not compile
-    type T = ExhaustiveArrayOfUnion<X, typeof a>
-    expectTypeOf<T>().not.toEqualTypeOf(a)
+    const a = ['a', 'b', 'c'] as const
+    // oxlint-disable-next-line typescript/ban-ts-comment -- asserts the superset is a compile error
+    // @ts-expect-error 'c' is not a member of X
+    expectTypeOf<ExhaustiveArrayOfUnion<X, typeof a>>().toEqualTypeOf(a)
   })
-  */
 })
