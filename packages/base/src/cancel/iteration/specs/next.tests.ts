@@ -4,7 +4,7 @@ import {
   CancellableIterableCompletedError,
   CancellablePromise,
 } from 'cancel/CancellablePromise'
-import { type CancellableStep } from 'cancel/iteration/CancellableIterable'
+import { type CancellableStep } from 'cancel/iteration/CancellableGenerator'
 import { next } from 'cancel/iteration/next'
 
 describe('next', () => {

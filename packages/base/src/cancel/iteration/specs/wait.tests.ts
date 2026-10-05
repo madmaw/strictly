@@ -1,15 +1,20 @@
 import { CancellablePromise } from 'cancel/CancellablePromise'
+import {
+  type CancellableGenerator,
+  type CancellableStep,
+} from 'cancel/iteration/CancellableGenerator'
 import { type CancellableIterable } from 'cancel/iteration/CancellableIterable'
 import { next } from 'cancel/iteration/next'
 import { wait } from 'cancel/iteration/wait'
 import { delay } from 'util/delay'
 
 function* filterAwaited<T, TReturn>(
-  source: CancellableIterable<T, TReturn>,
+  source: CancellableIterable<T, TReturn> | CancellableGenerator<T, TReturn>,
   predicate: (value: T) => boolean,
   onFinally: () => void = () => {},
 ) {
-  const i = source[Symbol.iterator]()
+  // a generator's `return` requires a value, a plain iterator's doesn't
+  const i: Iterator<CancellableStep<T> | T, TReturn> = source[Symbol.iterator]()
   function* nextMatch() {
     for (;;) {
       const value = yield* wait(next(i))
@@ -30,7 +35,7 @@ function* filterAwaited<T, TReturn>(
 
 // cancels after `limit` values so that a stream that never ends fails rather than hanging
 function collect<T, TReturn>(
-  iterable: CancellableIterable<T, TReturn>,
+  iterable: CancellableIterable<T, TReturn> | CancellableGenerator<T, TReturn>,
   limit = 10,
 ) {
   const values: unknown[] = []
@@ -47,13 +52,10 @@ function collect<T, TReturn>(
 }
 
 // fails if it is pulled after it has completed, as an operator should stop pulling once its source ends
-function oneToFour(): IterableIterator<
-  CancellablePromise<number> | number,
-  string
-> {
+function oneToFour(): IterableIterator<CancellablePromise<number>, string> {
   const g = (function* () {
     yield CancellablePromise.resolve(1)
-    yield 2
+    yield CancellablePromise.resolve(2)
     yield CancellablePromise.resolve(3)
     yield CancellablePromise.resolve(4)
     return 'end'

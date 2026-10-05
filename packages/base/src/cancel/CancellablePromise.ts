@@ -4,10 +4,11 @@ import {
 } from 'cancel/Cancellable'
 import { isCancellationError } from 'cancel/isCancellationError'
 import {
-  type CancellableIterable,
+  type CancellableGenerator,
   type CancellableStep,
   type ResolvedStep,
-} from 'cancel/iteration/CancellableIterable'
+} from 'cancel/iteration/CancellableGenerator'
+import { type CancellableIterable } from 'cancel/iteration/CancellableIterable'
 import { isAsyncIterable } from 'cancel/iteration/isAsyncIterable'
 import { isGenerator } from 'cancel/iteration/isGenerator'
 import { isIterable } from 'cancel/iteration/isIterable'
@@ -143,7 +144,10 @@ export class CancellablePromise<T> extends CancellablePromiseImpl<T> {
    * only exposed for testing, iterate the generator yourself if you want the values
    */
   static valuesFromIterable<T, TReturn>(
-    g: AsyncIterable<T, TReturn> | CancellableIterable<T, TReturn>,
+    g:
+      | AsyncIterable<T, TReturn>
+      | CancellableIterable<T, TReturn>
+      | CancellableGenerator<T, TReturn>,
   ): CancellablePromise<{ values: T[]; returnValue: TReturn }> {
     const values: T[] = []
     const options = {
