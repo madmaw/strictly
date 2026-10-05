@@ -1,4 +1,3 @@
-/* oxlint-disable vitest/no-standalone-expect -- assertions run inside generator methods exercised by the tests */
 import type { CancellablePromiseDisposer } from 'cancel/Cancellable'
 import { CancellablePromise, Cancellation } from 'cancel/CancellablePromise'
 import { wait } from 'cancel/iteration/wait'
@@ -24,9 +23,11 @@ class Model {
 
   @flow
   *asyncFlow() {
+    // oxlint-disable-next-line vitest/no-standalone-expect -- assertions run inside generator methods exercised by the tests
     expect(inAction()).toBeTruthy()
     this.thing++
     yield delay()
+    // oxlint-disable-next-line vitest/no-standalone-expect -- assertions run inside generator methods exercised by the tests
     expect(inAction()).toBeTruthy()
     this.thing++
     yield this.thing
@@ -38,11 +39,13 @@ class Model {
 
   @flow.bound
   *boundAsyncFlow() {
+    // oxlint-disable-next-line vitest/no-standalone-expect -- assertions run inside generator methods exercised by the tests
     expect(inAction()).toBeTruthy()
     return yield* this.asyncFlow()
   }
 
   *noFlow() {
+    // oxlint-disable-next-line vitest/no-standalone-expect -- assertions run inside generator methods exercised by the tests
     expect(inAction()).toBeFalsy()
     // because we run tests in mobx strict mode, we cannot modify `thing`, but
     // we can check the action context
@@ -52,6 +55,7 @@ class Model {
 
   @flow
   *flow() {
+    // oxlint-disable-next-line vitest/no-standalone-expect -- assertions run inside generator methods exercised by the tests
     expect(inAction()).toBeTruthy()
     yield this.thing++
     yield this.thing++

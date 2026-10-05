@@ -1,4 +1,3 @@
-/* oxlint-disable typescript/no-explicit-any -- the adapters are intentionally untyped here */
 import {
   annotations,
   lookup,
@@ -61,7 +60,9 @@ export function mergeAdaptersWithValidators<
       // the nested functions are hoisted, so they don't see the narrowed type
       const validator: Validator = maybeValidator
       function revert(
+        // oxlint-disable-next-line typescript/no-explicit-any -- the adapters are intentionally untyped here
         to: any,
+        // oxlint-disable-next-line typescript/no-explicit-any -- the adapters are intentionally untyped here
         ...params: [any, any]
       ): UnreliableFieldConversion {
         // oxlint-disable-next-line typescript/no-non-null-assertion -- only installed when the adapter can revert
@@ -80,7 +81,9 @@ export function mergeAdaptersWithValidators<
         }
       }
       function convert(
+        // oxlint-disable-next-line typescript/no-explicit-any -- the adapters are intentionally untyped here
         from: any,
+        // oxlint-disable-next-line typescript/no-explicit-any -- the adapters are intentionally untyped here
         ...params: [any, any]
       ): AnnotatedFieldConversion {
         const {

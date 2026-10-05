@@ -496,6 +496,10 @@ export function createOxlintConfig({
         name: 'stylistic',
         specifier: '@stylistic/eslint-plugin',
       },
+      {
+        name: 'directive-comments',
+        specifier: 'oxlint-plugin-directive-comments',
+      },
     ],
     plugins: [
       'import',
@@ -789,6 +793,20 @@ export function createOxlintConfig({
       // -- import --
       'import/no-duplicates': 'error',
       'import/no-self-import': 'error',
+      // -- directive comments --
+      // disables must name their rules and only cover a single line
+      'directive-comments/no-unlimited-disable': 'error',
+      'directive-comments/no-use': [
+        'error',
+        {
+          allow: [
+            'eslint-disable-line',
+            'eslint-disable-next-line',
+            'oxlint-disable-line',
+            'oxlint-disable-next-line',
+          ],
+        },
+      ],
     },
     overrides,
   })

@@ -1,4 +1,3 @@
-/* oxlint-disable typescript/no-non-null-assertion -- whether null is allowed is encoded in the generic parameters */
 import {
   copy,
   type ExhaustiveArrayOfUnion,
@@ -44,6 +43,7 @@ export abstract class AbstractSelectValueTypeConverter<
   ) {}
 
   revert(from: To): UnreliableFieldConversion<From, NoSuchValueError> {
+    // oxlint-disable-next-line typescript/no-non-null-assertion -- whether null is allowed is encoded in the generic parameters
     const prototype: From = from == null ? null! : this.values[from]
     if (prototype == null && this.noSuchValueError != null) {
       return {
@@ -58,6 +58,7 @@ export abstract class AbstractSelectValueTypeConverter<
     // of values?
     return {
       type: UnreliableFieldConversionType.Success,
+      // oxlint-disable-next-line typescript/no-non-null-assertion -- whether null is allowed is encoded in the generic parameters
       value: value!,
     }
   }
@@ -75,7 +76,8 @@ export abstract class AbstractSelectValueTypeConverter<
 
   create(): From {
     return this.defaultValueKey == null
-      ? null!
+      ? // oxlint-disable-next-line typescript/no-non-null-assertion -- whether null is allowed is encoded in the generic parameters
+        null!
       : this.values[this.defaultValueKey]
   }
 }

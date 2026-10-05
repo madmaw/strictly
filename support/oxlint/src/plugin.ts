@@ -1,4 +1,3 @@
-/* oxlint-disable typescript/no-explicit-any -- oxlint does not export types for its plugin api */
 import { existsSync } from 'node:fs'
 import path from 'node:path'
 
@@ -42,6 +41,7 @@ const restrictedSyntax = {
   meta: {
     schema: [{ type: 'array' }],
   },
+  // oxlint-disable-next-line typescript/no-explicit-any -- oxlint does not export types for its plugin api
   create(context: any) {
     const restrictions: readonly Restriction[] = context.options[0] ?? []
     const listeners: Record<string, (node: unknown) => void> = {}
@@ -84,6 +84,7 @@ const noRelativeImportPaths = {
       },
     ],
   },
+  // oxlint-disable-next-line typescript/no-explicit-any -- oxlint does not export types for its plugin api
   create(context: any) {
     const {
       allowSameFolder = false,
@@ -99,6 +100,7 @@ const noRelativeImportPaths = {
     const rootDir = path.join(packageRoot, srcFolder)
     const rootPrefix = rootDir + path.sep
 
+    // oxlint-disable-next-line typescript/no-explicit-any -- oxlint does not export types for its plugin api
     function check(node: any, source: any) {
       const importPath: unknown = source?.value
       if (typeof importPath !== 'string') {
@@ -133,6 +135,7 @@ const noRelativeImportPaths = {
       context.report({
         message: 'import statements should have an absolute path',
         node,
+        // oxlint-disable-next-line typescript/no-explicit-any -- oxlint does not export types for its plugin api
         fix(fixer: any) {
           return fixer.replaceText(source, `'${absoluteImport}'`)
         },
@@ -140,14 +143,17 @@ const noRelativeImportPaths = {
     }
 
     return {
+      // oxlint-disable-next-line typescript/no-explicit-any -- oxlint does not export types for its plugin api
       ExportAllDeclaration(node: any) {
         check(node, node.source)
       },
+      // oxlint-disable-next-line typescript/no-explicit-any -- oxlint does not export types for its plugin api
       ExportNamedDeclaration(node: any) {
         if (node.source != null) {
           check(node, node.source)
         }
       },
+      // oxlint-disable-next-line typescript/no-explicit-any -- oxlint does not export types for its plugin api
       ImportDeclaration(node: any) {
         check(node, node.source)
       },
