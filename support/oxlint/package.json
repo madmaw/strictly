@@ -2,7 +2,7 @@
   "devDependencies": {
     "@strictly/typescript": "workspace:*",
     "@stylistic/eslint-plugin": "5.10.0",
-    "@types/node": "^24.0.0",
+    "@types/node": "^26.6.4",
     "oxlint-plugin-directive-comments": "0.1.0",
     "vite-plus": "catalog:"
   },
