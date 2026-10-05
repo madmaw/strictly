@@ -2,7 +2,6 @@ import { type CancellablePromiseDisposer } from 'cancel/Cancellable'
 import { Cancellation } from 'cancel/CancellablePromise'
 import { type CancellableGenerator } from 'cancel/iteration/CancellableGenerator'
 import { isGenerator } from 'cancel/iteration/isGenerator'
-/* oxlint-disable typescript/no-explicit-any -- any ok in generics */
 import { runInAction } from 'mobx'
 import { type Writable } from 'type-fest'
 import { type Maybe } from 'types/Maybe'
@@ -11,6 +10,7 @@ function flowFactory(bound: boolean) {
   return <
     T,
     A extends unknown[],
+    // oxlint-disable-next-line typescript/no-explicit-any -- any ok in generics
     G extends CancellableGenerator<any, unknown, CancellablePromiseDisposer>,
   >(
     target: (...a: A) => G,
@@ -30,6 +30,7 @@ function flowFactory(bound: boolean) {
 }
 
 function* runGeneratorInAction<
+  // oxlint-disable-next-line typescript/no-explicit-any -- any ok in generics
   G extends CancellableGenerator<any, unknown, CancellablePromiseDisposer>,
 >(
   g: G,
@@ -37,6 +38,7 @@ function* runGeneratorInAction<
   // types can be pretty loose in the return type as the caller doesn't care
   // about the type this method returns and inferring the type from `G` doesn't
   // assist with type safety internally
+  // oxlint-disable-next-line typescript/no-explicit-any -- any ok in generics
   any,
   unknown,
   CancellablePromiseDisposer

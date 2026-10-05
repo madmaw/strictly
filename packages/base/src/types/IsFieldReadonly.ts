@@ -1,7 +1,7 @@
-/* oxlint-disable typescript/no-explicit-any -- any is needed for the generic constraints */
 import { type IsEqual } from 'type-fest'
 
 export type IsFieldReadonly<
+  // oxlint-disable-next-line typescript/no-explicit-any -- any is needed for the generic constraints
   R extends Record<string, any>,
   K extends keyof R,
 > = {

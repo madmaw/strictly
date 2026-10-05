@@ -1,5 +1,4 @@
 import { expectDefinedAndReturn } from '@strictly/vitest'
-/* oxlint-disable typescript/no-explicit-any -- the adapters are intentionally untyped here */
 import { type FieldAdapter } from 'form/core/mobx/FieldAdapter'
 import { identityAdapter } from 'form/core/mobx/fieldAdapterBuilder'
 import {
@@ -83,7 +82,9 @@ describe('MergedOfFieldAdapterWithTwoWayConverter', () => {
 const originalIntegerAdapter = identityAdapter(0)
 const originalBooleanAdapter = identityAdapter(false, true)
 const originalConverter: TwoWayFieldConverter<
+  // oxlint-disable-next-line typescript/no-explicit-any -- the adapters are intentionally untyped here
   any,
+  // oxlint-disable-next-line typescript/no-explicit-any -- the adapters are intentionally untyped here
   any,
   typeof error4,
   string,

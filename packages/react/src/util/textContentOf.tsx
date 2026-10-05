@@ -1,4 +1,3 @@
-/* oxlint-disable strictly/restricted-syntax -- rendering JSX to a string is the point of this helper */
 import { i18n } from '@lingui/core'
 import { I18nProvider } from '@lingui/react'
 import { type ReactNode } from 'react'
@@ -9,6 +8,7 @@ import { renderToString } from 'react-dom/server'
  */
 export function textContentOf(children: ReactNode): string {
   const escapedString = renderToString(
+    // oxlint-disable-next-line strictly/restricted-syntax -- rendering JSX to a string is the point of this helper
     <I18nProvider i18n={i18n}>{children}</I18nProvider>,
   )
   // unescape

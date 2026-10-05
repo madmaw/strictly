@@ -1,8 +1,5 @@
 import type { CancellablePromiseDisposer } from 'cancel/Cancellable'
 import { CancellablePromise, Cancellation } from 'cancel/CancellablePromise'
-/* oxlint-disable typescript/no-explicit-any -- any fine in generics */
-/* oxlint-disable vitest/no-standalone-expect -- assertions live in nested beforeEach setup */
-/* oxlint-disable vitest/no-disabled-tests -- documents a known async cancellation limitation */
 import { delay, infiniteDelay } from 'util/delay'
 import type { Mocked } from 'vite-plus/test'
 
@@ -31,6 +28,7 @@ function toAsyncIterable<T, TReturn, TNext>(
   }
 }
 
+// oxlint-disable-next-line typescript/no-explicit-any -- any fine in generics
 function toAsyncGeneratorAndIterable<P extends any[], T, TReturn>(
   f: (...p: P) => AsyncGenerator<T, TReturn>,
 ) {
@@ -40,6 +38,7 @@ function toAsyncGeneratorAndIterable<P extends any[], T, TReturn>(
   ] as const
 }
 
+// oxlint-disable-next-line typescript/no-explicit-any -- any fine in generics
 function toGeneratorAndIterable<P extends any[], T, TReturn>(
   f: (...p: P) => Generator<T, TReturn>,
 ) {
@@ -81,6 +80,7 @@ describe('CancellablePromise', () => {
           })
 
           // fails because we can't cancel underlying promises with async
+          // oxlint-disable-next-line vitest/no-disabled-tests -- documents a known async cancellation limitation
           it.skip('cancels the underlying promise', async () => {
             await expect(infinite).rejects.toBeDefined()
           })
@@ -528,6 +528,7 @@ describe('CancellablePromise', () => {
           promise3,
         ])
 
+        // oxlint-disable-next-line vitest/no-standalone-expect -- assertions live in nested beforeEach setup
         await expect(promise).rejects.toEqual(error)
       })
 
@@ -569,6 +570,7 @@ describe('CancellablePromise', () => {
 
         promise3.cancel()
 
+        // oxlint-disable-next-line vitest/no-standalone-expect -- assertions live in nested beforeEach setup
         await expect(promise).rejects.toBeInstanceOf(SpecialCancellation)
       })
 
@@ -595,6 +597,7 @@ describe('CancellablePromise', () => {
           (p) => p === promise3,
         )
 
+        // oxlint-disable-next-line vitest/no-standalone-expect -- assertions live in nested beforeEach setup
         await expect(promise).resolves.toBe(1)
       })
 

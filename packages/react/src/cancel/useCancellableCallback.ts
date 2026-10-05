@@ -1,4 +1,3 @@
-/* oxlint-disable typescript/no-explicit-any -- any ok in generics */
 import { type Cancellable, CancellablePromise } from '@strictly/base'
 import { type DependencyList, useCallback, useEffect, useMemo } from 'react'
 import { isPromiseWithCancel } from 'real-cancellable-promise'
@@ -13,6 +12,7 @@ function defaultCleanUpCancellablePromise<TReturn>(
  * Hook for ensuring that your async callbacks are cancelled when the component unmounts or the
  * deps change
  */
+// oxlint-disable-next-line typescript/no-explicit-any -- any ok in generics
 export function useCancellableCallback<A extends any[], TReturn>(
   cb: (...args: A) => Cancellable<TReturn>,
   deps: DependencyList,

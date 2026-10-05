@@ -12,7 +12,6 @@ import { type CancellableIterable } from 'cancel/iteration/CancellableIterable'
 import { isAsyncIterable } from 'cancel/iteration/isAsyncIterable'
 import { isGenerator } from 'cancel/iteration/isGenerator'
 import { isIterable } from 'cancel/iteration/isIterable'
-/* oxlint-disable typescript/no-explicit-any, typescript/no-non-null-assertion -- generic promise/iterator plumbing */
 import { fromPromise, type IPromiseBasedObservable } from 'mobx-utils'
 import {
   CancellablePromise as CancellablePromiseImpl,
@@ -173,6 +172,7 @@ export class CancellablePromise<T> extends CancellablePromiseImpl<T> {
    * @param g the Iterable/Iterator you want to convert to a promise
    */
   static fromIterable<
+    // oxlint-disable-next-line typescript/no-explicit-any -- generic promise/iterator plumbing
     G extends Iterable<unknown, any, CancellablePromiseDisposer>,
   >(
     g: G,
@@ -183,9 +183,11 @@ export class CancellablePromise<T> extends CancellablePromiseImpl<T> {
     ? CancellablePromise<Awaited<TReturn>>
     : never {
     return CancellablePromise.driveIterable(
+      // oxlint-disable-next-line typescript/no-explicit-any -- generic promise/iterator plumbing
       g as Iterable<any, any, CancellablePromiseDisposer>,
       options,
       false,
+      // oxlint-disable-next-line typescript/no-explicit-any -- generic promise/iterator plumbing
     ) as any
   }
 
@@ -234,9 +236,11 @@ export class CancellablePromise<T> extends CancellablePromiseImpl<T> {
             maybeError == null
               ? // allow iterators to access a destructor when calling yield
                 i.next(cancel)
-              : i.throw!(maybeError[0])
+              : // oxlint-disable-next-line typescript/no-non-null-assertion -- generic promise/iterator plumbing
+                i.throw!(maybeError[0])
         })
         // wrapper invokes its callback synchronously
+        // oxlint-disable-next-line typescript/no-non-null-assertion -- generic promise/iterator plumbing
         return result!
       } catch (e) {
         // make any synchronous errors into failing iterators (assume synchronous errors can only
@@ -410,12 +414,14 @@ export class CancellablePromise<T> extends CancellablePromiseImpl<T> {
       if (!isCancellationError(e)) {
         throw e
       }
+      // oxlint-disable-next-line typescript/no-explicit-any -- generic promise/iterator plumbing
     }) as any
   }
 
   /**
    * Turns a synchronous method into a cancellable, asynchronous method with a delay
    */
+  // oxlint-disable-next-line typescript/no-explicit-any -- generic promise/iterator plumbing
   static fromPseudoAsync<A extends any[], TReturn>(
     f: (...args: A) => Promise<TReturn> | TReturn,
     delay: Delay = createDelay(0),
