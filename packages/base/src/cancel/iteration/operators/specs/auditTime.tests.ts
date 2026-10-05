@@ -10,7 +10,6 @@ describe('auditTime', () => {
   })
 
   afterEach(() => {
-    // oxlint-disable-next-line vitest/no-standalone-expect -- every test checks that no timers are left running
     expect(vi.getTimerCount()).toBe(0)
     vi.useRealTimers()
   })

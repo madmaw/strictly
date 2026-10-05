@@ -10,6 +10,7 @@ import { type CancellableIterable } from 'cancel/iteration/CancellableIterable'
 import { next } from 'cancel/iteration/next'
 import { wait } from 'cancel/iteration/wait'
 import { delay } from 'util/delay'
+import { assertState } from 'util/preconditions'
 
 /**
  * Once a value arrives, waits `milliseconds` and then emits the most recent value from the source. When the source
@@ -23,33 +24,40 @@ export function* auditTime<T, TReturn>(
   const i: Iterator<CancellableStep<T> | T, TReturn> = source[Symbol.iterator]()
   // the pull from the source is kept between emissions, so a value still on its way when the wait ends isn't lost.
   // The source ending is kept too, so it ends the iteration on the pull after the last emission
-  let pending = null as CancellablePromise<T> | null
-  const pull = () => (pending ??= CancellablePromise.fromStep(() => next(i)))
+  let pending: CancellablePromise<T> | null = null
+  const pull = () => {
+    assertState(
+      pending == null,
+      'the previous pull from the source has not been consumed',
+    )
+    return (pending = CancellablePromise.fromStep(() => next(i)))
+  }
+  const cancelPull = () => pending?.cancel()
   try {
     for (;;) {
       yield* wait(function* () {
-        let latest = yield* wait(pull())
+        let latest = yield* wait(pending ?? pull())
         pending = null
         const timer = delay(milliseconds)
         try {
           for (;;) {
             const arrived = yield* wait(
               CancellablePromise.race([
-                pull().then((value) => ({ value })),
-                timer.then(() => null),
+                pull().then((value) => [value] as const),
+                timer,
               ]),
             )
             if (arrived == null) {
               return latest
             }
             pending = null
-            latest = arrived.value
+            ;[latest] = arrived
           }
         } catch (e) {
           if (!(e instanceof CancellableIterableCompletedError)) {
             throw e
           }
-          yield* wait(timer)
+          yield timer
           return latest
         } finally {
           timer.cancel()
@@ -57,7 +65,7 @@ export function* auditTime<T, TReturn>(
       })
     }
   } finally {
-    pending?.cancel()
+    cancelPull()
     i.return?.()
   }
 }
