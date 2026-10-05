@@ -21,7 +21,7 @@ export type SubPathsOf<
     : never
 
 export type CallbackMapper<ValuePath extends string> = <
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // oxlint-disable-next-line typescript/no-explicit-any
   Cb extends (...args: any[]) => any,
 >(
   cb: Cb,
@@ -37,7 +37,7 @@ export type CallbackMapper<ValuePath extends string> = <
 
 export type FieldsView<
   ValuePath extends string = string,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // oxlint-disable-next-line typescript/no-explicit-any
   C extends ComponentType<any> = ComponentType<any>,
 > = {
   Component: C
@@ -106,7 +106,7 @@ export function createFieldsView<
         <FieldsView
           {
             // maybe we can do this in a more type safe way
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            // oxlint-disable-next-line typescript/no-explicit-any
             ...(props as any)
           }
           fields={subFields}
@@ -121,7 +121,7 @@ export function createFieldsView<
   const callbackMapper: CallbackMapper<K> = ((
     callback: (valuePath: string, ...args: any[]) => any, // oxlint-disable-line typescript/no-explicit-any
   ) =>
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // oxlint-disable-next-line typescript/no-explicit-any
     (subFormValuePath: string, ...args: any[]) => {
       const valuePath = toKey(subFormValuePath)
       return callback(valuePath, ...args)

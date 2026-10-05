@@ -1,7 +1,7 @@
 import { type FlattenedValuesOfType } from './FlattenedValuesOfType'
 import { type Type } from './Type'
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// oxlint-disable-next-line typescript/no-explicit-any
 export type Accessor<T = any> = {
   readonly value: T
   set(v: T): void

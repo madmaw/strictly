@@ -11,14 +11,14 @@ export type ErrorRendererProps<
   K extends keyof Fields,
 > = InternalErrorRendererProps<ErrorOfField<F[K]>>
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// oxlint-disable-next-line typescript/no-explicit-any
 export type ErrorRenderer<E = any> = ComponentType<
   InternalErrorRendererProps<E>
 >
 
 export function DefaultErrorRenderer({
   error,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // oxlint-disable-next-line typescript/no-explicit-any
 }: InternalErrorRendererProps<any>) {
   return JSON.stringify(error)
 }

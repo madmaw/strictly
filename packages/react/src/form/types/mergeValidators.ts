@@ -65,7 +65,7 @@ export function mergeValidators<
     )
 
     validators[key as Keys] = {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // oxlint-disable-next-line typescript/no-explicit-any
       validate(value: any, valuePath: string, context: any) {
         const error = validate(validator1, value, valuePath, context)
         if (error != null) {
@@ -73,7 +73,7 @@ export function mergeValidators<
         }
         return validate(validator2, value, valuePath, context)
       },
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // oxlint-disable-next-line typescript/no-explicit-any
       annotations(valuePath: string, context: any) {
         const annotations1 = annotations(validator1, valuePath, context)
         const annotations2 = annotations(validator2, valuePath, context)
@@ -82,7 +82,7 @@ export function mergeValidators<
           required: annotations1.required || annotations2.required,
         }
       },
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // oxlint-disable-next-line typescript/no-explicit-any
     } as any
     return validators
   }, validators) as unknown as MergedOfValidators<

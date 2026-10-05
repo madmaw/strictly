@@ -126,11 +126,11 @@ describe('all', () => {
     type ConvenientFieldAdapter<
       From,
       Context,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // oxlint-disable-next-line typescript/no-explicit-any
       To = any,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // oxlint-disable-next-line typescript/no-explicit-any
       E = any,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // oxlint-disable-next-line typescript/no-explicit-any
       ValuePath extends string = any,
     > = FieldAdapter<From, To, E, ValuePath, Context>
 

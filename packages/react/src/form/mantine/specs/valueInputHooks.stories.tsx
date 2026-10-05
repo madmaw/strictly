@@ -21,7 +21,7 @@ function ErrorRenderer({ error }: { error: string }) {
   return `error ${error}`
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// oxlint-disable-next-line typescript/no-explicit-any
 type StoryValueInputProps<V> = SuppliedValueInputProps<V, any>
 
 function Component<V, P extends StoryValueInputProps<V>>({
@@ -40,7 +40,7 @@ function Component<V, P extends StoryValueInputProps<V>>({
   return (
     <ValueInputComponent
       {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        // oxlint-disable-next-line typescript/no-explicit-any
         ...(inputProps as any)
       }
       ErrorRenderer={ErrorRenderer}

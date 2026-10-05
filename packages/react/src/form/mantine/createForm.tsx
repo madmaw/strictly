@@ -31,7 +31,7 @@ export function createForm<
         <Form
           {
             // maybe we can do this in a more type safe way
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            // oxlint-disable-next-line typescript/no-explicit-any
             ...(props as any)
           }
           onValueChange={onValueChange}

@@ -1,4 +1,4 @@
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// oxlint-disable-next-line typescript/no-explicit-any
 export function errorHandlingJsonParse<T = any>(
   json: string,
   errorHandler?: (e: unknown) => void,
@@ -11,7 +11,7 @@ export function errorHandlingJsonParse<T = any>(
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// oxlint-disable-next-line typescript/no-explicit-any
 export function errorHandlingJsonStringify<T = any>(
   v: T,
   errorHandler?: (e: unknown) => void,

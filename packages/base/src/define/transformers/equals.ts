@@ -16,7 +16,7 @@ export function equals<T extends Type>(
   return internalEquals(t, o1, o2)
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// oxlint-disable-next-line typescript/no-explicit-any
 function internalEquals(t: Type, o1: any, o2: any): boolean {
   // get rid of optional values
   if (o1 === o2) {
@@ -44,7 +44,7 @@ function internalEquals(t: Type, o1: any, o2: any): boolean {
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// oxlint-disable-next-line typescript/no-explicit-any
 function internalListEquals(element: Type, o1: any[], o2: any[]) {
   return (
     o1.length === o2.length &&
@@ -54,9 +54,9 @@ function internalListEquals(element: Type, o1: any[], o2: any[]) {
 
 function internalRecordEquals(
   value: Type,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // oxlint-disable-next-line typescript/no-explicit-any
   o1: Record<string, any>,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // oxlint-disable-next-line typescript/no-explicit-any
   o2: Record<string, any>,
 ) {
   const k1s = Object.keys(o1).sort()
@@ -72,9 +72,9 @@ function internalRecordEquals(
 
 function internalObjectEquals(
   fields: Readonly<Record<string, Type>>,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // oxlint-disable-next-line typescript/no-explicit-any
   o1: Record<string, any>,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // oxlint-disable-next-line typescript/no-explicit-any
   o2: Record<string, any>,
 ) {
   return Object.entries(fields).every(([key, field]) =>
@@ -84,9 +84,9 @@ function internalObjectEquals(
 
 function internalUnionEquals(
   node: SchemaNode & { readonly kind: 'union' },
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // oxlint-disable-next-line typescript/no-explicit-any
   o1: any,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // oxlint-disable-next-line typescript/no-explicit-any
   o2: any,
 ) {
   const { discriminator } = node

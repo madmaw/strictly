@@ -21,7 +21,7 @@ export type ErrorsOfFlattenedValidators<
 }
 
 export type FlattenedTypePathsToValidatorsOf<
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // oxlint-disable-next-line typescript/no-explicit-any
   FlattenedValues extends Readonly<Record<string, any>>,
   Context,
 > = {

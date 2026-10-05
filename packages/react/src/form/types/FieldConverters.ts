@@ -4,7 +4,7 @@ export enum UnreliableFieldConversionType {
   Success = 0,
   Failure = 1,
 }
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// oxlint-disable-next-line typescript/no-explicit-any
 export type UnreliableFieldConversion<V = any, E = any> =
   | {
       type: UnreliableFieldConversionType.Success
@@ -38,7 +38,7 @@ export type Annotation = {
   readonly readonly: boolean
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// oxlint-disable-next-line typescript/no-explicit-any
 export type AnnotatedFieldConversion<V = any> = {
   value: V
 } & Annotation

@@ -5,7 +5,7 @@ import { type ValueOfType } from 'define/types/ValueOfType'
 import { UnreachableError } from 'errors/Unreachable'
 import { map, reduce } from 'util/record'
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// oxlint-disable-next-line typescript/no-explicit-any
 export type AnyValueType = any
 
 export type Copier<R> = (v: AnyValueType, t: Type) => R

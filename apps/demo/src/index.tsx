@@ -30,7 +30,7 @@ window.addEventListener('load', () => {
   }
 
   function onValueChange(value: Pet) {
-    // eslint-disable-next-line no-console
+    // oxlint-disable-next-line no-console
     console.log(value)
   }
 

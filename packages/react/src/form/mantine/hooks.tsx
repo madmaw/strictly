@@ -66,7 +66,7 @@ export function useMantineFormFields<F extends Fields>({
   const form = useMemo(
     () => new MantineFormImpl(fields, onFieldValueChange),
     // fields and the value change handler are kept up to date separately below
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // oxlint-disable-next-line react-hooks/exhaustive-deps
     [],
   )
   useEffect(() => {
@@ -108,9 +108,9 @@ class MantineFormImpl<F extends Fields> implements MantineForm<F> {
     MantineFieldComponent<SuppliedTextInputProps>
   >(createTextInput.bind(this))
   private readonly valueInputCache = new Cache<
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // oxlint-disable-next-line typescript/no-explicit-any
     [StringKeyOf<F>, ComponentType<SuppliedValueInputProps<any>>],
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // oxlint-disable-next-line typescript/no-explicit-any
     MantineFieldComponent<SuppliedValueInputProps<any>>
   >(createValueInput.bind(this))
   private readonly checkboxCache = new Cache<
@@ -142,13 +142,13 @@ class MantineFormImpl<F extends Fields> implements MantineForm<F> {
   >(createFieldView.bind(this))
   private readonly fieldsViewCache = new Cache<
     // the cache cannot reference keys, so we just use any
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // oxlint-disable-next-line typescript/no-explicit-any
     [StringKeyOf<F>, ComponentType<any>, FieldsViewProps<F>],
     FieldsView
   >(createFieldsView.bind(this))
   private readonly formCache = new Cache<
     // the cache cannot reference keys, so we just use any
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // oxlint-disable-next-line typescript/no-explicit-any
     [StringKeyOf<F>, ComponentType<any>, FieldsViewProps<F>],
     ComponentType
   >(createForm.bind(this))
@@ -186,7 +186,7 @@ class MantineFormImpl<F extends Fields> implements MantineForm<F> {
   >
   textInput<
     K extends keyof StringFieldsOfFields<F>,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // oxlint-disable-next-line typescript/no-explicit-any
     P extends SuppliedTextInputProps<any>,
   >(
     valuePath: K,
@@ -199,12 +199,12 @@ class MantineFormImpl<F extends Fields> implements MantineForm<F> {
   >
   textInput<
     K extends keyof StringFieldsOfFields<F>,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // oxlint-disable-next-line typescript/no-explicit-any
     P extends SuppliedTextInputProps<any>,
   >(
     valuePath: K,
     TextInput: ComponentType<P> = TextInputImpl as ComponentType<P>,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // oxlint-disable-next-line typescript/no-explicit-any
   ): MantineFieldComponent<SuppliedTextInputProps, P, ErrorOfField<F[K]>, any> {
     return this.textInputCache.retrieveOrCreate(
       valuePath,
@@ -218,7 +218,7 @@ class MantineFormImpl<F extends Fields> implements MantineForm<F> {
 
   valueInput<
     K extends StringKeyOf<F>,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // oxlint-disable-next-line typescript/no-explicit-any
     P extends SuppliedValueInputProps<ValueTypeOfField<F[K]>, any>,
   >(
     valuePath: K,
@@ -282,7 +282,7 @@ class MantineFormImpl<F extends Fields> implements MantineForm<F> {
   >(
     valuePath: K,
     Checkbox: ComponentType<P> = CheckboxImpl as ComponentType<P>,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // oxlint-disable-next-line typescript/no-explicit-any
   ): MantineFieldComponent<SuppliedCheckboxProps, P, ErrorOfField<F[K]>, any> {
     return this.checkboxCache.retrieveOrCreate(
       valuePath,

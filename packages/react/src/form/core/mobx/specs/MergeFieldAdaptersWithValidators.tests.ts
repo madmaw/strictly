@@ -200,7 +200,7 @@ describe('mergeFieldAdaptersWithValidators', () => {
         ] as const)(
           'field %s fails with validation %s',
           (key, error, value) => {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            // oxlint-disable-next-line typescript/no-explicit-any
             const mergedAdapter: FieldAdapter<any, any, string, any> =
               merged[key]
             expectDefined(mergedAdapter.revert)
@@ -214,7 +214,7 @@ describe('mergeFieldAdaptersWithValidators', () => {
           ['c', 1],
           ['d', true],
         ] as const)('field %s succeeds with value %s', (key, value) => {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          // oxlint-disable-next-line typescript/no-explicit-any
           const mergedAdapter: FieldAdapter<any, any, string, any> = merged[key]
           expectDefined(mergedAdapter.revert)
           const result = mergedAdapter.revert(value, key, null)
@@ -232,7 +232,7 @@ describe('mergeFieldAdaptersWithValidators', () => {
         ] as const)(
           'field %s is required %s and readonly %s',
           (key, expectedRequired, expectedReadonly, value) => {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            // oxlint-disable-next-line typescript/no-explicit-any
             const adapter: FieldAdapter<any, any, string, any> = merged[key]
             const { required, readonly } = adapter.convert(value, key, null)
             expect(required).toEqual(expectedRequired)

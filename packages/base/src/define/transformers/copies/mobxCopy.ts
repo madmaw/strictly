@@ -20,7 +20,7 @@ function observeValue(v: AnyValueType, t: Type): AnyValueType {
       return observeValue(v, node.inner)
     case 'list':
       // can't work out that an observable array is an array
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // oxlint-disable-next-line typescript/no-explicit-any
       return observable.array(v as any[], { deep: false }) as any
     case 'record':
       // observable observes all fields

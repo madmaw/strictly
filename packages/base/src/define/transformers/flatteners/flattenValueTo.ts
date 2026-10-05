@@ -6,7 +6,7 @@ import { UnreachableError } from 'errors/Unreachable'
 import { lookup } from 'util/record'
 import { jsonPath } from './jsonPath'
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// oxlint-disable-next-line typescript/no-explicit-any
 export type AnyValueType = any
 export type Setter<V> = (v: V) => void
 
