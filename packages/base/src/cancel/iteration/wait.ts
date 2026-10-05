@@ -1,7 +1,7 @@
 import { CancellablePromise } from 'cancel/CancellablePromise'
 import { type CancellableStep } from 'cancel/iteration/CancellableGenerator'
+import { isCancellableStepFactory } from 'cancel/iteration/isCancellableStepFactory'
 import { isGenerator } from 'cancel/iteration/isGenerator'
-import { isStepFactory } from 'cancel/iteration/isStepFactory'
 import { isPromiseLike } from 'util/isPromiseLike'
 
 type YieldStep<T> = Generator<CancellableStep<T>, T, unknown>
@@ -28,7 +28,7 @@ type YieldStep<T> = Generator<CancellableStep<T>, T, unknown>
 export function* wait<T>(
   step: CancellableStep<T> | (() => CancellableStep<T> | T) | T,
 ): YieldStep<T> {
-  return yield* waitFor(isStepFactory(step) ? step() : step)
+  return yield* waitFor(isCancellableStepFactory(step) ? step() : step)
 }
 
 function* waitFor<T>(step: CancellableStep<T> | T): YieldStep<T> {

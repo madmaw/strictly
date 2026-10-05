@@ -10,9 +10,9 @@ import {
 } from 'cancel/iteration/CancellableGenerator'
 import { type CancellableIterable } from 'cancel/iteration/CancellableIterable'
 import { isAsyncIterable } from 'cancel/iteration/isAsyncIterable'
+import { isCancellableStepFactory } from 'cancel/iteration/isCancellableStepFactory'
 import { isGenerator } from 'cancel/iteration/isGenerator'
 import { isIterable } from 'cancel/iteration/isIterable'
-import { isStepFactory } from 'cancel/iteration/isStepFactory'
 import { fromPromise, type IPromiseBasedObservable } from 'mobx-utils'
 import {
   CancellablePromise as CancellablePromiseImpl,
@@ -136,7 +136,7 @@ export class CancellablePromise<T> extends CancellablePromiseImpl<T> {
   ): CancellablePromise<T> {
     let started: CancellableStep<T> | T
     try {
-      started = isStepFactory(step) ? step() : step
+      started = isCancellableStepFactory(step) ? step() : step
     } catch (e) {
       return CancellablePromise.reject(e)
     }
