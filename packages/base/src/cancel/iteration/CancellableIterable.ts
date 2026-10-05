@@ -1,36 +1,21 @@
-/* oxlint-disable typescript/no-explicit-any -- any ok in generics */
 import {
   CancellableIterableCompletedError,
   CancellablePromise,
 } from 'cancel/CancellablePromise'
 
 /**
- * A yielded generator is run to completion as a single step, resolving to its return value
+ * A stream whose values are all pending when they are pulled, e.g. a subscription
  */
-export type CancellableStep<T> =
-  | CancellablePromise<T>
-  | Generator<unknown, T, any>
-
-/**
- * The value that a yielded step resolves to
- */
-export type ResolvedStep<S> =
-  S extends Generator<unknown, infer R, any> ? Awaited<R> : Awaited<S>
-
-/**
- * A synchronous iterator that returns (asynchronous) CancellablePromises, or values that are already available. This
- * is superior to AsyncIterator as we can exit the iterator at any point instead of just between async calls.
- */
-export type CancellableIterable<T = any, TReturn = any, TNext = any> = Iterable<
-  CancellableStep<T> | T,
-  TReturn,
-  TNext
->
+export type CancellableIterable<
+  T,
+  TReturn = unknown,
+  TNext = unknown,
+> = Iterable<CancellablePromise<T>, TReturn, TNext>
 
 export function* asyncToCancellableIterable<T, TReturn>(
   i: AsyncIterable<T, TReturn>,
   cancel: () => void,
-): Generator<CancellablePromise<T>, TReturn, void> {
+): CancellableIterable<T, TReturn, void> {
   const it = i[Symbol.asyncIterator]()
   let maybeReturnValue: [TReturn] | undefined
   // oxlint-disable-next-line no-unmodified-loop-condition -- maybeReturnValue is assigned inside the async promise callback

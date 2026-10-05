@@ -1,8 +1,8 @@
 import { type CancellablePromiseDisposer } from 'cancel/Cancellable'
 import { Cancellation } from 'cancel/CancellablePromise'
-import { type CancellableIterable } from 'cancel/iteration/CancellableIterable'
+import { type CancellableGenerator } from 'cancel/iteration/CancellableGenerator'
 import { isGenerator } from 'cancel/iteration/isGenerator'
-/* oxlint-disable typescript/no-explicit-any, typescript/no-non-null-assertion -- any ok in generics */
+/* oxlint-disable typescript/no-explicit-any -- any ok in generics */
 import { runInAction } from 'mobx'
 import { type Writable } from 'type-fest'
 import { type Maybe } from 'types/Maybe'
@@ -11,7 +11,7 @@ function flowFactory(bound: boolean) {
   return <
     T,
     A extends unknown[],
-    G extends CancellableIterable<any, unknown, CancellablePromiseDisposer>,
+    G extends CancellableGenerator<any, unknown, CancellablePromiseDisposer>,
   >(
     target: (...a: A) => G,
     {
@@ -30,7 +30,7 @@ function flowFactory(bound: boolean) {
 }
 
 function* runGeneratorInAction<
-  G extends CancellableIterable<any, unknown, CancellablePromiseDisposer>,
+  G extends CancellableGenerator<any, unknown, CancellablePromiseDisposer>,
 >(
   g: G,
 ): Generator<
@@ -44,12 +44,12 @@ function* runGeneratorInAction<
   const i = runInAction(() => g[Symbol.iterator]())
   let error: Maybe<unknown> = null
   let cancellerImpl: CancellablePromiseDisposer = () =>
-    i.throw?.(new Cancellation())
+    i.throw(new Cancellation())
   // hoist to provide a stable pointer to the implementation, which may vary
   const canceller = () => cancellerImpl()
   while (true) {
     const { done, value } = runInAction(() =>
-      error == null ? i.next(canceller) : i.throw!(error[0]),
+      error == null ? i.next(canceller) : i.throw(error[0]),
     )
     if (done) {
       return value
@@ -61,7 +61,7 @@ function* runGeneratorInAction<
         : value
       error = null
     } catch (e) {
-      if (i.throw == null || error === e) {
+      if (error === e) {
         throw e
       }
       error = [e]

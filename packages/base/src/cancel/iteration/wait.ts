@@ -1,5 +1,5 @@
 import { CancellablePromise } from 'cancel/CancellablePromise'
-import { type CancellableStep } from 'cancel/iteration/CancellableIterable'
+import { type CancellableStep } from 'cancel/iteration/CancellableGenerator'
 import { isGenerator } from 'cancel/iteration/isGenerator'
 import { isPromiseLike } from 'util/isPromiseLike'
 

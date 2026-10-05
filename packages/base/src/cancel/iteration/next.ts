@@ -1,5 +1,5 @@
 import { CancellableIterableCompletedError } from 'cancel/CancellablePromise'
-import { type CancellableStep } from 'cancel/iteration/CancellableIterable'
+import { type CancellableStep } from 'cancel/iteration/CancellableGenerator'
 
 /**
  * Pulls the next step from an iterator, throwing a CancellableIterableCompletedError with the return value
