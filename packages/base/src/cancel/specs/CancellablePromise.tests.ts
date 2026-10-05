@@ -589,7 +589,6 @@ describe('CancellablePromise', () => {
           promise3,
         ])
 
-        // oxlint-disable-next-line vitest/no-standalone-expect -- assertions live in nested beforeEach setup
         await expect(promise).rejects.toEqual(error)
       })
 
@@ -631,7 +630,6 @@ describe('CancellablePromise', () => {
 
         promise3.cancel()
 
-        // oxlint-disable-next-line vitest/no-standalone-expect -- assertions live in nested beforeEach setup
         await expect(promise).rejects.toBeInstanceOf(SpecialCancellation)
       })
 
@@ -658,7 +656,6 @@ describe('CancellablePromise', () => {
           (p) => p === promise3,
         )
 
-        // oxlint-disable-next-line vitest/no-standalone-expect -- assertions live in nested beforeEach setup
         await expect(promise).resolves.toBe(1)
       })
 
