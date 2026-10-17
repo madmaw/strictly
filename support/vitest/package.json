@@ -1,15 +1,51 @@
 {
-  "description": "Shared vitest assertion helpers for the workspace",
+  "author": "Chris <chris.glover@gmail.com> (@madmaw)",
+  "description": "Vitest assertion helpers that narrow types",
   "devDependencies": {
     "@strictly/typescript": "workspace:*",
+    "@strictly/vite": "workspace:*",
+    "vite-plus": "catalog:",
     "vitest": "catalog:"
   },
+  "files": [
+    "dist"
+  ],
+  "homepage": "https://github.com/madmaw/strictly/tree/main/support/vitest",
+  "keywords": [
+    "vitest"
+  ],
   "license": "MIT",
   "main": "src/index.ts",
   "name": "@strictly/vitest",
+  "peerDependencies": {
+    "vitest": "^5.0.1"
+  },
+  "publishConfig": {
+    "access": "public",
+    "exports": {
+      ".": {
+        "import": {
+          "types": "./dist/index.d.ts",
+          "default": "./dist/index.js"
+        },
+        "require": {
+          "types": "./dist/index.d.cts",
+          "default": "./dist/index.cjs"
+        }
+      }
+    },
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts"
+  },
+  "repository": {
+    "directory": "support/vitest",
+    "type": "git",
+    "url": "git+https://github.com/madmaw/strictly.git"
+  },
   "scripts": {
+    "build": "vp build --configLoader runner",
     "check-types": "tsc -b",
-    "clean": "del-cli .out"
+    "clean": "del-cli dist .out"
   },
   "type": "module",
   "version": "0.0.41"

@@ -1,3 +1,7 @@
+// published for projects without vite plus too
+// oxlint-disable-next-line no-restricted-imports, vite-plus/prefer-vite-plus-imports -- wraps vitest's assertions
+import { expect } from 'vitest'
+
 export function expectEquals<V1, V2 extends V1>(
   v1: V1,
   v2: V2,

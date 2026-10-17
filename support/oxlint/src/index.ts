@@ -1,5 +1,5 @@
-import { fileURLToPath } from 'node:url'
-import { defineConfig, type OxlintConfig, type OxlintOverride } from 'oxlint'
+import { createRequire } from 'node:module'
+import { type OxlintConfig, type OxlintOverride } from 'oxlint'
 
 // NOTE: this file is loaded directly by oxlint via node's type stripping, so it must not use any typescript syntax that
 // requires transformation (enums, namespaces, parameter properties, etc...)
@@ -27,7 +27,8 @@ type RestrictedImports = {
   patterns: RestrictedImportPattern[]
 }
 
-const PLUGIN_PATH = fileURLToPath(new URL('./plugin.ts', import.meta.url))
+// oxlint resolves plugin specifiers from the consuming configuration, where these are not installed
+const require = createRequire(import.meta.url)
 
 const TEST_GLOBALS = [
   'afterAll',
@@ -198,12 +199,6 @@ const NO_RESTRICTED_IMPORTS: RestrictedImports = {
     },
     {
       message:
-        "you can't import subfolders from workspace packages, export the file in the package instead",
-      regex:
-        '^(?!@strictly/[^\\/]*/((config)|(preview)))(@strictly)\\/[^\\/]*\\/.*$',
-    },
-    {
-      message:
         'Underscores in path or package names are inconsistent with NPM naming standards. Use a hyphen.',
       regex: '^[^./].*_.*$',
     },
@@ -215,10 +210,15 @@ const TEST_HELPER_IMPORT_NAMES = [
   'expectDefined',
   'expectDefinedAndReturn',
   'expectEquals',
+  'expectInstanceOf',
+  'expectPendingPromise',
   'expectTruthy',
 ]
 
 export type CreateOxlintConfigOptions = {
+  // the npm scope of the workspace packages, e.g. `@strictly`, whose `vitest` and `storybook` packages hold the test
+  // helpers
+  readonly workspaceScope: string
   // the source folder of every package, relative to the package
   readonly srcFolder?: string
   // regex of additional hooks to check for exhaustive dependencies
@@ -230,9 +230,10 @@ export type CreateOxlintConfigOptions = {
  * that need the package root find it from the file being linted
  */
 export function createOxlintConfig({
+  workspaceScope,
   srcFolder = 'src',
-  additionalHooks = '(usePartialComponent|usePartialObserverComponent|useWhen|useReaction|useAutorun|useObserverComponent|useConstant|useDeferredConstant)',
-}: CreateOxlintConfigOptions = {}): OxlintConfig {
+  additionalHooks,
+}: CreateOxlintConfigOptions): OxlintConfig {
   const ignorePatterns = [
     '**/.astro/**',
     '**/.out/**',
@@ -264,7 +265,15 @@ export function createOxlintConfig({
       'error',
       {
         paths: [...paths, ...NO_RESTRICTED_IMPORTS.paths],
-        patterns: [...patterns, ...NO_RESTRICTED_IMPORTS.patterns],
+        patterns: [
+          ...patterns,
+          ...NO_RESTRICTED_IMPORTS.patterns,
+          {
+            message:
+              "you can't import subfolders from workspace packages, export the file in the package instead",
+            regex: `^(?!${workspaceScope}/[^\\/]*/((config)|(preview)))(${workspaceScope})\\/[^\\/]*\\/.*$`,
+          },
+        ],
       },
     ]
   }
@@ -293,12 +302,12 @@ export function createOxlintConfig({
             {
               importNames: TEST_HELPER_IMPORT_NAMES,
               message: "Don't use test imports in production code",
-              name: '@strictly/vitest',
+              name: `${workspaceScope}/vitest`,
             },
             {
               importNames: TEST_HELPER_IMPORT_NAMES,
               message: "Don't use test imports in production code",
-              name: '@strictly/storybook',
+              name: `${workspaceScope}/storybook`,
             },
             {
               message: "Don't use test imports in production code",
@@ -424,9 +433,8 @@ export function createOxlintConfig({
           ],
           [
             {
-              message:
-                "Don't use storybook helpers in unit tests. The equivalent test helpers live in @strictly/vitest.",
-              regex: '^@strictly\\/storybook(\\/.*)?$',
+              message: `Don't use storybook helpers in unit tests. The equivalent test helpers live in ${workspaceScope}/vitest.`,
+              regex: `^${workspaceScope}\\/storybook(\\/.*)?$`,
             },
             {
               message:
@@ -447,9 +455,8 @@ export function createOxlintConfig({
           [
             // ban vitest imports
             {
-              message:
-                "Don't use vitest test helpers in storybook code. The equivalent assertions live in @strictly/storybook.",
-              name: '@strictly/vitest',
+              message: `Don't use vitest test helpers in storybook code. The equivalent assertions live in ${workspaceScope}/storybook.`,
+              name: `${workspaceScope}/vitest`,
             },
             {
               message:
@@ -485,20 +492,20 @@ export function createOxlintConfig({
     },
   ]
 
-  return defineConfig({
+  return {
     ignorePatterns,
     jsPlugins: [
       {
         name: 'strictly',
-        specifier: PLUGIN_PATH,
+        specifier: require.resolve('@strictly/oxlint/plugin'),
       },
       {
         name: 'stylistic',
-        specifier: '@stylistic/eslint-plugin',
+        specifier: require.resolve('@stylistic/eslint-plugin'),
       },
       {
         name: 'directive-comments',
-        specifier: 'oxlint-plugin-directive-comments',
+        specifier: require.resolve('oxlint-plugin-directive-comments'),
       },
     ],
     plugins: [
@@ -517,11 +524,6 @@ export function createOxlintConfig({
     globals: {
       JSX: 'readonly',
       React: 'readonly',
-    },
-    settings: {
-      react: {
-        version: '19.1.0',
-      },
     },
     categories: {
       correctness: 'error',
@@ -546,8 +548,7 @@ export function createOxlintConfig({
       ],
       'typescript/class-literal-property-style': 'error',
       'typescript/consistent-generic-constructors': 'error',
-      // the type-level code in this repository relies on index signatures where `Record` would break the compiler
-      'typescript/consistent-indexed-object-style': 'off',
+      'typescript/consistent-indexed-object-style': ['error', 'record'],
       'typescript/consistent-type-assertions': [
         'error',
         {
@@ -591,8 +592,8 @@ export function createOxlintConfig({
         },
       ],
       'typescript/no-unnecessary-type-assertion': 'error',
-      // the no-unsafe-* rules generate a lot of false positives in the type-level code in this repository and are
-      // largely redundant with the TS settings, so they are disabled
+      // the no-unsafe-* rules generate a lot of false positives in type-level code and are largely redundant with strict
+      // compiler settings
       'typescript/no-unsafe-argument': 'off',
       'typescript/no-unsafe-assignment': 'off',
       'typescript/no-unsafe-call': 'off',
@@ -697,9 +698,7 @@ export function createOxlintConfig({
       // -- react --
       'react/exhaustive-deps': [
         'error',
-        {
-          additionalHooks,
-        },
+        additionalHooks == null ? {} : { additionalHooks },
       ],
       'react/jsx-boolean-value': ['error', 'never'],
       'react/jsx-no-useless-fragment': 'error',
@@ -710,13 +709,13 @@ export function createOxlintConfig({
       // covered by the conditional hook restricted syntax
       'react/rules-of-hooks': 'off',
       'react/self-closing-comp': 'error',
-      // -- rules from the default categories that are not part of the compass ruleset --
+      // -- adjustments to the rules from the default categories --
       'import/no-unassigned-import': 'off',
       'no-await-in-loop': 'off',
       'no-shadow': 'off',
       // project standard is trailing underscore indicates it is non-production code
       'no-underscore-dangle': 'off',
-      // creating new objects in map callbacks is intentional in this repository
+      // creating new objects in map callbacks is intentional
       'oxc/no-map-spread': 'off',
       'oxc/no-this-in-exported-function': 'off',
       'react/capitalized-calls': 'error',
@@ -815,5 +814,5 @@ export function createOxlintConfig({
       ],
     },
     overrides,
-  })
+  }
 }

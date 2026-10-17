@@ -51,7 +51,7 @@ export type OptionsOfDiscriminatedUnion<
       Discriminator
     > extends infer L
       ? L extends string
-        ? { readonly [K in L]: Options[I] }
+        ? Readonly<Record<L, Options[I]>>
         : never
       : never
   }[number]
