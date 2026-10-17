@@ -2,7 +2,7 @@ import { createOxlintConfig } from '@strictly/oxlint'
 import { defineConfig } from 'vite-plus'
 
 const lint = createOxlintConfig({
-  additionalHooks: '(usePartialComponent|usePartialObserverComponent)',
+  additionalHooks: 'useObserver',
   workspaceScope: '@strictly',
 })
 
