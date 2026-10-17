@@ -216,8 +216,7 @@ const TEST_HELPER_IMPORT_NAMES = [
 ]
 
 export type CreateOxlintConfigOptions = {
-  // the npm scope of the workspace packages, e.g. `@strictly`, whose `vitest` and `storybook` packages hold the test
-  // helpers
+  // the npm scope of the workspace packages, e.g. `@strictly`, which may only be imported from their entry points
   readonly workspaceScope: string
   // the source folder of every package, relative to the package
   readonly srcFolder?: string
@@ -302,12 +301,12 @@ export function createOxlintConfig({
             {
               importNames: TEST_HELPER_IMPORT_NAMES,
               message: "Don't use test imports in production code",
-              name: `${workspaceScope}/vitest`,
+              name: '@strictly/vitest',
             },
             {
               importNames: TEST_HELPER_IMPORT_NAMES,
               message: "Don't use test imports in production code",
-              name: `${workspaceScope}/storybook`,
+              name: '@strictly/storybook',
             },
             {
               message: "Don't use test imports in production code",
@@ -433,8 +432,9 @@ export function createOxlintConfig({
           ],
           [
             {
-              message: `Don't use storybook helpers in unit tests. The equivalent test helpers live in ${workspaceScope}/vitest.`,
-              regex: `^${workspaceScope}\\/storybook(\\/.*)?$`,
+              message:
+                "Don't use storybook helpers in unit tests. The equivalent test helpers live in @strictly/vitest.",
+              regex: '^@strictly\\/storybook(\\/.*)?$',
             },
             {
               message:
@@ -455,8 +455,9 @@ export function createOxlintConfig({
           [
             // ban vitest imports
             {
-              message: `Don't use vitest test helpers in storybook code. The equivalent assertions live in ${workspaceScope}/storybook.`,
-              name: `${workspaceScope}/vitest`,
+              message:
+                "Don't use vitest test helpers in storybook code. The equivalent assertions live in @strictly/storybook.",
+              name: '@strictly/vitest',
             },
             {
               message:

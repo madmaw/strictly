@@ -6,7 +6,7 @@ Shared [oxlint](https://oxc.rs/docs/guide/usage/linter) configuration for worksp
 pnpm add -D @strictly/oxlint oxlint
 ```
 
-`workspaceScope` is the npm scope of your workspace packages. Its `vitest` and `storybook` packages are treated as the test helpers, e.g. `@acme/vitest` and `@acme/storybook`.
+`workspaceScope` is the npm scope of your workspace packages, which may only be imported from their entry points. The test helpers are expected to come from `@strictly/vitest` and `@strictly/storybook`.
 
 ```ts
 // oxlint.config.ts
