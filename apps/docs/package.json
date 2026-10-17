@@ -7,7 +7,7 @@
     "@strictly/base": "workspace:*",
     "@strictly/react": "workspace:*",
     "astro": "catalog:",
-    "marked": "^18.0.14",
+    "marked": "^18.1.1",
     "mobx": "catalog:",
     "mobx-react": "catalog:",
     "react": "catalog:"
