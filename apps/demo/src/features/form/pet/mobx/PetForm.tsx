@@ -1,7 +1,7 @@
 import {
   type FormProps,
   useDefaultMobxFormHooks,
-  usePartialObserverComponent,
+  useObserver,
   Validation,
 } from '@strictly/react'
 import { emulateTab } from 'emulate-tab'
@@ -95,28 +95,30 @@ export function PetForm({
   // union:discriminator.field instead of union.discriminator:field (or maybe discriminator:union.field), which
   // I think has previously caused recursion issues, but might be solvable if it all gets fixed instead of only
   // partly is done
-  const SpeciesCatComponent = usePartialObserverComponent(
-    () => ({
-      fields: model.fields,
-      onFieldValueChange,
-      onFieldSubmit,
-      onFieldFocus,
-      onFieldBlur,
-    }),
+  const SpeciesCatComponent = useObserver(
+    () => (
+      <PetSpeciesCatFieldsView
+        fields={model.fields}
+        onFieldBlur={onFieldBlur}
+        onFieldFocus={onFieldFocus}
+        onFieldSubmit={onFieldSubmit}
+        onFieldValueChange={onFieldValueChange}
+      />
+    ),
     [model, onFieldValueChange, onFieldSubmit, onFieldFocus, onFieldBlur],
-    PetSpeciesCatFieldsView,
   )
 
-  const SpeciesDogComponent = usePartialObserverComponent(
-    () => ({
-      fields: model.fields,
-      onFieldValueChange,
-      onFieldSubmit,
-      onFieldFocus,
-      onFieldBlur,
-    }),
+  const SpeciesDogComponent = useObserver(
+    () => (
+      <PetSpeciesDogFieldsView
+        fields={model.fields}
+        onFieldBlur={onFieldBlur}
+        onFieldFocus={onFieldFocus}
+        onFieldSubmit={onFieldSubmit}
+        onFieldValueChange={onFieldValueChange}
+      />
+    ),
     [model, onFieldValueChange, onFieldSubmit, onFieldFocus, onFieldBlur],
-    PetSpeciesDogFieldsView,
   )
 
   const speciesComponents = useMemo<Record<Species, ComponentType>>(
@@ -127,15 +129,17 @@ export function PetForm({
     [SpeciesCatComponent, SpeciesDogComponent],
   )
 
-  const SpeciesComponent = usePartialObserverComponent(
-    () => ({
-      fields: model.fields,
-      onFieldValueChange,
-      onFieldSubmit,
-      onFieldFocus,
-      onFieldBlur,
-      speciesComponents,
-    }),
+  const SpeciesComponent = useObserver(
+    () => (
+      <PetSpeciesFormFieldsView
+        fields={model.fields}
+        onFieldBlur={onFieldBlur}
+        onFieldFocus={onFieldFocus}
+        onFieldSubmit={onFieldSubmit}
+        onFieldValueChange={onFieldValueChange}
+        speciesComponents={speciesComponents}
+      />
+    ),
     [
       model,
       onFieldValueChange,
@@ -144,7 +148,6 @@ export function PetForm({
       onFieldBlur,
       speciesComponents,
     ],
-    PetSpeciesFormFieldsView,
   )
 
   return (
