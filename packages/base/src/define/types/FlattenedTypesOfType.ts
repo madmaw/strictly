@@ -23,9 +23,8 @@ type InternalFlattenedTypesOf<
   SegmentOverride extends string | null,
   Path extends string,
   R extends boolean,
-> = {
-  readonly [K in Path]: Branded<T, R>
-} & InternalFlattenedTypesOfChildren<Unwrap<T>, SegmentOverride, Path, R>
+> = Readonly<Record<Path, Branded<T, R>>> &
+  InternalFlattenedTypesOfChildren<Unwrap<T>, SegmentOverride, Path, R>
 
 export type InternalFlattenedTypesOfChildren<
   T,

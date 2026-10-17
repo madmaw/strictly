@@ -31,19 +31,13 @@ type InternalValueOfType<T, Extra, R extends boolean> =
 
 type ValueOfRecord<K, V, Extra, R extends boolean> = K extends z.core.$partial
   ? R extends true
-    ? {
-        readonly [k in KeyOfRecord<K>]?: InternalValueOfType<V, Extra, R>
-      }
-    : {
-        [k in KeyOfRecord<K>]?: InternalValueOfType<V, Extra, R>
-      }
+    ? Readonly<
+        Partial<Record<KeyOfRecord<K>, InternalValueOfType<V, Extra, R>>>
+      >
+    : Partial<Record<KeyOfRecord<K>, InternalValueOfType<V, Extra, R>>>
   : R extends true
-    ? {
-        readonly [k in KeyOfRecord<K>]: InternalValueOfType<V, Extra, R>
-      }
-    : {
-        [k in KeyOfRecord<K>]: InternalValueOfType<V, Extra, R>
-      }
+    ? Readonly<Record<KeyOfRecord<K>, InternalValueOfType<V, Extra, R>>>
+    : Record<KeyOfRecord<K>, InternalValueOfType<V, Extra, R>>
 
 type KeyOfRecord<K> = z.core.output<K> & (string | number)
 

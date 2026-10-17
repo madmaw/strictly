@@ -45,15 +45,11 @@ describe('Reverse', () => {
       a: `x.${number}`
     }>
 
-    expectTypeOf<T>().toEqualTypeOf<{
-      readonly [_: `x.${number}`]: 'a'
-    }>()
+    expectTypeOf<T>().toEqualTypeOf<Readonly<Record<`x.${number}`, 'a'>>>()
   })
 
   it('from dynamic key', () => {
-    type T = Reverse<{
-      [x: `x.${number}`]: 'a'
-    }>
+    type T = Reverse<Record<`x.${number}`, 'a'>>
 
     expectTypeOf<T>().toEqualTypeOf<{
       readonly a: `x.${number}`

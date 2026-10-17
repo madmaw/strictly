@@ -64,9 +64,7 @@ describe('valuePathToTypePath', () => {
 
     describe('fake subpath', () => {
       const fakeTypePath = valuePathToTypePath<
-        Paths & {
-          [_: `$.${number}.fake`]: '$.*.fake'
-        },
+        Paths & Record<`$.${number}.fake`, '$.*.fake'>,
         '$.0.fake'
       >(type, '$.0.fake', true)
 

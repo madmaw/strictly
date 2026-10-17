@@ -18,14 +18,13 @@ type InternalFlattenedTypePathsOf<
   SegmentOverride extends string,
   ValuePath extends string,
   TypePath extends string,
-> = {
-  readonly [K in ValuePath]: TypePath
-} & InternalFlattenedTypePathsOfChildren<
-  Unwrap<T>,
-  SegmentOverride,
-  ValuePath,
-  TypePath
->
+> = Readonly<Record<ValuePath, TypePath>> &
+  InternalFlattenedTypePathsOfChildren<
+    Unwrap<T>,
+    SegmentOverride,
+    ValuePath,
+    TypePath
+  >
 
 type InternalFlattenedTypePathsOfChildren<
   T,

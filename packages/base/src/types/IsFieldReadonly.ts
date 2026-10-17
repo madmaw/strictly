@@ -5,6 +5,7 @@ export type IsFieldReadonly<
   R extends Record<string, any>,
   K extends keyof R,
 > = {
+  // oxlint-disable-next-line typescript/consistent-indexed-object-style -- `Record` would copy the readonly modifier from R
   [P in keyof R]: IsEqual<{ [Q in P]: R[P] }, { readonly [Q in P]: R[P] }>
 }[K]
 

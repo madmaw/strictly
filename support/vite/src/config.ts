@@ -9,7 +9,7 @@ import babel from '@rolldown/plugin-babel'
 import { storybookTest } from '@storybook/addon-vitest/vitest-plugin'
 import reactSupport from '@vitejs/plugin-react'
 import { existsSync, readdirSync, readFileSync } from 'node:fs'
-import { createRequire } from 'node:module'
+import { createRequire, isBuiltin } from 'node:module'
 import { join } from 'node:path'
 import { type PluginOption } from 'vite'
 import dts from 'vite-plugin-dts'
@@ -129,15 +129,18 @@ export function createReactViteConfig({
 }
 
 /**
- * Bundles a publishable package from `src/index.ts` into ESM and CJS outputs with rolled up type declarations.
+ * Bundles a publishable package from its entry points into ESM and CJS outputs with rolled up type declarations.
  * Anything listed in dependencies or peerDependencies is left external.
  */
 export function createViteLibraryConfig(
   packageJson: LibraryPackageJson,
   {
+    entry = { index: 'src/index.ts' },
     react = false,
     root,
   }: {
+    // output file names to their source files
+    readonly entry?: Readonly<Record<string, string>>
     readonly react?: boolean
     readonly root: string
   },
@@ -152,16 +155,18 @@ export function createViteLibraryConfig(
   return defineConfig({
     build: {
       lib: {
-        entry: 'src/index.ts',
-        fileName: 'index',
+        entry: { ...entry },
         formats: ['es', 'cjs'],
       },
       minify: false,
       outDir: DIST,
       rolldownOptions: {
         external(id) {
-          return externals.some(
-            (external) => id === external || id.startsWith(`${external}/`),
+          return (
+            isBuiltin(id) ||
+            externals.some(
+              (external) => id === external || id.startsWith(`${external}/`),
+            )
           )
         },
       },

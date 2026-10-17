@@ -1,17 +1,53 @@
 {
+  "author": "Chris <chris.glover@gmail.com> (@madmaw)",
+  "dependencies": {
+    "@stylistic/eslint-plugin": "5.10.0",
+    "oxlint-plugin-directive-comments": "0.1.0"
+  },
+  "description": "Shared oxlint configuration for strictly style workspaces",
   "devDependencies": {
     "@strictly/typescript": "workspace:*",
-    "@stylistic/eslint-plugin": "5.10.0",
     "@types/node": "^24.0.0",
-    "oxlint-plugin-directive-comments": "0.1.0",
-    "vite-plus": "catalog:"
+    "oxlint": "catalog:"
   },
+  "exports": {
+    ".": "./src/index.ts",
+    "./plugin": "./src/plugin.ts"
+  },
+  "files": [
+    "dist"
+  ],
+  "homepage": "https://github.com/madmaw/strictly/tree/main/support/oxlint",
+  "keywords": [
+    "oxlint"
+  ],
   "license": "MIT",
   "main": "src/index.ts",
   "name": "@strictly/oxlint",
+  "peerDependencies": {
+    "oxlint": "^1.85.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "./plugin": "./dist/plugin.js"
+    },
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts"
+  },
+  "repository": {
+    "directory": "support/oxlint",
+    "type": "git",
+    "url": "git+https://github.com/madmaw/strictly.git"
+  },
   "scripts": {
+    "build": "tsc -p tsconfig.dist.json",
     "check-types": "tsc -b",
-    "clean": "del-cli .out"
+    "clean": "del-cli dist .out"
   },
   "type": "module",
   "version": "0.0.41"
