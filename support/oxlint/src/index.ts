@@ -239,8 +239,6 @@ export function createOxlintConfig({
     '**/dist/**',
     '**/node_modules/**',
     '**/storybook-static/**',
-    // generated
-    '**/*.d.ts',
   ]
 
   const sourceFiles = ['ts', 'tsx', 'mts', 'astro'].map(
