@@ -200,7 +200,9 @@ const NO_RESTRICTED_IMPORTS: RestrictedImports = {
     {
       message:
         'Underscores in path or package names are inconsistent with NPM naming standards. Use a hyphen.',
-      regex: '^[^./].*_.*$',
+      // node built-ins, e.g. `node:worker_threads`, are not ours to rename. oxlint's regex engine has no lookaround, so
+      // "does not start with `node:`" is spelled out one character at a time
+      regex: '^(n(o(de?)?)?)?_|^([^./n_]|n[^o_]|no[^d_]|nod[^e_]|node[^:_]).*_',
     },
   ],
 }
