@@ -25,7 +25,7 @@
   "main": "src/index.ts",
   "name": "@strictly/oxlint",
   "peerDependencies": {
-    "oxlint": "^1.85.0"
+    "oxlint": "^1.87.0"
   },
   "publishConfig": {
     "access": "public",
