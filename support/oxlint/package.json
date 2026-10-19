@@ -7,7 +7,7 @@
   "description": "Shared oxlint configuration for strictly style workspaces",
   "devDependencies": {
     "@strictly/typescript": "workspace:*",
-    "@types/node": "^24.0.0",
+    "@types/node": "^26.6.5",
     "oxlint": "catalog:"
   },
   "exports": {

@@ -11,7 +11,7 @@
     "@storybook/react-vite": "catalog:",
     "@strictly/typescript": "workspace:*",
     "@strictly/vite": "workspace:*",
-    "@types/node": "^24.0.0",
+    "@types/node": "^26.6.5",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
     "mobx": "catalog:",
