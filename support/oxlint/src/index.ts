@@ -443,6 +443,8 @@ export function createOxlintConfig({
             },
           ],
         ),
+        // type tests deliberately assert that types resolve to `{}`
+        'typescript/no-generated-empty-object-type': 'off',
       },
     },
     // storybook files
