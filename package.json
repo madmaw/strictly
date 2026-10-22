@@ -31,7 +31,7 @@
     "@strictly/oxlint": "workspace:*",
     "@strictly/typescript": "workspace:*",
     "@typescript/native": "catalog:",
-    "del-cli": "^7.0.0",
+    "del-cli": "^8.0.1",
     "typescript": "catalog:",
     "vite-plus": "catalog:",
     "vitest": "catalog:",
