@@ -1,4 +1,23 @@
 {
+  "name": "@strictly/demo",
+  "version": "0.0.41",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "build": "vp build",
+    "check-types": "tsc -b",
+    "clean": "del-cli dist .out",
+    "dev": "vp dev",
+    "lingui": "vp run lingui:extract",
+    "lingui:extract": "lingui extract",
+    "preview": "vp preview",
+    "storybook": "storybook dev",
+    "storybook:build": "storybook build",
+    "test": "vp test run --configLoader runner --project=unit/*",
+    "test:storybook": "playwright install chromium && vp test run --configLoader runner --project=storybook/test",
+    "test:update": "vp test run --configLoader runner -u --project=unit/*",
+    "test:watch": "vp test watch --configLoader runner --project=unit/*"
+  },
   "dependencies": {
     "@lingui/core": "catalog:",
     "@lingui/react": "catalog:",
@@ -36,24 +55,5 @@
     "vite-plus": "catalog:",
     "vitest": "catalog:",
     "zod": "catalog:"
-  },
-  "license": "MIT",
-  "name": "@strictly/demo",
-  "scripts": {
-    "build": "vp build",
-    "check-types": "tsc -b",
-    "clean": "del-cli dist .out",
-    "dev": "vp dev",
-    "lingui": "vp run lingui:extract",
-    "lingui:extract": "lingui extract",
-    "preview": "vp preview",
-    "storybook": "storybook dev",
-    "storybook:build": "storybook build",
-    "test": "vp test run --configLoader runner --project=unit/*",
-    "test:storybook": "playwright install chromium && vp test run --configLoader runner --project=storybook/test",
-    "test:update": "vp test run --configLoader runner -u --project=unit/*",
-    "test:watch": "vp test watch --configLoader runner --project=unit/*"
-  },
-  "type": "module",
-  "version": "0.0.41"
+  }
 }

@@ -1,4 +1,17 @@
 {
+  "name": "@strictly/vite",
+  "version": "0.0.41",
+  "license": "MIT",
+  "type": "module",
+  "main": "src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./config": "./src/config.ts"
+  },
+  "scripts": {
+    "check-types": "tsc -b",
+    "clean": "del-cli dist .out"
+  },
   "devDependencies": {
     "@babel/core": "catalog:",
     "@babel/plugin-proposal-decorators": "catalog:",
@@ -21,18 +34,5 @@
     "vitest": "catalog:",
     "vitest-fail-on-console": "catalog:",
     "vitest-matchmedia-mock": "catalog:"
-  },
-  "exports": {
-    ".": "./src/index.ts",
-    "./config": "./src/config.ts"
-  },
-  "license": "MIT",
-  "main": "src/index.ts",
-  "name": "@strictly/vite",
-  "scripts": {
-    "check-types": "tsc -b",
-    "clean": "del-cli dist .out"
-  },
-  "type": "module",
-  "version": "0.0.41"
+  }
 }

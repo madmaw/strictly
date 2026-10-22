@@ -1,15 +1,15 @@
 {
-  "devDependencies": {
-    "@lingui/cli": "catalog:",
-    "@strictly/typescript": "workspace:*"
-  },
-  "license": "MIT",
-  "main": "src/index.ts",
   "name": "@strictly/lingui",
+  "version": "0.0.41",
+  "license": "MIT",
+  "type": "module",
+  "main": "src/index.ts",
   "scripts": {
     "check-types": "tsc -b",
     "clean": "del-cli dist .out"
   },
-  "type": "module",
-  "version": "0.0.41"
+  "devDependencies": {
+    "@lingui/cli": "catalog:",
+    "@strictly/typescript": "workspace:*"
+  }
 }

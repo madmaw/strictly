@@ -1,54 +1,30 @@
 {
-  "author": "Chris <chris.glover@gmail.com> (@madmaw)",
+  "name": "@strictly/storybook",
+  "version": "0.0.41",
   "description": "Storybook configuration and assertion helpers for React, Mantine, MobX and Lingui",
-  "devDependencies": {
-    "@chromatic-com/storybook": "catalog:",
-    "@lingui/core": "catalog:",
-    "@lingui/react": "catalog:",
-    "@mantine/core": "catalog:",
-    "@storybook/addon-docs": "catalog:",
-    "@storybook/addon-links": "catalog:",
-    "@storybook/react-vite": "catalog:",
-    "@strictly/typescript": "workspace:*",
-    "@strictly/vite": "workspace:*",
-    "@types/node": "^26.6.5",
-    "@types/react": "catalog:",
-    "@types/react-dom": "catalog:",
-    "mobx": "catalog:",
-    "react": "catalog:",
-    "react-dom": "catalog:",
-    "storybook": "catalog:",
-    "vite-plus": "catalog:"
-  },
-  "exports": {
-    ".": "./src/index.ts",
-    "./main": "./src/main.ts"
+  "keywords": [
+    "storybook"
+  ],
+  "homepage": "https://github.com/madmaw/strictly/tree/main/support/storybook",
+  "license": "MIT",
+  "author": "Chris <chris.glover@gmail.com> (@madmaw)",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/madmaw/strictly.git",
+    "directory": "support/storybook"
   },
   "files": [
     "dist"
   ],
-  "homepage": "https://github.com/madmaw/strictly/tree/main/support/storybook",
-  "keywords": [
-    "storybook"
-  ],
-  "license": "MIT",
+  "type": "module",
   "main": "src/index.ts",
-  "name": "@strictly/storybook",
-  "peerDependencies": {
-    "@chromatic-com/storybook": "catalog:",
-    "@lingui/core": "catalog:",
-    "@lingui/react": "catalog:",
-    "@mantine/core": "catalog:",
-    "@storybook/addon-docs": "catalog:",
-    "@storybook/addon-links": "catalog:",
-    "@storybook/react-vite": "catalog:",
-    "mobx": "catalog:",
-    "react": "catalog:",
-    "react-dom": "catalog:",
-    "storybook": "catalog:"
+  "exports": {
+    ".": "./src/index.ts",
+    "./main": "./src/main.ts"
   },
   "publishConfig": {
-    "access": "public",
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
     "exports": {
       ".": {
         "import": {
@@ -71,19 +47,43 @@
         }
       }
     },
-    "main": "./dist/index.js",
-    "types": "./dist/index.d.ts"
-  },
-  "repository": {
-    "directory": "support/storybook",
-    "type": "git",
-    "url": "git+https://github.com/madmaw/strictly.git"
+    "access": "public"
   },
   "scripts": {
     "build": "vp build --configLoader runner",
     "check-types": "tsc -b",
     "clean": "del-cli dist .out"
   },
-  "type": "module",
-  "version": "0.0.41"
+  "devDependencies": {
+    "@chromatic-com/storybook": "catalog:",
+    "@lingui/core": "catalog:",
+    "@lingui/react": "catalog:",
+    "@mantine/core": "catalog:",
+    "@storybook/addon-docs": "catalog:",
+    "@storybook/addon-links": "catalog:",
+    "@storybook/react-vite": "catalog:",
+    "@strictly/typescript": "workspace:*",
+    "@strictly/vite": "workspace:*",
+    "@types/node": "^26.6.5",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "mobx": "catalog:",
+    "react": "catalog:",
+    "react-dom": "catalog:",
+    "storybook": "catalog:",
+    "vite-plus": "catalog:"
+  },
+  "peerDependencies": {
+    "@chromatic-com/storybook": "catalog:",
+    "@lingui/core": "catalog:",
+    "@lingui/react": "catalog:",
+    "@mantine/core": "catalog:",
+    "@storybook/addon-docs": "catalog:",
+    "@storybook/addon-links": "catalog:",
+    "@storybook/react-vite": "catalog:",
+    "mobx": "catalog:",
+    "react": "catalog:",
+    "react-dom": "catalog:",
+    "storybook": "catalog:"
+  }
 }

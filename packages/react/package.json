@@ -1,10 +1,54 @@
 {
+  "name": "@strictly/react",
+  "version": "0.0.41",
+  "description": "Types and utilities for creating React forms",
+  "keywords": [
+    "react",
+    "state management",
+    "types"
+  ],
+  "homepage": "https://madmaw.github.io/strictly/react",
+  "license": "MIT",
   "author": "Chris <chris.glover@gmail.com> (@madmaw)",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/madmaw/strictly.git",
+    "directory": "packages/react"
+  },
+  "type": "module",
+  "main": "src/index.ts",
+  "publishConfig": {
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "exports": {
+      ".": {
+        "import": {
+          "types": "./dist/index.d.ts",
+          "default": "./dist/index.js"
+        },
+        "require": {
+          "types": "./dist/index.d.cts",
+          "default": "./dist/index.cjs"
+        }
+      }
+    },
+    "access": "public"
+  },
+  "scripts": {
+    "build": "vp build --configLoader runner",
+    "check-types": "tsc -b",
+    "clean": "del-cli dist .out",
+    "storybook": "storybook dev",
+    "storybook:build": "storybook build",
+    "test": "vp test run --configLoader runner --project=unit/*",
+    "test:storybook": "playwright install chromium && vp test run --configLoader runner --project=storybook/test",
+    "test:update": "vp test run --configLoader runner -u --project=unit/*",
+    "test:watch": "vp test watch --configLoader runner --project=unit/*"
+  },
   "dependencies": {
     "@lingui/core": "catalog:",
     "@lingui/react": "catalog:"
   },
-  "description": "Types and utilities for creating React forms",
   "devDependencies": {
     "@storybook/react-vite": "catalog:",
     "@strictly/base": "workspace:*",
@@ -27,15 +71,6 @@
     "vitest": "catalog:",
     "zod": "catalog:"
   },
-  "homepage": "https://madmaw.github.io/strictly/react",
-  "keywords": [
-    "react",
-    "state management",
-    "types"
-  ],
-  "license": "MIT",
-  "main": "src/index.ts",
-  "name": "@strictly/react",
   "peerDependencies": {
     "@mantine/core": "catalog:",
     "@mantine/hooks": "catalog:",
@@ -48,40 +83,5 @@
     "react-dom": "catalog:",
     "real-cancellable-promise": "catalog:",
     "zod": "catalog:"
-  },
-  "publishConfig": {
-    "access": "public",
-    "exports": {
-      ".": {
-        "import": {
-          "types": "./dist/index.d.ts",
-          "default": "./dist/index.js"
-        },
-        "require": {
-          "types": "./dist/index.d.cts",
-          "default": "./dist/index.cjs"
-        }
-      }
-    },
-    "main": "./dist/index.js",
-    "types": "./dist/index.d.ts"
-  },
-  "repository": {
-    "directory": "packages/react",
-    "type": "git",
-    "url": "git+https://github.com/madmaw/strictly.git"
-  },
-  "scripts": {
-    "build": "vp build --configLoader runner",
-    "check-types": "tsc -b",
-    "clean": "del-cli dist .out",
-    "storybook": "storybook dev",
-    "storybook:build": "storybook build",
-    "test": "vp test run --configLoader runner --project=unit/*",
-    "test:storybook": "playwright install chromium && vp test run --configLoader runner --project=storybook/test",
-    "test:update": "vp test run --configLoader runner -u --project=unit/*",
-    "test:watch": "vp test watch --configLoader runner --project=unit/*"
-  },
-  "type": "module",
-  "version": "0.0.41"
+  }
 }

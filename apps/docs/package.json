@@ -1,4 +1,17 @@
 {
+  "name": "@strictly/docs",
+  "version": "0.0.41",
+  "license": "MIT",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "build": "astro build",
+    "check-types": "tsc -b",
+    "clean": "del-cli dist .out",
+    "dev": "astro dev",
+    "preview": "astro preview",
+    "serve": "http-server dist"
+  },
   "dependencies": {
     "@astrojs/mdx": "catalog:",
     "@astrojs/react": "catalog:",
@@ -20,18 +33,5 @@
     "http-server": "^14.1.1",
     "vite": "catalog:",
     "vite-plus": "catalog:"
-  },
-  "license": "MIT",
-  "main": "index.js",
-  "name": "@strictly/docs",
-  "scripts": {
-    "build": "astro build",
-    "check-types": "tsc -b",
-    "clean": "del-cli dist .out",
-    "dev": "astro dev",
-    "preview": "astro preview",
-    "serve": "http-server dist"
-  },
-  "type": "module",
-  "version": "0.0.41"
+  }
 }
