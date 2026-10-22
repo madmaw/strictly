@@ -1,34 +1,30 @@
 {
-  "author": "Chris <chris.glover@gmail.com> (@madmaw)",
-  "dependencies": {
-    "@stylistic/eslint-plugin": "5.10.0",
-    "oxlint-plugin-directive-comments": "0.1.0"
-  },
+  "name": "@strictly/oxlint",
+  "version": "0.0.41",
   "description": "Shared oxlint configuration for strictly style workspaces",
-  "devDependencies": {
-    "@strictly/typescript": "workspace:*",
-    "@types/node": "^26.6.5",
-    "oxlint": "catalog:"
-  },
-  "exports": {
-    ".": "./src/index.ts",
-    "./plugin": "./src/plugin.ts"
+  "keywords": [
+    "oxlint"
+  ],
+  "homepage": "https://github.com/madmaw/strictly/tree/main/support/oxlint",
+  "license": "MIT",
+  "author": "Chris <chris.glover@gmail.com> (@madmaw)",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/madmaw/strictly.git",
+    "directory": "support/oxlint"
   },
   "files": [
     "dist"
   ],
-  "homepage": "https://github.com/madmaw/strictly/tree/main/support/oxlint",
-  "keywords": [
-    "oxlint"
-  ],
-  "license": "MIT",
+  "type": "module",
   "main": "src/index.ts",
-  "name": "@strictly/oxlint",
-  "peerDependencies": {
-    "oxlint": "^1.87.0"
+  "exports": {
+    ".": "./src/index.ts",
+    "./plugin": "./src/plugin.ts"
   },
   "publishConfig": {
-    "access": "public",
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
     "exports": {
       ".": {
         "types": "./dist/index.d.ts",
@@ -36,19 +32,23 @@
       },
       "./plugin": "./dist/plugin.js"
     },
-    "main": "./dist/index.js",
-    "types": "./dist/index.d.ts"
-  },
-  "repository": {
-    "directory": "support/oxlint",
-    "type": "git",
-    "url": "git+https://github.com/madmaw/strictly.git"
+    "access": "public"
   },
   "scripts": {
     "build": "tsc -p tsconfig.dist.json",
     "check-types": "tsc -b",
     "clean": "del-cli dist .out"
   },
-  "type": "module",
-  "version": "0.0.41"
+  "dependencies": {
+    "@stylistic/eslint-plugin": "5.10.0",
+    "oxlint-plugin-directive-comments": "0.1.0"
+  },
+  "devDependencies": {
+    "@strictly/typescript": "workspace:*",
+    "@types/node": "^26.6.5",
+    "oxlint": "catalog:"
+  },
+  "peerDependencies": {
+    "oxlint": "^1.87.0"
+  }
 }

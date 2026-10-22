@@ -1,27 +1,26 @@
 {
-  "author": "Chris <chris.glover@gmail.com> (@madmaw)",
+  "name": "@strictly/vitest",
+  "version": "0.0.41",
   "description": "Vitest assertion helpers that narrow types",
-  "devDependencies": {
-    "@strictly/typescript": "workspace:*",
-    "@strictly/vite": "workspace:*",
-    "vite-plus": "catalog:",
-    "vitest": "catalog:"
+  "keywords": [
+    "vitest"
+  ],
+  "homepage": "https://github.com/madmaw/strictly/tree/main/support/vitest",
+  "license": "MIT",
+  "author": "Chris <chris.glover@gmail.com> (@madmaw)",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/madmaw/strictly.git",
+    "directory": "support/vitest"
   },
   "files": [
     "dist"
   ],
-  "homepage": "https://github.com/madmaw/strictly/tree/main/support/vitest",
-  "keywords": [
-    "vitest"
-  ],
-  "license": "MIT",
+  "type": "module",
   "main": "src/index.ts",
-  "name": "@strictly/vitest",
-  "peerDependencies": {
-    "vitest": "^5.0.1"
-  },
   "publishConfig": {
-    "access": "public",
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
     "exports": {
       ".": {
         "import": {
@@ -34,19 +33,20 @@
         }
       }
     },
-    "main": "./dist/index.js",
-    "types": "./dist/index.d.ts"
-  },
-  "repository": {
-    "directory": "support/vitest",
-    "type": "git",
-    "url": "git+https://github.com/madmaw/strictly.git"
+    "access": "public"
   },
   "scripts": {
     "build": "vp build --configLoader runner",
     "check-types": "tsc -b",
     "clean": "del-cli dist .out"
   },
-  "type": "module",
-  "version": "0.0.41"
+  "devDependencies": {
+    "@strictly/typescript": "workspace:*",
+    "@strictly/vite": "workspace:*",
+    "vite-plus": "catalog:",
+    "vitest": "catalog:"
+  },
+  "peerDependencies": {
+    "vitest": "^5.0.1"
+  }
 }

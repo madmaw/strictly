@@ -1,32 +1,24 @@
 {
-  "author": "Chris <chris.glover@gmail.com> (@madmaw)",
-  "devDependencies": {
-    "@strictly/typescript": "workspace:*",
-    "@strictly/vite": "workspace:*",
-    "@strictly/vitest": "workspace:*",
-    "mobx-utils": "catalog:",
-    "real-cancellable-promise": "catalog:",
-    "type-fest": "catalog:",
-    "zod": "catalog:"
-  },
-  "homepage": "https://madmaw.github.io/strictly/base",
+  "name": "@strictly/base",
+  "version": "0.0.41",
   "keywords": [
     "react",
     "state management",
     "types"
   ],
+  "homepage": "https://madmaw.github.io/strictly/base",
   "license": "MIT",
-  "main": "src/index.ts",
-  "name": "@strictly/base",
-  "peerDependencies": {
-    "mobx": "catalog:",
-    "mobx-utils": "catalog:",
-    "real-cancellable-promise": "catalog:",
-    "type-fest": "catalog:",
-    "zod": "catalog:"
+  "author": "Chris <chris.glover@gmail.com> (@madmaw)",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/madmaw/strictly.git",
+    "directory": "packages/base"
   },
+  "type": "module",
+  "main": "src/index.ts",
   "publishConfig": {
-    "access": "public",
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
     "exports": {
       ".": {
         "import": {
@@ -39,13 +31,7 @@
         }
       }
     },
-    "main": "./dist/index.js",
-    "types": "./dist/index.d.ts"
-  },
-  "repository": {
-    "directory": "packages/base",
-    "type": "git",
-    "url": "git+https://github.com/madmaw/strictly.git"
+    "access": "public"
   },
   "scripts": {
     "build": "vp build --configLoader runner",
@@ -54,6 +40,20 @@
     "test": "vp test run --configLoader runner",
     "test:watch": "vp test watch --configLoader runner"
   },
-  "type": "module",
-  "version": "0.0.41"
+  "devDependencies": {
+    "@strictly/typescript": "workspace:*",
+    "@strictly/vite": "workspace:*",
+    "@strictly/vitest": "workspace:*",
+    "mobx-utils": "catalog:",
+    "real-cancellable-promise": "catalog:",
+    "type-fest": "catalog:",
+    "zod": "catalog:"
+  },
+  "peerDependencies": {
+    "mobx": "catalog:",
+    "mobx-utils": "catalog:",
+    "real-cancellable-promise": "catalog:",
+    "type-fest": "catalog:",
+    "zod": "catalog:"
+  }
 }

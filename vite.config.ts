@@ -45,7 +45,7 @@ export default defineConfig({
       ],
       newlinesBetween: false,
     },
-    sortPackageJson: false,
+    sortPackageJson: true,
     trailingComma: 'all',
   },
 })

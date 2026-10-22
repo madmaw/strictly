@@ -1,27 +1,14 @@
 {
-  "devDependencies": {
-    "@strictly/oxlint": "workspace:*",
-    "@strictly/typescript": "workspace:*",
-    "@typescript/native": "catalog:",
-    "del-cli": "^7.0.0",
-    "typescript": "catalog:",
-    "vite-plus": "catalog:",
-    "vitest": "catalog:",
-    "vitest-mock-extended": "catalog:"
-  },
-  "engines": {
-    "node": ">=22.22.2",
-    "pnpm": ">=10.13.1"
-  },
-  "license": "MIT",
-  "main": "index.js",
   "name": "@strictly/strictly",
-  "packageManager": "pnpm@10.13.1",
+  "version": "0.0.41",
   "private": true,
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/madmaw/strictly.git"
   },
+  "type": "module",
+  "main": "index.js",
   "scripts": {
     "build": "vp run -r build",
     "check-types": "vp run -r check-types",
@@ -40,6 +27,19 @@
     "test:storybook": "vp run -r --concurrency-limit 1 test:storybook",
     "test:update": "vp run -r test:update"
   },
-  "type": "module",
-  "version": "0.0.41"
+  "devDependencies": {
+    "@strictly/oxlint": "workspace:*",
+    "@strictly/typescript": "workspace:*",
+    "@typescript/native": "catalog:",
+    "del-cli": "^7.0.0",
+    "typescript": "catalog:",
+    "vite-plus": "catalog:",
+    "vitest": "catalog:",
+    "vitest-mock-extended": "catalog:"
+  },
+  "engines": {
+    "node": ">=22.22.2",
+    "pnpm": ">=10.13.1"
+  },
+  "packageManager": "pnpm@10.13.1"
 }
