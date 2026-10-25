@@ -95,7 +95,7 @@ catalog:
   vitest-fail-on-console: ^0.10.1
   vitest-matchmedia-mock: ^2.0.4
   vitest-mock-extended: ^5.1.1
-  vite-plus: 1.3.0
+  vite-plus: 1.4.0
   zod: ^4.6.7
 
 # run every script under this exact node version regardless of the machine's install
