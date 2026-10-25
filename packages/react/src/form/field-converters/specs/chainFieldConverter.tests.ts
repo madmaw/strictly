@@ -9,31 +9,32 @@ import {
   UnreliableFieldConversionType,
   type UnreliableFieldConverter,
 } from 'form/types/FieldConverters'
-import { type Mock } from 'vite-plus/test'
 
 const CONTEXT = 'ctx'
 const ERROR1 = 'error 1'
 const ERROR2 = 'error 2'
 
 describe('chainUnreliableFieldConverter', () => {
-  const from: Mock<
-    UnreliableFieldConverter<
-      number,
-      boolean,
-      typeof ERROR1,
-      'x',
-      typeof CONTEXT
-    >
-  > = vi.fn()
-  const to: Mock<
-    UnreliableFieldConverter<
-      boolean,
-      string,
-      typeof ERROR2,
-      'x',
-      typeof CONTEXT
-    >
-  > = vi.fn()
+  const from =
+    vi.fn<
+      UnreliableFieldConverter<
+        number,
+        boolean,
+        typeof ERROR1,
+        'x',
+        typeof CONTEXT
+      >
+    >()
+  const to =
+    vi.fn<
+      UnreliableFieldConverter<
+        boolean,
+        string,
+        typeof ERROR2,
+        'x',
+        typeof CONTEXT
+      >
+    >()
 
   let chained: UnreliableFieldConverter<
     number,
@@ -187,12 +188,10 @@ describe('chainUnreliableFieldConverter', () => {
 })
 
 describe('chainAnnotatedFieldConverter', () => {
-  const from: Mock<
-    AnnotatedFieldConverter<string, boolean, 'x', typeof CONTEXT>
-  > = vi.fn()
-  const to: Mock<
-    AnnotatedFieldConverter<boolean, number, 'x', typeof CONTEXT>
-  > = vi.fn()
+  const from =
+    vi.fn<AnnotatedFieldConverter<string, boolean, 'x', typeof CONTEXT>>()
+  const to =
+    vi.fn<AnnotatedFieldConverter<boolean, number, 'x', typeof CONTEXT>>()
 
   let chained: AnnotatedFieldConverter<string, number, 'x', typeof CONTEXT>
   let result: AnnotatedFieldConversion<number>
