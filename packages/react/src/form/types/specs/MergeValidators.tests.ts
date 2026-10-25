@@ -9,7 +9,7 @@ import {
   type MergedOfValidators,
   mergeValidators,
 } from 'form/types/mergeValidators'
-import { type Mock, type Mocked } from 'vite-plus/test'
+import { type Mocked } from 'vite-plus/test'
 import { mock, mockReset } from 'vitest-mock-extended'
 
 describe('MergedOfValidators', () => {
@@ -79,14 +79,12 @@ describe('MergedOfValidators', () => {
 
 describe('mergeValidators', () => {
   describe('functional validators', () => {
-    const validatorA1: Mock<
-      FunctionalValidator<string, 'error a1', 'a', null>
-    > = vi.fn()
-    const validatorA2: Mock<
-      FunctionalValidator<string, 'error a2', 'a', null>
-    > = vi.fn()
-    const validatorB: Mock<FunctionalValidator<boolean, 'error b', 'b', null>> =
-      vi.fn()
+    const validatorA1 =
+      vi.fn<FunctionalValidator<string, 'error a1', 'a', null>>()
+    const validatorA2 =
+      vi.fn<FunctionalValidator<string, 'error a2', 'a', null>>()
+    const validatorB =
+      vi.fn<FunctionalValidator<boolean, 'error b', 'b', null>>()
     describe('produces expected type', () => {
       describe('empty validators 1', () => {
         const validators1 = {
