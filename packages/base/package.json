@@ -54,6 +54,6 @@
     "mobx-utils": "catalog:",
     "real-cancellable-promise": "catalog:",
     "type-fest": "catalog:",
-    "zod": "catalog:"
+    "zod": "^4.0.16"
   }
 }

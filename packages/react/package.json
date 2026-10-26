@@ -82,6 +82,6 @@
     "react": "catalog:",
     "react-dom": "catalog:",
     "real-cancellable-promise": "catalog:",
-    "zod": "catalog:"
+    "zod": "^4.0.16"
   }
 }
