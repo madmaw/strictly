@@ -79,7 +79,7 @@ catalog:
   mobx-react: ^10.0.0
   mobx-utils: ^6.1.0
   # vite plus pins the oxlint it runs, keep the config types on the same version
-  oxlint: 1.88.0
+  oxlint: 1.89.0
   playwright: ^1.64.1
   real-cancellable-promise: ^1.2.3
   react: ^19.3.1
@@ -89,13 +89,13 @@ catalog:
   type-fest: ^5.0.0
   typescript: npm:@typescript/typescript6@^6.0.2
   # vite plus pins the vite core it runs, keep it on the same version
-  vite: npm:@voidzero-dev/vite-plus-core@1.3.0
+  vite: npm:@voidzero-dev/vite-plus-core@1.4.0
   vite-plugin-dts: ^5.1.2
   vitest: 5.0.5
   vitest-fail-on-console: ^0.10.1
   vitest-matchmedia-mock: ^2.0.4
   vitest-mock-extended: ^5.1.1
-  vite-plus: 1.3.0
+  vite-plus: 1.4.0
   zod: ^4.6.7
 
 # run every script under this exact node version regardless of the machine's install
