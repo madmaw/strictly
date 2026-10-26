@@ -1,3 +1,4 @@
+export * from './abortable'
 export * from './AbortError'
 export type * from './Cancellable'
 export * from './CancellablePromise'
