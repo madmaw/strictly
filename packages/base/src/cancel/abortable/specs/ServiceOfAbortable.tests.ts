@@ -1,6 +1,6 @@
 import {
   type AbortableOfService,
-  type AbortOptions,
+  type AbortableOptions,
   IdleTimeoutError,
   type ServiceOfAbortable,
   serviceOfAbortable,
@@ -20,7 +20,7 @@ describe('Abortable', () => {
     describe('unary', () => {
       describe('with operation', () => {
         type A = {
-          op: (options: AbortOptions, p: number) => Promise<number>
+          op: (options: AbortableOptions, p: number) => Promise<number>
         }
         type C = ServiceOfAbortable<A>
 
@@ -34,7 +34,7 @@ describe('Abortable', () => {
 
       describe('with class', () => {
         class A {
-          op(_options: AbortOptions, _p: number) {
+          op(_options: AbortableOptions, _p: number) {
             return Promise.resolve(1)
           }
         }
@@ -51,7 +51,10 @@ describe('Abortable', () => {
 
       describe('with cancellable promise operation', () => {
         type A = {
-          op: (options: AbortOptions, p: number) => CancellablePromise<number>
+          op: (
+            options: AbortableOptions,
+            p: number,
+          ) => CancellablePromise<number>
         }
         type C = ServiceOfAbortable<A>
 
@@ -81,7 +84,7 @@ describe('Abortable', () => {
       describe('async iterable', () => {
         type A = {
           op: (
-            options: AbortOptions,
+            options: AbortableOptions,
             x: number,
           ) => AsyncIterable<number, boolean, string>
         }
@@ -112,7 +115,7 @@ describe('Abortable', () => {
 
       it('equals expected type', () => {
         type T = {
-          op: (options: AbortOptions, p: number) => Promise<number>
+          op: (options: AbortableOptions, p: number) => Promise<number>
         }
         expectTypeOf<A>().toEqualTypeOf<T>()
       })
@@ -133,7 +136,7 @@ describe('Abortable', () => {
       it('equals expected type', () => {
         type T = {
           op: (
-            options: AbortOptions,
+            options: AbortableOptions,
             x: number,
           ) => AsyncIterable<number, boolean, string>
         }
@@ -167,13 +170,14 @@ describe('Abortable', () => {
   describe('serviceOfAbortable', () => {
     describe('unary', () => {
       describe('proxy a class', () => {
-        let op: Mock<(options: AbortOptions, n: number) => Promise<number>> =
-          vi.fn()
+        let op: Mock<
+          (options: AbortableOptions, n: number) => Promise<number>
+        > = vi.fn()
         const timeoutMs = 100
 
         class A {
           @unary()
-          op(options: AbortOptions, n: number) {
+          op(options: AbortableOptions, n: number) {
             return op(options, n)
           }
         }
@@ -204,7 +208,7 @@ describe('Abortable', () => {
       describe('cancel-ability', () => {
         class A {
           @unary()
-          op({ signal }: AbortOptions) {
+          op({ signal }: AbortableOptions) {
             return new Promise((_res, rej) => {
               // block until aborted
               signal.addEventListener('abort', rej)
@@ -238,7 +242,7 @@ describe('Abortable', () => {
 
         class A {
           @unary()
-          op({ timeoutMs }: AbortOptions) {
+          op({ timeoutMs }: AbortableOptions) {
             return new Promise((_res, rej) => {
               // block until timeout
               setTimeout(() => rej(new Error()), timeoutMs)
@@ -246,12 +250,12 @@ describe('Abortable', () => {
           }
 
           @unary()
-          slowOp(_options: AbortOptions) {
+          slowOp(_options: AbortableOptions) {
             return slowOperation()
           }
 
           @unary({ initialIdleTimeout: operationTimeoutMs })
-          slowOpWithTimeoutOverride(_options: AbortOptions) {
+          slowOpWithTimeoutOverride(_options: AbortableOptions) {
             return slowOperation()
           }
         }
@@ -279,13 +283,13 @@ describe('Abortable', () => {
 
       describe('retryable', () => {
         describe('retries until success', () => {
-          let op: Mock<(options: AbortOptions) => Promise<number>> = vi.fn()
+          let op: Mock<(options: AbortableOptions) => Promise<number>> = vi.fn()
           const timeoutMs = 100
           let onDiscardError: Mock<() => void>
           let delay: Mock<typeof delayImpl>
           class A {
             @unary({ retry: true })
-            op(options: AbortOptions) {
+            op(options: AbortableOptions) {
               return op(options)
             }
           }
@@ -339,12 +343,14 @@ describe('Abortable', () => {
 
         class A {
           @streaming()
-          op(options: AbortOptions) {
+          op(options: AbortableOptions) {
             return operation(options)
           }
         }
 
-        let operation: Mock<(options: AbortOptions) => AsyncIterable<number>>
+        let operation: Mock<
+          (options: AbortableOptions) => AsyncIterable<number>
+        >
         let a: A
         let c: ServiceOfAbortable<A>
         let promise: Promise<{ values: StreamedValue<number>[] }>
@@ -420,10 +426,12 @@ describe('Abortable', () => {
           yield await Promise.reject(new Error())
         }
 
-        let operation: Mock<(options: AbortOptions) => AsyncIterable<number>>
+        let operation: Mock<
+          (options: AbortableOptions) => AsyncIterable<number>
+        >
         class A {
           @streaming()
-          op(options: AbortOptions) {
+          op(options: AbortableOptions) {
             return operation(options)
           }
         }
@@ -473,10 +481,12 @@ describe('Abortable', () => {
           yield await Promise.resolve(1)
         }
 
-        let operation: Mock<(options: AbortOptions) => AsyncIterable<number>>
+        let operation: Mock<
+          (options: AbortableOptions) => AsyncIterable<number>
+        >
         class A {
           @streaming()
-          op(options: AbortOptions) {
+          op(options: AbortableOptions) {
             return operation(options)
           }
         }

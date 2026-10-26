@@ -6,7 +6,7 @@ import { UnreachableError } from 'errors/Unreachable'
 import { type Simplify } from 'type-fest'
 import { delay as delayImpl } from 'util/delay'
 
-export type AbortOptions = {
+export type AbortableOptions = {
   readonly signal: AbortSignal
   readonly timeoutMs: number | undefined
 }
@@ -24,10 +24,11 @@ const STREAMING_SYMBOL = Symbol('streaming')
 const INITIAL_IDLE_TIMEOUT_SYMBOL = Symbol('initialIdleTimeout')
 
 type Annotations = Partial<{
-  [RETRY_SYMBOL]: boolean
-  [UNARY_SYMBOL]: boolean
-  [STREAMING_SYMBOL]: boolean
-  [INITIAL_IDLE_TIMEOUT_SYMBOL]: number | undefined
+  readonly [RETRY_SYMBOL]: boolean
+  readonly [UNARY_SYMBOL]: boolean
+  readonly [STREAMING_SYMBOL]: boolean
+  // TODO Milliseconds
+  readonly [INITIAL_IDLE_TIMEOUT_SYMBOL]: number | undefined
 }>
 
 /**
@@ -83,17 +84,17 @@ type AbortableOperation<
   R extends Promise<Any> | AsyncIterable<Any> =
     | Promise<Any>
     | AsyncIterable<Any>,
-> = (options: AbortOptions, ...p: P) => R
+> = (options: AbortableOptions, ...p: P) => R
 
 type UnaryAbortableOperation<
   P extends Any[] = Any[],
   R extends Promise<Any> = Promise<Any>,
-> = (options: AbortOptions, ...p: P) => R
+> = (options: AbortableOptions, ...p: P) => R
 
 type StreamingAbortableOperation<
   P extends Any[] = Any[],
   R extends AsyncIterable<Any> = AsyncIterable<Any>,
-> = (options: AbortOptions, ...p: P) => R
+> = (options: AbortableOptions, ...p: P) => R
 
 /**
  * An interface that exclusively contains AbortableOperations
@@ -123,7 +124,7 @@ type ServiceOperation<
 > = (...p: P) => R
 
 /**
- * Removes the AbortOptions parameter from each AbortableOperation of the service, converting Promise return types
+ * Removes the AbortableOptions parameter from each AbortableOperation of the service, converting Promise return types
  * to CancellablePromises and AsyncIterables to retrying CancellableIterables
  */
 export type ServiceOfAbortable<S> = {
@@ -136,7 +137,7 @@ type ValueOfStreamedValue<SV> =
   SV extends StreamedValue<infer V> ? (unknown extends V ? never : V) : never
 
 /**
- * The inverse of ServiceOfAbortable. Re-adds the AbortOptions parameter to each operation and converts
+ * The inverse of ServiceOfAbortable. Re-adds the AbortableOptions parameter to each operation and converts
  * CancellablePromise return types back to Promises, and CancellableIterables back to AsyncIterables. Useful as
  * an interface to implement when writing an abortable implementation of a service
  */

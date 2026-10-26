@@ -18,6 +18,7 @@ export type StreamedValueError = {
   readonly type: 'error'
   readonly error: unknown
   readonly attempt: number
+  // TODO replace with `Milliseconds` branded type once we have one
   readonly timeout: number
   readonly events: number
   readonly connectionDuration: number

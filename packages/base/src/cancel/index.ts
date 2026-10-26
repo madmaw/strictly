@@ -1,5 +1,4 @@
-export * from './abortable/ServiceOfAbortable'
-export type * from './abortable/StreamedValue'
+export * from './abortable'
 export * from './AbortError'
 export type * from './Cancellable'
 export * from './CancellablePromise'
