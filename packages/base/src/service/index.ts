@@ -1,2 +1,2 @@
-export * from './abortable'
+export * from './abort'
 export * from './fake'

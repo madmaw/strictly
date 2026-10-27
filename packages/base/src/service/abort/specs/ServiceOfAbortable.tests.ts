@@ -10,8 +10,8 @@ import {
   serviceOfAbortable,
   streaming,
   unary,
-} from 'service/abortable/ServiceOfAbortable'
-import { type StreamedValue } from 'service/abortable/StreamedValue'
+} from 'service/abort/ServiceOfAbortable'
+import { type StreamedValue } from 'service/abort/StreamedValue'
 import { type delay as delayImpl } from 'util/delay'
 import { type Mock } from 'vite-plus/test'
 

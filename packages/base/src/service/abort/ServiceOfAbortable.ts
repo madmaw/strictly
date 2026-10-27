@@ -2,7 +2,7 @@ import { CancellablePromise } from 'cancel/CancellablePromise'
 import { type CancellableIterable } from 'cancel/iteration/CancellableIterable'
 import { UnexpectedImplementationError } from 'errors/UnexpectedImplementation'
 import { UnreachableError } from 'errors/Unreachable'
-import { type StreamedValue } from 'service/abortable/StreamedValue'
+import { type StreamedValue } from 'service/abort/StreamedValue'
 import { type Simplify } from 'type-fest'
 import { delay as delayImpl } from 'util/delay'
 
