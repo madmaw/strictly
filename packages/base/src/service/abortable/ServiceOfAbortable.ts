@@ -1,8 +1,8 @@
-import { type StreamedValue } from 'cancel/abortable/StreamedValue'
 import { CancellablePromise } from 'cancel/CancellablePromise'
 import { type CancellableIterable } from 'cancel/iteration/CancellableIterable'
 import { UnexpectedImplementationError } from 'errors/UnexpectedImplementation'
 import { UnreachableError } from 'errors/Unreachable'
+import { type StreamedValue } from 'service/abortable/StreamedValue'
 import { type Simplify } from 'type-fest'
 import { delay as delayImpl } from 'util/delay'
 
@@ -498,19 +498,18 @@ export function serviceOfAbortable<S>(
   service: S,
   options: RetryOptions = {},
 ): ServiceOfAbortable<S> {
-  const methods: Partial<Record<string | symbol, ServiceOperationOfAbortable>> =
-    {}
+  const methods = new Map<PropertyKey, ServiceOperationOfAbortable>()
   return new Proxy<ServiceOfAbortable<S>>(service as ServiceOfAbortable<S>, {
     get(target, p, receiver) {
       const method =
-        methods[p] ??
+        methods.get(p) ??
         maybeServiceOperationOfAbortable(
           service as AbortableService,
           p,
           options,
         )
       if (method != null) {
-        methods[p] = method
+        methods.set(p, method)
         return method
       }
       return Reflect.get(target, p, receiver)

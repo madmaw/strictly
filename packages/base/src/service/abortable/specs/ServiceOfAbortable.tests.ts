@@ -1,4 +1,8 @@
 import {
+  CancellablePromise,
+  ToValuesPromiseError,
+} from 'cancel/CancellablePromise'
+import {
   type AbortableOfService,
   type AbortableOptions,
   IdleTimeoutError,
@@ -6,12 +10,8 @@ import {
   serviceOfAbortable,
   streaming,
   unary,
-} from 'cancel/abortable/ServiceOfAbortable'
-import { type StreamedValue } from 'cancel/abortable/StreamedValue'
-import {
-  CancellablePromise,
-  ToValuesPromiseError,
-} from 'cancel/CancellablePromise'
+} from 'service/abortable/ServiceOfAbortable'
+import { type StreamedValue } from 'service/abortable/StreamedValue'
 import { type delay as delayImpl } from 'util/delay'
 import { type Mock } from 'vite-plus/test'
 
