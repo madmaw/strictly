@@ -52,7 +52,8 @@
   "scripts": {
     "build": "vp build --configLoader runner",
     "check-types": "tsc -b",
-    "clean": "del-cli dist .out"
+    "clean": "del-cli dist .out",
+    "version:patch": "npm version patch --no-git-tag-version"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "catalog:",

@@ -37,7 +37,8 @@
   "scripts": {
     "build": "tsc -p tsconfig.dist.json",
     "check-types": "tsc -b",
-    "clean": "del-cli dist .out"
+    "clean": "del-cli dist .out",
+    "version:patch": "npm version patch --no-git-tag-version"
   },
   "dependencies": {
     "@stylistic/eslint-plugin": "5.10.0",

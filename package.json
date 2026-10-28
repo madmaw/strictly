@@ -25,7 +25,8 @@
     "storybook:build": "vp run -r storybook:build",
     "test": "vp run -r test",
     "test:storybook": "vp run -r --concurrency-limit 1 test:storybook",
-    "test:update": "vp run -r test:update"
+    "test:update": "vp run -r test:update",
+    "version:patch": "vp run --filter '!@strictly/strictly' version:patch && npm version patch --no-git-tag-version"
   },
   "devDependencies": {
     "@strictly/oxlint": "workspace:*",
