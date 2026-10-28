@@ -15,6 +15,9 @@
     "url": "git+https://github.com/madmaw/strictly.git",
     "directory": "packages/react"
   },
+  "files": [
+    "dist"
+  ],
   "type": "module",
   "main": "src/index.ts",
   "publishConfig": {

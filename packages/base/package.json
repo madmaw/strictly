@@ -14,6 +14,10 @@
     "url": "git+https://github.com/madmaw/strictly.git",
     "directory": "packages/base"
   },
+  "files": [
+    "dist",
+    "EXTERNAL.md"
+  ],
   "type": "module",
   "main": "src/index.ts",
   "publishConfig": {
