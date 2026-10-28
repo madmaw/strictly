@@ -1,6 +1,6 @@
 {
   "name": "@strictly/oxlint",
-  "version": "0.0.41",
+  "version": "0.0.42",
   "description": "Shared oxlint configuration for strictly style workspaces",
   "keywords": [
     "oxlint"

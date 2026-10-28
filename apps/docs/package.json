@@ -1,6 +1,6 @@
 {
   "name": "@strictly/docs",
-  "version": "0.0.41",
+  "version": "0.0.42",
   "license": "MIT",
   "type": "module",
   "main": "index.js",
