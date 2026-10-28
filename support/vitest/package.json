@@ -1,6 +1,6 @@
 {
   "name": "@strictly/vitest",
-  "version": "0.0.41",
+  "version": "0.0.42",
   "description": "Vitest assertion helpers that narrow types",
   "keywords": [
     "vitest"
@@ -38,7 +38,8 @@
   "scripts": {
     "build": "vp build --configLoader runner",
     "check-types": "tsc -b",
-    "clean": "del-cli dist .out"
+    "clean": "del-cli dist .out",
+    "version:patch": "npm version patch --no-git-tag-version"
   },
   "devDependencies": {
     "@strictly/typescript": "workspace:*",

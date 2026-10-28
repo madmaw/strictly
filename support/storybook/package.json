@@ -1,6 +1,6 @@
 {
   "name": "@strictly/storybook",
-  "version": "0.0.41",
+  "version": "0.0.42",
   "description": "Storybook configuration and assertion helpers for React, Mantine, MobX and Lingui",
   "keywords": [
     "storybook"
@@ -52,7 +52,8 @@
   "scripts": {
     "build": "vp build --configLoader runner",
     "check-types": "tsc -b",
-    "clean": "del-cli dist .out"
+    "clean": "del-cli dist .out",
+    "version:patch": "npm version patch --no-git-tag-version"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "catalog:",

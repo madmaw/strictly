@@ -1,6 +1,6 @@
 {
   "name": "@strictly/base",
-  "version": "0.0.41",
+  "version": "0.0.42",
   "keywords": [
     "react",
     "state management",
@@ -38,7 +38,8 @@
     "check-types": "tsc -b",
     "clean": "del-cli dist .out",
     "test": "vp test run --configLoader runner",
-    "test:watch": "vp test watch --configLoader runner"
+    "test:watch": "vp test watch --configLoader runner",
+    "version:patch": "npm version patch --no-git-tag-version"
   },
   "devDependencies": {
     "@strictly/typescript": "workspace:*",

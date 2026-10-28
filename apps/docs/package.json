@@ -1,6 +1,6 @@
 {
   "name": "@strictly/docs",
-  "version": "0.0.41",
+  "version": "0.0.42",
   "license": "MIT",
   "type": "module",
   "main": "index.js",
@@ -10,7 +10,8 @@
     "clean": "del-cli dist .out",
     "dev": "astro dev",
     "preview": "astro preview",
-    "serve": "http-server dist"
+    "serve": "http-server dist",
+    "version:patch": "npm version patch --no-git-tag-version"
   },
   "dependencies": {
     "@astrojs/mdx": "catalog:",

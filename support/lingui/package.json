@@ -1,12 +1,13 @@
 {
   "name": "@strictly/lingui",
-  "version": "0.0.41",
+  "version": "0.0.42",
   "license": "MIT",
   "type": "module",
   "main": "src/index.ts",
   "scripts": {
     "check-types": "tsc -b",
-    "clean": "del-cli dist .out"
+    "clean": "del-cli dist .out",
+    "version:patch": "npm version patch --no-git-tag-version"
   },
   "devDependencies": {
     "@lingui/cli": "catalog:",
