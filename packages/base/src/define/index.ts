@@ -30,3 +30,22 @@ export * from './validation/validators/MinimumStringLengthValidator'
 export * from './validation/validators/OptionalValidatorProxy'
 export * from './validation/validators/RegexpValidator'
 export type * from './validation/ValidatorsOfValues'
+// the zod types that the builders infer, re-exported so that packages which use the builders without
+// depending on zod directly can still emit declarations for them
+export type {
+  ZodArray,
+  ZodBoolean,
+  ZodCustom,
+  ZodDiscriminatedUnion,
+  ZodLiteral,
+  ZodNull,
+  ZodNullable,
+  ZodNumber,
+  ZodObject,
+  ZodOptional,
+  ZodReadonly,
+  ZodRecord,
+  ZodString,
+  ZodUnion,
+} from 'zod'
+export type { $partial, $strip, $ZodType, $ZodTypeInternals } from 'zod/v4/core'

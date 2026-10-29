@@ -1,6 +1,6 @@
 {
   "name": "@strictly/typescript",
-  "version": "0.0.42",
+  "version": "0.0.43",
   "description": "Shared typescript configurations for the workspace",
   "license": "MIT",
   "type": "module",

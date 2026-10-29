@@ -1,6 +1,6 @@
 {
   "name": "@strictly/vitest",
-  "version": "0.0.42",
+  "version": "0.0.43",
   "description": "Vitest assertion helpers that narrow types",
   "keywords": [
     "vitest"
