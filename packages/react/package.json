@@ -1,6 +1,6 @@
 {
   "name": "@strictly/react",
-  "version": "0.0.42",
+  "version": "0.0.43",
   "description": "Types and utilities for creating React forms",
   "keywords": [
     "react",

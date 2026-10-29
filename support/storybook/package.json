@@ -1,6 +1,6 @@
 {
   "name": "@strictly/storybook",
-  "version": "0.0.42",
+  "version": "0.0.43",
   "description": "Storybook configuration and assertion helpers for React, Mantine, MobX and Lingui",
   "keywords": [
     "storybook"
