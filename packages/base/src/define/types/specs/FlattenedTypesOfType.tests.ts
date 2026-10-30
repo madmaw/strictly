@@ -141,9 +141,9 @@ describe('union', () => {
       type C = {
         readonly $: typeof t
         readonly ['$:1.a']: BooleanSchema
-        readonly ['$:1.x']: z.ZodLiteral<'1'>
+        readonly ['$:1.x']: ReadonlyField<z.ZodLiteral<'1'>>
         readonly ['$:2.a']: NumberSchema
-        readonly ['$:2.x']: z.ZodLiteral<'2'>
+        readonly ['$:2.x']: ReadonlyField<z.ZodLiteral<'2'>>
       }
       it('equals expected type', () => {
         expectTypeOf<C>().toEqualTypeOf<T>()

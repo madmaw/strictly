@@ -345,9 +345,10 @@ describe('builder', () => {
         .or('2', object().field('b', numberType)).narrow
 
       it('equals expected type', () => {
-        type C = { d: '1'; a: boolean } | { d: '2'; b: number }
-        expectTypeOf<ValueOfType<typeof t>>().toMatchTypeOf<C>()
-        expectTypeOf<C>().toMatchTypeOf<ValueOfType<typeof t>>()
+        type C =
+          | { readonly d: '1'; a: boolean }
+          | { readonly d: '2'; b: number }
+        expectTypeOf<ValueOfType<typeof t>>().toEqualTypeOf<C>()
       })
 
       it('adds the discriminator to each option', () => {
@@ -390,11 +391,10 @@ describe('builder', () => {
 
       it('equals expected type', () => {
         type C =
-          | { x: '1'; y: 'p'; a: boolean }
-          | { x: '1'; y: 'q'; b: number }
-          | { x: '2'; c: string }
-        expectTypeOf<ValueOfType<typeof t>>().toMatchTypeOf<C>()
-        expectTypeOf<C>().toMatchTypeOf<ValueOfType<typeof t>>()
+          | { readonly x: '1'; readonly y: 'p'; a: boolean }
+          | { readonly x: '1'; readonly y: 'q'; b: number }
+          | { readonly x: '2'; c: string }
+        expectTypeOf<ValueOfType<typeof t>>().toEqualTypeOf<C>()
       })
 
       it('adds the discriminator to the options of the nested union', () => {

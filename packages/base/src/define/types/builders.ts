@@ -195,7 +195,7 @@ type UnionSchema<
 // gain it on each of their options
 type OptionOf<D extends string | null, K extends string, S> = D extends string
   ? S extends z.ZodObject<infer Shape>
-    ? z.ZodObject<Shape & Record<D, z.ZodLiteral<K>>> &
+    ? z.ZodObject<Shape & Record<D, ReadonlyField<z.ZodLiteral<K>>>> &
         Rules<ErrorsOfType<S>, ContextOfType<S>>
     : S extends z.ZodDiscriminatedUnion<infer Options, infer D2>
       ? z.ZodDiscriminatedUnion<
