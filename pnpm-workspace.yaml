@@ -73,7 +73,7 @@ catalog:
   '@vitejs/plugin-react': ^6.1.2
   # vite plus pins the vitest it runs, keep vitest and its browser provider on the same version
   '@vitest/browser-playwright': 5.0.5
-  astro: ^7.4.1
+  astro: ^7.4.7
   jsdom: ^30.1.3
   mobx: ^7.0.6
   mobx-react: ^10.0.0
