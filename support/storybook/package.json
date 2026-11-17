@@ -65,7 +65,7 @@
     "@storybook/react-vite": "catalog:",
     "@strictly/typescript": "workspace:*",
     "@strictly/vite": "workspace:*",
-    "@types/node": "^26.6.5",
+    "@types/node": "^26.6.6",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
     "mobx": "catalog:",
